@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gPBTjK3/dGRwOnljpKWAWYN0oGf4rKehe+gZEerR4NV2Vbp/88Xwht2Wn0IN3Sn4LZ/P8uErFSq6DTI/vZQEhQ==",
+  "dgSpecHash": "yQiKmbOlBwksdpLPtzJ8zYqtBHP7ySlswJJRHOGBZkuHeEboblTHqOnEnnIpSRM/9VG16CCPkk/xQwdNtVxfWg==",
   "success": true,
-  "projectFilePath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\AccountManagement.API.csproj",
+  "projectFilePath": "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\AccountManagement.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sonuf\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\sonuf\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

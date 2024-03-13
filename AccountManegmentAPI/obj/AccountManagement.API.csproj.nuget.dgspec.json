@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\AccountManagement.API.csproj": {}
+    "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\AccountManagement.API.csproj": {}
   },
   "projects": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\AccountManagement.API.csproj": {
+    "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\AccountManagement.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\AccountManagement.API.csproj",
+        "projectUniqueName": "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\AccountManagement.API.csproj",
         "projectName": "AccountManagement.API",
-        "projectPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\AccountManagement.API.csproj",
+        "projectPath": "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\AccountManagement.API.csproj",
         "packagesPath": "C:\\Users\\sonuf\\.nuget\\packages\\",
-        "outputPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegmentAPI\\obj\\",
+        "outputPath": "D:\\Bonifatius Projects\\AccountManegments\\AccountManegmentAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sonuf\\AppData\\Roaming\\NuGet\\NuGet.Config",

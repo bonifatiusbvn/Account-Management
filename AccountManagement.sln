@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountManagement.Repositor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountManagement.DBContext", "AccountManegment.DBContext\AccountManagement.DBContext.csproj", "{6720719E-0C88-46CE-BAFE-5CBAE3BD0E8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountManegments.Web", "AccountManegments.Web\AccountManegments.Web.csproj", "{49D7F3DE-979C-4527-9AD2-D62F6E14AAC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6720719E-0C88-46CE-BAFE-5CBAE3BD0E8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6720719E-0C88-46CE-BAFE-5CBAE3BD0E8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6720719E-0C88-46CE-BAFE-5CBAE3BD0E8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49D7F3DE-979C-4527-9AD2-D62F6E14AAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49D7F3DE-979C-4527-9AD2-D62F6E14AAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49D7F3DE-979C-4527-9AD2-D62F6E14AAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49D7F3DE-979C-4527-9AD2-D62F6E14AAC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
