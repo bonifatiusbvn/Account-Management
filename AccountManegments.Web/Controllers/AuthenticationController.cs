@@ -13,5 +13,10 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult UserSingUp()
+        {
+            return View();
+        }
     }
 }

@@ -35,4 +35,8 @@
     <Folder Include="wwwroot\lib\jquery\dist\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AccountManegment.DBContext\AccountManagement.DBContext.csproj" />
+  </ItemGroup>
+
 </Project>

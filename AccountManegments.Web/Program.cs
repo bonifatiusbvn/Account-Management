@@ -1,7 +1,15 @@
+using AccountManegments.Web.Helper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+builder.Services.AddScoped<WebAPI, WebAPI>();
+//builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<APIServices, APIServices>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 var app = builder.Build();
 

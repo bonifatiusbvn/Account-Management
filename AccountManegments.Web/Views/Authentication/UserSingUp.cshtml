@@ -1,10 +1,16 @@
-﻿<!doctype html>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!doctype html>
 <html lang="en" class="light-theme">
 
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
     <!--plugins-->
     <link href="~/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -30,10 +36,14 @@
                         <div class="card shadow-none">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h4>Sign In</h4>
-                                    <p>Sign In to your account</p>
+                                    <h4>Join us today</h4>
+                                    <p>Enter your email and password to register</p>
                                 </div>
                                 <form class="form-body row g-3">
+                                    <div class="col-12">
+                                        <label for="inputName" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="inputName">
+                                    </div>
                                     <div class="col-12">
                                         <label for="inputEmail" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="inputEmail">
@@ -42,18 +52,17 @@
                                         <label for="inputPassword" class="form-label">Password</label>
                                         <input type="password" class="form-control" id="inputPassword">
                                     </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRemember">
-                                            <label class="form-check-label" for="flexSwitchCheckRemember">Remember Me</label>
+                                    <div class="col-12 col-lg-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                I agree the Terms and Conditions
+                                            </label>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-lg-6 text-end">
-                                        <a href="authentication-reset-password-cover.html">Forgot Password?</a>
                                     </div>
                                     <div class="col-12 col-lg-12">
                                         <div class="d-grid">
-                                            <button type="button" class="btn btn-primary">Sign In</button>
+                                            <button type="button" class="btn btn-warning">Sign Up</button>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-12">
@@ -69,7 +78,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-12 text-center">
-                                        <p class="mb-0">Don't have an account? <a asp-action="UserSingUp" asp-controller="Authentication">Sign up</a></p>
+                                        <p class="mb-0">Already have an account? <a href="authentication-sign-in-cover.html">Sign in</a></p>
                                     </div>
                                 </form>
                             </div>
@@ -77,7 +86,7 @@
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-12">
-                    <div class="position-fixed top-0 h-100 d-xl-block d-none login-cover-img">
+                    <div class="position-fixed top-0 h-100 d-xl-block d-none register-cover-img">
                     </div>
                 </div>
             </div>
