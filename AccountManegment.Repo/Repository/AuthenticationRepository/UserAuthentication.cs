@@ -1,10 +1,13 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +22,60 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         }
 
         public DbaccManegmentContext Context { get; }
+
+        public async Task<jsonData> GetUsersList(DataTableRequstModel UsersList)
+        {
+            var GetUsersList = from e in Context.Users
+                               join r in Context.UserRoles on e.RoleId equals r.RoleId
+                               select new LoginView
+                               {
+                                   Id = e.Id,
+                                   FirstName = e.FirstName,
+                                   LastName = e.LastName,
+                                   UserName = e.UserName,
+                                   Email = e.Email,
+                                   PhoneNo = e.PhoneNo,
+                                   IsActive = e.IsActive,
+                                   RoleName = r.Role,
+                               };
+
+            if (!string.IsNullOrEmpty(UsersList.sortColumn) && !string.IsNullOrEmpty(UsersList.sortColumnDir))
+            {
+
+                var property = typeof(LoginView).GetProperty(UsersList.sortColumn);
+                if (property != null)
+                {
+                    var parameter = Expression.Parameter(typeof(LoginView), "x");
+                    var propertyAccess = Expression.Property(parameter, property);
+                    var orderByExp = Expression.Lambda(propertyAccess, parameter);
+                    string methodName = UsersList.sortColumnDir.ToLower() == "asc" ? "OrderBy" : "OrderByDescending";
+                    var resultExp = Expression.Call(typeof(Queryable), methodName,
+                                                    new Type[] { typeof(LoginView), property.PropertyType },
+                                                    GetUsersList.Expression, Expression.Quote(orderByExp));
+                    GetUsersList = GetUsersList.Provider.CreateQuery<LoginView>(resultExp);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(UsersList.searchValue))
+            {
+                GetUsersList = GetUsersList.Where(e => e.UserName.Contains(UsersList.searchValue) || e.RoleName.Contains(UsersList.searchValue));
+            }
+
+            int totalRecord = await GetUsersList.CountAsync();
+            var cData = await GetUsersList.Skip(UsersList.skip).Take(UsersList.pageSize).ToListAsync();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = UsersList.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+
+            return jsonData;
+        }
+
+
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {

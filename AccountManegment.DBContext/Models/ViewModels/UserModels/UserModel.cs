@@ -18,7 +18,13 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string Password { get; set; }
 
         public string FullName { get; set; }
+        public string Email { get; set; }
+
+        public string PhoneNo { get; set; }
         public int Role { get; set; }
+
+        public bool IsActive { get; set; }
+        public string RoleName { get; set; }
     }
     public class LoginResponseModel
     {

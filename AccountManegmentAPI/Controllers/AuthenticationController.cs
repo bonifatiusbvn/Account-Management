@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.ViewModels.UserModels;
+﻿using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,6 +46,13 @@ namespace AccountManagement.API.Controllers
                 loginresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
+        }
+        [HttpPost]
+        [Route("GetAllUserList")]
+        public async Task<IActionResult> GetAllUserList(DataTableRequstModel UsersList)
+        {
+            var userList = await Authentication.GetUsersList(UsersList);
+            return Ok(new { code = 200, data = userList });
         }
     }
 }

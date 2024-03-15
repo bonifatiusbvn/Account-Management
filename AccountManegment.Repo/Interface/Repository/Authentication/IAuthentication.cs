@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.ViewModels.UserModels;
+﻿using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
     public interface IAuthentication
     {
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
+        Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList);
 
     }
 }

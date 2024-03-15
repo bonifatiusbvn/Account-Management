@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.ViewModels.UserModels;
+﻿using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
 using System;
@@ -18,6 +19,11 @@ namespace AccountManagement.Repository.Services.Authentication
         }
 
         public IAuthentication Authentication { get; }
+
+        public async Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList)
+        {
+            return await Authentication.GetUsersList(GetUsersList);
+        }
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
         {

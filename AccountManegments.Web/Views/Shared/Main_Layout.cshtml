@@ -17,6 +17,7 @@
     <link href="~/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
     <link href="~/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
 
+
     <!-- CSS Files -->
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/assets/css/bootstrap-extended.css" rel="stylesheet">
@@ -28,6 +29,15 @@
     <link href="~/assets/css/dark-theme.css" rel="stylesheet" />
     <link href="~/assets/css/semi-dark.css" rel="stylesheet" />
     <link href="~/assets/css/header-colors.css" rel="stylesheet" />
+
+    <!--datatable css-->
+    <!--datatable responsive css-->
+    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+    @*  <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
     <title>@ViewData["Title"] - AccountManegments.Web</title>
 </head>
@@ -50,7 +60,66 @@
                 </div>
             </div>
             <!--navigation-->
+
             <ul class="metismenu" id="menu">
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon">
+                            <ion-icon name="bag-handle-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">eCommerce</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="ecommerce-shop-grid-view.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Grid
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-shop-list-view.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product List
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-shop-grid-view-top-filter.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Top Filters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-product-details.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-product-comparison.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="CreateCompany" asp-controller="Company">
+                                <ion-icon name="ellipse-outline"></ion-icon>Create Company
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-label">Pages</li>
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon">
+                            <ion-icon name="lock-closed-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">Authentication</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a asp-action="UserListView" asp-controller="Authentication">
+                                <ion-icon name="ellipse-outline"></ion-icon>User List
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
             </ul>
             <!--end navigation-->
         </aside>
@@ -84,7 +153,7 @@
                         <li class="nav-item dropdown dropdown-user-setting">
                             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
                                 <div class="user-setting">
-                                    <img src="~/assets/images/avatars/06.png" class="user-img" alt="">@_userSession.FullName
+                                    <img src="~/assets/images/avatars/06.png" class="user-img" alt=""><span>@_userSession.FullName</span>
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -180,23 +249,6 @@
             <div class="page-content">
 
                 <!--start breadcrumb-->
-                <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                    <div class="breadcrumb-title pe-3">Dashboard</div>
-                    <div class="ps-3">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb mb-0 p-0 align-items-center">
-                                <li class="breadcrumb-item">
-                                    <a href="javascript:;">
-                                        <ion-icon name="home-outline"></ion-icon>
-                                    </a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">eCommerce</li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div class="ms-auto">
-                    </div>
-                </div>
                 <!--end breadcrumb-->
 
 
@@ -298,15 +350,29 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <!--plugins-->
     <script src="~/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-    <script src="~/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+
     <script src="~/assets/plugins/chartjs/chart.min.js"></script>
     <script src="~/assets/js/index.js"></script>
     <!-- Main JS-->
+
     <script src="~/assets/js/main.js"></script>
-
     <!--end wrapper-->
+    <!-- listjs init -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <!--datatable js-->
+    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
