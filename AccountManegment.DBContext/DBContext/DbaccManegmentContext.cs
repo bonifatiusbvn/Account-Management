@@ -15,7 +15,11 @@ public partial class DbaccManegmentContext : DbContext
     {
     }
 
+    public virtual DbSet<City> Cities { get; set; }
+
     public virtual DbSet<Company> Companies { get; set; }
+
+    public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Form> Forms { get; set; }
 
@@ -23,16 +27,31 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Site> Sites { get; set; }
 
+    public virtual DbSet<State> States { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.HasKey(e => e.CityId).HasName("PK__Cities__F2D21B7648F1A50D");
+
+            entity.Property(e => e.CityId).ValueGeneratedNever();
+            entity.Property(e => e.CityName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.StateId).HasColumnName("State_Id");
+
+            entity.HasOne(d => d.State).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.StateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_state_id");
+        });
+
         modelBuilder.Entity<Company>(entity =>
         {
             entity
@@ -52,6 +71,22 @@ public partial class DbaccManegmentContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.Pincode).HasMaxLength(10);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Country>(entity =>
+        {
+            entity.HasKey(e => e.CountryId).HasName("PK__Countrie__10D1609F608A2BD0");
+
+            entity.Property(e => e.CountryId).ValueGeneratedNever();
+            entity.Property(e => e.CountryCode)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('')")
+                .IsFixedLength();
+            entity.Property(e => e.CountryName)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('')");
         });
 
         modelBuilder.Entity<Form>(entity =>
@@ -87,6 +122,22 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ShippingPincode).HasMaxLength(10);
             entity.Property(e => e.SiteName).HasMaxLength(250);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<State>(entity =>
+        {
+            entity.HasKey(e => e.StatesId).HasName("PK__States__AC838DA89CEB4784");
+
+            entity.Property(e => e.StatesId).ValueGeneratedNever();
+            entity.Property(e => e.CountryId).HasColumnName("Country_id");
+            entity.Property(e => e.StatesName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Country).WithMany(p => p.States)
+                .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_country_id");
         });
 
         modelBuilder.Entity<User>(entity =>
