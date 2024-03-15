@@ -9,6 +9,7 @@ namespace AccountManagement.Repository.Interface.Services.AuthenticationService
 {
     public interface IAuthenticationService
     {
-        Task<UserResponceModel> UserSingUp(UserModel AddEmployee);
+        Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.ViewModels.UserModels;
+using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,19 @@ namespace AccountManagement.Repository.Services.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
-        public Task<UserResponceModel> UserSingUp(UserModel AddEmployee)
+
+        public AuthenticationService(IAuthentication authentication)
         {
-            throw new NotImplementedException();
+            Authentication = authentication;
         }
+
+        public IAuthentication Authentication { get; }
+
+        public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
+        {
+            return await Authentication.LoginUser(LoginUser);
+        }
+
+
     }
 }

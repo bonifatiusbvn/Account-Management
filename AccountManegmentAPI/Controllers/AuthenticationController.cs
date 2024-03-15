@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -17,29 +18,33 @@ namespace AccountManagement.API.Controllers
 
         public IAuthenticationService Authentication { get; }
 
-        [HttpPost]
-        [Route("AddUser")]
-        public async Task<IActionResult> AddUser(UserModel AddEmployee)
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginRequest login)
         {
-            UserResponceModel response = new UserResponceModel();
+            LoginResponseModel loginresponsemodel = new LoginResponseModel();
             try
             {
-                var addEmployee = Authentication.UserSingUp(AddEmployee);
-                if (addEmployee.Result.Code == 200)
-                {
-                    response.Code = (int)HttpStatusCode.OK;
 
+                var result = await Authentication.LoginUser(login);
+
+                if (result != null && result.Data != null)
+                {
+                    loginresponsemodel.Code = (int)HttpStatusCode.OK;
+                    loginresponsemodel.Data = result.Data;
+                    loginresponsemodel.Message = result.Message;
                 }
                 else
                 {
-                    response.Message = addEmployee.Result.Message;
+                    loginresponsemodel.Message = result.Message;
+                    loginresponsemodel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                loginresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
     }
 }

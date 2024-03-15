@@ -1,4 +1,6 @@
 using AccountManegments.Web.Helper;
+using AccountManegments.Web.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,10 +8,35 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddScoped<WebAPI, WebAPI>();
-//builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<UserSession>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+        {
+            options.LoginPath = "/Authentication/Login";
+            options.LogoutPath = "/Authentication/Logout";
+            options.Cookie.HttpOnly = true;
+            //options.Cookie.Name = "localhost:7204";
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+            options.SlidingExpiration = true;
+        });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "UserName";
+    options.Cookie.Expiration = TimeSpan.FromMinutes(1);
+});
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(50);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+
+});
 
 var app = builder.Build();
 
@@ -25,7 +52,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
+app.UseCookiePolicy();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
