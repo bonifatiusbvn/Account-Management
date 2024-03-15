@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Security.Claims;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -29,7 +30,63 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+        public async Task<JsonResult> GetCountrys()
+        {
 
+            try
+            {
+                List<CountryView> countries = new List<CountryView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetCountries");
+                if (response.code == 200)
+                {
+                    countries = JsonConvert.DeserializeObject<List<CountryView>>(response.data.ToString());
+                }
+                return new JsonResult(countries);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<JsonResult> GetState(int StateId)
+        {
+
+            try
+            {
+                List<StateView> states = new List<StateView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetState?StateId=" + StateId);
+                if (response.code == 200)
+                {
+                    states = JsonConvert.DeserializeObject<List<StateView>>(response.data.ToString());
+                }
+                return new JsonResult(states);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<JsonResult> GetCity(int CityId)
+        {
+
+            try
+            {
+                List<CityView> cities = new List<CityView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetCities?CityId=" + CityId);
+                if (response.code == 200)
+                {
+                    cities = JsonConvert.DeserializeObject<List<CityView>>(response.data.ToString());
+                }
+                return new JsonResult(cities);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpGet]
         public IActionResult UserLogin()
         {
@@ -90,6 +147,8 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
+
         public IActionResult UserListView()
         {
             return View();
