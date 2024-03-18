@@ -2,10 +2,13 @@
 GetAllUserData();
 function GetAllUserData() {
     $('#UserTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
-        filter: true,
+        filter: false,
+        searching: false,
+        lengthChange: false,
         "bDestroy": true,
+        sorting: false,
         ajax: {
             type: "Post",
             url: '/User/GetUserList',
@@ -17,16 +20,24 @@ function GetAllUserData() {
             { "data": "userName", "name": "UserName", "className": "text-center" },
             { "data": "email", "name": "Email", "className": "text-center" },
             { "data": "phoneNo", "name": "PhoneNo", "className": "text-center" },
-            { "data": "isActive", "name": "IsActive", "className": "text-center" },
+            {
+                "data": "isActive", "name": "IsActive", "className": "text-center",
+                "render": function (data, type, full) {
+                    if (full.isActive == true) {
+                        return '<span class="badge bg-success text-uppercase">Active</span>';
+                    } else {
+                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
+                    }
+                }
+            },
             { "data": "roleName", "name": "RoleName", "className": "text-center" },
             {
-                // Action column
+
                 "data": null,
                 "orderable": false,
                 "className": "text-center",
                 "render": function (data, type, full, meta) {
                     return '<div class="table-actions d-flex align-items-center gap-3 fs-6">' +
-                        '<a href="javascript:;" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Views" aria-label="Views"><i class="lni lni-eye"></i></a>' +
                         '<a class="text-warning" onclick="DisplayUserDetails(\'' + data.id + '\')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>' +
                         '<a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>' +
                         '</div>';
@@ -36,6 +47,7 @@ function GetAllUserData() {
         ]
     });
 }
+
 
 
 function DisplayUserDetails(UserId) {
@@ -63,7 +75,7 @@ function DisplayUserDetails(UserId) {
 
 
 function CreateUser() {
-    debugger
+
     var objData = {
         FirstName: $('#txtFirstName').val(),
         LastName: $('#txtLastName').val(),
@@ -91,6 +103,104 @@ function CreateUser() {
         },
     })
 
+}
+var FirstName, LastName, UserName, Password, Email, PhoneNo;
+var isValid = true;
+
+$('#btnUpdate').click(function () {
+    if (CheckValidation() == false) {
+        return false;
+    }
+});
+function CheckValidation() {
+    FirstName = $('#txtFirstName').val();
+    LastName = $('#txtLastName').val();
+    UserName = $('#txtUserName').val();
+    Password = $('#txtPassword').val();
+    Email = $('#txtEmail').val();
+    PhoneNo = $('#txtPhoneNo').val();
+
+    //fname
+    if (FirstName == "") {
+        $('#spnFirstName').text('FirstName can not be blank.');
+        $('#txtFirstName').css('border-color', 'red');
+        $('#txtFirstName').focus();
+        isValid = false;
+    }
+    else {
+        $('#spnFirstName').text('');
+        $('#txtFirstName').css('border-color', 'green');
+    }
+    //lname
+    if (LastName == "") {
+
+        $('#spnLastName').text('LastName can not be blank.');
+        $('#txtLastName').css('border-color', 'red');
+        $('#txtLastName').focus();
+        isValid = false;
+    }
+    else {
+
+        $('#spnLastName').text('');
+        $('#txtLastName').css('border-color', 'green');
+    }
+    //Username
+    if (UserName == "") {
+
+        $('#spnUserName').text('UserName can not be blank.');
+        $('#txtUserName').css('border-color', 'red');
+        $('#txtUserName').focus();
+        isValid = false;
+    }
+    else {
+
+        $('#spnUserName').text('');
+        $('#txtUserName').css('border-color', 'green');
+    }
+
+    //email
+    if (Email == "") {
+
+        $('#spnEmail').text('EmailId can not be blank.');
+        $('#txtEmail').css('border-color', 'red');
+        $('#txtEmail').focus();
+        isValid = false;
+    }
+    else {
+
+        $('#spnEmail').text('');
+        $('#txtEmail').css('border-color', 'green');
+    }
+
+    //password
+    if (Password == "") {
+
+        $('#spnPassword').text('Password can not be blank.');
+        $('#txtPassword').css('border-color', 'red');
+        $('#txtPassword').focus();
+        isValid = false;
+    }
+    else {
+
+        $('#spnPassword').text('');
+        $('#txtPassword').css('border-color', 'green');
+    }
+
+    //phone
+    if (PhoneNo == "") {
+
+        $('#spnPhoneNo').text('PhoneNumber can not be blank.');
+        $('#txtPhoneNo').css('border-color', 'red');
+        $('#txtPhoneNo').focus();
+        isValid = false;
+    }
+    else {
+
+        $('#spnPhoneNo').text('');
+        $('#txtPhoneNo').css('border-color', 'green');
+    }
+
+    return isValid;
 }
 
 

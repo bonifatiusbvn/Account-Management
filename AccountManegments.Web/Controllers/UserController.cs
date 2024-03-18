@@ -104,8 +104,6 @@ namespace AccountManegments.Web.Controllers
 
             try
             {
-
-
                 var user = new UserViewModel()
                 {
                     Id = Guid.NewGuid(),
