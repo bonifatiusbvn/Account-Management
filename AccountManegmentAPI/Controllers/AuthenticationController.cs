@@ -54,5 +54,42 @@ namespace AccountManagement.API.Controllers
             var userList = await Authentication.GetUsersList(UsersList);
             return Ok(new { code = 200, data = userList });
         }
+
+        [HttpGet]
+        [Route("GetUserById")]
+        public async Task<IActionResult> GetEmployeeById(Guid UserId)
+        {
+            var userProfile = await Authentication.GetUserById(UserId);
+            return Ok(new { code = 200, data = userProfile });
+        }
+
+        [HttpPost]
+        [Route("CreateUser")]
+        public async Task<IActionResult> CreateUser(UserViewModel UpdateUser)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var updateUser = await Authentication.CreateUser(UpdateUser);
+            if (updateUser.Code == 200)
+            {
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = updateUser.Message;
+                response.Icone = updateUser.Icone;
+            }
+            return StatusCode(response.Code, response);
+        }
+        [HttpPost]
+        [Route("UpdateUserDetails")]
+        public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var updateUser = await Authentication.UpdateUserDetails(UpdateUser);
+            if (updateUser.Code == 200)
+            {
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = updateUser.Message;
+                response.Icone = updateUser.Icone;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

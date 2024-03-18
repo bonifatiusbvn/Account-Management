@@ -13,5 +13,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public int Code { get; set; }
         public dynamic Data { get; set; }
         public string Message { get; set; }
+        public string Icone { get; set; }
     }
 }

@@ -20,6 +20,16 @@ namespace AccountManagement.Repository.Services.Authentication
 
         public IAuthentication Authentication { get; }
 
+        public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
+        {
+            return await Authentication.CreateUser(CreateUser);
+        }
+
+        public async Task<LoginView> GetUserById(Guid UserId)
+        {
+            return await Authentication.GetUserById(UserId);
+        }
+
         public async Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList)
         {
             return await Authentication.GetUsersList(GetUsersList);
@@ -30,6 +40,9 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.LoginUser(LoginUser);
         }
 
-
+        public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
+        {
+            return await Authentication.UpdateUserDetails(UpdateUser);
+        }
     }
 }

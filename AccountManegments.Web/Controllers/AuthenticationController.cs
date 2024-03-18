@@ -10,6 +10,7 @@ using System.Net;
 using System.Security.Claims;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.API;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -22,10 +23,13 @@ namespace AccountManegments.Web.Controllers
             WebAPI = webAPI;
             APIServices = aPIServices;
             Environment = environment;
+
         }
         public WebAPI WebAPI { get; }
         public APIServices APIServices { get; }
         public IWebHostEnvironment Environment { get; }
+        public UserSession UserSession { get; }
+
         public IActionResult Index()
         {
             return View();
@@ -98,8 +102,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
-
                 if (ModelState.IsValid)
                 {
 
@@ -126,10 +128,11 @@ namespace AccountManegments.Web.Controllers
                         userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
                         var claims = new List<Claim>()
                               {
-                                new Claim("UserID", userlogin.Data.Id.ToString()),
+                                new Claim("UserId", userlogin.Data.Id.ToString()),
                                 new Claim("FullName", userlogin.Data.FullName),
                                 new Claim("UserName", userlogin.Data.UserName),
                               };
+
 
 
 
@@ -148,61 +151,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
-        public IActionResult UserListView()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetUserList()
-        {
-            try
-            {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<LoginView> GetUserList = new List<LoginView>();
-                var data = new jsonData();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "Authentication/GetAllUserList");
-                if (res.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                    GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = GetUserList,
-                };
-                return new JsonResult(jsonData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -219,6 +167,8 @@ namespace AccountManegments.Web.Controllers
             }
             return RedirectToAction("UserLogin");
         }
+
+
 
     }
 }

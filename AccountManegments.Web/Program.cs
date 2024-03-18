@@ -56,7 +56,7 @@ app.UseSession();
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
-
+UserSession.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authentication}/{action=UserLogin}/{id?}");

@@ -13,5 +13,11 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
         Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList);
 
+        Task<LoginView> GetUserById(Guid UserId);
+
+        Task<UserResponceModel> CreateUser(UserViewModel CreateUser);
+        Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
+
+
     }
 }

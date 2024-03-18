@@ -43,27 +43,6 @@
             }
         }
 
-        public static string ProfilePhoto
-        {
-            get
-            {
-                if (StaticHttpContext.Session.GetString("ProfilePhoto") == null)
-                    return null;
-                else
-                    return StaticHttpContext.Session.GetString("ProfilePhoto");
-            }
-            set
-            {
-                StaticHttpContext.Session.SetString("ProfilePhoto", value);
-            }
-        }
 
-        public string UserRoll
-        {
-            get
-            {
-                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserRoll", true) == 0)?.Value;
-            }
-        }
     }
 }

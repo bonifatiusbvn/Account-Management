@@ -1,0 +1,180 @@
+﻿@{
+    ViewData["Title"] = "UserListView";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Users</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0 align-items-center">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">User Tables</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary">Settings</button>
+            <button type="button" class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                <a class="dropdown-item" href="javascript:;">Action</a>
+                <a class="dropdown-item" href="javascript:;">Another action</a>
+                <a class="dropdown-item" href="javascript:;">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0">User Details</h5>
+            <form class="ms-auto position-relative">
+                <button type="button" class="btn btn-info px-5" data-bs-toggle="offcanvas" data-bs-target="#createUser"><i class="lni lni-circle-plus"></i>Create User</button>
+            </form>
+        </div>
+        <div class="card-body">
+            <div class="listjs-table">
+                <div class="table-responsive">
+                    <table id="UserTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+                        <thead class="table-light text-muted text-center">
+                            <tr>
+                                <th class="sort text-uppercase">FirstName</th>
+                                <th class="sort text-uppercase">LastName</th>
+                                <th class="sort text-uppercase">UserName</th>
+                                <th class="sort text-uppercase">Email</th>
+                                <th class="sort text-uppercase">PhoneNo</th>
+                                <th class="sort text-uppercase">IsActive</th>
+                                <th class="sort text-uppercase">RoleName</th>
+                                <th class="sort text-uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <!-- end table -->
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end border-0 w-25" tabindex="-1" id="editUserDetails">
+    <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+        <h5 class="m-0 me-2 text-white">User Details</h5>
+
+        <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div data-simplebar class="h-100">
+            <div class="p-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="border p-3 rounded">
+                            <h6 class="mb-0 text-uppercase">Edit User</h6>
+                            <hr>
+                            <form class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="FirstName">
+                                    <input type="hidden" class="form-control" id="Userid">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="LastName">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">User Name</label>
+                                    <input type="text" class="form-control" id="UserName" readonly>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="Email">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" id="PhoneNo">
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-lg btn-danger btn-default m-1" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close">Close</button>
+                                    <button type="button" class="btn btn-lg btn-success" onclick="UpdateUserDetails()">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="offcanvas offcanvas-end border-0 w-25" tabindex="-1" id="createUser">
+    <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+        <h5 class="m-0 me-2 text-white">User Details</h5>
+
+        <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div data-simplebar class="h-100">
+            <div class="p-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="border p-3 rounded">
+                            <h6 class="mb-0 text-uppercase">Edit User</h6>
+                            <hr>
+                            <form class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="txtFirstName">
+
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="txtLastName">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">User Name</label>
+                                    <input type="text" class="form-control" id="txtUserName">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="txtPassword">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="txtEmail">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" id="txtPhoneNo">
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateUser()">Crete User</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@section Scripts {
+
+    <script src="~/moduls/authenticationscript.js"></script>
+}
