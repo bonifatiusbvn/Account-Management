@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\sonuf\\.nuget\\packages\\": {}
+    "C:\\Users\\ravid\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
+      "projectUniqueName": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
       "projectName": "AccountManagement.Repository",
-      "projectPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
-      "packagesPath": "C:\\Users\\sonuf\\.nuget\\packages\\",
-      "outputPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.Repo\\obj\\",
+      "projectPath": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
+      "packagesPath": "C:\\Users\\ravid\\.nuget\\packages\\",
+      "outputPath": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.Repo\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\sonuf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ravid\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -41,11 +41,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -67,7 +62,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

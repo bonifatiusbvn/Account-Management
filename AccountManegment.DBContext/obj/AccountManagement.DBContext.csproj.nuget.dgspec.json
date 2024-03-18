@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {}
+    "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {}
   },
   "projects": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {
+    "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
+        "projectUniqueName": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
         "projectName": "AccountManagement.DBContext",
-        "projectPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
-        "packagesPath": "C:\\Users\\sonuf\\.nuget\\packages\\",
-        "outputPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\obj\\",
+        "projectPath": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
+        "packagesPath": "C:\\Users\\ravid\\.nuget\\packages\\",
+        "outputPath": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.DBContext\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sonuf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ravid\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -35,11 +35,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -61,7 +56,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

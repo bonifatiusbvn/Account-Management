@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SFgUEHY8qwcO7gzOSuBA12sNve+Lfh/GDdWqDsb3arCuQiY67sbACIZ/cI6TbwEawZWHCATES2FKVw1uxrgYqw==",
+  "dgSpecHash": "p+6aPa1/kuxsuOTtmWkl/V/Mice1L9iO6QntGK1hA2HJ3q4K45qaaJhda/wQBrMfYm7+PmhyjiHlpteZ+TaXRw==",
   "success": true,
-  "projectFilePath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
+  "projectFilePath": "D:\\Bonifatius\\Repos\\Account Managemant\\Account-Management\\AccountManegment.Repo\\AccountManagement.Repository.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
