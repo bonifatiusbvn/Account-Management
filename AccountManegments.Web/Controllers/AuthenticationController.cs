@@ -202,5 +202,23 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                HttpContext.Session.Clear();
+                await HttpContext.SignOutAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return RedirectToAction("UserLogin");
+        }
+
     }
 }
