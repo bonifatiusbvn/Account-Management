@@ -100,9 +100,17 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
         }
 
-        public async Task<IEnumerable<LoginView>> GetUsersList()
+
+
+
+
+        public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<LoginView> GetUsersList = from e in Context.Users
+
+            try
+            {
+
+                IEnumerable<LoginView> userList = from e in Context.Users
                                                   join r in Context.UserRoles on e.RoleId equals r.RoleId
                                                   select new LoginView
                                                   {
@@ -113,11 +121,62 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                       Email = e.Email,
                                                       PhoneNo = e.PhoneNo,
                                                       IsActive = e.IsActive,
-                                                      RoleName = r.Role,
+                                                      RoleName = r.Role
                                                   };
 
-            return GetUsersList;
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "username":
+                            userList = userList.Where(u => u.UserName.ToLower().Contains(searchText));
+                            break;
+                        case "email":
+                            userList = userList.Where(u => u.Email.ToLower().Contains(searchText));
+                            break;
+                        case "phone":
+                            userList = userList.Where(u => u.PhoneNo.ToLower().Contains(searchText));
+                            break;
+
+                    }
+                }
+
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    switch (sortBy.ToLower())
+                    {
+                        case "username":
+                            userList = userList.OrderBy(u => u.UserName);
+                            break;
+                        case "role":
+                            userList = userList.OrderBy(u => u.RoleName);
+                            break;
+                        case "active":
+                            userList = userList.OrderBy(u => u.IsActive);
+                            break;
+                        case "email":
+                            userList = userList.OrderBy(u => u.Email);
+                            break;
+                        case "phone":
+                            userList = userList.OrderBy(u => u.PhoneNo);
+                            break;
+
+                    }
+                }
+
+                return userList.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
+
+
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {

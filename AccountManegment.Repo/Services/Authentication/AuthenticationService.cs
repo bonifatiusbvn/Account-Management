@@ -30,9 +30,10 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.GetUserById(UserId);
         }
 
-        public async Task<IEnumerable<LoginView>> GetUsersList()
+
+        public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await Authentication.GetUsersList();
+            return await Authentication.GetUsersList(searchText, searchBy, sortBy);
         }
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)

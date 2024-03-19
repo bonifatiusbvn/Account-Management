@@ -1,4 +1,4 @@
-﻿
+﻿AllUserTable();
 function CreateUser() {
 
     var objData = {
@@ -103,50 +103,79 @@ function DisplayUserDetails(UserId) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    // JavaScript code for filtering the table
-    function filterTable() {
-        var searchText = document.getElementById("txtSearch").value.toLowerCase();
-        var searchBy = document.getElementById("ddlSearchBy").value.toLowerCase();
-        var rows = document.getElementById("userTable").getElementsByTagName("tbody")[0].rows;
-        for (var i = 0; i < rows.length; i++) {
-            var text = rows[i].cells[searchBy].textContent.toLowerCase();
-            if (!text.includes(searchText)) {
-                rows[i].style.display = "none";
-            } else {
-                rows[i].style.display = "";
-            }
-        }
-    }
+// JavaScript/jQuery Functions
+$(document).ready(function () {
+    $('#txtSearch').on('keyup', function () {
+        filterTable();
+    });
 
-    // JavaScript code for sorting the table
-    function sortTable() {
-        var sortBy = document.getElementById("ddlSortBy").value;
-        var tbody = document.getElementById("userTable").getElementsByTagName("tbody")[0];
-        var rows = Array.from(tbody.rows);
-        rows.sort((a, b) => {
-            var cellA = a.cells[sortBy].textContent.toUpperCase();
-            var cellB = b.cells[sortBy].textContent.toUpperCase();
-            return cellA.localeCompare(cellB);
-        });
-        tbody.innerHTML = "";
-        rows.forEach(row => tbody.appendChild(row));
-    }
+    $('#ddlSearchBy').on('change', function () {
+        filterTable();
+    });
 
-    // Check if necessary elements exist before adding event listeners
-    var txtSearch = document.getElementById("txtSearch");
-    var ddlSearchBy = document.getElementById("ddlSearchBy");
-    var ddlSortBy = document.getElementById("ddlSortBy");
-    var userTable = document.getElementById("userTable");
-
-    if (txtSearch && ddlSearchBy && ddlSortBy && userTable) {
-        txtSearch.addEventListener("input", filterTable);
-        ddlSearchBy.addEventListener("change", filterTable);
-        ddlSortBy.addEventListener("change", sortTable);
-    } else {
-        console.error("One or more elements not found.");
-    }
+    $('#ddlSortBy').on('change', function () {
+        sortTable();
+    });
 });
+
+
+function AllUserTable() {
+
+    var searchText = $('#txtSearch').val();
+    var searchBy = $('#ddlSearchBy').val();
+
+    $.get("/User/UserListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
+
+
+            $("#Usertbody").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+function filterTable() {
+    debugger
+    var searchText = $('#txtSearch').val();
+    var searchBy = $('#ddlSearchBy').val();
+
+    $.ajax({
+        url: '/User/UserListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            $("#Usertbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+
+function sortTable() {
+    debugger
+    var sortBy = $('#ddlSortBy').val();
+
+
+    $.ajax({
+        url: '/User/UserListAction',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            $("#Usertbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+
 
 function UpdateUserDetails() {
 

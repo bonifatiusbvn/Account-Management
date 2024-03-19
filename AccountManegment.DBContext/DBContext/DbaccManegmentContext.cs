@@ -33,7 +33,10 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -107,10 +110,9 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<Site>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Site");
+            entity.ToTable("Site");
 
+            entity.Property(e => e.SiteId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
             entity.Property(e => e.ContectPersonName).HasMaxLength(50);
