@@ -23,6 +23,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
 
         public bool IsActive { get; set; }
         public string RoleName { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
     public class LoginResponseModel
     {

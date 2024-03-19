@@ -27,7 +27,6 @@ function CreateUser() {
             });
         },
     })
-
 }
 //function GetAllUserData() {
 //    $('#UserTableData').DataTable({
@@ -78,23 +77,42 @@ function CreateUser() {
 //    });
 //}
 
-
+function ClearTextBox() {
+    $('#txtUserid').val('');
+    $('#txtFirstName').val('');
+    $('#txtLastName').val('');
+    $('#txtUserName').val('');
+    $('#txtPassword').val('');
+    $('#txtEmail').val('');
+    $('#txtPhoneNo').val('');
+    var button = document.getElementById("btnuser");
+    if ($('#txtUserid').val() == '') {
+        button.textContent = "Create";
+    }
+    var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
+    offcanvas.show();
+}
 function DisplayUserDetails(UserId) {
+
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            $('#Userid').val(response.id);
-            $('#FirstName').val(response.firstName);
-            $('#LastName').val(response.lastName);
-            $('#Password').val(response.password);
-            $('#UserName').val(response.userName);
-            $('#Email').val(response.email);
-            $('#PhoneNo').val(response.phoneNo);
 
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('editUserDetails'));
+            $('#txtUserid').val(response.id);
+            $('#txtFirstName').val(response.firstName);
+            $('#txtLastName').val(response.lastName);
+            $('#txtPassword').val(response.password);
+            $('#txtUserName').val(response.userName);
+            $('#txtEmail').val(response.email);
+            $('#txtPhoneNo').val(response.phoneNo);
+            var button = document.getElementById("btnuser");
+            if ($('#txtUserid').val() != '') {
+                button.textContent = "Update";
+            }
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
             offcanvas.show();
         },
         error: function (xhr, status, error) {
@@ -102,21 +120,6 @@ function DisplayUserDetails(UserId) {
         }
     });
 }
-
-// JavaScript/jQuery Functions
-$(document).ready(function () {
-    $('#txtSearch').on('keyup', function () {
-        filterTable();
-    });
-
-    $('#ddlSearchBy').on('change', function () {
-        filterTable();
-    });
-
-    $('#ddlSortBy').on('change', function () {
-        sortTable();
-    });
-});
 
 
 function AllUserTable() {
@@ -136,7 +139,7 @@ function AllUserTable() {
 }
 
 function filterTable() {
-    debugger
+
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
 
@@ -157,10 +160,7 @@ function filterTable() {
 }
 
 function sortTable() {
-    debugger
     var sortBy = $('#ddlSortBy').val();
-
-
     $.ajax({
         url: '/User/UserListAction',
         type: 'GET',
@@ -180,16 +180,16 @@ function sortTable() {
 function UpdateUserDetails() {
 
     var objData = {
-        Id: $('#Userid').val(),
-        FirstName: $('#FirstName').val(),
-        LastName: $('#LastName').val(),
-        UserName: $('#UserName').val(),
-        Password: $('#Password').val(),
-        Email: $('#Email').val(),
-        PhoneNo: $('#PhoneNo').val(),
+        Id: $('#txtUserid').val(),
+        FirstName: $('#txtFirstName').val(),
+        LastName: $('#txtLastName').val(),
+        UserName: $('#txtUserName').val(),
+        Password: $('#txtPassword').val(),
+        Email: $('#txtEmail').val(),
+        PhoneNo: $('#txtPhoneNo').val(),
     }
     $.ajax({
-        url: '/Authentication/UpdateUserDetails',
+        url: '/User/UpdateUserDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -201,110 +201,103 @@ function UpdateUserDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/Authentication/UserListView';
+                window.location = '/User/UserListView';
             });
         },
     })
 
 }
-var FirstName, LastName, UserName, Password, Email, PhoneNo;
-var isValid = true;
+function validateAndCreateUser() {
 
-$('#btnUpdate').click(function () {
-    if (CheckValidation() == false) {
-        return false;
-    }
-});
-function CheckValidation() {
-    FirstName = $('#txtFirstName').val();
-    LastName = $('#txtLastName').val();
-    UserName = $('#txtUserName').val();
-    Password = $('#txtPassword').val();
-    Email = $('#txtEmail').val();
-    PhoneNo = $('#txtPhoneNo').val();
+    resetErrorMessages();
 
-    //fname
-    if (FirstName == "") {
-        $('#spnFirstName').text('FirstName can not be blank.');
-        $('#txtFirstName').css('border-color', 'red');
-        $('#txtFirstName').focus();
+    var firstName = document.getElementById("txtFirstName").value.trim();
+    var lastName = document.getElementById("txtLastName").value.trim();
+    var userName = document.getElementById("txtUserName").value.trim();
+    var password = document.getElementById("txtPassword").value.trim();
+    var email = document.getElementById("txtEmail").value.trim();
+    var phoneNo = document.getElementById("txtPhoneNo").value.trim();
+
+
+    var isValid = true;
+
+
+    if (firstName === "") {
+        document.getElementById("spnFirstName").innerText = "First Name is required.";
         isValid = false;
     }
-    else {
-        $('#spnFirstName').text('');
-        $('#txtFirstName').css('border-color', 'green');
-    }
-    //lname
-    if (LastName == "") {
 
-        $('#spnLastName').text('LastName can not be blank.');
-        $('#txtLastName').css('border-color', 'red');
-        $('#txtLastName').focus();
+
+    if (lastName === "") {
+        document.getElementById("spnLastName").innerText = "Last Name is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnLastName').text('');
-        $('#txtLastName').css('border-color', 'green');
-    }
-    //Username
-    if (UserName == "") {
 
-        $('#spnUserName').text('UserName can not be blank.');
-        $('#txtUserName').css('border-color', 'red');
-        $('#txtUserName').focus();
+    if (userName === "") {
+        document.getElementById("spnUserName").innerText = "User Name is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnUserName').text('');
-        $('#txtUserName').css('border-color', 'green');
-    }
 
-    //email
-    if (Email == "") {
-
-        $('#spnEmail').text('EmailId can not be blank.');
-        $('#txtEmail').css('border-color', 'red');
-        $('#txtEmail').focus();
+    if (password === "") {
+        document.getElementById("spnPassword").innerText = "Password is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnEmail').text('');
-        $('#txtEmail').css('border-color', 'green');
-    }
 
-    //password
-    if (Password == "") {
-
-        $('#spnPassword').text('Password can not be blank.');
-        $('#txtPassword').css('border-color', 'red');
-        $('#txtPassword').focus();
+    if (email === "") {
+        document.getElementById("spnEmail").innerText = "Email is required.";
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        document.getElementById("spnEmail").innerText = "Invalid Email format.";
         isValid = false;
     }
-    else {
 
-        $('#spnPassword').text('');
-        $('#txtPassword').css('border-color', 'green');
-    }
 
-    //phone
-    if (PhoneNo == "") {
-
-        $('#spnPhoneNo').text('PhoneNumber can not be blank.');
-        $('#txtPhoneNo').css('border-color', 'red');
-        $('#txtPhoneNo').focus();
+    if (phoneNo === "") {
+        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
+        isValid = false;
+    } else if (!isValidPhoneNo(phoneNo)) {
+        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
         isValid = false;
     }
-    else {
 
-        $('#spnPhoneNo').text('');
-        $('#txtPhoneNo').css('border-color', 'green');
+
+    if (isValid) {
+        if ($("#txtxUserid").val() == '') {
+            CreateUser();
+        }
+        else {
+            UpdateUserDetails()
+        }
     }
-
-    return isValid;
 }
+
+
+function resetErrorMessages() {
+    document.getElementById("spnFirstName").innerText = "";
+    document.getElementById("spnLastName").innerText = "";
+    document.getElementById("spnUserName").innerText = "";
+    document.getElementById("spnPassword").innerText = "";
+    document.getElementById("spnEmail").innerText = "";
+    document.getElementById("spnPhoneNo").innerText = "";
+}
+
+
+function isValidEmail(email) {
+
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+
+function isValidPhoneNo(phoneNo) {
+
+    var phoneNoPattern = /^\d{10}$/;
+    return phoneNoPattern.test(phoneNo);
+}
+
 
 
 
