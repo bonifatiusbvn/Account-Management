@@ -403,3 +403,5 @@ FodyWeavers.xsd
 /.vs/AccountManegmentAPI/config/applicationhost.config
 /.vs/AccountManegmentAPI/DesignTimeBuild/.dtbcache.v2
 /.vs/AccountManegmentAPI/v17/fileList.bin
+bin/
+obj/
