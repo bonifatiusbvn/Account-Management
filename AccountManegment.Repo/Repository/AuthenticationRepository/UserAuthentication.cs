@@ -86,6 +86,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 FirstName = e.FirstName,
                                 LastName = e.LastName,
                                 Email = e.Email,
+                                Password = e.Password,
+                                IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
                                 RoleName = r.Role,
 
@@ -98,59 +100,24 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
         }
 
-        public async Task<jsonData> GetUsersList(DataTableRequstModel UsersList)
+        public async Task<IEnumerable<LoginView>> GetUsersList()
         {
-            var GetUsersList = from e in Context.Users
-                               join r in Context.UserRoles on e.RoleId equals r.RoleId
-                               select new LoginView
-                               {
-                                   Id = e.Id,
-                                   FirstName = e.FirstName,
-                                   LastName = e.LastName,
-                                   UserName = e.UserName,
-                                   Email = e.Email,
-                                   PhoneNo = e.PhoneNo,
-                                   IsActive = e.IsActive,
-                                   RoleName = r.Role,
-                               };
+            IEnumerable<LoginView> GetUsersList = from e in Context.Users
+                                                  join r in Context.UserRoles on e.RoleId equals r.RoleId
+                                                  select new LoginView
+                                                  {
+                                                      Id = e.Id,
+                                                      FirstName = e.FirstName,
+                                                      LastName = e.LastName,
+                                                      UserName = e.UserName,
+                                                      Email = e.Email,
+                                                      PhoneNo = e.PhoneNo,
+                                                      IsActive = e.IsActive,
+                                                      RoleName = r.Role,
+                                                  };
 
-            if (!string.IsNullOrEmpty(UsersList.sortColumn) && !string.IsNullOrEmpty(UsersList.sortColumnDir))
-            {
-
-                var property = typeof(LoginView).GetProperty(UsersList.sortColumn);
-                if (property != null)
-                {
-                    var parameter = Expression.Parameter(typeof(LoginView), "x");
-                    var propertyAccess = Expression.Property(parameter, property);
-                    var orderByExp = Expression.Lambda(propertyAccess, parameter);
-                    string methodName = UsersList.sortColumnDir.ToLower() == "asc" ? "OrderBy" : "OrderByDescending";
-                    var resultExp = Expression.Call(typeof(Queryable), methodName,
-                                                    new Type[] { typeof(LoginView), property.PropertyType },
-                                                    GetUsersList.Expression, Expression.Quote(orderByExp));
-                    GetUsersList = GetUsersList.Provider.CreateQuery<LoginView>(resultExp);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(UsersList.searchValue))
-            {
-                GetUsersList = GetUsersList.Where(e => e.UserName.Contains(UsersList.searchValue) || e.RoleName.Contains(UsersList.searchValue));
-            }
-
-            int totalRecord = await GetUsersList.CountAsync();
-            var cData = await GetUsersList.Skip(UsersList.skip).Take(UsersList.pageSize).ToListAsync();
-
-            jsonData jsonData = new jsonData
-            {
-                draw = UsersList.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = cData
-            };
-
-            return jsonData;
+            return GetUsersList;
         }
-
-
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {
@@ -210,6 +177,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.Id = UpdateUser.Id;
                     Userdata.FirstName = UpdateUser.FirstName;
                     Userdata.LastName = UpdateUser.LastName;
+                    Userdata.Password = UpdateUser.Password;
                     Userdata.Email = UpdateUser.Email;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Context.Users.Update(Userdata);

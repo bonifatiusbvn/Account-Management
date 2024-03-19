@@ -47,12 +47,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
-        [HttpPost]
+        [HttpGet]
         [Route("GetAllUserList")]
-        public async Task<IActionResult> GetAllUserList(DataTableRequstModel UsersList)
+        public async Task<IActionResult> GetAllUserList()
         {
-            var userList = await Authentication.GetUsersList(UsersList);
-            return Ok(new { code = 200, data = userList });
+            IEnumerable<LoginView> userList = await Authentication.GetUsersList();
+            return Ok(new { code = 200, data = userList.ToList() });
         }
 
         [HttpGet]

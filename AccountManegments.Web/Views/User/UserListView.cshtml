@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.UserModels.LoginView>
+@{
     ViewData["Title"] = "UserListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -35,32 +36,94 @@
         <div class="d-flex align-items-center">
             <h5 class="mb-0">User Details</h5>
             <form class="ms-auto position-relative">
-                <button type="button" class="btn btn-info px-5" data-bs-toggle="offcanvas" data-bs-target="#createUser"><i class="lni lni-circle-plus"></i>User</button>
+                <button type="button" class="btn btn-info px-5" data-bs-toggle="offcanvas" data-bs-target="#createUser"><i class="lni lni-circle-plus"></i>Add User</button>
             </form>
         </div>
-        <div class="card-body">
-            <div class="listjs-table">
-                <div class="table-responsive">
-                    <table id="UserTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                        <thead class="table-light text-muted text-center">
+
+        <div class="card radius-10 w-100">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-12 col-lg-4">
+                                        <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
+                                        </input>
+                                    </div>
+                                    <div class="col-12 col-lg-4">
+                                        <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                            <option selected="selected">UserName</option>
+                                            <option>Email</option>
+                                            <option>Phone</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-lg-4">
+                                        <select class="form-select" id="ddlSortBy" onchange="sortTable()">
+                                            <option value="UserName" selected="selected">Default sorting</option>
+                                            <option value="Role">Sort by Role</option>
+                                            <option value="Active">Sort by Active</option>
+                                            <option value="Email">Sort by Email</option>
+                                            <option value="Phone">Sort Phone</option>
+
+                                        </select>
+                                    </div>
+                                </div><!--end row-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!--end row-->
+                <div class="table-responsive mt-2">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light" id="userTable">
                             <tr>
-                                <th class="sort text-uppercase">FirstName</th>
-                                <th class="sort text-uppercase">LastName</th>
-                                <th class="sort text-uppercase">UserName</th>
-                                <th class="sort text-uppercase">Email</th>
-                                <th class="sort text-uppercase">PhoneNo</th>
-                                <th class="sort text-uppercase">IsActive</th>
-                                <th class="sort text-uppercase">RoleName</th>
-                                <th class="sort text-uppercase">Action</th>
+                                <th>FirstName</th>
+                                <th>LastName</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th>PhoneNo</th>
+                                <th>IsActive</th>
+                                <th>RoleName</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.PhoneNo</td>
+                                    <td>
+                                        @if (@item.IsActive == true)
+                                        {
+                                            <span class="badge bg-success text-uppercase">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger text-uppercase">Deactive</span>
+                                        }
+                                    </td>
+                                    <td>@item.RoleName</td>
+
+                                    <td>
+                                        <div class="table-actions d-flex align-items-center gap-3 fs-6">
+                                            <a class="btn text-warning" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                                            <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
-                    <!-- end table -->
                 </div>
             </div>
-            <!-- container-fluid -->
         </div>
     </div>
 </div>
@@ -91,9 +154,13 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">User Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" id="UserName" readonly>
+                                    <input type="text" class="form-control form-control-lg mb-3" id="UserName">
                                 </div>
-
+                                <div class="col-12">
+                                    <label class="form-label">Password</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" id="Password">
+                                    <span id="spnPassword" class="text-danger"></span>
+                                </div>
                                 <div class="col-12">
                                     <label class="form-label">Email</label>
                                     <input type="text" class="form-control form-control-lg mb-3" id="Email">
@@ -131,28 +198,34 @@
                     <div class="card-body">
 
 
-                        <form class="row g-3 needs-validation" id="userForm">
+                        <form class="row g-3" id="userForm">
                             <div class="col-12">
+                                <label class="form-label">First Name</label>
                                 <input type="text" class="form-control form-control-lg mb-3" placeholder="First Name" id="txtFirstName" required>
                                 <span id="spnFirstName" class="text-danger"></span>
                             </div>
                             <div class="col-12">
+                                <label class="form-label">Last Name</label>
                                 <input type="text" class="form-control form-control-lg mb-3" placeholder="Last Name" id="txtLastName" required>
                                 <span id="spnLastName" class="text-danger"></span>
                             </div>
                             <div class="col-12">
+                                <label class="form-label">User Name</label>
                                 <input type="text" class="form-control form-control-lg mb-3" placeholder="User Name" id="txtUserName" required>
                                 <span id="spnUserName" class="text-danger"></span>
                             </div>
                             <div class="col-12">
+                                <label class="form-label">Password</label>
                                 <input type="password" class="form-control form-control-lg mb-3" placeholder="Password" id="txtPassword" required>
                                 <span id="spnPassword" class="text-danger"></span>
                             </div>
                             <div class="col-12">
+                                <label class="form-label">Email</label>
                                 <input type="text" class="form-control form-control-lg mb-3" placeholder="Email" id="txtEmail" required>
                                 <span id="spnEmail" class="text-danger"></span>
                             </div>
                             <div class="col-12">
+                                <label class="form-label">Phone Number</label>
                                 <input type="text" class="form-control form-control-lg mb-3" placeholder="Phone Number" id="txtPhoneNo" required>
                                 <span id="spnPhoneNo" class="text-danger"></span>
                             </div>

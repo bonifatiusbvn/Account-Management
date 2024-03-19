@@ -11,7 +11,7 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
     public interface IAuthentication
     {
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
-        Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList);
+        Task<IEnumerable<LoginView>> GetUsersList();
 
         Task<LoginView> GetUserById(Guid UserId);
 

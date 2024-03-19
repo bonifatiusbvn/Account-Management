@@ -30,9 +30,9 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.GetUserById(UserId);
         }
 
-        public async Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList)
+        public async Task<IEnumerable<LoginView>> GetUsersList()
         {
-            return await Authentication.GetUsersList(GetUsersList);
+            return await Authentication.GetUsersList();
         }
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
