@@ -1,0 +1,30 @@
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.deps.json
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.dll
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.pdb
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.GeneratedMSBuildEditorConfig.editorconfig
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.AssemblyInfoInputs.cache
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.AssemblyInfo.cs
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.csproj.CoreCompileInputs.cache
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.sourcelink.json
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.dll
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\refint\AccountManagement.DBContext.dll
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.pdb
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\ref\AccountManagement.DBContext.dll
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.runtimeconfig.json
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.csproj.AssemblyReference.cache
+D:\Bonifatius Projects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.genruntimeconfig.cache
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.deps.json
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.runtimeconfig.json
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.dll
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\bin\Debug\net6.0\AccountManagement.DBContext.pdb
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.csproj.AssemblyReference.cache
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.GeneratedMSBuildEditorConfig.editorconfig
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.AssemblyInfoInputs.cache
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.AssemblyInfo.cs
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.csproj.CoreCompileInputs.cache
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.sourcelink.json
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.dll
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\refint\AccountManagement.DBContext.dll
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.pdb
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\AccountManagement.DBContext.genruntimeconfig.cache
+D:\BonifatiusProjects\AccountManegments\AccountManegment.DBContext\obj\Debug\net6.0\ref\AccountManagement.DBContext.dll

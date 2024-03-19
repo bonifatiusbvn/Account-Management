@@ -397,6 +397,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+/.vs
 /AccountManegments.Web/wwwroot/RestaurantImage
 /.vs/AccountManegmentAPI/v17/.suo
 /.vs/AccountManegmentAPI/config/applicationhost.config

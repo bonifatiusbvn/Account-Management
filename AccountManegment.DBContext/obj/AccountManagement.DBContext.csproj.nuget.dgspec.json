@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {}
+    "D:\\BonifatiusProjects\\AccountManegments\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {}
   },
   "projects": {
-    "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {
+    "D:\\BonifatiusProjects\\AccountManegments\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
+        "projectUniqueName": "D:\\BonifatiusProjects\\AccountManegments\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
         "projectName": "AccountManagement.DBContext",
-        "projectPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
+        "projectPath": "D:\\BonifatiusProjects\\AccountManegments\\AccountManegment.DBContext\\AccountManagement.DBContext.csproj",
         "packagesPath": "C:\\Users\\sonuf\\.nuget\\packages\\",
-        "outputPath": "D:\\Bonifatius Projects\\AccountManegment\\AccountManegment.DBContext\\obj\\",
+        "outputPath": "D:\\BonifatiusProjects\\AccountManegments\\AccountManegment.DBContext\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sonuf\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,24 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.17, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.17, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.17, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

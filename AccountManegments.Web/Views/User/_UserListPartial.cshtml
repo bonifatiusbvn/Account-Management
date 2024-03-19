@@ -1,0 +1,35 @@
+﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.UserModels.LoginView>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.FirstName</td>
+        <td>@item.LastName</td>
+        <td>@item.UserName</td>
+        <td>@item.Email</td>
+        <td>@item.PhoneNo</td>
+        <td>
+            @if (@item.IsActive == true)
+            {
+                <span class="badge bg-success text-uppercase">Active</span>
+            }
+            else
+            {
+                <span class="badge bg-danger text-uppercase">Deactive</span>
+            }
+        </td>
+        <td>@item.RoleName</td>
+
+        <td>
+            <div class="table-actions d-flex align-items-center gap-3 fs-6">
+                <a class="btn text-warning" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            </div>
+        </td>
+    </tr>
+}
+</tbody>

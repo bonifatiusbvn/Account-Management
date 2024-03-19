@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿@model AccountManagement.DBContext.Models.ViewModels.UserModels.LoginRequest
+
+<!doctype html>
 <html lang="en" class="light-theme">
 
 <head>
@@ -6,18 +8,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- loader-->
-    <link href="assets/css/pace.min.css" rel="stylesheet" />
-    <script src="assets/js/pace.min.js"></script>
-
     <!--plugins-->
-    <link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
 
     <!-- CSS Files -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/icons.css" rel="stylesheet">
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/css/bootstrap-extended.css" rel="stylesheet">
+    <link href="~/assets/css/style.css" rel="stylesheet">
+    <link href="~/assets/css/icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
     <title>Dashkote - Bootstrap5 Admin Template</title>
@@ -37,14 +35,17 @@
                                     <h4>Sign In</h4>
                                     <p>Sign In to your account</p>
                                 </div>
-                                <form class="form-body row g-3">
+                                <form class="form-body row g-3" asp-action="UserLogin" asp-controller="Authentication" method="post">
                                     <div class="col-12">
                                         <label for="inputEmail" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="inputEmail">
+                                        <input type="text" class="form-control" asp-for="UserName">
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                     <div class="col-12">
                                         <label for="inputPassword" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="inputPassword">
+                                        <input type="password" class="form-control" asp-for="Password">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                        <span class="text-danger">@TempData["ErrorMessage"]</span>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-check form-switch">
@@ -57,7 +58,7 @@
                                     </div>
                                     <div class="col-12 col-lg-12">
                                         <div class="d-grid">
-                                            <button type="button" class="btn btn-primary">Sign In</button>
+                                            <button type="submit" class="btn btn-primary">Sign Ini</button>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-12">
@@ -67,13 +68,13 @@
                                     </div>
                                     <div class="col-12 col-lg-12">
                                         <div class="social-login d-flex flex-row align-items-center justify-content-center gap-2 my-2">
-                                            <a href="javascript:;" class=""><img src="assets/images/icons/facebook.png" alt=""></a>
-                                            <a href="javascript:;" class=""><img src="assets/images/icons/apple-black-logo.png" alt=""></a>
-                                            <a href="javascript:;" class=""><img src="assets/images/icons/google.png" alt=""></a>
+                                            <a href="javascript:;" class=""><img src="~/assets/images/icons/facebook.png" alt=""></a>
+                                            <a href="javascript:;" class=""><img src="~/assets/images/icons/apple-black-logo.png" alt=""></a>
+                                            <a href="javascript:;" class=""><img src="~/assets/images/icons/google.png" alt=""></a>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-12 text-center">
-                                        <p class="mb-0">Don't have an account? <a href="authentication-sign-up-cover.html">Sign up</a></p>
+                                        <p class="mb-0">Don't have an account? <a asp-action="UserSingUp" asp-controller="Authentication">Sign up</a></p>
                                     </div>
                                 </form>
                             </div>
