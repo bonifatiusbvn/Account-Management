@@ -1,0 +1,379 @@
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+<!doctype html>
+<html lang="en" class="semi-dark">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*     <!-- loader-->
+    <link href="~/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="~/assets/js/pace.min.js"></script>
+    *@
+    <!--plugins-->
+    <link href="~/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="~/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+
+
+    <!-- CSS Files -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/css/bootstrap-extended.css" rel="stylesheet">
+    <link href="~/assets/css/style.css" rel="stylesheet">
+    <link href="~/assets/css/icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Theme Styles-->
+    <link href="~/assets/css/dark-theme.css" rel="stylesheet" />
+    <link href="~/assets/css/semi-dark.css" rel="stylesheet" />
+    <link href="~/assets/css/header-colors.css" rel="stylesheet" />
+
+    <!--datatable css-->
+    <!--datatable responsive css-->
+    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+    @*  <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
+    <title>@ViewData["Title"] - AccountManegments.Web</title>
+</head>
+
+<body>
+    <!--start wrapper-->
+    <div class="wrapper">
+
+        <!--start sidebar -->
+        <aside class="sidebar-wrapper" data-simplebar="true">
+            <div class="sidebar-header">
+                <div>
+                    <img src="~/assets/images/logo-icon-2.png" class="logo-icon" alt="logo icon">
+                </div>
+                <div>
+                    <h4 class="logo-text">Dashkote</h4>
+                </div>
+                <div class="toggle-icon ms-auto">
+                    <ion-icon name="menu-sharp"></ion-icon>
+                </div>
+            </div>
+            <!--navigation-->
+
+            <ul class="metismenu" id="menu">
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon">
+                            <ion-icon name="bag-handle-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">eCommerce</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="ecommerce-shop-grid-view.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Grid
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-shop-list-view.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product List
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-shop-grid-view-top-filter.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Top Filters
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-product-details.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-product-comparison.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="CreateCompany" asp-controller="Company">
+                                <ion-icon name="ellipse-outline"></ion-icon>Create Company
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-label">Pages</li>
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon">
+                            <ion-icon name="lock-closed-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">Authentication</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a asp-action="UserListView" asp-controller="User">
+                                <ion-icon name="ellipse-outline"></ion-icon>User List
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+            <!--end navigation-->
+        </aside>
+        <!--end sidebar -->
+        <!--start top header-->
+        <header class="top-header">
+            <nav class="navbar navbar-expand gap-3">
+                <div class="mobile-menu-button">
+                    <ion-icon name="menu-sharp"></ion-icon>
+                </div>
+
+                <div class="top-navbar-right ms-auto">
+
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item mobile-search-button">
+                            <a class="nav-link" href="javascript:;">
+                                <div class="">
+                                    <ion-icon name="search-sharp"></ion-icon>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dark-mode-icon" href="javascript:;">
+                                <div class="mode-icon">
+                                    <ion-icon name="moon-sharp"></ion-icon>
+                                </div>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item dropdown dropdown-user-setting">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+                                <div class="user-setting">
+                                    <img src="~/assets/images/avatars/06.png" class="user-img" alt=""><span>@_userSession.FullName</span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex flex-row align-items-center gap-2">
+                                            <img src="~/assets/images/avatars/06.png" alt="" class="rounded-circle" width="54" height="54">
+                                            <div class="">
+                                                <h6 class="mb-0 dropdown-user-name">@_userSession.FullName</h6>
+                                                <small class="mb-0 dropdown-user-designation text-secondary">UI Developer</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="person-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Profile</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="settings-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Setting</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="speedometer-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Dashboard</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="wallet-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Earnings</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="cloud-download-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Downloads</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="Logout" asp-controller="Authentication">
+                                        <div class="d-flex align-items-center">
+                                            <div class="">
+                                                <ion-icon name="log-out-outline"></ion-icon>
+                                            </div>
+                                            <div class="ms-3"><span>Logout</span></div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </nav>
+        </header>
+        <!--end top header-->
+        <!-- start page content wrapper-->
+        <div class="page-content-wrapper">
+            <!-- start page content-->
+            <div class="page-content">
+
+                <!--start breadcrumb-->
+                <!--end breadcrumb-->
+
+
+                <div>
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- end page content-->
+        </div>
+        <!--end page content wrapper-->
+        @*  <!--start footer-->
+        <footer class="footer">
+        <div class="footer-text">
+        Copyright © 2021. All right reserved.
+        </div>
+        </footer>
+        <!--end footer--> *@
+
+
+        <!--Start Back To Top Button-->
+        <a href="javaScript:;" class="back-to-top">
+            <ion-icon name="arrow-up-outline"></ion-icon>
+        </a>
+        <!--End Back To Top Button-->
+        <!--start switcher-->
+        @* <div class="switcher-body">
+        <button class="btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
+        <ion-icon name="color-palette-sharp" class="me-0"></ion-icon>
+        </button>
+        <div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false"
+        tabindex="-1" id="offcanvasScrolling">
+        <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Theme Customizer</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+        <h6 class="mb-0">Theme Variation</h6>
+        <hr>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="LightTheme" value="option1">
+        <label class="form-check-label" for="LightTheme">Light</label>
+        </div>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="DarkTheme" value="option2">
+        <label class="form-check-label" for="DarkTheme">Dark</label>
+        </div>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SemiDark" value="option3"
+        checked>
+        <label class="form-check-label" for="SemiDark">Semi Dark</label>
+        </div>
+        <hr />
+        <h6 class="mb-0">Header Colors</h6>
+        <hr />
+        <div class="header-colors-indigators">
+        <div class="row row-cols-auto g-3">
+        <div class="col">
+        <div class="indigator headercolor1" id="headercolor1"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor2" id="headercolor2"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor3" id="headercolor3"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor4" id="headercolor4"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor5" id="headercolor5"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor6" id="headercolor6"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor7" id="headercolor7"></div>
+        </div>
+        <div class="col">
+        <div class="indigator headercolor8" id="headercolor8"></div>
+        </div>
+        </div>
+        </div>
+
+        </div>
+        </div>
+        </div> *@
+        <!--end switcher-->
+        <!--start overlay-->
+        <div class="overlay nav-toggle-icon"></div>
+        <!--end overlay-->
+
+    </div>
+    <!-- JS Files-->
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="~/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <!--plugins-->
+    <script src="~/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+
+    <script src="~/assets/plugins/chartjs/chart.min.js"></script>
+    <script src="~/assets/js/index.js"></script>
+    <!-- Main JS-->
+
+    <script src="~/assets/js/main.js"></script>
+    <!--end wrapper-->
+    <!-- Sweet Alerts js -->
+    <!-- listjs init -->
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <!--datatable js-->
+    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
