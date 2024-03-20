@@ -31,14 +31,15 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<State> States { get; set; }
 
+    public virtual DbSet<UnitMaster> UnitMasters { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    { }
 
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -120,9 +121,14 @@ public partial class DbaccManegmentContext : DbContext
                 .HasMaxLength(10)
                 .HasColumnName("HSNCode");
             entity.Property(e => e.IsWithGst).HasColumnName("IsWithGST");
+            entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.PricePerUnit).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.UnitTypeNavigation).WithMany(p => p.ItemMasters)
+                .HasForeignKey(d => d.UnitType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ItemMaster_UnitMaster");
         });
 
         modelBuilder.Entity<RolewiseFormPermission>(entity =>
@@ -165,6 +171,15 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_country_id");
+        });
+
+        modelBuilder.Entity<UnitMaster>(entity =>
+        {
+            entity.HasKey(e => e.UnitId);
+
+            entity.ToTable("UnitMaster");
+
+            entity.Property(e => e.UnitName).HasMaxLength(15);
         });
 
         modelBuilder.Entity<User>(entity =>

@@ -7,7 +7,7 @@ public partial class ItemMaster
 {
     public Guid ItemId { get; set; }
 
-    public string ProductName { get; set; } = null!;
+    public string ItemName { get; set; } = null!;
 
     public int UnitType { get; set; }
 
@@ -21,7 +21,7 @@ public partial class ItemMaster
 
     public string? Hsncode { get; set; }
 
-    public bool? IsAproved { get; set; }
+    public bool? IsApproved { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -30,4 +30,6 @@ public partial class ItemMaster
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual UnitMaster UnitTypeNavigation { get; set; } = null!;
 }
