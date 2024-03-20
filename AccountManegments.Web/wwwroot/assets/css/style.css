@@ -1501,3 +1501,32 @@ ul.categories-list li {
         height: auto;
     }
 }
+.ac-view-list {
+    max-height: 550px;
+    overflow-y: scroll;
+    
+}
+
+    .ac-view-list .ac-card.active .card {
+        background-color: lightgrey
+    }
+    .ac-view-list .ac-card{
+        
+    }
+thead th {
+    position: sticky; /* make the table heads sticky */
+    top: 0px; /* table head will be placed from the top of the table and sticks to it */
+}
+tbody {
+    height: 10px; /* Just for the demo          */
+    overflow-y: auto; /* Trigger vertical scroll    */
+    overflow-x: hidden; /* Hide the horizontal scroll */
+}
+@media screen and (max-width:465px) {
+    .hide-sm{
+        display:none
+    }
+    .ac-add-edit{
+        width:85% !important;
+    }
+}
