@@ -1,4 +1,4 @@
-﻿
+﻿AllUserTable();
 function CreateUser() {
 
     var objData = {
@@ -27,7 +27,6 @@ function CreateUser() {
             });
         },
     })
-
 }
 //function GetAllUserData() {
 //    $('#UserTableData').DataTable({
@@ -78,23 +77,43 @@ function CreateUser() {
 //    });
 //}
 
-
+function ClearTextBox() {
+    resetErrorMessages();
+    $('#txtUserid').val('');
+    $('#txtFirstName').val('');
+    $('#txtLastName').val('');
+    $('#txtUserName').val('');
+    $('#txtPassword').val('');
+    $('#txtEmail').val('');
+    $('#txtPhoneNo').val('');
+    var button = document.getElementById("btnuser");
+    if ($('#txtUserid').val() == '') {
+        button.textContent = "Create";
+    }
+    var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
+    offcanvas.show();
+}
 function DisplayUserDetails(UserId) {
+
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            $('#Userid').val(response.id);
-            $('#FirstName').val(response.firstName);
-            $('#LastName').val(response.lastName);
-            $('#Password').val(response.password);
-            $('#UserName').val(response.userName);
-            $('#Email').val(response.email);
-            $('#PhoneNo').val(response.phoneNo);
 
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('editUserDetails'));
+            $('#txtUserid').val(response.id);
+            $('#txtFirstName').val(response.firstName);
+            $('#txtLastName').val(response.lastName);
+            $('#txtPassword').val(response.password);
+            $('#txtUserName').val(response.userName);
+            $('#txtEmail').val(response.email);
+            $('#txtPhoneNo').val(response.phoneNo);
+            var button = document.getElementById("btnuser");
+            if ($('#txtUserid').val() != '') {
+                button.textContent = "Update";
+            }
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
             offcanvas.show();
         },
         error: function (xhr, status, error) {
@@ -103,64 +122,101 @@ function DisplayUserDetails(UserId) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    // JavaScript code for filtering the table
-    function filterTable() {
-        var searchText = document.getElementById("txtSearch").value.toLowerCase();
-        var searchBy = document.getElementById("ddlSearchBy").value.toLowerCase();
-        var rows = document.getElementById("userTable").getElementsByTagName("tbody")[0].rows;
-        for (var i = 0; i < rows.length; i++) {
-            var text = rows[i].cells[searchBy].textContent.toLowerCase();
-            if (!text.includes(searchText)) {
-                rows[i].style.display = "none";
+function SelectUserDetails(UserId) {
+    debugger
+    $.ajax({
+        url: '/User/DisplayUserDetails?UserId=' + UserId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            if (response) {
+                $('#dspUserid').val(UserId);
+                $('#dspFirstName').val(response.firstName);
+                $('#dspLastName').val(response.lastName);
+                $('#dspUserName').val(response.userName);
+                $('#dspPassword').val(response.password);
+                $('#dspEmail').val(response.email);
+                $('#dspPhoneNo').val(response.phoneNo);
+                $('#dspRole').val(response.roleName);
             } else {
-                rows[i].style.display = "";
+                console.log('Empty response received.');
             }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
         }
-    }
+    });
+}
 
-    // JavaScript code for sorting the table
-    function sortTable() {
-        var sortBy = document.getElementById("ddlSortBy").value;
-        var tbody = document.getElementById("userTable").getElementsByTagName("tbody")[0];
-        var rows = Array.from(tbody.rows);
-        rows.sort((a, b) => {
-            var cellA = a.cells[sortBy].textContent.toUpperCase();
-            var cellB = b.cells[sortBy].textContent.toUpperCase();
-            return cellA.localeCompare(cellB);
+function AllUserTable() {
+
+    var searchText = $('#txtSearch').val();
+    var searchBy = $('#ddlSearchBy').val();
+
+    $.get("/User/UserListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
+
+
+            $("#Usertbody").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
         });
-        tbody.innerHTML = "";
-        rows.forEach(row => tbody.appendChild(row));
-    }
+}
 
-    // Check if necessary elements exist before adding event listeners
-    var txtSearch = document.getElementById("txtSearch");
-    var ddlSearchBy = document.getElementById("ddlSearchBy");
-    var ddlSortBy = document.getElementById("ddlSortBy");
-    var userTable = document.getElementById("userTable");
+function filterTable() {
 
-    if (txtSearch && ddlSearchBy && ddlSortBy && userTable) {
-        txtSearch.addEventListener("input", filterTable);
-        ddlSearchBy.addEventListener("change", filterTable);
-        ddlSortBy.addEventListener("change", sortTable);
-    } else {
-        console.error("One or more elements not found.");
-    }
-});
+    var searchText = $('#txtSearch').val();
+    var searchBy = $('#ddlSearchBy').val();
+
+    $.ajax({
+        url: '/User/UserListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            $("#Usertbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+
+function sortTable() {
+    var sortBy = $('#ddlSortBy').val();
+    $.ajax({
+        url: '/User/UserListAction',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            $("#Usertbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+
 
 function UpdateUserDetails() {
 
     var objData = {
-        Id: $('#Userid').val(),
-        FirstName: $('#FirstName').val(),
-        LastName: $('#LastName').val(),
-        UserName: $('#UserName').val(),
-        Password: $('#Password').val(),
-        Email: $('#Email').val(),
-        PhoneNo: $('#PhoneNo').val(),
+        Id: $('#txtUserid').val(),
+        FirstName: $('#txtFirstName').val(),
+        LastName: $('#txtLastName').val(),
+        UserName: $('#txtUserName').val(),
+        Password: $('#txtPassword').val(),
+        Email: $('#txtEmail').val(),
+        PhoneNo: $('#txtPhoneNo').val(),
     }
     $.ajax({
-        url: '/Authentication/UpdateUserDetails',
+        url: '/User/UpdateUserDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -172,111 +228,195 @@ function UpdateUserDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/Authentication/UserListView';
+                window.location = '/User/UserListView';
             });
         },
     })
 
 }
-var FirstName, LastName, UserName, Password, Email, PhoneNo;
-var isValid = true;
+function validateAndCreateUser() {
 
-$('#btnUpdate').click(function () {
-    if (CheckValidation() == false) {
-        return false;
-    }
-});
-function CheckValidation() {
-    FirstName = $('#txtFirstName').val();
-    LastName = $('#txtLastName').val();
-    UserName = $('#txtUserName').val();
-    Password = $('#txtPassword').val();
-    Email = $('#txtEmail').val();
-    PhoneNo = $('#txtPhoneNo').val();
+    resetErrorMessages();
 
-    //fname
-    if (FirstName == "") {
-        $('#spnFirstName').text('FirstName can not be blank.');
-        $('#txtFirstName').css('border-color', 'red');
-        $('#txtFirstName').focus();
+    var firstName = document.getElementById("txtFirstName").value.trim();
+    var lastName = document.getElementById("txtLastName").value.trim();
+    var userName = document.getElementById("txtUserName").value.trim();
+    var password = document.getElementById("txtPassword").value.trim();
+    var email = document.getElementById("txtEmail").value.trim();
+    var phoneNo = document.getElementById("txtPhoneNo").value.trim();
+
+
+    var isValid = true;
+
+
+    if (firstName === "") {
+        document.getElementById("spnFirstName").innerText = "First Name is required.";
         isValid = false;
     }
-    else {
-        $('#spnFirstName').text('');
-        $('#txtFirstName').css('border-color', 'green');
-    }
-    //lname
-    if (LastName == "") {
 
-        $('#spnLastName').text('LastName can not be blank.');
-        $('#txtLastName').css('border-color', 'red');
-        $('#txtLastName').focus();
+
+    if (lastName === "") {
+        document.getElementById("spnLastName").innerText = "Last Name is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnLastName').text('');
-        $('#txtLastName').css('border-color', 'green');
-    }
-    //Username
-    if (UserName == "") {
 
-        $('#spnUserName').text('UserName can not be blank.');
-        $('#txtUserName').css('border-color', 'red');
-        $('#txtUserName').focus();
+    if (userName === "") {
+        document.getElementById("spnUserName").innerText = "User Name is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnUserName').text('');
-        $('#txtUserName').css('border-color', 'green');
-    }
 
-    //email
-    if (Email == "") {
-
-        $('#spnEmail').text('EmailId can not be blank.');
-        $('#txtEmail').css('border-color', 'red');
-        $('#txtEmail').focus();
+    if (password === "") {
+        document.getElementById("spnPassword").innerText = "Password is required.";
         isValid = false;
     }
-    else {
 
-        $('#spnEmail').text('');
-        $('#txtEmail').css('border-color', 'green');
-    }
 
-    //password
-    if (Password == "") {
-
-        $('#spnPassword').text('Password can not be blank.');
-        $('#txtPassword').css('border-color', 'red');
-        $('#txtPassword').focus();
+    if (email === "") {
+        document.getElementById("spnEmail").innerText = "Email is required.";
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        document.getElementById("spnEmail").innerText = "Invalid Email format.";
         isValid = false;
     }
-    else {
 
-        $('#spnPassword').text('');
-        $('#txtPassword').css('border-color', 'green');
-    }
 
-    //phone
-    if (PhoneNo == "") {
-
-        $('#spnPhoneNo').text('PhoneNumber can not be blank.');
-        $('#txtPhoneNo').css('border-color', 'red');
-        $('#txtPhoneNo').focus();
+    if (phoneNo === "") {
+        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
+        isValid = false;
+    } else if (!isValidPhoneNo(phoneNo)) {
+        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
         isValid = false;
     }
-    else {
 
-        $('#spnPhoneNo').text('');
-        $('#txtPhoneNo').css('border-color', 'green');
+
+    if (isValid) {
+        if ($("#txtxUserid").val() == '') {
+            CreateUser();
+        }
+        else {
+            UpdateUserDetails()
+        }
     }
-
-    return isValid;
 }
 
+
+function resetErrorMessages() {
+    document.getElementById("spnFirstName").innerText = "";
+    document.getElementById("spnLastName").innerText = "";
+    document.getElementById("spnUserName").innerText = "";
+    document.getElementById("spnPassword").innerText = "";
+    document.getElementById("spnEmail").innerText = "";
+    document.getElementById("spnPhoneNo").innerText = "";
+}
+
+
+function isValidEmail(email) {
+
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+
+function isValidPhoneNo(phoneNo) {
+
+    var phoneNoPattern = /^\d{10}$/;
+    return phoneNoPattern.test(phoneNo);
+}
+
+function UserActiveDecative(UserId) {
+
+    Swal.fire({
+        title: "Are you sure want to Active this User?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("UserId", $("#txtuserid").val());
+
+            $.ajax({
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: "Active!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/UserProfile/UserActiveDecative';
+                    });
+
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'User Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+
+    Swal.fire({
+        title: "Are you sure want to DeActive this User?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            var formData = new FormData();
+            formData.append("UserId", $("#txtuserid").val());
+
+            $.ajax({
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: "DeActive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/UserProfile/UserActiveDecative';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'User Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+
+}
 
 
 

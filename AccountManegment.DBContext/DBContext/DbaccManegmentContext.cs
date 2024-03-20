@@ -23,17 +23,24 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
 
+    public virtual DbSet<ItemMaster> ItemMasters { get; set; }
+
     public virtual DbSet<RolewiseFormPermission> RolewiseFormPermissions { get; set; }
 
     public virtual DbSet<Site> Sites { get; set; }
 
     public virtual DbSet<State> States { get; set; }
 
+    public virtual DbSet<UnitMaster> UnitMasters { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -54,10 +61,9 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Company");
+            entity.ToTable("Company");
 
+            entity.Property(e => e.CompanyId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
             entity.Property(e => e.CompanyName).HasMaxLength(200);
@@ -97,6 +103,34 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.FormName).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<ItemMaster>(entity =>
+        {
+            entity.HasKey(e => e.ItemId);
+
+            entity.ToTable("ItemMaster");
+
+            entity.Property(e => e.ItemId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Gstamount)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GSTAmount");
+            entity.Property(e => e.Gstper)
+                .HasColumnType("numeric(2, 2)")
+                .HasColumnName("GSTPer");
+            entity.Property(e => e.Hsncode)
+                .HasMaxLength(10)
+                .HasColumnName("HSNCode");
+            entity.Property(e => e.IsWithGst).HasColumnName("IsWithGST");
+            entity.Property(e => e.ItemName).HasMaxLength(50);
+            entity.Property(e => e.PricePerUnit).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.UnitTypeNavigation).WithMany(p => p.ItemMasters)
+                .HasForeignKey(d => d.UnitType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ItemMaster_UnitMaster");
+        });
+
         modelBuilder.Entity<RolewiseFormPermission>(entity =>
         {
             entity.ToTable("RolewiseFormPermission");
@@ -107,10 +141,9 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<Site>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Site");
+            entity.ToTable("Site");
 
+            entity.Property(e => e.SiteId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
             entity.Property(e => e.ContectPersonName).HasMaxLength(50);
@@ -138,6 +171,15 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_country_id");
+        });
+
+        modelBuilder.Entity<UnitMaster>(entity =>
+        {
+            entity.HasKey(e => e.UnitId);
+
+            entity.ToTable("UnitMaster");
+
+            entity.Property(e => e.UnitName).HasMaxLength(15);
         });
 
         modelBuilder.Entity<User>(entity =>

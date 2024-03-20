@@ -11,12 +11,14 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
     public interface IAuthentication
     {
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
-        Task<IEnumerable<LoginView>> GetUsersList();
+        Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy);
 
         Task<LoginView> GetUserById(Guid UserId);
 
         Task<UserResponceModel> CreateUser(UserViewModel CreateUser);
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
+
+        Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
 
 
     }

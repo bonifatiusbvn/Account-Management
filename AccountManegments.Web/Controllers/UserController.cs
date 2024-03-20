@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -27,17 +28,37 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        public async Task<IActionResult> UserListView()
+        public IActionResult UserListView()
         {
-            List<LoginView> GetUserList = new List<LoginView>();
-            ApiResponseModel res = await APIServices.GetAsync("", "Authentication/GetAllUserList");
-            if (res.code == 200)
-            {
-                GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
-            }
-            return View(GetUserList);
+            return View();
         }
 
+        public async Task<IActionResult> UserListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
+
+                    return PartialView("~/Views/User/_UserListPartial.cshtml", GetUserList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
 
 
         public async Task<JsonResult> DisplayUserDetails(Guid UserId)
@@ -116,6 +137,30 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserActiveDecative(string UserName)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/ActiveDeactiveUsers?UserName=" + UserName);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

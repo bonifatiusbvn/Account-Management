@@ -20,6 +20,11 @@ namespace AccountManagement.Repository.Services.Authentication
 
         public IAuthentication Authentication { get; }
 
+        public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
+        {
+            return await Authentication.ActiveDeactiveUsers(UserId);
+        }
+
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             return await Authentication.CreateUser(CreateUser);
@@ -30,9 +35,10 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.GetUserById(UserId);
         }
 
-        public async Task<IEnumerable<LoginView>> GetUsersList()
+
+        public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await Authentication.GetUsersList();
+            return await Authentication.GetUsersList(searchText, searchBy, sortBy);
         }
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)

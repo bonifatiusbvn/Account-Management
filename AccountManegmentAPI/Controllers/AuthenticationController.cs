@@ -47,11 +47,11 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllUserList")]
-        public async Task<IActionResult> GetAllUserList()
+        public async Task<IActionResult> GetAllUserList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<LoginView> userList = await Authentication.GetUsersList();
+            IEnumerable<LoginView> userList = await Authentication.GetUsersList(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = userList.ToList() });
         }
 
@@ -90,6 +90,35 @@ namespace AccountManagement.API.Controllers
                 response.Icone = updateUser.Icone;
             }
             return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("ActiveDeactiveUsers")]
+        public async Task<IActionResult> ActiveDeactiveUsers(Guid UserId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var userName = await Authentication.ActiveDeactiveUsers(UserId);
+            try
+            {
+
+                if (userName != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = userName.Message;
+                }
+                else
+                {
+                    responseModel.Message = userName.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }
