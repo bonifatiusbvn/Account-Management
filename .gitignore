@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs
+/AccountManegment.DBContext
+/AccountManegment.Repo
+/AccountManegmentAPI
+/AccountManegments.Web
