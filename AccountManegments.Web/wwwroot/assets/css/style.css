@@ -1551,7 +1551,7 @@ tbody {
     }
 }
 
-div:: -webkit-scrollbar {
+div::-webkit-scrollbar {
     width: 12px;
 }
 
