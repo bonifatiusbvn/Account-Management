@@ -23,6 +23,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
 
+    public virtual DbSet<ItemMaster> ItemMasters { get; set; }
+
     public virtual DbSet<RolewiseFormPermission> RolewiseFormPermissions { get; set; }
 
     public virtual DbSet<Site> Sites { get; set; }
@@ -35,6 +37,7 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,10 +60,9 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Company");
+            entity.ToTable("Company");
 
+            entity.Property(e => e.CompanyId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
             entity.Property(e => e.CompanyName).HasMaxLength(200);
@@ -98,6 +100,29 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.FormGroup).HasMaxLength(10);
             entity.Property(e => e.FormName).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<ItemMaster>(entity =>
+        {
+            entity.HasKey(e => e.ItemId);
+
+            entity.ToTable("ItemMaster");
+
+            entity.Property(e => e.ItemId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Gstamount)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GSTAmount");
+            entity.Property(e => e.Gstper)
+                .HasColumnType("numeric(2, 2)")
+                .HasColumnName("GSTPer");
+            entity.Property(e => e.Hsncode)
+                .HasMaxLength(10)
+                .HasColumnName("HSNCode");
+            entity.Property(e => e.IsWithGst).HasColumnName("IsWithGST");
+            entity.Property(e => e.PricePerUnit).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<RolewiseFormPermission>(entity =>

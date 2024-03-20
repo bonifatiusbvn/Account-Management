@@ -91,5 +91,34 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
+        [HttpPost]
+        [Route("ActiveDeactiveUsers")]
+        public async Task<IActionResult> ActiveDeactiveUsers(Guid UserId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var userName = await Authentication.ActiveDeactiveUsers(UserId);
+            try
+            {
+
+                if (userName != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = userName.Message;
+                }
+                else
+                {
+                    responseModel.Message = userName.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

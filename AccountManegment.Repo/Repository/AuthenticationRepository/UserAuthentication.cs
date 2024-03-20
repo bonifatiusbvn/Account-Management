@@ -24,6 +24,39 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
         public DbaccManegmentContext Context { get; }
 
+        public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetUserdta = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
+
+            if (GetUserdta != null)
+            {
+
+                if (GetUserdta.IsActive == true)
+                {
+                    GetUserdta.IsActive = false;
+                    Context.Users.Update(GetUserdta);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
+                }
+
+                else
+                {
+                    GetUserdta.IsActive = true;
+                    Context.Users.Update(GetUserdta);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                }
+
+
+            }
+            return response;
+        }
+
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             UserResponceModel response = new UserResponceModel();

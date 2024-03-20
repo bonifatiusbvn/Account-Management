@@ -3,33 +3,52 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-
 @foreach (var item in Model)
 {
-    <tr>
-        <td>@item.FirstName</td>
-        @* <td>@item.LastName</td> *@
-        <td>@item.UserName</td>
-       @*  <td>@item.Email</td>
-        <td>@item.PhoneNo</td> *@
-        <td>
-            @if (@item.IsActive == true)
-            {
-                <span class="badge bg-success text-uppercase">Active</span>
-            }
-            else
-            {
-                <span class="badge bg-danger text-uppercase">Deactive</span>
-            }
-        </td>
-        <td>@item.RoleName</td>
+    <div class="row ac-card">
+        <div class="card  border mb-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="widget-icon-2 bg-light-primary text-primary">
+                                <div class="font-22">
+                                    <i class="lni lni-user" onclick="SelectUserDetails('@item.Id')">
 
-        <td>
-            <div class="table-actions d-flex align-items-center gap-3 fs-6">
-                <a class="btn text-warning" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="mb-0 text-primary">@item.FirstName  @item.LastName </h4>
+                                <p class="mb-1">@item.Email</p>
+                                <p class="mb-1">@item.PhoneNo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-3">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0 text-primary">@item.UserName</h5>
+                            <h6 class="mb-2"></h6>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-1 col-md-1 col-xl-1 text-center">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.Id" @if (item.IsActive)
+                            {
+                                <text>checked</text>
+                            }>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2 col-md-2 col-xl-3 text-center ac-m-btn">
+
+                        <a class="btn text-warning" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+
+                    </div>
+                </div>
             </div>
-        </td>
-    </tr>
+        </div>
+    </div>
+
 }
-</tbody>

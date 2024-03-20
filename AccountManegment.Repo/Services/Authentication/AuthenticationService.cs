@@ -20,6 +20,11 @@ namespace AccountManagement.Repository.Services.Authentication
 
         public IAuthentication Authentication { get; }
 
+        public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
+        {
+            return await Authentication.ActiveDeactiveUsers(UserId);
+        }
+
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             return await Authentication.CreateUser(CreateUser);
