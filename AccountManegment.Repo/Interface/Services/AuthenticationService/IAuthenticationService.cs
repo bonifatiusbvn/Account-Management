@@ -15,6 +15,7 @@ namespace AccountManagement.Repository.Interface.Services.AuthenticationService
         Task<LoginView> GetUserById(Guid UserId);
         Task<UserResponceModel> CreateUser(UserViewModel CreateUser);
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
+        Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
 
     }
 }

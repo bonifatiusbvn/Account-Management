@@ -25,6 +25,39 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
         public DbaccManegmentContext Context { get; }
 
+        public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetUserdta = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
+
+            if (GetUserdta != null)
+            {
+
+                if (GetUserdta.IsActive == true)
+                {
+                    GetUserdta.IsActive = false;
+                    Context.Users.Update(GetUserdta);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
+                }
+
+                else
+                {
+                    GetUserdta.IsActive = true;
+                    Context.Users.Update(GetUserdta);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                }
+
+
+            }
+            return response;
+        }
+
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -107,23 +140,35 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
         public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
-
             try
             {
+                IEnumerable<LoginView> userList = (from e in Context.Users
+                                                   join r in Context.UserRoles on e.RoleId equals r.RoleId
+                                                   select new LoginView
+                                                   {
+                                                       Id = e.Id,
+                                                       FirstName = e.FirstName,
+                                                       LastName = e.LastName,
+                                                       UserName = e.UserName,
+                                                       Email = e.Email,
+                                                       PhoneNo = e.PhoneNo,
+                                                       IsActive = e.IsActive,
+                                                       RoleName = r.Role
+                                                   });
 
-                IEnumerable<LoginView> userList = from e in Context.Users
-                                                  join r in Context.UserRoles on e.RoleId equals r.RoleId
-                                                  select new LoginView
-                                                  {
-                                                      Id = e.Id,
-                                                      FirstName = e.FirstName,
-                                                      LastName = e.LastName,
-                                                      UserName = e.UserName,
-                                                      Email = e.Email,
-                                                      PhoneNo = e.PhoneNo,
-                                                      IsActive = e.IsActive,
-                                                      RoleName = r.Role
-                                                  };
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    userList = userList.Where(u =>
+                        u.UserName.ToLower().Contains(searchText) ||
+                        u.Email.ToLower().Contains(searchText) ||
+                        u.PhoneNo.ToLower().Contains(searchText) ||
+                        u.FirstName.ToLower().Contains(searchText) ||
+                        u.LastName.ToLower().Contains(searchText) ||
+                        u.RoleName.ToLower().Contains(searchText)
+                    );
+                }
 
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
                 {
@@ -139,31 +184,52 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         case "phone":
                             userList = userList.Where(u => u.PhoneNo.ToLower().Contains(searchText));
                             break;
+                        default:
 
+                            break;
                     }
                 }
 
-
                 if (!string.IsNullOrEmpty(sortBy))
                 {
-                    switch (sortBy.ToLower())
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+
+                    switch (field.ToLower())
                     {
                         case "username":
-                            userList = userList.OrderBy(u => u.UserName);
+                            if (sortOrder == "ascending")
+                                userList = userList.OrderBy(u => u.UserName);
+                            else if (sortOrder == "descending")
+                                userList = userList.OrderByDescending(u => u.UserName);
                             break;
                         case "role":
-                            userList = userList.OrderBy(u => u.RoleName);
+                            if (sortOrder == "ascending")
+                                userList = userList.OrderBy(u => u.RoleName);
+                            else if (sortOrder == "descending")
+                                userList = userList.OrderByDescending(u => u.RoleName);
                             break;
                         case "active":
-                            userList = userList.OrderBy(u => u.IsActive);
+                            if (sortOrder == "ascending")
+                                userList = userList.OrderBy(u => u.IsActive);
+                            else if (sortOrder == "descending")
+                                userList = userList.OrderByDescending(u => u.IsActive);
                             break;
                         case "email":
-                            userList = userList.OrderBy(u => u.Email);
+                            if (sortOrder == "ascending")
+                                userList = userList.OrderBy(u => u.Email);
+                            else if (sortOrder == "descending")
+                                userList = userList.OrderByDescending(u => u.Email);
                             break;
                         case "phone":
-                            userList = userList.OrderBy(u => u.PhoneNo);
+                            if (sortOrder == "ascending")
+                                userList = userList.OrderBy(u => u.PhoneNo);
+                            else if (sortOrder == "descending")
+                                userList = userList.OrderByDescending(u => u.PhoneNo);
                             break;
+                        default:
 
+                            break;
                     }
                 }
 
@@ -171,11 +237,10 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
         }
+
 
 
 
@@ -237,11 +302,12 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.Id = UpdateUser.Id;
                     Userdata.FirstName = UpdateUser.FirstName;
                     Userdata.LastName = UpdateUser.LastName;
+                    Userdata.UserName = UpdateUser.UserName;
                     Userdata.Password = UpdateUser.Password;
                     Userdata.Email = UpdateUser.Email;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Context.Users.Update(Userdata);
-                    await Context.SaveChangesAsync();
+                    Context.SaveChanges();
                 }
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = "User Data Updated Successfully";
