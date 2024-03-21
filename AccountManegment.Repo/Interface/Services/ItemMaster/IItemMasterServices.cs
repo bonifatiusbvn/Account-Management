@@ -10,9 +10,10 @@ namespace AccountManagement.Repository.Interface.Services.ItemMaster
 {
     public interface IItemMasterServices
     {
-        Task<IEnumerable<ItemMasterModel>> GetItemList();
+        Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy);
         Task<ApiResponseModel> AddItemDetails(ItemMasterModel ItemDetails);
         Task<ItemMasterModel> GetItemDetailsById(Guid ItemId);
         Task<ApiResponseModel> UpdateItemDetails(ItemMasterModel ItemDetails);
+        Task<IEnumerable<UnitMasterView>> GetAllUnitType();
     }
 }
