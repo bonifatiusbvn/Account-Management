@@ -146,12 +146,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string UserName)
+        public async Task<IActionResult> UserActiveDecative(Guid UserId)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/ActiveDeactiveUsers?UserName=" + UserName);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
                 if (postuser.code == 200)
                 {
 

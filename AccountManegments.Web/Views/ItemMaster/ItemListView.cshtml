@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "UserListView";
+﻿
+@{
+    ViewData["Title"] = "ItemListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -75,13 +76,13 @@
 
                                     <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
                                         <div class="col-5 text-center">
-                                            <h5>First Name</h5>
-                                        </div>
-                                        <div class="col-3 ">
-                                            <h5>User Name</h5>
+                                            <h5>Item Name</h5>
                                         </div>
                                         <div class="col-2 ">
-                                            <h5>Active</h5>
+                                            <h5>PerUnitPrice</h5>
+                                        </div>
+                                        <div class="col-2 ">
+                                            <h5>Is Approved</h5>
                                         </div>
                                         <div class="col-2">
                                             <h5>Action</h5>
@@ -95,16 +96,13 @@
                                     <table class="table align-middle mb-0" style="">
                                         <thead class="table-light" id="userTable">
                                             <tr>
-                                                <th>First Name</th>
-
-                                                <th class="mb-2">User Name</th>
-
-                                                <th class="mb-2">Active</th>
-                                                <th class="mb-2">Role Name</th>
+                                                <th>Item Name</th>
+                                                <th class="mb-2">PerUnitPrice</th>
+                                                <th class="mb-2">Is Approved</th>
                                                 <th class="mb-2">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="Usertbody" style="max-height:20PX;">
+                                        <tbody id="Itemtbody" style="max-height:20PX;">
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,10 +114,10 @@
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body" style="height:650px">
+                            <div class="card-body">
                                 <h5 class="mb-0 mt-4">User Information</h5>
                                 <hr>
-                                <div class="row g-3 ac-detail d-none">
+                                <div class="row g-3">
                                     <div class="col-6">
                                         <label class="form-label">First Name</label>
                                         <input type="text" class="form-control" id="dspFirstName" readonly>
@@ -217,7 +215,8 @@
         </div>
 
     </div>
-    @section Scripts {
+</div>
+@*     @section Scripts {
 
         <script src="~/moduls/authenticationscript.js"></script>
-    }
+    } *@

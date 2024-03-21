@@ -122,8 +122,11 @@ function DisplayUserDetails(UserId) {
     });
 }
 
-function SelectUserDetails(UserId) {
-    debugger
+function SelectUserDetails(UserId, element) {
+
+    $('.row.ac-card').removeClass('active');
+    $(element).closest('.row.ac-card').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
@@ -326,53 +329,12 @@ function isValidPhoneNo(phoneNo) {
 }
 
 function UserActiveDecative(UserId) {
+    debugger
+    var isChecked = $('#flexSwitchCheckChecked_' + UserId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
 
     Swal.fire({
-        title: "Are you sure want to Active this User?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
-        cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-        cancelButtonClass: "btn btn-danger w-xs mt-2",
-        buttonsStyling: false,
-        showCloseButton: true
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-            var formData = new FormData();
-            formData.append("UserId", $("#txtuserid").val());
-
-            $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-                success: function (Result) {
-                    Swal.fire({
-                        title: "Active!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    });
-
-                }
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire(
-                'Cancelled',
-                'User Have No Changes.!!😊',
-                'error'
-            );
-        }
-    });
-
-    Swal.fire({
-        title: "Are you sure want to DeActive this User?",
+        title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -384,39 +346,38 @@ function UserActiveDecative(UserId) {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-
             var formData = new FormData();
-            formData.append("UserId", $("#txtuserid").val());
-
+            formData.append("UserId", UserId);
+            debugger
             $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                url: '/User/UserActiveDecative?UserId=' + UserId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-
                     Swal.fire({
-                        title: "DeActive!",
+                        title: isChecked ? "Active!" : "DeActive!",
                         text: Result.message,
                         icon: "success",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
                         buttonsStyling: false
                     }).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
+                        window.location = '/User/UserListView';
                     });
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-
             Swal.fire(
                 'Cancelled',
                 'User Have No Changes.!!😊',
                 'error'
-            );
+            ).then(function () {
+                window.location = '/User/UserListView';
+            });;
         }
     });
-
 }
+
 
 
 
