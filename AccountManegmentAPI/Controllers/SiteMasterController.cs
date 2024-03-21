@@ -21,9 +21,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetSiteList")]
-        public async Task<IActionResult> GetSiteList()
+        public async Task<IActionResult> GetSiteList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<SiteMasterModel> SiteList = await SiteMaster.GetSiteList();
+            IEnumerable<SiteMasterModel> SiteList = await SiteMaster.GetSiteList(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = SiteList.ToList() });
         }
 

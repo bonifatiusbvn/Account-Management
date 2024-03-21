@@ -11,7 +11,7 @@ namespace AccountManagement.Repository.Interface.Repository.SiteMaster
 {
     public interface ISiteMaster
     {
-        Task<IEnumerable<SiteMasterModel>> GetSiteList();
+        Task<IEnumerable<SiteMasterModel>> GetSiteList(string? searchText, string? searchBy, string? sortBy);
         Task<ApiResponseModel> AddSiteDetails(SiteMasterModel SiteDetails);
         Task<SiteMasterModel> GetSiteDetailsById(Guid SiteId);
         Task<ApiResponseModel> UpdateSiteDetails(SiteMasterModel SiteDetails);

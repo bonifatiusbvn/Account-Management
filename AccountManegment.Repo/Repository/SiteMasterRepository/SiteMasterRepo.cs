@@ -104,7 +104,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<IEnumerable<SiteMasterModel>> GetSiteList()
+        public async Task<IEnumerable<SiteMasterModel>> GetSiteList(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -143,6 +143,74 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                    CreatedBy = a.CreatedBy,
                                    CreatedOn = a.CreatedOn,
                                });
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    SiteList = SiteList.Where(u =>
+                        u.SiteName.ToLower().Contains(searchText) ||
+                        u.ContectPersonName.ToLower().Contains(searchText) ||
+                        u.ContectPersonPhoneNo.ToLower().Contains(searchText) 
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "SiteName":
+                            SiteList = SiteList.Where(u => u.SiteName.ToLower().Contains(searchText));
+                            break;
+                        case "ContectPersonName":
+                            SiteList = SiteList.Where(u => u.ContectPersonName.ToLower().Contains(searchText));
+                            break;
+                        case "ContectPersonPhoneNo":
+                            SiteList = SiteList.Where(u => u.ContectPersonPhoneNo.ToLower().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+
+                    switch (field.ToLower())
+                    {
+                        case "SiteName":
+                            if (sortOrder == "ascending")
+                                SiteList = SiteList.OrderBy(u => u.SiteName);
+                            else if (sortOrder == "descending")
+                                SiteList = SiteList.OrderByDescending(u => u.SiteName);
+                            break;
+                        case "ContectPersonName":
+                            if (sortOrder == "ascending")
+                                SiteList = SiteList.OrderBy(u => u.ContectPersonName);
+                            else if (sortOrder == "descending")
+                                SiteList = SiteList.OrderByDescending(u => u.ContectPersonName);
+                            break;
+                        case "active":
+                            if (sortOrder == "ascending")
+                                SiteList = SiteList.OrderBy(u => u.IsActive);
+                            else if (sortOrder == "descending")
+                                SiteList = SiteList.OrderByDescending(u => u.IsActive);
+                            break;
+                        case "ContectPersonPhoneNo":
+                            if (sortOrder == "ascending")
+                                SiteList = SiteList.OrderBy(u => u.ContectPersonPhoneNo);
+                            else if (sortOrder == "descending")
+                                SiteList = SiteList.OrderByDescending(u => u.ContectPersonPhoneNo);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
                 return SiteList;
             }
             catch (Exception ex)

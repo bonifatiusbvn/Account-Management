@@ -28,9 +28,9 @@ namespace AccountManagement.Repository.Services.SiteMaster
             return await SiteMaster.GetSiteDetailsById(SiteId);
         }
 
-        public async Task<IEnumerable<SiteMasterModel>> GetSiteList()
+        public async Task<IEnumerable<SiteMasterModel>> GetSiteList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await SiteMaster.GetSiteList();
+            return await SiteMaster.GetSiteList(searchText, searchBy, sortBy);
         }
 
         public async Task<ApiResponseModel> UpdateSiteDetails(SiteMasterModel SiteDetails)
