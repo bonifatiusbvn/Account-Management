@@ -28,54 +28,7 @@ function CreateUser() {
         },
     })
 }
-//function GetAllUserData() {
-//    $('#UserTableData').DataTable({
-//        processing: false,
-//        serverSide: true,
-//        filter: false,
-//        searching: false,
-//        lengthChange: false,
-//        "bDestroy": true,
-//        sorting: false,
 
-//        ajax: {
-//            type: "Post",
-//            url: '/User/GetUserList',
-//            dataType: 'json'
-//        },
-//        columns: [
-//            { "data": "firstName", "name": "FirstName", "className": "text-center" },
-//            { "data": "lastName", "name": "LastName", "className": "text-center" },
-//            { "data": "userName", "name": "UserName", "className": "text-center" },
-//            { "data": "email", "name": "Email", "className": "text-center" },
-//            { "data": "phoneNo", "name": "PhoneNo", "className": "text-center" },
-//            {
-//                "data": "isActive", "name": "IsActive", "className": "text-center",
-//                "render": function (data, type, full) {
-//                    if (full.isActive == true) {
-//                        return '<span class="badge bg-success text-uppercase">Active</span>';
-//                    } else {
-//                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
-//                    }
-//                }
-//            },
-//            { "data": "roleName", "name": "RoleName", "className": "text-center" },
-//            {
-
-//                "data": null,
-//                "orderable": false,
-//                "className": "text-center",
-//                "render": function (data, type, full, meta) {
-//                    return '<div class="table-actions d-flex align-items-center gap-3 fs-6">' +
-//                        '<a class="text-warning" onclick="DisplayUserDetails(\'' + data.id + '\')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>' +
-//                        '<a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>' +
-//                        '</div>';
-//                }
-
-//            }
-//        ]
-//    });
-//}
 
 function ClearTextBox() {
     resetErrorMessages();

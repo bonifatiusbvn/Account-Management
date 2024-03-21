@@ -12,4 +12,6 @@ public partial class City
     public int StateId { get; set; }
 
     public virtual State State { get; set; } = null!;
+
+    public virtual ICollection<SupplierMaster> SupplierMasters { get; set; } = new List<SupplierMaster>();
 }
