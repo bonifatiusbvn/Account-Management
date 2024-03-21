@@ -1,6 +1,6 @@
 ﻿AllUserTable();
 function CreateSupplier() {
-    debugger
+
     var objData = {
         SupplierName: $('#txtSupplierName').val(),
         Email: $('#txtEmail').val(),
@@ -62,14 +62,14 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function DisplaySupplierDetails(Supplier) {
-    debugger
+
     $.ajax({
         url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);
@@ -189,7 +189,7 @@ function sortTable() {
 
 
 function UpdateSupplierDetails() {
-    debugger
+
     var objData = {
         SupplierId: $('#txtSupplierid').val(),
         SupplierName: $('#txtSupplierName').val(),
@@ -301,7 +301,6 @@ function validateAndCreateSupplier() {
         document.getElementById("spnIFFC").innerText = "IFFC Code is required.";
         isValid = false;
     }
-
 
 
     if (isValid) {
