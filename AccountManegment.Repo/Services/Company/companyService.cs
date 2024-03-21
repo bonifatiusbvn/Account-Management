@@ -27,9 +27,9 @@ namespace AccountManagement.Repository.Services.Company
 
        
 
-        public async Task<IEnumerable<CompanyModel>> GetAllCompany()
+        public async Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
-            return await Company.GetAllCompany();
+            return await Company.GetAllCompany(searchText, searchBy, sortBy);
         }
 
         public async Task<CompanyModel> GetCompnaytById(Guid CompanyId)

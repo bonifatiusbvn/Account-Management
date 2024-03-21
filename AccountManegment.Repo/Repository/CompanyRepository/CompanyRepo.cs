@@ -39,6 +39,9 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     CityId = AddCompany.CityId,
                     StateId = AddCompany.StateId,
                     Country = AddCompany.Country,
+                    CreatedOn = DateTime.Now,
+                    Pincode = AddCompany.Pincode,
+                    CreatedBy = AddCompany.CreatedBy,
 
                 };
                 response.code = (int)HttpStatusCode.OK;
@@ -54,7 +57,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             return response;
         }
 
-        public async Task<IEnumerable<CompanyModel>> GetAllCompany()
+        public async Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -69,7 +72,68 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     CityId = a.CityId,
                     StateId = a.StateId,
                     Country = a.Country,
+                    Pincode =a.Pincode,
                 });
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    company = company.Where(u =>
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.Gstno.ToLower().Contains(searchText) ||
+                        u.PanNo.ToLower().Contains(searchText) 
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "CompanyName":
+                            company = company.Where(u => u.CompanyName.ToLower().Contains(searchText));
+                            break;
+                        case "GstNo":
+                            company = company.Where(u => u.Gstno.ToLower().Contains(searchText));
+                            break;
+                        case "PanNo":
+                            company = company.Where(u => u.PanNo.ToLower().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "companyname":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.CompanyName);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.CompanyName);
+                            break;
+                        case "gstno":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.Gstno);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.Gstno);
+                            break;
+                        case "panno":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.PanNo);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.PanNo);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
                 return company;
             }
             catch (Exception ex)
@@ -83,7 +147,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             var company = await Context.Companies.SingleOrDefaultAsync(x => x.CompanyId == CompanyId);
             CompanyModel model = new CompanyModel
             {
-                CompanyId = Guid.NewGuid(),
+                CompanyId = company.CompanyId,
                 CompanyName = company.CompanyName,
                 Gstno=company.Gstno,
                 PanNo=company.PanNo,
@@ -92,6 +156,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                 CityId = company.CityId,
                 StateId = company.StateId,
                 Country = company.Country,
+                Pincode = company.Pincode,
             };
             return model;
         }
@@ -111,9 +176,9 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company.Address = UpdateCompany.Address;
                     company.Area = UpdateCompany.Area;
                     company.CityId = UpdateCompany.CityId;
-                    company.StateId= UpdateCompany.StateId;
+                    company.StateId = UpdateCompany.StateId;
                     company.Country = UpdateCompany.Country;
-                    
+                    company.Pincode = UpdateCompany.Pincode;
                 }
                 Context.Companies.Update(company);
                 Context.SaveChanges();

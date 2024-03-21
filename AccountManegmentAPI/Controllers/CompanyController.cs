@@ -43,12 +43,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllCompany")]
-        public async Task<IActionResult> GetAllCompany()
+        public async Task<IActionResult> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<CompanyModel> getExpense = await companyService.GetAllCompany();
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            IEnumerable<CompanyModel> company = await companyService.GetAllCompany(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = company.ToList() });
         }
         [HttpGet]
         [Route("GetCompnaytById")]

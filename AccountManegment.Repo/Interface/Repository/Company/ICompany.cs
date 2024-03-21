@@ -11,7 +11,7 @@ namespace AccountManagement.Repository.Interface.Repository.Company
     public interface ICompany
     {
         Task<ApiResponseModel> AddCompany(CompanyModel AddCompany);
-        Task<IEnumerable<CompanyModel>> GetAllCompany();
+        Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy);
 
         Task<CompanyModel> GetCompnaytById(Guid CompanyId);
 
