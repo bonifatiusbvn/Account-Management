@@ -31,6 +31,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<State> States { get; set; }
 
+    public virtual DbSet<SupplierMaster> SupplierMasters { get; set; }
+
     public virtual DbSet<UnitMaster> UnitMasters { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -39,8 +41,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -171,6 +171,40 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_country_id");
+        });
+
+        modelBuilder.Entity<SupplierMaster>(entity =>
+        {
+            entity.HasKey(e => e.SupplierId);
+
+            entity.ToTable("SupplierMaster");
+
+            entity.Property(e => e.SupplierId).ValueGeneratedNever();
+            entity.Property(e => e.AccountNo).HasMaxLength(25);
+            entity.Property(e => e.Area).HasMaxLength(250);
+            entity.Property(e => e.BankName).HasMaxLength(50);
+            entity.Property(e => e.BuildingName).HasMaxLength(100);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Gstno)
+                .HasMaxLength(20)
+                .HasColumnName("GSTNo");
+            entity.Property(e => e.Iffccode)
+                .HasMaxLength(10)
+                .HasColumnName("IFFCCode");
+            entity.Property(e => e.Mobile).HasMaxLength(15);
+            entity.Property(e => e.PincodeCode).HasMaxLength(7);
+            entity.Property(e => e.SupplierName).HasMaxLength(30);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.CityNavigation).WithMany(p => p.SupplierMasters)
+                .HasForeignKey(d => d.City)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SupplierMaster_Cities");
+
+            entity.HasOne(d => d.StateNavigation).WithMany(p => p.SupplierMasters)
+                .HasForeignKey(d => d.State)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SupplierMaster_States");
         });
 
         modelBuilder.Entity<UnitMaster>(entity =>
