@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "SiteListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -17,7 +16,7 @@
         </nav>
     </div>
 </div>
- 
+
 <div class="">
     <div class=" radius-10 w-100">
         <div class="d-flex align-items-center">
@@ -44,9 +43,9 @@
                                             <div class="col-12 col-lg-4">
                                                 <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
                                                     <option selected="selected">All</option>
-                                                    <option>SiteName</option>
-                                                    <option>ContectPersonName</option>
-                                                    <option>ContectPersonPhoneNo</option>
+                                                    <option>Site Name</option>
+                                                    <option>Person Name</option>
+                                                    <option>Phone No</option>
                                                 </select>
                                             </div>
 
@@ -73,12 +72,12 @@
 
                             <div class="row w-100 ac-view-list">
 
-                                <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
-                                    <div class="col-3 text-center">
+                                <div class="row hide-sm table-light ac-view-header">
+                                    <div class="col-5 text-center">
                                         <h5>Site Name</h5>
                                     </div>
-                                    <div class="col-4 ">
-                                        <h5>Contect Person Name</h5>
+                                    <div class="col-3 text-center">
+                                        <h5>Person Name</h5>
                                     </div>
                                     <div class="col-2 ">
                                         <h5>Active</h5>
@@ -91,24 +90,7 @@
                                 </div>
 
                             </div>
-                            <div class="table-responsive mt-2  d-none" style="max-height:200PX;">
-                                <table class="table align-middle mb-0" style="">
-                                    <thead class="table-light" id="siteTable">
-                                        <tr>
-                                            <th>Site Name</th>
 
-                                            <th class="mb-2">Contect Person Name</th>
-                                            <th class="mb-2">Contect Person Phone No</th>
-
-                                            <th class="mb-2">Active</th>
-                                            <th class="mb-2">Role Name</th>
-                                            <th class="mb-2">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="Sitetbody" style="max-height:20PX;">
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <!--end row-->
@@ -289,10 +271,10 @@
 
 </div>
 
-    @section Scripts {
+@section Scripts {
 
     <script src="~/moduls/sitemasterscript.js"></script>
     <script src="~/moduls/masterlistscript.js"></script>
-    }
+}
 
 

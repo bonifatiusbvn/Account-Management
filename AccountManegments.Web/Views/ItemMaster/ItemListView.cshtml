@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ItemListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -39,14 +38,14 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search"/>
+                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search" />
                                                 </div>
                                                 <div class="col-12 col-lg-4">
                                                     <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
                                                         <option selected="selected">All</option>
-                                                        <option>ItemName</option>
-                                                        <option>PerUnitPrice</option>
-                                                        <option>IsApproved</option>
+                                                        <option>Item Name</option>
+                                                        <option>PerUnit Price</option>
+                                                        <option>Approved</option>
                                                     </select>
                                                 </div>
 
@@ -71,15 +70,15 @@
 
                                 <div class="row w-100 ac-view-list">
 
-                                    <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
-                                        <div class="col-4 text-center">
+                                    <div class="row hide-sm table-light ac-view-header">
+                                        <div class="col-5 text-center">
                                             <h5>Item Name</h5>
                                         </div>
-                                        <div class="col-4 text-center">
-                                            <h5>PerUnitPrice</h5>
+                                        <div class="col-3 text-center">
+                                            <h5>Unit Price</h5>
                                         </div>
                                         <div class="col-2 text-center">
-                                            <h5>Is Approved</h5>
+                                            <h5>Approved</h5>
                                         </div>
                                         <div class="col-2 text-center">
                                             <h5>Action</h5>
@@ -89,20 +88,7 @@
                                     </div>
 
                                 </div>
-                                <div class="table-responsive mt-2  d-none" style="max-height:200PX;">
-                                    <table class="table align-middle mb-0" style="">
-                                        <thead class="table-light" id="itemTable">
-                                            <tr>
-                                                <th>Item Name</th>
-                                                <th class="mb-2">PerUnitPrice</th>
-                                                <th class="mb-2">Is Approved</th>
-                                                <th class="mb-2">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="itemtbody" style="max-height:20PX;">
-                                        </tbody>
-                                    </table>
-                                </div>
+
                             </div>
                         </div>
                         <!--end row-->
@@ -214,6 +200,6 @@
 
     </div>
 </div>
-    @section Scripts {
+@section Scripts {
     <script src="~/moduls/itemmasterscript.js"></script>
-    }
+}

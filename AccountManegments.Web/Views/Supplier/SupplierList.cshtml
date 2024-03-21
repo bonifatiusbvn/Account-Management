@@ -219,7 +219,7 @@
                                     <div class="col-6">
                                         <div class="col-6">
                                             <div class="fv-row mb-4">
-                                                <select id="ddlCountry" class="form-control bg-transparent">
+                                                <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
                                                     <option>--Select Country--</option>
                                                 </select>
                                                 <input type="hidden" id="txtcountry" value="" />
@@ -228,8 +228,8 @@
                                         </div>
                                         <div class="fv-row mb-1">
                                             <label class="form-label">State</label>
-                                            <select id="ddlState" class="form-control bg-transparent">
-                                                <option>--Select State--</option>
+                                            <select id="dropState" class="form-control bg-transparent">
+                                                <option value="0" selected>--Select State--</option>
                                             </select>
                                             <input type="hidden" id="txtstate" value="" />
                                             <span class="text-danger"></span>

@@ -1,4 +1,5 @@
 ﻿AllUserTable();
+fn_getState('dropState', 1);
 function CreateSupplier() {
 
     var objData = {
@@ -46,12 +47,13 @@ function ClearTextBox() {
     $('#txtGST').val('');
     $('#txtBuilding').val('');
     $('#txtArea').val('');
-    $('#txtcity').val('');
-    $('#txtstate').val('');
+    $('#ddlCity').val('');
+    $('#dropState').val('');
     $('#txtPinCode').val('');
     $('#txtBank').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
+    $('#ddlCountry').val('');
 
 
     var button = document.getElementById("btnuser");
@@ -62,6 +64,7 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function DisplaySupplierDetails(Supplier) {
+
 
     $.ajax({
         url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
@@ -77,12 +80,16 @@ function DisplaySupplierDetails(Supplier) {
             $('#txtGST').val(response.gstno);
             $('#txtArea').val(response.area);
             $('#txtBuilding').val(response.buildingName);
-            $('#txtState').val(response.state);
-            $('#txtCity').val(response.city);
+            debugger
+            fn_getcitiesbystateId('ddlCity', response.state)
+
+            $('#dropState').val(response.state);
             $('#txtPinCode').val(response.pinCode);
             $('#txtBank').val(response.bankName);
             $('#txtAccount').val(response.accountNo);
             $('#txtIFFC').val(response.iffccode);
+
+            setTimeout(function () { $('#ddlCity').val(response.city); }, 100)
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
