@@ -72,16 +72,16 @@
                                 <div class="row w-100 ac-view-list">
 
                                     <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
-                                        <div class="col-5 text-center">
+                                        <div class="col-4 text-center">
                                             <h5>Item Name</h5>
                                         </div>
-                                        <div class="col-3 ">
+                                        <div class="col-4 text-center">
                                             <h5>PerUnitPrice</h5>
                                         </div>
-                                        <div class="col-2 ">
+                                        <div class="col-2 text-center">
                                             <h5>Is Approved</h5>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-2 text-center">
                                             <h5>Action</h5>
                                         </div>
                                     </div>
@@ -176,7 +176,7 @@
                                 <div class="col-12">
                                     <label class="form-label">Unit Type</label>
                                     <select class="form-control form-control-lg mb-3" id="txtUnitType" required>
-                                        <option selected disabled value="">---Select Unit Type---</option>
+                                        <option selected disabled value="">--Select--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
@@ -185,12 +185,6 @@
                                     <input type="text" class="form-control form-control-lg mb-3" placeholder="Price Per Unit" id="txtPricePerUnit" required>
                                     <span id="spnPricePerUnit" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">PriceWithGst</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Price With Gst" id="txtPriceWithGst" required>
-                                    <span id="spnPriceWithGst" class="text-danger"></span>
-                                </div>
-
                                 <div class="col-12">
                                     <label class="form-label">GstAmount</label>
                                     <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst Amount" id="txtGstAmount" required>
@@ -205,11 +199,6 @@
                                     <label class="form-label">HSNCode</label>
                                     <input type="text" class="form-control form-control-lg mb-3" placeholder="HSN Code" id="txtHSNCode" required>
                                     <span id="spnHSNCode" class="text-danger"></span>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">IsApproved</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="IsApproved" id="txtIsApproved" required>
-                                    <span id="spnIsApproved" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItem()" id="btnitem"></button>

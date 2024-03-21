@@ -81,11 +81,11 @@ namespace AccountManegments.Web.Controllers
                     ItemName = ItemDetails.ItemName,
                     UnitType = ItemDetails.UnitType,
                     PricePerUnit = ItemDetails.PricePerUnit,
-                    IsWithGst = ItemDetails.IsWithGst,
+                    IsWithGst = true,
                     Gstamount = ItemDetails.Gstamount,
                     Gstper = ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
-                    IsApproved = ItemDetails.IsApproved,
+                    IsApproved = true,
                     CreatedOn = DateTime.Now,
                     CreatedBy = _userSession.UserId,
                 };

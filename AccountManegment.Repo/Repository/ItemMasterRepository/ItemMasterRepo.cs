@@ -99,7 +99,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         }
 
         public async Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy)
-        {
+       {
             try
             {
                 var ItemList = (from a in Context.ItemMasters
@@ -122,10 +122,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     searchText = searchText.ToLower();
                     ItemList = ItemList.Where(u =>
                         u.ItemName.ToLower().Contains(searchText) ||
-                        u.UnitTypeName.ToLower().Contains(searchText) ||
                         u.PricePerUnit.ToString().Contains(searchText) ||
-                        u.Gstamount.ToString().Contains(searchText) ||
-                        u.Hsncode.ToLower().Contains(searchText) ||
                         u.IsApproved.ToString().Contains(searchText)
                     );
                 }
@@ -135,7 +132,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     searchText = searchText.ToLower();
                     switch (searchBy.ToLower())
                     {
-                        case "ItemName":
+                        case "itemname":
                             ItemList = ItemList.Where(u => u.ItemName.ToLower().Contains(searchText));
                             break;
                         case "IsApproved":
@@ -157,19 +154,19 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
 
                     switch (field.ToLower())
                     {
-                        case "ItemName":
+                        case "itemname":
                             if (sortOrder == "ascending")
                                 ItemList = ItemList.OrderBy(u => u.ItemName);
                             else if (sortOrder == "descending")
                                 ItemList = ItemList.OrderByDescending(u => u.ItemName);
                             break;
-                        case "PerUnitPrice":
+                        case "perunitprice":
                             if (sortOrder == "ascending")
                                 ItemList = ItemList.OrderBy(u => u.PricePerUnit);
                             else if (sortOrder == "descending")
                                 ItemList = ItemList.OrderByDescending(u => u.PricePerUnit);
                             break;
-                        case "IsApproved":
+                        case "isapproved":
                             if (sortOrder == "ascending")
                                 ItemList = ItemList.OrderBy(u => u.IsApproved);
                             else if (sortOrder == "descending")
