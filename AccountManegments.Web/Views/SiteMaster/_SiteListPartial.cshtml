@@ -34,7 +34,8 @@
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.SiteId" @if (item.IsActive)
                             {
                                 <text>checked</text>
-                            }>
+                            } onclick="ActiveDecativeSite('@item.SiteId')" />
+                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.SiteId"></label>
 
                         </div>
                     </div>

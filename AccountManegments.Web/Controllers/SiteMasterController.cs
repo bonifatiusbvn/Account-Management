@@ -97,8 +97,6 @@ namespace AccountManegments.Web.Controllers
                     ShippingStateId = createSite.ShippingStateId,
                     ShippingCountry = createSite.ShippingCountry,
                     ShippingPincode  = createSite.ShippingPincode,
-                    //CreatedOn = DateTime.Now,
-                    //IsActive = true,
                     CreatedBy = UserSession.UserId,
                 };
 
@@ -110,6 +108,50 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateSiteDetails(SiteMasterModel updateSite)
+        {
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(updateSite, "SiteMaster/UpdateSiteDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ActiveDeactiveSite(Guid SiteId)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SiteMaster/ActiveDeactiveSite?SiteId=" + SiteId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

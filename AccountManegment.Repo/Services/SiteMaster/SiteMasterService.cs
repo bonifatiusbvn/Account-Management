@@ -37,5 +37,9 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.UpdateSiteDetails(SiteDetails);
         }
+        public async Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId)
+        {
+            return await SiteMaster.ActiveDeactiveSite(SiteId);
+        }
     }
 }

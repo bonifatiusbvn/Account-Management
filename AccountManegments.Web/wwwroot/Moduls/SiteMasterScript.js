@@ -54,29 +54,29 @@ function sortTable() {
 }
 
 function DisplaySiteDetails(SiteId) {
-    debugger
+    debugger 
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
-            $('#txtSiteid').val(SiteId);
+     debugger
+            $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
-            $('#ddlCity').val(response.cityId);
-            $('#ddlState').val(response.stateId);
-            $('#ddlCountry').val(response.country);
+            $('#txtcity').val(response.cityId);
+            $('#txtstate').val(response.stateId);
+            $('#txtcountry').val(response.country);
             $('#txtPincode').val(response.pincode);
             $('#txtShippingAddress').val(response.shippingAddress);
             $('#txtShippingArea').val(response.shippingArea);
-            $('#ddlShippingCity').val(response.shippingCityName);
-            $('#ddlShippingState').val(response.shippingState);
-            $('#ddlShippingCountry').val(response.shippingCountry);
+            $('#txtShippingcity').val(response.shippingCityName);
+            $('#txtShippingstate').val(response.shippingState);
+            $('#txtShippingcountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
             var button = document.getElementById("btnSite");
             if ($('#txtSiteid').val() != '') {
@@ -122,11 +122,10 @@ function SelectSiteDetails(SiteId, element) {
 }
 
 function CreateSite() {
-
     var objData = {
         SiteName: $('#txtSiteName').val(),
         ContectPersonName :$('#txtContectPersonName').val(),
-        ontectPersonPhoneNumber:$('#txtContectPersonPhoneNo').val(),
+        ContectPersonPhoneNo:$('#txtContectPersonPhoneNo').val(),
         Address:$('#txtAddress').val(),
         Area:$('#txtArea').val(),
         CityId: $('#ddlCity').val(),
@@ -157,6 +156,46 @@ function CreateSite() {
             });
         },
     })
+}
+
+function UpdateSiteDetails() {
+   
+    var objData = {
+        SiteId: $('#txtSiteid').val(),
+        SiteName: $('#txtSiteName').val(),
+        ContectPersonName: $('#txtContectPersonName').val(),
+        ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
+        Address: $('#txtAddress').val(),
+        Area: $('#txtArea').val(),
+        CityId: $('#ddlCity').val(),
+        StateId: $('#ddlState').val(),
+        Country: $('#ddlCountry').val(),
+        Pincode: $('#txtPincode').val(),
+        ShippingAddress: $('#txtShippingAddress').val(),
+        ShippingArea: $('#txtShippingArea').val(),
+        ShippingPincode: $('#txtShippingPincode').val(),
+        ShippingCityId: $('#ddlShippingCity').val(),
+        ShippingStateId: $('#ddlShippingState').val(),
+        ShippingCountry: $('#ddlShippingCountry').val(),
+    }
+    $.ajax({
+        url: '/SiteMaster/UpdateSiteDetails',
+        type: 'post',
+        data: objData,
+        datatype: 'json',
+        success: function (Result) {
+
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/SiteMaster/SiteListView';
+            });
+        },
+    })
+
 }
 
 function ClearTextBox() {
@@ -197,7 +236,7 @@ function validateAndCreateSite() {
     var StateId = document.getElementById("txtstate").value.trim();
     var Country = document.getElementById("txtcountry").value.trim();
     var Pincode = document.getElementById("txtPincode").value.trim();
-    var ShippingCityId = document.getElementById("ddlShippingCity").value.trim();
+    var ShippingCityId = document.getElementById("txtShippingcity").value.trim();
     var ShippingStateId = document.getElementById("txtShippingstate").value.trim();
     var ShippingCountry = document.getElementById("txtShippingcountry").value.trim();
     var ShippingAddress = document.getElementById("txtShippingAddress").value.trim();
@@ -304,7 +343,7 @@ function validateAndCreateSite() {
             CreateSite();
         }
         else {
-            UpdateSiteDetails()
+            UpdateSiteDetails();
         }
     }
 }
@@ -333,3 +372,121 @@ function isValidPhoneNo(ContectPersonPhoneNo) {
     var phoneNoPattern = /^\d{10}$/;
     return phoneNoPattern.test(ContectPersonPhoneNo);
 }
+
+function ActiveDecativeSite(SiteId) {
+
+    var isChecked = $('#flexSwitchCheckChecked_' + SiteId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to Active this Site?" : "Are you sure want to DeActive this Site?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("SiteId", SiteId);
+         
+            $.ajax({
+                url: '/SiteMaster/ActiveDeactiveSite?SiteId=' + SiteId,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: isChecked ? "Active!" : "DeActive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/SiteMaster/SiteListView';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Site Have No Changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/SiteMaster/SiteListView';
+            });;
+        }
+    });
+}
+
+$(document).ready(function () {
+
+    GetShippingCountry();
+    $('#ddlShippingCountry').change(function () {
+
+        var Text = $("#ddlShippingCountry Option:Selected").text();
+        var StateId = $(this).val();
+        $("#txtShippingcountry").val(Text);
+        $('#ddlShippingState').empty();
+        $('#ddlShippingState').append('<Option >--Select State--</Option>');
+        $.ajax({
+            url: '/Authentication/GetState?StateId=' + StateId,
+            success: function (result) {
+                
+                $.each(result, function (i, data) {
+                    $('#ddlShippingState').append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+                });
+            }
+        });
+    });
+
+
+    $('#ddlShippingState').change(function () {
+
+        var Text = $("#ddlShippingState Option:Selected").text();
+        var CityId = $(this).val();
+    
+        $("#txtShippingstate").val(CityId);
+        $('#ddlShippingCity').empty();
+        $('#ddlShippingCity').append('<Option >--Select City--</Option>');
+        $.ajax({
+            url: '/Authentication/GetCity?CityId=' + CityId,
+            success: function (result) {
+
+                $.each(result, function (i, data) {
+                    $('#ddlShippingCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+                });
+            }
+        });
+    });
+
+    $('#ddlShippingCity').change(function () {
+    
+        var Text = $("#ddlShippingCity Option:Selected").text();
+        var txtShippingcity = $(this).val();
+        $("#txtShippingcity").val(txtShippingcity);
+    });
+
+});
+
+
+
+
+function GetShippingCountry() {
+
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlShippingCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
+
+            });
+        }
+    });
+}
+

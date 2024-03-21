@@ -64,10 +64,15 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             SiteMasterModel SiteList = new SiteMasterModel();
             try
             {
-                 SiteList = (from a in Context.Sites.Where(x => x.SiteId == SiteId)
-                            join b in Context.Cities on a.CityId equals b.CityId
+                SiteList = (from a in Context.Sites.Where(x => x.SiteId == SiteId)
+                            join b in Context.Cities on a.CityId equals b.CityId into CityJoin
+                            from city in CityJoin.DefaultIfEmpty()
+                            join sc in Context.Cities on a.ShippingCityId equals sc.CityId into ShippingCityJoin
+                            from shippingCity in ShippingCityJoin.DefaultIfEmpty()
                             join c in Context.States on a.StateId equals c.StatesId
                             join d in Context.Countries on a.Country equals d.CountryId
+                            join shippingState in Context.States on a.ShippingStateId equals shippingState.StatesId
+                            join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
                             select new SiteMasterModel
                             {
                                 SiteId = a.SiteId,
@@ -78,7 +83,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 Address = a.Address,
                                 Area = a.Area,
                                 CityId = a.CityId,
-                                CityName = b.CityName,
+                                CityName = city.CityName,
                                 StateId = a.StateId,
                                 StateName = c.StatesName,
                                 Country = a.Country,
@@ -87,11 +92,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 ShippingAddress = a.ShippingAddress,
                                 ShippingArea = a.ShippingArea,
                                 ShippingCityId = a.ShippingCityId,
-                                ShippingCityName = b.CityName,
+                                ShippingCityName = shippingCity.CityName,
                                 ShippingStateId = a.ShippingStateId,
-                                ShippingStateName = c.StatesName,
+                                ShippingStateName = shippingState.StatesName,
                                 ShippingCountry = a.ShippingCountry,
-                                ShippingCountryName = d.CountryName,
+                                ShippingCountryName = shippingCountry.CountryName,
                                 ShippingPincode = a.ShippingPincode,
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
@@ -181,13 +186,13 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
 
                     switch (field.ToLower())
                     {
-                        case "SiteName":
+                        case "sitename":
                             if (sortOrder == "ascending")
                                 SiteList = SiteList.OrderBy(u => u.SiteName);
                             else if (sortOrder == "descending")
                                 SiteList = SiteList.OrderByDescending(u => u.SiteName);
                             break;
-                        case "ContectPersonName":
+                        case "contectpersonname":
                             if (sortOrder == "ascending")
                                 SiteList = SiteList.OrderBy(u => u.ContectPersonName);
                             else if (sortOrder == "descending")
@@ -199,7 +204,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                             else if (sortOrder == "descending")
                                 SiteList = SiteList.OrderByDescending(u => u.IsActive);
                             break;
-                        case "ContectPersonPhoneNo":
+                        case "contectpersonphoneno":
                             if (sortOrder == "ascending")
                                 SiteList = SiteList.OrderBy(u => u.ContectPersonPhoneNo);
                             else if (sortOrder == "descending")
@@ -229,7 +234,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 {
                     SiteMaster.SiteId = SiteDetails.SiteId;
                     SiteMaster.SiteName = SiteDetails.SiteName;
-                    SiteMaster.IsActive = SiteDetails.IsActive;
                     SiteMaster.ContectPersonName = SiteDetails.ContectPersonName;
                     SiteMaster.ContectPersonPhoneNo = SiteDetails.ContectPersonPhoneNo;
                     SiteMaster.Address = SiteDetails.Address;
@@ -244,8 +248,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteMaster.ShippingStateId = SiteDetails.ShippingStateId;
                     SiteMaster.ShippingCountry = SiteDetails.ShippingCountry;
                     SiteMaster.ShippingPincode = SiteDetails.ShippingPincode;
-                    SiteMaster.CreatedBy = SiteDetails.CreatedBy;
-                    SiteMaster.CreatedOn = SiteDetails.CreatedOn;
                 }
                 Context.Sites.Update(SiteMaster);
                 Context.SaveChanges();
@@ -257,6 +259,38 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
             return model;
+        }
+        public async Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Getsitedata = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
+
+            if (Getsitedata != null)
+            {
+
+                if (Getsitedata.IsActive == true)
+                {
+                    Getsitedata.IsActive = false;
+                    Context.Sites.Update(Getsitedata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = Getsitedata;
+                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "Is Deactive Succesfully";
+                }
+
+                else
+                {
+                    Getsitedata.IsActive = true;
+                    Context.Sites.Update(Getsitedata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = Getsitedata;
+                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "Is Active Succesfully";
+                }
+
+
+            }
+            return response;
         }
     }
 }
