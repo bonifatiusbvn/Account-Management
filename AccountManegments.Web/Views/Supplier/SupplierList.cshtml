@@ -1,0 +1,285 @@
+﻿@inject UserSession _userSession
+
+@{
+    ViewData["Title"] = "SupplierList";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Users</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0 align-items-center">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">User Details</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+                <h2 class="h5 mb-0">User Details</h2>
+                <form class="ms-auto position-relative">
+                    <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Supplier</button>
+                </form>
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+                                <div class="row ">
+                                    <div class="col-12">
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-lg-4">
+                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
+                                                    </input>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                                        <option selected="selected">All</option>
+                                                        <option>UserName</option>
+                                                        <option>Email</option>
+                                                        <option>Phone</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-12 col-lg-4">
+                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
+                                                        <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
+                                                        <option value="AscendingRole">Ascending Role</option>
+                                                        <option value="DescendingRole">Descending Role</option>
+                                                        <option value="AscendingActive">Ascending Active</option>
+                                                        <option value="DescendingActive">Descending Active</option>
+                                                        <option value="AscendingEmail">Ascending Email</option>
+                                                        <option value="DescendingEmail">Descending Email</option>
+                                                        <option value="AscendingPhone">Ascending Phone</option>
+                                                        <option value="DescendingPhone">Descending Phone</option>
+                                                    </select>
+                                                </div>
+                                            </div><!--end row-->
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row w-100 ac-view-list">
+
+                                    <div class="row hide-sm table-light ac-view-header">
+                                        <div class="col-5 text-center">
+                                            <h5>Supplier Info</h5>
+                                        </div>
+                                        <div class="col-2 ">
+                                            <h5>Active</h5>
+                                        </div>
+                                        <div class="col-2">
+                                            <h5>Action</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card" id="Supplierbody">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--end row-->
+
+
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                        <div class="card radius-10">
+                            <div class="card-body" style="height:650px">
+                                <h5 class="mb-0 mt-4">User Information</h5>
+                                <hr>
+                                <div class="row g-3 ac-detail d-none">
+                                    <div class="col-6">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="dspFirstName" readonly>
+                                        <input type="hidden" class="form-control" id="dspUserid" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="dspLastName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="dspUserName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Password</label>
+                                        <input type="text" class="form-control" id="dspPassword" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="dspEmail" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="dspPhoneNo" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Role</label>
+                                        <input type="text" class="form-control" id="dspRole" readonly>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @* </form> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createSupplier">
+        <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+            <h5 class="m-0 me-2 text-white">Create Supplier</h5>
+            <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div data-simplebar class="h-100">
+                <div class="p-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3 ac-detail">
+                                <form class="row g-3" id="SupplierForm">
+                                    <div class="fv-row mb-1">
+                                        <label class="form-label">Supplier Name</label>
+                                        <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" required>
+                                        <input type="hidden" id="txtSupplierid">
+                                        <input type="hidden" id="txtUserid" value="@_userSession.UserId">
+                                        <span id="spnSupplier" class="text-danger"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="fv-row mb-2">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" required>
+                                                <span id="spnPhoneNo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="fv-row mb-2">
+                                                <label class="form-label">Email</label>
+                                                <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" required>
+                                                <span id="spnEmail" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="fv-row mb-2">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="fv-row mb-1">
+                                                    <label class="form-label">GST Number</label>
+                                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" required>
+                                                    <span id="spnGST" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="fv-row mb-1">
+                                                    <label class="form-label">Building Name</label>
+                                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" required>
+                                                    <span id="spnBuilding" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="fv-row mb-6">
+                                                <label class="form-label">Area</label>
+                                                <input type="text" class="form-control" placeholder="Area" id="txtArea" required style="height: 75px;">
+                                                <span id="spnArea" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="col-6">
+                                            <div class="fv-row mb-4">
+                                                <select id="ddlCountry" class="form-control bg-transparent">
+                                                    <option>--Select Country--</option>
+                                                </select>
+                                                <input type="hidden" id="txtcountry" value="" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-1">
+                                            <label class="form-label">State</label>
+                                            <select id="ddlState" class="form-control bg-transparent">
+                                                <option>--Select State--</option>
+                                            </select>
+                                            <input type="hidden" id="txtstate" value="" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="fv-row mb-1">
+                                            <label class="form-label">City</label>
+                                            <select id="ddlCity" class="form-control bg-transparent">
+                                                <option>--Select City--</option>
+                                            </select>
+                                            <input type="hidden" id="txtcity" value="" />
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="fv-row mb-1">
+                                                <label class="form-label">PinCode</label>
+                                                <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" required>
+                                                <span id="spnPinCode" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="fv-row mb-4">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="fv-row mb-1">
+                                                    <label class="form-label">Bank Name</label>
+                                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" required>
+                                                    <span id="spnBank" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="fv-row mb-1">
+                                                    <label class="form-label">Account Number</label>
+                                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" required>
+                                                    <span id="spnAccount" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="fv-row mb-1">
+                                                <label class="form-label">IFFC Code</label>
+                                                <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" required>
+                                                <span id="spnIFFC" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateSupplier()" id="btnuser"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@section Scripts {
+
+    <script src="~/moduls/SupplierScript.js"></script>
+    <script src="~/moduls/MasterListScript.js"></script>
+}
