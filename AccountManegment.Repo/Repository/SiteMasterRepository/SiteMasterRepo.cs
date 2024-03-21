@@ -29,7 +29,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 {
                     SiteId = Guid.NewGuid(),
                     SiteName = SiteDetails.SiteName,
-                    IsActive = SiteDetails.IsActive,
+                    IsActive = true,
                     ContectPersonName = SiteDetails.ContectPersonName,
                     ContectPersonPhoneNo = SiteDetails.ContectPersonPhoneNo,
                     Address = SiteDetails.Address,

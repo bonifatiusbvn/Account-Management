@@ -19,7 +19,7 @@ namespace AccountManagement.API.Controllers
         }
         public ISiteMasterServices SiteMaster { get; }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetSiteList")]
         public async Task<IActionResult> GetSiteList(string? searchText, string? searchBy, string? sortBy)
         {
