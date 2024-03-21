@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "CreateCompany";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Users</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0 align-items-center">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Create Company</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="ms-auto">
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary">Settings</button>
+            <button type="button" class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                <a class="dropdown-item" href="javascript:;">Action</a>
+                <a class="dropdown-item" href="javascript:;">Another action</a>
+                <a class="dropdown-item" href="javascript:;">Something else here</a>
+                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="border p-3 rounded">
+            <h6 class="mb-0 text-uppercase">Checkout Form</h6>
+            <hr>
+            <form class="row g-3">
+                <div class="col-12">
+                    <label class="form-label">Company Name</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Gstno</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">PanNo</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Area</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">CityId</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">StateId</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Country</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-12">
+                    <div class="form-check d-flex justify-content-center gap-2">
+                        <input class="form-check-input" type="checkbox" id="gridCheck3-c" checked="">
+                        <label class="form-check-label" for="gridCheck3-c">
+                            Create an account?
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Place Order</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
