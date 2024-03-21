@@ -135,9 +135,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         }
 
 
-
-
-
         public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
             try
@@ -241,9 +238,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
         }
 
-
-
-
         public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {
             LoginResponseModel response = new LoginResponseModel();
@@ -254,7 +248,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 {
                     if (tblUser.IsActive == true)
                     {
-                        if (tblUser.UserName == Loginrequest.UserName && tblUser.Password == Loginrequest.Password)
+                        if (tblUser.Password == Loginrequest.Password)
                         {
                             LoginView userModel = new LoginView();
                             userModel.UserName = tblUser.UserName;
