@@ -4,7 +4,7 @@ function CreateSupplier() {
     var objData = {
         SupplierName: $('#txtSupplierName').val(),
         Email: $('#txtEmail').val(),
-        PhoneNo: $('#txtPhoneNo').val(),
+        Mobile: $('#txtPhoneNo').val(),
         Gstno: $('#txtGST').val(),
         BuildingName: $('#txtBuilding').val(),
         Area: $('#txtArea').val(),
@@ -39,6 +39,7 @@ function CreateSupplier() {
 
 function ClearTextBox() {
 
+    $('#dspSupplierId').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
     $('#txtPhoneNo').val('');
@@ -51,36 +52,42 @@ function ClearTextBox() {
     $('#txtBank').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
-    $('#txtUserid').val('');
+
 
     var button = document.getElementById("btnuser");
-    if ($('#txtSupplierid').val() == '') {
+    if ($('#dspSupplierId').val() == '') {
         button.textContent = "Create";
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
     offcanvas.show();
 }
-function DisplayUserDetails(UserId) {
-
+function DisplaySupplierDetails(Supplier) {
+    debugger
     $.ajax({
-        url: '/User/DisplayUserDetails?UserId=' + UserId,
+        url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
-            $('#txtUserid').val(response.id);
-            $('#txtFirstName').val(response.firstName);
-            $('#txtLastName').val(response.lastName);
-            $('#txtPassword').val(response.password);
-            $('#txtUserName').val(response.userName);
+            debugger
+            $('#txtSupplierid').val(response.supplierId);
+            $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);
-            $('#txtPhoneNo').val(response.phoneNo);
+            $('#txtPhoneNo').val(response.mobile);
+            $('#txtGST').val(response.gstno);
+            $('#txtArea').val(response.area);
+            $('#txtBuilding').val(response.buildingName);
+            $('#txtState').val(response.state);
+            $('#txtCity').val(response.city);
+            $('#txtPinCode').val(response.pinCode);
+            $('#txtBank').val(response.bankName);
+            $('#txtAccount').val(response.accountNo);
+            $('#txtIFFC').val(response.iffccode);
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
             }
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
             offcanvas.show();
         },
         error: function (xhr, status, error) {
@@ -89,26 +96,32 @@ function DisplayUserDetails(UserId) {
     });
 }
 
-function SelectUserDetails(UserId, element) {
+function SelectUserDetails(Supplier, element) {
 
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
-        url: '/User/DisplayUserDetails?UserId=' + UserId,
+        url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            debugger
             if (response) {
-                $('#dspUserid').val(UserId);
-                $('#dspFirstName').val(response.firstName);
-                $('#dspLastName').val(response.lastName);
-                $('#dspUserName').val(response.userName);
-                $('#dspPassword').val(response.password);
+                $('#dspSupplierId').val(response.supplierId);
+                $('#dspSupplierName').val(response.supplierName);
                 $('#dspEmail').val(response.email);
-                $('#dspPhoneNo').val(response.phoneNo);
-                $('#dspRole').val(response.roleName);
+                $('#dspPhoneNo').val(response.mobile);
+                $('#dspArea').val(response.area);
+                $('#dspArea').val(response.area);
+                $('#dspBuildingName').val(response.buildingName);
+                $('#dspStateName').val(response.stateName);
+                $('#dspCityName').val(response.cityName);
+                $('#dspPinCode').val(response.pinCode);
+                $('#dspBankName').val(response.bankName);
+                $('#dspAccountNo').val(response.accountNo);
+                $('#dspIffccode').val(response.iffccode);
             } else {
                 console.log('Empty response received.');
             }
@@ -120,15 +133,16 @@ function SelectUserDetails(UserId, element) {
 }
 
 function AllUserTable() {
+    debugger
 
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
 
-    $.get("/User/UserListAction", { searchBy: searchBy, searchText: searchText })
+    $.get("/Supplier/SupplierListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
 
 
-            $("#Usertbody").html(result);
+            $("#Supplierbody").html(result);
         })
         .fail(function (error) {
             console.error(error);
@@ -141,14 +155,14 @@ function filterTable() {
     var searchBy = $('#ddlSearchBy').val();
 
     $.ajax({
-        url: '/User/UserListAction',
+        url: '/Supplier/SupplierListAction',
         type: 'GET',
         data: {
             searchText: searchText,
             searchBy: searchBy
         },
         success: function (result) {
-            $("#Usertbody").html(result);
+            $("#Supplierbody").html(result);
         },
         error: function (xhr, status, error) {
 
@@ -159,13 +173,13 @@ function filterTable() {
 function sortTable() {
     var sortBy = $('#ddlSortBy').val();
     $.ajax({
-        url: '/User/UserListAction',
+        url: '/Supplier/SupplierListAction',
         type: 'GET',
         data: {
             sortBy: sortBy
         },
         success: function (result) {
-            $("#Usertbody").html(result);
+            $("#Supplierbody").html(result);
         },
         error: function (xhr, status, error) {
 
@@ -174,19 +188,26 @@ function sortTable() {
 }
 
 
-function UpdateUserDetails() {
-
+function UpdateSupplierDetails() {
+    debugger
     var objData = {
-        Id: $('#txtUserid').val(),
-        FirstName: $('#txtFirstName').val(),
-        LastName: $('#txtLastName').val(),
-        UserName: $('#txtUserName').val(),
-        Password: $('#txtPassword').val(),
+        SupplierId: $('#txtSupplierid').val(),
+        SupplierName: $('#txtSupplierName').val(),
         Email: $('#txtEmail').val(),
-        PhoneNo: $('#txtPhoneNo').val(),
+        Mobile: $('#txtPhoneNo').val(),
+        Gstno: $('#txtGST').val(),
+        BuildingName: $('#txtBuilding').val(),
+        Area: $('#txtArea').val(),
+        City: $('#txtCity').val(),
+        State: $('#txtState').val(),
+        PinCode: $('#txtPinCode').val(),
+        BankName: $('#txtBank').val(),
+        AccountNo: $('#txtAccount').val(),
+        Iffccode: $('#txtIFFC').val(),
+        UpdatedBy: $('#txtUserid').val(),
     }
     $.ajax({
-        url: '/User/UpdateUserDetails',
+        url: '/Supplier/UpdateSupplierDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -198,7 +219,7 @@ function UpdateUserDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/User/UserListView';
+                window.location = '/Supplier/SupplierList';
             });
         },
     })
@@ -206,7 +227,7 @@ function UpdateUserDetails() {
 }
 function validateAndCreateSupplier() {
 
-
+    debugger
     resetErrorMessages();
 
     var supplierName = $('#txtSupplierName').val().trim();
@@ -284,11 +305,11 @@ function validateAndCreateSupplier() {
 
 
     if (isValid) {
-        if ($("#txtSupplierid").val() == '') {
+        if ($("#dspSupplierId").val() == '') {
             CreateSupplier();
         }
         else {
-            UpdateUserDetails()
+            UpdateSupplierDetails()
         }
     }
 
@@ -319,7 +340,7 @@ function isValidPhoneNo(phoneNo) {
 
 
 function UserActiveDecative(UserId) {
-    debugger
+
     var isChecked = $('#flexSwitchCheckChecked_' + UserId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
 
