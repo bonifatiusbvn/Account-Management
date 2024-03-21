@@ -9,25 +9,24 @@
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-5">
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-4">
                         <div class="d-flex align-items-center gap-3">
                             <div class="widget-icon-2 bg-light-primary text-primary">
                                 <div class="font-22">
-                                    <i class="lni lni-user" onclick="SelectSiteDetails('@item.SiteId')">
+                                    <i class="lni lni-user" onclick="SelectSiteDetails('@item.SiteId', this)">
 
                                     </i>
                                 </div>
                             </div>
                             <div class="flex-grow-1">
-                                <h4 class="mb-0 text-primary">@item.ContectPersonName </h4>
-                                <p class="mb-1">@item.ContectPersonPhoneNo</p>
+                                <h4 class="mb-0 text-primary">@item.SiteName </h4>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-lg-5 col-md-5 col-xl-3">
                         <div class="flex-grow-1">
-                            <h5 class="mb-0 text-primary">@item.SiteName</h5>
-                            <h6 class="mb-2"></h6>
+                            <h5 class="mb-0 text-primary">@item.ContectPersonName</h5>
+                            <p class="mb-1">@item.ContectPersonPhoneNo</p>
                         </div>
                     </div>
                     <div class="col-12 col-lg-1 col-md-1 col-xl-1 text-center">
@@ -35,13 +34,14 @@
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.SiteId" @if (item.IsActive)
                             {
                                 <text>checked</text>
-                            }>
+                            } onclick="ActiveDecativeSite('@item.SiteId')" />
+                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.SiteId"></label>
 
                         </div>
                     </div>
                     <div class="col-12 col-lg-2 col-md-2 col-xl-3 text-center ac-m-btn">
 
-                        <a class="btn text-warning" onclick="DisplayUserDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a class="btn text-warning" onclick="DisplaySiteDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                         <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
 
                     </div>

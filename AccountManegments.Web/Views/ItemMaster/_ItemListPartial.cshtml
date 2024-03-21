@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel>
+
+@foreach (var item in Model)
+{
+    <div class="row ac-card" id="userCard_@item.ItemId">
+        <div class="card border mb-3">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="widget-icon-2 bg-light-primary text-primary">
+                                <div class="font-22">
+                                    <i class="lni lni-user" onclick="SelectItemDetails('@item.ItemId', this)"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="mb-0 text-primary">@item.ItemName</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div>
+                            <h5 class="mb-0 text-primary">@item.PricePerUnit</h5>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <div>
+                            <h5 class="mb-0 text-primary">@item.IsApproved</h5>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 ac-m-btn">
+                        <a class="btn text-warning" onclick="DisplayItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

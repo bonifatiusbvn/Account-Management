@@ -17,11 +17,11 @@ namespace AccountManagement.API.Controllers
         }
         public IItemMasterServices ItemMaster { get; }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetItemList")]
-        public async Task<IActionResult> GetItemList()
+        public async Task<IActionResult> GetItemList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<ItemMasterModel> ItemList = await ItemMaster.GetItemList();
+            IEnumerable<ItemMasterModel> ItemList = await ItemMaster.GetItemList(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = ItemList.ToList() });
         }
 
@@ -58,6 +58,13 @@ namespace AccountManagement.API.Controllers
                 response.message = itemmaster.message;
             }
             return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("GetAllUnitType")]
+        public async Task<IActionResult> GetAllUnitType()
+        {
+            IEnumerable<UnitMasterView> UnitType = await ItemMaster.GetAllUnitType();
+            return Ok(new { code = 200, data = UnitType.ToList() });
         }
     }
 }
