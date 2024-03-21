@@ -1575,3 +1575,12 @@ div::-webkit-scrollbar-track-piece {
 div::-webkit-scrollbar-thumb {
     background: #eee
 }
+
+.ac-view-header {
+    position: sticky;
+    TOP: 0;
+    z-index: 99;
+    background-color: rgb(146 62 185 / 12%) !important;
+    height: 32px;
+    padding-top: 5px;
+}

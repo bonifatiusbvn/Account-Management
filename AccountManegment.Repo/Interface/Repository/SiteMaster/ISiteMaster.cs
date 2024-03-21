@@ -17,4 +17,3 @@ namespace AccountManagement.Repository.Interface.Repository.SiteMaster
         Task<ApiResponseModel> UpdateSiteDetails(SiteMasterModel SiteDetails);
     }
 }
- 
