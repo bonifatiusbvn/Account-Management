@@ -31,7 +31,7 @@ public partial class SupplierMaster
 
     public string? Iffccode { get; set; }
 
-    public bool? IsApproved { get; set; }
+    public bool IsApproved { get; set; }
 
     public Guid CreatedBy { get; set; }
 

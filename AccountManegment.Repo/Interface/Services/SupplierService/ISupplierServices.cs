@@ -11,9 +11,9 @@ namespace AccountManagement.Repository.Interface.Services.SupplierService
 {
     public interface ISupplierServices
     {
-        Task<IEnumerable<LoginView>> GetSupplierList(string? searchText, string? searchBy, string? sortBy);
+        Task<IEnumerable<SupplierModel>> GetSupplierList(string? searchText, string? searchBy, string? sortBy);
 
-        Task<LoginView> GetSupplierById(Guid SupplierId);
+        Task<SupplierModel> GetSupplierById(Guid SupplierId);
 
         Task<ApiResponseModel> CreateSupplier(SupplierModel CreateUser);
         Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateUser);

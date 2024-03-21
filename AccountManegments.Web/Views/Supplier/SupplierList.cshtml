@@ -1,5 +1,5 @@
 ﻿@inject UserSession _userSession
-
+@inject IHttpContextAccessor Accessor;
 @{
     ViewData["Title"] = "SupplierList";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
@@ -103,21 +103,9 @@
                                 <hr>
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-6">
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="dspFirstName" readonly>
-                                        <input type="hidden" class="form-control" id="dspUserid" readonly>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="dspLastName" readonly>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="dspUserName" readonly>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Password</label>
-                                        <input type="text" class="form-control" id="dspPassword" readonly>
+                                        <label class="form-label">Supplier Name</label>
+                                        <input type="text" class="form-control" id="dspSupplierName" readonly>
+                                        <input type="hidden" class="form-control" id="dspSupplierId" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Email</label>
@@ -128,10 +116,37 @@
                                         <input type="text" class="form-control" id="dspPhoneNo" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Role</label>
-                                        <input type="text" class="form-control" id="dspRole" readonly>
+                                        <label class="form-label">Area</label>
+                                        <input type="text" class="form-control" id="dspArea" readonly>
                                     </div>
-
+                                    <div class="col-6">
+                                        <label class="form-label">BuildingName</label>
+                                        <input type="text" class="form-control" id="dspBuildingName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">State</label>
+                                        <input type="text" class="form-control" id="dspStateName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control" id="dspCityName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">PinCode</label>
+                                        <input type="text" class="form-control" id="dspPinCode" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">BankName</label>
+                                        <input type="text" class="form-control" id="dspBankName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">AccountNo</label>
+                                        <input type="text" class="form-control" id="dspAccountNo" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Iffccode</label>
+                                        <input type="text" class="form-control" id="dspIffccode" readonly>
+                                    </div>
                                 </div>
                             </div>
                             @* </form> *@
@@ -157,7 +172,7 @@
                                     <div class="fv-row mb-1">
                                         <label class="form-label">Supplier Name</label>
                                         <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" required>
-                                        <input type="hidden" id="txtSupplierid">
+
                                         <input type="hidden" id="txtUserid" value="@_userSession.UserId">
                                         <span id="spnSupplier" class="text-danger"></span>
                                     </div>
@@ -218,6 +233,7 @@
                                             </select>
                                             <input type="hidden" id="txtstate" value="" />
                                             <span class="text-danger"></span>
+                                            <input type="text" class="form-control" id="txtState" readonly>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -226,6 +242,7 @@
                                             <select id="ddlCity" class="form-control bg-transparent">
                                                 <option>--Select City--</option>
                                             </select>
+                                            <input type="text" class="form-control" id="txtCity" readonly>
                                             <input type="hidden" id="txtcity" value="" />
                                             <span class="text-danger"></span>
                                         </div>
@@ -264,7 +281,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateSupplier()" id="btnuser"></button>
+                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnuser"></button>
                                     </div>
                                 </form>
                             </div>
@@ -279,7 +296,6 @@
 
 </div>
 @section Scripts {
-
-    <script src="~/moduls/SupplierScript.js"></script>
     <script src="~/moduls/MasterListScript.js"></script>
+    <script src="~/moduls/SupplierScript.js"></script>
 }

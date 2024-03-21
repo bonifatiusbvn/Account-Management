@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.Supplier;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,19 +64,169 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
 
         }
 
-        public Task<LoginView> GetSupplierById(Guid SupplierId)
+        public async Task<SupplierModel> GetSupplierById(Guid SupplierId)
         {
-            throw new NotImplementedException();
+
+            SupplierModel Userdata = new SupplierModel();
+            try
+            {
+                Userdata = (from e in Context.SupplierMasters
+                            join s in Context.States on e.State equals s.StatesId
+                            join c in Context.Cities on e.City equals c.CityId
+                            select new SupplierModel
+                            {
+                                SupplierId = e.SupplierId,
+                                SupplierName = e.SupplierName,
+                                Gstno = e.Gstno,
+                                Email = e.Email,
+                                Mobile = e.Mobile,
+                                IsApproved = e.IsApproved,
+                                Area = e.Area,
+                                PinCode = e.PinCode,
+                                BuildingName = e.BuildingName,
+                                StateName = s.StatesName,
+                                State = e.State,
+                                City = e.City,
+                                CityName = c.CityName,
+                                BankName = e.BankName,
+                                AccountNo = e.AccountNo,
+                                Iffccode = e.Iffccode,
+                            }).First();
+                return Userdata;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<IEnumerable<LoginView>> GetSupplierList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<SupplierModel>> GetSupplierList(string? searchText, string? searchBy, string? sortBy)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IEnumerable<SupplierModel> SupplierList = (from e in Context.SupplierMasters
+                                                           join s in Context.States on e.State equals s.StatesId
+                                                           join c in Context.Cities on e.City equals c.CityId
+                                                           select new SupplierModel
+                                                           {
+                                                               SupplierId = e.SupplierId,
+                                                               SupplierName = e.SupplierName,
+                                                               Gstno = e.Gstno,
+                                                               Email = e.Email,
+                                                               Mobile = e.Mobile,
+                                                               IsApproved = e.IsApproved,
+                                                               CityName = c.CityName,
+                                                           });
+
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    SupplierList = SupplierList.Where(u =>
+                        u.SupplierName.ToLower().Contains(searchText) ||
+                        u.Email.ToLower().Contains(searchText) ||
+                        u.Mobile.ToLower().Contains(searchText) ||
+                        u.CityName.ToLower().Contains(searchText) ||
+                        u.Gstno.ToLower().Contains(searchText)
+
+
+
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "suppliername":
+                            SupplierList = SupplierList.Where(u => u.SupplierName.ToLower().Contains(searchText));
+                            break;
+                        case "email":
+                            SupplierList = SupplierList.Where(u => u.Email.ToLower().Contains(searchText));
+                            break;
+                        case "mobile":
+                            SupplierList = SupplierList.Where(u => u.Mobile.ToLower().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "suppliername":
+                            if (sortOrder == "ascending")
+                                SupplierList = SupplierList.OrderBy(u => u.SupplierName);
+                            else if (sortOrder == "descending")
+                                SupplierList = SupplierList.OrderByDescending(u => u.SupplierName);
+                            break;
+                        case "email":
+                            if (sortOrder == "ascending")
+                                SupplierList = SupplierList.OrderBy(u => u.Email);
+                            else if (sortOrder == "descending")
+                                SupplierList = SupplierList.OrderByDescending(u => u.Email);
+                            break;
+                        case "mobile":
+                            if (sortOrder == "ascending")
+                                SupplierList = SupplierList.OrderBy(u => u.Mobile);
+                            else if (sortOrder == "descending")
+                                SupplierList = SupplierList.OrderByDescending(u => u.Mobile);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                return SupplierList.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateUser)
+        public async Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateSupplier)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                ApiResponseModel response = new ApiResponseModel();
+                var Userdata = await Context.SupplierMasters.FirstOrDefaultAsync(a => a.SupplierId == UpdateSupplier.SupplierId);
+                if (Userdata != null)
+                {
+                    Userdata.SupplierId = UpdateSupplier.SupplierId;
+                    Userdata.SupplierName = UpdateSupplier.SupplierName;
+                    Userdata.Area = UpdateSupplier.Area;
+                    Userdata.BuildingName = UpdateSupplier.BuildingName;
+                    Userdata.PinCode = UpdateSupplier.PinCode;
+                    Userdata.Email = UpdateSupplier.Email;
+                    Userdata.Mobile = UpdateSupplier.Mobile;
+                    Userdata.BankName = UpdateSupplier.BankName;
+                    Userdata.AccountNo = UpdateSupplier.AccountNo;
+                    Userdata.Iffccode = UpdateSupplier.Iffccode;
+                    Userdata.UpdatedBy = UpdateSupplier.CreatedBy;
+                    Userdata.UpdatedOn = DateTime.Now;
+                    Userdata.IsApproved = true;
+                    Context.SupplierMasters.Update(Userdata);
+                    Context.SaveChanges();
+                }
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Supplier Data Updated Successfully";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

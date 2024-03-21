@@ -20,6 +20,10 @@ using AccountManagement.Repository.Services.MasterList;
 using AccountManagement.Repository.Services.SiteMaster;
 using Microsoft.EntityFrameworkCore;
 using AccountManagement.Repository.Services.ItemMaster;
+using AccountManagement.Repository.Interface.Repository.Supplier;
+using AccountManagement.Repository.Repository.SupplierRepository;
+using AccountManagement.Repository.Interface.Services.SupplierService;
+using AccountManagement.Repository.Services.Supplier;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +40,7 @@ builder.Services.AddScoped<IMasterList, MasterListRepo>();
 builder.Services.AddScoped<IFormPermissionMaster, FormPermissionMasterRepo>();
 builder.Services.AddScoped<ISiteMaster, SiteMasterRepo>();
 builder.Services.AddScoped<IItemMaster, ItemMasterRepo>();
+builder.Services.AddScoped<ISupplierMaster, SupplierMasterRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -43,6 +48,7 @@ builder.Services.AddScoped<IMasterListServices, MasterListService>();
 builder.Services.AddScoped<ISiteMasterServices, SiteMasterService>();
 builder.Services.AddScoped<IFormPermissionMasterService, FormPermissionMasterService>();
 builder.Services.AddScoped<IItemMasterServices, ItemMasterServices>();
+builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

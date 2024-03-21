@@ -30,12 +30,12 @@ namespace AccountManagement.Repository.Services.Supplier
             return await Supplier.CreateSupplier(CreateUser);
         }
 
-        public async Task<LoginView> GetSupplierById(Guid SupplierId)
+        public async Task<SupplierModel> GetSupplierById(Guid SupplierId)
         {
             return await Supplier.GetSupplierById(SupplierId);
         }
 
-        public async Task<IEnumerable<LoginView>> GetSupplierList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<SupplierModel>> GetSupplierList(string? searchText, string? searchBy, string? sortBy)
         {
             return await Supplier.GetSupplierList(searchText, searchBy, sortBy);
         }
