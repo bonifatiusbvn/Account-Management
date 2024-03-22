@@ -16,5 +16,6 @@ namespace AccountManagement.Repository.Interface.Services.CompanyService
         Task<CompanyModel> GetCompnaytById(Guid CompanyId);
 
         Task<ApiResponseModel> UpdateCompany(CompanyModel UpdateCompany);
+        Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId);
     }
 }

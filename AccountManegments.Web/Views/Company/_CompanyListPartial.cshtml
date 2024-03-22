@@ -4,7 +4,7 @@
 *@
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="companyCard_@item.CompanyId">
+    <div class="row ac-card" id="companyCard_@item.CompanyId" onclick="SelectCompanyDetails('@item.CompanyId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
@@ -35,9 +35,9 @@
                             <h6 class="mb-2"></h6>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-2 text-center ac-m-btn">
+                    <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
                         <a class="btn text-primary" onclick="GetCompnaytById('@item.CompanyId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                        <a href="javascript:;" class="btn text-primary" onclick="DeleteCompanyDetails('@item.CompanyId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                     </div>
                 </div>
             </div>

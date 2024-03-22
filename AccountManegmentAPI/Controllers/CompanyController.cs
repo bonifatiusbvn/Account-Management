@@ -82,5 +82,30 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpPost]
+        [Route("DeleteCompanyDetails")]
+        public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var company = await companyService.DeleteCompanyDetails(CompanyId);
+            try
+            {
+                if (company != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = company.message;
+                }
+                else
+                {
+                    responseModel.message = company.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
     }
 }

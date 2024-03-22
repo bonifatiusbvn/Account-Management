@@ -1,11 +1,12 @@
 ﻿AllCompanyTable();
+fn_getState('dropState', 1);
 function AllCompanyTable() {
 
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
 
     $.get("/Company/GetAllCompanyDetails", { searchBy: searchBy, searchText: searchText })
-        .done(function (result) {debugger
+        .done(function (result) {
             $("#Companytbody").html(result);
         })
         .fail(function (error) {
@@ -19,7 +20,7 @@ function filterCompanyTable() {
     var searchBy = $('#ddlSearchBy').val();
 
     $.ajax({
-        url: '/Company/GetAllCompany',
+        url: '/Company/GetAllCompanyDetails',
         type: 'GET',
         data: {
             searchText: searchText,
@@ -37,7 +38,7 @@ function filterCompanyTable() {
 function sortCompanyTable() {
     var sortBy = $('#ddlSortBy').val();
     $.ajax({
-        url: '/Company/GetAllCompany',
+        url: '/Company/GetAllCompanyDetails',
         type: 'GET',
         data: {
             sortBy: sortBy
@@ -50,7 +51,7 @@ function sortCompanyTable() {
         }
     });
 }
-function AddCompany() {debugger
+function AddCompany() {
 
     var objData = {
         CompanyName: $('#txtCompanyName').val(),
@@ -59,7 +60,7 @@ function AddCompany() {debugger
         Address: $('#txtAddress').val(),
         Area: $('#txtArea').val(),
         CityId: $('#ddlCity').val(),
-        StateId: $('#ddlState').val(),
+        StateId: $('#dropState').val(),
         Country: $('#ddlCountry').val(),
         Pincode: $('#txtPincode').val(),
 
@@ -69,7 +70,7 @@ function AddCompany() {debugger
         type: 'post',
         data: objData,
         datatype: 'json',
-        success: function (Result) {debugger
+        success: function (Result) {
 
             Swal.fire({
                 title: Result.message,
@@ -90,9 +91,9 @@ function ClearTextBox() {
     $('#txtPanNo').val('');
     $('#txtAddress').val('');
     $('#txtArea').val('');
-    $('#txtCityId').val('');
-    $('#txtStateId').val('');
-    $('#txtCountry').val('');
+    $('#ddlCity').val('');
+    $('#dropState').val('');
+    $('#ddlCountry').val('');
     $('#txtPincode').val('');
     var button = document.getElementById("btncompany");
     if ($('#txtCompanyid').val() == '') {
@@ -101,14 +102,14 @@ function ClearTextBox() {
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createCompany'));
     offcanvas.show();
 }
-function GetCompnaytById(CompanyId) {debugger
+function GetCompnaytById(CompanyId) {
 
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
 
             $('#txtCompanyid').val(response.companyId);
             $('#txtCompanyName').val(response.companyName);
@@ -116,24 +117,27 @@ function GetCompnaytById(CompanyId) {debugger
             $('#txtPanNo').val(response.panNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
-            $('#txtCityId').val(response.cityId);
-            $('#txtStateId').val(response.stateId);
-            $('#ddlCountry').val(response.country);
+            fn_getcitiesbystateId('ddlCity', response.stateId)
+            $('#dropState').val(response.stateId);
+            $('#txtCountry').val(response.countryId);
             $('#txtPincode').val(response.pincode);
+        
+            setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
+
             var button = document.getElementById("btncompany");
-            resetErrorMessages();
             if ($('#txtCompanyid').val() != '') {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createCompany'));
             offcanvas.show();
+            resetErrorMessages();
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
 }
-function SelectCompanyDetails(CompanyId, element) {debugger
+function SelectCompanyDetails(CompanyId, element) {
 
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
@@ -143,7 +147,7 @@ function SelectCompanyDetails(CompanyId, element) {debugger
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
             if (response) {
                 $('#dspCompanyid').val(response.companyId);
                 $('#dspCompanyName').val(response.companyName);
@@ -151,9 +155,9 @@ function SelectCompanyDetails(CompanyId, element) {debugger
                 $('#dspPanNo').val(response.panNo);
                 $('#dspAddress').val(response.address);
                 $('#dspArea').val(response.area);
-                $('#dspCity').val(response.cityId);
-                $('#dspState').val(response.stateId);
-                $('#dspCountry').val(response.country);
+                $('#dspCity').val(response.cityName);
+                $('#dspState').val(response.stateName);
+                $('#dspCountry').val(response.countryName);
                 $('#dspPincode').val(response.pincode);
             } else {
                 console.log('Empty response received.');
@@ -164,7 +168,7 @@ function SelectCompanyDetails(CompanyId, element) {debugger
         }
     });
 }
-function UpdateCompany() {debugger
+function UpdateCompany() {
 
     var objData = {
         CompanyId: $('#txtCompanyid').val(),
@@ -173,8 +177,8 @@ function UpdateCompany() {debugger
         PanNo: $('#txtPanNo').val(),
         Address: $('#txtAddress').val(),
         Area: $('#txtArea').val(),
-        CityId: $('#txtCityId').val(),
-        StateId: $('#txtStateId').val(),
+        City: $('#txtCityId').val(),
+        State: $('#txtStateId').val(),
         Country: $('#txtCountry').val(),
         Pincode: $('#txtPincode').val(),
     }
@@ -183,7 +187,7 @@ function UpdateCompany() {debugger
         type: 'post',
         data: objData,
         datatype: 'json',
-        success: function (Result) {debugger
+        success: function (Result) {
 
             Swal.fire({
                 title: Result.message,
@@ -197,6 +201,55 @@ function UpdateCompany() {debugger
     })
 
 }
+function DeleteCompanyDetails(CompanyId) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Company/DeleteCompanyDetails?CompanyId=' + CompanyId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Company/CreateCompany';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Company!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Company/CreateCompany';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Company Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 function validateAndCreateCompany() {
 
     resetErrorMessages();
@@ -207,7 +260,7 @@ function validateAndCreateCompany() {
     var address = document.getElementById("txtAddress").value.trim();
     var area = document.getElementById("txtArea").value.trim();
     var cityId = document.getElementById("ddlCity").value.trim();
-    var stateId = document.getElementById("ddlState").value.trim();
+    var stateId = document.getElementById("dropState").value.trim();
     var country = document.getElementById("ddlCountry").value.trim();
     var pincode = document.getElementById("txtPincode").value.trim();
 

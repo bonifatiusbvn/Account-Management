@@ -126,5 +126,25 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
+        {
+            try
+            {
+                ApiResponseModel company = await APIServices.PostAsync(null, "Company/DeleteCompanyDetails?CompanyId=" + CompanyId);
+                if (company.code == 200)
+                {
+                    return Ok(new { Message = string.Format(company.message), Code = company.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(company.message), Code = company.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

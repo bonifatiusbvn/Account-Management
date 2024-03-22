@@ -25,7 +25,10 @@ namespace AccountManagement.Repository.Services.Company
             return await Company.AddCompany(AddCompany);
         }
 
-       
+        public async Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId)
+        {
+            return await Company.DeleteCompanyDetails(CompanyId);
+        }
 
         public async Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {

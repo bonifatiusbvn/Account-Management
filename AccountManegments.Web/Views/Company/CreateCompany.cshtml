@@ -39,10 +39,10 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterCompanyTable()" placeholder="Search">
+                                                    <input class="form-select form-select-lg" id="txtSearch" onkeyup="filterCompanyTable()" placeholder="Search">
                                                 </div>
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSearchBy" onchange="filterCompanyTable()">
+                                                    <select class="form-select form-select-lg" id="ddlSearchBy" onchange="filterCompanyTable()">
                                                         <option selected="selected">All</option>
                                                         <option>CompanyName</option>
                                                         <option>GstNo</option>
@@ -51,14 +51,15 @@
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSortBy" onchange="sortCompanyTable()">
-                                                        <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                        <option value="AscendingCompanyName">Ascending CompanyName</option>
-                                                        <option value="DescendingCompanyName">Descending CompanyName</option>
-                                                        <option value="AscendingGstNo">Ascending GstNo</option>
-                                                        <option value="DescendingGstNo">Descending GstNo</option>
-                                                        <option value="AscendingPanNo">Ascending PanNo</option>
-                                                        <option value="DescendingPanNo">Descending PanNo</option>
+                                                    <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortCompanyTable()">
+                                                        <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                        <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                        <option value="AscendingCompanyName">CompanyName(a-z)</option>
+                                                        <option value="DescendingCompanyName">CompanyName(z-a)</option>
+                                                        <option value="AscendingGstNo">GstNo-Asc </option>
+                                                        <option value="DescendingGstNo">GstNo-Des</option>
+                                                        <option value="AscendingPanNo">PanNo-Asc</option>
+                                                        <option value="DescendingPanNo">PanNo-Des</option>
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -71,7 +72,7 @@
 
                                 <div class="row w-100 ac-view-list">
 
-                                    <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
+                                    <div class="row hide-sm table-light ac-view-header">
                                         <div class="col-5 text-center">
                                             <h5>Company Name</h5>
                                         </div>
@@ -111,10 +112,10 @@
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body">
+                            <div class="card-body" style="height:650px">
                                 <h5 class="mb-0 mt-4">Company Details</h5>
                                 <hr>
-                                <div class="row g-3">
+                                <div class="row g-3 ac-detail d-none">
                                     <div class="col-6">
                                         <label class="form-label">Company Name</label>
                                         <input type="text" class="form-control" id="dspCompanyName" readonly>
@@ -166,7 +167,6 @@
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createCompany">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white">Create Company</h5>
-
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
@@ -204,7 +204,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" class="form-control bg-transparent">
+                                    <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <input type="hidden" id="txtcountry" value="" />
@@ -213,8 +213,8 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">StateId</label>
-                                    <select id="ddlState" class="form-control bg-transparent">
-                                        <option>--Select State--</option>
+                                    <select id="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                        <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
                                     <span id="spnStateId" class="text-danger"></span>
@@ -222,7 +222,7 @@
                                 <div class="col-12">
                                     <label class="form-label">CityId</label>
                                     <select id="ddlCity" class="form-control bg-transparent">
-                                        <option>--Select City--</option>
+                                        <option value="0">--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
 
@@ -234,7 +234,7 @@
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany"></button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
                                 </div>
                             </form>
 
@@ -248,7 +248,6 @@
     </div>
 </div>
 @section Scripts {
-
-    <script src="~/moduls/companyscript.js"></script>
     <script src="~/moduls/masterlistscript.js"></script>
+    <script src="~/moduls/companyscript.js"></script>
     }
