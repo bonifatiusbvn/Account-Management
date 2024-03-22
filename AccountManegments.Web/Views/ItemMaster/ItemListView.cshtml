@@ -38,26 +38,25 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search" />
+                                                    <input class="form-control" id="txtItemSearch" onkeyup="filterItemTable()" placeholder="Search" />
                                                 </div>
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                                    <select class="form-select" id="ddlItemSearchBy" onchange="filterItemTable()">
                                                         <option selected="selected">All</option>
-                                                        <option>Item Name</option>
-                                                        <option>PerUnit Price</option>
-                                                        <option>Approved</option>
+                                                        <option>ItemName</option>
+                                                        <option>PerUnitPrice</option>
+                                                        <option>IsApproved</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                        <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                        <option value="AscendingItemName">Ascending ItemName</option>
-                                                        <option value="DescendingItemName">Descending ItemName</option>
-                                                        <option value="AscendingPerUnitPrice">Ascending PerUnitPrice</option>
-                                                        <option value="DescendingPerUnitPrice">Descending PerUnitPrice</option>
-                                                        <option value="AscendingIsApproved">Ascending IsApproved</option>
-                                                        <option value="DescendingIsApproved">Descending IsApproved</option>
+                                                    <select class="form-select" id="ddlItemSortBy" onchange="sortItemTable()">
+                                                        <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                        <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                        <option value="AscendingItemName">ItemName(a-z)</option>
+                                                        <option value="DescendingItemName">ItemName(z-a)</option>
+                                                        <option value="AscendingPerUnitPrice">PerUnitPrice-Asc </option>
+                                                        <option value="DescendingPerUnitPrice">PerUnitPrice-Des</option>
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -97,10 +96,10 @@
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body">
+                            <div class="card-body" style="height:650px">
                                 <h5 class="mb-0 mt-4">Item Details</h5>
                                 <hr>
-                                <div class="row g-3">
+                                <div class="row g-3 ac-detail d-none">
                                     <div class="col-6">
                                         <label class="form-label">Item Name</label>
                                         <input type="text" class="form-control" id="dspItemName" readonly>

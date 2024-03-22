@@ -2,8 +2,8 @@
 GetAllUnitType();
 function AllItemTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtItemSearch').val();
+    var searchBy = $('#ddlItemSearchBy').val();
 
     $.get("/ItemMaster/ItemListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
@@ -13,10 +13,10 @@ function AllItemTable() {
             console.error(error);
         });
 }
-function filterTable() {
+function filterItemTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtItemSearch').val();
+    var searchBy = $('#ddlItemSearchBy').val();
 
     $.ajax({
         url: '/ItemMaster/ItemListAction',
@@ -34,8 +34,8 @@ function filterTable() {
     });
 }
 
-function sortTable() {
-    var sortBy = $('#ddlSortBy').val();
+function sortItemTable() {
+    var sortBy = $('#ddlItemSortBy').val();
     $.ajax({
         url: '/ItemMaster/ItemListAction',
         type: 'GET',
@@ -50,7 +50,7 @@ function sortTable() {
         }
     });
 }
-function SelectItemDetails(ItemId, element) {
+function DisplayItemDetails(ItemId, element) {
 
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
@@ -136,7 +136,7 @@ function CreateItem() {
         },
     })
 }
-function DisplayItemDetails(ItemId) {
+function EditItemDetails(ItemId) {
 
     $.ajax({
         url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
@@ -254,7 +254,6 @@ function validateAndCreateItem() {
     }
 }
 
-
 function resetErrorMessages() {
     document.getElementById("spnItemName").innerText = "";
     document.getElementById("spnUnitType").innerText = "";
@@ -262,4 +261,106 @@ function resetErrorMessages() {
     document.getElementById("spnGstAmount").innerText = "";
     document.getElementById("spnGstPerUnit").innerText = "";
     document.getElementById("spnHSNCode").innerText = "";
+}
+
+function ItemIsApproved(ItemId) {
+    debugger
+    var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to Approve this Item?" : "Are you sure want to UnApprove this Item?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("ItemId", ItemId);
+            debugger
+            $.ajax({
+                url: '/ItemMaster/ItemIsApproved?ItemId=' + ItemId,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: isChecked ? "Active!" : "DeActive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Item Have No Changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/ItemMaster/ItemListView';
+            });;
+        }
+    });
+}
+
+function deleteItemDetails(ItemId) {
+
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ItemMaster/DeleteItemDetails?ItemId=' + ItemId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Item!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Item Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

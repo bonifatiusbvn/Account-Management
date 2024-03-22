@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.ItemMaster;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     Gstamount = ItemDetails.Gstamount,
                     Gstper=ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
-                    IsApproved = ItemDetails.IsApproved,
                     CreatedBy= ItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -47,6 +47,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             catch (Exception)
             {
                 throw;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> DeleteItemDetails(Guid ItemId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var GetItemdata = Context.ItemMasters.Where(a => a.ItemId == ItemId).FirstOrDefault();
+
+            if (GetItemdata != null)
+            {
+                GetItemdata.IsDeleted = true;
+                Context.ItemMasters.Update(GetItemdata);
+                Context.SaveChanges();
+                response.code = 200;
+                response.data = GetItemdata;
+                response.message = "Item is Deleted Successfully";
             }
             return response;
         }
@@ -104,6 +121,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             {
                 var ItemList = (from a in Context.ItemMasters
                                 join b in Context.UnitMasters on a.UnitType equals b.UnitId
+                                where a.IsDeleted == false
                                 select new ItemMasterModel
                                 {
                                     ItemId = a.ItemId,
@@ -135,10 +153,10 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                         case "itemname":
                             ItemList = ItemList.Where(u => u.ItemName.ToLower().Contains(searchText));
                             break;
-                        case "IsApproved":
+                        case "isapproved":
                             ItemList = ItemList.Where(u => u.IsApproved.ToString().Contains(searchText));
                             break;
-                        case "PerUnitPrice":
+                        case "perunitprice":
                             ItemList = ItemList.Where(u => u.PricePerUnit.ToString().Contains(searchText));
                             break;
                         default:
@@ -166,12 +184,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             else if (sortOrder == "descending")
                                 ItemList = ItemList.OrderByDescending(u => u.PricePerUnit);
                             break;
-                        case "isapproved":
-                            if (sortOrder == "ascending")
-                                ItemList = ItemList.OrderBy(u => u.IsApproved);
-                            else if (sortOrder == "descending")
-                                ItemList = ItemList.OrderByDescending(u => u.IsApproved);
-                            break;
                         default:
                             break;
                     }
@@ -182,6 +194,37 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var ItemData = Context.ItemMasters.Where(a => a.ItemId == ItemId).FirstOrDefault();
+
+            if (ItemData != null)
+            {
+
+                if (ItemData.IsApproved == true)
+                {
+                    ItemData.IsApproved = false;
+                    Context.ItemMasters.Update(ItemData);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = ItemData;
+                    response.message = "Item Is UnApproved!";
+                }
+
+                else
+                {
+                    ItemData.IsApproved = true;
+                    Context.ItemMasters.Update(ItemData);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = ItemData;
+                    response.message = "Item Is Approved Successfully";
+                }
+            }
+            return response;
         }
 
         public async Task<ApiResponseModel> UpdateItemDetails(ItemMasterModel ItemDetails)
@@ -200,7 +243,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     ItemMaster.Gstamount = ItemDetails.Gstamount;
                     ItemMaster.Gstper = ItemDetails.Gstper;
                     ItemMaster.Hsncode = ItemDetails.Hsncode;
-                    ItemMaster.IsApproved = ItemDetails.IsApproved;
                 }
                 Context.ItemMasters.Update(ItemMaster);
                 Context.SaveChanges();

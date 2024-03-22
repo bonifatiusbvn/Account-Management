@@ -15,5 +15,7 @@ namespace AccountManagement.Repository.Interface.Services.ItemMaster
         Task<ItemMasterModel> GetItemDetailsById(Guid ItemId);
         Task<ApiResponseModel> UpdateItemDetails(ItemMasterModel ItemDetails);
         Task<IEnumerable<UnitMasterView>> GetAllUnitType();
+        Task<ApiResponseModel> ItemIsApproved(Guid ItemId);
+        Task<ApiResponseModel> DeleteItemDetails(Guid ItemId);
     }
 }

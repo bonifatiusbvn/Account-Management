@@ -3,9 +3,9 @@
 @foreach (var item in Model)
 {
     <div class="row ac-card" id="userCard_@item.ItemId">
-        <div class="card border">
+        <div class="card  border mb-0">
             <div class="card-body">
-                <div class="row align-items-center" onclick="SelectItemDetails('@item.ItemId', this)">
+                <div class="row align-items-center" onclick="DisplayItemDetails('@item.ItemId', this)">
                     <div class="col-lg-5 col-md-5 col-sm-12">
                         <div class="d-flex align-items-center gap-3">
                             <div class="widget-icon-2 bg-light-primary text-primary">
@@ -24,14 +24,18 @@
                             <h5 class="mb-0 text-primary">@item.PricePerUnit</h5>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12">
-                        <div>
-                            <h5 class="mb-0 text-primary">@item.IsApproved</h5>
+                    <div class="col-12 col-lg-2 col-md-2 col-xl-1">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @if (item.IsApproved ?? false)
+                            {
+                                <text>checked</text>
+                            } onclick="ItemIsApproved('@item.ItemId')">
+                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.ItemId"></label>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 ac-m-btn">
-                        <a class="btn text-warning" onclick="DisplayItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
+                        <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                     </div>
                 </div>
             </div>

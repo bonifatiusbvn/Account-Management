@@ -85,7 +85,6 @@ namespace AccountManegments.Web.Controllers
                     Gstamount = ItemDetails.Gstamount,
                     Gstper = ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
-                    IsApproved = true,
                     CreatedOn = DateTime.Now,
                     CreatedBy = _userSession.UserId,
                 };
@@ -136,6 +135,49 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ItemIsApproved(Guid ItemId)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemMaster/ItemIsApproved?ItemId=" + ItemId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteItemDetails(Guid ItemId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemMaster/DeleteItemDetails?ItemId=" + ItemId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
