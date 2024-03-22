@@ -24,6 +24,7 @@ public partial class Company
     public int Country { get; set; }
 
     public string Pincode { get; set; } = null!;
+    public bool? IsDelete { get; set; }
 
     public Guid CreatedBy { get; set; }
 

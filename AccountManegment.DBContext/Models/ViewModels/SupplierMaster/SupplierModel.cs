@@ -37,6 +37,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public string? Iffccode { get; set; }
 
         public bool IsApproved { get; set; }
+        public bool? IsDelete { get; set; }
 
         public Guid CreatedBy { get; set; }
 

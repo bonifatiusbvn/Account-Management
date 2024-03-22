@@ -5,84 +5,249 @@
 }
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Users</div>
+    <div class="breadcrumb-title pe-3">Company</div>
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0 align-items-center">
                 <li class="breadcrumb-item">
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Create Company</li>
+                <li class="breadcrumb-item active" aria-current="page">Company Details</li>
             </ol>
         </nav>
     </div>
-    <div class="ms-auto">
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline-primary">Settings</button>
-            <button type="button" class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
-                <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                <a class="dropdown-item" href="javascript:;">Action</a>
-                <a class="dropdown-item" href="javascript:;">Another action</a>
-                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+</div>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+                <h2 class="h5 mb-0">Company Details</h2>
+                <form class="ms-auto position-relative">
+                    <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Company</button>
+                </form>
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+                                <div class="row ">
+                                    <div class="col-12">
+                                        <div class="card-body">
+                                            <div class="row g-3">
+
+                                                <div class="col-12 col-lg-4">
+                                                    <input class="form-select form-select-lg" id="txtSearch" onkeyup="filterCompanyTable()" placeholder="Search">
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <select class="form-select form-select-lg" id="ddlSearchBy" onchange="filterCompanyTable()">
+                                                        <option selected="selected">All</option>
+                                                        <option>CompanyName</option>
+                                                        <option>GstNo</option>
+                                                        <option>PanNo</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-12 col-lg-4">
+                                                    <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortCompanyTable()">
+                                                        <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                        <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                        <option value="AscendingCompanyName">CompanyName(a-z)</option>
+                                                        <option value="DescendingCompanyName">CompanyName(z-a)</option>
+                                                        <option value="AscendingGstNo">GstNo-Asc </option>
+                                                        <option value="DescendingGstNo">GstNo-Des</option>
+                                                        <option value="AscendingPanNo">PanNo-Asc</option>
+                                                        <option value="DescendingPanNo">PanNo-Des</option>
+                                                    </select>
+                                                </div>
+                                            </div><!--end row-->
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row w-100 ac-view-list">
+
+                                    <div class="row hide-sm table-light ac-view-header">
+                                        <div class="col-5 text-center">
+                                            <h5>Company Name</h5>
+                                        </div>
+                                        <div class="col-3 ">
+                                            <h5>Gst No</h5>
+                                        </div>
+                                        <div class="col-2">
+                                            <h5>Pan No</h5>
+                                        </div>
+                                        <div class="col-2">
+                                            <h5>Action</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card" id="Companytbody">
+                                    </div>
+
+                                </div>
+                                <div class="table-responsive mt-2  d-none" style="max-height:200PX;">
+                                    <table class="table align-middle mb-0" style="">
+                                        <thead class="table-light" id="companyTable">
+                                            <tr>
+                                                <th>Company Name</th>
+                                                <th class="mb-2">Gst No</th>
+                                                <th class="mb-2">Pan No</th>
+                                                <th class="mb-2">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Companytbody" style="max-height:20PX;">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end row-->
+
+
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                        <div class="card radius-10">
+                            <div class="card-body" style="height:650px">
+                                <h5 class="mb-0 mt-4">Company Details</h5>
+                                <hr>
+                                <div class="row g-3 ac-detail d-none">
+                                    <div class="col-6">
+                                        <label class="form-label">Company Name</label>
+                                        <input type="text" class="form-control" id="dspCompanyName" readonly>
+                                        <input type="hidden" class="form-control" id="dspCompanyid" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Gst No</label>
+                                        <input type="text" class="form-control" id="dspGstNo" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Pan No</label>
+                                        <input type="text" class="form-control" id="dspPanNo" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="dspAddress" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Area</label>
+                                        <input type="text" class="form-control" id="dspArea" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Country</label>
+                                        <input type="text" class="form-control" id="dspCountry" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">State</label>
+                                        <input type="text" class="form-control" id="dspState" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control" id="dspCity" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Pincode</label>
+                                        <input type="text" class="form-control" id="dspPincode" readonly>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @* </form> *@
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <div class="border p-3 rounded">
-            <h6 class="mb-0 text-uppercase">Checkout Form</h6>
-            <hr>
-            <form class="row g-3">
-                <div class="col-12">
-                    <label class="form-label">Company Name</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Gstno</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">PanNo</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Address</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Area</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">CityId</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">StateId</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Country</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-12">
-                    <div class="form-check d-flex justify-content-center gap-2">
-                        <input class="form-check-input" type="checkbox" id="gridCheck3-c" checked="">
-                        <label class="form-check-label" for="gridCheck3-c">
-                            Create an account?
-                        </label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Place Order</button>
-                    </div>
-                </div>
-            </form>
+
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createCompany">
+        <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+            <h5 class="m-0 me-2 text-white">Create Company</h5>
+            <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
+        <div class="offcanvas-body p-0">
+            <div data-simplebar class="h-100">
+                <div class="p-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <form class="row g-3" id="companyForm">
+                                <div class="col-12">
+                                    <label class="form-label">Company Name</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Company Name" id="txtCompanyName" required>
+                                    <input type="hidden" id="txtCompanyid"/>
+                                    <span id="spnCompanyName" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Gst No</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst No" id="txtGstNo" required>
+                                    <span id="spnGstNo" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Pan No</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Pan No" id="txtPanNo" required>
+                                    <span id="spnPanNo" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Address" id="txtAddress" required>
+                                    <span id="spnAddress" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Area</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Area" id="txtArea" required>
+                                    <span id="spnArea" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Country</label>
+                                    <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
+                                        <option>--Select Country--</option>
+                                    </select>
+                                    <input type="hidden" id="txtcountry" value="" />
+
+                                    <span id="spnCountry" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">StateId</label>
+                                    <select id="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                        <option value="0" selected>--Select State--</option>
+                                    </select>
+                                    <input type="hidden" id="txtstate" value="" />
+                                    <span id="spnStateId" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">CityId</label>
+                                    <select id="ddlCity" class="form-control bg-transparent">
+                                        <option value="0">--Select City--</option>
+                                    </select>
+                                    <input type="hidden" id="txtcity" value="" />
+
+                                    <span id="spnCityId" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Pincode</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Pincode" id="txtPincode" required>
+                                    <span id="spnPincode" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
+@section Scripts {
+    <script src="~/moduls/masterlistscript.js"></script>
+    <script src="~/moduls/companyscript.js"></script>
+    }

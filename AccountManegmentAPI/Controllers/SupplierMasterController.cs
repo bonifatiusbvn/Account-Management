@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.SupplierService;
+using AccountManagement.Repository.Services.Company;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -63,6 +64,31 @@ namespace AccountManagement.API.Controllers
 
             }
             return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("DeleteSupplierDetails")]
+        public async Task<IActionResult> DeleteSupplierDetails(Guid SupplierId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var updateUser = await _Supplier.DeleteSupplierDetails(SupplierId);
+            try
+            {
+                if (updateUser != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = updateUser.message;
+                }
+                else
+                {
+                    responseModel.message = updateUser.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

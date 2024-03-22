@@ -30,6 +30,11 @@ namespace AccountManagement.Repository.Services.Supplier
             return await Supplier.CreateSupplier(CreateUser);
         }
 
+        public async Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId)
+        {
+            return await Supplier.DeleteSupplierDetails(SupplierId);
+        }
+
         public async Task<SupplierModel> GetSupplierById(Guid SupplierId)
         {
             return await Supplier.GetSupplierById(SupplierId);

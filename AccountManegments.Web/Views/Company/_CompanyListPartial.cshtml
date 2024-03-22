@@ -1,0 +1,47 @@
+﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.CompanyModels.CompanyModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@foreach (var item in Model)
+{
+    <div class="row ac-card" id="companyCard_@item.CompanyId" onclick="SelectCompanyDetails('@item.CompanyId', this)">
+        <div class="card  border mb-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="widget-icon-2 bg-light-primary text-primary">
+                                <div class="font-22">
+                                    <i class="lni lni-user" onclick="SelectCompanyDetails('@item.CompanyId', this)">
+
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="mb-0 text-primary">@item.CompanyName  </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-2">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0 text-primary">@item.Gstno</h5>
+                            <h6 class="mb-2"></h6>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5 col-md-5 col-xl-2">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0 text-primary">@item.PanNo</h5>
+                            <h6 class="mb-2"></h6>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
+                        <a class="btn text-primary" onclick="GetCompnaytById('@item.CompanyId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a href="javascript:;" class="btn text-primary" onclick="DeleteCompanyDetails('@item.CompanyId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

@@ -1,6 +1,7 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.Company;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AccountManagement.Repository.Repository.CompanyRepository
 {
@@ -32,13 +34,17 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                 {
                     CompanyId = Guid.NewGuid(),
                     CompanyName = AddCompany.CompanyName,
-                    Gstno= AddCompany.Gstno,
-                    PanNo= AddCompany.PanNo,
+                    Gstno = AddCompany.Gstno,
+                    PanNo = AddCompany.PanNo,
                     Address = AddCompany.Address,
                     Area = AddCompany.Area,
                     CityId = AddCompany.CityId,
                     StateId = AddCompany.StateId,
                     Country = AddCompany.Country,
+                    CreatedOn = DateTime.Now,
+                    Pincode = AddCompany.Pincode,
+                    CreatedBy = AddCompany.CreatedBy,
+                    IsDelete = false,
 
                 };
                 response.code = (int)HttpStatusCode.OK;
@@ -54,11 +60,28 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             return response;
         }
 
-        public async Task<IEnumerable<CompanyModel>> GetAllCompany()
+        public async Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var company = Context.Companies.Where(a => a.CompanyId == CompanyId).FirstOrDefault();
+
+            if (company != null)
+            {
+                
+                company.IsDelete = true;
+                Context.Companies.Update(company);
+                Context.SaveChanges();
+                response.code = 200;
+                response.message = "Company is Deleted Successfully";
+            }
+            return response;
+        }
+
+        public async Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
-                IEnumerable<CompanyModel> company = Context.Companies.ToList().Select(a => new CompanyModel
+                IEnumerable<CompanyModel> company = Context.Companies.Where(c => c.IsDelete == false).ToList().Select(a => new CompanyModel
                 {
                     CompanyId = a.CompanyId,
                     CompanyName = a.CompanyName,
@@ -69,7 +92,65 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     CityId = a.CityId,
                     StateId = a.StateId,
                     Country = a.Country,
+                    Pincode =a.Pincode,
                 });
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    company = company.Where(u =>
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.Gstno.ToString().Contains(searchText) ||
+                        u.PanNo.ToString().Contains(searchText)
+                    );
+                }
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "companyname":
+                            company = company.Where(u => u.CompanyName.ToLower().Contains(searchText));
+                            break;
+                        case "gstno":
+                            company = company.Where(u => u.Gstno.ToString().Contains(searchText));
+                            break;
+                        case "panno":
+                            company = company.Where(u => u.PanNo.ToString().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "companyname":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.CompanyName);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.CompanyName);
+                            break;
+                        case "gstno":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.Gstno);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.Gstno);
+                            break;
+                        case "panno":
+                            if (sortOrder == "ascending")
+                                company = company.OrderBy(u => u.PanNo);
+                            else if (sortOrder == "descending")
+                                company = company.OrderByDescending(u => u.PanNo);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 return company;
             }
             catch (Exception ex)
@@ -80,20 +161,37 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
 
         public async Task<CompanyModel> GetCompnaytById(Guid CompanyId)
         {
-            var company = await Context.Companies.SingleOrDefaultAsync(x => x.CompanyId == CompanyId);
-            CompanyModel model = new CompanyModel
+            CompanyModel company = new CompanyModel();
+            try
             {
-                CompanyId = Guid.NewGuid(),
-                CompanyName = company.CompanyName,
-                Gstno=company.Gstno,
-                PanNo=company.PanNo,
-                Address = company.Address,
-                Area = company.Area,
-                CityId = company.CityId,
-                StateId = company.StateId,
-                Country = company.Country,
-            };
-            return model;
+                company = (from a in Context.Companies.Where(x => x.CompanyId == CompanyId)
+                           join b in Context.Cities on a.CityId equals b.CityId
+                           join c in Context.States on a.StateId equals c.StatesId
+                           join d in Context.Countries on a.Country equals d.CountryId
+                           select new CompanyModel
+                           {
+                                CompanyId=a.CompanyId,
+                                CompanyName=a.CompanyName,
+                                Gstno=a.Gstno,
+                                PanNo=a.PanNo,
+                                Address=a.Address,
+                                Area=a.Area,
+                                CityId=a.CityId,
+                                CityName=b.CityName,
+                                StateId=a.StateId,
+                                StateName=c.StatesName,
+                                CountryName=d.CountryName,
+                                Country=a.Country,
+                                Pincode=a.Pincode,
+                                CreatedBy = a.CreatedBy,
+                                CreatedOn = a.CreatedOn,
+                           }).First();
+                return company;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ApiResponseModel> UpdateCompany(CompanyModel UpdateCompany)
@@ -111,9 +209,9 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company.Address = UpdateCompany.Address;
                     company.Area = UpdateCompany.Area;
                     company.CityId = UpdateCompany.CityId;
-                    company.StateId= UpdateCompany.StateId;
+                    company.StateId = UpdateCompany.StateId;
                     company.Country = UpdateCompany.Country;
-                    
+                    company.Pincode = UpdateCompany.Pincode;
                 }
                 Context.Companies.Update(company);
                 Context.SaveChanges();

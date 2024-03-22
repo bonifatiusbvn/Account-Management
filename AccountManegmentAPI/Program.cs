@@ -24,6 +24,10 @@ using AccountManagement.Repository.Interface.Repository.Supplier;
 using AccountManagement.Repository.Repository.SupplierRepository;
 using AccountManagement.Repository.Interface.Services.SupplierService;
 using AccountManagement.Repository.Services.Supplier;
+using AccountManagement.Repository.Repository.CompanyRepository;
+using AccountManagement.Repository.Interface.Repository.Company;
+using AccountManagement.Repository.Interface.Services.CompanyService;
+using AccountManagement.Repository.Services.Company;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +45,7 @@ builder.Services.AddScoped<IFormPermissionMaster, FormPermissionMasterRepo>();
 builder.Services.AddScoped<ISiteMaster, SiteMasterRepo>();
 builder.Services.AddScoped<IItemMaster, ItemMasterRepo>();
 builder.Services.AddScoped<ISupplierMaster, SupplierMasterRepo>();
+builder.Services.AddScoped<ICompany, CompanyRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -48,6 +53,7 @@ builder.Services.AddScoped<IMasterListServices, MasterListService>();
 builder.Services.AddScoped<ISiteMasterServices, SiteMasterService>();
 builder.Services.AddScoped<IFormPermissionMasterService, FormPermissionMasterService>();
 builder.Services.AddScoped<IItemMasterServices, ItemMasterServices>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 
 

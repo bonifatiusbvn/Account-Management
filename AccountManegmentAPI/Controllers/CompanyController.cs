@@ -43,12 +43,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllCompany")]
-        public async Task<IActionResult> GetAllCompany()
+        public async Task<IActionResult> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<CompanyModel> getExpense = await companyService.GetAllCompany();
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            IEnumerable<CompanyModel> company = await companyService.GetAllCompany(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = company.ToList() });
         }
         [HttpGet]
         [Route("GetCompnaytById")]
@@ -81,6 +81,31 @@ namespace AccountManagement.API.Controllers
                 throw ex;
             }
             return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("DeleteCompanyDetails")]
+        public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var company = await companyService.DeleteCompanyDetails(CompanyId);
+            try
+            {
+                if (company != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = company.message;
+                }
+                else
+                {
+                    responseModel.message = company.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

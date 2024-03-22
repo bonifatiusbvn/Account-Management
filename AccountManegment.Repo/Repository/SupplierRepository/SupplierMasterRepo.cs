@@ -6,6 +6,7 @@ using AccountManagement.Repository.Interface.Repository.Supplier;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -63,6 +64,23 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             }
             return response;
 
+        }
+
+        public async Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Userdata = Context.SupplierMasters.Where(a => a.SupplierId == SupplierId).FirstOrDefault();
+
+            if (Userdata != null)
+            {
+
+                Userdata.IsDelete = true;
+                Context.SupplierMasters.Update(Userdata);
+                Context.SaveChanges();
+                response.code = 200;
+                response.message = "Company is Deleted Successfully";
+            }
+            return response;
         }
 
         public async Task<SupplierModel> GetSupplierById(Guid SupplierId)

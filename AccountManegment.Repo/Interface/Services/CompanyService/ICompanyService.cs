@@ -11,10 +11,11 @@ namespace AccountManagement.Repository.Interface.Services.CompanyService
     public interface ICompanyService
     {
         Task<ApiResponseModel> AddCompany(CompanyModel AddCompany);
-        Task<IEnumerable<CompanyModel>> GetAllCompany();
+        Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy);
 
         Task<CompanyModel> GetCompnaytById(Guid CompanyId);
 
         Task<ApiResponseModel> UpdateCompany(CompanyModel UpdateCompany);
+        Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId);
     }
 }

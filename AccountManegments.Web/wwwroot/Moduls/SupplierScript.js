@@ -229,6 +229,55 @@ function UpdateSupplierDetails() {
     })
 
 }
+function DeleteSupplierDetails(SupplierId) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Supplier/SupplierList';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Supplier!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Supplier/SupplierList';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Supplier Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 function validateAndCreateSupplier() {
 
 
