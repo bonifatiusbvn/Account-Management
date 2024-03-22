@@ -1,7 +1,7 @@
 ﻿@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 <!doctype html>
-<html lang="en" class="semi-dark">
+<html lang="en" class="light-theme">
 
 <head>
     <!-- Required meta tags -->
@@ -39,7 +39,7 @@
     @*  <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
-    <title>@ViewData["Title"] - AccountManegments.Web</title>
+    <title>@ViewData["Title"] - D. M. Infra</title>
 </head>
 
 <body>
@@ -53,7 +53,7 @@
                     <img src="~/assets/images/logo-icon-2.png" class="logo-icon" alt="logo icon">
                 </div>
                 <div>
-                    <h4 class="logo-text">Dashkote</h4>
+                    <h4 class="logo-text">D. M. Infra</h4>
                 </div>
                 <div class="toggle-icon ms-auto">
                     <ion-icon name="menu-sharp"></ion-icon>
@@ -62,15 +62,15 @@
             <!--navigation-->
 
             <ul class="metismenu" id="menu">
-                <li>
-                    <a href="javascript:;" class="has-arrow">
+                @* <li>
+                    @* <a href="javascript:;" class="has-arrow">
                         <div class="parent-icon">
                             <ion-icon name="bag-handle-sharp"></ion-icon>
                         </div>
                         <div class="menu-title">eCommerce</div>
                     </a>
                     <ul>
-                        <li>
+                        < li>
                             <a href="ecommerce-shop-grid-view.html">
                                 <ion-icon name="ellipse-outline"></ion-icon>Product Grid
                             </a>
@@ -94,8 +94,8 @@
                             <a href="ecommerce-product-comparison.html">
                                 <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
                             </a>
-                        </li>
-                        <li>
+                        </li> *@
+                       @*  <li>
                             <a asp-action="CreateCompany" asp-controller="Company">
                                 <ion-icon name="ellipse-outline"></ion-icon>Create Company
                             </a>
@@ -110,16 +110,42 @@
                             <a asp-action="SiteListView" asp-controller="SiteMaster">
                                 <ion-icon name="ellipse-outline"></ion-icon>Site
                             </a>
-                        </li>
+                        </li> 
                     </ul>
+                </li> *@
+                <li class="mm-active">
+                    <a  asp-action="CreateCompany" asp-controller="Company">
+                        <div class="parent-icon">
+                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                        </div>
+                        <div class="menu-title">Company</div>
+                    </a>
                 </li>
-                <li class="menu-label">Pages</li>
+                <li class="mm-active">
+                    <a asp-action="SiteListView" asp-controller="SiteMaster">
+                        <div class="parent-icon">
+                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                        </div>
+                        <div class="menu-title">Site</div>
+                    </a>
+
+                </li>
+                <li class="mm-active">
+                    <a  asp-action="ItemListView" asp-controller="ItemMaster">
+                        <div class="parent-icon">
+                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                        </div>
+                        <div class="menu-title">Item</div>
+                    </a>
+                </li>
+                
+                @* <li class="menu-label">Pages</li> *@
                 <li>
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon">
                             <ion-icon name="lock-closed-sharp"></ion-icon>
                         </div>
-                        <div class="menu-title">Authentication</div>
+                        <div class="menu-title">Manage Users</div>
                     </a>
                     <ul>
                         <li>
@@ -127,8 +153,13 @@
                                 <ion-icon name="ellipse-outline"></ion-icon>User List
                             </a>
                         </li>
-
+                        <li>
+                            <a asp-action="UserListView" asp-controller="User">
+                                <ion-icon name="ellipse-outline"></ion-icon>User Wise Permission
+                            </a>
+                        </li>
                     </ul>
+                    
                 </li>
 
             </ul>
