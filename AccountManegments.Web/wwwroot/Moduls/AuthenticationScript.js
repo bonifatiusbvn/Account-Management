@@ -333,6 +333,43 @@ function UserActiveDecative(UserId) {
 
 
 
+function UserLogout() {
+    Swal.fire({
+        title: 'Logout Confirmation',
+        text: 'Are you sure you want to logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            logout();
+        }
+    });
+}
+
+function logout() {
+
+    fetch('/Authentication/Logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
+
+        },
+        body: ''
+    })
+        .then(response => {
+
+            window.location.href = '/Authentication/UserLogin';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+
+        });
+}
 
 
 
