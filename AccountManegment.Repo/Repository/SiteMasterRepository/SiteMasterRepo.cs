@@ -154,8 +154,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     searchText = searchText.ToLower();
                     SiteList = SiteList.Where(u =>
                         u.SiteName.ToLower().Contains(searchText) ||
-                        u.ContectPersonName.ToLower().Contains(searchText) ||
-                        u.ContectPersonPhoneNo.ToLower().Contains(searchText) 
+                        u.ContectPersonName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -164,14 +163,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     searchText = searchText.ToLower();
                     switch (searchBy.ToLower())
                     {
-                        case "SiteName":
+                        case "sitename":
                             SiteList = SiteList.Where(u => u.SiteName.ToLower().Contains(searchText));
                             break;
-                        case "ContectPersonName":
+                        case "contactpersonname":
                             SiteList = SiteList.Where(u => u.ContectPersonName.ToLower().Contains(searchText));
-                            break;
-                        case "ContectPersonPhoneNo":
-                            SiteList = SiteList.Where(u => u.ContectPersonPhoneNo.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -192,23 +188,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                             else if (sortOrder == "descending")
                                 SiteList = SiteList.OrderByDescending(u => u.SiteName);
                             break;
-                        case "contectpersonname":
+                        case "createdon":
                             if (sortOrder == "ascending")
-                                SiteList = SiteList.OrderBy(u => u.ContectPersonName);
+                                SiteList = SiteList.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
-                                SiteList = SiteList.OrderByDescending(u => u.ContectPersonName);
-                            break;
-                        case "active":
-                            if (sortOrder == "ascending")
-                                SiteList = SiteList.OrderBy(u => u.IsActive);
-                            else if (sortOrder == "descending")
-                                SiteList = SiteList.OrderByDescending(u => u.IsActive);
-                            break;
-                        case "contectpersonphoneno":
-                            if (sortOrder == "ascending")
-                                SiteList = SiteList.OrderBy(u => u.ContectPersonPhoneNo);
-                            else if (sortOrder == "descending")
-                                SiteList = SiteList.OrderByDescending(u => u.ContectPersonPhoneNo);
+                                SiteList = SiteList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
 
@@ -291,6 +275,27 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
 
             }
             return response;
+        }
+
+        public async Task<ApiResponseModel> DeleteSite(Guid SiteId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var siteDetails = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
+                if (SiteId != null)
+                {
+                    Context.Sites.Remove(siteDetails);
+                    response.message = "Site" + " " +  siteDetails.SiteName +" " +"is Removed Successfully!";
+                    response.code = 200;
+                }
+                Context.SaveChanges();
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
+             return response;
         }
     }
 }

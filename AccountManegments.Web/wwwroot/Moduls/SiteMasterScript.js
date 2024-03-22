@@ -1,8 +1,8 @@
 ﻿AllSiteListTable();
 function AllSiteListTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSiteSearch').val();
+    var searchBy = $('#SiteSearchBy').val();
 
     $.get("/SiteMaster/SiteListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
@@ -15,10 +15,10 @@ function AllSiteListTable() {
         });
 }
 
-function filterTable() {
+function SitefilterTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSiteSearch').val();
+    var searchBy = $('#SiteSearchBy').val();
 
     $.ajax({
         url: '/SiteMaster/SiteListAction',
@@ -36,8 +36,8 @@ function filterTable() {
     });
 }
 
-function sortTable() {
-    var sortBy = $('#ddlSortBy').val();
+function sortSiteTable() {
+    var sortBy = $('#SiteDataSortBy').val();
     $.ajax({
         url: '/SiteMaster/SiteListAction',
         type: 'GET',
@@ -68,22 +68,27 @@ function DisplaySiteDetails(SiteId) {
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
-            $('#txtcity').val(response.cityId);
-            $('#txtstate').val(response.stateId);
-            $('#txtcountry').val(response.country);
+            debugger
+            fn_getcitiesbystateId('ddlCity', response.stateId)
+
+            $('#txtSiteState').val(response.stateId);
+            $('#txtSiteCountry').val(response.country);
             $('#txtPincode').val(response.pincode);
             $('#txtShippingAddress').val(response.shippingAddress);
             $('#txtShippingArea').val(response.shippingArea);
-            $('#txtShippingcity').val(response.shippingCityName);
-            $('#txtShippingstate').val(response.shippingState);
-            $('#txtShippingcountry').val(response.shippingCountry);
+            $('#txtShippingState').val(response.shippingStateId);
+            $('#txtShippingCountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
+    
+            fn_getShippingcitiesbystateId('ShippingCity', response.shippingStateId)
+
             var button = document.getElementById("btnSite");
             if ($('#txtSiteid').val() != '') {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSite'));
             offcanvas.show();
+            resetErrorMessages();
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -129,15 +134,15 @@ function CreateSite() {
         Address:$('#txtAddress').val(),
         Area:$('#txtArea').val(),
         CityId: $('#ddlCity').val(),
-        StateId: $('#ddlState').val(),
+        StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode:$('#txtPincode').val(),
         ShippingAddress: $('#txtShippingAddress').val(),
         ShippingArea:$('#txtShippingArea').val(),
         ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ddlShippingCity').val(),
-        ShippingStateId: $('#ddlShippingState').val(),
-        ShippingCountry: $('#ddlShippingCountry').val(),
+        ShippingCityId: $('#ShippingCity').val(),
+        ShippingStateId: $('#ShippingState').val(),
+        ShippingCountry: $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/CreateSite',
@@ -168,15 +173,15 @@ function UpdateSiteDetails() {
         Address: $('#txtAddress').val(),
         Area: $('#txtArea').val(),
         CityId: $('#ddlCity').val(),
-        StateId: $('#ddlState').val(),
+        StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode: $('#txtPincode').val(),
         ShippingAddress: $('#txtShippingAddress').val(),
         ShippingArea: $('#txtShippingArea').val(),
         ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ddlShippingCity').val(),
-        ShippingStateId: $('#ddlShippingState').val(),
-        ShippingCountry: $('#ddlShippingCountry').val(),
+        ShippingCityId: $('#ShippingCity').val(),
+        ShippingStateId: $('#ShippingState').val(),
+        ShippingCountry: $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/UpdateSiteDetails',
@@ -199,6 +204,7 @@ function UpdateSiteDetails() {
 }
 
 function ClearTextBox() {
+
     resetErrorMessages();
     $('#txtSiteid').val('');
     $('#txtSiteName').val('');
@@ -206,13 +212,13 @@ function ClearTextBox() {
     $('#txtContectPersonPhoneNo').val('');
     $('#txtAddress').val('');
     $('#txtArea').val('');
-    $('#txtcity').val('');
-    $('#txtstate').val('');
-    $('#txtcountry').val('');
+    $('#ddlCity').val('');
+    $('#stateDropdown').val('');
+    $('#ddlCountry').val('');
     $('#txtPincode').val('');
-    $('#txtShippingcity').val('');
-    $('#txtShippingstate').val('');
-    $('#txtShippingcountry').val('');
+    $('#ShippingCity').val('');
+    $('#ShippingState').val('');
+    $('#shippingCountry').val('');
     $('#txtShippingAddress').val('');
     $('#txtShippingArea').val('');
     $('#txtShippingPincode').val('');
@@ -233,12 +239,12 @@ function validateAndCreateSite() {
     var Address = document.getElementById("txtAddress").value.trim();
     var Area = document.getElementById("txtArea").value.trim();
     var CityId = document.getElementById("ddlCity").value.trim();
-    var StateId = document.getElementById("txtstate").value.trim();
-    var Country = document.getElementById("txtcountry").value.trim();
+    var StateId = document.getElementById("stateDropdown").value.trim();
+    var Country = document.getElementById("ddlCountry").value.trim();
     var Pincode = document.getElementById("txtPincode").value.trim();
-    var ShippingCityId = document.getElementById("txtShippingcity").value.trim();
-    var ShippingStateId = document.getElementById("txtShippingstate").value.trim();
-    var ShippingCountry = document.getElementById("txtShippingcountry").value.trim();
+    var ShippingCityId = document.getElementById("ShippingCity").value.trim();
+    var ShippingStateId = document.getElementById("ShippingState").value.trim();
+    var ShippingCountry = document.getElementById("shippingCountry").value.trim();
     var ShippingAddress = document.getElementById("txtShippingAddress").value.trim();
     var ShippingArea = document.getElementById("txtShippingArea").value.trim();
     var ShippingPincode = document.getElementById("txtShippingPincode").value.trim();
@@ -282,7 +288,26 @@ function validateAndCreateSite() {
         isValid = false;
     }
 
+
+    if (CityId === "--Select City--") {
+        document.getElementById("spnCity").innerText = "City is required.";
+        isValid = false;
+    }
+
+
+    if (StateId === "--Select State--") {
+        document.getElementById("spnState").innerText = "State is required.";
+        isValid = false;
+    }
+
+
     if (Country === "") {
+        document.getElementById("spnCountry").innerText = "Country is required.";
+        isValid = false;
+    }
+
+
+    if (Country === "--Select Country--") {
         document.getElementById("spnCountry").innerText = "Country is required.";
         isValid = false;
     }
@@ -300,10 +325,29 @@ function validateAndCreateSite() {
     }
 
 
+    if (ShippingCountry === "--Select Country--") {
+        document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
+        isValid = false;
+    }
+
+
+    if (ShippingStateId === "--Select State--") {
+        document.getElementById("spnShippingState").innerText = "Shipping State is required.";
+        isValid = false;
+    }
+
+
+    if (ShippingCityId === "--Select City--") {
+        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
+        isValid = false;
+    }
+
+
     if (ShippingStateId === "") {
         document.getElementById("spnShippingState").innerText = "Shipping State is required.";
         isValid = false;
     }
+
 
     if (ShippingCityId === "") {
         document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
@@ -418,64 +462,112 @@ function ActiveDecativeSite(SiteId) {
                 'error'
             ).then(function () {
                 window.location = '/SiteMaster/SiteListView';
-            });;
+            });
         }
     });
 }
 
+
+function DeleteSite(SiteId)
+{
+    $('#deleteOrderModal').modal('show');
+    $('#delete-record').click(function () {
+        var formData = new FormData();
+        formData.append("SiteId", SiteId);
+        $.ajax({
+            url: '/SiteMaster/DeleteSite?SiteId=' + SiteId,
+            type: 'POST',
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/SiteMaster/SiteListView';
+                })
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Can't Remove Member!",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/SiteMaster/SiteListView';
+                })
+            }
+        })
+    });
+    $('#deleteRecord-close').click(function () {
+        Swal.fire(
+            'Cancelled',
+            'Site Have No Changes.!!😊',
+            'error'
+                )
+    });
+}
+
+
 $(document).ready(function () {
 
     GetShippingCountry();
-    $('#ddlShippingCountry').change(function () {
 
-        var Text = $("#ddlShippingCountry Option:Selected").text();
-        var StateId = $(this).val();
-        $("#txtShippingcountry").val(Text);
-        $('#ddlShippingState').empty();
-        $('#ddlShippingState').append('<Option >--Select State--</Option>');
-        $.ajax({
-            url: '/Authentication/GetState?StateId=' + StateId,
-            success: function (result) {
-                
-                $.each(result, function (i, data) {
-                    $('#ddlShippingState').append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-                });
-            }
-        });
-    });
-
-
-    $('#ddlShippingState').change(function () {
-
-        var Text = $("#ddlShippingState Option:Selected").text();
-        var CityId = $(this).val();
-    
-        $("#txtShippingstate").val(CityId);
-        $('#ddlShippingCity').empty();
-        $('#ddlShippingCity').append('<Option >--Select City--</Option>');
-        $.ajax({
-            url: '/Authentication/GetCity?CityId=' + CityId,
-            success: function (result) {
-
-                $.each(result, function (i, data) {
-                    $('#ddlShippingCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-                });
-            }
-        });
-    });
-
-    $('#ddlShippingCity').change(function () {
-    
-        var Text = $("#ddlShippingCity Option:Selected").text();
+    $('#ShippingCity').change(function () {
+        debugger
+        var Text = $("#shippingCity Option:Selected").text();
         var txtShippingcity = $(this).val();
-        $("#txtShippingcity").val(txtShippingcity);
+        $("#txtShippingCity").val(txtShippingcity);
     });
 
 });
 
+function fn_getShippingState(drpShippingstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+    debugger
+    $('#' + drpShippingstate).empty();
+    $('#' + drpShippingstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+        
+            $.each(result, function (i, data) {
+                $('#' + drpShippingstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getShippingcitiesbystateId(drpShippingcity, stateid, that) {
+   
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
 
 
+    $('#' + drpShippingcity).empty();
+    $('#' + drpShippingcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpShippingcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
 
 function GetShippingCountry() {
 
@@ -483,7 +575,7 @@ function GetShippingCountry() {
         url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlShippingCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
+                $('#shippingCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
 
             });
         }

@@ -90,5 +90,34 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+
+        [HttpPost]
+        [Route("DeleteSite")]
+        public async Task<IActionResult> DeleteSite(Guid SiteId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+
+            var siteId = await SiteMaster.DeleteSite(SiteId);
+            try
+            {
+
+                if (siteId != null)
+                {
+
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = siteId.message;
+                }
+                else
+                {
+                    responseModel.message = siteId.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
     }
 }

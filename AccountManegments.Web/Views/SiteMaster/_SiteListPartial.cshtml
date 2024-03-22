@@ -42,13 +42,40 @@
                     </div>
                     <div class="col-12 col-lg-3 col-md-3 col-xl-3 text-center ac-m-btn">
 
-                        <a class="btn text-warning" onclick="DisplaySiteDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                        <a class="btn text-primary" onclick="DisplaySiteDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a href="javascript:;" class="btn text-primary" onclick="DeleteSite('@item.SiteId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 }
+
+<!-- Modal -->
+<div class="modal fade flip" id="deleteOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-5 text-center">
+                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px"></lord-icon>
+                <div class="mt-4 text-center">
+                    <h4>You are about to delete a Member ?</h4>
+                    <p class="text-muted fs-15 mb-4">
+                        Deleting your Site will remove him form this.
+                    </p>
+                    <div class="hstack gap-2 justify-content-center remove">
+                        <button class="btn btn-link link-primary fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
+                            <i class="ri-close-line me-1 align-middle"></i>
+                            Close
+                        </button>
+                        <button class="btn btn-primary" id="delete-record">
+                            Yes,
+                            Delete It
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end modal -->
