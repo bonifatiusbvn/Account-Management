@@ -52,11 +52,11 @@
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortTable()">
+                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
                                                         <option value="AscendingCreatedOn" selected="selected">Last Created</option>
                                                         <option value="DescendingCreatedOn">First Created</option>
-                                                        <option value="AscendingSupplierName">UserName(a-z)</option>
-                                                        <option value="DescendingSupplierName">UserName(z-a)</option>
+                                                        <option value="AscendingSupplierName">SupplierName(a-z)</option>
+                                                        <option value="DescendingSupplierName">SupplierName(z-a)</option>
                                                         <option value="AscendingEmail">Email-Asc </option>
                                                         <option value="DescendingEmail">Email-Asc</option>
                                                     </select>
@@ -75,6 +75,9 @@
                                         <div class="col-5 text-center">
                                             <h5>Supplier Info</h5>
                                         </div>
+                                        <div class="col-3 ">
+                                            <h5>GST No.</h5>
+                                        </div>
                                         <div class="col-2 ">
                                             <h5>Active</h5>
                                         </div>
@@ -90,8 +93,6 @@
                             </div>
                         </div>
                         <!--end row-->
-
-
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
@@ -166,119 +167,84 @@
                         <div class="card-body">
                             <div class="row g-3 ac-detail">
                                 <form class="row g-3" id="SupplierForm">
-                                    <div class="fv-row mb-1">
+                                    <div class="col-md-6">
                                         <label class="form-label">Supplier Name</label>
                                         <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" required>
-
-                                        <input type="hidden" id="txtUserid" value="@_userSession.UserId">
                                         <span id="spnSupplier" class="text-danger"></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="fv-row mb-2">
-                                                <label class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" required>
-                                                <span id="spnPhoneNo" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="fv-row mb-2">
-                                                <label class="form-label">Email</label>
-                                                <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" required>
-                                                <span id="spnEmail" class="text-danger"></span>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" required>
+                                        <span id="spnPhoneNo" class="text-danger"></span>
                                     </div>
-
-                                    <div class="fv-row mb-2">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="fv-row mb-1">
-                                                    <label class="form-label">GST Number</label>
-                                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" required>
-                                                    <span id="spnGST" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="fv-row mb-1">
-                                                    <label class="form-label">Building Name</label>
-                                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" required>
-                                                    <span id="spnBuilding" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="fv-row mb-6">
-                                                <label class="form-label">Area</label>
-                                                <input type="text" class="form-control" placeholder="Area" id="txtArea" required style="height: 75px;">
-                                                <span id="spnArea" class="text-danger"></span>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" required>
+                                        <span id="spnEmail" class="text-danger"></span>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="col-6">
-                                            <div class="fv-row mb-4">
-                                                <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
-                                                    <option>--Select Country--</option>
-                                                </select>
-                                                <input type="hidden" id="txtcountry" value="" />
-                                                <span class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="fv-row mb-1">
-                                            <label class="form-label">State</label>
-                                            <select id="dropState" class="form-control bg-transparent">
-                                                <option value="0" selected>--Select State--</option>
-                                            </select>
-                                            <input type="hidden" id="txtstate" value="" />
-                                            <span class="text-danger"></span>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">GST Number</label>
+                                        <input type="text" class="form-control" placeholder="GST Number" id="txtGST" required>
+                                        <span id="spnGST" class="text-danger"></span>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="fv-row mb-1">
-                                            <label class="form-label">City</label>
-                                            <select id="ddlCity" class="form-control bg-transparent">
-                                                <option>--Select City--</option>
-                                            </select>
-                                            <input type="hidden" id="txtcity" value="" />
-                                            <span class="text-danger"></span>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Building Name</label>
+                                        <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" required>
+                                        <span id="spnBuilding" class="text-danger"></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="fv-row mb-1">
-                                                <label class="form-label">PinCode</label>
-                                                <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" required>
-                                                <span id="spnPinCode" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
+                                    <div class="col-md-6">
+                                        <label class="form-label">Area</label>
+                                        <input type="text" class="form-control" placeholder="Area" id="txtArea" required style="height: 75px;">
+                                        <span id="spnArea" class="text-danger"></span>
                                     </div>
-                                    <div class="fv-row mb-4">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="fv-row mb-1">
-                                                    <label class="form-label">Bank Name</label>
-                                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" required>
-                                                    <span id="spnBank" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="fv-row mb-1">
-                                                    <label class="form-label">Account Number</label>
-                                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" required>
-                                                    <span id="spnAccount" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="fv-row mb-1">
-                                                <label class="form-label">IFFC Code</label>
-                                                <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" required>
-                                                <span id="spnIFFC" class="text-danger"></span>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Country</label>
+                                        <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
+                                            <option>--Select Country--</option>
+                                        </select>
+                                        <span class="text-danger"></span>
                                     </div>
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnuser"></button>
+                                    <div class="col-md-6">
+                                        <label class="form-label">State</label>
+                                        <select id="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                            <option value="0" selected>--Select State--</option>
+                                        </select>
+                                        <input type="hidden" id="txtstate" value="" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">City</label>
+                                        <select id="ddlCity" class="form-control bg-transparent">
+                                            <option value="0">--Select City--</option>
+                                        </select>
+                                        <input type="hidden" id="txtcity" value="" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">PinCode</label>
+                                        <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" required>
+                                        <span id="spnPinCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Bank Name</label>
+                                        <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" required>
+                                        <span id="spnBank" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account Number</label>
+                                        <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" required>
+                                        <span id="spnAccount" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">IFFC Code</label>
+                                        <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" required>
+                                        <span id="spnIFFC" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnuser">Submit</button>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
 

@@ -73,6 +73,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 Userdata = (from e in Context.SupplierMasters
                             join s in Context.States on e.State equals s.StatesId
                             join c in Context.Cities on e.City equals c.CityId
+                            where e.SupplierId == SupplierId
                             select new SupplierModel
                             {
                                 SupplierId = e.SupplierId,

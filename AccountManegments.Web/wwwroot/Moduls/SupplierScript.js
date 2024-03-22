@@ -63,11 +63,10 @@ function ClearTextBox() {
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
     offcanvas.show();
 }
-function DisplaySupplierDetails(Supplier) {
-
+function DisplaySupplierDetails(SupplierId) {
 
     $.ajax({
-        url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
+        url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
@@ -80,9 +79,7 @@ function DisplaySupplierDetails(Supplier) {
             $('#txtGST').val(response.gstno);
             $('#txtArea').val(response.area);
             $('#txtBuilding').val(response.buildingName);
-            debugger
             fn_getcitiesbystateId('ddlCity', response.state)
-
             $('#dropState').val(response.state);
             $('#txtPinCode').val(response.pinCode);
             $('#txtBank').val(response.bankName);
@@ -103,18 +100,18 @@ function DisplaySupplierDetails(Supplier) {
     });
 }
 
-function SelectUserDetails(Supplier, element) {
+function SelectSupplierDetails(SupplierId, element) {
 
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
-        url: '/Supplier/DisplaySupplier?Supplier=' + Supplier,
+        url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+
             if (response) {
                 $('#dspSupplierId').val(response.supplierId);
                 $('#dspSupplierName').val(response.supplierName);
@@ -140,7 +137,7 @@ function SelectUserDetails(Supplier, element) {
 }
 
 function AllUserTable() {
-    debugger
+
 
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
@@ -234,7 +231,7 @@ function UpdateSupplierDetails() {
 }
 function validateAndCreateSupplier() {
 
-    debugger
+
     resetErrorMessages();
 
     var supplierName = $('#txtSupplierName').val().trim();
@@ -243,8 +240,6 @@ function validateAndCreateSupplier() {
     var GST = $('#txtGST').val().trim();
     var building = $('#txtBuilding').val().trim();
     var area = $('#txtArea').val().trim();
-    var city = $('#txtcity').val().trim();
-    var state = $('#txtstate').val().trim();
     var pinCode = $('#txtPinCode').val().trim();
     var bank = $('#txtBank').val().trim();
     var account = $('#txtAccount').val().trim();
@@ -365,7 +360,7 @@ function UserActiveDecative(UserId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("UserId", UserId);
-            debugger
+
             $.ajax({
                 url: '/User/UserActiveDecative?UserId=' + UserId,
                 type: 'Post',
