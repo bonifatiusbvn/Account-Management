@@ -19,12 +19,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
 
         public string? Password { get; set; }
         public int? Role { get; set; }
-
+        public Guid? SiteId { get; set; }
         public string? Email { get; set; }
 
         public string? PhoneNo { get; set; }
+        public bool? IsDeleted { get; set; }
         public DateTime? CreatedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
+
     }
 }

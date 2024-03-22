@@ -20,7 +20,7 @@
     <div class="">
         <div class=" radius-10 w-100">
             <div class="d-flex align-items-center">
-                <h2 class="h5 mb-0">Item Details</h2>
+               
                 <form class="ms-auto position-relative">
                     <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Item</button>
                 </form>
@@ -38,10 +38,10 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtItemSearch" onkeyup="filterItemTable()" placeholder="Search" />
+                                                    <input class="form-control form-select-lg" id="txtItemSearch" onkeyup="filterTable()" placeholder="Search" />
                                                 </div>
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlItemSearchBy" onchange="filterItemTable()">
+                                                    <select class="form-select form-select-lg" id="ddlItemSearchBy" onchange="filterItemTable()">
                                                         <option selected="selected">All</option>
                                                         <option>ItemName</option>
                                                         <option>PerUnitPrice</option>
@@ -50,7 +50,7 @@
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlItemSortBy" onchange="sortItemTable()">
+                                                    <select class="form-select form-select-lg" id="ddlItemSortBy" onchange="sortItemTable()">
                                                         <option value="AscendingCreatedOn" selected="selected">Last Created</option>
                                                         <option value="DescendingCreatedOn" selected="selected">First Created</option>
                                                         <option value="AscendingItemName">ItemName(a-z)</option>
@@ -68,18 +68,17 @@
                                 </div>
 
                                 <div class="row w-100 ac-view-list">
-
                                     <div class="row hide-sm table-light ac-view-header">
                                         <div class="col-5 text-center">
                                             <h5>Item Name</h5>
                                         </div>
-                                        <div class="col-3 text-center">
-                                            <h5>Unit Price</h5>
+                                        <div class="col-3 ">
+                                            <h5>Price</h5>
                                         </div>
-                                        <div class="col-2 text-center">
+                                        <div class="col-2 ">
                                             <h5>Approved</h5>
                                         </div>
-                                        <div class="col-2 text-center">
+                                        <div class="col-2">
                                             <h5>Action</h5>
                                         </div>
                                     </div>
@@ -111,23 +110,31 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Price Per Unit</label>
-                                        <input type="text" class="form-control" id="dspPricePerUnit" readonly>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="text" class="form-control" id="dspPricePerUnit" readonly>
+                                        </div>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Price With Gst</label>
-                                        <input type="text" class="form-control" id="dspWithGst" readonly>
+                                        <label class="form-label">IsWithGST</label>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input font-22" id="dspWithGst" type="checkbox" readonly>
+                                        </div>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Gst Amount</label>
-                                        <input type="text" class="form-control" id="dspGstAmount" readonly>
+                                        <label class="form-label">GST Amount</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="text" class="form-control" id="dspGstAmount" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">GST %</label>
+                                        <input type="text" class="form-control" id="dspGstPercentage" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">HsnCode</label>
                                         <input type="text" class="form-control" id="dspHsnCode" readonly>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">IsApproved</label>
-                                        <input type="text" class="form-control" id="dspIsApproved" readonly>
                                     </div>
 
                                 </div>
@@ -154,35 +161,41 @@
                             <form class="row g-3" id="userForm">
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Item Name" id="txtItemName" required>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="Item Name" id="txtItemName" required>
                                     <input type="hidden" id="txtItemid">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control form-control-lg mb-3" id="txtUnitType" required>
+                                    <select class="form-control form-control mb-3" id="txtUnitType" required>
                                         <option selected disabled value="">--Select--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">PricePerUnit</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Price Per Unit" id="txtPricePerUnit" required>
+                                <div class="col-8">
+                                    <label class="form-label">Price</label>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="Price Per Unit" id="txtPricePerUnit" required>
                                     <span id="spnPricePerUnit" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">GstAmount</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst Amount" id="txtGstAmount" required>
+                                <div class="col-4">
+                                    <label class="form-label">IsWithGST</label>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">GST Amount</label>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="Gst Amount" id="txtGstAmount" required>
                                     <span id="spnGstAmount" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">GstPerUnit</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst Per Unit" id="txtGstPerUnit" required>
+                                <div class="col-6">
+                                    <label class="form-label">GST%</label>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="Gst %" id="txtGstPerUnit" required>
                                     <span id="spnGstPerUnit" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">HSNCode</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="HSN Code" id="txtHSNCode" required>
+                                    <label class="form-label">HSN Code</label>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="HSN Code" id="txtHSNCode" required>
                                     <span id="spnHSNCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">

@@ -36,6 +36,8 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     Gstamount = ItemDetails.Gstamount,
                     Gstper=ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
+                    IsDeleted = ItemDetails.IsDeleted,
+                    IsApproved = ItemDetails.IsApproved,
                     CreatedBy= ItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };

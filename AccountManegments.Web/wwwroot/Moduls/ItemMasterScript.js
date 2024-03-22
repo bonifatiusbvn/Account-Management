@@ -66,8 +66,9 @@ function DisplayItemDetails(ItemId, element) {
                 $('#dspItemName').val(response.itemName);
                 $('#dspUnitName').val(response.unitTypeName);
                 $('#dspPricePerUnit').val(response.pricePerUnit);
-                $('#dspWithGst').val(response.isWithGst);
+                $('#dspWithGst').prop('checked', response.isWithGst);
                 $('#dspGstAmount').val(response.gstamount);
+                $('#dspGstPercentage').val(response.gstper);
                 $('#dspHsnCode').val(response.hsncode);
                 $('#dspIsApproved').val(response.isApproved);
             } else {
@@ -107,17 +108,18 @@ function ClearTextBox() {
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
     offcanvas.show();
 }
-function CreateItem() {
+function CreateItem() {debugger
 
     var objData = {
         ItemName: $('#txtItemName').val(),
         UnitType: $('#txtUnitType').val(),
         PricePerUnit: $('#txtPricePerUnit').val(),
-        IsWithGst: $('#txtPriceWithGst').val(),
+        IsWithGst: $('#txtIsWithGst').prop('checked'),
         Gstamount: $('#txtGstAmount').val(),
         Gstper: $('#txtGstPerUnit').val(),
         Hsncode: $('#txtHSNCode').val(),
     }
+    debugger
     $.ajax({
         url: '/ItemMaster/CreateItem',
         type: 'post',
@@ -149,6 +151,7 @@ function EditItemDetails(ItemId) {
             $('#txtItemName').val(response.itemName);
             $('#txtUnitType').val(response.unitType);
             $('#txtPricePerUnit').val(response.pricePerUnit);
+            $('#txtIsWithGst').prop('checked', response.isWithGst);
             $('#txtGstAmount').val(response.gstamount);
             $('#txtGstPerUnit').val(response.gstper);
             $('#txtHSNCode').val(response.hsncode);
@@ -223,14 +226,19 @@ function validateAndCreateItem() {
         isValid = false;
     }
 
-
     if (PricePerUnit === "") {
         document.getElementById("spnPricePerUnit").innerText = "PricePer Unit is required.";
+        isValid = false;
+    } else if (!isValidPriceInput(PricePerUnit)) {
+        document.getElementById("spnPricePerUnit").innerText = "Please Enter Valid Price!";
         isValid = false;
     }
 
     if (GstAmount === "") {
         document.getElementById("spnGstAmount").innerText = "Gst Amount is required.";
+        isValid = false;
+    } else if (!isValidGSTInput(GstAmount)) {
+        document.getElementById("spnGstAmount").innerText = "Please Enter Valid GST!";
         isValid = false;
     }
 
@@ -262,6 +270,17 @@ function resetErrorMessages() {
     document.getElementById("spnGstPerUnit").innerText = "";
     document.getElementById("spnHSNCode").innerText = "";
 }
+function isValidPriceInput(PricePerUnit) {
+
+    var numberPattern = /^[0-9]+$/;
+    return numberPattern.test(PricePerUnit);
+}
+function isValidGSTInput(GstAmount) {
+
+    var numberPattern = /^[0-9]+$/;
+    return numberPattern.test(GstAmount);
+}
+
 
 function ItemIsApproved(ItemId) {
     debugger
