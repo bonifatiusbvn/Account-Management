@@ -23,7 +23,7 @@
     <div class="">
         <div class=" radius-10 w-100">
             <div class="d-flex align-items-center">
-                <h2 class="h5 mb-0">User Details</h2>
+
                 <form class="ms-auto position-relative">
                     <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Supplier</button>
                 </form>
@@ -45,23 +45,20 @@
                                                 <div class="col-12 col-lg-4">
                                                     <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
                                                         <option selected="selected">All</option>
-                                                        <option>UserName</option>
+                                                        <option>Supplier Name</option>
                                                         <option>Email</option>
                                                         <option>Phone</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                        <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                        <option value="AscendingRole">Ascending Role</option>
-                                                        <option value="DescendingRole">Descending Role</option>
-                                                        <option value="AscendingActive">Ascending Active</option>
-                                                        <option value="DescendingActive">Descending Active</option>
-                                                        <option value="AscendingEmail">Ascending Email</option>
-                                                        <option value="DescendingEmail">Descending Email</option>
-                                                        <option value="AscendingPhone">Ascending Phone</option>
-                                                        <option value="DescendingPhone">Descending Phone</option>
+                                                    <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortTable()">
+                                                        <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                        <option value="DescendingCreatedOn">First Created</option>
+                                                        <option value="AscendingSupplierName">UserName(a-z)</option>
+                                                        <option value="DescendingSupplierName">UserName(z-a)</option>
+                                                        <option value="AscendingEmail">Email-Asc </option>
+                                                        <option value="DescendingEmail">Email-Asc</option>
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -99,7 +96,7 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:650px">
-                                <h5 class="mb-0 mt-4">User Information</h5>
+                                <h5 class="mb-0 mt-4">Supplier  Information</h5>
                                 <hr>
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-6">
@@ -233,7 +230,6 @@
                                             </select>
                                             <input type="hidden" id="txtstate" value="" />
                                             <span class="text-danger"></span>
-                                            <input type="text" class="form-control" id="txtState" readonly>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -242,7 +238,6 @@
                                             <select id="ddlCity" class="form-control bg-transparent">
                                                 <option>--Select City--</option>
                                             </select>
-                                            <input type="text" class="form-control" id="txtCity" readonly>
                                             <input type="hidden" id="txtcity" value="" />
                                             <span class="text-danger"></span>
                                         </div>

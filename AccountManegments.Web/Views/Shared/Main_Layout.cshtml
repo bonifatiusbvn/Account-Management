@@ -63,57 +63,57 @@
 
             <ul class="metismenu" id="menu">
                 @* <li>
-                    @* <a href="javascript:;" class="has-arrow">
-                        <div class="parent-icon">
-                            <ion-icon name="bag-handle-sharp"></ion-icon>
-                        </div>
-                        <div class="menu-title">eCommerce</div>
-                    </a>
-                    <ul>
-                        < li>
-                            <a href="ecommerce-shop-grid-view.html">
-                                <ion-icon name="ellipse-outline"></ion-icon>Product Grid
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ecommerce-shop-list-view.html">
-                                <ion-icon name="ellipse-outline"></ion-icon>Product List
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="SupplierList" asp-controller="Supplier">
-                                <ion-icon name="ellipse-outline"></ion-icon>Supplier Master
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ecommerce-product-details.html">
-                                <ion-icon name="ellipse-outline"></ion-icon>Product Details
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ecommerce-product-comparison.html">
-                                <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
-                            </a>
-                        </li> *@
-                       @*  <li>
-                            <a asp-action="CreateCompany" asp-controller="Company">
-                                <ion-icon name="ellipse-outline"></ion-icon>Create Company
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="ItemListView" asp-controller="ItemMaster">
-                                <ion-icon name="ellipse-outline"></ion-icon>Item List
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="SiteListView" asp-controller="SiteMaster">
-                                <ion-icon name="ellipse-outline"></ion-icon>Site
-                            </a>
-                        </li> 
-                    </ul>
+                @* <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon">
+                <ion-icon name="bag-handle-sharp"></ion-icon>
+                </div>
+                <div class="menu-title">eCommerce</div>
+                </a>
+                <ul>
+                < li>
+                <a href="ecommerce-shop-grid-view.html">
+                <ion-icon name="ellipse-outline"></ion-icon>Product Grid
+                </a>
+                </li>
+                <li>
+                <a href="ecommerce-shop-list-view.html">
+                <ion-icon name="ellipse-outline"></ion-icon>Product List
+                </a>
+                </li>
+                <li>
+                <a asp-action="SupplierList" asp-controller="Supplier">
+                <ion-icon name="ellipse-outline"></ion-icon>Supplier Master
+                </a>
+                </li>
+                <li>
+                <a href="ecommerce-product-details.html">
+                <ion-icon name="ellipse-outline"></ion-icon>Product Details
+                </a>
+                </li>
+                <li>
+                <a href="ecommerce-product-comparison.html">
+                <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
+                </a>
+                </li> *@
+                @*  <li>
+                <a asp-action="CreateCompany" asp-controller="Company">
+                <ion-icon name="ellipse-outline"></ion-icon>Create Company
+                </a>
+                </li>
+                <li>
+                <a asp-action="ItemListView" asp-controller="ItemMaster">
+                <ion-icon name="ellipse-outline"></ion-icon>Item List
+                </a>
+                </li>
+                <li>
+                <a asp-action="SiteListView" asp-controller="SiteMaster">
+                <ion-icon name="ellipse-outline"></ion-icon>Site
+                </a>
+                </li>
+                </ul>
                 </li> *@
                 <li class="mm-active">
-                    <a  asp-action="CreateCompany" asp-controller="Company">
+                    <a asp-action="CreateCompany" asp-controller="Company">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
                         </div>
@@ -130,14 +130,21 @@
 
                 </li>
                 <li class="mm-active">
-                    <a  asp-action="ItemListView" asp-controller="ItemMaster">
+                    <a asp-action="ItemListView" asp-controller="ItemMaster">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
                         </div>
                         <div class="menu-title">Item</div>
                     </a>
                 </li>
-                
+                <li class="mm-active">
+                    <a asp-action="SupplierList" asp-controller="Supplier">
+                        <div class="parent-icon">
+                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                        </div>
+                        <div class="menu-title">Supplier</div>
+                    </a>
+                </li>
                 @* <li class="menu-label">Pages</li> *@
                 <li>
                     <a class="has-arrow" href="javascript:;">
@@ -158,7 +165,7 @@
                             </a>
                         </li>
                     </ul>
-                    
+
                 </li>
 
             </ul>

@@ -4,7 +4,7 @@
 *@
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="userCard_@item.SupplierId">
+    <div class="row ac-card" id="userCard_@item.SupplierId" onclick="SelectUserDetails('@item.SupplierId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
@@ -12,7 +12,7 @@
                         <div class="d-flex align-items-center gap-3">
                             <div class="widget-icon-2 bg-light-primary text-primary">
                                 @* <div class="font-22">
-                            <i class="lni lni-user" onclick="SelectUserDetails('@item.SupplierId', this)">
+                            <i class="lni lni-user" >
 
                             </i>
                             </div> *@
