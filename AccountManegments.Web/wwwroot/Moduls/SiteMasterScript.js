@@ -1,4 +1,7 @@
 ﻿AllSiteListTable();
+fn_getState('stateDropdown', 1);
+fn_getShippingState('ShippingState', 1);
+
 function AllSiteListTable() {
 
     var searchText = $('#txtSiteSearch').val();
@@ -54,33 +57,33 @@ function sortSiteTable() {
 }
 
 function DisplaySiteDetails(SiteId) {
-    debugger 
+  
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-     debugger
+  
             $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
-            debugger
+            $('#stateDropdown').val(response.stateId);
             fn_getcitiesbystateId('ddlCity', response.stateId)
-
-            $('#txtSiteState').val(response.stateId);
             $('#txtSiteCountry').val(response.country);
             $('#txtPincode').val(response.pincode);
             $('#txtShippingAddress').val(response.shippingAddress);
             $('#txtShippingArea').val(response.shippingArea);
-            $('#txtShippingState').val(response.shippingStateId);
+            fn_getShippingcitiesbystateId('ShippingCity', response.shippingStateId)
+            $('#ShippingState').val(response.shippingStateId);
             $('#txtShippingCountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
+
     
-            fn_getShippingcitiesbystateId('ShippingCity', response.shippingStateId)
+            setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
 
             var button = document.getElementById("btnSite");
             if ($('#txtSiteid').val() != '') {
@@ -203,7 +206,7 @@ function UpdateSiteDetails() {
 
 }
 
-function ClearTextBox() {
+function ClearSiteTextBox() {
 
     resetErrorMessages();
     $('#txtSiteid').val('');
@@ -214,7 +217,7 @@ function ClearTextBox() {
     $('#txtArea').val('');
     $('#ddlCity').val('');
     $('#stateDropdown').val('');
-    $('#ddlCountry').val('');
+    $("#ddlCountry").val('');
     $('#txtPincode').val('');
     $('#ShippingCity').val('');
     $('#ShippingState').val('');
@@ -269,6 +272,9 @@ function validateAndCreateSite() {
     if (Address === "") {
         document.getElementById("spnAddress").innerText = "Address is required.";
         isValid = false;
+    } else if (Address.length > 100) {
+        document.getElementById("spnAddress").innerText = "Address should not exceed 100 characters.";
+        isValid = false;
     }
 
 
@@ -281,21 +287,17 @@ function validateAndCreateSite() {
     if (CityId === "") {
         document.getElementById("spnCity").innerText = "City is required.";
         isValid = false;
-    }
-
-    if (StateId === "") {
-        document.getElementById("spnState").innerText = "State is required.";
-        isValid = false;
-    }
-
-
-    if (CityId === "--Select City--") {
+    } else if(CityId === "--Select City--") {
         document.getElementById("spnCity").innerText = "City is required.";
         isValid = false;
     }
 
 
-    if (StateId === "--Select State--") {
+    if (StateId === "") {
+        document.getElementById("spnState").innerText = "State is required.";
+        isValid = false;
+    }
+    else if(StateId === "--Select State--") {
         document.getElementById("spnState").innerText = "State is required.";
         isValid = false;
     }
@@ -305,9 +307,7 @@ function validateAndCreateSite() {
         document.getElementById("spnCountry").innerText = "Country is required.";
         isValid = false;
     }
-
-
-    if (Country === "--Select Country--") {
+    else if(Country === "--Select Country--") {
         document.getElementById("spnCountry").innerText = "Country is required.";
         isValid = false;
     }
@@ -323,9 +323,7 @@ function validateAndCreateSite() {
         document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
         isValid = false;
     }
-
-
-    if (ShippingCountry === "--Select Country--") {
+    else if(ShippingCountry === "--Select Country--") {
         document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
         isValid = false;
     }
@@ -335,15 +333,7 @@ function validateAndCreateSite() {
         document.getElementById("spnShippingState").innerText = "Shipping State is required.";
         isValid = false;
     }
-
-
-    if (ShippingCityId === "--Select City--") {
-        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
-        isValid = false;
-    }
-
-
-    if (ShippingStateId === "") {
+    else if(ShippingStateId === "") {
         document.getElementById("spnShippingState").innerText = "Shipping State is required.";
         isValid = false;
     }
@@ -353,10 +343,18 @@ function validateAndCreateSite() {
         document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
         isValid = false;
     }
+    else if (ShippingCityId === "--Select City--") {
+        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
+        isValid = false;
+    }
 
-
+    debugger
     if (ShippingAddress === "") {
         document.getElementById("spnShippingAddress").innerText = "Shipping Address is required.";
+        isValid = false;
+    }
+    else if (ShippingAddress.length > 100) {
+        document.getElementById("spnShippingAddress").innerText = "Address should not exceed 100 characters.";
         isValid = false;
     }
 
@@ -391,7 +389,6 @@ function validateAndCreateSite() {
         }
     }
 }
-
 
 function resetErrorMessages() {
     document.getElementById("spnSiteName").innerText = "";
@@ -467,49 +464,55 @@ function ActiveDecativeSite(SiteId) {
     });
 }
 
-
 function DeleteSite(SiteId)
 {
-    $('#deleteOrderModal').modal('show');
-    $('#delete-record').click(function () {
-        var formData = new FormData();
-        formData.append("SiteId", SiteId);
-        $.ajax({
-            url: '/SiteMaster/DeleteSite?SiteId=' + SiteId,
-            type: 'POST',
-            dataType: 'json',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (Result) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/SiteMaster/DeleteSite?SiteId=' + SiteId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
 
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                })
-            },
-            error: function () {
-                Swal.fire({
-                    title: "Can't Remove Member!",
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                })
-            }
-        })
-    });
-    $('#deleteRecord-close').click(function () {
-        Swal.fire(
-            'Cancelled',
-            'Site Have No Changes.!!😊',
-            'error'
-                )
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/SiteMaster/SiteListView';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Site!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/SiteMaster/SiteListView';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Site Have No Changes.!!😊',
+                'error'
+            );
+        }
     });
 }
 
@@ -518,8 +521,15 @@ $(document).ready(function () {
 
     GetShippingCountry();
 
+    $('#dropShippingState').change(function () {
+
+        var Text = $("#dropShippingState Option:Selected").text();
+        var txtstateid = $(this).val();
+        $("#txtShippingstate").val(txtstateid);
+    });
+
     $('#ShippingCity').change(function () {
-        debugger
+    
         var Text = $("#shippingCity Option:Selected").text();
         var txtShippingcity = $(this).val();
         $("#txtShippingCity").val(txtShippingcity);
@@ -533,7 +543,7 @@ function fn_getShippingState(drpShippingstate, countryId, that) {
         var cid = $(that).val();
     }
 
-    debugger
+  
     $('#' + drpShippingstate).empty();
     $('#' + drpShippingstate).append('<Option >--Select State--</Option>');
     $.ajax({

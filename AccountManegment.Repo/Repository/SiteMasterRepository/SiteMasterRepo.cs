@@ -175,7 +175,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     }
                 }
 
-                if (!string.IsNullOrEmpty(sortBy))
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    // Default sorting by CreatedOn in descending order
+                    SiteList = SiteList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part

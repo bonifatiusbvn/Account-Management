@@ -4,14 +4,14 @@ $(document).ready(function () {
     GetCountry();
 
     $('#dropState').change(function () {
-        debugger
+        
         var Text = $("#dropState Option:Selected").text();
         var txtstateid = $(this).val();
         $("#txtstate").val(txtstateid);
     });
 
     $('#ddlCity').change(function () {
-        debugger
+        
         var Text = $("#ddlCity Option:Selected").text();
         var txtcityid = $(this).val();
         $("#txtcity").val(txtcityid);
