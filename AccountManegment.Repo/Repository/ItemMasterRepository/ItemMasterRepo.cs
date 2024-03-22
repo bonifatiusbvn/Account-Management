@@ -51,6 +51,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             return response;
         }
 
+        public async Task<IEnumerable<UnitMasterView>> GetAllUnitType()
+        {
+            try
+            {
+                IEnumerable<UnitMasterView> UnitType = Context.UnitMasters.ToList().Select(a => new UnitMasterView
+                {
+                    UnitId = a.UnitId,
+                    UnitName = a.UnitName,
+                });
+                return UnitType;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<ItemMasterModel> GetItemDetailsById(Guid ItemId)
         {
             ItemMasterModel ItemList = new ItemMasterModel();
@@ -81,8 +98,8 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
         }
 
-        public async Task<IEnumerable<ItemMasterModel>> GetItemList()
-        {
+        public async Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy)
+       {
             try
             {
                 var ItemList = (from a in Context.ItemMasters
@@ -100,6 +117,65 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                     Hsncode = a.Hsncode,
                                     IsApproved = a.IsApproved,
                                 });
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    ItemList = ItemList.Where(u =>
+                        u.ItemName.ToLower().Contains(searchText) ||
+                        u.PricePerUnit.ToString().Contains(searchText) ||
+                        u.IsApproved.ToString().Contains(searchText)
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "itemname":
+                            ItemList = ItemList.Where(u => u.ItemName.ToLower().Contains(searchText));
+                            break;
+                        case "IsApproved":
+                            ItemList = ItemList.Where(u => u.IsApproved.ToString().Contains(searchText));
+                            break;
+                        case "PerUnitPrice":
+                            ItemList = ItemList.Where(u => u.PricePerUnit.ToString().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "itemname":
+                            if (sortOrder == "ascending")
+                                ItemList = ItemList.OrderBy(u => u.ItemName);
+                            else if (sortOrder == "descending")
+                                ItemList = ItemList.OrderByDescending(u => u.ItemName);
+                            break;
+                        case "perunitprice":
+                            if (sortOrder == "ascending")
+                                ItemList = ItemList.OrderBy(u => u.PricePerUnit);
+                            else if (sortOrder == "descending")
+                                ItemList = ItemList.OrderByDescending(u => u.PricePerUnit);
+                            break;
+                        case "isapproved":
+                            if (sortOrder == "ascending")
+                                ItemList = ItemList.OrderBy(u => u.IsApproved);
+                            else if (sortOrder == "descending")
+                                ItemList = ItemList.OrderByDescending(u => u.IsApproved);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 return ItemList;
             }
             catch (Exception ex)
@@ -125,8 +201,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     ItemMaster.Gstper = ItemDetails.Gstper;
                     ItemMaster.Hsncode = ItemDetails.Hsncode;
                     ItemMaster.IsApproved = ItemDetails.IsApproved;
-                    ItemMaster.CreatedBy = ItemDetails.CreatedBy;
-                    ItemMaster.CreatedOn = ItemDetails.CreatedOn;
                 }
                 Context.ItemMasters.Update(ItemMaster);
                 Context.SaveChanges();

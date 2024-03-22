@@ -19,7 +19,7 @@ namespace AccountManagement.API.Controllers
         }
         public ISiteMasterServices SiteMaster { get; }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetSiteList")]
         public async Task<IActionResult> GetSiteList(string? searchText, string? searchBy, string? sortBy)
         {
@@ -60,6 +60,35 @@ namespace AccountManagement.API.Controllers
                 response.message = sitemaster.message;
             }
             return StatusCode(response.code, response);
+        }
+
+        [HttpPost]
+        [Route("ActiveDeactiveSite")]
+        public async Task<IActionResult> ActiveDeactiveSite(Guid SiteId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+
+            var siteName = await SiteMaster.ActiveDeactiveSite(SiteId);
+            try
+            {
+
+                if (siteName != null)
+                {
+
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = siteName.message;
+                }
+                else
+                {
+                    responseModel.message = siteName.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

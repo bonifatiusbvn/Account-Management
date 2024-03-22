@@ -1,18 +1,17 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ItemListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Users</div>
+    <div class="breadcrumb-title pe-3">Items</div>
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0 align-items-center">
                 <li class="breadcrumb-item">
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">User Details</li>
+                <li class="breadcrumb-item active" aria-current="page">Item Details</li>
             </ol>
         </nav>
     </div>
@@ -21,9 +20,9 @@
     <div class="">
         <div class=" radius-10 w-100">
             <div class="d-flex align-items-center">
-                <h2 class="h5 mb-0">User Details</h2>
+                <h2 class="h5 mb-0">Item Details</h2>
                 <form class="ms-auto position-relative">
-                    <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add User</button>
+                    <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Item</button>
                 </form>
             </div>
             <div class="my-3 border-bottom"></div>
@@ -39,29 +38,26 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
-                                                    </input>
+                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search" />
                                                 </div>
                                                 <div class="col-12 col-lg-4">
                                                     <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
                                                         <option selected="selected">All</option>
-                                                        <option>UserName</option>
-                                                        <option>Email</option>
-                                                        <option>Phone</option>
+                                                        <option>Item Name</option>
+                                                        <option>PerUnit Price</option>
+                                                        <option>Approved</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
                                                     <select class="form-select" id="ddlSortBy" onchange="sortTable()">
                                                         <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                        <option value="AscendingRole">Ascending Role</option>
-                                                        <option value="DescendingRole">Descending Role</option>
-                                                        <option value="AscendingActive">Ascending Active</option>
-                                                        <option value="DescendingActive">Descending Active</option>
-                                                        <option value="AscendingEmail">Ascending Email</option>
-                                                        <option value="DescendingEmail">Descending Email</option>
-                                                        <option value="AscendingPhone">Ascending Phone</option>
-                                                        <option value="DescendingPhone">Descending Phone</option>
+                                                        <option value="AscendingItemName">Ascending ItemName</option>
+                                                        <option value="DescendingItemName">Descending ItemName</option>
+                                                        <option value="AscendingPerUnitPrice">Ascending PerUnitPrice</option>
+                                                        <option value="DescendingPerUnitPrice">Descending PerUnitPrice</option>
+                                                        <option value="AscendingIsApproved">Ascending IsApproved</option>
+                                                        <option value="DescendingIsApproved">Descending IsApproved</option>
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -74,38 +70,25 @@
 
                                 <div class="row w-100 ac-view-list">
 
-                                    <div class="row hide-sm table-light" style="position:sticky;TOP:0;z-index:99;background: #923eb9!important;height: 32px;padding-top: 5px;margin-right: 0px;">
+                                    <div class="row hide-sm table-light ac-view-header">
                                         <div class="col-5 text-center">
                                             <h5>Item Name</h5>
                                         </div>
-                                        <div class="col-2 ">
-                                            <h5>PerUnitPrice</h5>
+                                        <div class="col-3 text-center">
+                                            <h5>Unit Price</h5>
                                         </div>
-                                        <div class="col-2 ">
-                                            <h5>Is Approved</h5>
+                                        <div class="col-2 text-center">
+                                            <h5>Approved</h5>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-2 text-center">
                                             <h5>Action</h5>
                                         </div>
                                     </div>
-                                    <div class="card" id="Usertbody">
+                                    <div class="card" id="itemtbody">
                                     </div>
 
                                 </div>
-                                <div class="table-responsive mt-2  d-none" style="max-height:200PX;">
-                                    <table class="table align-middle mb-0" style="">
-                                        <thead class="table-light" id="userTable">
-                                            <tr>
-                                                <th>Item Name</th>
-                                                <th class="mb-2">PerUnitPrice</th>
-                                                <th class="mb-2">Is Approved</th>
-                                                <th class="mb-2">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="Itemtbody" style="max-height:20PX;">
-                                        </tbody>
-                                    </table>
-                                </div>
+
                             </div>
                         </div>
                         <!--end row-->
@@ -115,37 +98,37 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body">
-                                <h5 class="mb-0 mt-4">User Information</h5>
+                                <h5 class="mb-0 mt-4">Item Details</h5>
                                 <hr>
                                 <div class="row g-3">
                                     <div class="col-6">
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="dspFirstName" readonly>
-                                        <input type="hidden" class="form-control" id="dspUserid" readonly>
+                                        <label class="form-label">Item Name</label>
+                                        <input type="text" class="form-control" id="dspItemName" readonly>
+                                        <input type="hidden" class="form-control" id="dspItemId" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="dspLastName" readonly>
+                                        <label class="form-label">Unit Name</label>
+                                        <input type="text" class="form-control" id="dspUnitName" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="dspUserName" readonly>
+                                        <label class="form-label">Price Per Unit</label>
+                                        <input type="text" class="form-control" id="dspPricePerUnit" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Password</label>
-                                        <input type="text" class="form-control" id="dspPassword" readonly>
+                                        <label class="form-label">Price With Gst</label>
+                                        <input type="text" class="form-control" id="dspWithGst" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="dspEmail" readonly>
+                                        <label class="form-label">Gst Amount</label>
+                                        <input type="text" class="form-control" id="dspGstAmount" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="dspPhoneNo" readonly>
+                                        <label class="form-label">HsnCode</label>
+                                        <input type="text" class="form-control" id="dspHsnCode" readonly>
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label">Role</label>
-                                        <input type="text" class="form-control" id="dspRole" readonly>
+                                        <label class="form-label">IsApproved</label>
+                                        <input type="text" class="form-control" id="dspIsApproved" readonly>
                                     </div>
 
                                 </div>
@@ -158,9 +141,9 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createUser">
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItem">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create User</h5>
+            <h5 class="m-0 me-2 text-white">Create Item</h5>
 
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -171,39 +154,40 @@
                         <div class="card-body">
                             <form class="row g-3" id="userForm">
                                 <div class="col-12">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="First Name" id="txtFirstName" required>
-                                    <input type="hidden" id="txtUserid">
-                                    <span id="spnFirstName" class="text-danger"></span>
+                                    <label class="form-label">Item Name</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Item Name" id="txtItemName" required>
+                                    <input type="hidden" id="txtItemid">
+                                    <span id="spnItemName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Last Name" id="txtLastName" required>
-                                    <span id="spnLastName" class="text-danger"></span>
+                                    <label class="form-label">Unit Type</label>
+                                    <select class="form-control form-control-lg mb-3" id="txtUnitType" required>
+                                        <option selected disabled value="">--Select--</option>
+                                    </select>
+                                    <span id="spnUnitType" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">User Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="User Name" id="txtUserName" required>
-                                    <span id="spnUserName" class="text-danger"></span>
+                                    <label class="form-label">PricePerUnit</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Price Per Unit" id="txtPricePerUnit" required>
+                                    <span id="spnPricePerUnit" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Password</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Password" id="txtPassword" required>
-                                    <span id="spnPassword" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label">Email</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Email" id="txtEmail" required>
-                                    <span id="spnEmail" class="text-danger"></span>
+                                    <label class="form-label">GstAmount</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst Amount" id="txtGstAmount" required>
+                                    <span id="spnGstAmount" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Phone Number" id="txtPhoneNo" required>
-                                    <span id="spnPhoneNo" class="text-danger"></span>
+                                    <label class="form-label">GstPerUnit</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Gst Per Unit" id="txtGstPerUnit" required>
+                                    <span id="spnGstPerUnit" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateUser()" id="btnuser"></button>
+                                    <label class="form-label">HSNCode</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="HSN Code" id="txtHSNCode" required>
+                                    <span id="spnHSNCode" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItem()" id="btnitem"></button>
                                 </div>
                             </form>
 
@@ -216,7 +200,6 @@
 
     </div>
 </div>
-@*     @section Scripts {
-
-        <script src="~/moduls/authenticationscript.js"></script>
-    } *@
+@section Scripts {
+    <script src="~/moduls/itemmasterscript.js"></script>
+}

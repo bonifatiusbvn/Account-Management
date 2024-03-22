@@ -14,6 +14,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
 
         public string Mobile { get; set; }
 
+        public string Email { get; set; }
+
         public string? Gstno { get; set; }
 
         public string? BuildingName { get; set; }
@@ -21,10 +23,12 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public string Area { get; set; }
 
         public int State { get; set; }
+        public string? StateName { get; set; }
 
         public int City { get; set; }
+        public string? CityName { get; set; }
 
-        public string PincodeCode { get; set; }
+        public string PinCode { get; set; }
 
         public string? BankName { get; set; }
 
@@ -32,7 +36,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
 
         public string? Iffccode { get; set; }
 
-        public bool? IsApproved { get; set; }
+        public bool IsApproved { get; set; }
 
         public Guid CreatedBy { get; set; }
 

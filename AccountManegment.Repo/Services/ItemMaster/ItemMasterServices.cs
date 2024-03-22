@@ -23,14 +23,19 @@ namespace AccountManagement.Repository.Services.ItemMaster
             return await ItemMaster.AddItemDetails(ItemDetails);
         }
 
+        public async Task<IEnumerable<UnitMasterView>> GetAllUnitType()
+        {
+            return await ItemMaster.GetAllUnitType();
+        }
+
         public async Task<ItemMasterModel> GetItemDetailsById(Guid ItemId)
         {
             return await ItemMaster.GetItemDetailsById(ItemId);
         }
 
-        public async Task<IEnumerable<ItemMasterModel>> GetItemList()
+        public async Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await ItemMaster.GetItemList();
+            return await ItemMaster.GetItemList(searchText, searchBy, sortBy);
         }
 
         public async Task<ApiResponseModel> UpdateItemDetails(ItemMasterModel ItemDetails)

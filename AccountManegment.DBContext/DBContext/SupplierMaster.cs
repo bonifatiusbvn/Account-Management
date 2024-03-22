@@ -11,6 +11,8 @@ public partial class SupplierMaster
 
     public string Mobile { get; set; } = null!;
 
+    public string Email { get; set; } = null!;
+
     public string? Gstno { get; set; }
 
     public string? BuildingName { get; set; }
@@ -21,7 +23,7 @@ public partial class SupplierMaster
 
     public int City { get; set; }
 
-    public string PincodeCode { get; set; } = null!;
+    public string PinCode { get; set; } = null!;
 
     public string? BankName { get; set; }
 
@@ -29,7 +31,7 @@ public partial class SupplierMaster
 
     public string? Iffccode { get; set; }
 
-    public bool? IsApproved { get; set; }
+    public bool IsApproved { get; set; }
 
     public Guid CreatedBy { get; set; }
 

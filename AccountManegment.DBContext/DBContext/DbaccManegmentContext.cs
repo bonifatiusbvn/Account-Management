@@ -41,6 +41,7 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -185,6 +186,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.BankName).HasMaxLength(50);
             entity.Property(e => e.BuildingName).HasMaxLength(100);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Gstno)
                 .HasMaxLength(20)
                 .HasColumnName("GSTNo");
@@ -192,7 +194,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasMaxLength(10)
                 .HasColumnName("IFFCCode");
             entity.Property(e => e.Mobile).HasMaxLength(15);
-            entity.Property(e => e.PincodeCode).HasMaxLength(7);
+            entity.Property(e => e.PinCode).HasMaxLength(7);
             entity.Property(e => e.SupplierName).HasMaxLength(30);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
