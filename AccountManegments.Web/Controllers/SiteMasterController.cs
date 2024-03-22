@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
@@ -153,6 +154,24 @@ namespace AccountManegments.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetSiteNameList()
+        {
+            try
+            {
+                List<SiteMasterModel> SiteName = new List<SiteMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteNameList");
+                if (res.code == 200)
+                {
+                    SiteName = JsonConvert.DeserializeObject<List<SiteMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(SiteName);
             }
             catch (Exception ex)
             {

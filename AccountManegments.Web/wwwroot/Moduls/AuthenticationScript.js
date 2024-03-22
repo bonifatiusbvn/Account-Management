@@ -1,5 +1,6 @@
 ﻿AllUserTable();
-function CreateUser() {
+GetSiteDetails();
+function CreateUser() {debugger
 
     var objData = {
         FirstName: $('#txtFirstName').val(),
@@ -8,6 +9,7 @@ function CreateUser() {
         Password: $('#txtPassword').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
+        SiteId: $('#txtSiteName').val(),
 
     }
     $.ajax({
@@ -28,7 +30,17 @@ function CreateUser() {
         },
     })
 }
+function GetSiteDetails() {
 
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+            });
+        }
+    });
+}
 
 function ClearTextBox() {
     resetErrorMessages();
@@ -62,6 +74,7 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
+            $('#txtSiteName').val(response.siteId);
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
@@ -95,6 +108,7 @@ function SelectUserDetails(UserId, element) {
                 $('#dspEmail').val(response.email);
                 $('#dspPhoneNo').val(response.phoneNo);
                 $('#dspRole').val(response.roleName);
+                $('#dspSiteName').val(response.siteName);
             } else {
                 console.log('Empty response received.');
             }
@@ -170,6 +184,7 @@ function UpdateUserDetails() {
         Password: $('#txtPassword').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
+        SiteId: $('#txtSiteName').val(),
     }
     $.ajax({
         url: '/User/UpdateUserDetails',
@@ -200,6 +215,7 @@ function validateAndCreateUser() {
     var password = document.getElementById("txtPassword").value.trim();
     var email = document.getElementById("txtEmail").value.trim();
     var phoneNo = document.getElementById("txtPhoneNo").value.trim();
+    var SiteName = document.getElementById("txtSiteName").value.trim();
 
 
     var isValid = true;
@@ -246,9 +262,13 @@ function validateAndCreateUser() {
         isValid = false;
     }
 
+    if (SiteName === "") {
+        document.getElementById("spnSiteName").innerText = "Site Name is required.";
+        isValid = false;
+    }
 
     if (isValid) {
-        if ($("#txtxUserid").val() == '') {
+        if ($("#txtUserid").val() == '') {
             CreateUser();
         }
         else {
@@ -265,6 +285,7 @@ function resetErrorMessages() {
     document.getElementById("spnPassword").innerText = "";
     document.getElementById("spnEmail").innerText = "";
     document.getElementById("spnPhoneNo").innerText = "";
+    document.getElementById("spnSiteName").innerText = "";
 }
 
 
@@ -332,7 +353,94 @@ function UserActiveDecative(UserId) {
 }
 
 
+function deleteUserDetails(UserId) {
 
+function UserLogout() {
+    Swal.fire({
+        title: 'Logout Confirmation',
+        text: 'Are you sure you want to logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            logout();
+        }
+    });
+}
+
+function logout() {
+
+    fetch('/Authentication/Logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
+
+        },
+        body: ''
+    })
+        .then(response => {
+
+            window.location.href = '/Authentication/UserLogin';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+
+        });
+}
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/User/DeleteUserDetails?UserId=' + UserId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/User/UserListView';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete User!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/User/UserListView';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'User Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 
 
 

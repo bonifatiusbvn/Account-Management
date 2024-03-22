@@ -30,6 +30,11 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.CreateUser(CreateUser);
         }
 
+        public async Task<UserResponceModel> DeleteUserDetails(Guid UserId)
+        {
+            return await Authentication.DeleteUserDetails(UserId);
+        }
+
         public async Task<LoginView> GetUserById(Guid UserId)
         {
             return await Authentication.GetUserById(UserId);

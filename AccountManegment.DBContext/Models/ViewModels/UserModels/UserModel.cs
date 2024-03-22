@@ -25,6 +25,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string RoleName { get; set; }
 
         public DateTime CreatedOn { get; set; }
+        public string? SiteName { get; set; }
+        public Guid? SiteId { get; set; }
+        public bool? IsDeleted { get; set; }
     }
     public class LoginResponseModel
     {

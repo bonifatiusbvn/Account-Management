@@ -120,5 +120,31 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+        [HttpPost]
+        [Route("DeleteUserDetails")]
+        public async Task<IActionResult> DeleteUserDetails(Guid UserId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var User = await Authentication.DeleteUserDetails(UserId);
+            try
+            {
+                if (User != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = User.Message;
+                }
+                else
+                {
+                    responseModel.Message = User.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

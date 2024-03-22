@@ -22,6 +22,9 @@ public partial class ItemMaster
     public string? Hsncode { get; set; }
 
     public bool? IsApproved { get; set; }
+    public bool? IsDeleted { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
 

@@ -23,6 +23,11 @@ namespace AccountManagement.Repository.Services.ItemMaster
             return await ItemMaster.AddItemDetails(ItemDetails);
         }
 
+        public async Task<ApiResponseModel> DeleteItemDetails(Guid ItemId)
+        {
+            return await ItemMaster.DeleteItemDetails(ItemId);
+        }
+
         public async Task<IEnumerable<UnitMasterView>> GetAllUnitType()
         {
             return await ItemMaster.GetAllUnitType();
@@ -36,6 +41,11 @@ namespace AccountManagement.Repository.Services.ItemMaster
         public async Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy)
         {
             return await ItemMaster.GetItemList(searchText, searchBy, sortBy);
+        }
+
+        public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
+        {
+            return await ItemMaster.ItemIsApproved(ItemId);
         }
 
         public async Task<ApiResponseModel> UpdateItemDetails(ItemMasterModel ItemDetails)

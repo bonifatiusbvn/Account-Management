@@ -50,6 +50,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     CreatedBy = Supplier.CreatedBy,
                     CreatedOn = DateTime.Now,
                     IsApproved = true,
+                    IsDelete = false,
                 };
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Supplier Successfully Added";
@@ -108,6 +109,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 IEnumerable<SupplierModel> SupplierList = (from e in Context.SupplierMasters
                                                            join s in Context.States on e.State equals s.StatesId
                                                            join c in Context.Cities on e.City equals c.CityId
+                                                           where e.IsDelete == false
                                                            select new SupplierModel
                                                            {
                                                                SupplierId = e.SupplierId,

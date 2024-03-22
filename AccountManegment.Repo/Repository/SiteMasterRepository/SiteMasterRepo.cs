@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
@@ -301,6 +302,23 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
              return response;
+        }
+
+        public async Task<IEnumerable<SiteMasterModel>> GetSiteNameList()
+        {
+            try
+            {
+                IEnumerable<SiteMasterModel> SiteName = Context.Sites.ToList().Select(a => new SiteMasterModel
+                {
+                    SiteId = a.SiteId,
+                    SiteName = a.SiteName,
+                });
+                return SiteName;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

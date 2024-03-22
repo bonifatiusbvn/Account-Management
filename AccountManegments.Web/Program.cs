@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddScoped<WebAPI, WebAPI>();
 builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<Common>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
