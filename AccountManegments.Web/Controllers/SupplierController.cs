@@ -71,12 +71,12 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        public async Task<JsonResult> DisplaySupplier(Guid Supplier)
+        public async Task<JsonResult> DisplaySupplier(Guid SupplierId)
         {
             try
             {
                 SupplierModel UserDetails = new SupplierModel();
-                ApiResponseModel res = await APIServices.GetAsync("", "SupplierMaster/GetSupplierById?Supplier=" + Supplier);
+                ApiResponseModel res = await APIServices.GetAsync("", "SupplierMaster/GetSupplierById?SupplierId=" + SupplierId);
                 if (res.code == 200)
                 {
                     UserDetails = JsonConvert.DeserializeObject<SupplierModel>(res.data.ToString());

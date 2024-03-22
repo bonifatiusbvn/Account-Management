@@ -44,9 +44,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetSupplierById")]
-        public async Task<IActionResult> GetEmployeeById(Guid Supplier)
+        public async Task<IActionResult> GetEmployeeById(Guid SupplierId)
         {
-            var SupplierProfile = await _Supplier.GetSupplierById(Supplier);
+            var SupplierProfile = await _Supplier.GetSupplierById(SupplierId);
             return Ok(new { code = 200, data = SupplierProfile });
         }
 
