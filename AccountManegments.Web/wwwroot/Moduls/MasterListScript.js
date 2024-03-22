@@ -3,12 +3,21 @@ $(document).ready(function () {
 
     GetCountry();
 
+    $('#dropState').change(function () {
+        debugger
+        var Text = $("#dropState Option:Selected").text();
+        var txtstateid = $(this).val();
+        $("#txtstate").val(txtstateid);
+    });
+
     $('#ddlCity').change(function () {
         debugger
         var Text = $("#ddlCity Option:Selected").text();
-        var txtcity = $(this).val();
-        $("#txtcity").val(txtcity);
+        var txtcityid = $(this).val();
+        $("#txtcity").val(txtcityid);
     });
+
+
 
 });
 
@@ -18,13 +27,12 @@ function fn_getState(drpstate, countryId, that) {
         var cid = $(that).val();
     }
 
-    debugger
     $('#' + drpstate).empty();
     $('#' + drpstate).append('<Option >--Select State--</Option>');
     $.ajax({
         url: '/Authentication/GetState?StateId=' + cid,
         success: function (result) {
-            debugger
+
             $.each(result, function (i, data) {
                 $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
             });
@@ -33,12 +41,11 @@ function fn_getState(drpstate, countryId, that) {
 }
 
 function fn_getcitiesbystateId(drpcity, stateid, that) {
+
     var sid = stateid;
     if (sid == undefined || sid == null) {
         var sid = $(that).val();
     }
-    debugger
-
     $('#' + drpcity).empty();
     $('#' + drpcity).append('<Option >--Select City--</Option>');
     $.ajax({
