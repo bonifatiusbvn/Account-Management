@@ -38,11 +38,11 @@
                                             <div class="row g-3">
 
                                                 <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
+                                                    <input class="form-control form-control-lg" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
                                                     </input>
                                                 </div>
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                                    <select class="form-select form-select-lg" id="ddlSearchBy" onchange="filterTable()">
                                                         <option selected="selected">All</option>
                                                         <option>UserName</option>
                                                         <option>Email</option>
@@ -51,16 +51,14 @@
                                                 </div>
 
                                                 <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                        <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                        <option value="AscendingRole">Ascending Role</option>
-                                                        <option value="DescendingRole">Descending Role</option>
-                                                        <option value="AscendingActive">Ascending Active</option>
-                                                        <option value="DescendingActive">Descending Active</option>
-                                                        <option value="AscendingEmail">Ascending Email</option>
-                                                        <option value="DescendingEmail">Descending Email</option>
+                                                    <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortTable()">
+                                                        <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                        <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                        <option value="AscendingEmail">UserName(a-z)</option>
+                                                        <option value="AscendingEmail">UserName(z-a)</option>
+                                                        @* <option value="DescendingEmail">Email-Asc</option>
                                                         <option value="AscendingPhone">Ascending Phone</option>
-                                                        <option value="DescendingPhone">Descending Phone</option>
+                                                        <option value="DescendingPhone">Descending Phone</option> *@
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -91,7 +89,7 @@
                                     </div>
 
                                 </div>
-                                <div class="table-responsive mt-2  " style="max-height:200PX;">
+                                <div class="table-responsive mt-2  d-none" style="max-height:200PX;">
                                     <table class="table align-middle mb-0" style="">
                                         <thead class="table-light" id="userTable">
                                             <tr>
@@ -174,34 +172,34 @@
                             <form class="row g-3" id="userForm">
                                 <div class="col-12">
                                     <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="First Name" id="txtFirstName" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="First Name" id="txtFirstName" required>
                                     <input type="hidden" id="txtUserid">
                                     <span id="spnFirstName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Last Name" id="txtLastName" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="Last Name" id="txtLastName" required>
                                     <span id="spnLastName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">User Name</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="User Name" id="txtUserName" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="User Name" id="txtUserName" required>
                                     <span id="spnUserName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Password</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Password" id="txtPassword" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="Password" id="txtPassword" required>
                                     <span id="spnPassword" class="text-danger"></span>
                                 </div>
 
                                 <div class="col-12">
                                     <label class="form-label">Email</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Email" id="txtEmail" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="Email" id="txtEmail" required>
                                     <span id="spnEmail" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Phone Number" id="txtPhoneNo" required>
+                                    <input type="text" class="form-control form-control-lg " placeholder="Phone Number" id="txtPhoneNo" required>
                                     <span id="spnPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
