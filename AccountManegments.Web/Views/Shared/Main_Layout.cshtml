@@ -62,57 +62,7 @@
             <!--navigation-->
 
             <ul class="metismenu" id="menu">
-                @* <li>
-                @* <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon">
-                <ion-icon name="bag-handle-sharp"></ion-icon>
-                </div>
-                <div class="menu-title">eCommerce</div>
-                </a>
-                <ul>
-                < li>
-                <a href="ecommerce-shop-grid-view.html">
-                <ion-icon name="ellipse-outline"></ion-icon>Product Grid
-                </a>
-                </li>
                 <li>
-                <a href="ecommerce-shop-list-view.html">
-                <ion-icon name="ellipse-outline"></ion-icon>Product List
-                </a>
-                </li>
-                <li>
-                <a asp-action="SupplierList" asp-controller="Supplier">
-                <ion-icon name="ellipse-outline"></ion-icon>Supplier Master
-                </a>
-                </li>
-                <li>
-                <a href="ecommerce-product-details.html">
-                <ion-icon name="ellipse-outline"></ion-icon>Product Details
-                </a>
-                </li>
-                <li>
-                <a href="ecommerce-product-comparison.html">
-                <ion-icon name="ellipse-outline"></ion-icon>Product Comparison
-                </a>
-                </li> *@
-                @*  <li>
-                <a asp-action="CreateCompany" asp-controller="Company">
-                <ion-icon name="ellipse-outline"></ion-icon>Create Company
-                </a>
-                </li>
-                <li>
-                <a asp-action="ItemListView" asp-controller="ItemMaster">
-                <ion-icon name="ellipse-outline"></ion-icon>Item List
-                </a>
-                </li>
-                <li>
-                <a asp-action="SiteListView" asp-controller="SiteMaster">
-                <ion-icon name="ellipse-outline"></ion-icon>Site
-                </a>
-                </li>
-                </ul>
-                </li> *@
-                <li class="mm-active">
                     <a asp-action="CreateCompany" asp-controller="Company">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
@@ -120,7 +70,7 @@
                         <div class="menu-title">Company</div>
                     </a>
                 </li>
-                <li class="mm-active">
+                <li>
                     <a asp-action="SiteListView" asp-controller="SiteMaster">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
@@ -129,7 +79,7 @@
                     </a>
 
                 </li>
-                <li class="mm-active">
+                <li>
                     <a asp-action="ItemListView" asp-controller="ItemMaster">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
@@ -137,7 +87,7 @@
                         <div class="menu-title">Item</div>
                     </a>
                 </li>
-                <li class="mm-active">
+                <li>
                     <a asp-action="SupplierList" asp-controller="Supplier">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
@@ -145,9 +95,8 @@
                         <div class="menu-title">Supplier</div>
                     </a>
                 </li>
-                @* <li class="menu-label">Pages</li> *@
                 <li>
-                    <a class="has-arrow" href="javascript:;">
+                    <a class="has-arrow">
                         <div class="parent-icon">
                             <ion-icon name="lock-closed-sharp"></ion-icon>
                         </div>
@@ -273,7 +222,7 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-action="Logout" asp-controller="Authentication">
+                                    <a class="dropdown-item" onclick="UserLogout()">
                                         <div class="d-flex align-items-center">
                                             <div class="">
                                                 <ion-icon name="log-out-outline"></ion-icon>
@@ -405,7 +354,7 @@
 
     <script src="~/assets/js/main.js"></script>
     <!--end wrapper-->
-    <!-- Sweet Alerts js -->
+    <script src="~/moduls/authenticationscript.js"></script>
     <!-- listjs init -->
 
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -425,3 +374,24 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    const listItems = document.querySelectorAll('.metismenu > li');
+
+    listItems.forEach(item => {
+        item.addEventListener('click', event => {
+            const hasChildren = item.querySelector('ul');
+
+            listItems.forEach(li => li.classList.remove('mm-active'));
+
+            if (!hasChildren) {
+                item.classList.add('mm-active');
+            } else {
+
+                item.classList.toggle('mm-active');
+            }
+
+            event.stopPropagation();
+        });
+    });
+
+</script>

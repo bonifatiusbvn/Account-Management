@@ -32,37 +32,38 @@
                         <div class="card shadow-none">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h4>Sign In</h4>
+                                    <h6>Welcome To</h6>
+                                    <h2> D. M.Infra</h2>
                                     <p>Sign In to your account</p>
                                 </div>
                                 <form class="form-body row g-3" asp-action="UserLogin" asp-controller="Authentication" method="post">
                                     <div class="col-12">
-                                        <label for="inputEmail" class="form-label">Email</label>
-                                        <input type="text" class="form-control" asp-for="UserName">
+                                        <label for="inputEmail" class="form-label">User Name</label>
+                                        <input type="text" class="form-control" asp-for="UserName" placeholder="User Name">
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                     <div class="col-12">
                                         <label for="inputPassword" class="form-label">Password</label>
-                                        <input type="password" class="form-control" asp-for="Password">
+                                        <input type="password" class="form-control" asp-for="Password" placeholder="Password">
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                         <span class="text-danger">@TempData["ErrorMessage"]</span>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRemember">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRemember" asp-for="RememberMe">
                                             <label class="form-check-label" for="flexSwitchCheckRemember">Remember Me</label>
                                         </div>
+
                                     </div>
-                                    <div class="col-12 col-lg-6 text-end">
-                                        <a href="authentication-reset-password-cover.html">Forgot Password?</a>
-                                    </div>
+
                                     <div class="col-12 col-lg-12">
                                         <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">Sign Ini</button>
+                                            <button type="submit" class="btn btn-primary">Sign In</button>
                                         </div>
                                     </div>
 
                                 </form>
+
                             </div>
                         </div>
                     </div>

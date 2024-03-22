@@ -102,47 +102,56 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+
+                ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
+                LoginResponseModel userlogin = new LoginResponseModel();
+
+                if (responsemodel.code != (int)HttpStatusCode.OK)
                 {
-
-                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
-                    LoginResponseModel userlogin = new LoginResponseModel();
-
-
-                    if (responsemodel.code != (int)HttpStatusCode.OK)
+                    if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                     {
-                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
-                        }
-                        else
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                        }
+                        TempData["ErrorMessage"] = responsemodel.message;
+                        return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
                     }
-
                     else
                     {
-                        var data = JsonConvert.SerializeObject(responsemodel.data);
-                        userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
-                        var claims = new List<Claim>()
-                              {
-                                new Claim("UserId", userlogin.Data.Id.ToString()),
-                                new Claim("FullName", userlogin.Data.FullName),
-                                new Claim("UserName", userlogin.Data.UserName),
-                              };
-
-
-
-
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                        return RedirectToAction("Index", "Home");
+                        TempData["ErrorMessage"] = responsemodel.message;
                     }
                 }
+
+                else
+                {
+                    var data = JsonConvert.SerializeObject(responsemodel.data);
+                    userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                    var claims = new List<Claim>()
+                {
+                    new Claim("UserId", userlogin.Data.Id.ToString()),
+                    new Claim("FullName", userlogin.Data.FullName),
+                    new Claim("UserName", userlogin.Data.UserName),
+                };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+
+
+                    if (login.RememberMe)
+                    {
+                        CookieOptions cookie = new CookieOptions();
+                        cookie.Expires = DateTime.Now.AddYears(1);
+                        Response.Cookies.Append("UserName", (login.UserName), cookie);
+                        Response.Cookies.Append("Password", (login.Password), cookie);
+                    }
+                    else
+                    {
+                        Response.Cookies.Delete("UserName");
+                        Response.Cookies.Delete("Password");
+
+                    }
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                    return RedirectToAction("Index", "Home");
+                }
+
                 return View();
             }
             catch (Exception ex)
@@ -150,6 +159,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
