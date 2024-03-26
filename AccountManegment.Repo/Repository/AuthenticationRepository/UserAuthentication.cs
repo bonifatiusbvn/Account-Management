@@ -84,6 +84,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         Password = CreateUser.Password,
                         RoleId = 3,
                         IsActive = true,
+                        SiteId=CreateUser.SiteId,
+                        IsDeleted=false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
@@ -105,6 +107,22 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             return response;
         }
 
+        public async Task<UserResponceModel> DeleteUserDetails(Guid UserId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetUserdata = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
+
+            if (GetUserdata != null)
+            {
+                GetUserdata.IsDeleted = true;
+                Context.Users.Update(GetUserdata);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Data = GetUserdata;
+                response.Message = "User is Deleted Successfully";
+            }
+            return response;
+        }
 
         public async Task<LoginView> GetUserById(Guid UserId)
         {
@@ -113,6 +131,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
                             join r in Context.UserRoles on e.RoleId equals r.RoleId
+                            join p in Context.Sites on e.SiteId equals p.SiteId
                             select new LoginView
                             {
                                 Id = e.Id,
@@ -124,7 +143,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
                                 RoleName = r.Role,
-
+                                SiteName = p.SiteName,
+                                SiteId = e.SiteId,
                             }).First();
                 return Userdata;
             }
@@ -141,6 +161,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
                 IEnumerable<LoginView> userList = (from e in Context.Users
                                                    join r in Context.UserRoles on e.RoleId equals r.RoleId
+                                                   join p in Context.Sites on e.SiteId equals p.SiteId
+                                                   where e.IsDeleted == false
                                                    select new LoginView
                                                    {
                                                        Id = e.Id,
@@ -150,7 +172,9 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        Email = e.Email,
                                                        PhoneNo = e.PhoneNo,
                                                        IsActive = e.IsActive,
-                                                       RoleName = r.Role
+                                                       RoleName = r.Role,
+                                                       SiteName = p.SiteName,
+                                                       SiteId = e.SiteId,
                                                    });
 
 

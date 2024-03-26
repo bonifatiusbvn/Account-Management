@@ -19,6 +19,7 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
 
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
+        Task<UserResponceModel> DeleteUserDetails(Guid UserId);
 
 
     }

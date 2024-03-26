@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
@@ -40,6 +41,16 @@ namespace AccountManagement.Repository.Services.SiteMaster
         public async Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId)
         {
             return await SiteMaster.ActiveDeactiveSite(SiteId);
+        }
+
+        public async Task<ApiResponseModel> DeleteSite(Guid SiteId)
+        {
+            return await SiteMaster.DeleteSite(SiteId);
+        }
+
+        public async Task<IEnumerable<SiteMasterModel>> GetSiteNameList()
+        {
+            return await SiteMaster.GetSiteNameList();
         }
     }
 }

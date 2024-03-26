@@ -16,5 +16,7 @@ namespace AccountManagement.Repository.Interface.Repository.SiteMaster
         Task<SiteMasterModel> GetSiteDetailsById(Guid SiteId);
         Task<ApiResponseModel> UpdateSiteDetails(SiteMasterModel SiteDetails);
         Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId);
+        Task<ApiResponseModel> DeleteSite(Guid SiteId);
+        Task<IEnumerable<SiteMasterModel>> GetSiteNameList();
     }
 }

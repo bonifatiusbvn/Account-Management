@@ -95,6 +95,7 @@ namespace AccountManegments.Web.Controllers
                     Email = CreatUser.Email,
                     Password = CreatUser.Password,
                     PhoneNo = CreatUser.PhoneNo,
+                    SiteId = CreatUser.SiteId,
                     CreatedBy = _userSession.UserId,
                 };
 
@@ -157,6 +158,26 @@ namespace AccountManegments.Web.Controllers
 
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
 
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserDetails(Guid UserId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/DeleteUserDetails?UserId=" + UserId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {

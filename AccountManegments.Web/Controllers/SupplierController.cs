@@ -111,5 +111,25 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteSupplierDetails(Guid SupplierId)
+        {
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(null, "SupplierMaster/DeleteSupplierDetails?SupplierId=" + SupplierId);
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

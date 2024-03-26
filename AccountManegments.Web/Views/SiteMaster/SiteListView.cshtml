@@ -22,7 +22,7 @@
         <div class="d-flex align-items-center">
             <h2 class="h5 mb-0">Site Details</h2>
             <form class="ms-auto position-relative">
-                <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
+                <button type="button" class="btn btn-info px-5" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
             </form>
         </div>
         <div class="my-3 border-bottom"></div>
@@ -38,28 +38,22 @@
                                         <div class="row g-3">
 
                                             <div class="col-12 col-lg-4">
-                                                <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
+                                                <input class="form-control" id="txtSiteSearch" onkeyup="SitefilterTable()" placeholder="Search">
                                             </div>
                                             <div class="col-12 col-lg-4">
-                                                <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                                <select class="form-select" id="SiteSearchBy" onchange="SitefilterTable()">
                                                     <option selected="selected">All</option>
-                                                    <option>Site Name</option>
-                                                    <option>Person Name</option>
-                                                    <option>Phone No</option>
+                                                    <option>SiteName</option>
+                                                    <option>ContactPersonName</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-12 col-lg-4">
-                                                <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                    <option value="DescendingCreatedOn" selected="selected">Default sorting</option>
-                                                    <option value="AscendingSitename">Ascending Sitename</option>
-                                                    <option value="DescendingSitename">Descending Sitename</option>
-                                                    <option value="AscendingActive">Ascending Active</option>
-                                                    <option value="DescendingActive">Descending Active</option>
-                                                    <option value="AscendingContectPersonName">Ascending ContectPersonName</option>
-                                                    <option value="DescendingContectPersonName">DescendingContectPersonName</option>
-                                                    <option value="AscendingContectPersonPhoneNo">Ascending ContectPersonPhoneNo</option>
-                                                    <option value="DescendingContectPersonPhoneNo">Descending ContectPersonPhoneNo</option>
+                                                <select class="form-select" id="SiteDataSortBy" onchange="sortSiteTable()">
+                                                    <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                    <option value="AscendingCreatedOn">First Created</option>
+                                                    <option value="AscendingSitename">Sitename (A-Z)</option>
+                                                    <option value="DescendingSitename">Sitename (Z-A)</option>
                                                 </select>
                                             </div>
                                         </div><!--end row-->
@@ -77,7 +71,7 @@
                                         <h5>Site Name</h5>
                                     </div>
                                     <div class="col-3 text-center">
-                                        <h5>Person Name</h5>
+                                        <h5>Contact Name</h5>
                                     </div>
                                     <div class="col-2 ">
                                         <h5>Active</h5>
@@ -102,7 +96,7 @@
                         <div class="card-body">
                             <h5 class="mb-0 mt-4">Site Information</h5>
                             <hr>
-                            <div class="row g-3">
+                            <div class="row g-3 ac-detail d-none">
                                 <div class="col-12">
                                     <label class="form-label">Site Name</label>
                                     <input type="text" class="form-control" id="dspSiteName" readonly>
@@ -116,9 +110,9 @@
                                     <label class="form-label">Contact Person Phone No</label>
                                     <input type="text" class="form-control" id="dspContactPersonPhoneNo" readonly>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="dspAddress" readonly>
+                                    <textarea type="text" class="form-control" row="3" id="dspAddress" readonly></textarea>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">City</label>
@@ -153,110 +147,100 @@
                         <form class="row g-3" id="siteForm">
                             <div class="col-12">
                                 <label class="form-label">Site Name</label>
-                                <input type="text" class="form-control mb-3" placeholder="Site Name" id="txtSiteName" required>
+                                <input type="text" class="form-control" placeholder="Site Name" id="txtSiteName" required>
                                 <input type="hidden" id="txtSiteid">
                                 <span id="spnSiteName" class="text-danger"></span>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Contact Person Name</label>
-                                <input type="text" class="form-control mb-3" placeholder="Contact Person Name" id="txtContectPersonName" required>
+                                <label class="form-label">Contact Name</label>
+                                <input type="text" class="form-control" placeholder="Contact Person Name" id="txtContectPersonName" required>
                                 <span id="spnContectPersonName" class="text-danger"></span>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Contact Person Phone No.</label>
+                                <label class="form-label">Contact Phone No.</label>
                                 <input type="text" class="form-control" placeholder="Contact Person Phone No." id="txtContectPersonPhoneNo" required>
                                 <span id="spnContectPersonPhoneNo" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Country</label>
-                                    <select id="ddlCountry" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select Country--</option>
-                                    </select>
-                                    <input type="hidden" id="txtcountry" value="" />
-                                    <span id="spnCountry" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">State</label>
-                                    <select id="ddlState" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select State--</option>
-                                    </select>
-                                    <input type="hidden" id="txtstate" value="" />
-                                    <span id="spnState" class="text-danger"></span>
-                                </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" required></textarea>
+                                <span id="spnAddress" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select City--</option>
-                                    </select>
-                                    <input type="hidden" id="txtcity" name="txtcity" value="" />
-                                    <span id="spnCity" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Area</label>
-                                    <input type="text" class="form-control mb-3" placeholder="Area" id="txtArea" required>
-                                    <span id="spnArea" class="text-danger"></span>
-                                </div>
+                            <div class="col-12">
+                                <label class="form-label">Area</label>
+                                <input type="text" class="form-control" placeholder="Area" id="txtArea" required>
+                                <span id="spnArea" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" class="form-control mb-3" placeholder="Address" id="txtAddress" required>
-                                    <span id="spnAddress" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Pincode</label>
-                                    <input type="text" class="form-control mb-3" placeholder="Pincode" id="txtPincode" required>
-                                    <span id="spnPincode" class="text-danger"></span>
-                                </div>
+                            <div class="col-6">
+                                <label class="form-label">Pincode</label>
+                                <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" required>
+                                <span id="spnPincode" class="text-danger"></span>
                             </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label"> Shipping Country</label>
-                                    <select id="ddlShippingCountry" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select Country--</option>
-                                    </select>
-                                    <input type="hidden" id="txtShippingcountry" value="" />
-                                    <span id="spnShippingCountry" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label"> Shipping State</label>
-                                    <select id="ddlShippingState" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select State--</option>
-                                    </select>
-                                    <input type="hidden" id="txtShippingstate" value="" />
-                                    <span id="spnShippingState" class="text-danger"></span>
-                                </div>
+                            <div class="col-6">
+                                <label class="form-label">City</label>
+                                <select id="ddlCity" class="form-control" required>
+                                    <option>--Select City--</option>
+                                </select>
+                                <input type="hidden" id="txtSiteCity" value="" />
+                                <span id="spnCity" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Shipping City</label>
-                                    <select id="ddlShippingCity" class="form-control mb-3 bg-transparent" required>
-                                        <option>--Select City--</option>
-                                    </select>
-                                    <input type="hidden" id="txtShippingcity" value="" />
-                                    <span id="spnShippingCity" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Shipping Area</label>
-                                    <input type="text" class="form-control mb-3" placeholder="Shipping Area" id="txtShippingArea" required>
-                                    <span id="spnShippingArea" class="text-danger"></span>
-                                </div>
+                            <div class="col-6">
+                                <label class="form-label">State</label>
+                                <select id="stateDropdown" class="form-control" onchange="fn_getcitiesbystateId('ddlCity', null, this)" required>
+                                    <option>--Select State--</option>
+                                </select>
+                                <input type="hidden" id="txtSiteState" value="" />
+                                <span id="spnState" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="form-label">Shipping Address</label>
-                                    <input type="text" class="form-control mb-3" placeholder="Shipping Address" id="txtShippingAddress" required>
-                                    <span id="spnShippingAddress" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">Shipping Pincode</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Shipping Pincode" id="txtShippingPincode" required>
-                                    <span id="spnShippingPincode" class="text-danger"></span>
-                                </div>
+                            <div class="col-6">
+                                <label class="form-label">Country</label>
+                                <select id="ddlCountry" class="form-control" onchange="fn_getState('stateDropdown',null,this)" required>
+                                    <option>--Select Country--</option>
+                                </select>
+                                <input type="hidden" id="txtSiteCountry" value="" />
+                                <span id="spnCountry" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <h5><b>Shipping Address</b></h5>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Shipping Address</label>
+                                <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" required></textarea>
+                                <span id="spnShippingAddress" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Shipping Area</label>
+                                <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" required>
+                                <span id="spnShippingArea" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Shipping Pincode</label>
+                                <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" required>
+                                <span id="spnShippingPincode" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Shipping City</label>
+                                <select id="ShippingCity" class="form-control" required>
+                                    <option>--Select City--</option>
+                                </select>
+                                <input type="hidden" id="txtShippingCity" value="" />
+                                <span id="spnShippingCity" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label"> Shipping State</label>
+                                <select id="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)" required>
+                                    <option>--Select State--</option>
+                                </select>
+                                <input type="hidden" id="txtShippingState" value="" />
+                                <span id="spnShippingState" class="text-danger"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label"> Shipping Country</label>
+                                <select id="shippingCountry" class="form-control " onchange="fn_getShippingState('ShippingState', null, this)" required>
+                                    <option value=" ">--Select Country--</option>
+                                </select>
+                                <input type="hidden" id="txtShippingCountry" value="" />
+                                <span id="spnShippingCountry" class="text-danger"></span>
                             </div>
                             <div class="col-12">
                                 <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite"></button>
@@ -272,9 +256,9 @@
 </div>
 
 @section Scripts {
-
-    <script src="~/moduls/sitemasterscript.js"></script>
     <script src="~/moduls/masterlistscript.js"></script>
+    <script src="~/moduls/sitemasterscript.js"></script>
+    
 }
 
 

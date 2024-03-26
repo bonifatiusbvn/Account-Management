@@ -26,6 +26,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public string? Hsncode { get; set; }
 
         public bool? IsApproved { get; set; }
+
+        public bool? IsDeleted { get; set; }
         [Required]
         public Guid CreatedBy { get; set; }
         [Required]

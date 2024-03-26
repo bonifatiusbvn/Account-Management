@@ -1,8 +1,11 @@
 ﻿AllSiteListTable();
+fn_getState('stateDropdown', 1);
+fn_getShippingState('ShippingState', 1);
+
 function AllSiteListTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSiteSearch').val();
+    var searchBy = $('#SiteSearchBy').val();
 
     $.get("/SiteMaster/SiteListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
@@ -15,10 +18,10 @@ function AllSiteListTable() {
         });
 }
 
-function filterTable() {
+function SitefilterTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSiteSearch').val();
+    var searchBy = $('#SiteSearchBy').val();
 
     $.ajax({
         url: '/SiteMaster/SiteListAction',
@@ -36,8 +39,8 @@ function filterTable() {
     });
 }
 
-function sortTable() {
-    var sortBy = $('#ddlSortBy').val();
+function sortSiteTable() {
+    var sortBy = $('#SiteDataSortBy').val();
     $.ajax({
         url: '/SiteMaster/SiteListAction',
         type: 'GET',
@@ -54,36 +57,41 @@ function sortTable() {
 }
 
 function DisplaySiteDetails(SiteId) {
-    debugger 
+  
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-     debugger
+  
             $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
-            $('#txtcity').val(response.cityId);
-            $('#txtstate').val(response.stateId);
-            $('#txtcountry').val(response.country);
+            $('#stateDropdown').val(response.stateId);
+            fn_getcitiesbystateId('ddlCity', response.stateId)
+            $('#txtSiteCountry').val(response.country);
             $('#txtPincode').val(response.pincode);
             $('#txtShippingAddress').val(response.shippingAddress);
             $('#txtShippingArea').val(response.shippingArea);
-            $('#txtShippingcity').val(response.shippingCityName);
-            $('#txtShippingstate').val(response.shippingState);
-            $('#txtShippingcountry').val(response.shippingCountry);
+            fn_getShippingcitiesbystateId('ShippingCity', response.shippingStateId)
+            $('#ShippingState').val(response.shippingStateId);
+            $('#txtShippingCountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
+
+    
+            setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
+
             var button = document.getElementById("btnSite");
             if ($('#txtSiteid').val() != '') {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSite'));
             offcanvas.show();
+            resetErrorMessages();
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -129,15 +137,15 @@ function CreateSite() {
         Address:$('#txtAddress').val(),
         Area:$('#txtArea').val(),
         CityId: $('#ddlCity').val(),
-        StateId: $('#ddlState').val(),
+        StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode:$('#txtPincode').val(),
         ShippingAddress: $('#txtShippingAddress').val(),
         ShippingArea:$('#txtShippingArea').val(),
         ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ddlShippingCity').val(),
-        ShippingStateId: $('#ddlShippingState').val(),
-        ShippingCountry: $('#ddlShippingCountry').val(),
+        ShippingCityId: $('#ShippingCity').val(),
+        ShippingStateId: $('#ShippingState').val(),
+        ShippingCountry: $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/CreateSite',
@@ -168,15 +176,15 @@ function UpdateSiteDetails() {
         Address: $('#txtAddress').val(),
         Area: $('#txtArea').val(),
         CityId: $('#ddlCity').val(),
-        StateId: $('#ddlState').val(),
+        StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode: $('#txtPincode').val(),
         ShippingAddress: $('#txtShippingAddress').val(),
         ShippingArea: $('#txtShippingArea').val(),
         ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ddlShippingCity').val(),
-        ShippingStateId: $('#ddlShippingState').val(),
-        ShippingCountry: $('#ddlShippingCountry').val(),
+        ShippingCityId: $('#ShippingCity').val(),
+        ShippingStateId: $('#ShippingState').val(),
+        ShippingCountry: $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/UpdateSiteDetails',
@@ -198,7 +206,8 @@ function UpdateSiteDetails() {
 
 }
 
-function ClearTextBox() {
+function ClearSiteTextBox() {
+
     resetErrorMessages();
     $('#txtSiteid').val('');
     $('#txtSiteName').val('');
@@ -206,13 +215,13 @@ function ClearTextBox() {
     $('#txtContectPersonPhoneNo').val('');
     $('#txtAddress').val('');
     $('#txtArea').val('');
-    $('#txtcity').val('');
-    $('#txtstate').val('');
-    $('#txtcountry').val('');
+    $('#ddlCity').val('');
+    $('#stateDropdown').val('');
+    $("#ddlCountry").val('');
     $('#txtPincode').val('');
-    $('#txtShippingcity').val('');
-    $('#txtShippingstate').val('');
-    $('#txtShippingcountry').val('');
+    $('#ShippingCity').val('');
+    $('#ShippingState').val('');
+    $('#shippingCountry').val('');
     $('#txtShippingAddress').val('');
     $('#txtShippingArea').val('');
     $('#txtShippingPincode').val('');
@@ -233,12 +242,12 @@ function validateAndCreateSite() {
     var Address = document.getElementById("txtAddress").value.trim();
     var Area = document.getElementById("txtArea").value.trim();
     var CityId = document.getElementById("ddlCity").value.trim();
-    var StateId = document.getElementById("txtstate").value.trim();
-    var Country = document.getElementById("txtcountry").value.trim();
+    var StateId = document.getElementById("stateDropdown").value.trim();
+    var Country = document.getElementById("ddlCountry").value.trim();
     var Pincode = document.getElementById("txtPincode").value.trim();
-    var ShippingCityId = document.getElementById("txtShippingcity").value.trim();
-    var ShippingStateId = document.getElementById("txtShippingstate").value.trim();
-    var ShippingCountry = document.getElementById("txtShippingcountry").value.trim();
+    var ShippingCityId = document.getElementById("ShippingCity").value.trim();
+    var ShippingStateId = document.getElementById("ShippingState").value.trim();
+    var ShippingCountry = document.getElementById("shippingCountry").value.trim();
     var ShippingAddress = document.getElementById("txtShippingAddress").value.trim();
     var ShippingArea = document.getElementById("txtShippingArea").value.trim();
     var ShippingPincode = document.getElementById("txtShippingPincode").value.trim();
@@ -263,6 +272,9 @@ function validateAndCreateSite() {
     if (Address === "") {
         document.getElementById("spnAddress").innerText = "Address is required.";
         isValid = false;
+    } else if (Address.length > 100) {
+        document.getElementById("spnAddress").innerText = "Address should not exceed 100 characters.";
+        isValid = false;
     }
 
 
@@ -275,14 +287,27 @@ function validateAndCreateSite() {
     if (CityId === "") {
         document.getElementById("spnCity").innerText = "City is required.";
         isValid = false;
+    } else if(CityId === "--Select City--") {
+        document.getElementById("spnCity").innerText = "City is required.";
+        isValid = false;
     }
+
 
     if (StateId === "") {
         document.getElementById("spnState").innerText = "State is required.";
         isValid = false;
     }
+    else if(StateId === "--Select State--") {
+        document.getElementById("spnState").innerText = "State is required.";
+        isValid = false;
+    }
+
 
     if (Country === "") {
+        document.getElementById("spnCountry").innerText = "Country is required.";
+        isValid = false;
+    }
+    else if(Country === "--Select Country--") {
         document.getElementById("spnCountry").innerText = "Country is required.";
         isValid = false;
     }
@@ -298,21 +323,38 @@ function validateAndCreateSite() {
         document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
         isValid = false;
     }
+    else if(ShippingCountry === "--Select Country--") {
+        document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
+        isValid = false;
+    }
 
 
-    if (ShippingStateId === "") {
+    if (ShippingStateId === "--Select State--") {
         document.getElementById("spnShippingState").innerText = "Shipping State is required.";
         isValid = false;
     }
+    else if(ShippingStateId === "") {
+        document.getElementById("spnShippingState").innerText = "Shipping State is required.";
+        isValid = false;
+    }
+
 
     if (ShippingCityId === "") {
         document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
         isValid = false;
     }
+    else if (ShippingCityId === "--Select City--") {
+        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
+        isValid = false;
+    }
 
-
+    debugger
     if (ShippingAddress === "") {
         document.getElementById("spnShippingAddress").innerText = "Shipping Address is required.";
+        isValid = false;
+    }
+    else if (ShippingAddress.length > 100) {
+        document.getElementById("spnShippingAddress").innerText = "Address should not exceed 100 characters.";
         isValid = false;
     }
 
@@ -347,7 +389,6 @@ function validateAndCreateSite() {
         }
     }
 }
-
 
 function resetErrorMessages() {
     document.getElementById("spnSiteName").innerText = "";
@@ -418,64 +459,125 @@ function ActiveDecativeSite(SiteId) {
                 'error'
             ).then(function () {
                 window.location = '/SiteMaster/SiteListView';
-            });;
+            });
         }
     });
 }
 
+function DeleteSite(SiteId)
+{
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/SiteMaster/DeleteSite?SiteId=' + SiteId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/SiteMaster/SiteListView';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Site!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/SiteMaster/SiteListView';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Site Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
+
 $(document).ready(function () {
 
     GetShippingCountry();
-    $('#ddlShippingCountry').change(function () {
 
-        var Text = $("#ddlShippingCountry Option:Selected").text();
-        var StateId = $(this).val();
-        $("#txtShippingcountry").val(Text);
-        $('#ddlShippingState').empty();
-        $('#ddlShippingState').append('<Option >--Select State--</Option>');
-        $.ajax({
-            url: '/Authentication/GetState?StateId=' + StateId,
-            success: function (result) {
-                
-                $.each(result, function (i, data) {
-                    $('#ddlShippingState').append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-                });
-            }
-        });
+    $('#dropShippingState').change(function () {
+
+        var Text = $("#dropShippingState Option:Selected").text();
+        var txtstateid = $(this).val();
+        $("#txtShippingstate").val(txtstateid);
     });
 
-
-    $('#ddlShippingState').change(function () {
-
-        var Text = $("#ddlShippingState Option:Selected").text();
-        var CityId = $(this).val();
+    $('#ShippingCity').change(function () {
     
-        $("#txtShippingstate").val(CityId);
-        $('#ddlShippingCity').empty();
-        $('#ddlShippingCity').append('<Option >--Select City--</Option>');
-        $.ajax({
-            url: '/Authentication/GetCity?CityId=' + CityId,
-            success: function (result) {
-
-                $.each(result, function (i, data) {
-                    $('#ddlShippingCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-                });
-            }
-        });
-    });
-
-    $('#ddlShippingCity').change(function () {
-    
-        var Text = $("#ddlShippingCity Option:Selected").text();
+        var Text = $("#shippingCity Option:Selected").text();
         var txtShippingcity = $(this).val();
-        $("#txtShippingcity").val(txtShippingcity);
+        $("#txtShippingCity").val(txtShippingcity);
     });
 
 });
 
+function fn_getShippingState(drpShippingstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+  
+    $('#' + drpShippingstate).empty();
+    $('#' + drpShippingstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+        
+            $.each(result, function (i, data) {
+                $('#' + drpShippingstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getShippingcitiesbystateId(drpShippingcity, stateid, that) {
+   
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
 
 
+    $('#' + drpShippingcity).empty();
+    $('#' + drpShippingcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpShippingcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
 
 function GetShippingCountry() {
 
@@ -483,7 +585,7 @@ function GetShippingCountry() {
         url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlShippingCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
+                $('#shippingCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
 
             });
         }
