@@ -18,7 +18,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string? UserName { get; set; }
 
         public string? Password { get; set; }
-        public int? Role { get; set; }
+        public int Role { get; set; }
         public Guid? SiteId { get; set; }
         public string? Email { get; set; }
 

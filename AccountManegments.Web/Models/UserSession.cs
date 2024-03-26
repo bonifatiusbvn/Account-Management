@@ -42,6 +42,14 @@
                 return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserName", true) == 0)?.Value;
             }
         }
+        public int UserRole
+        {
+            get
+            {
+                var userroleid = StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserRole", true) == 0);
+                return userroleid != null ? int.Parse(userroleid.Value) : 0;
+            }
+        }
 
 
     }

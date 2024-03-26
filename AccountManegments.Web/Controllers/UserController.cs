@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -93,6 +94,7 @@ namespace AccountManegments.Web.Controllers
                     LastName = CreatUser.LastName,
                     UserName = CreatUser.UserName,
                     Email = CreatUser.Email,
+                    Role = CreatUser.Role,
                     Password = CreatUser.Password,
                     PhoneNo = CreatUser.PhoneNo,
                     SiteId = CreatUser.SiteId,
@@ -127,6 +129,7 @@ namespace AccountManegments.Web.Controllers
                     LastName = UpdateUser.LastName,
                     UserName = UpdateUser.UserName,
                     Password = UpdateUser.Password,
+                    Role = UpdateUser.Role,
                     Email = UpdateUser.Email,
                     PhoneNo = UpdateUser.PhoneNo,
                 };
@@ -183,6 +186,26 @@ namespace AccountManegments.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<JsonResult> GetRoles()
+        {
+
+            try
+            {
+                List<UserRoleModel> Userrole = new List<UserRoleModel>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetUserRole");
+                if (response.code == 200)
+                {
+                    Userrole = JsonConvert.DeserializeObject<List<UserRoleModel>>(response.data.ToString());
+                }
+                return new JsonResult(Userrole);
+
             }
             catch (Exception ex)
             {

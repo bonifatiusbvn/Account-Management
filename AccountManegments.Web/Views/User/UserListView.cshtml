@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "UserListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -174,6 +176,7 @@
                                     <label class="form-label">First Name</label>
                                     <input type="text" class="form-control form-control-lg " placeholder="First Name" id="txtFirstName" required>
                                     <input type="hidden" id="txtUserid">
+                                    <input type="hidden" id="txtUserRole" value="@_userSession.UserRole">
                                     <span id="spnFirstName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
@@ -191,6 +194,14 @@
                                     <select class="form-control form-control-lg" id="txtSiteName" required>
                                         <option selected disabled value="">--Select--</option>
                                     </select>
+                                    <span id="spnSiteName" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Role</label>
+                                    <select class="form-control form-control-lg" id="ddlUserRole" required>
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <input type="hidden" id="txtrole">
                                     <span id="spnSiteName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
@@ -225,4 +236,5 @@
     @section Scripts {
 
         <script src="~/moduls/authenticationscript.js"></script>
+        <script src="~/moduls/masterlistscript.js"></script>
     }

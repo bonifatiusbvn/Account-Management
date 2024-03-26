@@ -2,22 +2,26 @@
 $(document).ready(function () {
 
     GetCountry();
-
+    GetUserRole()
     $('#dropState').change(function () {
-        
+
         var Text = $("#dropState Option:Selected").text();
         var txtstateid = $(this).val();
         $("#txtstate").val(txtstateid);
     });
 
     $('#ddlCity').change(function () {
-        
+
         var Text = $("#ddlCity Option:Selected").text();
         var txtcityid = $(this).val();
         $("#txtcity").val(txtcityid);
     });
 
-
+    $('#ddlUserRole').change(function () {
+        var Text = $("#ddlUserRole Option:Selected").text();
+        var txtroleid = $(this).val();
+        $("#txtrole").val(txtroleid);
+    });
 
 });
 
@@ -67,6 +71,19 @@ function GetCountry() {
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
+
+            });
+        }
+    });
+}
+
+function GetUserRole() {
+
+    $.ajax({
+        url: '/User/GetRoles',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlUserRole').append('<Option value=' + data.roleId + ' Selected>' + data.role + '</Option>')
 
             });
         }
