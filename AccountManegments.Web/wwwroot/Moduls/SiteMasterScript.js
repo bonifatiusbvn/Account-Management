@@ -140,12 +140,12 @@ function CreateSite() {
         StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode:$('#txtPincode').val(),
-        ShippingAddress: $('#txtShippingAddress').val(),
-        ShippingArea:$('#txtShippingArea').val(),
-        ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ShippingCity').val(),
-        ShippingStateId: $('#ShippingState').val(),
-        ShippingCountry: $('#shippingCountry').val(),
+        ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#txtAddress').val() : $('#txtShippingAddress').val(),
+        ShippingArea: $('#hideShippingAddress').is(':checked') ? $('#txtArea').val() : $('#txtShippingArea').val(),
+        ShippingPincode: $('#hideShippingAddress').is(':checked') ? $('#txtPincode').val() : $('#txtShippingPincode').val(),
+        ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
+        ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
+        ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/CreateSite',
@@ -179,12 +179,12 @@ function UpdateSiteDetails() {
         StateId: $('#stateDropdown').val(),
         Country: $('#ddlCountry').val(),
         Pincode: $('#txtPincode').val(),
-        ShippingAddress: $('#txtShippingAddress').val(),
-        ShippingArea: $('#txtShippingArea').val(),
-        ShippingPincode: $('#txtShippingPincode').val(),
-        ShippingCityId: $('#ShippingCity').val(),
-        ShippingStateId: $('#ShippingState').val(),
-        ShippingCountry: $('#shippingCountry').val(),
+        ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#txtAddress').val() : $('#txtShippingAddress').val(),
+        ShippingArea: $('#hideShippingAddress').is(':checked') ? $('#txtArea').val() : $('#txtShippingArea').val(),
+        ShippingPincode: $('#hideShippingAddress').is(':checked') ? $('#txtPincode').val() : $('#txtShippingPincode').val(),
+        ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
+        ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
+        ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
     }
     $.ajax({
         url: '/SiteMaster/UpdateSiteDetails',
@@ -234,7 +234,7 @@ function ClearSiteTextBox() {
 }
 
 function validateAndCreateSite() {
-
+  
     resetErrorMessages();
     var SiteName = document.getElementById("txtSiteName").value.trim();
     var ContectPersonName = document.getElementById("txtContectPersonName").value.trim();
@@ -251,8 +251,6 @@ function validateAndCreateSite() {
     var ShippingAddress = document.getElementById("txtShippingAddress").value.trim();
     var ShippingArea = document.getElementById("txtShippingArea").value.trim();
     var ShippingPincode = document.getElementById("txtShippingPincode").value.trim();
-
-
 
     var isValid = true;
 
@@ -319,55 +317,67 @@ function validateAndCreateSite() {
     }
 
 
-    if (ShippingCountry === "") {
-        document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
-        isValid = false;
-    }
-    else if(ShippingCountry === "--Select Country--") {
-        document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
-        isValid = false;
-    }
-
-
-    if (ShippingStateId === "--Select State--") {
-        document.getElementById("spnShippingState").innerText = "Shipping State is required.";
-        isValid = false;
-    }
-    else if(ShippingStateId === "") {
-        document.getElementById("spnShippingState").innerText = "Shipping State is required.";
-        isValid = false;
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingCountry === "") {
+            document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
+            isValid = false;
+        } else if (ShippingCountry === "--Select Country--") {
+            document.getElementById("spnShippingCountry").innerText = "Shipping Country is required.";
+            isValid = false;
+        }
     }
 
 
-    if (ShippingCityId === "") {
-        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
-        isValid = false;
-    }
-    else if (ShippingCityId === "--Select City--") {
-        document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
-        isValid = false;
-    }
-
-    debugger
-    if (ShippingAddress === "") {
-        document.getElementById("spnShippingAddress").innerText = "Shipping Address is required.";
-        isValid = false;
-    }
-    else if (ShippingAddress.length > 100) {
-        document.getElementById("spnShippingAddress").innerText = "Address should not exceed 100 characters.";
-        isValid = false;
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingStateId === "") {
+            document.getElementById("spnShippingState").innerText = "Shipping State is required.";
+            isValid = false;
+        }
+        else if (ShippingStateId === "--Select State--") {
+            document.getElementById("spnShippingState").innerText = "Shipping State is required.";
+            isValid = false;
+        }
     }
 
 
-    if (ShippingArea === "") {
-        document.getElementById("spnShippingArea").innerText = "Shipping Area is required.";
-        isValid = false;
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingCityId === "") {
+            document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
+            isValid = false;
+        }
+        else if (ShippingCityId === "--Select City--") {
+            document.getElementById("spnShippingCity").innerText = "Shipping City is required.";
+            isValid = false;
+        }
     }
 
 
-    if (ShippingPincode === "") {
-        document.getElementById("spnShippingPincode").innerText = "Shipping Pincode is required.";
-        isValid = false;
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingAddress === "") {
+            document.getElementById("spnShippingAddress").innerText = "Shipping Address is required.";
+            isValid = false;    
+        }
+        else if (ShippingAddress.length > 100) {
+            document.getElementById("spnShippingAddress").innerText = "Address should not exceed 100 characters.";
+            isValid = false;
+        }
+    }
+
+
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingArea === "") {
+
+            document.getElementById("spnShippingArea").innerText = "Shipping Area is required.";
+            isValid = false;
+        }
+    }
+
+
+    if (!document.getElementById("hideShippingAddress").checked) {
+        if (ShippingPincode === "") {
+            document.getElementById("spnShippingPincode").innerText = "Shipping Pincode is required.";
+            isValid = false;
+        }
     }
 
 
@@ -592,3 +602,13 @@ function GetShippingCountry() {
     });
 }
 
+function toggleShippingAddress() {
+    var checkbox = document.getElementById("hideShippingAddress");
+    var shippingFields = document.getElementById("shippingAddressFields");
+
+    if (checkbox.checked) {
+        shippingFields.style.display = "none";
+    } else {
+        shippingFields.style.display = "block";
+    }
+}

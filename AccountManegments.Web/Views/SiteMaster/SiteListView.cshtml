@@ -162,7 +162,10 @@
                                 <span id="spnContectPersonPhoneNo" class="text-danger"></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Address</label> <br/>     
+                                <input type="checkbox" id="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                <label for="hideShippingAddress"><b>Is Your Address is same as Shipping Address?</b></label>
+                           
                                 <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" required></textarea>
                                 <span id="spnAddress" class="text-danger"></span>
                             </div>
@@ -200,47 +203,53 @@
                                 <input type="hidden" id="txtSiteCountry" value="" />
                                 <span id="spnCountry" class="text-danger"></span>
                             </div>
-                            <div class="col-12">
-                                <h5><b>Shipping Address</b></h5>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Shipping Address</label>
-                                <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" required></textarea>
-                                <span id="spnShippingAddress" class="text-danger"></span>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Shipping Area</label>
-                                <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" required>
-                                <span id="spnShippingArea" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Shipping Pincode</label>
-                                <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" required>
-                                <span id="spnShippingPincode" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Shipping City</label>
-                                <select id="ShippingCity" class="form-control" required>
-                                    <option>--Select City--</option>
-                                </select>
-                                <input type="hidden" id="txtShippingCity" value="" />
-                                <span id="spnShippingCity" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label"> Shipping State</label>
-                                <select id="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)" required>
-                                    <option>--Select State--</option>
-                                </select>
-                                <input type="hidden" id="txtShippingState" value="" />
-                                <span id="spnShippingState" class="text-danger"></span>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label"> Shipping Country</label>
-                                <select id="shippingCountry" class="form-control " onchange="fn_getShippingState('ShippingState', null, this)" required>
-                                    <option value=" ">--Select Country--</option>
-                                </select>
-                                <input type="hidden" id="txtShippingCountry" value="" />
-                                <span id="spnShippingCountry" class="text-danger"></span>
+                            <div id="shippingAddressFields" style="display:none;">
+                                <div class="col-12">
+                                    <h5><b>Shipping Address</b></h5>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Shipping Address</label>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" required></textarea>
+                                    <span id="spnShippingAddress" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Shipping Area</label>
+                                    <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" required>
+                                    <span id="spnShippingArea" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label">Shipping Pincode</label>
+                                        <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" required>
+                                        <span id="spnShippingPincode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Shipping City</label>
+                                        <select id="ShippingCity" class="form-control" required>
+                                            <option>--Select City--</option>
+                                        </select>
+                                        <input type="hidden" id="txtShippingCity" value="" />
+                                        <span id="spnShippingCity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label"> Shipping State</label>
+                                        <select id="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)" required>
+                                            <option>--Select State--</option>
+                                        </select>
+                                        <input type="hidden" id="txtShippingState" value="" />
+                                        <span id="spnShippingState" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label"> Shipping Country</label>
+                                        <select id="shippingCountry" class="form-control" onchange="fn_getShippingState('ShippingState', null, this)" required>
+                                            <option value=" ">--Select Country--</option>
+                                        </select>
+                                        <input type="hidden" id="txtShippingCountry" value="" />
+                                        <span id="spnShippingCountry" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite"></button>

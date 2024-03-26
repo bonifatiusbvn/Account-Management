@@ -5,7 +5,7 @@
 
 @foreach (var item in Model)
 {
-    <div class="row ac-card">
+    <div class="row ac-card" id="siteCard_@item.SiteId" onclick="SelectSiteDetails('@item.SiteId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
