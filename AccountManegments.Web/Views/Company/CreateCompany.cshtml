@@ -76,7 +76,7 @@
                                         <div class="col-5 text-center">
                                             <h5>Company Name</h5>
                                         </div>
-                                        <div class="col-3 ">
+                                        <div class="col-3">
                                             <h5>Gst No</h5>
                                         </div>
                                         <div class="col-2">
@@ -193,46 +193,43 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Address</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Address" id="txtAddress" required>
+                                    <textarea type="text" class="form-control form-control-lg mb-3" rows="3" placeholder="Address" id="txtAddress" required></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
-
                                 <div class="col-12">
                                     <label class="form-label">Area</label>
                                     <input type="text" class="form-control form-control-lg mb-3" placeholder="Area" id="txtArea" required>
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Country</label>
-                                    <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
-                                        <option>--Select Country--</option>
-                                    </select>
-                                    <input type="hidden" id="txtcountry" value="" />
-
-                                    <span id="spnCountry" class="text-danger"></span>
+                                    <label class="form-label">Pincode</label>
+                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Pincode" id="txtPincode" required>
+                                    <span id="spnPincode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">StateId</label>
-                                    <select id="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                    <label class="form-label">City</label>
+                                    <select id="ddlCity" class="form-control form-control-lg mb-3">
+                                        <option value="0">--Select City--</option>
+                                    </select>
+                                    <input type="hidden" id="txtcity" value="" />
+                                    <span id="spnCityId" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">State</label>
+                                    <select id="dropState" class="form-control form-control-lg mb-3" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
                                         <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
                                     <span id="spnStateId" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">CityId</label>
-                                    <select id="ddlCity" class="form-control bg-transparent">
-                                        <option value="0">--Select City--</option>
+                                    <label class="form-label">Country</label>
+                                    <select id="ddlCountry" class="form-control form-control-lg mb-3" onchange="fn_getState('dropState',null,this)">
+                                        <option>--Select Country--</option>
                                     </select>
-                                    <input type="hidden" id="txtcity" value="" />
-
-                                    <span id="spnCityId" class="text-danger"></span>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">Pincode</label>
-                                    <input type="text" class="form-control form-control-lg mb-3" placeholder="Pincode" id="txtPincode" required>
-                                    <span id="spnPincode" class="text-danger"></span>
-                                </div>
+                                    <input type="hidden" id="txtcountry" value="" />
+                                    <span id="spnCountry" class="text-danger"></span>
+                                </div>           
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
                                 </div>
