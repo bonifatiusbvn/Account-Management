@@ -1,6 +1,7 @@
 ﻿
 using AccountManagement.API;
 using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.MasterList;
 using System;
 using System.Collections.Generic;
@@ -72,5 +73,22 @@ namespace AccountManagement.Repository.Repository.MasterListRepository
             }
         }
 
+        public async Task<IEnumerable<UserRoleModel>> GetUserRole()
+        {
+
+            try
+            {
+                IEnumerable<UserRoleModel> role = Context.UserRoles.ToList().Select(a => new UserRoleModel
+                {
+                    RoleId = a.RoleId,
+                    Role = a.Role,
+                });
+                return role;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

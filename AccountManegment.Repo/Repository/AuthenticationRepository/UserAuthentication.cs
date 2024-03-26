@@ -82,10 +82,10 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         Email = CreateUser.Email,
                         PhoneNo = CreateUser.PhoneNo,
                         Password = CreateUser.Password,
-                        RoleId = 3,
+                        RoleId = CreateUser.Role,
                         IsActive = true,
-                        SiteId=CreateUser.SiteId,
-                        IsDeleted=false,
+                        SiteId = CreateUser.SiteId,
+                        IsDeleted = false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
@@ -142,6 +142,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 Password = e.Password,
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
+                                RoleId = e.RoleId,
                                 RoleName = r.Role,
                                 SiteName = p.SiteName,
                                 SiteId = e.SiteId,
@@ -186,8 +187,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         u.Email.ToLower().Contains(searchText) ||
                         u.PhoneNo.ToLower().Contains(searchText) ||
                         u.FirstName.ToLower().Contains(searchText) ||
-                        u.LastName.ToLower().Contains(searchText) ||
-                        u.RoleName.ToLower().Contains(searchText)
+                        u.LastName.ToLower().Contains(searchText)
+
                     );
                 }
 
@@ -214,7 +215,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 if (!string.IsNullOrEmpty(sortBy))
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+                    string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
@@ -277,6 +278,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             LoginView userModel = new LoginView();
                             userModel.UserName = tblUser.UserName;
                             userModel.Id = tblUser.Id;
+                            userModel.RoleId = tblUser.RoleId;
                             userModel.FullName = tblUser.FirstName + " " + tblUser.LastName;
                             userModel.FirstName = tblUser.FirstName;
                             response.Data = userModel;
@@ -323,6 +325,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.UserName = UpdateUser.UserName;
                     Userdata.Password = UpdateUser.Password;
                     Userdata.Email = UpdateUser.Email;
+                    Userdata.PhoneNo = UpdateUser.PhoneNo;
+                    Userdata.RoleId = UpdateUser.Role;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();

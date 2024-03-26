@@ -7,13 +7,15 @@ public partial class PurchaseRequest
 {
     public Guid Pid { get; set; }
 
+    public Guid SiteId { get; set; }
+
     public string Item { get; set; } = null!;
 
     public int UnitTypeId { get; set; }
 
     public decimal Quantity { get; set; }
 
-    public Guid SiteId { get; set; }
+    public string PrNo { get; set; } = null!;
 
     public bool? IsApproved { get; set; }
 

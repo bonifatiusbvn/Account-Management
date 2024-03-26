@@ -1,13 +1,14 @@
 ﻿AllUserTable();
 GetSiteDetails();
 function CreateUser() {
-    debugger
+
 
     var objData = {
         FirstName: $('#txtFirstName').val(),
         LastName: $('#txtLastName').val(),
         UserName: $('#txtUserName').val(),
         Password: $('#txtPassword').val(),
+        Role: $('#txtrole').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
         SiteId: $('#txtSiteName').val(),
@@ -51,7 +52,10 @@ function ClearTextBox() {
     $('#txtUserName').val('');
     $('#txtPassword').val('');
     $('#txtEmail').val('');
+    $('#txtrole').val('');
+    $('#txtSiteName').val('');
     $('#txtPhoneNo').val('');
+    $('#ddlUserRole').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
         button.textContent = "Create";
@@ -75,7 +79,19 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
+
+            $(document).ready(function () {
+                if ($('#txtUserRole').val() == '9') {
+                    $('#txtSiteName').val(response.siteId).prop('disabled', false);
+                } else {
+                    $('#txtSiteName').val(response.siteId).prop('disabled', true);
+                }
+            });
+
+
+
             $('#txtSiteName').val(response.siteId);
+            $('#ddlUserRole').val(response.roleId);
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
@@ -183,6 +199,7 @@ function UpdateUserDetails() {
         LastName: $('#txtLastName').val(),
         UserName: $('#txtUserName').val(),
         Password: $('#txtPassword').val(),
+        Role: $('#txtrole').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
         SiteId: $('#txtSiteName').val(),
@@ -304,7 +321,7 @@ function isValidPhoneNo(phoneNo) {
 }
 
 function UserActiveDecative(UserId) {
-    debugger
+
     var isChecked = $('#flexSwitchCheckChecked_' + UserId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
 

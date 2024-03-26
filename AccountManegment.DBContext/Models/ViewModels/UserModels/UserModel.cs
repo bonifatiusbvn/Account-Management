@@ -19,7 +19,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string Email { get; set; }
 
         public string PhoneNo { get; set; }
-        public int Role { get; set; }
+        public int RoleId { get; set; }
 
         public bool IsActive { get; set; }
         public string RoleName { get; set; }

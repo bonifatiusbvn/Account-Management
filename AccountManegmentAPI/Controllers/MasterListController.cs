@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.MasterList;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,14 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<CityView> getCities = await MasterList.GetCities(CityId);
             return Ok(new { code = 200, data = getCities.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetUserRole")]
+        public async Task<IActionResult> GetUserRole()
+        {
+            IEnumerable<UserRoleModel> userRole = await MasterList.GetUserRole();
+            return Ok(new { code = 200, data = userRole.ToList() });
         }
     }
 }

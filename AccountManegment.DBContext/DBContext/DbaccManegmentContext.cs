@@ -43,8 +43,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -146,6 +144,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasColumnName("PId");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
