@@ -10,4 +10,6 @@ public partial class UnitMaster
     public string UnitName { get; set; } = null!;
 
     public virtual ICollection<ItemMaster> ItemMasters { get; set; } = new List<ItemMaster>();
+
+    public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
 }

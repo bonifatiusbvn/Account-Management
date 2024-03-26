@@ -25,6 +25,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
 
+    public virtual DbSet<PurchaseRequest> PurchaseRequests { get; set; }
+
     public virtual DbSet<RolewiseFormPermission> RolewiseFormPermissions { get; set; }
 
     public virtual DbSet<Site> Sites { get; set; }
@@ -39,7 +41,10 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=DBAccManegment;User ID=BoniEmp;Password=Admin123;Encrypt=False");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -128,6 +133,31 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.UnitType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ItemMaster_UnitMaster");
+        });
+
+        modelBuilder.Entity<PurchaseRequest>(entity =>
+        {
+            entity.HasKey(e => e.Pid);
+
+            entity.ToTable("PurchaseRequest");
+
+            entity.Property(e => e.Pid)
+                .ValueGeneratedNever()
+                .HasColumnName("PId");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Site).WithMany(p => p.PurchaseRequests)
+                .HasForeignKey(d => d.SiteId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseRequest_Site");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseRequests)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseRequest_UnitMaster");
         });
 
         modelBuilder.Entity<RolewiseFormPermission>(entity =>

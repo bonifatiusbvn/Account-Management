@@ -20,9 +20,11 @@ public partial class User
     public string Password { get; set; } = null!;
 
     public int RoleId { get; set; }
+
     public Guid? SiteId { get; set; }
 
     public bool IsActive { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
