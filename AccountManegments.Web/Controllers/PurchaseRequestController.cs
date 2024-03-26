@@ -1,0 +1,74 @@
+﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+using AccountManegments.Web.Helper;
+using AccountManegments.Web.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
+namespace AccountManegments.Web.Controllers
+{
+    public class PurchaseRequestController : Controller
+    {
+        public PurchaseRequestController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
+        {
+            WebAPI = webAPI;
+            APIServices = aPIServices;
+            Environment = environment;
+            UserSession = userSession;
+        }
+
+        public WebAPI WebAPI { get; }
+        public APIServices APIServices { get; }
+        public IWebHostEnvironment Environment { get; }
+        public UserSession UserSession { get; }
+
+        public IActionResult PurchaseRequestListView()
+        {
+            return View();
+        }
+        public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseRequestModel> GetSiteList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(res.data.ToString());
+
+                    return PartialView("~/Views/PurchaseRequest/_PurchaseRequestListPartial.cshtml", GetSiteList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Purchase Request list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<JsonResult> DisplayPurchaseRequestDetails(Guid PurchaseId)
+        {
+            try
+            {
+                PurchaseRequestModel SiteDetails = new PurchaseRequestModel();
+                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseRequest/GetPurchaseRequestDetailsById?purchaseId=" + PurchaseId);
+                if (res.code == 200)
+                {
+                    SiteDetails = JsonConvert.DeserializeObject<PurchaseRequestModel>(res.data.ToString());
+                }
+                return new JsonResult(SiteDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}
