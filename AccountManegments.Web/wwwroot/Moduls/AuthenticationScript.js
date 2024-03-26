@@ -1,6 +1,7 @@
 ﻿AllUserTable();
 GetSiteDetails();
-function CreateUser() {debugger
+function CreateUser() {
+    debugger
 
     var objData = {
         FirstName: $('#txtFirstName').val(),
@@ -352,9 +353,6 @@ function UserActiveDecative(UserId) {
     });
 }
 
-
-function deleteUserDetails(UserId) {
-
 function UserLogout() {
     Swal.fire({
         title: 'Logout Confirmation',
@@ -392,6 +390,8 @@ function logout() {
 
         });
 }
+function deleteUserDetails(UserId) {
+
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",

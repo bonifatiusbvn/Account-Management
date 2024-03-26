@@ -22,8 +22,6 @@ public partial class User
     public int RoleId { get; set; }
     public Guid? SiteId { get; set; }
 
-    public Guid? SiteId { get; set; }
-
     public bool IsActive { get; set; }
     public bool? IsDeleted { get; set; }
 

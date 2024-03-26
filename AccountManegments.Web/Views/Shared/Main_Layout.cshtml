@@ -374,24 +374,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-<script>
-    const listItems = document.querySelectorAll('.metismenu > li');
 
-    listItems.forEach(item => {
-        item.addEventListener('click', event => {
-            const hasChildren = item.querySelector('ul');
 
-            listItems.forEach(li => li.classList.remove('mm-active'));
 
-            if (!hasChildren) {
-                item.classList.add('mm-active');
-            } else {
-
-                item.classList.toggle('mm-active');
-            }
-
-            event.stopPropagation();
-        });
-    });
-
-</script>

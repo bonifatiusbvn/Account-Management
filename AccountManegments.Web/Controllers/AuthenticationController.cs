@@ -94,15 +94,24 @@ namespace AccountManegments.Web.Controllers
         [HttpGet]
         public IActionResult UserLogin()
         {
+
+            if (Request.Cookies["UserName"] != null && Request.Cookies["Password"] != null)
+            {
+                ViewBag.UserName = (Request.Cookies["UserName"].ToString());
+                var pwd = Request.Cookies["Password"].ToString();
+                ViewBag.Password = pwd;
+                ViewBag.chkRememberMe = true;
+
+            }
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UserLogin(LoginRequest login)
         {
             try
             {
-
                 ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
                 LoginResponseModel userlogin = new LoginResponseModel();
 
@@ -118,40 +127,40 @@ namespace AccountManegments.Web.Controllers
                         TempData["ErrorMessage"] = responsemodel.message;
                     }
                 }
-
                 else
                 {
                     var data = JsonConvert.SerializeObject(responsemodel.data);
                     userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
                     var claims = new List<Claim>()
-                {
-                    new Claim("UserId", userlogin.Data.Id.ToString()),
-                    new Claim("FullName", userlogin.Data.FullName),
-                    new Claim("UserName", userlogin.Data.UserName),
-                };
+            {
+                new Claim("UserId", userlogin.Data.Id.ToString()),
+                new Claim("FullName", userlogin.Data.FullName),
+                new Claim("UserName", userlogin.Data.UserName),
+            };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-
-
                     if (login.RememberMe)
                     {
                         CookieOptions cookie = new CookieOptions();
-                        cookie.Expires = DateTime.Now.AddYears(1);
+                        cookie.Expires = DateTime.UtcNow.AddDays(7);
                         Response.Cookies.Append("UserName", (login.UserName), cookie);
                         Response.Cookies.Append("Password", (login.Password), cookie);
+                        ViewBag.chkRememberMe = true;
+
+
                     }
                     else
                     {
                         Response.Cookies.Delete("UserName");
                         Response.Cookies.Delete("Password");
-
+                        ViewBag.chkRememberMe = false;
                     }
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                     return RedirectToAction("Index", "Home");
                 }
-
                 return View();
             }
             catch (Exception ex)
@@ -159,6 +168,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
 
 
         [HttpPost]

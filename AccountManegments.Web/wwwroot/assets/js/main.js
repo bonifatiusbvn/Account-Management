@@ -166,11 +166,6 @@ $(function () {
     }
 
 
-
-
-
-
-
     new PerfectScrollbar(".header-notifications-list")
 
 
