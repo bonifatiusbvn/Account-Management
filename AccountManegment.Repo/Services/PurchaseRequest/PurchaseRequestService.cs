@@ -49,5 +49,10 @@ namespace AccountManagement.Repository.Services.PurchaseRequest
         {
             return await PurchaseRequest.PurchaseRequestIsApproved(PurchaseId);
         }
+
+        public string CheckPRNo()
+        {
+            return PurchaseRequest.CheckPRNo();  
+        }
     }
 }

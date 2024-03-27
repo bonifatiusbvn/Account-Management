@@ -21,38 +21,38 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
 
         public DbaccManegmentContext Context { get; }
 
-        //public string CheckPRNo()
-        //{
-        //    try
-        //    {
-        //        var LastOrder = Context.PurchaseRequests.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-        //        var currentYear = DateTime.Now.Year;
-        //        var lastYear = currentYear - 1;
+        public string CheckPRNo()
+        {
+            try
+            {
+                var LastPr = Context.PurchaseRequests.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentYear = DateTime.Now.Year;
+                var lastYear = currentYear - 1;
 
-        //        string INVOICEId;
-        //        if (LastOrder == null)
-        //        {
-        //            INVOICEId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-01";
-        //        }
-        //        else
-        //        {
-        //            if (LastOrder..Length >= 25)
-        //            {
-        //                int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-        //                INVOICEId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("OrderId does not have the expected format.");
-        //            }
-        //        }
-        //        return INVOICEId;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+                string PurchaseRequestId;
+                if (LastPr == null)
+                {
+                    PurchaseRequestId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-01";
+                }
+                else
+                {
+                    if (LastPr.PrNo.Length >= 25)
+                    {
+                        int PrNumber = int.Parse(LastPr.PrNo.Substring(24)) + 1;
+                        PurchaseRequestId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-" + PrNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("Purchase Request Id does not have the expected format.");
+                    }
+                }
+                return PurchaseRequestId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
         {

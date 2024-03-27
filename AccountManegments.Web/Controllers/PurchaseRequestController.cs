@@ -23,10 +23,25 @@ namespace AccountManegments.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
 
-        public IActionResult PurchaseRequestListView()
+        public async Task<IActionResult> PurchaseRequestListView()
         {
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
+                if (Response.code == 200)
+                {
+                    ViewBag.ProjectRequestNo = Response.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
             return View();
         }
+
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -64,6 +79,60 @@ namespace AccountManegments.Web.Controllers
                     SiteDetails = JsonConvert.DeserializeObject<PurchaseRequestModel>(res.data.ToString());
                 }
                 return new JsonResult(SiteDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PuchaseRequestDetails)
+        {
+
+            try
+            {
+                var PuchaseRequest = new PurchaseRequestModel()
+                { 
+                    Pid = Guid.NewGuid(),
+                    Item = PuchaseRequestDetails.Item,
+                    UnitTypeId = PuchaseRequestDetails.UnitTypeId,
+                    SiteId = PuchaseRequestDetails.SiteId,
+                    Quantity = PuchaseRequestDetails.Quantity,
+                    CreatedBy = UserSession.UserId,
+                    PrNo = PuchaseRequestDetails.PrNo
+                };
+
+                ApiResponseModel postUser = await APIServices.PostAsync(PuchaseRequest, "PuchaseRequest/AddPurchaseRequestDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel updatePurchaseRequest)
+        {
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(updatePurchaseRequest, "PurchaseRequest/UpdatePurchaseRequestDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
             }
             catch (Exception ex)
             {

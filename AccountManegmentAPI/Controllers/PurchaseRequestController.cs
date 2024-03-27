@@ -117,5 +117,13 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpGet]
+        [Route("CheckPRNo")]
+        public IActionResult CheckPRNo()
+        {
+            var checkPRNo = PurchaseRequest.CheckPRNo();
+            return Ok(new { code = 200, data = checkPRNo });
+        }
     }
 }

@@ -45,7 +45,6 @@
                                                     <select class="form-select form-select-lg" id="PurchaseRequestSearchBy" onchange="filterPurchaseRequestTable()">
                                                         <option selected="selected">All</option>
                                                         <option>ItemName</option>
-                                                        <option>SiteName</option>
                                                     </select>
                                                 </div>
 
@@ -141,51 +140,40 @@
                 <div class="p-4">
                     <div class="card">
                         <div class="card-body">
-                            <form class="row g-3" id="userForm">
+                            <form class="row g-3" id="purchaseRequestForm">
+                                <div class="col-12">
+                                    <label class="form-label">Purchase Request No</label>
+                                    <input type="text" class="form-control form-control mb-3" id="prNo" value="@ViewBag.ProjectRequestNo" readonly />
+                                </div>
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
                                     <input type="text" class="form-control form-control mb-3" placeholder="Item Name" id="txtItemName" required>
-                                    <input type="hidden" id="txtItemid">
+                                    <input type="hidden" id="PurchaseRequestId">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control form-control mb-3" id="txtUnitType" required>
-                                        <option selected disabled value="">--Select--</option>
+                                    <select class="form-control form-control mb-3" id="txtUnitType">
+                                        <option>--Select Unit Type--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
-                                <div class="col-8">
-                                    <label class="form-label">Price</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="Price Per Unit" id="txtPricePerUnit" required>
-                                    <span id="spnPricePerUnit" class="text-danger"></span>
-                                </div>
-                                <div class="col-4">
-                                    <label class="form-label">IsWithGST</label>
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">GST Amount</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="Gst Amount" id="txtGstAmount" required>
-                                    <span id="spnGstAmount" class="text-danger"></span>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label">GST%</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="Gst %" id="txtGstPerUnit" required>
-                                    <span id="spnGstPerUnit" class="text-danger"></span>
+                                <div class="col-12">
+                                    <label class="form-label">Site</label>
+                                    <select class="form-control form-control mb-3" id="txtSiteName" required>
+                                        <option selected disabled value="">--Select--</option>
+                                    </select>
+                                    <span id="spnSiteName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">HSN Code</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="HSN Code" id="txtHSNCode" required>
-                                    <span id="spnHSNCode" class="text-danger"></span>
+                                    <label class="form-label">Quantity</label>
+                                    <input type="text" class="form-control form-control mb-3" placeholder="Quantity" id="txtQuantity" required>
+                                    <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -195,7 +183,9 @@
 
     </div>
 </div>
+
 @section Scripts {
-    <script src="~/moduls/itemmasterscript.js"></script>
     <script src="~/moduls/purchaserequestscript.js"></script>
+    <script src="~/moduls/authenticationscript.js"></script>
+    <script src="~/moduls/itemmasterscript.js"></script>
 }

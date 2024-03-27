@@ -17,5 +17,6 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseRequest
         Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails);
         Task<ApiResponseModel> PurchaseRequestIsApproved(Guid PurchaseId);
         Task<ApiResponseModel> DeletePurchaseRequest(Guid PurchaseId);
+        string CheckPRNo();
     }
 }
