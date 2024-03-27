@@ -165,7 +165,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
-            entity.Property(e => e.Poid).HasColumnName("POId");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGstamount)
@@ -178,10 +177,6 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.FromSupplierId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseOrder_SupplierMaster");
-
-            entity.HasOne(d => d.RefInvoice).WithMany(p => p.PurchaseOrders)
-                .HasForeignKey(d => d.RefInvoiceId)
-                .HasConstraintName("FK_PurchaseOrder_PurchaseRequest");
         });
 
         modelBuilder.Entity<PurchaseOrderDetail>(entity =>
@@ -203,6 +198,11 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Po).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.Poid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseOrderDetails_PurchaseOrder");
 
             entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.UnitTypeId)

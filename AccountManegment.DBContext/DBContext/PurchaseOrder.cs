@@ -7,11 +7,7 @@ public partial class PurchaseOrder
 {
     public Guid Id { get; set; }
 
-    public Guid Poid { get; set; }
-
     public Guid SiteId { get; set; }
-
-    public Guid? RefInvoiceId { get; set; }
 
     public Guid FromSupplierId { get; set; }
 
@@ -41,5 +37,5 @@ public partial class PurchaseOrder
 
     public virtual SupplierMaster FromSupplier { get; set; } = null!;
 
-    public virtual PurchaseRequest? RefInvoice { get; set; }
+    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
 }

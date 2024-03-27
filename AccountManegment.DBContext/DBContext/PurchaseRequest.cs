@@ -27,8 +27,6 @@ public partial class PurchaseRequest
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
-
     public virtual Site Site { get; set; } = null!;
 
     public virtual UnitMaster UnitType { get; set; } = null!;

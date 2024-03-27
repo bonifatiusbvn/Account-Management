@@ -31,5 +31,7 @@ public partial class PurchaseOrderDetail
 
     public DateTime? UpdatedOn { get; set; }
 
+    public virtual PurchaseOrder Po { get; set; } = null!;
+
     public virtual UnitMaster UnitType { get; set; } = null!;
 }
