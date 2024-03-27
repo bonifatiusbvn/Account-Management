@@ -3,15 +3,11 @@ using System.Collections.Generic;
 
 namespace AccountManagement.API;
 
-public partial class PurchaseOrder
+public partial class SupplierInvoice
 {
-    public Guid Id { get; set; }
-
-    public Guid Poid { get; set; }
+    public Guid InvoiceId { get; set; }
 
     public Guid SiteId { get; set; }
-
-    public Guid? RefInvoiceId { get; set; }
 
     public Guid FromSupplierId { get; set; }
 
@@ -29,7 +25,7 @@ public partial class PurchaseOrder
 
     public decimal TotalGstamount { get; set; }
 
-    public string? BillingAddress { get; set; }
+    public decimal? Roundoff { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -39,7 +35,7 @@ public partial class PurchaseOrder
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual SupplierMaster FromSupplier { get; set; } = null!;
+    public virtual Site Site { get; set; } = null!;
 
-    public virtual PurchaseRequest? RefInvoice { get; set; }
+    public virtual ICollection<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; } = new List<SupplierInvoiceDetail>();
 }
