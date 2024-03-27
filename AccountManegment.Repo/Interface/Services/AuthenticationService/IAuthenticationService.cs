@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.DataTableParameters;
+﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace AccountManagement.Repository.Interface.Services.AuthenticationService
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
         Task<UserResponceModel> DeleteUserDetails(Guid UserId);
+        Task<ApiResponseModel> RolewisePermission(RolewisePermissionModel RolePermission);
     }
 }

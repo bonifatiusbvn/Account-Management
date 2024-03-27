@@ -55,7 +55,7 @@ function ClearTextBox() {
     $('#txtrole').val('');
     $('#txtPhoneNo').val('');
     $('#ddlUserRole').val('');
-    $('#txtSiteName').val('').prop('disabled', false);
+    $('#txtSiteName').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
         button.textContent = "Create";

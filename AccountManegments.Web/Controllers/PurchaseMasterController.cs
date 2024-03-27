@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
-    public class PurchaseRequestController : Controller
+    public class PurchaseMasterController : Controller
     {
-        public PurchaseRequestController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
+        public PurchaseMasterController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
         {
             WebAPI = webAPI;
             APIServices = aPIServices;
@@ -93,7 +93,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var PurchaseRequest = new PurchaseRequestModel()
-                { 
+                {
                     Pid = Guid.NewGuid(),
                     Item = PurchaseRequestDetails.Item,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
@@ -185,5 +185,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+
     }
 }

@@ -96,13 +96,32 @@
                     </a>
                 </li>
                 <li>
-                    <a asp-action="PurchaseRequestListView" asp-controller="PurchaseRequest">
+                    <a asp-action="InvoiceMaster" asp-controller="CreateInvoice">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
                         </div>
-                        <div class="menu-title">Purchase Request</div>
+                        <div class="menu-title">Create Invoice</div>
                     </a>
                 </li>
+                <li>
+                    <a class="has-arrow">
+                        <div class="parent-icon">
+                            <ion-icon name="lock-closed-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">Purchase Master</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a asp-action="PurchaseRequestListView" asp-controller="PurchaseRequest">
+                                <div class="parent-icon">
+                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                </div>
+                                <div class="menu-title">Purchase Request</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li>
                     <a class="has-arrow">
                         <div class="parent-icon">
@@ -117,7 +136,7 @@
                             </a>
                         </li>
                         <li>
-                            <a asp-action="UserListView" asp-controller="User">
+                            <a asp-action="RolewisePermission" asp-controller="User">
                                 <ion-icon name="ellipse-outline"></ion-icon>User Wise Permission
                             </a>
                         </li>

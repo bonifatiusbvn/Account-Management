@@ -33,7 +33,7 @@ namespace AccountManegments.Web.Controllers
         public async Task<IActionResult> GetAllCompanyDetails(string searchText, string searchBy, string sortBy)
         {
             try
-            {   
+            {
                 string apiUrl = $"Company/GetAllCompany?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
@@ -55,6 +55,8 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
+
         [HttpPost]
         public async Task<IActionResult> AddCompany(CompanyModel AddCompany)
         {

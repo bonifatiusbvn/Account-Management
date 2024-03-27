@@ -310,6 +310,41 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             return response;
         }
 
+        public async Task<ApiResponseModel> RolewisePermission(RolewisePermissionModel RolePermission)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+
+            try
+            {
+
+                var model = new RolewiseFormPermission()
+                {
+
+                    RoleId = RolePermission.RoleId,
+                    FormId = RolePermission.FormId,
+                    IsViewAllow = RolePermission.IsViewAllow,
+                    IsEditAllow = RolePermission.IsEditAllow,
+                    IsDeleteAllow = RolePermission.IsDeleteAllow,
+                    CreatedBy = RolePermission.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+
+                Context.RolewiseFormPermissions.Add(model);
+                Context.SaveChanges();
+
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Permissions Given Successfully";
+
+            }
+            catch (Exception ex)
+            {
+
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while creating the user";
+            }
+
+            return response;
+        }
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
         {

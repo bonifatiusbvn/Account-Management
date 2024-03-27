@@ -82,11 +82,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Gstno)
                 .HasMaxLength(17)
-                .IsFixedLength()
                 .HasColumnName("GSTNo");
-            entity.Property(e => e.PanNo)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.PanNo).HasMaxLength(10);
             entity.Property(e => e.Pincode).HasMaxLength(10);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -242,6 +239,11 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Form).WithMany(p => p.RolewiseFormPermissions)
+                .HasForeignKey(d => d.FormId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RolewiseFormPermission_UserRole");
         });
 
         modelBuilder.Entity<Site>(entity =>
@@ -307,7 +309,6 @@ public partial class DbaccManegmentContext : DbContext
         {
             entity.HasKey(e => e.InvoiceDetailsId);
 
-            entity.Property(e => e.InvoiceDetailsId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst)
