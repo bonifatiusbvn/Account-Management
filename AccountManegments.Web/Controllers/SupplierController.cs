@@ -3,8 +3,11 @@ using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Reflection;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -130,6 +133,72 @@ namespace AccountManegments.Web.Controllers
             {
                 throw ex;
             }
+        }
+        public async Task<IActionResult> ExportSupplierListToExcel()
+        {
+            try
+            {
+                List<SupplierModel> getSupplierList = new List<SupplierModel>();
+                string apiUrl = $"SupplierMaster/GetAllSupplierList";
+
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.data.Count != 0)
+                {
+                    getSupplierList = JsonConvert.DeserializeObject<List<SupplierModel>>(response.data.ToString());
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        wb.Worksheets.Add(ToConvertDataTable(getSupplierList.ToList()));
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            string FileName = Guid.NewGuid() + "_SupplierList.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocuments.spreadsheetml.sheet", FileName);
+
+                        }
+                    }
+                }
+                return RedirectToAction("SupplierList");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public System.Data.DataTable ToConvertDataTable<T>(List<T> items)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable(typeof(T).Name);
+            PropertyInfo[] propInfo = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in propInfo)
+            {
+                dt.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[propInfo.Length];
+                for (int i = 1; i < propInfo.Length; i++)
+                {
+                    values[i] = propInfo[i].GetValue(item, null);
+                }
+                dt.Rows.Add(values);
+            }
+            dt.Columns.Remove("SupplierId");
+            dt.Columns.Remove("BuildingName");
+            dt.Columns.Remove("Area");
+            dt.Columns.Remove("State");
+            dt.Columns.Remove("StateName");
+            dt.Columns.Remove("City");
+            dt.Columns.Remove("Pincode");
+            dt.Columns.Remove("BankName");
+            dt.Columns.Remove("AccountNo");
+            dt.Columns.Remove("Iffccode");
+            dt.Columns.Remove("isDelete");
+            dt.Columns.Remove("CreatedBy");
+            dt.Columns.Remove("CreatedOn");
+            dt.Columns.Remove("UpdatedBy");
+            dt.Columns.Remove("UpdatedOn");
+            return dt;
         }
     }
 }

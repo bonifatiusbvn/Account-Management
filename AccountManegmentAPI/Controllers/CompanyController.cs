@@ -12,11 +12,11 @@ namespace AccountManagement.API.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly ICompanyService companyService;
+        public ICompanyService _companyService { get; }
 
         public CompanyController(ICompanyService companyService)
         {
-            this.companyService = companyService;
+            _companyService = companyService;
         }
         [HttpPost]
         [Route("AddCompany")]
@@ -25,7 +25,7 @@ namespace AccountManagement.API.Controllers
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var result = companyService.AddCompany(AddCompany);
+                var result = _companyService.AddCompany(AddCompany);
                 if (result.Result.code == 200)
                 {
                     response.code = (int)HttpStatusCode.OK;
@@ -47,14 +47,14 @@ namespace AccountManagement.API.Controllers
         [Route("GetAllCompany")]
         public async Task<IActionResult> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<CompanyModel> company = await companyService.GetAllCompany(searchText, searchBy, sortBy);
+            IEnumerable<CompanyModel> company = await _companyService.GetAllCompany(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = company.ToList() });
         }
         [HttpGet]
         [Route("GetCompnaytById")]
         public async Task<IActionResult> GetCompnaytById(Guid Id)
         {
-            var company = await companyService.GetCompnaytById(Id);
+            var company = await _companyService.GetCompnaytById(Id);
             return Ok(new { code = 200, data = company });
         }
         [HttpPost]
@@ -64,7 +64,7 @@ namespace AccountManagement.API.Controllers
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var result = companyService.UpdateCompany(UpdateCompany);
+                var result = _companyService.UpdateCompany(UpdateCompany);
                 if (result.Result.code == 200)
                 {
                     response.code = (int)HttpStatusCode.OK;
@@ -87,7 +87,7 @@ namespace AccountManagement.API.Controllers
         public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-            var company = await companyService.DeleteCompanyDetails(CompanyId);
+            var company = await _companyService.DeleteCompanyDetails(CompanyId);
             try
             {
                 if (company != null)

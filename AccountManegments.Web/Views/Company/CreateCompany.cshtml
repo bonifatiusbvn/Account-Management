@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "CreateCompany";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -53,13 +52,8 @@
                                                 <div class="col-12 col-lg-4">
                                                     <select class="form-select form-select-lg" id="ddlSortBy" onchange="sortCompanyTable()">
                                                         <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                        <option value="DescendingCreatedOn" selected="selected">First Created</option>
                                                         <option value="AscendingCompanyName">CompanyName(a-z)</option>
                                                         <option value="DescendingCompanyName">CompanyName(z-a)</option>
-                                                        <option value="AscendingGstNo">GstNo-Asc </option>
-                                                        <option value="DescendingGstNo">GstNo-Des</option>
-                                                        <option value="AscendingPanNo">PanNo-Asc</option>
-                                                        <option value="DescendingPanNo">PanNo-Des</option>
                                                     </select>
                                                 </div>
                                             </div><!--end row-->
@@ -178,7 +172,7 @@
                                 <div class="col-12">
                                     <label class="form-label">Company Name</label>
                                     <input type="text" class="form-control form-control-lg mb-3" placeholder="Company Name" id="txtCompanyName" required>
-                                    <input type="hidden" id="txtCompanyid"/>
+                                    <input type="hidden" id="txtCompanyid" />
                                     <span id="spnCompanyName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
@@ -229,7 +223,7 @@
                                     </select>
                                     <input type="hidden" id="txtcountry" value="" />
                                     <span id="spnCountry" class="text-danger"></span>
-                                </div>           
+                                </div>
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
                                 </div>
@@ -247,4 +241,4 @@
 @section Scripts {
     <script src="~/moduls/masterlistscript.js"></script>
     <script src="~/moduls/companyscript.js"></script>
-    }
+}

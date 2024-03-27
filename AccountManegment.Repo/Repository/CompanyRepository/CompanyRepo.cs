@@ -18,7 +18,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
 {
     public class CompanyRepo : ICompany
     {
-        public CompanyRepo(DbaccManegmentContext context) 
+        public CompanyRepo(DbaccManegmentContext context)
         {
             Context = context;
         }
@@ -30,7 +30,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var company = new API.Company()
+                var company = new Company()
                 {
                     CompanyId = Guid.NewGuid(),
                     CompanyName = AddCompany.CompanyName,
@@ -67,7 +67,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
 
             if (company != null)
             {
-                
+
                 company.IsDelete = true;
                 Context.Companies.Update(company);
                 Context.SaveChanges();
@@ -86,13 +86,13 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     CompanyId = a.CompanyId,
                     CompanyName = a.CompanyName,
                     Gstno = a.Gstno,
-                    PanNo=a.PanNo,
+                    PanNo = a.PanNo,
                     Address = a.Address,
                     Area = a.Area,
                     CityId = a.CityId,
                     StateId = a.StateId,
                     Country = a.Country,
-                    Pincode =a.Pincode,
+                    Pincode = a.Pincode,
                 });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -170,21 +170,21 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                            join d in Context.Countries on a.Country equals d.CountryId
                            select new CompanyModel
                            {
-                                CompanyId=a.CompanyId,
-                                CompanyName=a.CompanyName,
-                                Gstno=a.Gstno,
-                                PanNo=a.PanNo,
-                                Address=a.Address,
-                                Area=a.Area,
-                                CityId=a.CityId,
-                                CityName=b.CityName,
-                                StateId=a.StateId,
-                                StateName=c.StatesName,
-                                CountryName=d.CountryName,
-                                Country=a.Country,
-                                Pincode=a.Pincode,
-                                CreatedBy = a.CreatedBy,
-                                CreatedOn = a.CreatedOn,
+                               CompanyId = a.CompanyId,
+                               CompanyName = a.CompanyName,
+                               Gstno = a.Gstno,
+                               PanNo = a.PanNo,
+                               Address = a.Address,
+                               Area = a.Area,
+                               CityId = a.CityId,
+                               CityName = b.CityName,
+                               StateId = a.StateId,
+                               StateName = c.StatesName,
+                               CountryName = d.CountryName,
+                               Country = a.Country,
+                               Pincode = a.Pincode,
+                               CreatedBy = a.CreatedBy,
+                               CreatedOn = a.CreatedOn,
                            }).First();
                 return company;
             }
@@ -224,6 +224,6 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             }
             return model;
         }
-    }     
-    
+    }
+
 }

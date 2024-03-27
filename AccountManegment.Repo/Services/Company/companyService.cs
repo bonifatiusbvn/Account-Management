@@ -13,7 +13,7 @@ namespace AccountManagement.Repository.Services.Company
     public class CompanyService : ICompanyService
     {
 
-        public CompanyService(ICompany company) 
+        public CompanyService(ICompany company)
         {
             Company = company;
         }

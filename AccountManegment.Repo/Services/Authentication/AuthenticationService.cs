@@ -1,4 +1,6 @@
-﻿using AccountManagement.DBContext.Models.DataTableParameters;
+﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
@@ -49,6 +51,11 @@ namespace AccountManagement.Repository.Services.Authentication
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
         {
             return await Authentication.LoginUser(LoginUser);
+        }
+
+        public async Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission)
+        {
+            return await Authentication.RolewisePermission(RolePermission);
         }
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)

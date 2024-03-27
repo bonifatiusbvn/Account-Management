@@ -36,9 +36,9 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 }
                 else
                 {
-                    if (LastPr.PrNo.Length >= 25)
+                    if (LastPr.PrNo.Length >= 19)
                     {
-                        int PrNumber = int.Parse(LastPr.PrNo.Substring(24)) + 1;
+                        int PrNumber = int.Parse(LastPr.PrNo.Substring(18)) + 1;
                         PurchaseRequestId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-" + PrNumber.ToString("D3");
                     }
                     else
@@ -62,11 +62,12 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 var purchaseRequest = new PurchaseRequest()
                 {
                     Pid = Guid.NewGuid(),
+                    PrNo = PurchaseRequestDetails.PrNo,
                     Item = PurchaseRequestDetails.Item,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
-                    IsApproved = false,
+                    IsApproved = PurchaseRequestDetails.IsApproved,
                     CreatedBy = PurchaseRequestDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -114,6 +115,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                             select new PurchaseRequestModel
                             {
                                 Pid = a.Pid,
+                                PrNo = a.PrNo,
                                 Item = a.Item,
                                 UnitTypeId = a.UnitTypeId,
                                 Quantity = a.Quantity,
@@ -144,6 +146,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                          
                                                 Pid = a.Pid,
                                                 Item = a.Item,
+                                                PrNo = a.PrNo,
                                                 Quantity = a.Quantity,
                                                 UnitTypeId = a.UnitTypeId,
                                                 UnitName = b.UnitName,
@@ -151,6 +154,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                                 SiteName = c.SiteName,
                                                 CreatedBy = a.CreatedBy,
                                                 CreatedOn = a.CreatedOn,
+                                                IsApproved = a.IsApproved,
                                             });
 
                 if (!string.IsNullOrEmpty(searchText))
@@ -158,8 +162,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
                         u.Item.ToLower().Contains(searchText) ||
-                        u.SiteName.ToLower().Contains(searchText) 
-                        
+                        u.UnitName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -168,8 +171,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     searchText = searchText.ToLower();
                     switch (searchBy.ToLower())
                     {
-                        case "sitename":
-                            PurchaseRequestList = PurchaseRequestList.Where(u => u.SiteName.ToLower().Contains(searchText));
+                        case "unitname":
+                            PurchaseRequestList = PurchaseRequestList.Where(u => u.UnitName.ToLower().Contains(searchText));
                             break;
                         case "item":
                             PurchaseRequestList = PurchaseRequestList.Where(u => u.Item.ToLower().Contains(searchText));
@@ -228,10 +231,12 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 if (PurchaseRequestData != null)
                 {
                     PurchaseRequestData.Pid = PurchaseRequestDetails.Pid;
+                    PurchaseRequestData.PrNo = PurchaseRequestDetails.PrNo;
                     PurchaseRequestData.Item = PurchaseRequestDetails.Item;
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
+                    
                 }
                 Context.PurchaseRequests.Update(PurchaseRequestData);
                 Context.SaveChanges();

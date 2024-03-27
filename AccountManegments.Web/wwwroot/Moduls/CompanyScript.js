@@ -65,6 +65,7 @@ function AddCompany() {
         Pincode: $('#txtPincode').val(),
 
     }
+
     $.ajax({
         url: '/Company/AddCompany',
         type: 'post',
@@ -121,7 +122,7 @@ function GetCompnaytById(CompanyId) {
             $('#dropState').val(response.stateId);
             $('#txtCountry').val(response.countryId);
             $('#txtPincode').val(response.pincode);
-        
+
             setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
 
             var button = document.getElementById("btncompany");
@@ -177,9 +178,9 @@ function UpdateCompany() {
         PanNo: $('#txtPanNo').val(),
         Address: $('#txtAddress').val(),
         Area: $('#txtArea').val(),
-        City: $('#txtCityId').val(),
-        State: $('#txtStateId').val(),
-        Country: $('#txtCountry').val(),
+        CityId: $('#ddlCity').val(),
+        StateId: $('#dropState').val(),
+        Country: $('#ddlCountry').val(),
         Pincode: $('#txtPincode').val(),
     }
     $.ajax({
@@ -316,7 +317,7 @@ function validateAndCreateCompany() {
         isValid = false;
     }
 
-    
+
 
     if (isValid) {
         if ($("#txtCompanyid").val() == '') {

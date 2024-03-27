@@ -212,5 +212,10 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public IActionResult RolewisePermission()
+        {
+            return View();
+        }
     }
 }
