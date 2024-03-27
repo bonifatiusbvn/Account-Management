@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
         Task<UserResponceModel> DeleteUserDetails(Guid UserId);
 
-        Task<ApiResponseModel> RolewisePermission(RolewisePermissionModel RolePermission);
+        Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission);
 
 
     }

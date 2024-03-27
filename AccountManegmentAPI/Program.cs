@@ -32,6 +32,10 @@ using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Repository.PurchaseRequestRepository;
 using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
 using AccountManagement.Repository.Services.PurchaseRequest;
+using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using AccountManagement.Repository.Repository.InvoiceMasterRepository;
+using AccountManagement.Repository.Interface.Services.InvoiceMaster;
+using AccountManagement.Repository.Services.InvoiceMaster;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +55,8 @@ builder.Services.AddScoped<IItemMaster, ItemMasterRepo>();
 builder.Services.AddScoped<ISupplierMaster, SupplierMasterRepo>();
 builder.Services.AddScoped<ICompany, CompanyRepo>();
 builder.Services.AddScoped<IPurchaseRequest, PurchaseRequestRepo>();
+builder.Services.AddScoped<ISupplierInvoice, SupplierInvoiceRepo>();
+builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -61,6 +67,8 @@ builder.Services.AddScoped<IItemMasterServices, ItemMasterServices>();
 builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>();
+builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
+builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
