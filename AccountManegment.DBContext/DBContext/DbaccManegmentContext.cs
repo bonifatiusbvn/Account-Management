@@ -49,6 +49,7 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -179,6 +180,10 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.FromSupplierId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseOrder_SupplierMaster");
+
+            entity.HasOne(d => d.RefPurchaseRequestNavigation).WithMany(p => p.PurchaseOrders)
+                .HasForeignKey(d => d.RefPurchaseRequest)
+                .HasConstraintName("FK_PurchaseOrder_PurchaseRequest");
         });
 
         modelBuilder.Entity<PurchaseOrderDetail>(entity =>

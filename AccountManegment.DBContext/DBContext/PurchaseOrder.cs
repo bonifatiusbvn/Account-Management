@@ -7,6 +7,10 @@ public partial class PurchaseOrder
 {
     public Guid Poid { get; set; }
 
+    public Guid SiteId { get; set; }
+
+    public Guid? RefPurchaseRequest { get; set; }
+
     public Guid FromSupplierId { get; set; }
 
     public Guid ToCompanyId { get; set; }
@@ -38,4 +42,6 @@ public partial class PurchaseOrder
     public DateTime? UpdatedOn { get; set; }
 
     public virtual SupplierMaster FromSupplier { get; set; } = null!;
+
+    public virtual PurchaseRequest? RefPurchaseRequestNavigation { get; set; }
 }
