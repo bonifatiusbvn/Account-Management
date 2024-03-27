@@ -174,6 +174,11 @@ public partial class DbaccManegmentContext : DbContext
                 .HasColumnName("TotalGSTAmount");
             entity.Property(e => e.TotalPrice).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.FromSupplier).WithMany(p => p.PurchaseOrders)
+                .HasForeignKey(d => d.FromSupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseOrder_SupplierMaster");
         });
 
         modelBuilder.Entity<PurchaseOrderDetail>(entity =>
@@ -195,11 +200,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Po).WithMany(p => p.PurchaseOrderDetails)
-                .HasForeignKey(d => d.Poid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseOrderDetails_PurchaseOrder");
 
             entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.UnitTypeId)

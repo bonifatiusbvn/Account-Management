@@ -37,5 +37,5 @@ public partial class PurchaseOrder
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
+    public virtual SupplierMaster FromSupplier { get; set; } = null!;
 }
