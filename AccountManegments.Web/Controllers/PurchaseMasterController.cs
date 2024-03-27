@@ -186,6 +186,10 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        public IActionResult CreatePurchaseOrder()
+        {
+            return View();
+        }
 
     }
 }

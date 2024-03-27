@@ -16,389 +16,251 @@
         </nav>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card" id="invoiceList">
-            <div class="card-header border-0">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
-                    <div class="flex-shrink-0">
-                        <div class="d-flex gap-2 flex-wrap">
-                            <select class="form-control" data-choices data-choices-search-false id="idStatus">
-                                <option selected disabled value=" ">Type</option>
-                                <option value="Selse">Selse</option>
-                                <option value="Purchase">Purchase</option>
-                            </select>
+<div class="row justify-content-center">
+    <div class="col-xxl-9">
+        <div class="card">
+            <form id="createproductform" autocomplete="off">
+                <div class="card-body border-bottom border-bottom-dashed p-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="profile-user mx-auto  mb-3">
+                                <label for="profile-img-file-input" class="d-block" tabindex="0">
+                                    <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
+                                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
+                                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
+                                    </span>
+                                </label>
+                            </div>
                         </div>
+                        <!--end col-->
+
                     </div>
+                    <!--end row-->
                 </div>
-            </div>
-            <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-9">
-                            <div class="card">
-                                <form id="CreateInvoiceForm">
-                                    <div class="card-body border-bottom border-bottom-dashed p-4">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="profile-user mx-auto  mb-3">
-                                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
-                                                    <label for="profile-img-file-input" class="d-block" tabindex="0">
-                                                        <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
-                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div id="Companyname" style="display:none;">
-                                                    <label>CompanyAddress</label>
-                                                </div>
-                                                <div class="mb-2" style="display:none;" id="idStatusCompany">
-                                                    <div class="form-control">
-                                                        <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
-                                                        <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,Vadodara,Gujarat 390020</span></h6>
-                                                        <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(91) 643 234 6789</span></h6>
-                                                    </div>
-                                                    @* <select class="form-control" name="data[#].CompanyAddress" data-choices data-choices-search-false id="idStatusCompany" name="Company">
-                                                    <option selected value=" ">Type</option>
-                                                    <option value="Pending">Bonifatius</option>
-                                                    <option value="Inprogress">Purchase</option>
-                                                    </select> *@
-                                                </div>
-                                                <div class="col-lg-12 ms-auto" id="vender" style="display:none;">
-                                                    <select class="form-control" data-choices data-choices-search-false id="txtvendorname" name="txtvendorname">
-                                                        <option selected disabled value="">---Select Vendor Name---</option>
-                                                    </select>
-                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
-                                                </div>
-                                                <br />
-                                                <div class="mb-2" id="vendorcompanyaddress">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4 ms-auto" id="vender">
-                                                <select class="form-control" data-choices data-choices-search-false id="txtvendorname1" name="txtvendorname">
-                                                    <option selected disabled value="">---Select Vendor Name---</option>
-                                                </select>
-                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid1">
-                                                <br />
-                                                <div class="mb-2" id="vendorcompanyaddress1">
-                                                </div>
-                                                <div id="CompanCCP" style="display:none;">
-                                                    <label>CompanyAddress</label>
-                                                </div>
-                                                <div class="mb-2" style="display:none;" id="idCompany">
-                                                    <div class="form-control">
-                                                        <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
-                                                        <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,Vadodara,Gujarat 390020</span></h6>
-                                                        <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(91) 643 234 6789</span></h6>
-                                                    </div>
-                                                    @* <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
-                                                    <option selected value=" ">Type</option>
-                                                    <option value="Pending">Bonifatius</option>
-                                                    <option value="Inprogress">Purchase</option>
-                                                    </select> *@
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <div class="row g-3 ">
-                                            <div class="col-lg-3 col-sm-6">
-                                                <label for="invoicenoInput" id="InvoiceNo">Invoice No</label>
-                                                <input type="text" class="form-control bg-light border-0" id="invoicenoInput" name="data[#].InvoiceNo" placeholder="Invoice No" />
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <label for="date-field">Date</label>
-                                                    <input type="date" class="form-control bg-light border-0" id="date-field" name="data[#].Date" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <label for="choices-payment-status">Payment Status</label>
-                                                <div class="input-light">
-                                                    <select class="form-control bg-light border-0" name="data[#].PaymentStatus" data-choices data-choices-search-false id="choices-payment-status" required>
-                                                        <option value="">Select Payment Status</option>
-                                                        <option value="Paid">Paid</option>
-                                                        <option value="Unpaid">Unpaid</option>
-                                                        <option value="Refund">Refund</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <label for="totalamountInput">Total Amount</label>
-                                                    <input type="text" class="form-control bg-light border-0" name="data[#].TotalAmount" id="totalamountInput" placeholder="₹0.00" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-                                    <div class="card-body p-4 border-top border-top-dashed">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-6">
-                                                <div>
-                                                    <label for="billingName" class="text-uppercase fw-semibold">Billing Address</label>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control bg-light border-0" id="billingName" name="data[#].BillingName" placeholder="Full Name" required />
-                                                    <div class="invalid-feedback">
-                                                        Please enter a full name
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <textarea class="form-control bg-light border-0" id="billingAddress" name="data[#].BillingAddress" rows="3" placeholder="Address" required></textarea>
-                                                    <div class="invalid-feedback">
-                                                        Please enter a address
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control bg-light border-0" name="data[#].BillingNumber" data-plugin="cleave-phone" id="billingPhoneno" placeholder="(123)456-7890" required />
-                                                    <div class="invalid-feedback">
-                                                        Please enter a phone number
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <input type="text" class="form-control bg-light border-0" name="data[#].BillingTaxNumber" id="billingTaxno" placeholder="Tax Number" required />
-                                                    <div class="invalid-feedback">
-                                                        Please enter a tax number
-                                                    </div>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="same" name="same" onchange="billingFunction()" />
-                                                    <label class="form-check-label" for="same">
-                                                        Will your Billing and Shipping address same?
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-6 ms-auto">
-                                                <div class="row">
-                                                    <div class="col-lg-8">
-                                                        <div>
-                                                            <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
-                                                            <div class="invalid-feedback">
-                                                                Please enter a full name
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <textarea class="form-control bg-light border-0" id="shippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
-                                                            <div class="invalid-feedback">
-                                                                Please enter a address
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <input type="text" class="form-control bg-light border-0" name="data[#].ShippingNumber" data-plugin="cleave-phone" id="shippingPhoneno" placeholder="(123)456-7890" required />
-                                                            <div class="invalid-feedback">
-                                                                Please enter a phone number
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <input type="text" class="form-control bg-light border-0" name="data[#].ShippingTaxNumber" id="shippingTaxno" placeholder="Tax Number" required />
-                                                            <div class="invalid-feedback">
-                                                                Please enter a tax number
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive ">
-                                            <table class="invoice-table table table-borderless table-nowrap mb-0">
-                                                <thead class="align-middle">
-                                                    <tr class="table-active">
-                                                        <th scope="col" style="width: 50px;">#</th>
-                                                        <th scope="col">
-                                                            Product Details
-                                                        </th>
-                                                        <th scope="col">
-                                                            HSN/SAC
-                                                        </th>
-                                                        <th scope="col" style="width: 120px;">
-                                                            <div class="d-flex currency-select input-light align-items-center">
-                                                                Rate
-                                                                <select class="form-selectborder-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
-                                                                    <option value="$">($)</option>
-                                                                    <option value="£">(£)</option>
-                                                                    <option value="₹">(₹)</option>
-                                                                    <option value="€">(€)</option>
-                                                                </select>
-                                                            </div>
-                                                        </th>
-                                                        <th scope="col" style="width: 120px;">Quantity</th>
-                                                        <th scope="col" class="text-end" style="width: 150px;">Amount</th>
-                                                        <th scope="col" class="text-end" style="width: 105px;"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="invoiceItems">
-                                                    <tr class="product invoice-item">
-                                                        <th scope="row" class="product-id">1</th>
-                                                        <td class="text-start">
-                                                            <div class="mb-2">
-                                                                <input type="text" class="form-control bg-light border-0" name="data[#].ProductName" id="productName-1" placeholder="Product Name" required />
-                                                                <div class="invalid-feedback">
-                                                                    Please enter a product name
-                                                                </div>
-                                                            </div>
-                                                            <textarea class="form-control bg-light border-0" id="productDetails-1" name="data[#].ProductDetails" rows="2" placeholder="Product Details"></textarea>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control product-price bg-light border-0" id="productHsn-1" name="data[#].HSN" step="0.01" placeholder="HSN" required />
-                                                            <div class="invalid-feedback">
-                                                                Please enter a HSN
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control product-price bg-light border-0" id="productRate-1" name="data[#].Price" step="0.01" placeholder="0.00" required />
-                                                            <div class="invalid-feedback">
-                                                                Please enter a rate
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="input-step">
-                                                                <button type="button" class='minus'>–</button>
-                                                                <input type="number" class="product-quantity" id="product-qty-1" name="data[#].Quantity" value="0">
-                                                                <button type="button" class='plus'>+</button>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-end">
-                                                            <div>
-                                                                <input type="text" class="form-control bg-light border-0 product-line-price" name="data[#].TotalAmount" id="productPrice-1" placeholder="₹0.00" readonly />
-                                                            </div>
-                                                        </td>
-                                                        <td class="product-removal">
-                                                            <a href="javascript:void(0)" class="btn btn-success">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody>
-                                                    <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"><p>Add New Form</p></td></tr>
-                                                    <tr>
-                                                        <td colspan="5">
-                                                            @* <a href="javascript:new_link()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a> *@
-                                                            <button type="button" class="btn btn-secondary fw-medium" id="addItemBtn">Add Item</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="border-top border-top-dashed mt-2">
-                                                        <td colspan="3"></td>
-                                                        <td colspan="2" class="p-0">
-                                                            <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th scope="row">CGST</th>
-                                                                        <td style="width:150px;">
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">SGST</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">IGST</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Total GST</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Shipping Charge</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr class="border-top border-top-dashed">
-                                                                        <th scope="row">Total Amount</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            <!--end table-->
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <!--end table-->
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-lg-4">
-                                                <div class="mb-2">
-                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                                    <div class="input-light">
-                                                        <select class="form-control bg-light border-0" name="data[#].PaymentMethod" data-choices data-choices-search-false data-choices-removeItem id="choices-payment-type">
-                                                            <option value="">Payment Method</option>
-                                                            <option value="Mastercard">Mastercard</option>
-                                                            <option value="Credit Card">Credit Card</option>
-                                                            <option value="Visa">Visa</option>
-                                                            <option value="Paypal">Paypal</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input class="form-control bg-light border-0" type="text" name="data[#].CardHolderName" id="cardholderName" placeholder="Card Holder Name">
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input class="form-control bg-light border-0" type="text" name="data[#].CardNumber" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
-                                                </div>
-                                                <div>
-                                                    <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="₹0.00" readonly />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                        <div class="mt-4">
-                                            <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                                            <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="submit" id="SubmitInvoiceBtn" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                            <a href="javascript:void(0);" id="generatePDF" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                                            <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
-                                            <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
-                                        </div>
-                                    </div>
-                                </form>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-sm-6">
+                            <label for="orderId" class="text-muted text-uppercase fw-semibold">Order ID</label>
+                            <input type="text" id="POId" class="form-control bg-light border-0" name="POId" value="@ViewBag.PoId" readonly />
+                        </div>
+                        @*                         <!--end col-->
+                        <div class="col-lg-3 col-sm-6">
+                        <div>
+                        <label for="date-field">Date</label>
+                        <input type="text" class="form-control bg-light border-0" id="date-field" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
+                        </div>
+                        </div> *@
+                        <!--end col-->
+                        <div class="col-lg-4 col-sm-6">
+                            <label for="choices-payment-status" class="text-muted text-uppercase fw-semibold">Payment Status</label>
+                            <div class="input-light">
+                                <select class="form-control bg-light border-0" id="txtPaymentStatus" data-choices data-choices-search-false>
+                                    <option selected disabled value="">Select Payment Status</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="Refund">Refund</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                                <label for="payment" class="text-muted text-uppercase fw-semibold">Payment Type</label>
+                                <input type="text" id="paymenttype" class="form-control bg-light border-0" name="payment" value="Credit" readonly />
                             </div>
                         </div>
                         <!--end col-->
                     </div>
+                    <!--end row-->
+                </div>
+                <div class="card-body p-4 border-top border-top-dashed">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                                <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
+                            </div>
+                            <div class="mb-2">
+                                <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-sm-6 ms-auto">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div>
+                                        <label for="deliverydate" class="text-muted text-uppercase fw-semibold">Delivery Date</label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Delivery-Date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="card-body border border-dashed border-end-0 border-start-0">
+                    <form id="dropdownValidationForm">
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <div>
+                                    <label for="txtvendorname" class="text-muted text-uppercase fw-semibold">Vendor Name</label>
+                                </div>
+                                <select class="text-muted text-uppercase fw-semibold" id="txtvendorname" name="txtvendorname" style="border:hidden;">
+                                    <option selected disabled value="">---Select Vendor Name---</option>
+                                </select>
+                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                <div id="vendorvalidationMessage" class="text-danger"></div>
+                            </div>
+                            <!--end col-->
+
+                            <div class="col-sm-4">
+                                <div>
+                                    <label for="ProductType" class="text-muted text-uppercase fw-semibold">Product Type</label>
+                                </div><select id="txtProducts" class="text-muted text-uppercase fw-semibold" onchange="selectProductTypeId()" style="border:hidden;">
+                                    <option selected disabled value="">----Select Product Type---</option>
+                                </select>
+                                <input type="hidden" class="form-control" id="txtProductTypeid">
+                                <input type="hidden" class="form-control" id="txtProductid">
+                                <div id="productvalidationMessage" class="text-danger"></div>
+                            </div>
+                            <!--end col-->
+
+                            <div class="col-sm-4">
+                                <div class="input-light">
+                                    <div>
+                                        <label for="searchproductname" class="text-muted text-uppercase fw-semibold">Product Names</label>
+                                    </div> <select id="searchproductname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
+                                        <option selected disabled value="">--Select ProductName--</option>
+                                    </select>
+                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchproductnameid">
+                                    <div id="searchvalidationMessage" class="text-danger"></div>
+
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="input-light">
+                                <div>
+                                    <div class="col-sm-2">
+                                        <a id="addItemButton" class="btn btn-secondary fw-small" onclick="SerchProductDetailsById()">Add Product</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
                 </div>
 
+                <!---- Product Details ---->
 
-            </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="invoice-table table table-bordered table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">#</th>
+                                    <th class="text-start">Product Details</th>
+                                    <th class="text-start">Rate</th>
+                                    <th class="text-start">GST (%)</th>
+                                    <th class="text-start">GST Price</th>
+                                    <th class="text-start">Quantity</th>
+                                    <th class="text-start">Amount</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="addNewlink">
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <tbody>
+                        <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
+                        <tr class="border-top border-top-dashed mt-2">
+                            <td colspan="3"></td>
+                            <td colspan="2" class="p-0">
+                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Sub Total</th>
+                                            <td style="width:150px;">
+                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Estimated Tax (12.5%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Gst(18%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Discount <small class="text-muted">()</small></th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Shipping Charge</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top border-top-dashed">
+                                            <th scope="row">Total Amount</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!--end table-->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <div class="row mt-3">
+                        <div class="col-lg-4">
+                            <div class="mb-2">
+                                <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
+                                <div class="input-light">
+                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false data-choices-removeItem id="txtpaymentmethod">
+                                        <option selected disabled value="">---Select Payment Method---</option>
+                                    </select>
+                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymentmethodid">
+                                </div>
+                            </div>
+                            <div>
+                                <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="₹0.00" readonly />
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                    <div class="mt-4">
+                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
+                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
+                    </div>
+                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                        <button type="button" class="btn btn-success" onclick="InsertMultiplePurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
+                    </div>
+                </div>
+            </form>
         </div>
-
     </div>
     <!--end col-->
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/purchaseorderdetailsscript.js"></script>
