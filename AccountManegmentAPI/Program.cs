@@ -28,6 +28,10 @@ using AccountManagement.Repository.Repository.CompanyRepository;
 using AccountManagement.Repository.Interface.Repository.Company;
 using AccountManagement.Repository.Interface.Services.CompanyService;
 using AccountManagement.Repository.Services.Company;
+using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
+using AccountManagement.Repository.Repository.PurchaseRequestRepository;
+using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
+using AccountManagement.Repository.Services.PurchaseRequest;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +50,7 @@ builder.Services.AddScoped<ISiteMaster, SiteMasterRepo>();
 builder.Services.AddScoped<IItemMaster, ItemMasterRepo>();
 builder.Services.AddScoped<ISupplierMaster, SupplierMasterRepo>();
 builder.Services.AddScoped<ICompany, CompanyRepo>();
+builder.Services.AddScoped<IPurchaseRequest, PurchaseRequestRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -54,7 +59,7 @@ builder.Services.AddScoped<ISiteMasterServices, SiteMasterService>();
 builder.Services.AddScoped<IFormPermissionMasterService, FormPermissionMasterService>();
 builder.Services.AddScoped<IItemMasterServices, ItemMasterServices>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
-builder.Services.AddScoped<ISupplierServices, SupplierServices>();
+builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
