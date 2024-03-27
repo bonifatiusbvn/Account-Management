@@ -25,6 +25,12 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
 
+    public virtual DbSet<PodeliveryAddress> PodeliveryAddresses { get; set; }
+
+    public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
+    public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+
     public virtual DbSet<PurchaseRequest> PurchaseRequests { get; set; }
 
     public virtual DbSet<RolewiseFormPermission> RolewiseFormPermissions { get; set; }
@@ -131,6 +137,74 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.UnitType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ItemMaster_UnitMaster");
+        });
+
+        modelBuilder.Entity<PodeliveryAddress>(entity =>
+        {
+            entity.HasKey(e => e.Aid).HasName("PK_PODelevryAddress");
+
+            entity.ToTable("PODeliveryAddress");
+
+            entity.Property(e => e.Aid)
+                .ValueGeneratedNever()
+                .HasColumnName("AId");
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.Poid).HasColumnName("POId");
+        });
+
+        modelBuilder.Entity<PurchaseOrder>(entity =>
+        {
+            entity.HasKey(e => e.Poid);
+
+            entity.ToTable("PurchaseOrder");
+
+            entity.Property(e => e.Poid)
+                .ValueGeneratedNever()
+                .HasColumnName("POId");
+            entity.Property(e => e.BillingAddress).HasMaxLength(500);
+            entity.Property(e => e.ContactName).HasMaxLength(50);
+            entity.Property(e => e.ContactPhone).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalGstamount)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("TotalGSTAmount");
+            entity.Property(e => e.TotalPrice).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<PurchaseOrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_PurchaseOrderDetails_1");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Gst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GST");
+            entity.Property(e => e.Gstamount)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GSTAmount");
+            entity.Property(e => e.Item)
+                .HasMaxLength(10)
+                .IsFixedLength();
+            entity.Property(e => e.Poid).HasColumnName("POId");
+            entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Po).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.Poid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseOrderDetails_PurchaseOrder");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseOrderDetails_UnitMaster");
         });
 
         modelBuilder.Entity<PurchaseRequest>(entity =>
