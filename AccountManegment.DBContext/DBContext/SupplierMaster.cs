@@ -45,5 +45,7 @@ public partial class SupplierMaster
 
     public virtual City CityNavigation { get; set; } = null!;
 
+    public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
+
     public virtual State StateNavigation { get; set; } = null!;
 }

@@ -48,4 +48,6 @@ public partial class Site
     public DateTime? UpdatedOn { get; set; }
 
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
+
+    public virtual ICollection<SupplierInvoice> SupplierInvoices { get; set; } = new List<SupplierInvoice>();
 }

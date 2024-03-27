@@ -79,13 +79,7 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
-            $(document).ready(function () {
-                if ($('#txtUserRole').val() == '9') {
-                    $('#txtSiteName').val(response.siteId).prop('disabled', false);
-                } else {
-                    $('#txtSiteName').val(response.siteId).prop('disabled', true);
-                }
-            });
+            $('#txtSiteName').val(response.siteId);
             $('#txtSiteName').val(response.siteId);
             $('#ddlUserRole').val(response.roleId);
             var button = document.getElementById("btnuser");
