@@ -87,23 +87,24 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PuchaseRequestDetails)
+        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PurchaseRequestDetails)
         {
 
             try
             {
-                var PuchaseRequest = new PurchaseRequestModel()
+                var PurchaseRequest = new PurchaseRequestModel()
                 { 
                     Pid = Guid.NewGuid(),
-                    Item = PuchaseRequestDetails.Item,
-                    UnitTypeId = PuchaseRequestDetails.UnitTypeId,
-                    SiteId = PuchaseRequestDetails.SiteId,
-                    Quantity = PuchaseRequestDetails.Quantity,
+                    Item = PurchaseRequestDetails.Item,
+                    UnitTypeId = PurchaseRequestDetails.UnitTypeId,
+                    SiteId = PurchaseRequestDetails.SiteId,
+                    Quantity = PurchaseRequestDetails.Quantity,
                     CreatedBy = UserSession.UserId,
-                    PrNo = PuchaseRequestDetails.PrNo
+                    PrNo = PurchaseRequestDetails.PrNo,
+                    IsApproved = false,
                 };
 
-                ApiResponseModel postUser = await APIServices.PostAsync(PuchaseRequest, "PuchaseRequest/AddPurchaseRequestDetails");
+                ApiResponseModel postUser = await APIServices.PostAsync(PurchaseRequest, "PurchaseRequest/AddPurchaseRequestDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
@@ -132,6 +133,51 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePurchaseRequest(Guid PurchaseId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseRequest/DeletePurchaseRequest?PurchaseId=" + PurchaseId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PurchaseRequestIsApproved(Guid PurchaseId)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseRequest/PurchaseRequestIsApproved?PurchaseId=" + PurchaseId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

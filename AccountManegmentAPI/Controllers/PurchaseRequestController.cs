@@ -29,7 +29,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetPurchaseRequestDetailsById")]
-        public async Task<IActionResult> GetPuchaseRequestDetailsById(Guid purchaseId)
+        public async Task<IActionResult> GetPurchaseRequestDetailsById(Guid purchaseId)
         {
             var purchaseRequestDetails = await PurchaseRequest.GetPurchaseRequestDetailsById(purchaseId);
             return Ok(new { code = 200, data = purchaseRequestDetails });
@@ -37,7 +37,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("AddPurchaseRequestDetails")]
-        public async Task<IActionResult> AddPuchaseRequestDetails(PurchaseRequestModel PuchaseRequestDetails)
+        public async Task<IActionResult> AddPurchaseRequestDetails(PurchaseRequestModel PuchaseRequestDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var purchaseRequest = await PurchaseRequest.AddPurchaseRequestDetails(PuchaseRequestDetails);

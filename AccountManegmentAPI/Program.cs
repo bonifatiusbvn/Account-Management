@@ -58,6 +58,7 @@ builder.Services.AddScoped<IMasterListServices, MasterListService>();
 builder.Services.AddScoped<ISiteMasterServices, SiteMasterService>();
 builder.Services.AddScoped<IFormPermissionMasterService, FormPermissionMasterService>();
 builder.Services.AddScoped<IItemMasterServices, ItemMasterServices>();
+builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>();
 
