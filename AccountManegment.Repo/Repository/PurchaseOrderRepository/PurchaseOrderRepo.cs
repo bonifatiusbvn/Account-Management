@@ -53,6 +53,55 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             return responseModel;
         }
 
+        public string CheckPONo()
+        {
+            try
+            {
+                var LastPO = Context.PurchaseOrders.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentDate = DateTime.Now;
+
+                int currentYear;
+                int lastYear;
+                if (currentDate.Month > 4)
+                {
+
+                    currentYear = currentDate.Year + 1;
+                    lastYear = currentDate.Year;
+                }
+                else
+                {
+
+                    currentYear = currentDate.Year;
+                    lastYear = currentDate.Year - 1;
+                }
+
+                string PurchaseRequestId;
+                if (LastPr == null)
+                {
+
+                    PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
+                }
+                else
+                {
+                    if (LastPr.PrNo.Length >= 19)
+                    {
+
+                        int PrNumber = int.Parse(LastPr.PrNo.Substring(18)) + 1;
+                        PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("Purchase Request Id does not have the expected format.");
+                    }
+                }
+                return PurchaseRequestId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
         {
             throw new NotImplementedException();
