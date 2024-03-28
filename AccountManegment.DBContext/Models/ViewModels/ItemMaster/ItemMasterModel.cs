@@ -12,7 +12,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public Guid ItemId { get; set; }
 
         public string ItemName { get; set; } = null!;
-    
+
         public int UnitType { get; set; }
 
         public decimal PricePerUnit { get; set; }
@@ -20,16 +20,16 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
 
         public decimal? Gstamount { get; set; }
 
-        public decimal? Gstper { get; set; }
+        public float? Gstper { get; set; }
 
         public string? Hsncode { get; set; }
 
         public bool? IsApproved { get; set; }
 
         public bool? IsDeleted { get; set; }
-    
+
         public Guid CreatedBy { get; set; }
-   
+
         public DateTime CreatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
