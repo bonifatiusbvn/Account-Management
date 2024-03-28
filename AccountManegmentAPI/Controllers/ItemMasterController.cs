@@ -119,5 +119,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpGet]
+        [Route("GetItemNameList")]
+        public async Task<IActionResult> GetItemNameList()
+        {
+            IEnumerable<ItemMasterModel> ItemName = await ItemMaster.GetItemNameList();
+            return Ok(new { code = 200, data = ItemName.ToList() });
+        }
     }
 }

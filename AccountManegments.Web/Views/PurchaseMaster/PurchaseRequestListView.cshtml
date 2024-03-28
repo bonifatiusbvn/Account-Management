@@ -124,7 +124,7 @@
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input font-22" id="dspIsApproved" type="checkbox" style="margin-left:-35px;" disabled>
                                         </div>
-                                    </div>                                
+                                    </div>
                                 </div>
                             </div>
                             @* </form> *@
@@ -149,34 +149,53 @@
                             <form class="row g-3" id="purchaseRequestForm">
                                 <div class="col-12">
                                     <label class="form-label">Purchase Request No</label>
-                                    <input type="text" class="form-control form-control mb-3" id="prNo" value="@ViewBag.ProjectRequestNo" readonly />
+                                    <input type="text" class="form-control form-control" id="prNo" value="@ViewBag.ProjectRequestNo" readonly />
                                 </div>
+
+
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="Item Name" id="txtItemName" required>
+                                    <input type="text" class="form-control form-control" placeholder="Item Name" id="txtItemName" required>
                                     <input type="hidden" id="PurchaseRequestId">
                                     <input type="hidden" id="txtUserRole" value="@_userSession.UserRole">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-6">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control form-control mb-3" id="txtUnitType">
+                                    <select class="form-control form-control" id="txtUnitType">
                                         <option selected disabled value="">--Select Unit Type--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">Site</label>
-                                    <select class="form-control form-control mb-3" id="txtSiteName" required>
-                                        <option selected disabled value="">--Select SiteName--</option>
-                                    </select>
-                                    <span id="spnSiteName" class="text-danger"></span>
-                                </div>
-                                <div class="col-12">
+                                <div class="col-6">
                                     <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control form-control mb-3" placeholder="Quantity" id="txtQuantity" required>
+                                    <input type="text" class="form-control form-control" placeholder="Quantity" id="txtQuantity" required>
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
+                                @if (_userSession.UserRole == 3)
+                                {
+                                    <div class="col-12">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-control form-control" id="txtPoSiteName" required>
+                                            <option selected value="">--Select Site--</option>
+                                        </select>
+                                        <span id="spnSiteName" class="text-danger"></span>
+                                    </div>
+
+                                }
+                                else
+                                {
+
+                                    <div class="col-12">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-control form-control" id="txtPoSiteName" disabled>
+                                            <option selected value="">@_userSession.SiteName</option>
+                                        </select>
+                                        <span id="spnSiteName" class="text-danger"></span>
+                                    </div>
+                                }
+
+
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
                                 </div>
@@ -193,6 +212,5 @@
 
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js"></script>
-    <script src="~/moduls/authenticationscript.js"></script>
     <script src="~/moduls/itemmasterscript.js"></script>
 }

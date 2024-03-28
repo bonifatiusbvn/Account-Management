@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
 {
-    public class PurchaseRequestRepo :IPurchaseRequest
+    public class PurchaseRequestRepo : IPurchaseRequest
     {
         public PurchaseRequestRepo(DbaccManegmentContext context)
         {
@@ -26,20 +26,36 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             try
             {
                 var LastPr = Context.PurchaseRequests.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                var currentYear = DateTime.Now.Year;
-                var lastYear = currentYear - 1;
+                var currentDate = DateTime.Now;
+
+                int currentYear;
+                int lastYear;
+                if (currentDate.Month > 4)
+                {
+
+                    currentYear = currentDate.Year + 1;
+                    lastYear = currentDate.Year;
+                }
+                else
+                {
+
+                    currentYear = currentDate.Year;
+                    lastYear = currentDate.Year - 1;
+                }
 
                 string PurchaseRequestId;
                 if (LastPr == null)
                 {
-                    PurchaseRequestId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-01";
+
+                    PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
                 }
                 else
                 {
                     if (LastPr.PrNo.Length >= 19)
                     {
+
                         int PrNumber = int.Parse(LastPr.PrNo.Substring(18)) + 1;
-                        PurchaseRequestId = $"DMInfra/PR/{lastYear % 100}-{currentYear % 100}-" + PrNumber.ToString("D3");
+                        PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
                     }
                     else
                     {
@@ -53,6 +69,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 throw ex;
             }
         }
+
 
         public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
         {
@@ -104,28 +121,28 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             return response;
         }
 
-        public  async Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PurchaseId)
+        public async Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PurchaseId)
         {
             PurchaseRequestModel purchaseRequestList = new PurchaseRequestModel();
             try
             {
                 purchaseRequestList = (from a in Context.PurchaseRequests.Where(x => x.Pid == PurchaseId)
-                            join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId 
-                            join c in Context.Sites on a.SiteId equals c.SiteId 
-                            select new PurchaseRequestModel
-                            {
-                                Pid = a.Pid,
-                                PrNo = a.PrNo,
-                                Item = a.Item,
-                                UnitTypeId = a.UnitTypeId,
-                                Quantity = a.Quantity,
-                                UnitName = b.UnitName,
-                                IsApproved = a.IsApproved,
-                                SiteId = a.SiteId,
-                                SiteName = c.SiteName,
-                                CreatedBy = a.CreatedBy,
-                                CreatedOn = a.CreatedOn,
-                            }).First();
+                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                       join c in Context.Sites on a.SiteId equals c.SiteId
+                                       select new PurchaseRequestModel
+                                       {
+                                           Pid = a.Pid,
+                                           PrNo = a.PrNo,
+                                           Item = a.Item,
+                                           UnitTypeId = a.UnitTypeId,
+                                           Quantity = a.Quantity,
+                                           UnitName = b.UnitName,
+                                           IsApproved = a.IsApproved,
+                                           SiteId = a.SiteId,
+                                           SiteName = c.SiteName,
+                                           CreatedBy = a.CreatedBy,
+                                           CreatedOn = a.CreatedOn,
+                                       }).First();
                 return purchaseRequestList;
             }
             catch (Exception ex)
@@ -139,23 +156,23 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             try
             {
                 var PurchaseRequestList = (from a in Context.PurchaseRequests
-                                          join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                          join c in Context.Sites on a.SiteId equals c.SiteId
-                                            select new PurchaseRequestModel
-                                            {
-                                         
-                                                Pid = a.Pid,
-                                                Item = a.Item,
-                                                PrNo = a.PrNo,
-                                                Quantity = a.Quantity,
-                                                UnitTypeId = a.UnitTypeId,
-                                                UnitName = b.UnitName,
-                                                SiteId = a.SiteId,
-                                                SiteName = c.SiteName,
-                                                CreatedBy = a.CreatedBy,
-                                                CreatedOn = a.CreatedOn,
-                                                IsApproved = a.IsApproved,
-                                            });
+                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                           join c in Context.Sites on a.SiteId equals c.SiteId
+                                           select new PurchaseRequestModel
+                                           {
+
+                                               Pid = a.Pid,
+                                               Item = a.Item,
+                                               PrNo = a.PrNo,
+                                               Quantity = a.Quantity,
+                                               UnitTypeId = a.UnitTypeId,
+                                               UnitName = b.UnitName,
+                                               SiteId = a.SiteId,
+                                               SiteName = c.SiteName,
+                                               CreatedBy = a.CreatedBy,
+                                               CreatedOn = a.CreatedOn,
+                                               IsApproved = a.IsApproved,
+                                           });
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -236,7 +253,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
-                    
+
                 }
                 Context.PurchaseRequests.Update(PurchaseRequestData);
                 Context.SaveChanges();

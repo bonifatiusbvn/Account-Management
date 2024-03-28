@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace AccountManagement.Repository.Interface.Repository.Company
 
         Task<ApiResponseModel> UpdateCompany(CompanyModel UpdateCompany);
         Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId);
+        Task<IEnumerable<CompanyModel>> GetCompanyNameList();
     }
 }

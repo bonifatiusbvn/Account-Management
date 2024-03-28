@@ -53,6 +53,55 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             return responseModel;
         }
 
+        public string CheckPONo()
+        {
+            try
+            {
+                var LastPO = Context.PurchaseOrders.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentDate = DateTime.Now;
+
+                int currentYear;
+                int lastYear;
+                if (currentDate.Month > 4)
+                {
+
+                    currentYear = currentDate.Year + 1;
+                    lastYear = currentDate.Year;
+                }
+                else
+                {
+
+                    currentYear = currentDate.Year;
+                    lastYear = currentDate.Year - 1;
+                }
+
+                string PurchaseOrderId;
+                if (LastPO == null)
+                {
+
+                    PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
+                }
+                else
+                {
+                    if (LastPO.Poid.Length >= 19)
+                    {
+
+                        int PrNumber = int.Parse(LastPO.Poid.Substring(18)) + 1;
+                        PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("Purchase Order Id does not have the expected format.");
+                    }
+                }
+                return PurchaseOrderId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
         {
             throw new NotImplementedException();
@@ -130,6 +179,64 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var item in PurchaseOrderDetails)
+                {
+                    var PurchaseOrder = new PurchaseOrder()
+                    {
+
+                        Id = Guid.NewGuid(),
+                        SiteId = item.SiteId,
+                        FromSupplierId = item.FromSupplierId,
+                        ToCompanyId = item.ToCompanyId,
+                        TotalAmount = item.TotalAmount,
+                        Description = item.Description,
+                        DeliveryShedule = item.DeliveryShedule,
+                        TotalPrice = item.TotalPrice,
+                        TotalDiscount = item.TotalDiscount,
+                        TotalGstamount = item.TotalGstamount,
+                        BillingAddress = item.BillingAddress,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    var PurchaseOrderDetail = new PurchaseOrderDetail()
+                    {
+                        PorefId = item.Id,
+                        Item = item.Item,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        Gstamount = item.Gstamount,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    var PurchaseAddress = new PodeliveryAddress()
+                    {
+                        Poid = item.Id,
+                        Address = item.BillingAddress,
+                    };
+                    Context.PurchaseOrders.Add(PurchaseOrder);
+                    Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Purchase Order Inserted Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
+            }
+            return response;
+        }
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
             ApiResponseModel responseModel = new ApiResponseModel();

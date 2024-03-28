@@ -21,5 +21,6 @@ namespace AccountManagement.Repository.Interface.Services.SupplierService
         Task<ApiResponseModel> ActiveDeactiveSupplier(Guid UserId);
 
         Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId);
+        Task<IEnumerable<SupplierModel>> GetSupplierNameList();
     }
 }

@@ -9,6 +9,8 @@ public partial class PurchaseOrder
 
     public Guid SiteId { get; set; }
 
+    public string? Poid { get; set; }
+
     public Guid FromSupplierId { get; set; }
 
     public Guid ToCompanyId { get; set; }

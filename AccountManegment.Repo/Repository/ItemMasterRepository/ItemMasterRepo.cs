@@ -198,6 +198,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
         }
 
+        public async Task<IEnumerable<ItemMasterModel>> GetItemNameList()
+        {
+            try
+            {
+                IEnumerable<ItemMasterModel> ItemName = Context.ItemMasters.ToList().Select(a => new ItemMasterModel
+                {
+                    ItemId = a.ItemId,
+                    ItemName = a.ItemName,
+                });
+                return ItemName;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
         {
             ApiResponseModel response = new ApiResponseModel();

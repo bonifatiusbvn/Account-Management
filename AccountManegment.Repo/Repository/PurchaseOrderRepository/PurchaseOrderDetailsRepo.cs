@@ -1,6 +1,7 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
-    public class PurchaseOrderDetailsRepo:IPurchaseOrderDetails
+    public class PurchaseOrderDetailsRepo : IPurchaseOrderDetails
     {
         public PurchaseOrderDetailsRepo(DbaccManegmentContext context)
         {
@@ -27,14 +28,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             {
                 var PurchaseOrder = new PurchaseOrderDetail()
                 {
-                    Poid = PurchaseOrderDetails.Poid,
+                    PorefId = PurchaseOrderDetails.Poid,
                     Item = PurchaseOrderDetails.Item,
                     UnitTypeId = PurchaseOrderDetails.UnitTypeId,
                     Quantity = PurchaseOrderDetails.Quantity,
                     Price = PurchaseOrderDetails.Price,
                     Discount = PurchaseOrderDetails.Discount,
-                    Gst=PurchaseOrderDetails.Gst,
-                    Gstamount=PurchaseOrderDetails.Gstamount,
+                    Gst = PurchaseOrderDetails.Gst,
+                    Gstamount = PurchaseOrderDetails.Gstamount,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -65,7 +66,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  select new PurchaseOrderDetailsModel
                                  {
                                      Id = a.Id,
-                                     Poid=a.Poid,
+                                     Poid=a.PorefId,
                                      Item=a.Item,
                                      UnitTypeId=a.UnitTypeId,
                                      UnitTypeName=b.UnitName,
@@ -94,7 +95,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  select new PurchaseOrderDetailsModel
                                  {
                                      Id = a.Id,
-                                     Poid = a.Poid,
+                                     Poid = a.PorefId,
                                      Item = a.Item,
                                      UnitTypeId = a.UnitTypeId,
                                      UnitTypeName = b.UnitName,
@@ -124,7 +125,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 if (PurchaseOrder != null)
                 {
                     PurchaseOrder.Id = PurchaseOrderDetails.Id;
-                    PurchaseOrder.Poid = PurchaseOrderDetails.Poid;
+                    PurchaseOrder.PorefId = PurchaseOrderDetails.Poid;
                     PurchaseOrder.Item = PurchaseOrderDetails.Item;
                     PurchaseOrder.UnitTypeId = PurchaseOrderDetails.UnitTypeId;
                     PurchaseOrder.Quantity = PurchaseOrderDetails.Quantity;

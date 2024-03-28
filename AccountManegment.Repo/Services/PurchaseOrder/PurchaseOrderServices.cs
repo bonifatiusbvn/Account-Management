@@ -23,6 +23,11 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.AddPurchaseOrderDetails(PurchaseOrderDetails);
         }
 
+        public string CheckPONo()
+        {
+            return PurchaseOrder.CheckPONo();
+        }
+
         public Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
         {
             throw new NotImplementedException();
@@ -36,6 +41,11 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList()
         {
             return await PurchaseOrder.GetPurchaseOrderList();
+        }
+
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            return await PurchaseOrder.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
         }
 
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)

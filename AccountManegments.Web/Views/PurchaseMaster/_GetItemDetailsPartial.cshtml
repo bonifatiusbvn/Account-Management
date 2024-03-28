@@ -1,0 +1,39 @@
+﻿@model AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel
+
+
+<tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product" data-product-id="@Model.ItemId">
+    <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
+    <td class="text-start">
+        <input type="text" class="form-control bg-light border-0" id="txtItemName" value="@Model.ItemName" readonly />
+        <input type="hidden" class="form-control bg-light border-0" id="Product_Id" readonly value="@Model.ItemId" />
+        <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@Model.UnitType" />
+    </td>
+    <td class="text-start">
+        <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit" readonly />
+    </td>
+    <td class="text-start">
+        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" readonly />
+    </td>
+    <td class="text-start">
+        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" readonly />
+        <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
+    </td>
+    <td class="text-start">
+        <div class="input-step">
+            <button type="button" class='minus' id="minusbtn">–</button>
+            <input type="number" class="product-quantity" id="txtproductquantity" value="1" style="width: 30px;">
+            <button type="button" class='plus' id="plusbtn">+</button>
+        </div>
+    </td>
+    <td class="text-start">
+        <div>
+            <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
+        </div>
+    </td>
+    <td class="product-removal">
+        <a id="remove"><i class="lni lni-trash"></i></a>
+    </td>
+</tr>
+@section Scripts {
+    <script src="~/moduls/purchaserequestscript.js"></script>
+}

@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace AccountManagement.Repository.Repository.AuthenticationRepository
 {
@@ -269,19 +270,30 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-                var tblUser = await Context.Users.SingleOrDefaultAsync(p => p.UserName == Loginrequest.UserName);
+
+                var tblUser = await (from u in Context.Users
+                                     join s in Context.Sites on u.SiteId equals s.SiteId
+                                     where u.UserName == Loginrequest.UserName
+                                     select new
+                                     {
+                                         User = u,
+                                         SiteName = s.SiteName
+                                     }).FirstOrDefaultAsync();
+
                 if (tblUser != null)
                 {
-                    if (tblUser.IsActive == true)
+                    if (tblUser.User.IsActive == true)
                     {
-                        if (tblUser.Password == Loginrequest.Password)
+
+                        if (tblUser.User.Password == Loginrequest.Password)
                         {
                             LoginView userModel = new LoginView();
-                            userModel.UserName = tblUser.UserName;
-                            userModel.Id = tblUser.Id;
-                            userModel.RoleId = tblUser.RoleId;
-                            userModel.FullName = tblUser.FirstName + " " + tblUser.LastName;
-                            userModel.FirstName = tblUser.FirstName;
+                            userModel.UserName = tblUser.User.UserName;
+                            userModel.Id = tblUser.User.Id;
+                            userModel.RoleId = tblUser.User.RoleId;
+                            userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
+                            userModel.FirstName = tblUser.User.FirstName;
+                            userModel.SiteName = tblUser.SiteName;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
                         }
