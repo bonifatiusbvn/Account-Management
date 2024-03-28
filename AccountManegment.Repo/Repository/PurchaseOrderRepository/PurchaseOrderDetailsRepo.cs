@@ -28,7 +28,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             {
                 var PurchaseOrder = new PurchaseOrderDetail()
                 {
-                    Poid = PurchaseOrderDetails.Poid,
+                    PorefId = PurchaseOrderDetails.Poid,
                     Item = PurchaseOrderDetails.Item,
                     UnitTypeId = PurchaseOrderDetails.UnitTypeId,
                     Quantity = PurchaseOrderDetails.Quantity,
@@ -66,15 +66,15 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  select new PurchaseOrderDetailsModel
                                  {
                                      Id = a.Id,
-                                     Poid = a.Poid,
-                                     Item = a.Item,
-                                     UnitTypeId = a.UnitTypeId,
-                                     UnitTypeName = b.UnitName,
-                                     Quantity = a.Quantity,
-                                     Price = a.Price,
-                                     Discount = a.Discount,
-                                     Gst = a.Gst,
-                                     Gstamount = a.Gstamount,
+                                     Poid=a.PorefId,
+                                     Item=a.Item,
+                                     UnitTypeId=a.UnitTypeId,
+                                     UnitTypeName=b.UnitName,
+                                     Quantity=a.Quantity,
+                                     Price=a.Price,
+                                     Discount=a.Discount,
+                                     Gst=a.Gst,
+                                     Gstamount=a.Gstamount,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
@@ -90,23 +90,23 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         {
             try
             {
-                var PurchaseOrder = (from a in Context.PurchaseOrderDetails
-                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                     select new PurchaseOrderDetailsModel
-                                     {
-                                         Id = a.Id,
-                                         Poid = a.Poid,
-                                         Item = a.Item,
-                                         UnitTypeId = a.UnitTypeId,
-                                         UnitTypeName = b.UnitName,
-                                         Quantity = a.Quantity,
-                                         Price = a.Price,
-                                         Discount = a.Discount,
-                                         Gst = a.Gst,
-                                         Gstamount = a.Gstamount,
-                                         CreatedBy = a.CreatedBy,
-                                         CreatedOn = a.CreatedOn,
-                                     });
+               var PurchaseOrder = (from a in Context.PurchaseOrderDetails
+                                 join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                 select new PurchaseOrderDetailsModel
+                                 {
+                                     Id = a.Id,
+                                     Poid = a.PorefId,
+                                     Item = a.Item,
+                                     UnitTypeId = a.UnitTypeId,
+                                     UnitTypeName = b.UnitName,
+                                     Quantity = a.Quantity,
+                                     Price = a.Price,
+                                     Discount = a.Discount,
+                                     Gst = a.Gst,
+                                     Gstamount = a.Gstamount,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                 });
                 return PurchaseOrder;
             }
             catch (Exception)
@@ -126,7 +126,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     var POModel = new PurchaseOrderDetail()
                     {
 
-                        Poid = item.Poid,
+                        PorefId = item.Poid,
                         Item = item.Item,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -161,7 +161,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 if (PurchaseOrder != null)
                 {
                     PurchaseOrder.Id = PurchaseOrderDetails.Id;
-                    PurchaseOrder.Poid = PurchaseOrderDetails.Poid;
+                    PurchaseOrder.PorefId = PurchaseOrderDetails.Poid;
                     PurchaseOrder.Item = PurchaseOrderDetails.Item;
                     PurchaseOrder.UnitTypeId = PurchaseOrderDetails.UnitTypeId;
                     PurchaseOrder.Quantity = PurchaseOrderDetails.Quantity;

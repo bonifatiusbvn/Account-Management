@@ -59,5 +59,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpGet]
+        [Route("CheckPONo")]
+        public IActionResult CheckPONo()
+        {
+            var checkPONo = PurchaseOrder.CheckPONo();
+            return Ok(new { code = 200, data = checkPONo });
+        }
     }
 }
