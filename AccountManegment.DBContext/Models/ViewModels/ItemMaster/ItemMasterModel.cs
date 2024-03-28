@@ -10,13 +10,12 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
     public class ItemMasterModel
     {
         public Guid ItemId { get; set; }
-        [Required]
+
         public string ItemName { get; set; } = null!;
-        [Required]
+    
         public int UnitType { get; set; }
-        [Required]
+
         public decimal PricePerUnit { get; set; }
-        [Required]
         public bool IsWithGst { get; set; }
 
         public decimal? Gstamount { get; set; }
@@ -28,9 +27,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public bool? IsApproved { get; set; }
 
         public bool? IsDeleted { get; set; }
-        [Required]
+    
         public Guid CreatedBy { get; set; }
-        [Required]
+   
         public DateTime CreatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
@@ -38,5 +37,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public DateTime? UpdatedOn { get; set; }
 
         public string? UnitTypeName { get; set; }
+        public int RowNumber { get; set; }
     }
 }

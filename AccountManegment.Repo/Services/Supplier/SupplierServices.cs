@@ -45,6 +45,11 @@ namespace AccountManagement.Repository.Services.Supplier
             return await Supplier.GetSupplierList(searchText, searchBy, sortBy);
         }
 
+        public async Task<IEnumerable<SupplierModel>> GetSupplierNameList()
+        {
+            return await Supplier.GetSupplierNameList();
+        }
+
         public async Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateUser)
         {
             return await Supplier.UpdateSupplierDetails(UpdateUser);

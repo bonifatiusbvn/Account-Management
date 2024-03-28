@@ -1,6 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
         Task<IEnumerable<UnitMasterView>> GetAllUnitType();
         Task<ApiResponseModel> ItemIsApproved(Guid ItemId);
         Task<ApiResponseModel> DeleteItemDetails(Guid ItemId);
+        Task<IEnumerable<ItemMasterModel>> GetItemNameList();
     }
 }

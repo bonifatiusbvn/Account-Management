@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<PurchaseOrderDetailsModel> GetPurchaseOrderDetailsById(int Id);
         Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails);
         Task<ApiResponseModel> DeletePurchaseOrderDetails(int Id);
+        Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderDetailsModel> PurchaseOrderDetails);
     }
 }

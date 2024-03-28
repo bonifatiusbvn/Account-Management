@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManegments.Web.Helper;
@@ -191,5 +192,27 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> InsertMultiplePurchaseOrderDetails()
+        {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["PODETAILS"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderDetailsModel>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrderDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

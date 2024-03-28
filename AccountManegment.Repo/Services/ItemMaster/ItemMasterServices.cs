@@ -43,6 +43,11 @@ namespace AccountManagement.Repository.Services.ItemMaster
             return await ItemMaster.GetItemList(searchText, searchBy, sortBy);
         }
 
+        public async Task<IEnumerable<ItemMasterModel>> GetItemNameList()
+        {
+            return await ItemMaster.GetItemNameList();
+        }
+
         public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
         {
             return await ItemMaster.ItemIsApproved(ItemId);

@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
@@ -165,7 +166,24 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [HttpGet]
+        public async Task<JsonResult> GetSupplierNameList()
+        {
+            try
+            {
+                List<SupplierModel> SupplierName = new List<SupplierModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SupplierMaster/GetSupplierNameList");
+                if (res.code == 200)
+                {
+                    SupplierName = JsonConvert.DeserializeObject<List<SupplierModel>>(res.data.ToString());
+                }
+                return new JsonResult(SupplierName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public System.Data.DataTable ToConvertDataTable<T>(List<T> items)
         {
             System.Data.DataTable dt = new System.Data.DataTable(typeof(T).Name);

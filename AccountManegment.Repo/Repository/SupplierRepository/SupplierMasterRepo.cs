@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.Supplier;
@@ -207,6 +208,23 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 }
 
                 return SupplierList.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<SupplierModel>> GetSupplierNameList()
+        {
+            try
+            {
+                IEnumerable<SupplierModel> SupplierName = Context.SupplierMasters.ToList().Select(a => new SupplierModel
+                {
+                    SupplierId = a.SupplierId,
+                    SupplierName = a.SupplierName,
+                });
+                return SupplierName;
             }
             catch (Exception ex)
             {

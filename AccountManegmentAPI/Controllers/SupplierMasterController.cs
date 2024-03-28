@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
@@ -89,6 +90,13 @@ namespace AccountManagement.API.Controllers
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.code, responseModel);
+        }
+        [HttpGet]
+        [Route("GetSupplierNameList")]
+        public async Task<IActionResult> GetSupplierNameList()
+        {
+            IEnumerable<SupplierModel> SupplierName = await _Supplier.GetSupplierNameList();
+            return Ok(new { code = 200, data = SupplierName.ToList() });
         }
     }
 }

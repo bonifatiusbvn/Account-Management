@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -193,6 +194,25 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetItemNameList()
+        {
+            try
+            {
+                List<ItemMasterModel> ItemName = new List<ItemMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "ItemMaster/GetItemNameList");
+                if (res.code == 200)
+                {
+                    ItemName = JsonConvert.DeserializeObject<List<ItemMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(ItemName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpPost]
         public IActionResult ImportExcelFile(IFormFile FormFile)
         {
@@ -272,6 +292,28 @@ namespace AccountManegments.Web.Controllers
                 string msg = ex.Message;
             }
             return RedirectToAction("ItemListView");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemDetailsById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = Newtonsoft.Json.JsonConvert.DeserializeObject<ItemMasterModel>(ItemId.ToString());
+                ItemMasterModel Items = new ItemMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
+                    Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
