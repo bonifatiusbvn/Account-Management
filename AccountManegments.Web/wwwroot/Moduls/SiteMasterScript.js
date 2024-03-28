@@ -64,9 +64,9 @@ function DisplaySiteDetails(SiteId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-  
+ 
             $('#txtSiteid').val(response.siteId);
-            $('#txtSiteName').val(response.siteName);
+            $('#txtsiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
@@ -131,7 +131,7 @@ function SelectSiteDetails(SiteId, element) {
 
 function CreateSite() {
     var objData = {
-        SiteName: $('#txtSiteName').val(),
+        SiteName: $('#txtsiteName').val(),
         ContectPersonName :$('#txtContectPersonName').val(),
         ContectPersonPhoneNo:$('#txtContectPersonPhoneNo').val(),
         Address:$('#txtAddress').val(),
@@ -170,7 +170,7 @@ function UpdateSiteDetails() {
    
     var objData = {
         SiteId: $('#txtSiteid').val(),
-        SiteName: $('#txtSiteName').val(),
+        SiteName: $('#txtsiteName').val(),
         ContectPersonName: $('#txtContectPersonName').val(),
         ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
         Address: $('#txtAddress').val(),
@@ -210,7 +210,7 @@ function ClearSiteTextBox() {
 
     resetErrorMessages();
     $('#txtSiteid').val('');
-    $('#txtSiteName').val('');
+    $('#txtsiteName').val('');
     $('#txtContectPersonName').val('');
     $('#txtContectPersonPhoneNo').val('');
     $('#txtAddress').val('');
@@ -236,7 +236,7 @@ function ClearSiteTextBox() {
 function validateAndCreateSite() {
   
     resetErrorMessages();
-    var SiteName = document.getElementById("txtSiteName").value.trim();
+    var SiteName = document.getElementById("txtsiteName").value.trim();
     var ContectPersonName = document.getElementById("txtContectPersonName").value.trim();
     var ContectPersonPhoneNo = document.getElementById("txtContectPersonPhoneNo").value.trim();
     var Address = document.getElementById("txtAddress").value.trim();
@@ -525,7 +525,6 @@ function DeleteSite(SiteId)
         }
     });
 }
-
 
 $(document).ready(function () {
 

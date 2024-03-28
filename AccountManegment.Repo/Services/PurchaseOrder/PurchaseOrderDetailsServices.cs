@@ -38,11 +38,6 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PODetails.GetPurchaseOrderDetailsList();
         }
 
-        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderDetailsModel> PurchaseOrderDetails)
-        {
-            return await PODetails.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
-        }
-
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails)
         {
             return await PODetails.UpdatePurchaseOrderDetails(PurchaseOrderDetails);
