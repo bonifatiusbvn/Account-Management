@@ -162,6 +162,9 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.Poid)
+                .HasMaxLength(100)
+                .HasColumnName("POId");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGstamount)
@@ -191,13 +194,13 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Item)
                 .HasMaxLength(10)
                 .IsFixedLength();
-            entity.Property(e => e.Poid).HasColumnName("POId");
+            entity.Property(e => e.PorefId).HasColumnName("PORefId");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Po).WithMany(p => p.PurchaseOrderDetails)
-                .HasForeignKey(d => d.Poid)
+            entity.HasOne(d => d.Poref).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.PorefId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseOrderDetails_PurchaseOrder");
 

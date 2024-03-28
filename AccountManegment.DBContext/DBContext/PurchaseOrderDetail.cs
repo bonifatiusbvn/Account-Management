@@ -7,7 +7,7 @@ public partial class PurchaseOrderDetail
 {
     public int Id { get; set; }
 
-    public Guid Poid { get; set; }
+    public Guid PorefId { get; set; }
 
     public string Item { get; set; } = null!;
 
@@ -31,7 +31,7 @@ public partial class PurchaseOrderDetail
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual PurchaseOrder Po { get; set; } = null!;
+    public virtual PurchaseOrder Poref { get; set; } = null!;
 
     public virtual UnitMaster UnitType { get; set; } = null!;
 }

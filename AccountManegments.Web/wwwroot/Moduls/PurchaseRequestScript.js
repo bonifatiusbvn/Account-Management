@@ -559,6 +559,14 @@ $(document).on("click", ".minus", function () {
     updateProductQuantity($(this).closest(".product"), -1);
     return
 });
+$('.minus').click(function () {
+    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) - 1)
+});
+
+$('.plus').click(function () {
+    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) + 1)
+});
+
 function bindEventListeners() {
 
     document.querySelectorAll(".product-removal a").forEach(function (e) {

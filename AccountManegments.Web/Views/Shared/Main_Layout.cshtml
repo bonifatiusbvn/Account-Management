@@ -20,6 +20,7 @@
 
 
     <!-- CSS Files -->
+
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/assets/css/bootstrap-extended.css" rel="stylesheet">
     <link href="~/assets/css/style.css" rel="stylesheet">
@@ -161,9 +162,11 @@
 
                 @if (_userSession.UserRole == 3)
                 {
-                    <select class="form-control" id="txtSiteName">
-                        <option value="" selected>@_userSession.SiteName</option>
-                    </select>
+                    <div class="col-3">
+                        <select class="form-control form-control-lg" id="txtSiteName">
+                            <option value="">All Site</option>
+                        </select>
+                    </div>
                 }
                 else
                 {
