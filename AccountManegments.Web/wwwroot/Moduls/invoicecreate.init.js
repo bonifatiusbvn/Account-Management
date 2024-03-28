@@ -60,7 +60,7 @@ var taxRate = .125,
     shippingRate = 65,
     discountRate = .15;
 
-function remove() {
+function removedata() {
     Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
         e.addEventListener("click", function (e) {
             removeItem(e), resetRow()

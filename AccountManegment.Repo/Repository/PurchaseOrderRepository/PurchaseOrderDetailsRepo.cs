@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
-    public class PurchaseOrderDetailsRepo:IPurchaseOrderDetails
+    public class PurchaseOrderDetailsRepo : IPurchaseOrderDetails
     {
         public PurchaseOrderDetailsRepo(DbaccManegmentContext context)
         {
@@ -34,8 +34,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Quantity = PurchaseOrderDetails.Quantity,
                     Price = PurchaseOrderDetails.Price,
                     Discount = PurchaseOrderDetails.Discount,
-                    Gst=PurchaseOrderDetails.Gst,
-                    Gstamount=PurchaseOrderDetails.Gstamount,
+                    Gst = PurchaseOrderDetails.Gst,
+                    Gstamount = PurchaseOrderDetails.Gstamount,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
