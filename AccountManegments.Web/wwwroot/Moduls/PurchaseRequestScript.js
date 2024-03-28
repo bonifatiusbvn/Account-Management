@@ -1,5 +1,5 @@
 ﻿AllPurchaseRequestListTable();
-
+GetSiteDetails();
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -35,7 +35,17 @@ function filterPurchaseRequestTable() {
         }
     });
 }
+function GetSiteDetails() {
 
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+            });
+        }
+    });
+}
 function sortPurchaseRequestTable() {
     var sortBy = $('#PurchaseRequestSortBy').val();
     $.ajax({
@@ -88,8 +98,8 @@ function CreatePurchaseRequest() {
     var objData = {
         UnitTypeId: $('#txtUnitType').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtSiteName').val(),
-        Quantity:$('#txtQuantity').val(),
+        SiteId: $('#txtPoSiteName').val(),
+        Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
     }
     $.ajax({
@@ -116,7 +126,7 @@ function ClearPurchaseRequestTextBox() {
     $('#txtItemName').val('');
     $('#txtUnitType').val('');
     $('#txtQuantity').val('');
-    $('#txtSiteName').val('').prop('disabled', false);
+    $('#txtPoSiteName').val('');
     var button = document.getElementById("btnpurchaseRequest");
     if ($('#PurchaseRequestId').val() == '') {
         button.textContent = "Create";
@@ -126,11 +136,11 @@ function ClearPurchaseRequestTextBox() {
 }
 
 function validateAndCreatePurchaseRequest() {
-  
+
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("txtItemName").value.trim();
-    var SiteId = document.getElementById("txtSiteName").value.trim();
+    var SiteId = document.getElementById("txtPoSiteName").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
 
     var isValid = true;
@@ -147,7 +157,7 @@ function validateAndCreatePurchaseRequest() {
     if (ItemName === "") {
         document.getElementById("spnItemName").innerText = "Item is required.";
         isValid = false;
-    } 
+    }
 
 
     if (SiteId === "") {
@@ -156,14 +166,14 @@ function validateAndCreatePurchaseRequest() {
     } else if (SiteId === "--Select SiteName--") {
         document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
-    } 
+    }
 
 
     if (Quantity === "") {
         document.getElementById("spnQuantity").innerText = "Quantity is required.";
         isValid = false;
-    } 
-   
+    }
+
 
     if (isValid) {
         if ($("#PurchaseRequestId").val() == '') {
@@ -179,11 +189,11 @@ function resetErrorsMessages() {
     document.getElementById("spnUnitType").innerText = "";
     document.getElementById("spnItemName").innerText = "";
     document.getElementById("spnSiteName").innerText = "";
-    document.getElementById("spnQuantity").innerText = ""; 
+    document.getElementById("spnQuantity").innerText = "";
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
-    
+
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -195,15 +205,9 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#prNo').val(response.prNo);
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
-            $(document).ready(function () {
-                if ($('#txtUserRole').val() == '9') {
-                    $('#txtSiteName').val(response.siteId).prop('disabled', false);
-                } else {
-                    $('#txtSiteName').val(response.siteId).prop('disabled', true);
-                }
-            });
+            $('#txtPoSiteName').val(response.siteId);
             $('#txtUnitType').val(response.unitTypeId);
-            $('#txtSiteName').val(response.siteId);
+            $('#txtPoSiteName').val(response.siteId);
             var button = document.getElementById("btnpurchaseRequest");
             if ($('#PurchaseRequestId').val() != '') {
                 button.textContent = "Update";
@@ -224,7 +228,7 @@ function UpdatePurchaseRequestDetails() {
         Pid: $('#PurchaseRequestId').val(),
         UnitTypeId: $('#txtUnitType').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtSiteName').val(),
+        SiteId: $('#txtPoSiteName').val(),
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
     }
@@ -301,7 +305,7 @@ function DeletePurchaseRequest(PurchaseId) {
 }
 
 function PurchaseRequestIsApproved(PurchaseId) {
-   
+
     var isChecked = $('#flexSwitchCheckChecked_' + PurchaseId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Approve this Purchase Request?" : "Are you sure want to UnApprove this Purchase Request?";
 
@@ -320,14 +324,14 @@ function PurchaseRequestIsApproved(PurchaseId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("PurchaseId", PurchaseId);
-      
+
             $.ajax({
                 url: '/PurchaseMaster/PurchaseRequestIsApproved?PurchaseId=' + PurchaseId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                 
+
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,

@@ -96,7 +96,7 @@
                     </a>
                 </li>
                 <li>
-                    <a asp-action="CreatePurchaseOrder" asp-controller="InvoiceMaster">
+                    <a asp-action="CreateInvoice" asp-controller="InvoiceMaster">
                         <div class="parent-icon">
                             <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
                         </div>
@@ -158,6 +158,17 @@
         <!--start top header-->
         <header class="top-header">
             <nav class="navbar navbar-expand gap-3">
+
+                @if (_userSession.UserRole == 3)
+                {
+                    <select class="form-control" id="txtSiteName">
+                        <option value="" selected>@_userSession.SiteName</option>
+                    </select>
+                }
+                else
+                {
+                    <h5>@_userSession.SiteName</h5>
+                }
                 <div class="mobile-menu-button">
                     <ion-icon name="menu-sharp"></ion-icon>
                 </div>

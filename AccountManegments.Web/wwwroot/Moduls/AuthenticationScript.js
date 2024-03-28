@@ -11,7 +11,7 @@ function CreateUser() {
         Role: $('#txtrole').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
-        SiteId: $('#txtSiteName').val(),
+        SiteId: $('#txtuserSiteName').val(),
 
     }
     $.ajax({
@@ -38,14 +38,15 @@ function GetSiteDetails() {
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             $.each(result, function (i, data) {
+                $('#txtuserSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
                 $('#txtSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
             });
         }
     });
 }
 
-function ClearTextBox() {
-    document.getElementById("formPermissionId").style.display = "none";
+function ClearUserTextBox() {
+
     resetErrorMessages();
     $('#txtUserid').val('');
     $('#txtFirstName').val('');
@@ -56,7 +57,7 @@ function ClearTextBox() {
     $('#txtrole').val('');
     $('#txtPhoneNo').val('');
     $('#ddlUserRole').val('');
-    $('#txtSiteName').val('');
+    $('#txtuserSiteName').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
         button.textContent = "Create";
@@ -65,7 +66,7 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function DisplayUserDetails(UserId) {
-    document.getElementById("formPermissionId").style.display = "table";
+
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
@@ -80,8 +81,7 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
-            $('#txtSiteName').val(response.siteId);
-            $('#txtSiteName').val(response.siteId);
+            $('#txtuserSiteName').val(response.siteId);
             $('#ddlUserRole').val(response.roleId);
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
@@ -193,7 +193,7 @@ function UpdateUserDetails() {
         Role: $('#txtrole').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
-        SiteId: $('#txtSiteName').val(),
+        SiteId: $('#txtuserSiteName').val(),
     }
     $.ajax({
         url: '/User/UpdateUserDetails',
@@ -224,7 +224,7 @@ function validateAndCreateUser() {
     var password = document.getElementById("txtPassword").value.trim();
     var email = document.getElementById("txtEmail").value.trim();
     var phoneNo = document.getElementById("txtPhoneNo").value.trim();
-    var SiteName = document.getElementById("txtSiteName").value.trim();
+    var SiteName = document.getElementById("txtuserSiteName").value.trim();
 
 
     var isValid = true;
