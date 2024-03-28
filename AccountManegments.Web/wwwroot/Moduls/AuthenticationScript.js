@@ -45,6 +45,7 @@ function GetSiteDetails() {
 }
 
 function ClearTextBox() {
+    document.getElementById("formPermissionId").style.display = "none";
     resetErrorMessages();
     $('#txtUserid').val('');
     $('#txtFirstName').val('');
@@ -64,7 +65,7 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function DisplayUserDetails(UserId) {
-
+    document.getElementById("formPermissionId").style.display = "table";
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',

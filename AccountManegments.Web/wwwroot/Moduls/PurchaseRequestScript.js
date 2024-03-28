@@ -4,7 +4,7 @@ function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
-    $.get("/PurchaseRequest/PurchaseRequestListAction", { searchBy: searchBy, searchText: searchText })
+    $.get("/PurchaseMaster/PurchaseRequestListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
 
 
@@ -21,7 +21,7 @@ function filterPurchaseRequestTable() {
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
     $.ajax({
-        url: '/PurchaseRequest/PurchaseRequestListAction',
+        url: '/PurchaseMaster/PurchaseRequestListAction',
         type: 'GET',
         data: {
             searchText: searchText,
@@ -39,7 +39,7 @@ function filterPurchaseRequestTable() {
 function sortPurchaseRequestTable() {
     var sortBy = $('#PurchaseRequestSortBy').val();
     $.ajax({
-        url: '/PurchaseRequest/PurchaseRequestListAction',
+        url: '/PurchaseMaster/PurchaseRequestListAction',
         type: 'GET',
         data: {
             sortBy: sortBy
@@ -59,7 +59,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
     $(element).closest('.row.ac-card').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
-        url: '/PurchaseRequest/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
+        url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
@@ -93,7 +93,7 @@ function CreatePurchaseRequest() {
         PrNo: $('#prNo').val(),
     }
     $.ajax({
-        url: '/PurchaseRequest/CreatePurchaseRequest',
+        url: '/PurchaseMaster/CreatePurchaseRequest',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -105,7 +105,7 @@ function CreatePurchaseRequest() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/PurchaseRequest/PurchaseRequestListView';
+                window.location = '/PurchaseMaster/PurchaseRequestListView';
             });
         },
     })
@@ -185,7 +185,7 @@ function resetErrorsMessages() {
 function EditPurchaseRequestDetails(PurchaseId) {
     
     $.ajax({
-        url: '/PurchaseRequest/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
+        url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
@@ -230,7 +230,7 @@ function UpdatePurchaseRequestDetails() {
     }
 
     $.ajax({
-        url: '/PurchaseRequest/UpdatePurchaseRequestDetails',
+        url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -242,7 +242,7 @@ function UpdatePurchaseRequestDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/PurchaseRequest/PurchaseRequestListView';
+                window.location = '/PurchaseMaster/PurchaseRequestListView';
             });
         },
     })
@@ -264,7 +264,7 @@ function DeletePurchaseRequest(PurchaseId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/PurchaseRequest/DeletePurchaseRequest?PurchaseId=' + PurchaseId,
+                url: '/PurchaseMaster/DeletePurchaseRequest?PurchaseId=' + PurchaseId,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
@@ -275,7 +275,7 @@ function DeletePurchaseRequest(PurchaseId) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestListView';
+                        window.location = '/PurchaseMaster/PurchaseRequestListView';
                     })
                 },
                 error: function () {
@@ -285,7 +285,7 @@ function DeletePurchaseRequest(PurchaseId) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestView';
+                        window.location = '/PurchaseMaster/PurchaseRequestView';
                     })
                 }
             })
@@ -322,7 +322,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
             formData.append("PurchaseId", PurchaseId);
       
             $.ajax({
-                url: '/PurchaseRequest/PurchaseRequestIsApproved?PurchaseId=' + PurchaseId,
+                url: '/PurchaseMaster/PurchaseRequestIsApproved?PurchaseId=' + PurchaseId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
@@ -335,7 +335,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
                         buttonsStyling: false
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestListView';
+                        window.location = '/PurchaseMaster/PurchaseRequestListView';
                     });
                 }
             });
@@ -345,7 +345,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
                 'Purchase Request Have No Changes.!!😊',
                 'error'
             ).then(function () {
-                window.location = '/PurchaseRequest/PurchaseRequestListView';
+                window.location = '/PurchaseMaster/PurchaseRequestListView';
             });;
         }
     });

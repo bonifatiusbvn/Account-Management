@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.FormMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.MasterList;
 using Microsoft.AspNetCore.Http;
@@ -10,12 +11,14 @@ namespace AccountManagement.API.Controllers
     [ApiController]
     public class MasterListController : ControllerBase
     {
-        public MasterListController(IMasterList masterList)
+        public MasterListController(IMasterList masterList,IFormMaster formMaster)
         {
             MasterList = masterList;
+            FormMaster = formMaster;
         }
 
         public IMasterList MasterList { get; }
+        public IFormMaster FormMaster { get; }
 
         [HttpGet]
         [Route("GetCountries")]
@@ -47,6 +50,14 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<UserRoleModel> userRole = await MasterList.GetUserRole();
             return Ok(new { code = 200, data = userRole.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetFormGroupList")]
+        public async Task<IActionResult> GetFormGroupList()
+        {
+            IEnumerable<FormMasterModel> formList = await FormMaster.GetFormGroupList();
+            return Ok(new { code = 200, data = formList.ToList() });
         }
     }
 }

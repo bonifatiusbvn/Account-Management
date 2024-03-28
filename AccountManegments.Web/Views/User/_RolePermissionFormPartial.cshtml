@@ -1,0 +1,26 @@
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster.RolewiseFormPermissionModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<table class="table align-middle mb-0" id="formPermissionId">
+    @if (Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FormName</td>
+                <td id="chkformname">
+                    <input type="checkbox" id="isViewAllow" name="isViewAllow">
+                    <label for="isViewAllow">isViewAllow</label>
+                    <input type="checkbox" id="isEditAllow" name="isViewAllow">
+                    <label for="isEditAllow">isEditAllow </label>
+                    <input type="checkbox" id="isDeleteAllow" name="isViewAllow">
+                    <label for="isDeleteAllow">isDeleteAllow</label>
+                </td>
+            </tr>
+        
+        }
+}
+</table>
