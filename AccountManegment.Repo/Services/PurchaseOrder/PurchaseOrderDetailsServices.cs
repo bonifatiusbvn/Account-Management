@@ -20,7 +20,7 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
 
         public async Task<ApiResponseModel> AddPurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails)
         {
-            return await PODetails.AddPurchaseOrderDetails(PurchaseOrderDetails);              
+            return await PODetails.AddPurchaseOrderDetails(PurchaseOrderDetails);
         }
 
         public Task<ApiResponseModel> DeletePurchaseOrderDetails(int Id)
@@ -37,6 +37,8 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         {
             return await PODetails.GetPurchaseOrderDetailsList();
         }
+
+
 
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails)
         {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.ItemMasterRepository
 {
-    public class ItemMasterRepo:IItemMaster
+    public class ItemMasterRepo : IItemMaster
     {
         public ItemMasterRepo(DbaccManegmentContext context)
         {
@@ -34,11 +34,11 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     PricePerUnit = ItemDetails.PricePerUnit,
                     IsWithGst = ItemDetails.IsWithGst,
                     Gstamount = ItemDetails.Gstamount,
-                    Gstper=ItemDetails.Gstper,
+                    Gstper = ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
                     IsDeleted = ItemDetails.IsDeleted,
                     IsApproved = ItemDetails.IsApproved,
-                    CreatedBy= ItemDetails.CreatedBy,
+                    CreatedBy = ItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
@@ -99,15 +99,15 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                 ItemId = a.ItemId,
                                 ItemName = a.ItemName,
                                 UnitType = a.UnitType,
-                                UnitTypeName=b.UnitName,
+                                UnitTypeName = b.UnitName,
                                 PricePerUnit = a.PricePerUnit,
                                 IsWithGst = a.IsWithGst,
                                 Gstamount = a.Gstamount,
                                 Gstper = a.Gstper,
                                 Hsncode = a.Hsncode,
                                 IsApproved = a.IsApproved,
-                                CreatedBy=a.CreatedBy,
-                                CreatedOn=a.CreatedOn,
+                                CreatedBy = a.CreatedBy,
+                                CreatedOn = a.CreatedOn,
                             }).First();
                 return ItemList;
             }
@@ -118,7 +118,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         }
 
         public async Task<IEnumerable<ItemMasterModel>> GetItemList(string? searchText, string? searchBy, string? sortBy)
-       {
+        {
             try
             {
                 var ItemList = (from a in Context.ItemMasters
