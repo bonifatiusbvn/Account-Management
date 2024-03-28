@@ -56,10 +56,3 @@
     });
 
 });
-$('.minus').click(function () {
-    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) - 1)
-});
-
-$('.plus').click(function () {
-    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) + 1)
-});

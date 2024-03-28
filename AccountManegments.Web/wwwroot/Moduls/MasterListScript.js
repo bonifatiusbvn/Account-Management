@@ -90,3 +90,19 @@ function GetUserRole() {
     });
 }
 
+$(document).on("click", ".plus", function () {
+    debugger
+    updateProductQuantity($(this).closest(".product"), 1);
+    return
+});
+
+$(document).on("click", ".minus", function () {
+    debugger
+    updateProductQuantity($(this).closest(".product"), -1);
+    return
+});
+$(document).on("click", "#remove", function () {
+    var row = $(this).closest("tr");
+    row.remove();
+    updateTotals();
+});

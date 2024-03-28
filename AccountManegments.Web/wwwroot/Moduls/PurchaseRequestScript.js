@@ -380,7 +380,6 @@ function GetSupplierDetails() {
 }
 
 function SerchItemDetailsById() {
-    debugger
 
     var GetItemId = {
         ItemId: $('#searchItemname').val(),
@@ -516,16 +515,15 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
         e.src = n.result
     }, !1), t && n.readAsDataURL(t)
 }), isData();
-var count = 1;
 
+
+var count = 0;
 function AddNewRow(Result) {
-
     var newProductRow = $(Result);
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;
 
     $('#addNewlink .product').each(function () {
-
         var existingProductRow = $(this);
         var existingProductId = existingProductRow.attr('data-product-id');
         if (existingProductId === newProductId) {
@@ -539,6 +537,7 @@ function AddNewRow(Result) {
         $("#addNewlink").append(Result);
         updateProductTotalAmount();
         updateTotals();
+        updateRowNumbers();
     } else {
         Swal.fire({
             title: "Product already added!",
@@ -550,18 +549,12 @@ function AddNewRow(Result) {
     }
 }
 
-$(document).on("click", ".plus", function () {
-    debugger
-    updateProductQuantity($(this).closest(".product-id"), 1);
-    return
-});
 
-$(document).on("click", ".minus", function () {
-    updateProductQuantity($(this).closest(".product-id"), -1);
-    return
-});
-
-
+function updateRowNumbers() {
+    $(".product-id").each(function (index) {
+        $(this).text(index + 1);
+    });
+}
 function bindEventListeners() {
 
     document.querySelectorAll(".product-removal a").forEach(function (e) {
@@ -637,7 +630,8 @@ function updateTotals() {
     $("#cart-total").val(totalAmount.toFixed(2));
 }
 
-remove();
+
+
 var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
