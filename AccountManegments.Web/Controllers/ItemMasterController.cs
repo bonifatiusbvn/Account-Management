@@ -4,23 +4,29 @@ using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using System.Data;
+using System.Data.OleDb;
 
 namespace AccountManegments.Web.Controllers
 {
     public class ItemMasterController : Controller
     {
+
         public WebAPI WebAPI { get; }
         public APIServices APIServices { get; }
         public IWebHostEnvironment Environment { get; }
         public UserSession _userSession { get; }
+        public IConfiguration Configuration { get; }
 
-        public ItemMasterController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
+        public ItemMasterController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession,IConfiguration configuration)
         {
             WebAPI = webAPI;
             APIServices = aPIServices;
             Environment = environment;
             _userSession = userSession;
+            Configuration = configuration;
         }
         public IActionResult ItemListView()
         {
@@ -186,6 +192,86 @@ namespace AccountManegments.Web.Controllers
             {
                 throw ex;
             }
+        }
+        [HttpPost]
+        public IActionResult ImportExcelFile(IFormFile FormFile)
+        {
+            try
+            {
+                    var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UploadExcelFile");
+                    if (!Directory.Exists(MainPath))
+                    {
+                        Directory.CreateDirectory(MainPath);
+                    }
+                    var filepath = Path.Combine(MainPath, FormFile.FileName);
+                    using (FileStream stream = new FileStream(filepath, FileMode.Create))
+                    {
+                        FormFile.CopyTo(stream);
+                    }
+                    var filename = FormFile.FileName;
+                    string extension = Path.GetExtension(filename);
+                    string conString = string.Empty;
+                    switch (extension)
+                    {
+                        case ".xls":
+                            conString = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
+                            break;
+
+                        case ".xlsx":
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + filepath + ";Extended Properties='Excel 12.0 Xml; HDR=Yes'";
+                        break;
+                    }
+                    DataTable dt = new DataTable();
+                    conString = string.Format(conString, filepath);
+                    using (OleDbConnection conExcel = new OleDbConnection(conString))
+                    {
+                        using (OleDbCommand cmdExcel = new OleDbCommand())
+                        {
+                            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                            {
+                                cmdExcel.Connection = conExcel;
+                                conExcel.Open();
+                                DataTable dtExcelSchema = conExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                                string sheetName = dtExcelSchema.Rows[0]["Table_Name"].ToString();
+                                cmdExcel.CommandText = "SELECT * FROM [" + sheetName + "]";
+                                odaExcel.SelectCommand = cmdExcel;
+                                odaExcel.Fill(dt);
+                                conExcel.Close();
+                            }
+                        }
+                    }
+                    conString = Configuration.GetConnectionString("ACCDbconn");
+                    using (SqlConnection con = new SqlConnection(conString))
+                    {
+                        using (SqlBulkCopy bulkCopy = new SqlBulkCopy(con))
+                        {
+                            bulkCopy.DestinationTableName = "ItemMaster";
+                            bulkCopy.ColumnMappings.Add("ItemId", "ItemId");
+                            bulkCopy.ColumnMappings.Add("ItemName", "ItemName");
+                            bulkCopy.ColumnMappings.Add("UnitType", "UnitType");
+                            bulkCopy.ColumnMappings.Add("PricePerUnit", "PricePerUnit");
+                            bulkCopy.ColumnMappings.Add("IsWithGST", "IsWithGST");
+                            bulkCopy.ColumnMappings.Add("GSTAmount", "GSTAmount");
+                            bulkCopy.ColumnMappings.Add("GSTPer", "GSTPer");
+                            bulkCopy.ColumnMappings.Add("HSNCode", "HSNCode");
+                            bulkCopy.ColumnMappings.Add("IsApproved", "IsApproved");
+                            bulkCopy.ColumnMappings.Add("IsDeleted", "IsDeleted");
+                            bulkCopy.ColumnMappings.Add("CreatedBy", "CreatedBy");
+                            bulkCopy.ColumnMappings.Add("CreatedOn", "CreatedOn");
+                            bulkCopy.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                            bulkCopy.ColumnMappings.Add("UpdatedOn", "UpdatedOn");
+                            con.Open();
+                            bulkCopy.WriteToServer(dt);
+                            con.Close();
+                        }
+                    }
+                    
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return RedirectToAction("ItemListView");
         }
     }
 }
