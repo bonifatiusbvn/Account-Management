@@ -63,6 +63,7 @@ builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepo>();
 builder.Services.AddScoped<IPurchaseOrderDetails, PurchaseOrderDetailsRepo>();
 builder.Services.AddScoped<ISupplierInvoice, SupplierInvoiceRepo>();
 builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
+builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IPurchaseOrderServices, PurchaseOrderServices>();
 builder.Services.AddScoped<IPurchaseOrderDetailsServices, PurchaseOrderDetailsServices>();
 builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
+builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

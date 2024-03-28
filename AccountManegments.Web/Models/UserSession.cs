@@ -50,6 +50,13 @@
                 return userroleid != null ? int.Parse(userroleid.Value) : 0;
             }
         }
+        public string SiteName
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value;
+            }
+        }
 
 
     }
