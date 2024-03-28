@@ -551,21 +551,16 @@ function AddNewRow(Result) {
 }
 
 $(document).on("click", ".plus", function () {
-    updateProductQuantity($(this).closest(".product"), 1);
+    debugger
+    updateProductQuantity($(this).closest(".product-id"), 1);
     return
 });
 
 $(document).on("click", ".minus", function () {
-    updateProductQuantity($(this).closest(".product"), -1);
+    updateProductQuantity($(this).closest(".product-id"), -1);
     return
 });
-$('.minus').click(function () {
-    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) - 1)
-});
 
-$('.plus').click(function () {
-    $('#product-qty-1').val(parseInt($('#product-qty-1').val()) + 1)
-});
 
 function bindEventListeners() {
 

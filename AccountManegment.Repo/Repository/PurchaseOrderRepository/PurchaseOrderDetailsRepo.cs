@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
-    public class PurchaseOrderDetailsRepo:IPurchaseOrderDetails
+    public class PurchaseOrderDetailsRepo : IPurchaseOrderDetails
     {
         public PurchaseOrderDetailsRepo(DbaccManegmentContext context)
         {
@@ -34,8 +34,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Quantity = PurchaseOrderDetails.Quantity,
                     Price = PurchaseOrderDetails.Price,
                     Discount = PurchaseOrderDetails.Discount,
-                    Gst=PurchaseOrderDetails.Gst,
-                    Gstamount=PurchaseOrderDetails.Gstamount,
+                    Gst = PurchaseOrderDetails.Gst,
+                    Gstamount = PurchaseOrderDetails.Gstamount,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -66,15 +66,15 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  select new PurchaseOrderDetailsModel
                                  {
                                      Id = a.Id,
-                                     Poid=a.Poid,
-                                     Item=a.Item,
-                                     UnitTypeId=a.UnitTypeId,
-                                     UnitTypeName=b.UnitName,
-                                     Quantity=a.Quantity,
-                                     Price=a.Price,
-                                     Discount=a.Discount,
-                                     Gst=a.Gst,
-                                     Gstamount=a.Gstamount,
+                                     Poid = a.Poid,
+                                     Item = a.Item,
+                                     UnitTypeId = a.UnitTypeId,
+                                     UnitTypeName = b.UnitName,
+                                     Quantity = a.Quantity,
+                                     Price = a.Price,
+                                     Discount = a.Discount,
+                                     Gst = a.Gst,
+                                     Gstamount = a.Gstamount,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
@@ -90,23 +90,23 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         {
             try
             {
-               var PurchaseOrder = (from a in Context.PurchaseOrderDetails
-                                 join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                 select new PurchaseOrderDetailsModel
-                                 {
-                                     Id = a.Id,
-                                     Poid = a.Poid,
-                                     Item = a.Item,
-                                     UnitTypeId = a.UnitTypeId,
-                                     UnitTypeName = b.UnitName,
-                                     Quantity = a.Quantity,
-                                     Price = a.Price,
-                                     Discount = a.Discount,
-                                     Gst = a.Gst,
-                                     Gstamount = a.Gstamount,
-                                     CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn,
-                                 });
+                var PurchaseOrder = (from a in Context.PurchaseOrderDetails
+                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                     select new PurchaseOrderDetailsModel
+                                     {
+                                         Id = a.Id,
+                                         Poid = a.Poid,
+                                         Item = a.Item,
+                                         UnitTypeId = a.UnitTypeId,
+                                         UnitTypeName = b.UnitName,
+                                         Quantity = a.Quantity,
+                                         Price = a.Price,
+                                         Discount = a.Discount,
+                                         Gst = a.Gst,
+                                         Gstamount = a.Gstamount,
+                                         CreatedBy = a.CreatedBy,
+                                         CreatedOn = a.CreatedOn,
+                                     });
                 return PurchaseOrder;
             }
             catch (Exception)
