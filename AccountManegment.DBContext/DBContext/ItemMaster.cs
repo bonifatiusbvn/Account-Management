@@ -17,7 +17,7 @@ public partial class ItemMaster
 
     public decimal? Gstamount { get; set; }
 
-    public float? Gstper { get; set; }
+    public decimal? Gstper { get; set; }
 
     public string? Hsncode { get; set; }
 

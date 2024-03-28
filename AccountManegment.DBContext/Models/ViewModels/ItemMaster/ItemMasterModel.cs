@@ -11,16 +11,17 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
     {
         public Guid ItemId { get; set; }
 
-        public string ItemName { get; set; } = null!;
+        public string ItemName { get; set; }
 
         public int UnitType { get; set; }
 
         public decimal PricePerUnit { get; set; }
+
         public bool IsWithGst { get; set; }
 
         public decimal? Gstamount { get; set; }
 
-        public float? Gstper { get; set; }
+        public decimal? Gstper { get; set; }
 
         public string? Hsncode { get; set; }
 

@@ -58,18 +58,6 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        [HttpPost]
-        [Route("InsertMultiplePurchaseOrderDetails")]
-        public async Task<IActionResult> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderDetailsModel> PurchaseOrderDetails)
-        {
-            ApiResponseModel response = new ApiResponseModel();
-            var PurchaseOrdermaster = await PurchaseOrder.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
-            if (PurchaseOrdermaster.code == 200)
-            {
-                response.code = PurchaseOrdermaster.code;
-                response.message = PurchaseOrdermaster.message;
-            }
-            return StatusCode(response.code, response);
-        }
+
     }
 }
