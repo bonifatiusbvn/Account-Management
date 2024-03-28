@@ -15,5 +15,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormMaster
         public string FormName { get; set; } = null!;
 
         public bool IsActive { get; set; }
+        public int RowNumber { get; set; }
     }
 }

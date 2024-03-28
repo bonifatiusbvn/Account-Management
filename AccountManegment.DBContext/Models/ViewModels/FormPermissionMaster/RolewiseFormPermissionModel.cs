@@ -15,6 +15,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
 
         public int FormId { get; set; }
 
+        public Guid UserId { get; set; }
+
         public bool IsViewAllow { get; set; }
 
         public bool IsEditAllow { get; set; }

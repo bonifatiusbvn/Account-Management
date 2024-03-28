@@ -24,6 +24,11 @@ namespace AccountManagement.Repository.Services.FormPermissionMaster
             return await FormPermissionMaster.CreateRolewiseFormPermission(formPermission);
         }
 
+        public Task<List<RolewiseFormPermissionModel>> GetRolewiseFormList(int RoleId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<RolewiseFormPermissionModel> GetRolewiseFormPermissionById(int formPermissionId)
         {
             return await FormPermissionMaster.GetRolewiseFormPermissionById(formPermissionId);
@@ -32,6 +37,11 @@ namespace AccountManagement.Repository.Services.FormPermissionMaster
         public async Task<IEnumerable<RolewiseFormPermissionModel>> GetRolewiseFormPermissionList()
         {
             return await FormPermissionMaster.GetRolewiseFormPermissionList();
+        }
+
+        public async Task<ApiResponseModel> InsertMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> InsertRolewiseFormPermission)
+        {
+            return await FormPermissionMaster.InsertMultipleRolewiseFormPermission(InsertRolewiseFormPermission);
         }
 
         public async Task<ApiResponseModel> UpdateRolewiseFormPermission(RolewiseFormPermissionModel updateFormPermission)

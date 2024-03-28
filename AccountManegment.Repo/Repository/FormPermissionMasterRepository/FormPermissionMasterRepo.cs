@@ -35,6 +35,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                     IsViewAllow = formPermission.IsViewAllow,
                     IsEditAllow = formPermission.IsEditAllow,
                     IsDeleteAllow = formPermission.IsDeleteAllow,
+                    UserId = formPermission.UserId,
                     CreatedBy = formPermission.CreatedBy,
                     CreatedOn = DateTime.Now,   
                 };
@@ -59,7 +60,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             {
                 model = (from e in Context.RolewiseFormPermissions.Where(x => x.Id == formPermissionId)
                             join r in Context.UserRoles on e.RoleId equals r.RoleId
-                            join u in Context.Users on e.CreatedBy equals u.Id
+                            join u in Context.Users on e.UserId equals u.Id
                             join f in Context.Forms on e.FormId equals f.FormId
                             select new RolewiseFormPermissionModel
                             {
@@ -68,6 +69,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                 RoleId = e.RoleId,
                                 FormId = e.FormId,
                                 FormName = f.FormName,
+                                UserId = e.UserId,
                                 FullName = u.FirstName + " " + u.LastName,
                                 IsViewAllow = e.IsViewAllow,
                                 IsEditAllow = e.IsEditAllow,
@@ -90,7 +92,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             {
                 IEnumerable<RolewiseFormPermissionModel> FormPermissionList = from a in Context.RolewiseFormPermissions
                                                                   join r in Context.UserRoles on a.RoleId equals r.RoleId
-                                                                  join u in Context.Users on a.CreatedBy equals u.Id
+                                                                  join u in Context.Users on a.UserId equals u.Id
                                                                   join f in Context.Forms on a.FormId equals f.FormId
                                                                   select new RolewiseFormPermissionModel
                                                                   {
@@ -99,6 +101,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                                                       Role = r.Role,
                                                                       FormId = a.FormId,
                                                                       FormName = f.FormName,
+                                                                      UserId = a.UserId,
                                                                       IsViewAllow = a.IsViewAllow,
                                                                       IsEditAllow = a.IsEditAllow,
                                                                       IsDeleteAllow = a.IsDeleteAllow,
@@ -121,7 +124,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             var formPermissionData = Context.RolewiseFormPermissions.Where(e => e.Id == updateFormPermission.Id).FirstOrDefault();
             try
             {
-                if (formPermissionData != null)
+                if (updateFormPermission != null)
                 {
                     formPermissionData.Id = updateFormPermission.Id;
                     formPermissionData.RoleId = updateFormPermission.RoleId;
@@ -140,6 +143,90 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                 throw ex;
             }
             return model;
+        }
+
+        public async Task<ApiResponseModel> InsertMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> InsertRolewiseFormPermission)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var item in InsertRolewiseFormPermission)
+                {
+                    var rolewisePermission = new RolewiseFormPermission()
+                    {
+                        Id = item.Id,
+                        RoleId = item.RoleId,
+                        FormId = item.FormId,
+                        IsViewAllow = item.IsViewAllow,
+                        IsEditAllow = item.IsEditAllow,
+                        IsDeleteAllow = item.IsDeleteAllow,
+                        UserId = item.UserId,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.RolewiseFormPermissions.Add(rolewisePermission);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = 200;
+                response.message = "Rolewise Permission Created successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating Rolewise Permission";
+            }
+            return response;
+        }
+
+        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormList(int RoleId)
+        {
+            var UserData = new List<RolewiseFormPermissionModel>();
+            var data = await (from e in Context.RolewiseFormPermissions.Where(x => x.RoleId == RoleId)
+                     join r in Context.UserRoles on e.RoleId equals r.RoleId
+                     join u in Context.Users on e.UserId equals u.Id
+                     join f in Context.Forms on e.FormId equals f.FormId
+                     select new 
+                     {
+                          e.Id,
+                          r.Role,
+                          e.RoleId,
+                          e.FormId,
+                          f.FormName,
+                         e.UserId,
+                         u.FirstName,
+                         u.LastName,
+                         e.IsViewAllow,
+                         e.IsEditAllow,
+                         e.IsDeleteAllow,
+                         e.CreatedBy,
+                         e.CreatedOn,
+
+                     }).ToListAsync();
+
+
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    UserData.Add(new RolewiseFormPermissionModel()
+                    {
+                        Id = item.Id,
+                        Role = item.Role,
+                        RoleId = item.RoleId,
+                        FormId = item.FormId,
+                        FormName = item.FormName,
+                        UserId = item.UserId,
+                        FullName = item.FirstName + " " + item.LastName,
+                        IsViewAllow = item.IsViewAllow,
+                        IsEditAllow = item.IsEditAllow,
+                        IsDeleteAllow = item.IsDeleteAllow,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = item.CreatedOn
+                    });
+                }
+            }
+            return UserData;
         }
     }
 }

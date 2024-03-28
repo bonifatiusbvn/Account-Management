@@ -1,12 +1,16 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.FormMaster;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -216,6 +220,76 @@ namespace AccountManegments.Web.Controllers
         public IActionResult RolewisePermission()
         {
             return View();
+        }
+
+        public async Task<IActionResult> RolewisePermissionListAction()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.PostAsync("", "MasterList/GetUserRoleList");
+
+                if (res.code == 200)
+                {
+                    List<UserRoleModel> GetUserRoleList = JsonConvert.DeserializeObject<List<UserRoleModel>>(res.data.ToString());
+
+                    return PartialView("~/Views/User/_RolewisePermissionPartial.cshtml", GetUserRoleList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve user role list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+    
+
+        [HttpPost]
+        public async Task<IActionResult> GetFormGroupList()
+        {
+
+            try
+            {
+                List<FormMasterModel> formGroupList = new List<FormMasterModel>();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/GetFormGroupList");
+                if (postuser.data != null)
+                {
+                    formGroupList = JsonConvert.DeserializeObject<List<FormMasterModel>>(postuser.data.ToString());
+
+                }
+                return PartialView("~/Views/User/_FormGroupListPartial.cshtml", formGroupList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertMultipleRolewiseFormPermission()
+        {
+            try
+            {
+                var rolewisePermissionDetails = HttpContext.Request.Form["RolewisePermissionDetails"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(rolewisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "FormPermissionMaster/InsertMultipleRolewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

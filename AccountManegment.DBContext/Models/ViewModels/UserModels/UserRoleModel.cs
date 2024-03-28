@@ -11,7 +11,5 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public int RoleId { get; set; }
 
         public string Role { get; set; }
-
-
     }
 }

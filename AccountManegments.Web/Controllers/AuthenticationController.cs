@@ -12,6 +12,7 @@ using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels;
 using AccountManagement.API;
 using AccountManagement.DBContext.Models.ViewModels.FormMaster;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -188,26 +189,6 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
             return RedirectToAction("UserLogin");
-        }
-
-        public async Task<JsonResult> GetFormGroupList()
-        {
-
-            try
-            {
-                List<FormMasterModel> formList = new List<FormMasterModel>();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetFormGroupList");
-                if (response.code == 200)
-                {
-                    formList = JsonConvert.DeserializeObject<List<FormMasterModel>>(response.data.ToString());
-                }
-                return new JsonResult(formList);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
     }
 }

@@ -18,5 +18,10 @@ namespace AccountManagement.Repository.Interface.Services.FormPermissionMasterSe
         Task<RolewiseFormPermissionModel> GetRolewiseFormPermissionById(int formPermissionId);
 
         Task<ApiResponseModel> UpdateRolewiseFormPermission(RolewiseFormPermissionModel updateFormPermission);
+
+        Task<ApiResponseModel> InsertMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> InsertRolewiseFormPermission);
+
+        Task<List<RolewiseFormPermissionModel>> GetRolewiseFormList(int RoleId);
+
     }
 }

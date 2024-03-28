@@ -11,14 +11,12 @@ namespace AccountManagement.API.Controllers
     [ApiController]
     public class MasterListController : ControllerBase
     {
-        public MasterListController(IMasterList masterList,IFormMaster formMaster)
+        public MasterListController(IMasterList masterList)
         {
             MasterList = masterList;
-            FormMaster = formMaster;
         }
 
         public IMasterList MasterList { get; }
-        public IFormMaster FormMaster { get; }
 
         [HttpGet]
         [Route("GetCountries")]
@@ -52,12 +50,12 @@ namespace AccountManagement.API.Controllers
             return Ok(new { code = 200, data = userRole.ToList() });
         }
 
-        [HttpGet]
-        [Route("GetFormGroupList")]
-        public async Task<IActionResult> GetFormGroupList()
+        [HttpPost]
+        [Route("GetUserRoleList")]
+        public async Task<IActionResult> GetUserRoleList()
         {
-            IEnumerable<FormMasterModel> formList = await FormMaster.GetFormGroupList();
-            return Ok(new { code = 200, data = formList.ToList() });
+            IEnumerable<UserRoleModel> userRole = await MasterList.GetUserRole();
+            return Ok(new { code = 200, data = userRole.ToList() });
         }
     }
 }

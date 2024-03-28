@@ -1,0 +1,43 @@
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.FormMaster.FormMasterModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <div id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
+            <div class="row card mb-3">
+                <div class="col-5">
+                    <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormGroup</h6>
+                    <input type="text" id="formId" value="@item.FormId" hidden />
+                </div>
+                <div class="col-7">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="isView" name="isView">
+                                <label class="form-check-label" for="isView">View</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="isEdit" name="isEdit">
+                                <label class="form-check-label" for="isEdit">Edit</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="isDelete" name="isDelete">
+                                <label class="form-check-label" for="isDelete">Delete</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
