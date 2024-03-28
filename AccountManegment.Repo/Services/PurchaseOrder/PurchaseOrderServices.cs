@@ -23,6 +23,11 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.AddPurchaseOrderDetails(PurchaseOrderDetails);
         }
 
+        public string CheckPONo()
+        {
+            return PurchaseOrder.CheckPONo();
+        }
+
         public Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
         {
             throw new NotImplementedException();

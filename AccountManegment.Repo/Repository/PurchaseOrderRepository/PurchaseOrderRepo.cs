@@ -75,26 +75,26 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     lastYear = currentDate.Year - 1;
                 }
 
-                string PurchaseRequestId;
-                if (LastPr == null)
+                string PurchaseOrderId;
+                if (LastPO == null)
                 {
 
-                    PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
+                    PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
                 }
                 else
                 {
-                    if (LastPr.PrNo.Length >= 19)
+                    if (LastPO.Poid.Length >= 19)
                     {
 
-                        int PrNumber = int.Parse(LastPr.PrNo.Substring(18)) + 1;
-                        PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                        int PrNumber = int.Parse(LastPO.Poid.Substring(18)) + 1;
+                        PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
                     }
                     else
                     {
-                        throw new Exception("Purchase Request Id does not have the expected format.");
+                        throw new Exception("Purchase Order Id does not have the expected format.");
                     }
                 }
-                return PurchaseRequestId;
+                return PurchaseOrderId;
             }
             catch (Exception ex)
             {
