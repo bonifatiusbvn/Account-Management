@@ -107,5 +107,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+        [HttpGet]
+        [Route("GetCompanyNameList")]
+        public async Task<IActionResult> GetCompanyNameList()
+        {
+            IEnumerable<CompanyModel> company = await _companyService.GetCompanyNameList();
+            return Ok(new { code = 200, data = company.ToList() });
+        }
     }
 }

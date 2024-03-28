@@ -187,9 +187,22 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        public IActionResult CreatePurchaseOrder()
+        public async Task<IActionResult> CreatePurchaseOrder()
         {
-            return View();
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrder/CheckPONo");
+                if (Response.code == 200)
+                {
+                    ViewBag.PurchaseOrderNo = Response.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
         }
 
         [HttpPost]

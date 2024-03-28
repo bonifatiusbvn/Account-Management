@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.Company;
 using Microsoft.EntityFrameworkCore;
@@ -152,6 +153,23 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     }
                 }
                 return company;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<CompanyModel>> GetCompanyNameList()
+        {
+            try
+            {
+                IEnumerable<CompanyModel> CompanyName = Context.Companies.ToList().Select(a => new CompanyModel
+                {
+                    CompanyId = a.CompanyId,
+                    CompanyName = a.CompanyName,
+                });
+                return CompanyName;
             }
             catch (Exception ex)
             {

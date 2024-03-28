@@ -1,5 +1,6 @@
 ﻿AllPurchaseRequestListTable();
 GetSiteDetails();
+GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 function AllPurchaseRequestListTable() {
@@ -356,6 +357,17 @@ function PurchaseRequestIsApproved(PurchaseId) {
         }
     });
 }
+function GetCompanyDetails() {
+
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtcompanyname').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+            });
+        }
+    });
+}
 function GetItemDetails() {
 
     $.ajax({
@@ -378,6 +390,41 @@ function GetSupplierDetails() {
         }
     });
 }
+$(document).ready(function () {
+    $('#txtcompanyname').change(function () {
+        var CompanyId = $(this).val();
+        $.ajax({
+            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+            type: 'GET',
+            success: function (result) {
+                $('#companybillingaddressDetails').empty().append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.companyName + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 90px;">' + result.address + ' , ' + result.area + ' , ' + result.cityName + ' , ' + result.stateName + ' , ' + result.countryName + ' , ' + result.pincode + '</textarea></div>'
+                );
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching company details:", error);
+            }
+        });
+    });
+
+    $('#sameAsBillingAddress').change(function () {
+        var billingAddress = $('#companybillingaddressDetails textarea').val();
+        var shippingNameInput = $('#shippingName');
+        var shippingAddressInput = $('#shippingAddress');
+        if (this.checked) {
+            var companyName = $('#companybillingaddressDetails input').val();
+            shippingNameInput.val(companyName);
+            shippingAddressInput.val(billingAddress);
+        } else {
+            shippingNameInput.val("");
+            shippingAddressInput.val("");
+        }
+    });
+});
+
+
+
 
 function SerchItemDetailsById() {
     debugger
@@ -398,26 +445,7 @@ function SerchItemDetailsById() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
-
-            if (Result.statusText === "success") {
-                AddNewRow(Result.responseText);
-            }
-            else {
-                debugger
-                var suppliername = $('#txtSuppliername').val();
-                var itemtname = $('#searchItemname').val();
-                if (suppliername === '' || suppliername === null) {
-                    $('#SuppliervalidationMessage').text('Please select supplier!!');
-                }
-                if (itemtname === "--Select ProductName--" || itemtname === null) {
-                    $('#itemvalidationMessage').text('Please select Item!!');
-                }
-                else {
-                    $('#SuppliervalidationMessage').text('');
-                    $('#itemvalidationMessage').text('');
-                }
-            }
+            AddNewRow(Result.responseText);
         }
     });
 }
@@ -539,14 +567,6 @@ function AddNewRow(Result) {
         $("#addNewlink").append(Result);
         updateProductTotalAmount();
         updateTotals();
-    } else {
-        Swal.fire({
-            title: "Product already added!",
-            text: "The selected product is already added.",
-            icon: "warning",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK"
-        });
     }
 }
 

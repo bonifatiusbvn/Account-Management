@@ -35,6 +35,11 @@ namespace AccountManagement.Repository.Services.Company
             return await Company.GetAllCompany(searchText, searchBy, sortBy);
         }
 
+        public async Task<IEnumerable<CompanyModel>> GetCompanyNameList()
+        {
+            return await Company.GetCompanyNameList();
+        }
+
         public async Task<CompanyModel> GetCompnaytById(Guid CompanyId)
         {
             return await Company.GetCompnaytById(CompanyId);

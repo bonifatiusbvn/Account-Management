@@ -1,6 +1,7 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -142,6 +143,24 @@ namespace AccountManegments.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(company.message), Code = company.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetCompanyNameList()
+        {
+            try
+            {
+                List<CompanyModel> CompanyName = new List<CompanyModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "Company/GetCompanyNameList");
+                if (res.code == 200)
+                {
+                    CompanyName = JsonConvert.DeserializeObject<List<CompanyModel>>(res.data.ToString());
+                }
+                return new JsonResult(CompanyName);
             }
             catch (Exception ex)
             {

@@ -179,6 +179,64 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var item in PurchaseOrderDetails)
+                {
+                    var PurchaseOrder = new PurchaseOrder()
+                    {
+
+                        Id = Guid.NewGuid(),
+                        SiteId = item.SiteId,
+                        FromSupplierId = item.FromSupplierId,
+                        ToCompanyId = item.ToCompanyId,
+                        TotalAmount = item.TotalAmount,
+                        Description = item.Description,
+                        DeliveryShedule = item.DeliveryShedule,
+                        TotalPrice = item.TotalPrice,
+                        TotalDiscount = item.TotalDiscount,
+                        TotalGstamount = item.TotalGstamount,
+                        BillingAddress = item.BillingAddress,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    var PurchaseOrderDetail = new PurchaseOrderDetail()
+                    {
+                        PorefId = item.Id,
+                        Item = item.Item,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        Gstamount = item.Gstamount,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    var PurchaseAddress = new PodeliveryAddress()
+                    {
+                        Poid = item.Id,
+                        Address = item.BillingAddress,
+                    };
+                    Context.PurchaseOrders.Add(PurchaseOrder);
+                    Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Purchase Order Inserted Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
+            }
+            return response;
+        }
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
             ApiResponseModel responseModel = new ApiResponseModel();

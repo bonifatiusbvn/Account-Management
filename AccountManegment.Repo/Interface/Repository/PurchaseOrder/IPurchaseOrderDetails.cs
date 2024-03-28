@@ -16,6 +16,5 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<PurchaseOrderDetailsModel> GetPurchaseOrderDetailsById(int Id);
         Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails);
         Task<ApiResponseModel> DeletePurchaseOrderDetails(int Id);
-        Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderDetailsModel> PurchaseOrderDetails);
     }
 }

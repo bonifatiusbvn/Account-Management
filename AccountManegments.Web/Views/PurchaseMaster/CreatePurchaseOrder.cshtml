@@ -15,236 +15,244 @@
         </nav>
     </div>
 </div>
-<div class="row justify-content-center">
-    <div class="col-xxl-9">
-        <div class="card">
-            <form id="createproductform" autocomplete="off">
-                <div class="card-body border-bottom border-bottom-dashed p-4">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="profile-user mx-auto  mb-3">
-                                <label for="profile-img-file-input" class="d-block" tabindex="0">
-                                    <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                        @* <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
-                                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light"> *@
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                        <!--end col-->
-
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-3">
-                        <div class="col-lg-4 col-sm-6">
-                            <label for="orderId" class="text-muted text-uppercase fw-semibold">Order ID</label>
-                            <input type="text" id="POIdDetail" class="form-control bg-light border-0" name="POIdDetail" value="@ViewBag.PoId" readonly />
-                            <input type="text" id="POId" class="form-control bg-light border-0" name="POId" hidden />
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-4 col-sm-6">
-                            <label for="choices-payment-status" class="text-muted text-uppercase fw-semibold">Payment Status</label>
-                            <div class="input-light">
-                                <select class="form-control bg-light border-0" id="txtPaymentStatus" data-choices data-choices-search-false>
-                                    <option selected disabled value="">Select Payment Status</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Unpaid">Unpaid</option>
-                                    <option value="Refund">Refund</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-4 col-sm-6">
-                            <div>
-                                <label for="payment" class="text-muted text-uppercase fw-semibold">Payment Type</label>
-                                <input type="text" id="paymenttype" class="form-control bg-light border-0" name="payment" value="Credit" readonly />
-                            </div>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="card-body p-4 border-top border-top-dashed">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-6">
-                            <div>
-                                <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
-                            </div>
-                            <div class="mb-2">
-                                <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-sm-6 ms-auto">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div>
-                                        <label for="deliverydate" class="text-muted text-uppercase fw-semibold">Delivery Date</label>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="invoiceList">
+            <div class="card-body">
+                <div>
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-9">
+                            <div class="card">
+                                <form id="CreateInvoiceForm">
+                                    <div class="card-body border-bottom border-bottom-dashed p-4">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="profile-user mx-auto  mb-3">
+                                                    <label for="profile-img-file-input" class="d-block" tabindex="0">
+                                                        <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
+                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <label class="text-muted text-uppercase fw-semibold">CompanyName</label>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
+                                                        <option selected disabled value="">Select Company Name</option>
+                                                    </select>
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
                                     </div>
-                                    <div class="mb-2">
-                                        <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Delivery-Date" />
+                                    <div class="card-body p-4 border-top border-top-dashed">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-sm-6">
+                                                <div>
+                                                    <label for="billingName" class="text-uppercase fw-semibold">Billing Address</label>
+                                                </div>
+                                                <div class="mb-2" id="companybillingaddressDetails"></div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-sm-6 ms-auto">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <input type="checkbox" id="sameAsBillingAddress"> Same as billing address<br>
+                                                        <div>
+                                                            <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
+                                                        </div>
+                                                        <div class="mb-2" id="companyshippingaddressDetails">
+                                                            <div class="mb-2">
+                                                                <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
+                                                                <div class="invalid-feedback">
+                                                                    Please enter a full name
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <textarea class="form-control bg-light border-0" id="shippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                                <div class="invalid-feedback">
+                                                                    Please enter an address
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
                                     </div>
-                                </div>
+                                    <div class="card-body p-4">
+                                        <div class="row g-3 ">
+                                            <div class="col-lg-3 col-sm-6">
+                                                <label for="invoicenoInput" id="InvoiceNo">Invoice No</label>
+                                                <input type="text" class="form-control bg-light border-0" id="invoicenoInput" value="@ViewBag.PurchaseOrderNo" readonly />
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <div>
+                                                        <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
+                                                </div>
+                                                <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                    <option selected disabled value="">Select Supplier Name</option>
+                                                </select>
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtSuppliernameid">
+                                                <div id="SuppliervalidationMessage" class="text-danger"></div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <div>
+                                                        <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
+                                                    </div>
+                                                    <select id="searchItemname" onclick="SerchItemDetailsById()" class="form-control bg-light border-0" style="border:hidden;">
+                                                        <option selected disabled value="">Select ProductName</option>
+                                                    </select>
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                    </div>
+
+                                    <!---- Product Details ---->
+
+                                    <div class="card-body p-4">
+                                        <div class="table-responsive">
+                                            <table class="invoice-table table table-bordered table-striped mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-start">#</th>
+                                                        <th class="text-start">Product Details</th>
+                                                        <th class="text-start">Rate</th>
+                                                        <th class="text-start">GST (%)</th>
+                                                        <th class="text-start">GST Price</th>
+                                                        <th class="text-start">Quantity</th>
+                                                        <th class="text-start">Amount</th>
+                                                        <th class="text-end">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="addNewlink">
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                        <tbody>
+                                            <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
+                                            <tr class="border-top border-top-dashed mt-2">
+                                                <td colspan="3"></td>
+                                                <td colspan="2" class="p-0">
+                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Sub Total</th>
+                                                                <td style="width:150px;">
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Estimated Tax (12.5%)</th>
+                                                                <td>
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Total Gst(18%)</th>
+                                                                <td>
+                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Discount <small class="text-muted">()</small></th>
+                                                                <td>
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Shipping Charge</th>
+                                                                <td>
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="border-top border-top-dashed">
+                                                                <th scope="row">Total Amount</th>
+                                                                <td>
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!--end table-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-4">
+                                                <div class="mb-2">
+                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
+                                                    <div class="input-light">
+                                                        <select class="form-control bg-light border-0" id="txtpaymentmethod">
+                                                            <option selected disabled value="">Select Payment Method</option>
+                                                            <option value="Paid">Paid</option>
+                                                            <option value="Unpaid">Unpaid</option>
+                                                            <option value="Refund">Refund</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                        <div class="mt-4">
+                                            <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
+                                            <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
+                                        </div>
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            <button type="button" class="btn btn-success" onclick="InsertMultiplePurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                                            <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
+                                        </div>
+                                    </div>
+
+                                </form>
                             </div>
                         </div>
                         <!--end col-->
                     </div>
-                    <!--end row-->
                 </div>
-                <div class="card-body border border-dashed border-end-0 border-start-0">
-                    <form id="dropdownValidationForm">
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <div>
-                                    <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
-                                </div>
-                                <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                    <option selected disabled value="">Select Supplier Name</option>
-                                </select>
-                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtSuppliernameid">
-                                <div id="SuppliervalidationMessage" class="text-danger"></div>
-                            </div>
-                            <!--end col-->
-
-                            <div class="col-sm-6">
-                                <div class="input-light">
-                                    <div>
-                                        <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
-                                    </div>
-                                    <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                        <option selected disabled value="">Select ProductName</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
-                                    <div id="itemvalidationMessage" class="text-danger"></div>
-
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="input-light">
-                                <div>
-                                    <div class="col-sm-2">
-                                        <a id="addItemButton" class="btn btn-secondary fw-small" onclick="SerchItemDetailsById()">Add Product</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </form>
-                </div>
-
-                <!---- Product Details ---->
-
-                <div class="card-body p-4">
-                    <div class="table-responsive">
-                        <table class="invoice-table table table-bordered table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-start">#</th>
-                                    <th class="text-start">Product Details</th>
-                                    <th class="text-start">Rate</th>
-                                    <th class="text-start">GST (%)</th>
-                                    <th class="text-start">GST Price</th>
-                                    <th class="text-start">Quantity</th>
-                                    <th class="text-start">Amount</th>
-                                    <th class="text-end">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="addNewlink">
-                            </tbody>
-
-
-                        </table>
-                    </div>
-                    <tbody>
-                        <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
-                        <tr class="border-top border-top-dashed mt-2">
-                            <td colspan="3"></td>
-                            <td colspan="2" class="p-0">
-                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Sub Total</th>
-                                            <td style="width:150px;">
-                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Estimated Tax (12.5%)</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Total Gst(18%)</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Discount <small class="text-muted">()</small></th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Shipping Charge</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr class="border-top border-top-dashed">
-                                            <th scope="row">Total Amount</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!--end table-->
-                            </td>
-                        </tr>
-                    </tbody>
-                    <div class="row mt-3">
-                        <div class="col-lg-4">
-                            <div class="mb-2">
-                                <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                <div class="input-light">
-                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false data-choices-removeItem id="txtpaymentmethod">
-                                        <option selected disabled value="">---Select Payment Method---</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymentmethodid">
-                                </div>
-                            </div>
-                            <div>
-                                <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="₹0.00" readonly />
-                            </div>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                    <div class="mt-4">
-                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                    </div>
-                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                        <button type="button" class="btn btn-success" onclick="InsertMultiplePurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     <!--end col-->
 </div>
+<!--end row-->
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/purchaserequestscript.js"></script>
+
 
 

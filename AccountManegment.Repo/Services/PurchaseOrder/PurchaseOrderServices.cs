@@ -43,6 +43,11 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.GetPurchaseOrderList();
         }
 
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            return await PurchaseOrder.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
+        }
+
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
             return await PurchaseOrder.UpdatePurchaseOrderDetails(PurchaseOrderDetails);

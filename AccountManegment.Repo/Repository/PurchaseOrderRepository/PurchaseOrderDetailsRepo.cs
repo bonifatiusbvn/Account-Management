@@ -116,42 +116,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
-        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderDetailsModel> PurchaseOrderDetails)
-        {
-            ApiResponseModel response = new ApiResponseModel();
-            try
-            {
-                foreach (var item in PurchaseOrderDetails)
-                {
-                    var POModel = new PurchaseOrderDetail()
-                    {
-
-                        PorefId = item.Poid,
-                        Item = item.Item,
-                        UnitTypeId = item.UnitTypeId,
-                        Quantity = item.Quantity,
-                        Price = item.Price,
-                        Discount = item.Discount,
-                        Gst = item.Gst,
-                        Gstamount = item.Gstamount,
-                        CreatedBy = item.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                    };
-                    Context.PurchaseOrderDetails.Add(POModel);
-                }
-
-                await Context.SaveChangesAsync();
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "Purchase Order Details Inserted Successfully";
-            }
-            catch (Exception ex)
-            {
-                response.code = 500;
-                response.message = "Error creating orders: " + ex.Message;
-            }
-            return response;
-        }
-
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderDetailsModel PurchaseOrderDetails)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
