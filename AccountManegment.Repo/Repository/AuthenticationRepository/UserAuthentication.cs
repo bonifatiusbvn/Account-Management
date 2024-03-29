@@ -294,6 +294,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
                             userModel.FirstName = tblUser.User.FirstName;
                             userModel.SiteName = tblUser.SiteName;
+                            userModel.SiteId = tblUser.User.SiteId;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
                         }

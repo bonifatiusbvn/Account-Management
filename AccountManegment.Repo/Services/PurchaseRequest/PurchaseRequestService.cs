@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
@@ -35,9 +36,9 @@ namespace AccountManagement.Repository.Services.PurchaseRequest
             return await PurchaseRequest.GetPurchaseRequestDetailsById(PurchaseId);
         }
 
-        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy,Guid? siteId)
         {
-            return await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy);
+            return await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy,siteId);
         }
 
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)

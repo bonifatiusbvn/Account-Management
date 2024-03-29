@@ -6,7 +6,8 @@
 
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="purchaseRequestCard_@item.Pid" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
+
+    @* <div class="row ac-card" id="purchaseRequestCard_@item.Pid" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
@@ -44,5 +45,22 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
+    <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
+        <td>@item.Item</td>
+        <td>@item.UnitName</td>
+        <td>@item.Quantity</td>
+        <td>
+        @if(item.IsApproved== true){
+                <span class="badge bg-light-success text-success w-100">Approved</span>
+        }else
+            {
+                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+            }
+       </td>
+        <td>
+            <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+            <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+        </td>
+    </tr>
 }

@@ -47,8 +47,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
-                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId)? null : new Guid(UserSession.SiteId) ;
+                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 

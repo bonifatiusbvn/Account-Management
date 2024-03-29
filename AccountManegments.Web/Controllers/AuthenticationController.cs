@@ -139,6 +139,7 @@ namespace AccountManegments.Web.Controllers
                 new Claim("FullName", userlogin.Data.FullName),
                 new Claim("UserName", userlogin.Data.UserName),
                 new Claim("SiteName", userlogin.Data.SiteName),
+                new Claim("SiteId", userlogin.Data.SiteId.ToString()),
                 new Claim("UserRole", userlogin.Data.RoleId.ToString()),
             };
 

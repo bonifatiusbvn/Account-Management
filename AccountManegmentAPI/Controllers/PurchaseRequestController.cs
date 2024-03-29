@@ -21,9 +21,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetPurchaseRequestList")]
-        public async Task<IActionResult> GetPuchaseRequestList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IActionResult> GetPuchaseRequestList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
         {
-            IEnumerable<PurchaseRequestModel> purchaseRequestList = await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy);
+            IEnumerable<PurchaseRequestModel> purchaseRequestList = await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy, siteId);
             return Ok(new { code = 200, data = purchaseRequestList.ToList() });
         }
 

@@ -151,13 +151,14 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             }
         }
 
-        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy,Guid? siteId)
         {
             try
             {
                 var PurchaseRequestList = (from a in Context.PurchaseRequests
                                            join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                            join c in Context.Sites on a.SiteId equals c.SiteId
+                                           where (siteId == null && a.SiteId ==a.SiteId)||(siteId != null && a.SiteId == siteId)
                                            select new PurchaseRequestModel
                                            {
 

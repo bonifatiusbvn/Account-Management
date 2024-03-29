@@ -1,4 +1,6 @@
-﻿@inject IHttpContextAccessor Accessor;
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "PurchaseRequestListView";
@@ -34,40 +36,10 @@
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
                             <div class="card-body">
-                                <div class="row ">
-                                    <div class="col-12">
-                                        <div class="card-body">
-                                            <div class="row g-3">
+                               
 
-                                                <div class="col-12 col-lg-4">
-                                                    <input class="form-control form-select-lg" id="txtPurchaseRequestSearch" onkeyup="filterPurchaseRequestTable()" placeholder="Search" />
-                                                </div>
-                                                <div class="col-12 col-lg-4">
-                                                    <select class="form-select form-select-lg" id="PurchaseRequestSearchBy" onchange="filterPurchaseRequestTable()">
-                                                        <option selected="selected">All</option>
-                                                        <option>ItemName</option>
-                                                        <option>UnitName</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-12 col-lg-4">
-                                                    <select class="form-select form-select-lg" id="PurchaseRequestSortBy" onchange="sortPurchaseRequestTable()">
-                                                        <option value="DescendingCreatedOn" selected="selected">Last Created</option>
-                                                        <option value="AscendingCreatedOn">First Created</option>
-                                                        <option value="AscendingItem">ItemName(A-Z)</option>
-                                                        <option value="DescendingItem">ItemName(Z-A)</option>
-                                                    </select>
-                                                </div>
-                                            </div><!--end row-->
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="row w-100 ac-view-list">
-                                    <div class="row hide-sm table-light ac-view-header">
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+                                    @* <div class="row hide-sm table-light ac-view-header">
                                         <div class="col-5 text-center">
                                             <h5>Item</h5>
                                         </div>
@@ -82,8 +54,60 @@
                                         </div>
                                     </div>
                                     <div class="card" id="purchaseRequesttbody">
-                                    </div>
+                                    </div> *@
+                                    <div class="row ">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3">
 
+                                                    <div class="col-12 col-lg-4">
+                                                        <input class="form-control" id="txtPurchaseRequestSearch" onkeyup="filterPurchaseRequestTable()" placeholder="Search" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="PurchaseRequestSearchBy" onchange="filterPurchaseRequestTable()">
+                                                            <option selected="selected">All</option>
+                                                            <option>Item Name</option>
+                                                            <option>Unit Name</option>
+                                                        </select> 
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="PurchaseRequestSortBy" onchange="sortPurchaseRequestTable()">
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
+                                                            <option value="AscendingItem">ItemName(A-Z)</option>
+                                                            <option value="DescendingItem">ItemName(Z-A)</option>
+                                                        </select>
+                                                    </div>
+                                                </div><!--end row-->
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                      
+                                            
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table align-middle mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>Item Name</th>
+                                                                <th> Per Unit Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Status</th>
+                                                                <th>Action</th>
+                                                             </tr>
+                                                        </thead>
+                                                        <tbody id="purchaseRequesttbody">
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        
+                                    
                                 </div>
 
                             </div>

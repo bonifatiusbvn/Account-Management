@@ -1508,8 +1508,8 @@ ul.categories-list li {
 }
 
 .ac-view-list {
-    max-height: 550px;
-    overflow-y: scroll;
+    /*max-height: 550px;
+    overflow-y: scroll;*/
 }
 
     .ac-view-list .ac-card.active .card {
@@ -1583,4 +1583,13 @@ div::-webkit-scrollbar-thumb {
     background-color: #fff; /* rgb(146 62 185 / 12%) !important;*/
     height: 32px;
     padding-top: 5px;
+}
+
+tr.active {
+    background-color: lightgrey
+}
+
+.card-body .table-responsive{
+    height:500px;
+    max-height:500px;
 }
