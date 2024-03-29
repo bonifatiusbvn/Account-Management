@@ -5,7 +5,7 @@
 
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="userCard_@item.RoleId" onclick="SelectUserDetails('@item.RoleId', this)">
+    @*<div class="row ac-card" id="userCard_@item.RoleId" onclick="SelectUserDetails('@item.RoleId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
@@ -44,6 +44,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
 
+    <tr id="siteCard_@item.RoleId" onclick="SelectSiteDetails('@item.RoleId', this)">
+        <td>@item.Role</td>
+        <td>
+            <a class="btn text-primary" onclick="EditRoleWiseFormDetails('@item.RoleId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+        </td>
+    </tr>
 }
