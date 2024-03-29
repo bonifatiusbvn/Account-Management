@@ -1,4 +1,5 @@
-﻿@inject IHttpContextAccessor Accessor;
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 <!doctype html>
 <html lang="en" class="light-theme">
@@ -64,6 +65,14 @@
             <!--navigation-->
 
             <ul class="metismenu" id="menu">
+                <li>
+                    <a asp-action="Index" asp-controller="Home">
+                        <div class="parent-icon">
+                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                        </div>
+                        <div class="menu-title">Dashboard</div>
+                    </a>
+                </li>
                 <li>
                     <a asp-action="CreateCompany" asp-controller="Company">
                         <div class="parent-icon">

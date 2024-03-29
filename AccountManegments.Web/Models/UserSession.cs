@@ -57,7 +57,13 @@
                 return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value;
             }
         }
-
+        public string SiteId
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value;
+            }
+        }
 
     }
 }

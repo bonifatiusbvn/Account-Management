@@ -68,9 +68,9 @@ function sortPurchaseRequestTable() {
 
 function SelectPurchaseRequestDetails(PurchaseId, element) {
 
-    $('.row.ac-card').removeClass('active');
-    $(element).closest('.row.ac-card').addClass('active');
-    $('.ac-detail').removeClass('d-none');
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+     $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
