@@ -11,25 +11,28 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public Guid Id { get; set; }
 
         public Guid SiteId { get; set; }
+
         public string? Poid { get; set; }
 
         public Guid FromSupplierId { get; set; }
 
         public Guid ToCompanyId { get; set; }
 
-        public decimal TotalAmount { get; set; }
+        public DateTime? Date { get; set; }
 
         public string? Description { get; set; }
 
         public string? DeliveryShedule { get; set; }
 
-        public decimal TotalPrice { get; set; }
-
         public decimal? TotalDiscount { get; set; }
 
         public decimal TotalGstamount { get; set; }
 
+        public decimal TotalAmount { get; set; }
+
         public string? BillingAddress { get; set; }
+
+        public Guid PorefId { get; set; }
 
         public string Item { get; set; } = null!;
 
@@ -43,7 +46,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public decimal Gst { get; set; }
 
-        public decimal Gstamount { get; set; }
+        public decimal ItemTotal { get; set; }
+        public string ShippingAddress { get; set; } = null!;
 
         public Guid CreatedBy { get; set; }
 

@@ -47,7 +47,7 @@
                                                     <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
                                                         <option selected disabled value="">Select Company Name</option>
                                                     </select>
-                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                                    <span id="spncompanyname" class="text-danger"></span>
                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                     <input type="hidden" class="form-control" id="siteid" value="@_userSession.SiteId">
                                                 </div>
@@ -66,40 +66,9 @@
                                                 <div class="mb-2" id="companybillingaddressDetails">
                                                     <div class="mb-2">
                                                         <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" placeholder="Full Name" required />
-                                                        <div class="invalid-feedback">
-                                                            Please enter a full name
-                                                        </div>
                                                     </div>
                                                     <div class="mb-2">
                                                         <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
-                                                        <div class="invalid-feedback">
-                                                            Please enter an address
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-6 ms-auto">
-                                                <div class="row">
-                                                    <div class="col-lg-8">
-                                                        <input type="checkbox" id="sameAsBillingAddress"> Same as billing address<br>
-                                                        <div>
-                                                            <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
-                                                        </div>
-                                                        <div class="mb-2" id="companyshippingaddressDetails">
-                                                            <div class="mb-2">
-                                                                <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
-                                                                <div class="invalid-feedback">
-                                                                    Please enter a full name
-                                                                </div>
-                                                            </div>
-                                                            <div class="mb-2">
-                                                                <textarea class="form-control bg-light border-0" id="shippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
-                                                                <div class="invalid-feedback">
-                                                                    Please enter an address
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -120,9 +89,8 @@
                                                         <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
+                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" disabled>
                                                     </div>
-
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -133,7 +101,7 @@
                                                 <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
                                                     <option selected disabled value="">Select Supplier Name</option>
                                                 </select>
-                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtSuppliernameid">
+                                                <span id="spnsuppliername" class="text-danger"></span>
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-3 col-sm-6">
@@ -196,12 +164,6 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <th scope="row">Estimated Tax (12.5%)</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <th scope="row">Total Gst(18%)</th>
                                                                 <td>
                                                                     <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
@@ -211,12 +173,6 @@
                                                                 <th scope="row">Discount <small class="text-muted">()</small></th>
                                                                 <td>
                                                                     <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Shipping Charge</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
                                                                 </td>
                                                             </tr>
                                                             <tr class="border-top border-top-dashed">
@@ -235,14 +191,30 @@
                                         <div class="row mt-3">
                                             <div class="col-lg-4">
                                                 <div class="mb-2">
-                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                                    <div class="input-light">
-                                                        <select class="form-control bg-light border-0" id="txtpaymentmethod">
-                                                            <option selected disabled value="">Select Payment Method</option>
-                                                            <option value="Paid">Paid</option>
-                                                            <option value="Unpaid">Unpaid</option>
-                                                            <option value="Refund">Refund</option>
-                                                        </select>
+                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Delivery Schedule</label>
+                                                    <div class="mb-2">
+                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" />
+                                                        <span id="spndelivryschedule" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-sm-6 ms-auto">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <input type="checkbox" id="sameAsBillingAddress"> Same as billing address<br>
+                                                        <div>
+                                                            <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
+                                                        </div>
+                                                        <div class="mb-2" id="companyshippingaddressDetails">
+                                                            <div class="mb-2">
+                                                                <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                                <span id="spnshippingaddress" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -254,12 +226,12 @@
                                             <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
                                         </div>
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="button" class="btn btn-success" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-success" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
                                             <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
                                             <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                         </div>
                                     </div>
-
+                                    
                                 </form>
                             </div>
                         </div>
@@ -273,6 +245,7 @@
 </div>
 <!--end row-->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
