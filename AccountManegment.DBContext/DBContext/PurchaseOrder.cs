@@ -15,17 +15,17 @@ public partial class PurchaseOrder
 
     public Guid ToCompanyId { get; set; }
 
-    public decimal TotalAmount { get; set; }
+    public DateTime? Date { get; set; }
 
     public string? Description { get; set; }
 
     public string? DeliveryShedule { get; set; }
 
-    public decimal TotalPrice { get; set; }
-
     public decimal? TotalDiscount { get; set; }
 
     public decimal TotalGstamount { get; set; }
+
+    public decimal TotalAmount { get; set; }
 
     public string? BillingAddress { get; set; }
 

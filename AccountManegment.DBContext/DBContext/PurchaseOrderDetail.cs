@@ -21,7 +21,7 @@ public partial class PurchaseOrderDetail
 
     public decimal Gst { get; set; }
 
-    public decimal Gstamount { get; set; }
+    public decimal ItemTotal { get; set; }
 
     public Guid CreatedBy { get; set; }
 

@@ -1,9 +1,11 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.CompanyModels.CompanyModel>
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.CompanyModels.CompanyModel>
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @foreach (var item in Model)
-{
+{@*
     <div class="row ac-card" id="companyCard_@item.CompanyId" onclick="SelectCompanyDetails('@item.CompanyId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
@@ -42,6 +44,22 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div> *@
+    <tr id="companyCard_@item.CompanyId" onclick="SelectCompanyDetails('@item.CompanyId', this)">
+        <td>@item.CompanyName</td>
+        <td>@item.Gstno</td>
+        <td>@item.PanNo</td>
+        <td>
+            @if (_userSession.UserRole == 3)
+            {
+                <a class="btn text-primary" onclick="GetCompnaytById('@item.CompanyId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeleteCompanyDetails('@item.CompanyId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+            else
+            {
+                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+        </td>
+    </tr>
 }

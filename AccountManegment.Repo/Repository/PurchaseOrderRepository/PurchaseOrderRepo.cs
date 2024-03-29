@@ -34,7 +34,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     TotalAmount = PurchaseOrderDetails.TotalAmount,
                     Description = PurchaseOrderDetails.Description,
                     DeliveryShedule = PurchaseOrderDetails.DeliveryShedule,
-                    TotalPrice = PurchaseOrderDetails.TotalPrice,
                     TotalDiscount = PurchaseOrderDetails.TotalDiscount,
                     TotalGstamount = PurchaseOrderDetails.TotalGstamount,
                     BillingAddress = PurchaseOrderDetails.BillingAddress,
@@ -128,7 +127,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                    TotalAmount=a.TotalAmount,
                                    Description = a.Description,
                                    DeliveryShedule = a.DeliveryShedule,
-                                   TotalPrice = a.TotalPrice,
                                    TotalDiscount = a.TotalDiscount,
                                    TotalGstamount = a.TotalGstamount,
                                    BillingAddress = a.BillingAddress,
@@ -164,7 +162,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          TotalAmount = a.TotalAmount,
                                          Description = a.Description,
                                          DeliveryShedule = a.DeliveryShedule,
-                                         TotalPrice = a.TotalPrice,
                                          TotalDiscount = a.TotalDiscount,
                                          TotalGstamount = a.TotalGstamount,
                                          BillingAddress = a.BillingAddress,
@@ -188,41 +185,42 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 {
                     var PurchaseOrder = new PurchaseOrder()
                     {
-
                         Id = Guid.NewGuid(),
+                        Poid=item.Poid,
                         SiteId = item.SiteId,
+                        Date=item.Date,
                         FromSupplierId = item.FromSupplierId,
                         ToCompanyId = item.ToCompanyId,
                         TotalAmount = item.TotalAmount,
                         Description = item.Description,
                         DeliveryShedule = item.DeliveryShedule,
-                        TotalPrice = item.TotalPrice,
                         TotalDiscount = item.TotalDiscount,
                         TotalGstamount = item.TotalGstamount,
                         BillingAddress = item.BillingAddress,
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
-
+                    Context.PurchaseOrders.Add(PurchaseOrder);
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
                     {
-                        PorefId = item.Id,
+                        PorefId = PurchaseOrder.Id,
                         Item = item.Item,
+                        ItemTotal = item.ItemTotal,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
                         Price = item.Price,
                         Discount = item.Discount,
                         Gst = item.Gst,
-                        Gstamount = item.Gstamount,
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
+
                     var PurchaseAddress = new PodeliveryAddress()
                     {
-                        Poid = item.Id,
-                        Address = item.BillingAddress,
+                        Poid = PurchaseOrder.Id,
+                        Address = item.ShippingAddress,
                     };
-                    Context.PurchaseOrders.Add(PurchaseOrder);
+                    Context.PodeliveryAddresses.Add(PurchaseAddress);
                     Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
 
@@ -252,7 +250,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.TotalAmount = PurchaseOrderDetails.TotalAmount;
                     PurchaseOrder.Description = PurchaseOrderDetails.Description;
                     PurchaseOrder.DeliveryShedule = PurchaseOrderDetails.DeliveryShedule;
-                    PurchaseOrder.TotalPrice = PurchaseOrderDetails.TotalPrice;
                     PurchaseOrder.TotalDiscount = PurchaseOrderDetails.TotalDiscount;
                     PurchaseOrder.TotalGstamount = PurchaseOrderDetails.TotalGstamount;
                     PurchaseOrder.BillingAddress = PurchaseOrderDetails.BillingAddress;

@@ -25,75 +25,82 @@
             <div class="d-flex align-items-center">
 
                 <form class="ms-auto position-relative">
-                    <a class="btn" asp-action="ExportSupplierListToExcel" asp-controller="Supplier" style="margin-left: 16px;background-color:#018749;color:white;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" /></svg><span></span>Export To Excel</a>
                     <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Supplier</button>
                 </form>
             </div>
             <div class="my-3 border-bottom"></div>
             <div class="">
+
                 <div class="row">
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
                             <div class="card-body">
-                                <div class="row ">
-                                    <div class="col-12">
-                                        <div class="card-body">
-                                            <div class="row g-3">
-                                                <div class="col-12 col-lg-4">
-                                                    <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
-                                                    </input>
-                                                </div>
-                                                <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
-                                                        <option selected="selected">All</option>
-                                                        <option>Supplier Name</option>
-                                                        <option>Email</option>
-                                                        <option>Phone</option>
-                                                    </select>
-                                                </div>
 
-                                                <div class="col-12 col-lg-4">
-                                                    <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                        <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                        <option value="DescendingCreatedOn">First Created</option>
-                                                        <option value="AscendingSupplierName">SupplierName(a-z)</option>
-                                                        <option value="DescendingSupplierName">SupplierName(z-a)</option>
-                                                        <option value="AscendingEmail">Email-Asc </option>
-                                                        <option value="DescendingEmail">Email-Asc</option>
-                                                    </select>
-                                                </div>
-                                            </div><!--end row-->
+
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+
+                                    <div class="row ">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3">
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <input class="form-control" id="txtSearch" onkeyup="filterTable()" placeholder="Search">
+                                                        </input>
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
+                                                            <option selected="selected">All</option>
+                                                            <option>Supplier Name</option>
+                                                            <option>Email</option>
+                                                            <option>Phone</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ddlSortBy" onchange="sortTable()">
+                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="DescendingCreatedOn">First Created</option>
+                                                            <option value="AscendingSupplierName">SupplierName(a-z)</option>
+                                                            <option value="DescendingSupplierName">SupplierName(z-a)</option>
+                                                            <option value="AscendingEmail">Email-Asc </option>
+                                                            <option value="DescendingEmail">Email-Asc</option>
+                                                        </select>
+                                                    </div>
+                                                </div><!--end row-->
+
+                                            </div>
 
                                         </div>
 
                                     </div>
 
-                                </div>
 
-                                <div class="row w-100 ac-view-list">
-
-                                    <div class="row hide-sm table-light ac-view-header">
-                                        <div class="col-5 text-center">
-                                            <h5>Supplier Info</h5>
-                                        </div>
-                                        <div class="col-3 ">
-                                            <h5>GST No.</h5>
-                                        </div>
-                                        <div class="col-2 ">
-                                            <h5>Active</h5>
-                                        </div>
-                                        <div class="col-2">
-                                            <h5>Action</h5>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Supplier Info</th>
+                                                        <th>GST No.</th>
+                                                        <th>Active</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="Supplierbody">
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="card" id="Supplierbody">
-                                    </div>
+
 
                                 </div>
 
                             </div>
                         </div>
                         <!--end row-->
+
+
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
@@ -147,26 +154,24 @@
                                         <input type="text" class="form-control" id="dspIffccode" readonly>
                                     </div>
                                 </div>
+                                @* </form> *@
                             </div>
-                            @* </form> *@
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createSupplier">
-        <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Supplier</h5>
-            <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <div data-simplebar class="h-100">
-                <div class="p-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row g-3 ac-detail">
+        <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createSupplier">
+            <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+                <h5 class="m-0 me-2 text-white">Create Supplier</h5>
+                <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <div data-simplebar class="h-100">
+                    <div class="p-4">
+                        <div class="card">
+                            <div class="card-body">
                                 <form class="row g-3" id="SupplierForm">
                                     <div class="col-md-12">
                                         <label class="form-label">Supplier Name</label>
@@ -251,16 +256,14 @@
 
                             </div>
                         </div>
-
                     </div>
                 </div>
+
             </div>
+
         </div>
-
     </div>
-
-</div>
-@section Scripts {
-    <script src="~/moduls/MasterListScript.js"></script>
-    <script src="~/moduls/SupplierScript.js"></script>
-}
+    @section Scripts {
+        <script src="~/moduls/MasterListScript.js"></script>
+        <script src="~/moduls/SupplierScript.js"></script>
+    }

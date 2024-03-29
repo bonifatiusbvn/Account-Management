@@ -47,8 +47,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
-                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId)? null : new Guid(UserSession.SiteId) ;
+                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
@@ -211,8 +211,8 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderDetailsModel>>(OrderDetails.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrderDetails");
+                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });

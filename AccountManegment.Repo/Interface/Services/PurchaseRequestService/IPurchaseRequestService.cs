@@ -11,7 +11,7 @@ namespace AccountManagement.Repository.Interface.Services.PurchaseRequestService
 {
     public interface IPurchaseRequestService
     {
-        Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy);
+        Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy, Guid? siteId);
         Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails);
         Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PurchaseId);
         Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails);

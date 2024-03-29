@@ -1,8 +1,10 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel>
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel>
 
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="userCard_@item.ItemId">
+    @* <div class="row ac-card" id="userCard_@item.ItemId">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row align-items-center" onclick="DisplayItemDetails('@item.ItemId', this)">
@@ -37,5 +39,31 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
+    <tr id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">
+        <td>@item.ItemName</td>
+        <td>@item.PricePerUnit</td>
+        <td>
+            @if (item.IsApproved == true)
+            {
+                <span class="badge bg-light-success text-success w-100">Approved</span>
+            }
+            else
+            {
+                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+            }
+        </td>
+        <td>
+            @if (_userSession.UserRole == 3)
+            {
+                <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+            else
+            {
+                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+        </td>
+    </tr>
 }
