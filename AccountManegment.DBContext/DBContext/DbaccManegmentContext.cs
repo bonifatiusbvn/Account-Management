@@ -53,6 +53,7 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -158,6 +159,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BillingAddress).HasMaxLength(500);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.Poid)
@@ -168,7 +170,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.TotalGstamount)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGSTAmount");
-            entity.Property(e => e.TotalPrice).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.FromSupplier).WithMany(p => p.PurchaseOrders)
@@ -186,10 +187,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GST");
-            entity.Property(e => e.Gstamount)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("GSTAmount");
             entity.Property(e => e.Item).HasMaxLength(100);
+            entity.Property(e => e.ItemTotal).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.PorefId).HasColumnName("PORefId");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
