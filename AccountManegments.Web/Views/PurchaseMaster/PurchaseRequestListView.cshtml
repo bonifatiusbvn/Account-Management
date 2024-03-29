@@ -1,6 +1,5 @@
 ﻿@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
-
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "PurchaseRequestListView";
@@ -36,22 +35,22 @@
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
                             <div class="card-body">
-                               
+
 
                                 <div class="row w-100 ac-view-list card radius-10 w-100">
                                     @* <div class="row hide-sm table-light ac-view-header">
-                                        <div class="col-5 text-center">
-                                            <h5>Item</h5>
-                                        </div>
-                                        <div class="col-3 ">
-                                            <h5>Quantity</h5>
-                                        </div>
-                                        <div class="col-2 ">
-                                            <h5>Approved</h5>
-                                        </div>
-                                        <div class="col-2">
-                                            <h5>Action</h5>
-                                        </div>
+                                    <div class="col-5 text-center">
+                                    <h5>Item</h5>
+                                    </div>
+                                    <div class="col-3 ">
+                                    <h5>Quantity</h5>
+                                    </div>
+                                    <div class="col-2 ">
+                                    <h5>Approved</h5>
+                                    </div>
+                                    <div class="col-2">
+                                    <h5>Action</h5>
+                                    </div>
                                     </div>
                                     <div class="card" id="purchaseRequesttbody">
                                     </div> *@
@@ -68,7 +67,7 @@
                                                             <option selected="selected">All</option>
                                                             <option>Item Name</option>
                                                             <option>Unit Name</option>
-                                                        </select> 
+                                                        </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
@@ -86,28 +85,27 @@
                                         </div>
 
                                     </div>
-                                      
-                                            
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table align-middle mb-0">
-                                                        <thead class="table-light">
-                                                            <tr>
-                                                                <th>Item Name</th>
-                                                                <th> Per Unit Price</th>
-                                                                <th>Quantity</th>
-                                                                <th>Status</th>
-                                                                <th>Action</th>
-                                                             </tr>
-                                                        </thead>
-                                                        <tbody id="purchaseRequesttbody">
-                                                            
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        
-                                    
+
+
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Item Name</th>
+                                                        <th> Per Unit Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="purchaseRequesttbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
                                 </div>
 
                             </div>

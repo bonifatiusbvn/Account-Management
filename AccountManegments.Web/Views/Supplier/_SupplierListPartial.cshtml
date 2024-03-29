@@ -1,10 +1,12 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.SupplierMaster.SupplierModel>
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.SupplierMaster.SupplierModel>
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @foreach (var item in Model)
 {
-    <div class="row ac-card" id="userCard_@item.SupplierId" onclick="SelectSupplierDetails('@item.SupplierId', this)">
+    @* <div class="row ac-card" id="userCard_@item.SupplierId" onclick="SelectSupplierDetails('@item.SupplierId', this)">
         <div class="card  border mb-0">
             <div class="card-body">
                 <div class="row">
@@ -42,6 +44,33 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
+    <tr id="userCard_@item.SupplierId" onclick="SelectSupplierDetails('@item.SupplierId', this)">
+        <td>@item.SupplierName</td>
+        <td>@item.Gstno</td>
+        <td>
+            @if (item.IsApproved == true)
+            {
+                <span class="badge bg-light-success text-success w-100">Approved</span>
+            }
+            else
+            {
+                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+            }
+        </td>
 
+        <td>
+            @if (_userSession.UserRole == 3)
+            {
+                <a class="btn text-primary" onclick="DisplaySiteDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeleteSite('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+
+            }
+            else
+            {
+                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+        </td>
+    </tr>
 }

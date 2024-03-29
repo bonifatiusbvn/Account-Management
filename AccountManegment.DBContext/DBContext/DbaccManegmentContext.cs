@@ -191,9 +191,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gstamount)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTAmount");
-            entity.Property(e => e.Item)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.Item).HasMaxLength(100);
             entity.Property(e => e.PorefId).HasColumnName("PORefId");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");

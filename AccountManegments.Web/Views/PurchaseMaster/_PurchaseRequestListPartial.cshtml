@@ -1,4 +1,6 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.PurchaseRequest.PurchaseRequestModel>
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.PurchaseRequest.PurchaseRequestModel>
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -51,16 +53,26 @@
         <td>@item.UnitName</td>
         <td>@item.Quantity</td>
         <td>
-        @if(item.IsApproved== true){
+            @if (item.IsApproved == true)
+            {
                 <span class="badge bg-light-success text-success w-100">Approved</span>
-        }else
+            }
+            else
             {
                 <span class="badge bg-light-warning text-warning w-100">Pending</span>
             }
-       </td>
+        </td>
         <td>
-            <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-            <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            @if (_userSession.UserRole == 3)
+            {
+                <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+            else
+            {
+                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
         </td>
     </tr>
 }
