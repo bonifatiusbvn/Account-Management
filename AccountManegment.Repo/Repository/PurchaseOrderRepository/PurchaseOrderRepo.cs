@@ -188,8 +188,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 {
                     var PurchaseOrder = new PurchaseOrder()
                     {
-
                         Id = Guid.NewGuid(),
+                        Poid=item.Poid,
                         SiteId = item.SiteId,
                         FromSupplierId = item.FromSupplierId,
                         ToCompanyId = item.ToCompanyId,
@@ -206,7 +206,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Context.PurchaseOrders.Add(PurchaseOrder);
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
                     {
-                        PorefId = item.Id,
+                        PorefId = PurchaseOrder.Id,
                         Item = item.Item,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -217,14 +217,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
+
                     var PurchaseAddress = new PodeliveryAddress()
                     {
-                        Poid = item.Id,
+                        Poid = PurchaseOrder.Id,
                         Address = item.BillingAddress,
                     };
-                   
-                    Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
                     Context.PodeliveryAddresses.Add(PurchaseAddress);
+                    Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
 
                 await Context.SaveChangesAsync();

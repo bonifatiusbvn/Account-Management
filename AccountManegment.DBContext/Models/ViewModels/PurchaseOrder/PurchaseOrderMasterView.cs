@@ -11,6 +11,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public Guid Id { get; set; }
 
         public Guid SiteId { get; set; }
+        public string? Poid { get; set; }
 
         public Guid FromSupplierId { get; set; }
 

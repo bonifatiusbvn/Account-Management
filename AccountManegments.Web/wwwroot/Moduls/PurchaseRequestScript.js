@@ -398,8 +398,8 @@ $(document).ready(function () {
             type: 'GET',
             success: function (result) {
                 $('#companybillingaddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.companyName + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 90px;">' + result.address + ' , ' + result.area + ' , ' + result.cityName + ' , ' + result.stateName + ' , ' + result.countryName + ' , ' + result.pincode + '</textarea></div>'
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
                 );
             },
             error: function (xhr, status, error) {
@@ -407,6 +407,7 @@ $(document).ready(function () {
             }
         });
     });
+
 
     $('#sameAsBillingAddress').change(function () {
         var billingAddress = $('#companybillingaddressDetails textarea').val();
@@ -461,25 +462,30 @@ function SerchItemDetailsById() {
     });
 }
 
-function InsertMultiplePurchaseOrderDetails() {
+function InsertMultiplePurchaseOrderDetails() {debugger
 
     var orderDetails = [];
     var numOrders = $(".product").length;
-    $(".product").each(function () {
+    $(".product").each(function () {debugger
 
         var orderRow = $(this);
         var objData = {
-            FromSupplierId: $("#txtProjectId").val(),
-            POId: $("#txtProjectId").val(),
-            POId: $("#txtProjectId").val(),
-            ProductId: orderRow.find("#Product_Id").val(),
-            ProductType: orderRow.find("#Product_TypeId").val(),
-            Quantity: orderRow.find("#txtproductquantity").val(),
-            ProductName: orderRow.find("#txtproductName").val(),
-            GstPerUnit: orderRow.find("#txtgst").val(),
-            SubTotal: orderRow.find("#txtproducttotalamount").val(),
-            TotalGst: $("#totalgst").val(),
+            SiteId: $("#siteid").val(),
+            Poid: $("#txtPoId").val(),
+            FromSupplierId: $("#txtSuppliername").val(),
+            ToCompanyId: $("#txtcompanyname").val(),
             TotalAmount: $("#cart-total").val(),
+           /* Description: orderRow.find("#txtItemName").val(),*/
+            TotalPrice: orderRow.find("#txtproductamount").val(),
+            TotalGstamount: $("#totalgst").val(),
+            BillingAddress: $("#txtbillingAddress").val(),
+            Item: orderRow.find("#txtItemName").val(),
+            UnitTypeId: orderRow.find("#UnitTypeId").val(),
+            Quantity: orderRow.find("#txtproductquantity").val(),
+            Price: $("#cart-total").val(),
+            Gst: $("#totalgst").val(),
+            Gstamount: orderRow.find("#txtproductamountwithGST").val(),
+            CreatedBy: $("#createdbyid").val(),
         };
         orderDetails.push(objData);
         debugger
@@ -501,7 +507,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/PurchaseOrderMaster/CreatePurchaseOrderView';
+                    window.location = '/PurchaseMaster/CreatePurchaseOrder';
                 });
             }
         },
