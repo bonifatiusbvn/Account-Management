@@ -146,9 +146,7 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.ToTable("PODeliveryAddress");
 
-            entity.Property(e => e.Aid)
-                .ValueGeneratedNever()
-                .HasColumnName("AId");
+            entity.Property(e => e.Aid).HasColumnName("AId");
             entity.Property(e => e.Address).HasMaxLength(500);
             entity.Property(e => e.Poid).HasColumnName("POId");
         });
