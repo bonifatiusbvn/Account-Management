@@ -9,8 +9,6 @@ public partial class RolewiseFormPermission
 
     public int RoleId { get; set; }
 
-    public Guid UserId { get; set; }
-
     public int FormId { get; set; }
 
     public bool IsViewAllow { get; set; }

@@ -33,13 +33,13 @@
                     </div>
                     <div class="col-12 col-lg-2 col-md-2 col-xl-1">
                         <div class="form-check form-switch">
-                            <input class="form-check-input font-22" type="checkbox" id="flexSwitchCheckChecked_@item.Role">
+                            <input class="form-check-input font-22" type="checkbox" id="flexSwitchCheckChecked_@item.Role" hidden>
                             <label class="form-check-label" for="flexSwitchCheckChecked_@item.RoleId"></label>
                         </div>
                     </div>
                     <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
                         <a class="btn text-primary" onclick="EditRoleWiseFormDetails('@item.RoleId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="btn text-primary" onclick="deleteFormwiseUserDetails('@item.RoleId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                        <a href="javascript:;" class="btn text-primary" onclick="deleteFormwiseUserDetails('@item.RoleId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete" hidden><i class="lni lni-trash"></i></a>
                     </div>
                 </div>
             </div>
