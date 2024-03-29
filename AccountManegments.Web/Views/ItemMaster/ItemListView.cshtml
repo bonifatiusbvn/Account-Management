@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "ItemListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }

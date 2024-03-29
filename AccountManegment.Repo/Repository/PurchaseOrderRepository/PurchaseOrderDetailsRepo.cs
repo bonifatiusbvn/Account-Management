@@ -35,7 +35,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Price = PurchaseOrderDetails.Price,
                     Discount = PurchaseOrderDetails.Discount,
                     Gst = PurchaseOrderDetails.Gst,
-                    Gstamount = PurchaseOrderDetails.Gstamount,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -74,7 +73,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      Price=a.Price,
                                      Discount=a.Discount,
                                      Gst=a.Gst,
-                                     Gstamount=a.Gstamount,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
@@ -103,7 +101,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      Price = a.Price,
                                      Discount = a.Discount,
                                      Gst = a.Gst,
-                                     Gstamount = a.Gstamount,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  });
@@ -132,7 +129,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.Price = PurchaseOrderDetails.Price;
                     PurchaseOrder.Discount = PurchaseOrderDetails.Discount;
                     PurchaseOrder.Gst = PurchaseOrderDetails.Gst;
-                    PurchaseOrder.Gstamount = PurchaseOrderDetails.Gstamount;
                     PurchaseOrder.CreatedBy = PurchaseOrderDetails.CreatedBy;
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
                 };
