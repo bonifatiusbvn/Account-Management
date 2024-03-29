@@ -444,7 +444,19 @@ function SerchItemDetailsById() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            AddNewRow(Result.responseText);
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
+            }
+            else {
+                debugger
+                var GetItemId = $('#searchItemname').val();
+                if (GetItemId === "Select ProductName" || GetItemId === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#searchvalidationMessage').text('');
+                }
+            }
         }
     });
 }
@@ -457,6 +469,8 @@ function InsertMultiplePurchaseOrderDetails() {
 
         var orderRow = $(this);
         var objData = {
+            FromSupplierId: $("#txtProjectId").val(),
+            POId: $("#txtProjectId").val(),
             POId: $("#txtProjectId").val(),
             ProductId: orderRow.find("#Product_Id").val(),
             ProductType: orderRow.find("#Product_TypeId").val(),

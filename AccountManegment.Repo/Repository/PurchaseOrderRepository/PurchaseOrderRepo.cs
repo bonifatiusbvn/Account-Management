@@ -203,7 +203,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
-
+                    Context.PurchaseOrders.Add(PurchaseOrder);
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
                     {
                         PorefId = item.Id,
@@ -222,8 +222,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Poid = item.Id,
                         Address = item.BillingAddress,
                     };
-                    Context.PurchaseOrders.Add(PurchaseOrder);
+                   
                     Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
+                    Context.PodeliveryAddresses.Add(PurchaseAddress);
                 }
 
                 await Context.SaveChangesAsync();

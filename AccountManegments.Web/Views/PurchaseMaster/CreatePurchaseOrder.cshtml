@@ -116,7 +116,6 @@
                                                     <option selected disabled value="">Select Supplier Name</option>
                                                 </select>
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtSuppliernameid">
-                                                <div id="SuppliervalidationMessage" class="text-danger"></div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-3 col-sm-6">
@@ -124,10 +123,19 @@
                                                     <div>
                                                         <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
                                                     </div>
-                                                    <select id="searchItemname" onclick="SerchItemDetailsById()" class="form-control bg-light border-0" style="border:hidden;">
+                                                    <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
                                                         <option selected disabled value="">Select ProductName</option>
                                                     </select>
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
+                                                    <div id="searchvalidationMessage" class="text-danger"></div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="input-light">
+                                                <div>
+                                                    <div class="col-sm-2">
+                                                        <a id="addItemButton" class="btn btn-primary fw-small" onclick="SerchItemDetailsById()" style="margin-left: 950px;width: 120px;">Add Product</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!--end col-->
