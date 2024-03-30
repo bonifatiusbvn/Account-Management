@@ -126,18 +126,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                var Updateuser = new UserViewModel()
-                {
-                    Id = UpdateUser.Id,
-                    FirstName = UpdateUser.FirstName,
-                    LastName = UpdateUser.LastName,
-                    UserName = UpdateUser.UserName,
-                    Password = UpdateUser.Password,
-                    Role = UpdateUser.Role,
-                    Email = UpdateUser.Email,
-                    PhoneNo = UpdateUser.PhoneNo,
-                };
-                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "Authentication/UpdateUserDetails");
+                
+                ApiResponseModel postUser = await APIServices.PostAsync(UpdateUser, "Authentication/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });

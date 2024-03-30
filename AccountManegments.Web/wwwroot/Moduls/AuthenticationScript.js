@@ -190,11 +190,12 @@ function UpdateUserDetails() {
         LastName: $('#txtLastName').val(),
         UserName: $('#txtUserName').val(),
         Password: $('#txtPassword').val(),
-        Role: $('#txtrole').val(),
+        Role: $('#ddlUserRole').val(),
         Email: $('#txtEmail').val(),
         PhoneNo: $('#txtPhoneNo').val(),
         SiteId: $('#txtuserSiteName').val(),
     }
+    debugger
     $.ajax({
         url: '/User/UpdateUserDetails',
         type: 'post',
@@ -275,7 +276,7 @@ function validateAndCreateUser() {
         document.getElementById("spnSiteName").innerText = "Site Name is required.";
         isValid = false;
     }
-
+    debugger
     if (isValid) {
         if ($("#txtUserid").val() == '') {
             CreateUser();

@@ -123,7 +123,7 @@ namespace AccountManagement.API.Controllers
         public IActionResult CheckPRNo()
         {
             var checkPRNo = PurchaseRequest.CheckPRNo();
-            return Ok(new { code = 200, data = checkPRNo });
+            return Ok(new { code = 200, data = checkPRNo.ToString() });
         }
     }
 }

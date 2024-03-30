@@ -162,7 +162,8 @@ namespace AccountManegments.Web.Controllers
                         Response.Cookies.Delete("Password");
                         ViewBag.chkRememberMe = false;
                     }
-
+                    UserSession.SiteId = userlogin.Data.SiteId.ToString();
+                    UserSession.SiteName = userlogin.Data.SiteName;
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                     return RedirectToAction("Index", "Home");
                 }

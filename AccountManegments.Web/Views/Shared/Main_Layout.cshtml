@@ -177,17 +177,17 @@
         <header class="top-header">
             <nav class="navbar navbar-expand gap-3">
 
-                @if (_userSession.UserRole == 3)
+                @if (_userSession.UserRole == 3 && UserSession.SiteId == null)
                 {
                     <div class="col-3">
-                        <select class="form-control form-control-lg" id="txtSiteName">
+                        <select class="form-control form-control-lg" id="drplaySiteName">
                             <option value="">All Site</option>
                         </select>
                     </div>
                 }
                 else
                 {
-                    <h5>@_userSession.SiteName</h5>
+                    <h5 id="laySiteName">@UserSession.SiteName</h5>
                 }
                 <div class="mobile-menu-button">
                     <ion-icon name="menu-sharp"></ion-icon>

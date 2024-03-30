@@ -1,4 +1,7 @@
-﻿@{
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -6,14 +9,34 @@
 
 
 <!--start breadcrumb-->
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+@* <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Dashboard</div>
     <div class="ps-3">
-        <select class="form-control form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
-            <option value="">All Site</option>
-        </select>
+
     </div>
-    
+
+</div> *@
+<div class="row">
+    <div class="col-12 col-lg-4 col-xl-4 d-flex">
+        <div class="card radius-10 w-100">
+            <form id="frmdrpdashbord">
+
+                <select class="form-control form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
+                    @if (_userSession.UserRole != 3)
+                    {
+                        <option value="@UserSession.SiteId" selected>@UserSession.SiteName</option>
+                    }else
+                    {
+                        <option value="" selected>All Site</option>
+                    }
+                </select>
+
+
+            </form>
+        </div>
+
+    </div>
+
 </div>
 
 <!--end breadcrumb-->
@@ -23,7 +46,7 @@
         <div class="card radius-10 w-100">
             <div class="card-header">
                 <h5>Purchase Requests</h5>
-                
+
             </div>
             <div class="card-body">
                 <div class="table-responsive mt-3" style="max-height:350px;">
@@ -38,43 +61,7 @@
                                 <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Cements</td>
-                                <td>Bags</td>
-                                <td>250</td>
-                                <td>Oro University-surat</td>
-                                <td><span class="badge bg-light-warning text-warning w-100">Pending</span></td>
-                                <td>03 Feb 2020</td>
-                            </tr>
-                            <tr>
-                                <td>Cements</td>
-                                <td>Bags</td>
-                                <td>250</td>
-                                <td>Bhavnager</td>
-                                <td><span class="badge bg-light-success text-success w-100">Approved</span></td>
-                                <td>03 Feb 2020</td>
-                            </tr>
-                            <tr>
-                                <td>Cements</td>
-                                <td>Bags</td>
-                                <td>250</td>
-                                <td>Vadodra</td>
-                                <td><span class="badge bg-light-warning text-warning w-100">Pending</span></td>
-                                <td>03 Feb 2020</td>
-                            </tr>
-
-                            <tr>
-                                <td>Cements</td>
-                                <td>Bags</td>
-                                <td>250</td>
-                                <td>Rajkot</td>
-                                <td><span class="badge bg-light-warning text-warning w-100">Pending</span></td>
-                                <td>03 Feb 2020</td>
-                            </tr>
-
-
-                            
+                        <tbody id="tbPndingApproval">
                         </tbody>
                     </table>
                 </div>
@@ -85,7 +72,7 @@
         <div class="card radius-10 overflow-hidden w-100">
             <div class="card-header">
                 <h5>Supplier Pending</h5>
-                </div>
+            </div>
             <div class="card-body">
                 <div class="table-responsive mt-3" style="max-height:350px;">
                     <table class="table align-middle mb-0">
@@ -93,7 +80,7 @@
                             <tr>
                                 <th>Company</th>
                                 <th>Amount</th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
@@ -104,7 +91,7 @@
                                     <i class="lni lni-rupee"></i>
                                     2500000.00
                                 </td>
-                              
+
                             </tr>
                             <tr>
                                 <td>D. M. Infra</td>
@@ -128,42 +115,62 @@
                         </tbody>
                     </table>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    $(function () {
-        fn_fillsiteDropDown('#drpSiteName')
-    });
-
-
-
-    function fn_fillsiteDropDown(drpid) {
-        debugger
-        $.ajax({
-            url: '/SiteMaster/GetSiteNameList',
-            success: function (result) {
-                $.each(result, function (i, data) {
-                
-                    $(drpid).append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
-                });
-            }
+@section Scripts {
+    <script type="text/javascript">
+        var role = "@_userSession.UserRole";
+        $(function () {
+            fn_fillsiteDropDown('#drpSiteName')
+            $('#drpSiteName').val("@UserSession.SiteId")
+            fn_ChangeSite();
         });
-    }
 
-    function fn_ChangeSite(){
-        $.ajax({
-            url: '/SiteMaster/GetSiteNameList',
-            success: function (result) {
-                $.each(result, function (i, data) {
 
-                    $(drpid).append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
-                });
-            }
-        });
-    }
-</script>
-<!--end 
+
+        function fn_fillsiteDropDown(drpid) {
+            debugger
+            $.ajax({
+                url: '/SiteMaster/GetSiteNameList',
+                success: function (result) {
+                    $.each(result, function (i, data) {
+
+                        $(drpid).append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
+
+                    });
+                    $('#drpSiteName').val("@UserSession.SiteId")
+                }
+            });
+        }
+
+        function fn_ChangeSite() {
+            var searchText = ""; ///$('#txtPurchaseRequestSearch').val();
+            var searchBy = "";//$('#PurchaseRequestSearchBy').val();
+            debugger
+
+            $.ajax({
+                url: '/Home/PurchaseRequestList',
+                type: 'GET',
+                data: {
+                    searchText: searchText,
+                    searchBy: searchBy,
+                    SiteId: $('#drpSiteName').val(),
+                    SiteName: $('#drpSiteName option:selected').text()
+                },
+                success: function (result) {
+                    debugger
+                    $("#tbPndingApproval").html(result);
+
+                    $('#laySiteName').html($('#drpSiteName option:selected').text())
+                    $('#drplaySiteName').val($('#drpSiteName option:selected').text())
+
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+        }
+    </script>
+}
