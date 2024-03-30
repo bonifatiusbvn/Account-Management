@@ -45,17 +45,17 @@
                                                 <div class="row g-3">
 
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSiteSearch" onkeyup="RolefilterTable()" placeholder="Search">
+                                                        <input class="form-control" id="txtSiteSearch" onkeyup="RolefilterTable()" placeholder="Search" hidden>
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteSearchBy" onchange="RolefilterTable()">
+                                                        <select class="form-select" id="SiteSearchBy" onchange="RolefilterTable()"  hidden>
                                                             <option selected="selected">All</option>
                                                             <option>Role</option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteDataSortBy" onchange="RoleSiteTable()">
+                                                        <select class="form-select" id="SiteDataSortBy" onchange="RoleSiteTable()" hidden>
                                                             <option value="DescendingCreatedOn" selected="selected">Last Created</option>
                                                             <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingRole">Role (A-Z)</option>
