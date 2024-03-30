@@ -52,8 +52,10 @@ function sortItemTable() {
 }
 function DisplayItemDetails(ItemId, element) {
 
-    $('.row.ac-card').removeClass('active');
-    $(element).closest('.row.ac-card').addClass('active');
+    //$('.row.ac-card').removeClass('active');
+    //$(element).closest('.row.ac-card').addClass('active');
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
@@ -177,6 +179,7 @@ function UpdateItemDetails() {
         UnitType: $('#txtUnitType').val(),
         PricePerUnit: $('#txtPricePerUnit').val(),
         Gstamount: $('#txtGstAmount').val(),
+        IsWithGst: $('#txtIsWithGst').prop('checked'),
         Gstper: $('#txtGstPerUnit').val(),
         Hsncode: $('#txtHSNCode').val(),
         IsApproved: $('#txtIsApproved').val(),
@@ -210,7 +213,6 @@ function validateAndCreateItem() {
     var GstAmount = document.getElementById("txtGstAmount").value.trim();
     var GstPerUnit = document.getElementById("txtGstPerUnit").value.trim();
     var HSNCode = document.getElementById("txtHSNCode").value.trim();
-
 
     var isValid = true;
 
@@ -383,3 +385,32 @@ function deleteItemDetails(ItemId) {
         }
     });
 }
+
+// Define the function
+function WithGSTSelected() {
+    var isWithGstCheckbox = document.getElementById('txtIsWithGst');
+    var gstAmountInput = document.getElementById('txtGstAmount');
+    var gstPercentageInput = document.getElementById('txtGstPerUnit');
+    var priceInput = document.getElementById('txtPricePerUnit');
+
+    if (isWithGstCheckbox.checked) {
+        var price = parseFloat(priceInput.value); 
+        var gstPercentage = parseFloat(gstPercentageInput.value); 
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var gstAmount = (gstPercentage / 100) * price;
+            var totalAmount = price + gstAmount; 
+            gstAmountInput.value = gstAmount.toFixed(2);
+        } else {
+            gstAmountInput.value = "Invalid input";
+        }
+    } else {
+        gstAmountInput.value = "";
+    }
+}
+
+document.getElementById('txtGstPerUnit').addEventListener('input', function () {
+    WithGSTSelected();
+});
+
+

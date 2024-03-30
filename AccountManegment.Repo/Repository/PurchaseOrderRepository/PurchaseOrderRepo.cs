@@ -106,16 +106,19 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             throw new NotImplementedException();
         }
 
-        public async Task<PurchaseOrderView> GetPurchaseOrderDetailsById(Guid POId)
+        public async Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsById(Guid POId)
         {
-            PurchaseOrderView PurchaseOrder = new PurchaseOrderView();
+            PurchaseOrderMasterView PurchaseOrder = new PurchaseOrderMasterView();
             try
             {
                 PurchaseOrder=(from a in Context.PurchaseOrders.Where(x=>x.Id==POId)
                                join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                join d in Context.Sites on a.SiteId equals d.SiteId
-                               select new PurchaseOrderView
+                               join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
+                               join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
+                               join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                               select new PurchaseOrderMasterView
                                {
                                    Id = a.Id,
                                    SiteId = a.SiteId,
@@ -130,6 +133,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                    TotalDiscount = a.TotalDiscount,
                                    TotalGstamount = a.TotalGstamount,
                                    BillingAddress = a.BillingAddress,
+                                   Item=e.Item,
+                                   Date=a.Date,
+                                   ItemTotal=e.ItemTotal,
+                                   UnitTypeId=e.UnitTypeId,
+                                   UnitName=f.UnitName,
+                                   Quantity=e.Quantity,
+                                   Gst=e.Gst,
+                                   ShippingAddress=g.Address,
                                    CreatedBy = a.CreatedBy,
                                    CreatedOn = a.CreatedOn,
                                }).First();
@@ -142,7 +153,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
-        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList()
+        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -168,7 +179,66 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          CreatedBy = a.CreatedBy,
                                          CreatedOn = a.CreatedOn,
                                      });
-                return PurchaseOrder;
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    PurchaseOrder = PurchaseOrder.Where(u =>
+                        u.SupplierName.ToLower().Contains(searchText) ||
+                        u.TotalGstamount.ToString().Contains(searchText) ||
+                        u.TotalAmount.ToString().Contains(searchText)
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "suppliername":
+                            PurchaseOrder = PurchaseOrder.Where(u => u.SupplierName.ToLower().Contains(searchText));
+                            break;
+                        case "totalgstamount":
+                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalGstamount.ToString().Contains(searchText));
+                            break;
+                        case "totalamount":
+                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalAmount.ToString().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "suppliername":
+                            if (sortOrder == "ascending")
+                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.SupplierName);
+                            else if (sortOrder == "descending")
+                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.SupplierName);
+                            break;
+                        case "totalgstamount":
+                            if (sortOrder == "ascending")
+                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.TotalGstamount);
+                            else if (sortOrder == "descending")
+                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.TotalGstamount);
+                            break;
+                        case "totalamount":
+                            if (sortOrder == "ascending")
+                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.TotalAmount);
+                            else if (sortOrder == "descending")
+                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.TotalAmount);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                 return PurchaseOrder;
             }
             catch (Exception)
             {

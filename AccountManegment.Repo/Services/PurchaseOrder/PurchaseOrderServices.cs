@@ -33,14 +33,14 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             throw new NotImplementedException();
         }
 
-        public async Task<PurchaseOrderView> GetPurchaseOrderDetailsById(Guid POId)
+        public async Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsById(Guid POId)
         {
             return await PurchaseOrder.GetPurchaseOrderDetailsById(POId);
         }
 
-        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList()
+        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await PurchaseOrder.GetPurchaseOrderList();
+            return await PurchaseOrder.GetPurchaseOrderList(searchText, searchBy, sortBy);
         }
 
         public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
