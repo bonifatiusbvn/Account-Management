@@ -1,4 +1,5 @@
-﻿@inject IHttpContextAccessor Accessor;
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "CreatePurchaseOrder";
@@ -49,7 +50,7 @@
                                                     </select>
                                                     <span id="spncompanyname" class="text-danger"></span>
                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
-                                                    <input type="hidden" class="form-control" id="siteid" value="@_userSession.SiteId">
+                                                    <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
                                                 </div>
                                             </div>
                                             <!--end col-->

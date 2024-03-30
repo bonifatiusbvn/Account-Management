@@ -1,4 +1,6 @@
-﻿namespace AccountManegments.Web.Models
+﻿using AccountManagement.API;
+
+namespace AccountManegments.Web.Models
 {
     public class UserSession
     {
@@ -50,18 +52,34 @@
                 return userroleid != null ? int.Parse(userroleid.Value) : 0;
             }
         }
-        public string SiteName
+        public static string SiteName
         {
             get
             {
-                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value;
+                if (StaticHttpContext.Session.GetString("SiteName") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("SiteName");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("SiteName", value);
             }
         }
-        public string SiteId
+        public static string SiteId
         {
             get
             {
-                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value;
+                if (StaticHttpContext.Session.GetString("SiteId") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("SiteId"); 
+               
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("SiteId", value);
             }
         }
 
