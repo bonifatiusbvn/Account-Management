@@ -32,11 +32,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     Id = Guid.NewGuid(),
                     InvoiceId = SupplierInvoiceDetail.InvoiceId,
                     SiteId = SupplierInvoiceDetail.SiteId,
-                    FromSupplierId = SupplierInvoiceDetail.FromSupplierId,
-                    ToCompanyId = SupplierInvoiceDetail.ToCompanyId,
+                    SupplierId = SupplierInvoiceDetail.SupplierId,
+                    CompanyId = SupplierInvoiceDetail.CompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
-                    DeliveryShedule = SupplierInvoiceDetail.DeliveryShedule,
                     TotalPrice = SupplierInvoiceDetail.TotalPrice,
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
@@ -84,25 +83,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
-                            join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId 
-                            join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                            join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId 
+                            join c in Context.Companies on a.CompanyId equals c.CompanyId
                             join d in Context.Sites on a.SiteId equals d.SiteId
                             select new SupplierInvoiceModel
                             {
                                 InvoiceId = a.InvoiceId,
                                 SiteId = a.SiteId,
-                                FromSupplierId = a.FromSupplierId,
+                                SupplierId = a.SupplierId,
                                 TotalAmount = a.TotalAmount,
                                 TotalDiscount = a.TotalDiscount,
                                 TotalGstamount = a.TotalGstamount,
                                 TotalPrice = a.TotalPrice,
                                 Description = a.Description,
-                                DeliveryShedule = a.DeliveryShedule,
                                 Roundoff = a.Roundoff,
-                                ToCompanyId = a.ToCompanyId,
-                                ToCompanyName = c.CompanyName,
+                                CompanyId = a.CompanyId,
+                                CompanyName = c.CompanyName,
                                 SiteName = d.SiteName,
-                                FromSupplierName = b.SupplierName
+                                SupplierName = b.SupplierName
                             }).First();
                 return supplierList;
             }
@@ -117,26 +115,25 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var supplierList = (from a in Context.SupplierInvoices
-                                    join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                    join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                    join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                    join c in Context.Companies on a.CompanyId equals c.CompanyId
                                     join d in Context.Sites on a.SiteId equals d.SiteId
                                     select new SupplierInvoiceModel
                                     {
                                         Id = a.Id,
                                         InvoiceId = a.InvoiceId,
                                         SiteId = a.SiteId,
-                                        FromSupplierId = a.FromSupplierId,
+                                        SupplierId = a.SupplierId,
                                         TotalAmount = a.TotalAmount,
                                         TotalDiscount = a.TotalDiscount,
                                         TotalGstamount = a.TotalGstamount,
                                         TotalPrice = a.TotalPrice,
                                         Description = a.Description,
-                                        DeliveryShedule = a.DeliveryShedule,
                                         Roundoff = a.Roundoff,
-                                        ToCompanyId = a.ToCompanyId,
-                                        ToCompanyName = c.CompanyName,
+                                        CompanyId = a.CompanyId,
+                                        CompanyName = c.CompanyName,
                                         SiteName = d.SiteName,
-                                        FromSupplierName = b.SupplierName,
+                                        SupplierName = b.SupplierName,
                                         CreatedOn = a.CreatedOn,
                                     });
 
@@ -145,7 +142,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     searchText = searchText.ToLower();
                     supplierList = supplierList.Where(u =>
                         u.SiteName.ToLower().Contains(searchText) ||
-                        u.ToCompanyName.ToLower().Contains(searchText)
+                        u.CompanyName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -158,7 +155,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             supplierList = supplierList.Where(u => u.SiteName.ToLower().Contains(searchText));
                             break;
                         case "companyname":
-                            supplierList = supplierList.Where(u => u.ToCompanyName.ToLower().Contains(searchText));
+                            supplierList = supplierList.Where(u => u.CompanyName.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -214,11 +211,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     supplierInvoice.InvoiceId = SupplierInvoiceDetail.InvoiceId;
                     supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
-                    supplierInvoice.FromSupplierId = SupplierInvoiceDetail.FromSupplierId;
-                    supplierInvoice.ToCompanyId = SupplierInvoiceDetail.ToCompanyId;
+                    supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
+                    supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
                     supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmount;
                     supplierInvoice.Description = SupplierInvoiceDetail.Description;
-                    supplierInvoice.DeliveryShedule = SupplierInvoiceDetail.DeliveryShedule;
                     supplierInvoice.TotalPrice = SupplierInvoiceDetail.TotalPrice;
                     supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
                     supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
@@ -251,11 +247,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         Id = Id,
                         InvoiceId = item.InvoiceId, // Use the same InvoiceId for all items
                         SiteId = item.SiteId,
-                        FromSupplierId = item.FromSupplierId,
-                        ToCompanyId = item.ToCompanyId,
+                        SupplierId = item.SupplierId,
+                        CompanyId = item.CompanyId,
                         TotalAmount = item.TotalAmount,
                         Description = item.Description,
-                        DeliveryShedule = item.DeliveryShedule,
                         TotalPrice = item.TotalPrice,
                         TotalDiscount = item.TotalDiscount,
                         TotalGstamount = item.TotalGstamount,
