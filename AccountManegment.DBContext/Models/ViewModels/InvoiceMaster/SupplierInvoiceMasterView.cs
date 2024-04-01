@@ -39,7 +39,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public DateTime? UpdatedOn { get; set; }
 
         public string? UnitTypeName { get; set; }
+
         public Guid Id { get; set; }
+
         public string? InvoiceId { get; set; }
 
         public Guid? SiteId { get; set; }

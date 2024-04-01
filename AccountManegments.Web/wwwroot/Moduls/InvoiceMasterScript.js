@@ -1,21 +1,81 @@
 ﻿AllSupplierInvoiceListTable()
 GetItemDetailsList()
+GetSiteDetails();
+GetCompanyDetails();
+GetSupplierDetails();
 function GetItemDetailsList() {
 
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#searchItemname').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+                $('#searchItemName').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
             });
         }
     });
 }
 
-function searchItemDetailById() {
+function GetCompanyDetails() {
 
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtCompanyName').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+            });
+        }
+    });
+}
+
+function GetSupplierDetails() {
+
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+            });
+        }
+    });
+}
+
+$(document).ready(function () {
+    debugger
+    $('#txtcompanyName').change(function () {
+        var CompanyId = $(this).val();
+        $.ajax({
+            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+            type: 'GET',
+            success: function (result) {
+                $('#companyBillingAddressDetails').empty().append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtBillingCompanyName" value="' + result.companyName + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtBillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
+                );
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching company details:", error);
+            }
+        });
+    });
+});
+
+// Get today's date
+$(document).ready(function () {
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $("#txtOrderDate").val(today);
+    $("#txtOrderDate").prop("disabled", true);
+});
+
+function searchItemDetailById() {
+    debugger
     var GetItemId = {
-        ItemId: $('#searchItemname').val(),
+        ItemId: $('#searchItemName').val(),
 
     }
     var form_data = new FormData();
@@ -34,8 +94,8 @@ function searchItemDetailById() {
                 AddNewRow(Result.responseText);
             }
             else {
-                var GetItemId = $('#searchItemname').val();
-                if (GetItemId === "Select ProductName" || GetItemId === null) {
+                var GetItemId = $('#searchItemName').val();
+                if (GetItemId === "Select Product Name" || GetItemId === null) {
                     $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
@@ -162,14 +222,12 @@ function InsertMultipleSupplierItem() {
         var orderRow = $(this);
         var objData = {
             SiteId: $("#siteid").val(),
-            Poid: $("#txtPoId").val(),
+            InvoiceId: $("#txtSupplierInvoiceId").val(),
             Date: $("#orderdate").val(),
-            FromSupplierId: $("#txtSuppliername").val(),
-            ToCompanyId: $("#txtcompanyname").val(),
+            SupplierId: $("#txtSupplierName").val(),
+            CompanyId: $("#txtCompanynName").val(),
             TotalAmount: $("#cart-total").val(),
             TotalGstamount: $("#totalgst").val(),
-            BillingAddress: $("#txtbillingAddress").val(),
-            ShippingAddress: $("#txtshippingAddress").val(),
             Item: orderRow.find("#txtItemName").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
@@ -225,10 +283,10 @@ function InsertMultipleSupplierItem() {
 
 function validateAndInsertSupplierItem() {
 
-    var companyname = document.getElementById("txtcompanyname").value.trim();
-    var suppliername = document.getElementById("txtSuppliername").value.trim();
-    var productname = document.getElementById("searchItemname").value.trim();
-    var deliveryschedule = document.getElementById("txtdelivryschedule").value.trim();
+    var companyname = document.getElementById("txtCompanyName").value.trim();
+    var suppliername = document.getElementById("txtSupplierName").value.trim();
+    var productname = document.getElementById("searchItemName").value.trim();
+    var PaymentStatus = document.getElementById("txtPaymentStatus").value.trim();
 
     var isValid = true;
 
@@ -244,12 +302,12 @@ function validateAndInsertSupplierItem() {
         document.getElementById("searchvalidationMessage").innerText = "Please Select Product!";
         isValid = false;
     }
-    if (deliveryschedule === "") {
-        document.getElementById("spndelivryschedule").innerText = "Enter Delievery Schedule";
+    if (PaymentStatus === "") {
+        document.getElementById("spnPaymentStatus").innerText = "Enter Payment Status";
         isValid = false;
     }
     if (isValid) {
-        InsertMultiplePurchaseOrderDetails();
+        InsertMultipleSupplierItem();
     }
 }
 
