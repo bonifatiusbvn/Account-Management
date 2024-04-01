@@ -45,13 +45,23 @@
                                                 <div>
                                                     <label class="text-muted text-uppercase fw-semibold">CompanyName</label>
                                                 </div>
+                                                
                                                 <div class="ms-auto">
-                                                    <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
-                                                        <option selected disabled value="">@Model.CompanyName</option>
-                                                    </select>
+                                                    @if (Model.CompanyName != null)
+                                                    {
+                                                        <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
+                                                            <option selected disabled value="@Model.ToCompanyId">@Model.CompanyName</option>
+                                                        </select>
+                                                    }else{
+                                                        <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
+                                                            <option selected disabled value="">Select Company</option>
+                                                        </select>
+                                                    }
+                                                   
                                                     <span id="spncompanyname" class="text-danger"></span>
                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                     <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
+                                                    <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -100,9 +110,16 @@
                                                 <div>
                                                     <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
                                                 </div>
-                                                <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                                    <option selected disabled value="">@Model.SupplierName</option>
-                                                </select>
+                                                @if (Model.SupplierName != null)
+                                                {
+                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                        <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
+                                                    </select>
+                                                }else{
+                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                        <option selected disabled value="">Select Supplier</option>
+                                                    </select>
+                                                }
                                                 <span id="spnsuppliername" class="text-danger"></span>
                                             </div>
                                             <!--end col-->
@@ -111,9 +128,16 @@
                                                     <div>
                                                         <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
                                                     </div>
-                                                    <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                                        <option selected disabled value="">@Model.Item</option>
-                                                    </select>
+                                                    @if (Model.Item != null)
+                                                    {
+                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                            <option selected disabled value="@Model.ItemId">@Model.Item</option>
+                                                        </select>
+                                                    }else{
+                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                            <option selected disabled value="">select Item</option>
+                                                        </select>
+                                                    }
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
                                                     <div id="searchvalidationMessage" class="text-danger"></div>
                                                 </div>
@@ -149,10 +173,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="addNewlink">
-                                          @*           @if ()
+                                                    @if (Model.ItemList != null)
                                                     {
-                                                        
-                                                    } *@
+                                                        @Html.Partial("_EditItemDetailsPartial",Model.ItemList)
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>
@@ -232,7 +256,8 @@
                                             <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
                                         </div>
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="button" class="btn btn-success" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-success" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-success" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                             <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
                                             <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                         </div>
@@ -257,6 +282,10 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/purchaserequestscript.js"></script>
-
+<script type="text/javascript">
+    _editCompanyselectedValue = "@Model.ToCompanyId";
+    _editSupplierselectedValue = "@Model.FromSupplierId";
+    _editItemselectedValue = "@Model.ItemId";
+</script>
 
 

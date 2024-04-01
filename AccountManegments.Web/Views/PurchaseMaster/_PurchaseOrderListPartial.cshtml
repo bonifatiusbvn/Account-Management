@@ -11,7 +11,7 @@
         <td>
             @if (_userSession.UserRole == 3)
             {
-                <a class="btn text-primary" href="DisplayPurchaseOrderDetails?Id=@item.Id" @* onclick="EditPurchaseOrderDetails('@item.Id')" *@ title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a class="btn text-primary" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
             }
             else

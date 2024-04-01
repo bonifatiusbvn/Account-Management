@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,10 +103,67 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
-        public Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
+        //public async Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
+        //{
+        //    ApiResponseModel response = new ApiResponseModel();
+        //    var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == POId).FirstOrDefault();
+        //    var GetPODdata = Context.PurchaseOrderDetails.Where(a => a.PorefId == POId).FirstOrDefault();
+        //    var GetPOAdata = Context.PodeliveryAddresses.Where(a => a.Poid == POId).FirstOrDefault();
+
+        //    if (GetPOdata != null)
+        //    {
+        //        GetPOdata.IsDeleted = true;
+        //        GetPODdata.IsDeleted = true;
+        //        GetPOAdata.IsDeleted = true;
+        //        Context.PurchaseOrders.Update(GetPOdata);  
+        //        Context.PurchaseOrderDetails.Update(GetPODdata);
+        //        Context.PodeliveryAddresses.Update(GetPOAdata);
+        //    }
+        //    Context.SaveChanges();
+        //    response.code = 200;
+        //    response.data = GetPOdata;
+        //    response.message = "PurchaseOrder is Deleted Successfully";
+        //    return response;
+        //}
+        public async Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)
         {
-            throw new NotImplementedException();
+            ApiResponseModel response = new ApiResponseModel();
+
+            var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == POId).FirstOrDefault();
+            var PODDataList = Context.PurchaseOrderDetails.Where(a => a.PorefId == POId).ToList();
+            var POADataList = Context.PodeliveryAddresses.Where(a => a.Poid == POId).ToList();
+
+            GetPOdata.IsDeleted = true;
+            Context.PurchaseOrders.Update(GetPOdata);
+
+            if (PODDataList.Any() || POADataList.Any())
+            {
+                foreach (var PODData in PODDataList)
+                {
+                    PODData.IsDeleted = true;
+                    Context.PurchaseOrderDetails.Update(PODData);
+                }
+
+                foreach (var POAData in POADataList)
+                {
+                    POAData.IsDeleted = true;
+                    Context.PodeliveryAddresses.Update(POAData);
+                }
+
+                Context.SaveChanges();
+
+                response.code = 200;
+                response.message = "Purchase Order Details are deleted successfully";
+            }
+            else
+            {
+                response.code = 404;
+                response.message = "No related records found to delete";
+            }
+
+            return response;
         }
+
 
         public async Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsById(Guid POId)
         {
@@ -116,14 +174,13 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                join d in Context.Sites on a.SiteId equals d.SiteId
-                               //join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
-                               //join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
                                join g in Context.PodeliveryAddresses on a.Id equals g.Poid
                                select new PurchaseOrderMasterView
                                {
                                    Id = a.Id,
                                    SiteId = a.SiteId,
                                    SiteName=d.SiteName,
+                                   Poid=a.Poid,
                                    FromSupplierId=a.FromSupplierId,
                                    SupplierName=b.SupplierName,
                                    ToCompanyId=a.ToCompanyId,
@@ -134,22 +191,26 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                    TotalDiscount = a.TotalDiscount,
                                    TotalGstamount = a.TotalGstamount,
                                    BillingAddress = a.BillingAddress,
-                                  
                                    ShippingAddress=g.Address,
                                    CreatedBy = a.CreatedBy,
                                    CreatedOn = a.CreatedOn,
                                }).First();
 
-                List<ItemMasterModel> itemlist = Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id).Select(e => new ItemMasterModel
-                {
-                    
-                    ItemName = e.Item,
-                    
+                List<POItemDetailsModel> itemlist =(from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
+                                                    join b in Context.ItemMasters on a.ItemId equals b.ItemId
+                                                    select new POItemDetailsModel
+                                                    {
+                                                        ItemName = a.Item,
+                                                        ItemId=a.ItemId,
+                                                        Quantity = a.Quantity,
+                                                        ItemAmount=a.ItemTotal,
+                                                        Gstamount = a.Gst,
+                                                        UnitType=a.UnitTypeId,
+                                                        PricePerUnit=a.Price,
+                                                        GstPercentage=b.Gstper,
+                                                    }).ToList();
 
-
-
-                }).ToList();
-                
+                PurchaseOrder.ItemList = itemlist;
 
                 return PurchaseOrder;
             }
@@ -168,6 +229,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                      join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                      join d in Context.Sites on a.SiteId equals d.SiteId
+                                     where a.IsDeleted == false
                                      select new PurchaseOrderView
                                      {
                                          Id = a.Id,
@@ -258,29 +320,32 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                foreach (var item in PurchaseOrderDetails)
-                {
+                    var firstOrderDetail = PurchaseOrderDetails.First();
                     var PurchaseOrder = new PurchaseOrder()
                     {
                         Id = Guid.NewGuid(),
-                        Poid=item.Poid,
-                        SiteId = item.SiteId,
-                        Date=item.Date,
-                        FromSupplierId = item.FromSupplierId,
-                        ToCompanyId = item.ToCompanyId,
-                        TotalAmount = item.TotalAmount,
-                        Description = item.Description,
-                        DeliveryShedule = item.DeliveryShedule,
-                        TotalDiscount = item.TotalDiscount,
-                        TotalGstamount = item.TotalGstamount,
-                        BillingAddress = item.BillingAddress,
-                        CreatedBy = item.CreatedBy,
+                        Poid= firstOrderDetail.Poid,
+                        SiteId = firstOrderDetail.SiteId,
+                        Date= firstOrderDetail.Date,
+                        FromSupplierId = firstOrderDetail.FromSupplierId,
+                        ToCompanyId = firstOrderDetail.ToCompanyId,
+                        TotalAmount = firstOrderDetail.TotalAmount,
+                        Description = firstOrderDetail.Description,
+                        DeliveryShedule = firstOrderDetail.DeliveryShedule,
+                        TotalDiscount = firstOrderDetail.TotalDiscount,
+                        TotalGstamount = firstOrderDetail.TotalGstamount,
+                        BillingAddress = firstOrderDetail.BillingAddress,
+                        IsDeleted=false,
+                        CreatedBy = firstOrderDetail.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
                     Context.PurchaseOrders.Add(PurchaseOrder);
+                foreach (var item in PurchaseOrderDetails)
+                {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
                     {
                         PorefId = PurchaseOrder.Id,
+                        ItemId = item.ItemId,
                         Item = item.Item,
                         ItemTotal = item.ItemTotal,
                         UnitTypeId = item.UnitTypeId,
@@ -288,6 +353,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Price = item.Price,
                         Discount = item.Discount,
                         Gst = item.Gst,
+                        IsDeleted = false,
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
@@ -296,6 +362,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     {
                         Poid = PurchaseOrder.Id,
                         Address = item.ShippingAddress,
+                        IsDeleted = false,
                     };
                     Context.PodeliveryAddresses.Add(PurchaseAddress);
                     Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
@@ -312,6 +379,83 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
             return response;
         }
+        public async Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+
+            try
+            {
+                foreach (var PODetails in PurchaseOrderDetails)
+                {
+                    var PurchaseOrder = await Context.PurchaseOrders.FindAsync(PODetails.Id);
+
+                    if (PurchaseOrder == null)
+                    {
+                        response.code = (int)HttpStatusCode.NotFound;
+                        response.message = $"Purchase order with ID {PODetails.Id} not found";
+                        return response;
+                    }
+                    PurchaseOrder.Id = PODetails.Id;
+                    PurchaseOrder.Poid = PODetails.Poid;
+                    PurchaseOrder.SiteId = PODetails.SiteId;
+                    PurchaseOrder.Date = PODetails.Date;
+                    PurchaseOrder.FromSupplierId = PODetails.FromSupplierId;
+                    PurchaseOrder.ToCompanyId = PODetails.ToCompanyId;
+                    PurchaseOrder.TotalAmount = PODetails.TotalAmount;
+                    PurchaseOrder.Description = PODetails.Description;
+                    PurchaseOrder.DeliveryShedule = PODetails.DeliveryShedule;
+                    PurchaseOrder.TotalDiscount = PODetails.TotalDiscount;
+                    PurchaseOrder.TotalGstamount = PODetails.TotalGstamount;
+                    PurchaseOrder.BillingAddress = PODetails.BillingAddress;
+
+                    Context.PurchaseOrders.Update(PurchaseOrder);
+                }
+
+                    foreach (var item in PurchaseOrderDetails)
+                    {
+                        var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.PorefId == item.Id);
+
+                        if (PODetail == null)
+                        {
+                            continue;
+                        }
+
+                        PODetail.ItemId = item.ItemId;
+                        PODetail.Item = item.Item;
+                        PODetail.ItemTotal = item.ItemTotal;
+                        PODetail.UnitTypeId = item.UnitTypeId;
+                        PODetail.Quantity = item.Quantity;
+                        PODetail.Price = item.Price;
+                        PODetail.Discount = item.Discount;
+                        PODetail.Gst = item.Gst;
+
+                        Context.PurchaseOrderDetails.Update(PODetail);
+                    }
+                    foreach (var item in PurchaseOrderDetails)
+                    {
+                        var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.Poid == item.Id);
+
+                        if (DeliveryAddress != null)
+                        {
+                            DeliveryAddress.Address = item.ShippingAddress;
+                            Context.PodeliveryAddresses.Update(DeliveryAddress);
+                        }
+                    }
+
+                await Context.SaveChangesAsync();
+
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Purchase Orders Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "Error updating purchase orders: " + ex.Message;
+            }
+
+            return response;
+        }
+
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
