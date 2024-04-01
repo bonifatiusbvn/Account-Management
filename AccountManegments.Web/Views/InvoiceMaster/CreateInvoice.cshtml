@@ -51,8 +51,8 @@
                                                     <select class="form-control bg-light border-0" id="txtCompanyName" name="txtCompanyName">
                                                         <option selected disabled value="">Select Company Name</option>
                                                     </select>
-                                                    <span id="spncompanyname" class="text-danger"></span>
-                                                    <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
+                                                    <span id="spnCompanyName" class="text-danger"></span>
+                                                    <input type="hidden" class="form-control" id="createdById" value="@_userSession.UserId">
                                                     <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
                                                 </div>
                                             </div>
@@ -117,7 +117,7 @@
                                                         <option selected disabled value="">Select Product Name</option>
                                                     </select>
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemNameId">
-                                                    <div id="searchvalidationMessage" class="text-danger"></div>
+                                                    <div id="spnsearchItemName" class="text-danger"></div>
                                                 </div>
                                             </div>
                                             <!--end col-->

@@ -5,29 +5,29 @@
     <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
     <td class="text-start">
         <input type="text" class="form-control bg-light border-0" id="txtItemName" value="@Model.ItemName" readonly />
-        <input type="hidden" class="form-control bg-light border-0" id="Product_Id" readonly value="@Model.ItemId" />
+        <input type="hidden" class="form-control bg-light border-0" id="ProductId" readonly value="@Model.ItemId" />
         <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@Model.UnitType" />
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit" readonly />
+        <input type="number" class="form-control bg-light border-0" id="txtPricePerUnit" value="@Model.PricePerUnit" readonly />
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" readonly />
+        <input type="number" class="form-control bg-light border-0" id="txtGSTPer" value="@Model.Gstper" readonly />
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" readonly />
+        <input type="number" class="form-control bg-light border-0" id="txtProductAmountWithGST" readonly />
         <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
     </td>
     <td class="text-start">
         <div class="input-step">
             <button type="button" class='minus' id="minusbtn">–</button>
-            <input type="number" class="product-quantity" id="txtproductquantity" value="1">
+            <input type="number" class="product-quantity" id="txtProductQuantity" value="1">
             <button type="button" class='plus' id="plusbtn">+</button>
         </div>
     </td>
     <td class="text-start">
         <div>
-            <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
+            <input type="text" class="form-control bg-light border-0" id="txtProductTotalAmount" readonly />
         </div>
     </td>
     <td class="product-removal">

@@ -28,7 +28,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public decimal? Gst { get; set; }
 
-        public decimal? TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public Guid CreatedBy { get; set; }
 
@@ -41,7 +41,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? UnitTypeName { get; set; }
 
         public Guid Id { get; set; }
-
         public string? InvoiceId { get; set; }
 
         public Guid? SiteId { get; set; }
@@ -52,11 +51,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? Description { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public decimal TotalGstamount { get; set; }
 
         public decimal? TotalDiscount { get; set; }
-
-        public decimal TotalGstamount { get; set; }
 
         public decimal? Roundoff { get; set; }
 

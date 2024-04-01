@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -166,6 +167,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          Id = a.Id,
                                          SiteId = a.SiteId,
                                          SiteName=d.SiteName,
+                                         Poid  = a.Poid,
                                          FromSupplierId = a.FromSupplierId,
                                          SupplierName = b.SupplierName,
                                          ToCompanyId = a.ToCompanyId,
@@ -221,6 +223,12 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                 PurchaseOrder = PurchaseOrder.OrderBy(u => u.SupplierName);
                             else if (sortOrder == "descending")
                                 PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.SupplierName);
+                            break;
+                        case "createdon":
+                            if (sortOrder == "ascending")
+                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.CreatedOn);
+                            else if (sortOrder == "descending")
+                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.CreatedOn);
                             break;
                         case "totalgstamount":
                             if (sortOrder == "ascending")
@@ -336,6 +344,87 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 throw ex;
             }
             return responseModel;
+        }
+        public async Task<ApiResponseModel> DisplayInvoiceDetails(Guid Id)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var orderDetails = new List<PurchaseOrderMasterView>();
+                var data = await (from a in Context.PurchaseOrders.Where(x => x.Id == Id)
+                                 join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
+                                 join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                 join d in Context.Sites on a.SiteId equals d.SiteId
+                                 join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
+                                 join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
+                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                 select new PurchaseOrderMasterView
+                                 {
+                                     Id = a.Id,
+                                     SiteId = a.SiteId,
+                                     SiteName = d.SiteName,
+                                     FromSupplierId = a.FromSupplierId,
+                                     SupplierName = b.SupplierName,
+                                     ToCompanyId = a.ToCompanyId,
+                                     CompanyName = c.CompanyName,
+                                     TotalAmount = a.TotalAmount,
+                                     Description = a.Description,
+                                     DeliveryShedule = a.DeliveryShedule,
+                                     TotalDiscount = a.TotalDiscount,
+                                     TotalGstamount = a.TotalGstamount,
+                                     BillingAddress = a.BillingAddress,
+                                     Item = e.Item,
+                                     Date = a.Date,
+                                     ItemTotal = e.ItemTotal,
+                                     UnitTypeId = e.UnitTypeId,
+                                     UnitName = f.UnitName,
+                                     Quantity = e.Quantity,
+                                     Gst = e.Gst,
+                                     ShippingAddress = g.Address,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                 }).ToListAsync();
+                
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        orderDetails.Add(new PurchaseOrderMasterView()
+                        {
+                            Id = item.Id,
+                            SiteId = item.SiteId,
+                            SiteName = item.SiteName,
+                            FromSupplierId = item.FromSupplierId,
+                            SupplierName = item.SupplierName,
+                            ToCompanyId = item.ToCompanyId,
+                            CompanyName = item.CompanyName,
+                            TotalAmount = item.TotalAmount,
+                            Description = item.Description,
+                            DeliveryShedule = item.DeliveryShedule,
+                            TotalDiscount = item.TotalDiscount,
+                            TotalGstamount = item.TotalGstamount,
+                            BillingAddress = item.BillingAddress,
+                            Item = item.Item,
+                            Date = item.Date,
+                            ItemTotal = item.ItemTotal,
+                            UnitTypeId = item.UnitTypeId,
+                            UnitName = item.UnitName,
+                            Quantity = item.Quantity,
+                            Gst = item.Gst,
+                            ShippingAddress = item.ShippingAddress,
+                            CreatedBy = item.CreatedBy,
+                            CreatedOn = item.CreatedOn,
+                        });
+                    }
+                    response.data = orderDetails;
+                    response.code = 200;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
     }
 }

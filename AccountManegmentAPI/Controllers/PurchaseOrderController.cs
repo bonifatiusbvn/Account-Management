@@ -67,6 +67,7 @@ namespace AccountManagement.API.Controllers
             var checkPONo = PurchaseOrder.CheckPONo();
             return Ok(new { code = 200, data = checkPONo });
         }
+
         [HttpPost]
         [Route("InsertMultiplePurchaseOrderDetails")]
         public async Task<IActionResult> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
@@ -82,6 +83,33 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = (int)HttpStatusCode.NotFound;
                 response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
+
+        [HttpGet]
+        [Route("DisplayInvoiceDetails")]
+
+        public async Task<IActionResult> DisplayInvoiceDetails(Guid Id)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var orderdetails = PurchaseOrder.DisplayInvoiceDetails(Id);
+                if (orderdetails.Result.code != 200)
+                {
+                    response.message = orderdetails.Result.message;
+                    response.code = (int)HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    response.data = orderdetails.Result.data;
+                    response.code = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return StatusCode(response.code, response);
         }

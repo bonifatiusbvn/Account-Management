@@ -1,4 +1,7 @@
-﻿@{
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "PayOutInvoice";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -89,7 +92,7 @@
                                     <a href="javascript:void(0);" class="fw-medium">Total Outstanding</a>
                                 </div>
                             </div>
-                            <h3 class="mb-2 text-success">₹@TotalAmount</h3>
+                  @*          <h3 class="mb-2 text-success">₹@TotalAmount</h3>*@
                             <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
                         </div>
                     </div>
@@ -149,10 +152,10 @@
                     </div>
                     <!--end col-->
                     <div class="col-auto ms-auto">
-                        <div class="d-flex gap-2">
+                        @*<div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="getLastTransaction('@vendorid')"><i class="ri-equalizer-line align-bottom me-1"></i> See LastTransactions</button>
                             <a class="btn btn-primary" id="" href="/Invoice/GetAllTransactionByVendorId?Vid=@vendorid"><i class="ri-equalizer-line align-bottom me-1"></i> See AllTransactions</a>
-                        </div>
+                        </div>*@
 
                     </div>
                     <!--end col-->
@@ -296,7 +299,7 @@
 
                                 <div class="input-group mb-0">
                                     <label class="input-group-text">Total Amount</label>
-                                    <input type="text" class="form-control" id="txttotalamount" value="@TotalAmount">
+                                   @* <input type="text" class="form-control" id="txttotalamount" value="@TotalAmount">*@
                                     <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
                                 </div>
                             </div>

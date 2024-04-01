@@ -36,7 +36,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CompanyId = SupplierInvoiceDetail.CompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
-                    TotalPrice = SupplierInvoiceDetail.TotalPrice,
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
@@ -95,7 +94,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     TotalAmount = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
-                                    TotalPrice = a.TotalPrice,
                                     Description = a.Description,
                                     Roundoff = a.Roundoff,
                                     CompanyId = a.CompanyId,
@@ -128,7 +126,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         TotalAmount = a.TotalAmount,
                                         TotalDiscount = a.TotalDiscount,
                                         TotalGstamount = a.TotalGstamount,
-                                        TotalPrice = a.TotalPrice,
                                         Description = a.Description,
                                         Roundoff = a.Roundoff,
                                         CompanyId = a.CompanyId,
@@ -216,7 +213,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
                     supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmount;
                     supplierInvoice.Description = SupplierInvoiceDetail.Description;
-                    supplierInvoice.TotalPrice = SupplierInvoiceDetail.TotalPrice;
                     supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
                     supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
                     supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
@@ -238,31 +234,33 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                // Generate a single InvoiceId for all items
-                var Id = Guid.NewGuid();
 
-                foreach (var item in SupplierItemDetails)
-                {
+                var firstOrderDetail = SupplierItemDetails.First();
+
                     var supplierInvoice = new SupplierInvoice()
                     {
-                        Id = Id,
-                        InvoiceId = item.InvoiceId, // Use the same InvoiceId for all items
-                        SiteId = item.SiteId,
-                        SupplierId = item.SupplierId,
-                        CompanyId = item.CompanyId,
-                        Description = item.Description,
-                        TotalPrice = item.TotalPrice,
-                        TotalDiscount = item.TotalDiscount,
-                        TotalGstamount = item.TotalGstamount,
-                        Roundoff = item.Roundoff,
-                        CreatedBy = item.CreatedBy,
+                        Id = Guid.NewGuid(),
+                        InvoiceId = firstOrderDetail.InvoiceId,
+                        SiteId = firstOrderDetail.SiteId,
+                        SupplierId = firstOrderDetail.SupplierId,
+                        CompanyId = firstOrderDetail.CompanyId,
+                        Description = firstOrderDetail.Description,
+                        TotalDiscount = firstOrderDetail.TotalDiscount,
+                        TotalGstamount = firstOrderDetail.TotalGstamount,
+                        TotalAmount = firstOrderDetail.TotalAmount,
+                        PaymentStatus = firstOrderDetail.PaymentStatus,
+                        Roundoff = firstOrderDetail.Roundoff,
+                        IsPayOut = false,
+                        CreatedBy = firstOrderDetail.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
                     Context.SupplierInvoices.Add(supplierInvoice);
 
+                foreach (var item in SupplierItemDetails)
+                {
                     var supplierInvoiceDetail = new SupplierInvoiceDetail()
                     {
-                        RefInvoiceId = Id, // Use the same InvoiceId for all items
+                        RefInvoiceId = supplierInvoice.Id, 
                         Item = item.Item,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -323,7 +321,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     {
 
                         int PrNumber = int.Parse(LastPO.InvoiceId.Substring(24)) + 1;
-                        SupplierInvoiceId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                        SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
                     }
                     else
                     {

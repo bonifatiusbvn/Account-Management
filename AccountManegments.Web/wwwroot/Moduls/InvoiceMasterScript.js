@@ -39,25 +39,25 @@ function GetSupplierDetails() {
     });
 }
 
-$(document).ready(function () {
-    debugger
-    $('#txtcompanyName').change(function () {
-        var CompanyId = $(this).val();
-        $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
-            type: 'GET',
-            success: function (result) {
-                $('#companyBillingAddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtBillingCompanyName" value="' + result.companyName + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtBillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
-                );
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching company details:", error);
-            }
-        });
-    });
-});
+//$(document).ready(function () {
+//    debugger
+//    $('#txtcompanyName').change(function () {
+//        var CompanyId = $(this).val();
+//        $.ajax({
+//            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+//            type: 'GET',
+//            success: function (result) {
+//                $('#companyBillingAddressDetails').empty().append(
+//                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtBillingCompanyName" value="' + result.companyName + '" readonly /></div>' +
+//                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtBillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
+//                );
+//            },
+//            error: function (xhr, status, error) {
+//                console.error("Error fetching company details:", error);
+//            }
+//        });
+//    });
+//});
 
 // Get today's date
 $(document).ready(function () {
@@ -225,18 +225,18 @@ function InsertMultipleSupplierItem() {
             InvoiceId: $("#txtSupplierInvoiceId").val(),
             Date: $("#orderdate").val(),
             SupplierId: $("#txtSupplierName").val(),
-            CompanyId: $("#txtCompanynName").val(),
+            CompanyId: $("#txtCompanyName").val(),
             TotalAmount: $("#cart-total").val(),
-            TotalGstamount: $("#totalgst").val(),
-            Item: orderRow.find("#txtItemName").val(),
+            TotalGstAmount: $("#totalgst").val(),
+            Item: orderRow.find("#ProductId").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
-            Quantity: orderRow.find("#txtproductquantity").val(),
-            TotalPrice: orderRow.find("#txtproductamount").val(),
-            Price: orderRow.find("#txtproductamount").val(),
-            Gst: orderRow.find("#txtproductamountwithGST").val(),
-            ItemTotal: orderRow.find("#txtproducttotalamount").val(),
-            DeliveryShedule: $("#txtdelivryschedule").val(),
-            CreatedBy: $("#createdbyid").val(),
+            Quantity: orderRow.find("#txtProductQuantity").val(),
+            Price: orderRow.find("#txtPricePerUnit").val(),
+            GstPer: orderRow.find("#txtGSTPer").val(),
+            Gst: orderRow.find("#txtProductAmountWithGST").val(),
+            TotalAmount: orderRow.find("#txtProductTotalAmount").val(),
+            PaymentStatus: $("#txtPaymentStatus").val(),
+            CreatedBy: $("#createdById").val(),
         };
         orderDetails.push(objData);
     });
@@ -250,14 +250,14 @@ function InsertMultipleSupplierItem() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            if (Result.message == "Purchase Order Inserted Successfully") {
+            if (Result.message == "Supplier Order Inserted Successfully") {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
-                    window.location = '/PurchaseMaster/CreatePurchaseOrder';
+                    window.location = '/InvoiceMaster/CreateInvoice';
                 });
             }
             else {
@@ -291,15 +291,15 @@ function validateAndInsertSupplierItem() {
     var isValid = true;
 
     if (companyname === "") {
-        document.getElementById("spncompanyname").innerText = "Please Select Company!";
+        document.getElementById("spnCompanyName").innerText = "Please Select Company!";
         isValid = false;
     }
     if (suppliername === "") {
-        document.getElementById("spnsuppliername").innerText = "Please Select Supplier!";
+        document.getElementById("spnSupplierName").innerText = "Please Select Supplier!";
         isValid = false;
     }
     if (productname === "") {
-        document.getElementById("searchvalidationMessage").innerText = "Please Select Product!";
+        document.getElementById("spnsearchItemName").innerText = "Please Select Product!";
         isValid = false;
     }
     if (PaymentStatus === "") {
@@ -421,14 +421,14 @@ function updateProductTotalAmount() {
 
     $(".product").each(function () {
         var row = $(this);
-        var productPrice = parseFloat(row.find("#txtproductamount").val());
-        var quantity = parseInt(row.find("#txtproductquantity").val());
-        var gst = parseFloat(row.find("#txtgst").val());
+        var productPrice = parseFloat(row.find("#txtPricePerUnit").val());
+        var quantity = parseInt(row.find("#txtProductQuantity").val());
+        var gst = parseFloat(row.find("#txtGSTPer").val());
         var totalGst = (productPrice * quantity * gst) / 100;
         var totalAmount = productPrice * quantity;
 
-        row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
-        row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
+        row.find("#txtProductAmountWithGST").val(totalGst.toFixed(2));
+        row.find("#txtProductTotalAmount").val(totalAmount.toFixed(2));
     });
 }
 
@@ -453,8 +453,8 @@ function updateTotals() {
 
     $(".product").each(function () {
         var row = $(this);
-        var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
-        var gst = parseFloat(row.find("#txtproductamountwithGST").val());
+        var subtotal = parseFloat(row.find("#txtProductTotalAmount").val());
+        var gst = parseFloat(row.find("#txtProductAmountWithGST").val());
 
         totalSubtotal += subtotal;
         totalGst += gst;
@@ -523,9 +523,6 @@ function removeItem(e) {
 amountKeyup();
 var genericExamples = document.querySelectorAll("[data-trigger]");
 
-function billingFunction() {
-    document.getElementById("same").checked ? (document.getElementById("shippingName").value = document.getElementById("billingName").value, document.getElementById("shippingAddress").value = document.getElementById("billingAddress").value, document.getElementById("shippingPhoneno").value = document.getElementById("billingPhoneno").value, document.getElementById("shippingTaxno").value = document.getElementById("billingTaxno").value) : (document.getElementById("shippingName").value = "", document.getElementById("shippingAddress").value = "", document.getElementById("shippingPhoneno").value = "", document.getElementById("shippingTaxno").value = "")
-}
 Array.from(genericExamples).forEach(function (e) {
     new Choices(e, {
         placeholderValue: "This is a placeholder set in the config",
@@ -616,9 +613,9 @@ document.addEventListener("DOMContentLoaded", function () {
         Array.from(A).forEach(e => {
             var t = e.querySelector("#txtproductName-" + N).value,
                 n = e.querySelector("#txtproductDescription-" + N).value,
-                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
-                p = parseInt(e.querySelector("#txtgst-" + N).value),
-                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
+                o = parseInt(e.querySelector("#txtPricePerUnit-" + N).value),
+                p = parseInt(e.querySelector("#txtGSTPer-" + N).value),
+                q = parseInt(e.querySelector("#txtProductAmountWithGST-" + N).value),
                 a = parseInt(e.querySelector("#product-qty-" + N).value),
                 e = e.querySelector("#productPrice-" + N).value.split("$"),
                 t = {

@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -289,6 +290,58 @@ namespace AccountManegments.Web.Controllers
             {
 
                 return RedirectToAction("CreatePurchaseOrder", new { id = Id });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> POListView()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> POListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+                    return PartialView("~/Views/PurchaseMaster/_POListPartial.cshtml", GetPOList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }            
+        }
+
+        public async Task<IActionResult> DisplayPODetails(Guid POId)
+        {
+            try
+            {
+                List<PurchaseOrderMasterView> order = new List<PurchaseOrderMasterView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseMaster/GetPurchaseOrderDetailsById?POId=" + POId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(response.data.ToString());
+                    response.data = order;
+
+                }
+                return View(order);
             }
             catch (Exception ex)
             {

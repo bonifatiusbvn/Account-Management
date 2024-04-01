@@ -52,5 +52,9 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         {
             return await PurchaseOrder.UpdatePurchaseOrderDetails(PurchaseOrderDetails);
         }
+        public async Task<ApiResponseModel> DisplayInvoiceDetails(Guid Id)
+        {
+            return await PurchaseOrder.DisplayInvoiceDetails(Id);
+        }
     }
 }

@@ -4,6 +4,8 @@ GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
+GetPOList();
+
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -39,6 +41,7 @@ function filterPurchaseRequestTable() {
         }
     });
 }
+
 function GetSiteDetails() {
 
     $.ajax({
@@ -1055,3 +1058,56 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
+
+
+function GetPOList() {
+    var searchText = $('#txtPOSearch').val();
+    var searchBy = $('#ddlPOSearchBy').val();
+
+    $.get("/PurchaseMaster/POListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
+
+
+            $("#PurchaseOrderListbody").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+function filterPOTable() {
+
+    var searchText = $('#txtPOSearch').val();
+    var searchBy = $('#ddlPOSearchBy').val();
+
+    $.ajax({
+        url: '/PurchaseMaster/POListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            $("#PurchaseOrderListbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+function sortPOTable() {
+    var sortBy = $('#ddlPOSortBy').val();
+    $.ajax({
+        url: '/PurchaseMaster/POListAction',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            $("#PurchaseOrderListbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}

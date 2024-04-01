@@ -21,8 +21,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? Description { get; set; }
 
-        public decimal TotalPrice { get; set; }
-
         public decimal? TotalDiscount { get; set; }
 
         public decimal TotalGstamount { get; set; }
