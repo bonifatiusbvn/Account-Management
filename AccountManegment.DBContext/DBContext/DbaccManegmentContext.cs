@@ -53,7 +53,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -193,6 +192,10 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("FK_PurchaseOrderDetails_ItemMaster");
 
             entity.HasOne(d => d.Poref).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.PorefId)

@@ -9,5 +9,9 @@ public partial class PodeliveryAddress
 
     public Guid Poid { get; set; }
 
+    public int? Quantity { get; set; }
+
+    public int? UnitTypeId { get; set; }
+
     public string Address { get; set; } = null!;
 }
