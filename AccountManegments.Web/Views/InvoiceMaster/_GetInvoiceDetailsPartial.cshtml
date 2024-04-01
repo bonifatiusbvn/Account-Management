@@ -1,0 +1,24 @@
+﻿@* @foreach (var item in Model)
+                                { *@
+<tr>
+    <td>
+        <div class="avatar-xs">
+            <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                <i class="ri-arrow-right-up-fill"></i>
+            </div>
+        </div>
+    </td>
+    <td class="date">item.VendorName<small class="text-muted"></small></td>
+    <td class="form_name" id="txtvendorid" hidden>item.VandorId</td>
+    <td class="form_name" id="txtinvoicetype">item.InvoiceType</td>
+    <td class="form_name" id="txtinvoiceno" hidden>item.InvoiceNo</td>
+    <td class="to_name" id="txtorderid">item.OrderId</td>
+    <td class="details" id="txtdate">item.Date.ToString("dd/MM/yyyy")</td>
+    <td>
+        <h6 class="text-success mb-1 amount">item.TotalAmount</h6>
+    </td>
+    <td class="status">
+        <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
+    </td>
+</tr>
+@* } *@
