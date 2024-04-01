@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using System;
@@ -115,8 +116,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                join d in Context.Sites on a.SiteId equals d.SiteId
-                               join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
-                               join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
+                               //join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
+                               //join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
                                join g in Context.PodeliveryAddresses on a.Id equals g.Poid
                                select new PurchaseOrderMasterView
                                {
@@ -133,17 +134,23 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                    TotalDiscount = a.TotalDiscount,
                                    TotalGstamount = a.TotalGstamount,
                                    BillingAddress = a.BillingAddress,
-                                   Item=e.Item,
-                                   Date=a.Date,
-                                   ItemTotal=e.ItemTotal,
-                                   UnitTypeId=e.UnitTypeId,
-                                   UnitName=f.UnitName,
-                                   Quantity=e.Quantity,
-                                   Gst=e.Gst,
+                                  
                                    ShippingAddress=g.Address,
                                    CreatedBy = a.CreatedBy,
                                    CreatedOn = a.CreatedOn,
                                }).First();
+
+                List<ItemMasterModel> itemlist = Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id).Select(e => new ItemMasterModel
+                {
+                    
+                    ItemName = e.Item,
+                    
+
+
+
+                }).ToList();
+                
+
                 return PurchaseOrder;
             }
             catch (Exception)

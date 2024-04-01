@@ -1,4 +1,5 @@
-﻿@using AccountManegments.Web.Models;
+﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
+@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
@@ -46,7 +47,7 @@
                                                 </div>
                                                 <div class="ms-auto">
                                                     <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
-                                                        <option selected disabled value="">Select Company Name</option>
+                                                        <option selected disabled value="">@Model.CompanyName</option>
                                                     </select>
                                                     <span id="spncompanyname" class="text-danger"></span>
                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
@@ -66,10 +67,10 @@
                                                 </div>
                                                 <div class="mb-2" id="companybillingaddressDetails">
                                                     <div class="mb-2">
-                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" placeholder="Full Name" required />
+                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="@Model.CompanyName" placeholder="Full Name" required />
                                                     </div>
                                                     <div class="mb-2">
-                                                        <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                        <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.BillingAddress</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -90,7 +91,7 @@
                                                         <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" disabled>
+                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@Model.Date" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,7 +101,7 @@
                                                     <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
                                                 </div>
                                                 <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                                    <option selected disabled value="">Select Supplier Name</option>
+                                                    <option selected disabled value="">@Model.SupplierName</option>
                                                 </select>
                                                 <span id="spnsuppliername" class="text-danger"></span>
                                             </div>
@@ -111,7 +112,7 @@
                                                         <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
                                                     </div>
                                                     <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                                        <option selected disabled value="">Select ProductName</option>
+                                                        <option selected disabled value="">@Model.Item</option>
                                                     </select>
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
                                                     <div id="searchvalidationMessage" class="text-danger"></div>
@@ -148,6 +149,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="addNewlink">
+                                          @*           @if ()
+                                                    {
+                                                        
+                                                    } *@
                                                 </tbody>
                                             </table>
                                         </div>
@@ -167,7 +172,7 @@
                                                             <tr>
                                                                 <th scope="row">Total Gst(18%)</th>
                                                                 <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -179,7 +184,7 @@
                                                             <tr class="border-top border-top-dashed">
                                                                 <th scope="row">Total Amount</th>
                                                                 <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -194,7 +199,7 @@
                                                 <div class="mb-2">
                                                     <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Delivery Schedule</label>
                                                     <div class="mb-2">
-                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" />
+                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" />
                                                         <span id="spndelivryschedule" class="text-danger"></span>
                                                     </div>
                                                 </div>
@@ -212,7 +217,7 @@
                                                                 <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
                                                             </div>
                                                             <div class="mb-2">
-                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.ShippingAddress</textarea>
                                                                 <span id="spnshippingaddress" class="text-danger"></span>
                                                             </div>
                                                         </div>

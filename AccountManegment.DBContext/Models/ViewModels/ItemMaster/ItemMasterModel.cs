@@ -10,6 +10,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
     public class ItemMasterModel
     {
         public Guid ItemId { get; set; }
+        public int DetailId { get; set; }
 
         public string ItemName { get; set; }
 

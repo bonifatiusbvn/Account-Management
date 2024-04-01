@@ -409,40 +409,6 @@ function sortPurchaseOrderTable() {
         }
     });
 }
-function EditPurchaseOrderDetails(Id) {debugger
-
-    $.ajax({
-        url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        success: function (response) {debugger
-
-            $('#purchaseorderid').val(response.id);
-            $('#txtcompanyname').val(response.toCompanyId);
-            $('#txtbillingAddress').val(response.billingAddress);
-            $('#txtPoId').val(response.poid);
-            $('#orderdate').val(response.date);
-            $('#txtSuppliername').val(response.fromSupplierId);
-            $('#searchItemname').val(response.itemId);
-            $('#totalgst').val(response.totalGstamount);
-            $('#cart-total').val(response.totalAmount);
-            $('#txtdelivryschedule').val(response.deliveryShedule);
-            $('#txtshippingAddress').val(response.shippingAddress);
-            
-            //var button = document.getElementById("purchaseorderid");
-            //if ($('#purchaseorderid').val() != '') {
-            //    button.textContent = "Update";
-            //}
-            //var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
-            //resetErrorMessages()
-            //offcanvas.show();
-            window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
-}
 
 function GetCompanyDetails() {
 
