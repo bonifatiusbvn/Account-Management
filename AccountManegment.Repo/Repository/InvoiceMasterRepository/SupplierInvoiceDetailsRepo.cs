@@ -29,16 +29,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var SupplierInvoice = new SupplierInvoiceDetail()
-                { 
+                {
                     RefInvoiceId = SupplierInvoiceDetails.RefInvoiceId,
                     Item = SupplierInvoiceDetails.Item,
                     UnitTypeId = SupplierInvoiceDetails.UnitTypeId,
                     Quantity = SupplierInvoiceDetails.Quantity,
                     Price = SupplierInvoiceDetails.Price,
-                    Discount = SupplierInvoiceDetails.Discount,
-                    Gst = SupplierInvoiceDetails.Gst,
-                    Gstamount = SupplierInvoiceDetails.Gstamount,
-                    PaymentStatus = SupplierInvoiceDetails.PaymentStatus,
+                    DiscountPer = SupplierInvoiceDetails.DiscountPer,
+                    DiscountAmount = SupplierInvoiceDetails.Discount,
+                    Gst = SupplierInvoiceDetails.Gstamount,
+                    Gstper = SupplierInvoiceDetails.Gstper,
                     CreatedBy = SupplierInvoiceDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -63,7 +63,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoiceDetails.Remove(SupplierInvoice);
-                    response.message =  SupplierInvoice.RefInvoiceId + " Id of Supplier Invoice Details is Removed Successfully!";
+                    response.message = SupplierInvoice.RefInvoiceId + " Id of Supplier Invoice Details is Removed Successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -90,13 +90,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Item = a.Item,
                                     RefInvoiceId = a.RefInvoiceId,
                                     UnitTypeId = a.UnitTypeId,
-                                    UnitTypeName  = c.UnitName,
-                                    Gst = a.Gst,
-                                    Gstamount = a.Gstamount,
+                                    UnitTypeName = c.UnitName,
+                                    Gstper = a.Gstper,
+                                    Gstamount = a.Gst,
                                     Quantity = a.Quantity,
                                     Price = a.Price,
-                                    Discount = a.Discount,
-                                    PaymentStatus = a.PaymentStatus
+                                    Discount = a.DiscountAmount,
+                                    DiscountPer = a.DiscountPer,
+
 
                                 }).First();
                 return supplierList;
@@ -111,24 +112,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         {
             try
             {
-               var supplierList = (from a in Context.SupplierInvoiceDetails
-                                join b in Context.SupplierInvoices on a.RefInvoiceId equals b.Id
-                                join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
-                                select new SupplierInvoiceDetailsModel
-                                {
-                                    InvoiceDetailsId  = a.InvoiceDetailsId,
-                                    Item = a.Item,
-                                    RefInvoiceId = a.RefInvoiceId,
-                                    UnitTypeId = a.UnitTypeId,
-                                    UnitTypeName = c.UnitName,
-                                    Gst = a.Gst,
-                                    Gstamount = a.Gstamount,
-                                    Quantity = a.Quantity,
-                                    Price = a.Price,
-                                    Discount = a.Discount,
-                                    PaymentStatus = a.PaymentStatus,
-                                    CreatedOn = a.CreatedOn,
-                                });
+                var supplierList = (from a in Context.SupplierInvoiceDetails
+                                    join b in Context.SupplierInvoices on a.RefInvoiceId equals b.Id
+                                    join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
+                                    select new SupplierInvoiceDetailsModel
+                                    {
+                                        InvoiceDetailsId = a.InvoiceDetailsId,
+                                        Item = a.Item,
+                                        RefInvoiceId = a.RefInvoiceId,
+                                        UnitTypeId = a.UnitTypeId,
+                                        UnitTypeName = c.UnitName,
+                                        Gstper = a.Gstper,
+                                        Gstamount = a.Gst,
+                                        Quantity = a.Quantity,
+                                        Price = a.Price,
+                                        Discount = a.DiscountAmount,
+                                        DiscountPer = a.DiscountPer,
+                                        CreatedOn = a.CreatedOn,
+                                    });
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -204,10 +205,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     supplierInvoiceDetail.UnitTypeId = SupplierInvoiceDetails.UnitTypeId;
                     supplierInvoiceDetail.Quantity = SupplierInvoiceDetails.Quantity;
                     supplierInvoiceDetail.Price = SupplierInvoiceDetails.Price;
-                    supplierInvoiceDetail.Discount = SupplierInvoiceDetails.Discount;
-                    supplierInvoiceDetail.Gst = SupplierInvoiceDetails.Gst;
-                    supplierInvoiceDetail.Gstamount = SupplierInvoiceDetails.Gstamount;
-                    supplierInvoiceDetail.PaymentStatus = SupplierInvoiceDetails.PaymentStatus;
+                    supplierInvoiceDetail.Gst = SupplierInvoiceDetails.Gstamount;
+                    supplierInvoiceDetail.Gstper = SupplierInvoiceDetails.Gstper;
                 }
                 Context.SupplierInvoiceDetails.Update(supplierInvoiceDetail);
                 Context.SaveChanges();

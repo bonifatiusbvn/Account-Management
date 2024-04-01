@@ -21,6 +21,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? Description { get; set; }
 
+        public string? PaymentStatus { get; set; }
+
         public decimal TotalPrice { get; set; }
 
         public decimal? TotalDiscount { get; set; }
@@ -28,6 +30,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal TotalGstamount { get; set; }
 
         public decimal? Roundoff { get; set; }
+        public bool? IsPayOut { get; set; }
 
         public string? PaymentStatus { get; set; }
 

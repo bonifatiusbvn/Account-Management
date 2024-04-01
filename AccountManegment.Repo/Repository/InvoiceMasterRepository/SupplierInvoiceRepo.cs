@@ -32,8 +32,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     Id = Guid.NewGuid(),
                     InvoiceId = SupplierInvoiceDetail.InvoiceId,
                     SiteId = SupplierInvoiceDetail.SiteId,
-                    SupplierId = SupplierInvoiceDetail.SupplierId,
-                    CompanyId = SupplierInvoiceDetail.CompanyId,
+                    SupplierId = SupplierInvoiceDetail.FromSupplierId,
+                    CompanyId = SupplierInvoiceDetail.ToCompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
                     TotalPrice = SupplierInvoiceDetail.TotalPrice,
@@ -83,25 +83,26 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
-                            join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId 
-                            join c in Context.Companies on a.CompanyId equals c.CompanyId
-                            join d in Context.Sites on a.SiteId equals d.SiteId
-                            select new SupplierInvoiceModel
-                            {
-                                InvoiceId = a.InvoiceId,
-                                SiteId = a.SiteId,
-                                SupplierId = a.SupplierId,
-                                TotalAmount = a.TotalAmount,
-                                TotalDiscount = a.TotalDiscount,
-                                TotalGstamount = a.TotalGstamount,
-                                TotalPrice = a.TotalPrice,
-                                Description = a.Description,
-                                Roundoff = a.Roundoff,
-                                CompanyId = a.CompanyId,
-                                CompanyName = c.CompanyName,
-                                SiteName = d.SiteName,
-                                SupplierName = b.SupplierName
-                            }).First();
+                                join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                join d in Context.Sites on a.SiteId equals d.SiteId
+                                select new SupplierInvoiceModel
+                                {
+                                    Id = a.Id,
+                                    InvoiceId = a.InvoiceId,
+                                    //SiteId = a.SiteId,
+                                    SupplierId = a.SupplierId,
+                                    TotalAmount = a.TotalAmount,
+                                    TotalDiscount = a.TotalDiscount,
+                                    TotalGstamount = a.TotalGstamount,
+                                    TotalPrice = a.TotalPrice,
+                                    Description = a.Description,
+                                    Roundoff = a.Roundoff,
+                                    CompanyId = a.CompanyId,
+                                    CompanyName = c.CompanyName,
+                                    SiteName = d.SiteName,
+                                    SupplierName = b.SupplierName
+                                }).First();
                 return supplierList;
             }
             catch (Exception ex)
@@ -204,12 +205,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetail)
         {
             ApiResponseModel model = new ApiResponseModel();
-            var supplierInvoice = Context.SupplierInvoices.Where(e => e.InvoiceId == SupplierInvoiceDetail.InvoiceId).FirstOrDefault();
+            var supplierInvoice = Context.SupplierInvoices.Where(e => e.Id == SupplierInvoiceDetail.Id).FirstOrDefault();
             try
             {
                 if (supplierInvoice != null)
                 {
-                    supplierInvoice.InvoiceId = SupplierInvoiceDetail.InvoiceId;
+                    supplierInvoice.Id = SupplierInvoiceDetail.Id;
                     supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
                     supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
                     supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
@@ -267,7 +268,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
                         Price = item.Price,
-                        Discount = item.Discount,
+                        DiscountPer = item.DiscountPer,
                         Gst = item.Gst,
                         Gstamount = item.Gstamount,
                         PaymentStatus = item.PaymentStatus,
