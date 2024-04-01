@@ -296,7 +296,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.TotalGstamount)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGSTAmount");
-            entity.Property(e => e.TotalPrice).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Site).WithMany(p => p.SupplierInvoices)

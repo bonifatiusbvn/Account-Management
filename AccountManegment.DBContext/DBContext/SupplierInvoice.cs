@@ -15,15 +15,13 @@ public partial class SupplierInvoice
 
     public Guid CompanyId { get; set; }
 
-    public decimal TotalAmount { get; set; }
-
     public string? Description { get; set; }
 
-    public decimal TotalPrice { get; set; }
-
-    public decimal? TotalDiscount { get; set; }
+    public decimal TotalAmount { get; set; }
 
     public decimal TotalGstamount { get; set; }
+
+    public decimal? TotalDiscount { get; set; }
 
     public decimal? Roundoff { get; set; }
 
