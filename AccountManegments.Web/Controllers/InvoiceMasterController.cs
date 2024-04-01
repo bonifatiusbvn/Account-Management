@@ -75,5 +75,34 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        public IActionResult PayOutInvoice()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceDetails(Guid CompanyId, Guid SupplierId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                if (postuser.code == 200)
+                {
+                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
+                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
+
+                }
+                else
+                {
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
+            }
+        }
+
     }
 }

@@ -92,5 +92,13 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+
+        [HttpPost]
+        [Route("GetInvoiceDetailsById")]
+        public async Task<IActionResult> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        {
+            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
+            return Ok(new { code = 200, data = supplierDetails.ToList() });
+        }
     }
 }

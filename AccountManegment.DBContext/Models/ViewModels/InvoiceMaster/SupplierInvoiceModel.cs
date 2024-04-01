@@ -9,6 +9,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
     public class SupplierInvoiceModel
     {
         public Guid InvoiceId { get; set; }
+        public string? InvoiceNo { get; set; }
 
         public Guid SiteId { get; set; }
 
@@ -22,7 +23,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? PaymentStatus { get; set; }
 
-        public decimal TotalPrice { get; set; }
 
         public decimal? TotalDiscount { get; set; }
 

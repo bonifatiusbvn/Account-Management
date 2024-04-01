@@ -1,9 +1,13 @@
-﻿AllPurchaseRequestListTable();
+﻿
+var TotalAmount = '';
+
+AllPurchaseRequestListTable();
 GetSiteDetails();
 GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
+
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -14,9 +18,7 @@ function AllPurchaseRequestListTable() {
 
             $("#purchaseRequesttbody").html(result);
         })
-        .fail(function (error) {
-            console.error(error);
-        });
+
 }
 
 function filterPurchaseRequestTable() {
@@ -71,7 +73,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
-     $('.ac-detail').removeClass('d-none');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -409,13 +411,15 @@ function sortPurchaseOrderTable() {
         }
     });
 }
-function EditPurchaseOrderDetails(Id) {debugger
+function EditPurchaseOrderDetails(Id) {
+    debugger
 
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
-        success: function (response) {debugger
+        success: function (response) {
+            debugger
 
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
@@ -428,7 +432,7 @@ function EditPurchaseOrderDetails(Id) {debugger
             $('#cart-total').val(response.totalAmount);
             $('#txtdelivryschedule').val(response.deliveryShedule);
             $('#txtshippingAddress').val(response.shippingAddress);
-            
+
             //var button = document.getElementById("purchaseorderid");
             //if ($('#purchaseorderid').val() != '') {
             //    button.textContent = "Update";
@@ -479,9 +483,10 @@ function GetSupplierDetails() {
 }
 $(document).ready(function () {
     $('#txtcompanyname').change(function () {
-        var CompanyId = $(this).val();
+        var Company = $(this).val();
+        $('#txtcompany').val(Company);
         $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
             type: 'GET',
             success: function (result) {
                 $('#companybillingaddressDetails').empty().append(
@@ -544,8 +549,10 @@ function SerchItemDetailsById() {
         }
     });
 }
-// Get today's date
+
+
 $(document).ready(function () {
+
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -613,7 +620,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
-            }  
+            }
         },
         error: function (xhr, status, error) {
             Swal.fire({
@@ -647,19 +654,44 @@ function validateAndInsertPurchaseOrder() {
     if (productname === "") {
         document.getElementById("searchvalidationMessage").innerText = "Please Select Product!";
         isValid = false;
-    } 
+    }
     if (deliveryschedule === "") {
         document.getElementById("spndelivryschedule").innerText = "Enter Delievery Schedule";
         isValid = false;
-    } 
+    }
     if (shippingaddress === "") {
         document.getElementById("spnshippingaddress").innerText = "Enter shipping Address!";
         isValid = false;
-    } 
+    }
     if (isValid) {
         InsertMultiplePurchaseOrderDetails();
     }
 }
+
+
+$(document).ready(function () {
+
+    $("#totalAmount").html('₹' + 00);
+    $('#txtSuppliername').change(function () {
+        debugger;
+        var CompanyId = $('#txtcompany').val();
+        var SupplierId = $(this).val();
+        $.ajax({
+            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+            type: 'GET',
+            success: function (result) {
+                $("#invoicedetails").html(result);
+                $("#totalAmount").html('₹' + TotalAmount);
+            },
+
+        });
+    });
+});
+
+
+
+
+
 
 var paymentSign = "$";
 
@@ -882,11 +914,7 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-//var cleaveBlocks = new Cleave("#cardNumber", {
-//    blocks: [4, 4, 4, 4],
-//    uppercase: !0
-//}),
-//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],
