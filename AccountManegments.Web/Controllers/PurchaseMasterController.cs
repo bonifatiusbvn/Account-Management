@@ -31,10 +31,12 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
+                
                 if (Response.code == 200)
                 {
-                    ViewBag.ProjectRequestNo = Response.data;
+                    ViewData["PrNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
                 }
+                
                 return View();
             }
             catch (Exception ex)
@@ -45,11 +47,15 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy)
+        public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy,Guid? SiteId)
         {
             try
             {
-                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                if (SiteId != null)
+                {
+                    UserSession.SiteId = SiteId.ToString();
+                }
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId)? null : new Guid(UserSession.SiteId) ;
                 string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);

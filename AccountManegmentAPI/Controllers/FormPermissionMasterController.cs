@@ -103,5 +103,51 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpPost]
+        [Route("GetRolewiseFormListById")]
+        public async Task<IActionResult> GetRolewiseFormListById(int RoleId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleId);
+
+            if (RolewiseFormList.Count == 0)
+            {
+                response.code = 400;
+            }
+            else
+            {
+                response.code = 200;
+                response.data = RolewiseFormList.ToList();
+            }
+            return StatusCode(response.code, response);
+        }
+
+
+        [HttpPost]
+        [Route("UpdateMultipleRolewiseFormPermission")]
+        public async Task<IActionResult> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> RolewiseFormPermission)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var rolewiseFormPermission = RolewisePermissionMaster.UpdateMultipleRolewiseFormPermission(RolewiseFormPermission);
+                if (rolewiseFormPermission.Result.code == 200)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = rolewiseFormPermission.Result.message;
+                }
+                else
+                {
+                    response.message = rolewiseFormPermission.Result.message;
+                    response.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

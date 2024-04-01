@@ -133,7 +133,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
                             join r in Context.UserRoles on e.RoleId equals r.RoleId
-                            join p in Context.Sites on e.SiteId equals p.SiteId
                             select new LoginView
                             {
                                 Id = e.Id,
@@ -146,7 +145,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 PhoneNo = e.PhoneNo,
                                 RoleId = e.RoleId,
                                 RoleName = r.Role,
-                                SiteName = p.SiteName,
+                                SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                 SiteId = e.SiteId,
                             }).First();
                 return Userdata;
@@ -164,7 +163,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
                 IEnumerable<LoginView> userList = (from e in Context.Users
                                                    join r in Context.UserRoles on e.RoleId equals r.RoleId
-                                                   join p in Context.Sites on e.SiteId equals p.SiteId
+                                                   
                                                    where e.IsDeleted == false
                                                    select new LoginView
                                                    {
@@ -176,7 +175,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        PhoneNo = e.PhoneNo,
                                                        IsActive = e.IsActive,
                                                        RoleName = r.Role,
-                                                       SiteName = p.SiteName,
+                                                       SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
                                                    });
 
@@ -257,7 +256,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     }
                 }
 
-                return userList.ToList();
+                    return userList.ToList();
             }
             catch (Exception ex)
             {

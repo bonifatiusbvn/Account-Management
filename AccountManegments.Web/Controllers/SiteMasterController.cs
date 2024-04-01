@@ -97,7 +97,7 @@ namespace AccountManegments.Web.Controllers
                     ShippingCityId = createSite.ShippingCityId,
                     ShippingStateId = createSite.ShippingStateId,
                     ShippingCountry = createSite.ShippingCountry,
-                    ShippingPincode  = createSite.ShippingPincode,
+                    ShippingPincode = createSite.ShippingPincode,
                     CreatedBy = UserSession.UserId,
                 };
 
@@ -136,7 +136,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> ActiveDeactiveSite(Guid SiteId)
         {
@@ -166,11 +166,15 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 List<SiteMasterModel> SiteName = new List<SiteMasterModel>();
-                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteNameList");
-                if (res.code == 200)
+                if (UserSession.UserRole == 3)
                 {
-                    SiteName = JsonConvert.DeserializeObject<List<SiteMasterModel>>(res.data.ToString());
+                    ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteNameList");
+                    if (res.code == 200)
+                    {
+                        SiteName = JsonConvert.DeserializeObject<List<SiteMasterModel>>(res.data.ToString());
+                    }
                 }
+
                 return new JsonResult(SiteName);
             }
             catch (Exception ex)

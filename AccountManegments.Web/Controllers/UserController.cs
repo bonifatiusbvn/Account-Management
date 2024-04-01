@@ -126,18 +126,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                var Updateuser = new UserViewModel()
-                {
-                    Id = UpdateUser.Id,
-                    FirstName = UpdateUser.FirstName,
-                    LastName = UpdateUser.LastName,
-                    UserName = UpdateUser.UserName,
-                    Password = UpdateUser.Password,
-                    Role = UpdateUser.Role,
-                    Email = UpdateUser.Email,
-                    PhoneNo = UpdateUser.PhoneNo,
-                };
-                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "Authentication/UpdateUserDetails");
+                
+                ApiResponseModel postUser = await APIServices.PostAsync(UpdateUser, "Authentication/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
@@ -216,6 +206,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public IActionResult RolewisePermission()
         {
@@ -245,28 +236,7 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-    
 
-        [HttpPost]
-        public async Task<IActionResult> GetFormGroupList()
-        {
-
-            try
-            {
-                List<FormMasterModel> formGroupList = new List<FormMasterModel>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/GetFormGroupList");
-                if (postuser.data != null)
-                {
-                    formGroupList = JsonConvert.DeserializeObject<List<FormMasterModel>>(postuser.data.ToString());
-
-                }
-                return PartialView("~/Views/User/_FormGroupListPartial.cshtml", formGroupList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         [HttpPost]
         public async Task<IActionResult> InsertMultipleRolewiseFormPermission()
@@ -291,5 +261,50 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<IActionResult> GetRolewiseFormListById(int RoleId)
+        {
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetRolewiseFormListById?RoleId=" + RoleId);
+                if (response.code == 200)
+                {
+                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/User/_editRolewiseFormPartial.cshtml", RolewiseFormList);
+                }
+                else
+                {
+                    return Ok(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
+        {
+            try
+            {
+                var rolewisePermissionDetails = HttpContext.Request.Form["RolewisePermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(rolewisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleRolewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message,postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message,postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }     
     }
 }

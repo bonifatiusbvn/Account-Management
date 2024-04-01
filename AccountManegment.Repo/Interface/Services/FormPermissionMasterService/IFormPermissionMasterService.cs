@@ -21,7 +21,9 @@ namespace AccountManagement.Repository.Interface.Services.FormPermissionMasterSe
 
         Task<ApiResponseModel> InsertMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> InsertRolewiseFormPermission);
 
-        Task<List<RolewiseFormPermissionModel>> GetRolewiseFormList(int RoleId);
+        Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(int RoleId);
+
+        Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions);
 
     }
 }
