@@ -21,10 +21,11 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal Price { get; set; }
 
         public decimal? Discount { get; set; }
+        public decimal? DiscountPer { get; set; }
 
-        public decimal Gst { get; set; }
+        public decimal? Gstper { get; set; }
 
-        public decimal Gstamount { get; set; }
+        public decimal? Gstamount { get; set; }
 
         public string? PaymentStatus { get; set; }
 

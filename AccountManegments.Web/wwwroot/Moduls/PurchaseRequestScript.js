@@ -1,4 +1,7 @@
-﻿var _editCompanyselectedValue = "";
+﻿
+var TotalAmount = '';
+
+var _editCompanyselectedValue = "";
 var _editSupplierselectedValue = "";
 var _editItemselectedValue = "";
 
@@ -10,6 +13,7 @@ GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
+
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -20,9 +24,7 @@ function AllPurchaseRequestListTable() {
 
             $("#purchaseRequesttbody").html(result);
         })
-        .fail(function (error) {
-            console.error(error);
-        });
+
 }
 
 function filterPurchaseRequestTable() {
@@ -77,7 +79,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
-     $('.ac-detail').removeClass('d-none');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -415,6 +417,42 @@ function sortPurchaseOrderTable() {
         }
     });
 }
+function EditPurchaseOrderDetails(Id) {
+    debugger
+
+    $.ajax({
+        url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        success: function (response) {
+            debugger
+
+            $('#purchaseorderid').val(response.id);
+            $('#txtcompanyname').val(response.toCompanyId);
+            $('#txtbillingAddress').val(response.billingAddress);
+            $('#txtPoId').val(response.poid);
+            $('#orderdate').val(response.date);
+            $('#txtSuppliername').val(response.fromSupplierId);
+            $('#searchItemname').val(response.itemId);
+            $('#totalgst').val(response.totalGstamount);
+            $('#cart-total').val(response.totalAmount);
+            $('#txtdelivryschedule').val(response.deliveryShedule);
+            $('#txtshippingAddress').val(response.shippingAddress);
+
+            //var button = document.getElementById("purchaseorderid");
+            //if ($('#purchaseorderid').val() != '') {
+            //    button.textContent = "Update";
+            //}
+            //var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
+            //resetErrorMessages()
+            //offcanvas.show();
+            window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
 
 function GetCompanyDetails() {
     $('#txtcompanyname').empty();
@@ -438,14 +476,9 @@ function GetItemDetails() {
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
-            if (result.length > 0) {
-                $.each(result, function (i, data) {
-                    $('#searchItemname').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
-                });
-            }
-            if (_editItemselectedValue != "") {
-                $('#searchItemname').val(_editItemselectedValue);
-            }
+            $.each(result, function (i, data) {
+                $('#searchItemname').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+            });
         }
     });
 }
@@ -467,9 +500,10 @@ function GetSupplierDetails() {
 }
 $(document).ready(function () {
     $('#txtcompanyname').change(function () {
-        var CompanyId = $(this).val();
+        var Company = $(this).val();
+        $('#txtcompany').val(Company);
         $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
             type: 'GET',
             success: function (result) {
                 $('#companybillingaddressDetails').empty().append(
@@ -532,8 +566,10 @@ function SerchItemDetailsById() {
         }
     });
 }
-// Get today's date
+
+
 $(document).ready(function () {
+
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -761,19 +797,44 @@ function validateAndInsertPurchaseOrder() {
     if (productname === "") {
         document.getElementById("searchvalidationMessage").innerText = "Please Select Product!";
         isValid = false;
-    } 
+    }
     if (deliveryschedule === "") {
         document.getElementById("spndelivryschedule").innerText = "Enter Delievery Schedule";
         isValid = false;
-    } 
+    }
     if (shippingaddress === "") {
         document.getElementById("spnshippingaddress").innerText = "Enter shipping Address!";
         isValid = false;
-    } 
+    }
     if (isValid) {
             InsertMultiplePurchaseOrderDetails();
     }
 }
+
+
+$(document).ready(function () {
+
+    $("#totalAmount").html('₹' + 00);
+    $('#txtSuppliername').change(function () {
+        debugger;
+        var CompanyId = $('#txtcompany').val();
+        var SupplierId = $(this).val();
+        $.ajax({
+            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+            type: 'GET',
+            success: function (result) {
+                $("#invoicedetails").html(result);
+                $("#totalAmount").html('₹' + TotalAmount);
+            },
+
+        });
+    });
+});
+
+
+
+
+
 
 var paymentSign = "$";
 
@@ -996,11 +1057,7 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-//var cleaveBlocks = new Cleave("#cardNumber", {
-//    blocks: [4, 4, 4, 4],
-//    uppercase: !0
-//}),
-//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],
