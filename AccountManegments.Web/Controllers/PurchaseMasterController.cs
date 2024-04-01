@@ -1,9 +1,11 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -193,16 +195,31 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> CreatePurchaseOrder()
+        public async Task<IActionResult> CreatePurchaseOrder(Guid? id)
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrder/CheckPONo");
-                if (Response.code == 200)
+                PurchaseOrderMasterView response = new PurchaseOrderMasterView();
+                if (id != null)
                 {
-                    ViewBag.PurchaseOrderNo = Response.data;
+                    PurchaseOrderMasterView PODetails = new PurchaseOrderMasterView();
+                    ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrder/GetPurchaseOrderDetailsById?POId=" + id);
+                    if (res.code == 200)
+                    {
+                        response = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(res.data.ToString());
+                    }
+                    ViewBag.PurchaseOrderNo = response.Poid;
                 }
-                return View();
+                else
+                {
+
+                    ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrder/CheckPONo");
+                    if (Response.code == 200)
+                    {
+                        ViewBag.PurchaseOrderNo = Response.data;
+                    }
+                }
+                return View(response);
             }
             catch (Exception ex)
             {
@@ -216,6 +233,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
                 var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
@@ -227,6 +245,49 @@ namespace AccountManegments.Web.Controllers
                 {
                     return Ok(new { postuser.message });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public IActionResult PurchaseOrderList()
+        {
+            return View();
+        }
+        public async Task<IActionResult> PurchaseOrderListView(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+                    return PartialView("~/Views/PurchaseMaster/_PurchaseOrderListPartial.cshtml", GetPOList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> DisplayPurchaseOrderDetails(string Id)
+        {
+            try
+            {
+
+                return RedirectToAction("CreatePurchaseOrder", new { id = Id });
             }
             catch (Exception ex)
             {

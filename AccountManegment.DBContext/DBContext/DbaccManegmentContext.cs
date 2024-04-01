@@ -194,6 +194,10 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
+            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("FK_PurchaseOrderDetails_ItemMaster");
+
             entity.HasOne(d => d.Poref).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.PorefId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -280,14 +284,13 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<SupplierInvoice>(entity =>
         {
-            entity.HasKey(e => e.InvoiceId);
-
             entity.ToTable("SupplierInvoice");
 
-            entity.Property(e => e.InvoiceId).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.InvoiceId).HasMaxLength(100);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");

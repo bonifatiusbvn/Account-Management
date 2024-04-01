@@ -18,11 +18,11 @@ namespace AccountManagement.API.Controllers
         }
         public IPurchaseOrderServices PurchaseOrder { get; }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetPurchaseOrderList")]
-        public async Task<IActionResult> GetPurchaseOrderList()
+        public async Task<IActionResult> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<PurchaseOrderView> PurchaseOrderList = await PurchaseOrder.GetPurchaseOrderList();
+            IEnumerable<PurchaseOrderView> PurchaseOrderList = await PurchaseOrder.GetPurchaseOrderList(searchText,searchBy,sortBy);
             return Ok(new { code = 200, data = PurchaseOrderList.ToList() });
         }
 

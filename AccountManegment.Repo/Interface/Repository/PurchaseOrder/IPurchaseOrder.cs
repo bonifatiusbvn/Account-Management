@@ -11,9 +11,9 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
 {
     public interface IPurchaseOrder
     {
-        Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList();
+        Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy);
         Task<ApiResponseModel> AddPurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails);
-        Task<PurchaseOrderView> GetPurchaseOrderDetailsById(Guid POId);
+        Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsById(Guid POId);
         Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails);
         Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId);
         string CheckPONo();

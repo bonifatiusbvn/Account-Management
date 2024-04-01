@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewData["Title"] = "PurchaseOrderList";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Purchase Order</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0 align-items-center">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">PurchaseOrder Details</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+
+                <form class="ms-auto position-relative">
+                    <a type="button" class="btn btn-info px-5" asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster"><i class="lni lni-circle-plus"></i>PurchaseOrder</a>
+                </form>
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+                                    <div class="row ">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3">
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <input class="form-control" id="txtPurchaseOrderSearch" onkeyup="filterPurchaseOrderTable()" placeholder="Search" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ddlPurchaseOrderSearchBy" onchange="filterPurchaseOrderTable()">
+                                                            <option selected="selected">All</option>
+                                                            <option>SupplierName</option>
+                                                            <option>TotalGstAmount</option>
+                                                            <option>TotalAmount</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ddlPurchaseOrderSortBy" onchange="sortPurchaseOrderTable()">
+                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                            <option value="AscendingSupplierName">SupplierName(a-z)</option>
+                                                            <option value="DescendingSupplierName">SupplierName(z-a)</option>
+                                                            <option value="AscendingTotalGstAmount">TotalGstAmount-Asc </option>
+                                                            <option value="DescendingTotalGstAmount">TotalGstAmount-Des</option>
+                                                            <option value="AscendingTotalAmount">TotalAmount-Asc</option>
+                                                            <option value="DescendingTotalAmount">TotalAmount-Des</option>
+                                                        </select>
+                                                    </div>
+                                                </div><!--end row-->
+                                            </div>
+                                        </div>
+                                    </div><!--end row-->
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Supplier Name</th>
+                                                        <th>GST Amount</th>
+                                                        <th>Total Amount</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="PurchaseOrdertbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--end row-->
+
+
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                        <div class="card radius-10">
+                            <div class="card-body" style="height:650px">
+                                <h5 class="mb-0 mt-4">Item Details</h5>
+                                <hr>
+                                <div class="row g-3 ac-detail d-none">
+                                    <div class="col-6">
+                                        <label class="form-label">Item Name</label>
+                                        <input type="text" class="form-control" id="dspItemName" readonly>
+                                        <input type="hidden" class="form-control" id="dspItemId" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Unit Name</label>
+                                        <input type="text" class="form-control" id="dspUnitName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Price Per Unit</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="text" class="form-control" id="dspPricePerUnit" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">IsWithGST</label>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input font-22" id="dspWithGst" type="checkbox" style="margin-left:-35px;" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">GST Amount</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="text" class="form-control" id="dspGstAmount" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">GST %</label>
+                                        <input type="text" class="form-control" id="dspGstPercentage" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">HsnCode</label>
+                                        <input type="text" class="form-control" id="dspHsnCode" readonly>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/moduls/purchaserequestscript.js"></script>
+}
+
+
