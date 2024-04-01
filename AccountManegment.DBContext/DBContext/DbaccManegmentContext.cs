@@ -53,6 +53,7 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -283,14 +284,13 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<SupplierInvoice>(entity =>
         {
-            entity.HasKey(e => e.InvoiceId);
-
             entity.ToTable("SupplierInvoice");
 
-            entity.Property(e => e.InvoiceId).ValueGeneratedNever();
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.InvoiceId).HasMaxLength(100);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
