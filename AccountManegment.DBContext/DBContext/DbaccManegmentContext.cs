@@ -53,7 +53,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -288,9 +287,9 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.InvoiceId).HasMaxLength(100);
+            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
@@ -302,7 +301,6 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.HasOne(d => d.Site).WithMany(p => p.SupplierInvoices)
                 .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_SupplierInvoice_Site");
         });
 
@@ -311,19 +309,20 @@ public partial class DbaccManegmentContext : DbContext
             entity.HasKey(e => e.InvoiceDetailsId);
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GST");
-            entity.Property(e => e.Gstamount)
+            entity.Property(e => e.Gstper)
                 .HasColumnType("numeric(18, 2)")
-                .HasColumnName("GSTAmount");
+                .HasColumnName("GSTPer");
             entity.Property(e => e.Item)
                 .HasMaxLength(10)
                 .IsFixedLength();
-            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.RefInvoice).WithMany(p => p.SupplierInvoiceDetails)
