@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -68,6 +69,30 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> InsertMultipleSupplierItemDetails()
+        {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["SupplierItems"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
                 }
             }
             catch (Exception ex)

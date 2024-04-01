@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Services.InvoiceMaster;
 using Microsoft.AspNetCore.Http;
@@ -91,6 +92,25 @@ namespace AccountManagement.API.Controllers
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.code, responseModel);
+        }
+
+        [HttpPost]
+        [Route("InsertMultipleSupplierItemDetails")]
+        public async Task<IActionResult> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SupplierInvoicemaster = await SupplierInvoice.InsertMultipleSupplierItemDetails(SupplierItemDetails);
+            if (SupplierInvoicemaster.code == 200)
+            {
+                response.code = SupplierInvoicemaster.code;
+                response.message = SupplierInvoicemaster.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 {
-    public class SupplierInvoiceDetailsModel
+    public class SupplierInvoiceMasterView
     {
         public int InvoiceDetailsId { get; set; }
 

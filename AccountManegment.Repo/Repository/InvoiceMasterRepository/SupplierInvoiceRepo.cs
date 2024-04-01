@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -200,6 +201,64 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                // Generate a single InvoiceId for all items
+                var invoiceId = Guid.NewGuid();
+
+                foreach (var item in SupplierItemDetails)
+                {
+                    var supplierInvoice = new SupplierInvoice()
+                    {
+                        InvoiceId = invoiceId, // Use the same InvoiceId for all items
+                        SiteId = item.SiteId,
+                        FromSupplierId = item.FromSupplierId,
+                        ToCompanyId = item.ToCompanyId,
+                        TotalAmount = item.TotalAmount,
+                        Description = item.Description,
+                        DeliveryShedule = item.DeliveryShedule,
+                        TotalPrice = item.TotalPrice,
+                        TotalDiscount = item.TotalDiscount,
+                        TotalGstamount = item.TotalGstamount,
+                        Roundoff = item.Roundoff,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.SupplierInvoices.Add(supplierInvoice);
+
+                    var supplierInvoiceDetail = new SupplierInvoiceDetail()
+                    {
+                        RefInvoiceId = invoiceId, // Use the same InvoiceId for all items
+                        Item = item.Item,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        Gstamount = item.Gstamount,
+                        PaymentStatus = item.PaymentStatus,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.SupplierInvoiceDetails.Add(supplierInvoiceDetail);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Supplier Order Inserted Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
+            }
+            return response;
+        }
+
 
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetail)
         {
