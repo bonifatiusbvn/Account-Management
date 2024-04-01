@@ -1,62 +1,50 @@
 ﻿AllSupplierInvoiceListTable()
-$(document).ready(function () {
-    var itemCounter = 0;
+GetItemDetailsList()
+function GetItemDetailsList() {
 
-    $("#addItemBtn").click(function () {
-        var newItem = $(".invoice-item:first").clone().removeAttr("style");
-        newItem.find("input").val(""); // Clear input values for the new item
-        $("#invoiceItems").append(newItem);
-
-        itemCounter++;
+    $.ajax({
+        url: '/ItemMaster/GetItemNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#searchItemname').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+            });
+        }
     });
+}
+
+function searchItemDetailById() {
+
+    var GetItemId = {
+        ItemId: $('#searchItemname').val(),
+
+    }
+    var form_data = new FormData();
+    form_data.append("ITEMID", JSON.stringify(GetItemId));
 
 
-    $("#SubmitInvoiceBtn").click(function (e) {
-
-        e.preventDefault();
-
-        var formData =
-        {
-            CompanyAddress: $("#idStatusCompany").val(),
-            InvoiceNo: $("#InvoiceNo").val(),
-            Date: $("#date-field").val(),
-            PaymentStatus: $("#choices-payment-status").val(),
-            TotalAmount: $("#totalamountInput").val(),
-            BillingName: $("#billingName").val(),
-            BillingAddress: $("#billingAddress").val(),
-            BillingNumber: $("#billingPhoneno").val(),
-            BillingTaxNumber: $("#billingTaxno").val(),
-            ShippingName: $("#shippingName").val(),
-            ShippingAddress: $("#shippingAddress").val(),
-            ShippingNumber: $("#shippingPhoneno").val(),
-            ShippingTaxNumber: $("#shippingTaxno").val(),
-            ProductName: $("#productName-1").val(),
-            ProductDetails: $("#productDetails-1").val(),
-            HSN: $("#productHsn-1").val(),
-            Price: $("#productRate-1").val(),
-            Quantity: $("#product-qty-1").val(),
-            PaymentMethod: $("#choices-payment-type").val(),
-            CardHolderName: $("#cardholderName").val(),
-            CardNumber: $("#cardNumber").val(),
-        };
-        $.ajax({
-            url: '/Invoice/GenerateInvoice',
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                if (response) {
-                    generatePdf(response);
-                } else {
-                    alert("Error generating invoice. Please try again.");
-                }
-            },
-            error: function () {
-                alert("An error occurred. Please try again.");
+    $.ajax({
+        url: '/InvoiceMaster/DisplayItemDetailById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
             }
-        });
+            else {
+                var GetItemId = $('#searchItemname').val();
+                if (GetItemId === "Select ProductName" || GetItemId === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#searchvalidationMessage').text('');
+                }
+            }
+        }
     });
-
-});
+}
 
 function AllSupplierInvoiceListTable() {
    

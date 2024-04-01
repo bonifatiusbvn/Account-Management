@@ -281,6 +281,7 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> DisplayPurchaseOrderDetails(string Id)
         {

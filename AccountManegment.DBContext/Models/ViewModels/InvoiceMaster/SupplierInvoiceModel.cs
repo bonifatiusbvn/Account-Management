@@ -8,7 +8,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 {
     public class SupplierInvoiceModel
     {
-        public Guid InvoiceId { get; set; }
+        public Guid Id { get; set; }
+        public string? InvoiceId { get; set; }
 
         public Guid SiteId { get; set; }
 

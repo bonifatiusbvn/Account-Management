@@ -31,9 +31,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetSupplierInvoiceById")]
-        public async Task<IActionResult> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<IActionResult> GetSupplierInvoiceById(Guid Id)
         {
-            var supplierDetails = await SupplierInvoice.GetSupplierInvoiceById(InvoiceId);
+            var supplierDetails = await SupplierInvoice.GetSupplierInvoiceById(Id);
             return Ok(new { code = 200, data = supplierDetails });
         }
 
@@ -67,11 +67,11 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("DeleteSupplierInvoice")]
-        public async Task<IActionResult> DeleteSupplierInvoice(Guid InvoiceId)
+        public async Task<IActionResult> DeleteSupplierInvoice(Guid Id)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
 
-            var invoiceId = await SupplierInvoice.DeleteSupplierInvoice(InvoiceId);
+            var invoiceId = await SupplierInvoice.DeleteSupplierInvoice(Id);
             try
             {
 
@@ -111,6 +111,14 @@ namespace AccountManagement.API.Controllers
                 response.message = "There Is Some Problem In Your Request!";
             }
             return StatusCode(response.code, response);
+        }
+
+        [HttpGet]
+        [Route("CheckSupplierInvoiceNo")]
+        public IActionResult CheckSupplierInvoiceNo()
+        {
+            var checkInvoiceNo = SupplierInvoice.CheckSupplierInvoiceNo();
+            return Ok(new { code = 200, data = checkInvoiceNo });
         }
     }
 }

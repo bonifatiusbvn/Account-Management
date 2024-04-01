@@ -23,14 +23,14 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.AddSupplierInvoice(SupplierInvoiceDetails);
         }
 
-        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid InvoiceId)
+        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid Id)
         {
-            return await SupplierInvoice.DeleteSupplierInvoice(InvoiceId);
+            return await SupplierInvoice.DeleteSupplierInvoice(Id);
         }
 
-        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid Id)
         {
-            return await SupplierInvoice.GetSupplierInvoiceById(InvoiceId);
+            return await SupplierInvoice.GetSupplierInvoiceById(Id);
         }
 
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
@@ -46,6 +46,11 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetails)
         {
             return await SupplierInvoice.UpdateSupplierInvoice(SupplierInvoiceDetails);
+        }
+
+        public string CheckSupplierInvoiceNo()
+        {
+            return SupplierInvoice.CheckSupplierInvoiceNo();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
@@ -16,8 +17,24 @@ namespace AccountManegments.Web.Controllers
         {
             APIServices = aPIServices;
         }
-        public IActionResult CreateInvoice()
+        public async Task<IActionResult> CreateInvoice()
         {
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "SupplierInvoice/CheckSupplierInvoiceNo");
+
+                if (Response.code == 200)
+                {
+                    ViewData["SupplierInvoiceNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
             return View();
         }
 
@@ -70,6 +87,28 @@ namespace AccountManegments.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemDetailById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<ItemMasterModel>(ItemId.ToString());
+                ItemMasterModel Items = new ItemMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
+                    Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/InvoiceMaster/_GetItemsDetailsListPartial.cshtml", Items);
             }
             catch (Exception ex)
             {

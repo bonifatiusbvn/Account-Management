@@ -6,7 +6,6 @@ namespace AccountManagement.API;
 public partial class SupplierInvoice
 {
     public Guid Id { get; set; }
-
     public string? InvoiceId { get; set; }
 
     public Guid SiteId { get; set; }

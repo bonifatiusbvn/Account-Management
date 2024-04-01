@@ -82,7 +82,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 supplierList = (from a in Context.SupplierInvoiceDetails.Where(x => x.InvoiceDetailsId == InvoiceDetailsId)
-                                join b in Context.SupplierInvoices on a.RefInvoiceId equals b.InvoiceId
+                                join b in Context.SupplierInvoices on a.RefInvoiceId equals b.Id
                                 join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
                                 select new SupplierInvoiceDetailsModel
                                 {
@@ -112,7 +112,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                var supplierList = (from a in Context.SupplierInvoiceDetails
-                                join b in Context.SupplierInvoices on a.RefInvoiceId equals b.InvoiceId
+                                join b in Context.SupplierInvoices on a.RefInvoiceId equals b.Id
                                 join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
                                 select new SupplierInvoiceDetailsModel
                                 {
