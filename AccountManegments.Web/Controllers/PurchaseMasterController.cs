@@ -203,7 +203,6 @@ namespace AccountManegments.Web.Controllers
                 PurchaseOrderMasterView response = new PurchaseOrderMasterView();
                 if (id != null)
                 {
-                    PurchaseOrderMasterView PODetails = new PurchaseOrderMasterView();
                     ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrder/GetPurchaseOrderDetailsById?POId=" + id);
                     if (res.code == 200)
                     {
@@ -290,6 +289,48 @@ namespace AccountManegments.Web.Controllers
             {
 
                 return RedirectToAction("CreatePurchaseOrder", new { id = Id });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails()
+         {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["PODETAILS"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "PurchaseOrder/UpdateMultiplePurchaseOrderDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeletePurchaseOrderDetails(Guid POId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseOrder/DeletePurchaseOrderDetails?POId=" + POId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

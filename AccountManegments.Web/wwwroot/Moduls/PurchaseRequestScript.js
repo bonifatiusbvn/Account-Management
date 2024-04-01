@@ -1,9 +1,19 @@
-﻿AllPurchaseRequestListTable();
+﻿
+var TotalAmount = '';
+
+var _editCompanyselectedValue = "";
+var _editSupplierselectedValue = "";
+var _editItemselectedValue = "";
+
+
+
+AllPurchaseRequestListTable();
 GetSiteDetails();
 GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
+
 GetPOList();
 
 function AllPurchaseRequestListTable() {
@@ -16,9 +26,7 @@ function AllPurchaseRequestListTable() {
 
             $("#purchaseRequesttbody").html(result);
         })
-        .fail(function (error) {
-            console.error(error);
-        });
+
 }
 
 function filterPurchaseRequestTable() {
@@ -74,7 +82,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
-     $('.ac-detail').removeClass('d-none');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -412,13 +420,15 @@ function sortPurchaseOrderTable() {
         }
     });
 }
-function EditPurchaseOrderDetails(Id) {debugger
+function EditPurchaseOrderDetails(Id) {
+    debugger
 
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
-        success: function (response) {debugger
+        success: function (response) {
+            debugger
 
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
@@ -431,7 +441,7 @@ function EditPurchaseOrderDetails(Id) {debugger
             $('#cart-total').val(response.totalAmount);
             $('#txtdelivryschedule').val(response.deliveryShedule);
             $('#txtshippingAddress').val(response.shippingAddress);
-            
+
             //var button = document.getElementById("purchaseorderid");
             //if ($('#purchaseorderid').val() != '') {
             //    button.textContent = "Update";
@@ -448,18 +458,24 @@ function EditPurchaseOrderDetails(Id) {debugger
 }
 
 function GetCompanyDetails() {
-
+    $('#txtcompanyname').empty();
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtcompanyname').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
-            });
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#txtcompanyname').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                });
+            }
+
+            if (_editCompanyselectedValue != "") {
+                $('#txtcompanyname').val(_editCompanyselectedValue);
+            }
         }
     });
 }
 function GetItemDetails() {
-
+    $('#searchItemname').empty();
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
@@ -470,21 +486,27 @@ function GetItemDetails() {
     });
 }
 function GetSupplierDetails() {
-
+    $('#txtSuppliername').empty();
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
-            });
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+                });
+            }
+            if (_editSupplierselectedValue != "") {
+                $('#txtSuppliername').val(_editSupplierselectedValue);
+            }
         }
     });
 }
 $(document).ready(function () {
     $('#txtcompanyname').change(function () {
-        var CompanyId = $(this).val();
+        var Company = $(this).val();
+        $('#txtcompany').val(Company);
         $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + CompanyId,
+            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
             type: 'GET',
             success: function (result) {
                 $('#companybillingaddressDetails').empty().append(
@@ -547,8 +569,10 @@ function SerchItemDetailsById() {
         }
     });
 }
-// Get today's date
+
+
 $(document).ready(function () {
+
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -578,6 +602,7 @@ function InsertMultiplePurchaseOrderDetails() {
             BillingAddress: $("#txtbillingAddress").val(),
             ShippingAddress: $("#txtshippingAddress").val(),
             Item: orderRow.find("#txtItemName").val(),
+            ItemId: orderRow.find("#txtItemId").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
             TotalPrice: orderRow.find("#txtproductamount").val(),
@@ -606,12 +631,12 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
-                    window.location = '/PurchaseMaster/CreatePurchaseOrder';
+                    window.location = '/PurchaseMaster/PurchaseOrderList';
                 });
             }
             else {
                 Swal.fire({
-                    title: Result.message,
+                    title: "There Is Some Prolem in Your Request!",
                     icon: 'warning',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
@@ -629,6 +654,131 @@ function InsertMultiplePurchaseOrderDetails() {
         }
     });
 }
+
+function UpdateMultiplePurchaseOrderDetails() {
+
+    var orderDetails = [];
+    var numOrders = $(".product").length;
+    $(".product").each(function () {
+
+        var orderRow = $(this);
+        var objData = {
+            Id: $("#RefPOid").val(),
+            SiteId: $("#siteid").val(),
+            Poid: $("#txtPoId").val(),
+            Date: $("#orderdate").val(),
+            FromSupplierId: $("#txtSuppliername").val(),
+            ToCompanyId: $("#txtcompanyname").val(),
+            TotalAmount: $("#cart-total").val(),
+            TotalGstamount: $("#totalgst").val(),
+            BillingAddress: $("#txtbillingAddress").val(),
+            ShippingAddress: $("#txtshippingAddress").val(),
+            Item: orderRow.find("#txtItemName").val(),
+            ItemId: orderRow.find("#txtItemId").val(),
+            UnitTypeId: orderRow.find("#UnitTypeId").val(),
+            Quantity: orderRow.find("#txtproductquantity").val(),
+            TotalPrice: orderRow.find("#txtproductamount").val(),
+            Price: orderRow.find("#txtproductamount").val(),
+            Gst: orderRow.find("#txtproductamountwithGST").val(),
+            ItemTotal: orderRow.find("#txtproducttotalamount").val(),
+            DeliveryShedule: $("#txtdelivryschedule").val(),
+            CreatedBy: $("#createdbyid").val(),
+        };
+        orderDetails.push(objData);
+    }); 
+    var form_data = new FormData();
+    form_data.append("PODETAILS", JSON.stringify(orderDetails));
+    $.ajax({
+        url: '/PurchaseMaster/UpdateMultiplePurchaseOrderDetails',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.message == "Purchase Orders Updated Successfully") {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/PurchaseMaster/PurchaseOrderList';
+                });
+            }
+            else {
+                Swal.fire({
+                    title: "There Is Some Prolem in Your Request!",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
+    });
+}
+
+function deleteItemDetails(POId) {
+
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/PurchaseMaster/DeletePurchaseOrderDetails?POId=' + POId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/PurchaseMaster/PurchaseOrderList';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete PO!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/PurchaseMaster/PurchaseOrderList';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'PO Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
 function validateAndInsertPurchaseOrder() {
 
     var companyname = document.getElementById("txtcompanyname").value.trim();
@@ -650,19 +800,44 @@ function validateAndInsertPurchaseOrder() {
     if (productname === "") {
         document.getElementById("searchvalidationMessage").innerText = "Please Select Product!";
         isValid = false;
-    } 
+    }
     if (deliveryschedule === "") {
         document.getElementById("spndelivryschedule").innerText = "Enter Delievery Schedule";
         isValid = false;
-    } 
+    }
     if (shippingaddress === "") {
         document.getElementById("spnshippingaddress").innerText = "Enter shipping Address!";
         isValid = false;
-    } 
+    }
     if (isValid) {
-        InsertMultiplePurchaseOrderDetails();
+            InsertMultiplePurchaseOrderDetails();
     }
 }
+
+
+$(document).ready(function () {
+
+    $("#totalAmount").html('₹' + 00);
+    $('#txtSuppliername').change(function () {
+        debugger;
+        var CompanyId = $('#txtcompany').val();
+        var SupplierId = $(this).val();
+        $.ajax({
+            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+            type: 'GET',
+            success: function (result) {
+                $("#invoicedetails").html(result);
+                $("#totalAmount").html('₹' + TotalAmount);
+            },
+
+        });
+    });
+});
+
+
+
+
+
 
 var paymentSign = "$";
 
@@ -885,11 +1060,7 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-//var cleaveBlocks = new Cleave("#cardNumber", {
-//    blocks: [4, 4, 4, 4],
-//    uppercase: !0
-//}),
-//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],

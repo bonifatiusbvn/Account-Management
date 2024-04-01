@@ -56,10 +56,10 @@ namespace AccountManegments.Web.Models
         {
             get
             {
-                if (StaticHttpContext.Session.GetString("SiteName") == null)
+                if (string.IsNullOrEmpty(StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value))
                     return null;
                 else
-                    return StaticHttpContext.Session.GetString("SiteName");
+                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value;
 
             }
             set
@@ -71,10 +71,10 @@ namespace AccountManegments.Web.Models
         {
             get
             {
-                if (StaticHttpContext.Session.GetString("SiteId") == null)
+                if (string.IsNullOrEmpty(StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value))
                     return null;
                 else
-                    return StaticHttpContext.Session.GetString("SiteId"); 
+                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value; 
                
             }
             set

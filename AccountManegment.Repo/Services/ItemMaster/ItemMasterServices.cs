@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.ItemMaster
 {
-    public class ItemMasterServices:IItemMasterServices
+    public class ItemMasterServices : IItemMasterServices
     {
         public ItemMasterServices(IItemMaster itemMaster)
         {

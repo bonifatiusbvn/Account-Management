@@ -24,6 +24,7 @@ public partial class PurchaseOrderDetail
     public decimal Gst { get; set; }
 
     public decimal ItemTotal { get; set; }
+    public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
 

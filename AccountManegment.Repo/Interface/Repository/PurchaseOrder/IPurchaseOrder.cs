@@ -18,6 +18,7 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId);
         string CheckPONo();
         Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails);
+        Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails);
         Task<ApiResponseModel> DisplayInvoiceDetails(Guid Id);
     }
 }

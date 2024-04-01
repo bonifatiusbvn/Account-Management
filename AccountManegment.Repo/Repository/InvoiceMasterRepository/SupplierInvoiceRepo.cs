@@ -4,13 +4,14 @@ using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-
+#nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 {
     public class SupplierInvoiceRepo : ISupplierInvoice
@@ -36,6 +37,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CompanyId = SupplierInvoiceDetail.CompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
+
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
@@ -75,7 +77,44 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid Id)
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        {
+            try
+            {
+                var supplierInvoices = await (from a in Context.SupplierInvoices
+                                              where a.CompanyId == CompanyId
+                                                    && a.SupplierId == SupplierId
+                                                    && a.IsPayOut == false
+                                                    && a.PaymentStatus == "Pending"
+                                              join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                              join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                              select new SupplierInvoiceModel
+                                              {
+                                                  InvoiceId = a.Id,
+                                                  InvoiceNo = a.InvoiceId,
+                                                  FromSupplierId = a.SupplierId,
+                                                  FromSupplierName = b.SupplierName,
+                                                  ToCompanyId = a.CompanyId,
+                                                  ToCompanyName = c.CompanyName,
+                                                  TotalAmount = a.TotalAmount,
+                                                  TotalDiscount = a.TotalDiscount,
+                                                  TotalGstamount = a.TotalGstamount,
+                                                  Description = a.Description,
+                                                  Roundoff = a.Roundoff,
+                                                  IsPayOut = a.IsPayOut,
+                                                  PaymentStatus = a.PaymentStatus
+                                              }).ToListAsync();
+
+                return supplierInvoices;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
         {
 
             SupplierInvoiceModel supplierList = new SupplierInvoiceModel();
@@ -87,15 +126,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 join d in Context.Sites on a.SiteId equals d.SiteId
                                 select new SupplierInvoiceModel
                                 {
-                                    Id = a.Id,
-                                    InvoiceId = a.InvoiceId,
-                                    //SiteId = a.SiteId,
-                                    SupplierId = a.SupplierId,
+                                    InvoiceId = a.Id,
+                                    FromSupplierId = a.SupplierId,
+                                    FromSupplierName = b.SupplierName,
                                     TotalAmount = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
                                     Description = a.Description,
                                     Roundoff = a.Roundoff,
+                                    ToCompanyId = a.CompanyId,
+                                    ToCompanyName = c.CompanyName,
                                     CompanyId = a.CompanyId,
                                     CompanyName = c.CompanyName,
                                     SiteName = d.SiteName,

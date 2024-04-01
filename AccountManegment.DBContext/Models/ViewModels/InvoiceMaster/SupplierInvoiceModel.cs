@@ -8,8 +8,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 {
     public class SupplierInvoiceModel
     {
-        public Guid Id { get; set; }
-        public string? InvoiceId { get; set; }
+        public Guid InvoiceId { get; set; }
+        public string? InvoiceNo { get; set; }
 
         public Guid? SiteId { get; set; }
 
@@ -20,6 +20,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal TotalAmount { get; set; }
 
         public string? Description { get; set; }
+
+        public string? PaymentStatus { get; set; }
+
 
         public decimal? TotalDiscount { get; set; }
 

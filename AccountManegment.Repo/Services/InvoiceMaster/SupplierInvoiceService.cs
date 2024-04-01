@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.InvoiceMaster
 {
-    public class SupplierInvoiceService:ISupplierInvoiceService
+    public class SupplierInvoiceService : ISupplierInvoiceService
     {
         public SupplierInvoiceService(ISupplierInvoice supplierInvoice)
         {
@@ -28,7 +28,12 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.DeleteSupplierInvoice(Id);
         }
 
-        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid Id)
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        {
+            return await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
+        }
+
+        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
         {
             return await SupplierInvoice.GetSupplierInvoiceById(Id);
         }
