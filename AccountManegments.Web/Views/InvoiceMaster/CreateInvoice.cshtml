@@ -6,6 +6,8 @@
     ViewData["Title"] = "CreateInvoice";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Invoice</div>
@@ -111,7 +113,7 @@
                                             <div class="col-lg-3 col-sm-6">
                                                 <div>
                                                     <div>
-                                                        <label for="searchItemName" class="text-muted text-uppercase fw-semibold">Product Names</label>
+                                                        <label for="searchItemName" class="text-muted text-uppercase fw-semibold">Item Names</label>
                                                     </div>
                                                     <select id="searchItemName" class="form-control bg-light border-0" style="border:hidden;">
                                                         <option selected disabled value="">Select Product Name</option>
@@ -202,7 +204,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--end col-->                               
+                                            <!--end col-->
                                         </div>
                                         <!--end row-->
                                         <div class="mt-4">
@@ -228,9 +230,9 @@
     <!--end col-->
 </div>
 <!--end row-->
-
-
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="~/moduls/invoicemasterscript.js"></script>
 }
+
 
