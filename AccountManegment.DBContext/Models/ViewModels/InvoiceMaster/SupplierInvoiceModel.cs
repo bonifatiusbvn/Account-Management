@@ -42,7 +42,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public DateTime? UpdatedOn { get; set; }
         public string? SiteName { get; set; }
 
-        public string SupplierName { get; set; }
+        public string? SupplierName { get; set; }
 
         public string? CompanyName { get; set; }
     }

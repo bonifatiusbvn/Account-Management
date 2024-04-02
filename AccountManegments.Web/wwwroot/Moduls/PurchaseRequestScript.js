@@ -1,6 +1,4 @@
 ﻿
-var TotalAmount = '';
-
 var _editCompanyselectedValue = "";
 var _editSupplierselectedValue = "";
 var _editItemselectedValue = "";
@@ -813,38 +811,6 @@ function validateAndInsertPurchaseOrder() {
         InsertMultiplePurchaseOrderDetails();
     }
 }
-
-
-$(document).ready(function () {
-
-    $("#totalAmount").html('₹' + 00);
-    $('#txtSuppliername').change(function () {
-        debugger;
-        var CompanyId = $('#txtcompany').val();
-        var SupplierId = $(this).val();
-        $.ajax({
-            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
-            type: 'GET',
-            success: function (result) {
-                $("#invoicedetails").html(result);
-                $("#totalAmount").html('₹' + TotalAmount);
-            },
-
-        });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

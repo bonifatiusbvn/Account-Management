@@ -213,7 +213,7 @@ function DeleteSupplierInvoice(InvoiceId)
     });   
 }
 
-function InsertMultipleSupplierItem() {
+function InsertMultipleSupplierItem() {debugger
 
     var orderDetails = [];
     var numOrders = $(".product").length;
@@ -231,11 +231,10 @@ function InsertMultipleSupplierItem() {
             Item: orderRow.find("#ProductId").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtProductQuantity").val(),
-            Price: orderRow.find("#txtPricePerUnit").val(),
+            Price: orderRow.find("#txtProductTotalAmount").val(),
             GstPer: orderRow.find("#txtGSTPer").val(),
             Gst: orderRow.find("#txtProductAmountWithGST").val(),
-            TotalAmount: orderRow.find("#txtProductTotalAmount").val(),
-            PaymentStatus: $("#txtPaymentStatus").val(),
+            Discription: $("#txtDiscription").val(),
             CreatedBy: $("#createdById").val(),
         };
         orderDetails.push(objData);

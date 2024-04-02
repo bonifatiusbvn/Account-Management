@@ -325,6 +325,13 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         CreatedOn = DateTime.Now,
                     };
                     Context.PurchaseOrders.Add(PurchaseOrder);
+                    var PurchaseAddress = new PodeliveryAddress()
+                    {
+                        Poid = PurchaseOrder.Id,
+                        Address = firstOrderDetail.ShippingAddress,
+                        IsDeleted = false,
+                    };
+                    Context.PodeliveryAddresses.Add(PurchaseAddress);
                 foreach (var item in PurchaseOrderDetails)
                 {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
@@ -342,16 +349,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
-
-                    var PurchaseAddress = new PodeliveryAddress()
-                    {
-                        Poid = PurchaseOrder.Id,
-                        Address = item.ShippingAddress,
-                        IsDeleted = false,
-                    };
-                    Context.PodeliveryAddresses.Add(PurchaseAddress);
                     Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
+
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
