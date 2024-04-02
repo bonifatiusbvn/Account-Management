@@ -213,7 +213,7 @@ function DeleteSupplierInvoice(InvoiceId)
     });   
 }
 
-function InsertMultipleSupplierItem() {debugger
+function InsertMultipleSupplierItem() {
 
     var orderDetails = [];
     var numOrders = $(".product").length;
