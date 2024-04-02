@@ -18,6 +18,5 @@ namespace AccountManagement.Repository.Interface.Services.PurchaseOrderService
         string CheckPONo();
         Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails);
         Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails);
-        Task<ApiResponseModel> DisplayInvoiceDetails(Guid Id);
     }
 }

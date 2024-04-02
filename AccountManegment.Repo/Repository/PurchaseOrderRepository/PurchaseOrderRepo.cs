@@ -30,7 +30,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 var PurchaseOrder = new PurchaseOrder()
                 {
                     Id = Guid.NewGuid(),
-                    SiteId=PurchaseOrderDetails.SiteId,
+                    SiteId = PurchaseOrderDetails.SiteId,
                     FromSupplierId = PurchaseOrderDetails.FromSupplierId,
                     ToCompanyId = PurchaseOrderDetails.ToCompanyId,
                     TotalAmount = PurchaseOrderDetails.TotalAmount,
@@ -42,7 +42,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
-                responseModel.code=(int)HttpStatusCode.OK;
+                responseModel.code = (int)HttpStatusCode.OK;
                 responseModel.message = "Purchase Order Inserted Successfully";
                 Context.PurchaseOrders.Add(PurchaseOrder);
                 Context.SaveChanges();
@@ -170,47 +170,59 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             PurchaseOrderMasterView PurchaseOrder = new PurchaseOrderMasterView();
             try
             {
-                PurchaseOrder=(from a in Context.PurchaseOrders.Where(x=>x.Id==POId)
-                               join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                               join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                               join d in Context.Sites on a.SiteId equals d.SiteId
-                               join g in Context.PodeliveryAddresses on a.Id equals g.Poid
-                               select new PurchaseOrderMasterView
-                               {
-                                   Id = a.Id,
-                                   SiteId = a.SiteId,
-                                   SiteName=d.SiteName,
-                                   Poid=a.Poid,
-                                   FromSupplierId=a.FromSupplierId,
-                                   SupplierName=b.SupplierName,
-                                   ToCompanyId=a.ToCompanyId,
-                                   CompanyName=c.CompanyName,
-                                   TotalAmount=a.TotalAmount,
-                                   Description = a.Description,
-                                   DeliveryShedule = a.DeliveryShedule,
-                                   TotalDiscount = a.TotalDiscount,
-                                   TotalGstamount = a.TotalGstamount,
-                                   BillingAddress = a.BillingAddress,
-                                   ShippingAddress=g.Address,
-                                   CreatedBy = a.CreatedBy,
-                                   CreatedOn = a.CreatedOn,
-                               }).First();
+                PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
+                                 join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
+                                 join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                 join d in Context.Sites on a.SiteId equals d.SiteId
+                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                 select new PurchaseOrderMasterView
+                                 {
+                                     Id = a.Id,
+                                     SiteId = a.SiteId,
+                                     SiteName = d.SiteName,
+                                     Poid = a.Poid,
+                                     FromSupplierId = a.FromSupplierId,
+                                     SupplierName = b.SupplierName,
+                                     ToCompanyId = a.ToCompanyId,
+                                     CompanyName = c.CompanyName,
+                                     TotalAmount = a.TotalAmount,
+                                     Description = a.Description,
+                                     DeliveryShedule = a.DeliveryShedule,
+                                     TotalDiscount = a.TotalDiscount,
+                                     TotalGstamount = a.TotalGstamount,
+                                     BillingAddress = a.BillingAddress,
+                                     ShippingAddress = g.Address,
+                                     Date = a.Date,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                 }).First();
 
-                List<POItemDetailsModel> itemlist =(from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
-                                                    join b in Context.ItemMasters on a.ItemId equals b.ItemId
-                                                    select new POItemDetailsModel
-                                                    {
-                                                        ItemName = a.Item,
-                                                        ItemId=a.ItemId,
-                                                        Quantity = a.Quantity,
-                                                        ItemAmount=a.ItemTotal,
-                                                        Gstamount = a.Gst,
-                                                        UnitType=a.UnitTypeId,
-                                                        PricePerUnit=a.Price,
-                                                        GstPercentage=b.Gstper,
-                                                    }).ToList();
+                List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
+                                                     join b in Context.ItemMasters on a.ItemId equals b.ItemId
+                                                     select new POItemDetailsModel
+                                                     {
+                                                         ItemName = a.Item,
+                                                         ItemId = a.ItemId,
+                                                         Quantity = a.Quantity,
+                                                         ItemAmount = a.ItemTotal,
+                                                         Gstamount = a.Gst,
+                                                         UnitType = a.UnitTypeId,
+                                                         PricePerUnit = a.Price,
+                                                         GstPercentage = b.Gstper,
+                                                     }).ToList();
+
+                List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
+                                                     select new PODeliveryAddressModel
+                                                     {
+                                                         Poid = a.Poid,
+                                                         Quantity = a.Quantity,
+                                                         UnitTypeId = a.UnitTypeId,
+                                                         Address = a.Address,
+                                                         IsDeleted = a.IsDeleted,
+                                                     }).ToList();
 
                 PurchaseOrder.ItemList = itemlist;
+                PurchaseOrder.AddressList = addresslist;
 
                 return PurchaseOrder;
             }
@@ -234,12 +246,12 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      {
                                          Id = a.Id,
                                          SiteId = a.SiteId,
-                                         SiteName=d.SiteName,
-                                         Poid  = a.Poid,
+                                         SiteName = d.SiteName,
+                                         Poid = a.Poid,
                                          FromSupplierId = a.FromSupplierId,
                                          SupplierName = b.SupplierName,
                                          ToCompanyId = a.ToCompanyId,
-                                         CompanyName=c.CompanyName,
+                                         CompanyName = c.CompanyName,
                                          TotalAmount = a.TotalAmount,
                                          Description = a.Description,
                                          DeliveryShedule = a.DeliveryShedule,
@@ -314,7 +326,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                             break;
                     }
                 }
-                 return PurchaseOrder;
+                return PurchaseOrder;
             }
             catch (Exception)
             {
@@ -327,26 +339,26 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                    var firstOrderDetail = PurchaseOrderDetails.First();
-                    var PurchaseOrder = new PurchaseOrder()
-                    {
-                        Id = Guid.NewGuid(),
-                        Poid= firstOrderDetail.Poid,
-                        SiteId = firstOrderDetail.SiteId,
-                        Date= firstOrderDetail.Date,
-                        FromSupplierId = firstOrderDetail.FromSupplierId,
-                        ToCompanyId = firstOrderDetail.ToCompanyId,
-                        TotalAmount = firstOrderDetail.TotalAmount,
-                        Description = firstOrderDetail.Description,
-                        DeliveryShedule = firstOrderDetail.DeliveryShedule,
-                        TotalDiscount = firstOrderDetail.TotalDiscount,
-                        TotalGstamount = firstOrderDetail.TotalGstamount,
-                        BillingAddress = firstOrderDetail.BillingAddress,
-                        IsDeleted=false,
-                        CreatedBy = firstOrderDetail.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                    };
-                    Context.PurchaseOrders.Add(PurchaseOrder);
+                var firstOrderDetail = PurchaseOrderDetails.First();
+                var PurchaseOrder = new PurchaseOrder()
+                {
+                    Id = Guid.NewGuid(),
+                    Poid = firstOrderDetail.Poid,
+                    SiteId = firstOrderDetail.SiteId,
+                    Date = firstOrderDetail.Date,
+                    FromSupplierId = firstOrderDetail.FromSupplierId,
+                    ToCompanyId = firstOrderDetail.ToCompanyId,
+                    TotalAmount = firstOrderDetail.TotalAmount,
+                    Description = firstOrderDetail.Description,
+                    DeliveryShedule = firstOrderDetail.DeliveryShedule,
+                    TotalDiscount = firstOrderDetail.TotalDiscount,
+                    TotalGstamount = firstOrderDetail.TotalGstamount,
+                    BillingAddress = firstOrderDetail.BillingAddress,
+                    IsDeleted = false,
+                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                Context.PurchaseOrders.Add(PurchaseOrder);
                 foreach (var item in PurchaseOrderDetails)
                 {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
@@ -418,36 +430,36 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Context.PurchaseOrders.Update(PurchaseOrder);
                 }
 
-                    foreach (var item in PurchaseOrderDetails)
+                foreach (var item in PurchaseOrderDetails)
+                {
+                    var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.PorefId == item.Id);
+
+                    if (PODetail == null)
                     {
-                        var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.PorefId == item.Id);
-
-                        if (PODetail == null)
-                        {
-                            continue;
-                        }
-
-                        PODetail.ItemId = item.ItemId;
-                        PODetail.Item = item.Item;
-                        PODetail.ItemTotal = item.ItemTotal;
-                        PODetail.UnitTypeId = item.UnitTypeId;
-                        PODetail.Quantity = item.Quantity;
-                        PODetail.Price = item.Price;
-                        PODetail.Discount = item.Discount;
-                        PODetail.Gst = item.Gst;
-
-                        Context.PurchaseOrderDetails.Update(PODetail);
+                        continue;
                     }
-                    foreach (var item in PurchaseOrderDetails)
+
+                    PODetail.ItemId = item.ItemId;
+                    PODetail.Item = item.Item;
+                    PODetail.ItemTotal = item.ItemTotal;
+                    PODetail.UnitTypeId = item.UnitTypeId;
+                    PODetail.Quantity = item.Quantity;
+                    PODetail.Price = item.Price;
+                    PODetail.Discount = item.Discount;
+                    PODetail.Gst = item.Gst;
+
+                    Context.PurchaseOrderDetails.Update(PODetail);
+                }
+                foreach (var item in PurchaseOrderDetails)
+                {
+                    var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.Poid == item.Id);
+
+                    if (DeliveryAddress != null)
                     {
-                        var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.Poid == item.Id);
-
-                        if (DeliveryAddress != null)
-                        {
-                            DeliveryAddress.Address = item.ShippingAddress;
-                            Context.PodeliveryAddresses.Update(DeliveryAddress);
-                        }
+                        DeliveryAddress.Address = item.ShippingAddress;
+                        Context.PodeliveryAddresses.Update(DeliveryAddress);
                     }
+                }
 
                 await Context.SaveChangesAsync();
 
@@ -466,10 +478,10 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         public async Task<ApiResponseModel> UpdatePurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-            var PurchaseOrder=Context.PurchaseOrders.Where(e=>e.Id==PurchaseOrderDetails.Id).FirstOrDefault();
+            var PurchaseOrder = Context.PurchaseOrders.Where(e => e.Id == PurchaseOrderDetails.Id).FirstOrDefault();
             try
             {
-                if(PurchaseOrder!=null)
+                if (PurchaseOrder != null)
                 {
                     PurchaseOrder.Id = PurchaseOrderDetails.Id;
                     PurchaseOrder.SiteId = PurchaseOrderDetails.SiteId;
@@ -494,87 +506,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 throw ex;
             }
             return responseModel;
-        }
-        public async Task<ApiResponseModel> DisplayInvoiceDetails(Guid Id)
-        {
-            ApiResponseModel response = new ApiResponseModel();
-            try
-            {
-                var orderDetails = new List<PurchaseOrderMasterView>();
-                var data = await (from a in Context.PurchaseOrders.Where(x => x.Id == Id)
-                                 join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                 join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                                 join d in Context.Sites on a.SiteId equals d.SiteId
-                                 join e in Context.PurchaseOrderDetails on a.Id equals e.PorefId
-                                 join f in Context.UnitMasters on e.UnitTypeId equals f.UnitId
-                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
-                                 select new PurchaseOrderMasterView
-                                 {
-                                     Id = a.Id,
-                                     SiteId = a.SiteId,
-                                     SiteName = d.SiteName,
-                                     FromSupplierId = a.FromSupplierId,
-                                     SupplierName = b.SupplierName,
-                                     ToCompanyId = a.ToCompanyId,
-                                     CompanyName = c.CompanyName,
-                                     TotalAmount = a.TotalAmount,
-                                     Description = a.Description,
-                                     DeliveryShedule = a.DeliveryShedule,
-                                     TotalDiscount = a.TotalDiscount,
-                                     TotalGstamount = a.TotalGstamount,
-                                     BillingAddress = a.BillingAddress,
-                                     Item = e.Item,
-                                     Date = a.Date,
-                                     ItemTotal = e.ItemTotal,
-                                     UnitTypeId = e.UnitTypeId,
-                                     UnitName = f.UnitName,
-                                     Quantity = e.Quantity,
-                                     Gst = e.Gst,
-                                     ShippingAddress = g.Address,
-                                     CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn,
-                                 }).ToListAsync();
-                
-                if (data != null)
-                {
-                    foreach (var item in data)
-                    {
-                        orderDetails.Add(new PurchaseOrderMasterView()
-                        {
-                            Id = item.Id,
-                            SiteId = item.SiteId,
-                            SiteName = item.SiteName,
-                            FromSupplierId = item.FromSupplierId,
-                            SupplierName = item.SupplierName,
-                            ToCompanyId = item.ToCompanyId,
-                            CompanyName = item.CompanyName,
-                            TotalAmount = item.TotalAmount,
-                            Description = item.Description,
-                            DeliveryShedule = item.DeliveryShedule,
-                            TotalDiscount = item.TotalDiscount,
-                            TotalGstamount = item.TotalGstamount,
-                            BillingAddress = item.BillingAddress,
-                            Item = item.Item,
-                            Date = item.Date,
-                            ItemTotal = item.ItemTotal,
-                            UnitTypeId = item.UnitTypeId,
-                            UnitName = item.UnitName,
-                            Quantity = item.Quantity,
-                            Gst = item.Gst,
-                            ShippingAddress = item.ShippingAddress,
-                            CreatedBy = item.CreatedBy,
-                            CreatedOn = item.CreatedOn,
-                        });
-                    }
-                    response.data = orderDetails;
-                    response.code = 200;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
-        }
+        }   
     }
 }

@@ -96,6 +96,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                   SupplierName = b.SupplierName,
                                                   CompanyId = a.CompanyId,
                                                   CompanyName = c.CompanyName,
+                                                  Date = DateTime.Now,
                                                   TotalAmount = a.TotalAmount,
                                                   TotalDiscount = a.TotalDiscount,
                                                   TotalGstamount = a.TotalGstamount,
@@ -135,6 +136,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Description = a.Description,
                                     Roundoff = a.Roundoff,
                                     CompanyId = a.CompanyId,
+                                    Date = DateTime.Now,
                                     CompanyName = c.CompanyName,
                                     SiteName = d.SiteName,
 
@@ -167,6 +169,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         Description = a.Description,
                                         Roundoff = a.Roundoff,
                                         CompanyId = a.CompanyId,
+                                        Date = DateTime.Now,
                                         CompanyName = c.CompanyName,
                                         SiteName = d.SiteName,
                                         SupplierName = b.SupplierName,
@@ -289,6 +292,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     PaymentStatus = firstOrderDetail.PaymentStatus,
                     Roundoff = firstOrderDetail.Roundoff,
                     IsPayOut = false,
+                    Date = DateTime.Now,
                     CreatedBy = firstOrderDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };

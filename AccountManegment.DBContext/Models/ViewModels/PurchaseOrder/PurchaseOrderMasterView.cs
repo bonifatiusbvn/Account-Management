@@ -67,6 +67,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? UnitName { get; set; }
         public Guid? ItemId { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }
+        public List<PODeliveryAddressModel>? AddressList { get; set; }
     }
 
 

@@ -9,6 +9,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
     public class SupplierInvoiceModel
     {
         public Guid Id { get; set; }
+
         public string? InvoiceNo { get; set; }
 
         public Guid? SiteId { get; set; }
@@ -17,19 +18,19 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public Guid CompanyId { get; set; }
 
-        public decimal TotalAmount { get; set; }
+        public DateTime? Date { get; set; }
 
         public string? Description { get; set; }
 
-        public string? PaymentStatus { get; set; }
-
-
-        public decimal? TotalDiscount { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public decimal TotalGstamount { get; set; }
 
+        public decimal? TotalDiscount { get; set; }
+
         public decimal? Roundoff { get; set; }
 
+        public string? PaymentStatus { get; set; }
 
         public bool? IsPayOut { get; set; }
 
@@ -40,6 +41,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
         public string? SiteName { get; set; }
 
         public string SupplierName { get; set; }

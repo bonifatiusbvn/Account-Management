@@ -1,4 +1,4 @@
-﻿@model List<AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView>
+﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
@@ -6,15 +6,16 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+
+<style>
+    .border-right {
+        border-right: 2px solid black;
+    }
+</style>
 @{
-    var firstItem = Model.FirstOrDefault();
+    var firstItem = Model;
     decimal? totalAmount = 0;
     decimal? totalGst = 0;
-}
-@foreach (var item in Model)
-{
-    totalAmount += item.TotalAmount;
-    totalGst += item.TotalGstamount;
 }
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -32,156 +33,199 @@
 </div>
 <!-- end page title -->
 
-<div class="row justify-content-center" id="printableContent">
+<div class="row justify-content-center">
     <div class="col-xxl-9">
-        <div class="card" id="demo">
+        <div class="card border">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card-header border-bottom-dashed p-4">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark" style="width:250px;">
-                                <div class="mt-sm-5 mt-4">
-                                    <h6 class="text-muted text-uppercase fw-semibold">Address</h6>
-                                    <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
-                                    <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span></h6>
-                                    <h6><span class="text-muted fw-normal">Vadodara,Gujarat 390020</span></h6>
-                                </div>
+                @*<div class="card-body">
+                    <div class="d-flex">
+                        <div class="flex-grow-1 col-5 border">
+                            <h4 class="text-center">Purchase Order</h4>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="flex-grow-1 col-5 border">
+                            <p class="text-muted text-uppercase"><b>D. M. Infra</b></p>
+                            <p class="text-muted">SF- 203, Peridot Complex, Varacha</p>
+                            <p class="text-muted">Area- Surat,Gujarat 390020</p>
+                            <p class="text-muted">State- Gujarat,Code:24</p>
+                            <p class="text-muted">GST.NO- 24AAKCB0366M1ZJ</p>
+                        </div>
+                        <div class="flex-grow-1 col-4">
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Purchase Order Id</label>
+                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
                             </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                <h6><span class="text-muted fw-normal">Legal Registration No:</span><span>987654</span></h6>
-                                <h6><span class="text-muted fw-normal">Email:</span><span>bonifatius@gmail.com</span></h6>
-                                <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span> +(91) 64 234 6789</span></h6>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Mode/Terms of Payment</label>
+                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Buyer's Ref./Order No.</label>
+                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 col-3">
+                            <!-- Seller Invoice Dates -->
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Dated</label>
+                                <p><span class="text-muted fw-normal">@firstItem.Date</span></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Mode/Terms of Payment</label>
+                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">References No.</label>
+                                <p><span class="text-muted fw-normal">FM/BRD/SSD/180324/ROO</span></p>
                             </div>
                         </div>
                     </div>
-                    <!--end card-header-->
-                </div><!--end col-->
-                <div class="col-lg-12">
-                    <div class="card-body p-4">
-                        <div class="row g-3">
-                            @if (firstItem != null)
-                            {
-                                <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
-                                <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.SiteId" style="border:hidden;" />
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p>
-                                    <h5 class="fs-14 mb-0" id="txtinvoiceid">@firstItem.Poid</h5>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
-                                    <h5 class="fs-14 mb-0" id="txtdate">@firstItem.Date?.ToString("dd/MM/yyyy")</h5>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
-                                    <span class="badge bg-success-subtle text-success fs-11" id="txtDeliveryShedule">@firstItem.DeliveryShedule</span>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
-                                    <h5 class="fs-14 mb-0">₹<span id="txttotalamount">@totalAmount</span></h5>
-                                    <h5 class="fs-14 mb-0" hidden>₹<span id="txttotalgst">@totalGst</span></h5>
-                                </div>
-                                <!--end col-->
-                            }
-                        </div>
-                        <!--end row-->
-                    </div>
-                    <!--end card-body-->
-                </div><!--end col-->
-                <div class="col-lg-12">
-                    <div class="card-body p-4 border-top border-top-dashed">
-                        @if (firstItem != null)
-                        {
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
-                                    <p class="fw-medium mb-2" id="txtcompanyname">@firstItem.CompanyName</p>
-                                    <p class="text-muted mb-1" id="txtaddress">@firstItem.BillingAddress</p>
-                                </div>
-                                <!--end col-->
-                                <div class="col-6">
-                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Shipping Address</h6>
-                                    <p class="fw-medium mb-2" id="txtshippingcompany">@firstItem.SupplierName</p>
-                                    <p class="text-muted mb-1" id="txtshippingaddress">@firstItem.BillingAddress</p>
-                                </div>
-                                <!--end col-->
+                </div>
+                <div class="card-body" style="margin-top:-33px;">
+                    <div class="d-flex">
+                        <div class="flex-grow-1 col-5 border">
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
+                                <p class="text-muted">@firstItem.BillingAddress</p>
+                                <br />
+                                <p class="text-muted">GSTIN:- </p>
                             </div>
-                            <!--end row-->
-                        }
-                    </div>
-                    <!--end card-body-->
-                </div><!--end col-->
-                <div class="col-lg-12">
-                    <div class="card-body p-4">
-                        <div class="table-responsive">
-                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
-                                <thead>
-                                    <tr class="table-active">
-                                        <th scope="col">#</th>
-                                        <th scope="col">Product Details</th>
-                                        <th scope="col">Rate</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">RateWithGst</th>
-                                        <th scope="col" class="text-end">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="products-list">
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr class="product">
-                                            <td>@(Model.IndexOf(item) + 1)</td>
-                                            <td class="text-start">
-                                                <span class="fw-medium" id="txtproductname">@item.Item</span>
-                                                <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
-                                                <p class="text-muted mb-0" id="txtdescription">@item.Description</p>
-                                            </td>
-                                            <td id="txtperunitprice">@item.Price</td>
-                                            <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.Gst</td>
-                                            <td class="text-end" id="txttotal">@item.TotalAmount</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table><!--end table-->
-                        </div>
-                        <div class="border-top border-top-dashed mt-2">
-                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
-                                <tbody>
-                                    <tr class="border-top border-top-dashed fs-15">
-                                        <th scope="row">Total Amount</th>
-                                        <th class="text-end" id="InsertInvoiceDetails">₹@totalAmount</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!--end table-->
-                        </div>
-                        <div class="mt-4">
-                            <div class="alert alert-primary">
-                                <p class="mb-0">
-                                    <span class="fw-semibold">NOTES:</span>
-                                    <span id="note">
-                                        All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or
-                                        credit card or direct payment online. If account is not paid within 7
-                                        days the credits details supplied as confirmation of work undertaken
-                                        will be charged the agreed quoted fee noted above.
-                                    </span>
-                                </p>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
+                                <p class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></p>
+                                <p class="text-muted text-uppercase">@firstItem.ShippingAddress</p>
+                                @{
+                                    int Index = 1;
+                                }
+                                @foreach (var item in Model.AddressList)
+                                {
+                                    <p><span>@Index</span><span> </span><span>@item.Address</span></p>
+                                    Index++;
+                                }
                             </div>
                         </div>
-                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                            <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
-                        </div>
-                    </div>
-                    <!--end card-body-->
-                </div><!--end col-->
-            </div><!--end row-->
-        </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
-</div>
-<!--end row-->
+                        <div class="flex-grow-1 col-7 border">
+                            <div class="d-flex">
+                                <div class="flex-grow-1 col-4">
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                        <label class="form-label">Dispatched through</label>
+                                        <p class="text-muted text-uppercase">@firstItem.SupplierName<b></b></p>
 
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 col-3">
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                        <label class="form-label">Destination</label>
+                                        <p><span class="text-muted"><b>Bonifatius Technologies Pvt ltd,</b></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Terms of Delivery</label>
+                                <p><span class="text-muted"><b>2-3 Weeks</b></span></p>
+                                <p><span class="text-muted"><b>P & F-Inclusive</b></span></p>
+                                <p><span class="text-muted"><b>Freight-Extra at actual</b></span></p>
+                                <p><span class="text-muted"><b>Note : Test Certificate required with material</b></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="margin-top:-33px;">
+                    <div class="table-responsive">
+                        <table class="table table-border text-center table-nowrap align-middle mb-0">
+                            <thead>
+                                <tr class="table-active">
+                                    <th class="border" scope="col">SRr.No.</th>
+                                    <th class="border" scope="col">Product Details</th>
+                                    <th class="border" scope="col">HSN / SAC</th>
+                                    <th class="border" scope="col">Quantity</th>
+                                    <th class="border" scope="col">Rate</th>
+                                    <th class="border" scope="col">per</th>
+                                    <th class="text-end border" text-end scope="col">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-list">
+                                @{
+                                    int index = 1;
+                                }
+                                @foreach (var item in Model.ItemList)
+                                {
+                                    <tr class="product">
+                                        <td class="border">@index</td>
+                                        <td class="text-start border">
+                                            <span class="fw-medium" id="txtproductname">@item.ItemName</span>
+                                            <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
+                                            <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
+                                        </td>
+                                        <td class="border" id="txtHSN"></td>
+                                        <td class="border" id="txtquantity">@item.Quantity</td>
+                                        <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
+                                        <td class="border" id="txtper">No.</td>
+                                        <td class="text-end border" id="txttotal">₹@item.ItemAmount</td>
+                                    </tr>
+                                    index++;
+                                }
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">Total</td>
+                                    <td class="border"></td>
+                                    <td class="border">₹</td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">SGST 9%</td>
+                                    <td class="border"></td>
+                                    <td class="border">₹</td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">CGST 9%</td>
+                                    <td class="border"></td>
+                                    <td class="border">₹</td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">Round Off</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border">Total</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">₹@firstItem.TotalAmount</td>
+                                </tr>
+                            </tbody>
+                        </table><!--end table-->
+                    </div>
+                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                        <a class="btn btn-primary" asp-action="ExportToPdf" asp-controller="PurchaseMaster" asp-route-POId="@firstItem.Id"><i class="ri-download-2-line align-bottom me-1"></i> Download </a>
+                        <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/moduls/purchaserequestscript.js"></script>
+        }
