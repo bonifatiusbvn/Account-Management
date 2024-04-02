@@ -26,6 +26,8 @@ namespace AccountManegments.Web.Controllers
             _userSession = userSession;
         }
 
+        [FormPermissionAttribute("Company-View")]
+        
         public IActionResult CreateCompany()
         {
             return View();
@@ -149,6 +151,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Company-View")]
         [HttpGet]
         public async Task<JsonResult> GetCompanyNameList()
         {

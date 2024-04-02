@@ -1,4 +1,5 @@
 ﻿using AccountManagement.API;
+using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Models
 {
@@ -83,5 +84,37 @@ namespace AccountManegments.Web.Models
             }
         }
 
+        public static  List<FromPermission> FormPermisionData
+        {
+
+            get
+            {
+                if (StaticHttpContext.Session.GetObjectFromJson<List<FromPermission>>("FromPermission") == null)
+                    return new List<FromPermission>();
+                else
+                    return StaticHttpContext.Session.GetObjectFromJson<List<FromPermission>>("FromPermission");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("FromPermission", value);
+
+            }
+            
+        }
+
+    }
+
+    public static class SessionExtensions
+    {
+        public static void SetObjectAsJson(this ISession session, string key, object value)
+        {
+            session.SetString(key, JsonConvert.SerializeObject(value));
+        }
+
+        public static T GetObjectFromJson<T>(this ISession session, string key)
+        {
+            var value = session.GetString(key);
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+        }
     }
 }

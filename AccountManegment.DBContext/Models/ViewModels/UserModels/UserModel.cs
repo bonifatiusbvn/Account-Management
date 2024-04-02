@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountManegments.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string? SiteName { get; set; }
         public Guid? SiteId { get; set; }
         public bool? IsDeleted { get; set; }
+        public List<FromPermission> FromPermissionData { get; set; }
     }
     public class LoginResponseModel
     {
@@ -36,6 +38,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public int Code { get; set; }
 
         public LoginView Data { get; set; }
+        
 
     }
 

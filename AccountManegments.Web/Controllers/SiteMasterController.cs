@@ -24,11 +24,13 @@ namespace AccountManegments.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
 
+        [FormPermissionAttribute("SiteMaster-View")]
         public IActionResult SiteListView()
         {
             return View();
         }
 
+        [FormPermissionAttribute("SiteMaster-View")]
         public async Task<IActionResult> SiteListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -73,7 +75,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("SiteMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> CreateSite(SiteMasterModel createSite)
         {
@@ -116,6 +118,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("SiteMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSiteDetails(SiteMasterModel updateSite)
         {
@@ -137,6 +140,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("SiteMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> ActiveDeactiveSite(Guid SiteId)
         {
@@ -182,7 +186,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("SiteMaster-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSite(Guid SiteId)
         {
