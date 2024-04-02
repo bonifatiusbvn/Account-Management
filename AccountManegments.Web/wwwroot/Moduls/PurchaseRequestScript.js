@@ -641,7 +641,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
-            }  
+            }
         },
         error: function (xhr, status, error) {
             Swal.fire({
@@ -685,7 +685,7 @@ function UpdateMultiplePurchaseOrderDetails() {
             CreatedBy: $("#createdbyid").val(),
         };
         orderDetails.push(objData);
-    }); 
+    });
     var form_data = new FormData();
     form_data.append("PODETAILS", JSON.stringify(orderDetails));
     $.ajax({
@@ -810,7 +810,7 @@ function validateAndInsertPurchaseOrder() {
         isValid = false;
     }
     if (isValid) {
-            InsertMultiplePurchaseOrderDetails();
+        InsertMultiplePurchaseOrderDetails();
     }
 }
 
@@ -833,6 +833,17 @@ $(document).ready(function () {
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
+
 
 
 

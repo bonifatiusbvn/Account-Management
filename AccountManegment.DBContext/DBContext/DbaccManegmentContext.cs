@@ -23,6 +23,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
 
+    public virtual DbSet<ItemInword> ItemInwords { get; set; }
+
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
 
     public virtual DbSet<PodeliveryAddress> PodeliveryAddresses { get; set; }
@@ -111,6 +113,25 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.FormGroup).HasMaxLength(10);
             entity.Property(e => e.FormName).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<ItemInword>(entity =>
+        {
+            entity.HasKey(e => e.InwordId);
+
+            entity.ToTable("ItemInword");
+
+            entity.Property(e => e.InwordId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DocumentName).HasMaxLength(100);
+            entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.ItemInwords)
+                .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ItemInword_ItemMaster");
         });
 
         modelBuilder.Entity<ItemMaster>(entity =>
