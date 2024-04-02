@@ -168,5 +168,49 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<JsonResult> GetPayOutDetailsByInvoiceNo()
+        {
+            try
+            {
+                var InvoiceNo = HttpContext.Request.Form["INVOICENO"];
+                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(InvoiceNo);
+                List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsByInvoiceNo?InvoiceNo=" + Details.InvoiceNo);
+                if (postuser.code == 200)
+                {
+                    GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
+                }
+                return new JsonResult(GetInvoiceList);
+            }
+            catch (Exception ex)
+            {
+                throw ex ;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertPayOutDetails()
+        {
+            try
+            {
+                var payout = HttpContext.Request.Form["PAYOUTDETAILS"];
+                var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceModel>(payout);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/AddSupplierInvoice");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

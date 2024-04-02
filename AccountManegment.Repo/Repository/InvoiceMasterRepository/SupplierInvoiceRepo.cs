@@ -7,6 +7,7 @@ using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -41,6 +42,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
+                    IsPayOut=true,
+                    PaymentStatus = SupplierInvoiceDetail.PaymentStatus,
                     CreatedBy = SupplierInvoiceDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -286,7 +289,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalDiscount = firstOrderDetail.TotalDiscount,
                     TotalGstamount = firstOrderDetail.TotalGstamount,
                     TotalAmount = firstOrderDetail.TotalAmount,
-                    PaymentStatus = firstOrderDetail.PaymentStatus,
+                    PaymentStatus = "Pending",
                     Roundoff = firstOrderDetail.Roundoff,
                     IsPayOut = false,
                     CreatedBy = firstOrderDetail.CreatedBy,
@@ -367,6 +370,62 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     }
                 }
                 return SupplierInvoiceId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        {
+            try
+            {
+                var supplierInvoices = new List<SupplierInvoiceModel>();
+                var data = await(from a in Context.SupplierInvoices
+                                             where a.InvoiceNo == InvoiceNo
+                                                   && a.IsPayOut == true
+                                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                             join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                             select new 
+                                             {
+                                                 a.Id,
+                                                 a.InvoiceNo,
+                                                 a.SupplierId,
+                                                 b.SupplierName,
+                                                 a.CompanyId,
+                                                 c.CompanyName,
+                                                 a.TotalAmount,
+                                                 a.TotalDiscount,
+                                                 a.TotalGstamount,
+                                                 a.Description,
+                                                 a.Roundoff,
+                                                 a.IsPayOut,
+                                                 a.PaymentStatus
+                                             }).ToListAsync();
+                if(data != null )
+                {
+                    foreach( var item in data )
+                    {
+                        supplierInvoices.Add( new SupplierInvoiceModel()
+                        {
+                            Id = item.Id,
+                            InvoiceNo = item.InvoiceNo,
+                            SupplierId = item.SupplierId,
+                            SupplierName = item.SupplierName,
+                            CompanyId = item.CompanyId,
+                            CompanyName = item.CompanyName,
+                            TotalAmount = item.TotalAmount,
+                            TotalDiscount = item.TotalDiscount,
+                            TotalGstamount = item.TotalGstamount,
+                            Description = item.Description,
+                            Roundoff = item.Roundoff,
+                            IsPayOut = item.IsPayOut,
+                            PaymentStatus = item.PaymentStatus
+                        });
+                    }
+                }
+                return supplierInvoices;
             }
             catch (Exception ex)
             {

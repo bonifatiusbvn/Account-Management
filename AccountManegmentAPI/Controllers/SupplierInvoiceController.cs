@@ -128,5 +128,12 @@ namespace AccountManagement.API.Controllers
             var checkInvoiceNo = SupplierInvoice.CheckSupplierInvoiceNo();
             return Ok(new { code = 200, data = checkInvoiceNo });
         }
+        [HttpPost]
+        [Route("GetPayOutDetailsByInvoiceNo")]
+        public async Task<IActionResult> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        {
+            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetPayOutDetailsByInvoiceNo(InvoiceNo);
+            return Ok(new { code = 200, data = supplierDetails.ToList() });
+        }
     }
 }
