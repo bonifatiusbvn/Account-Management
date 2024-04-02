@@ -31,13 +31,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var SupplierInvoice = new SupplierInvoice()
                 {
                     Id = Guid.NewGuid(),
-                    InvoiceId = SupplierInvoiceDetail.InvoiceId,
+                    InvoiceNo = SupplierInvoiceDetail.InvoiceNo,
                     SiteId = SupplierInvoiceDetail.SiteId,
                     SupplierId = SupplierInvoiceDetail.SupplierId,
                     CompanyId = SupplierInvoiceDetail.CompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
-
+                    Date = DateTime.Now,
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
@@ -65,7 +65,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "SupplierInvoice" + " " + SupplierInvoice.InvoiceId + "is Removed Successfully!";
+                    response.message = "SupplierInvoice" + " " + SupplierInvoice.Id + "is Removed Successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -90,12 +90,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                               join c in Context.Companies on a.CompanyId equals c.CompanyId
                                               select new SupplierInvoiceModel
                                               {
-                                                  InvoiceId = a.Id,
-                                                  InvoiceNo = a.InvoiceId,
-                                                  FromSupplierId = a.SupplierId,
-                                                  FromSupplierName = b.SupplierName,
-                                                  ToCompanyId = a.CompanyId,
-                                                  ToCompanyName = c.CompanyName,
+                                                  Id = a.Id,
+                                                  InvoiceNo = a.InvoiceNo,
+                                                  SupplierId = a.SupplierId,
+                                                  SupplierName = b.SupplierName,
+                                                  CompanyId = a.CompanyId,
+                                                  CompanyName = c.CompanyName,
                                                   TotalAmount = a.TotalAmount,
                                                   TotalDiscount = a.TotalDiscount,
                                                   TotalGstamount = a.TotalGstamount,
@@ -120,26 +120,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             SupplierInvoiceModel supplierList = new SupplierInvoiceModel();
             try
             {
-                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
+                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
                                 join d in Context.Sites on a.SiteId equals d.SiteId
                                 select new SupplierInvoiceModel
                                 {
-                                    InvoiceId = a.Id,
-                                    FromSupplierId = a.SupplierId,
-                                    FromSupplierName = b.SupplierName,
+                                    Id = a.Id,
+                                    SupplierId = a.SupplierId,
+                                    SupplierName = b.SupplierName,
                                     TotalAmount = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
                                     Description = a.Description,
                                     Roundoff = a.Roundoff,
-                                    ToCompanyId = a.CompanyId,
-                                    ToCompanyName = c.CompanyName,
                                     CompanyId = a.CompanyId,
                                     CompanyName = c.CompanyName,
                                     SiteName = d.SiteName,
-                                    SupplierName = b.SupplierName
+
                                 }).First();
                 return supplierList;
             }
@@ -160,7 +158,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     select new SupplierInvoiceModel
                                     {
                                         Id = a.Id,
-                                        InvoiceId = a.InvoiceId,
+                                        InvoiceNo = a.InvoiceNo,
                                         SiteId = a.SiteId,
                                         SupplierId = a.SupplierId,
                                         TotalAmount = a.TotalAmount,
@@ -277,30 +275,30 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 var firstOrderDetail = SupplierItemDetails.First();
 
-                    var supplierInvoice = new SupplierInvoice()
-                    {
-                        Id = Guid.NewGuid(),
-                        InvoiceId = firstOrderDetail.InvoiceId,
-                        SiteId = firstOrderDetail.SiteId,
-                        SupplierId = firstOrderDetail.SupplierId,
-                        CompanyId = firstOrderDetail.CompanyId,
-                        Description = firstOrderDetail.Description,
-                        TotalDiscount = firstOrderDetail.TotalDiscount,
-                        TotalGstamount = firstOrderDetail.TotalGstamount,
-                        TotalAmount = firstOrderDetail.TotalAmount,
-                        PaymentStatus = firstOrderDetail.PaymentStatus,
-                        Roundoff = firstOrderDetail.Roundoff,
-                        IsPayOut = false,
-                        CreatedBy = firstOrderDetail.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                    };
-                    Context.SupplierInvoices.Add(supplierInvoice);
+                var supplierInvoice = new SupplierInvoice()
+                {
+                    Id = Guid.NewGuid(),
+                    InvoiceNo = firstOrderDetail.InvoiceId,
+                    SiteId = firstOrderDetail.SiteId,
+                    SupplierId = firstOrderDetail.SupplierId,
+                    CompanyId = firstOrderDetail.CompanyId,
+                    Description = firstOrderDetail.Description,
+                    TotalDiscount = firstOrderDetail.TotalDiscount,
+                    TotalGstamount = firstOrderDetail.TotalGstamount,
+                    TotalAmount = firstOrderDetail.TotalAmount,
+                    PaymentStatus = firstOrderDetail.PaymentStatus,
+                    Roundoff = firstOrderDetail.Roundoff,
+                    IsPayOut = false,
+                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                Context.SupplierInvoices.Add(supplierInvoice);
 
                 foreach (var item in SupplierItemDetails)
                 {
                     var supplierInvoiceDetail = new SupplierInvoiceDetail()
                     {
-                        RefInvoiceId = supplierInvoice.Id, 
+                        RefInvoiceId = supplierInvoice.Id,
                         Item = item.Item,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -357,10 +355,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    if (LastPO.InvoiceId.Length >= 25)
+                    if (LastPO.InvoiceNo.Length >= 25)
                     {
 
-                        int PrNumber = int.Parse(LastPO.InvoiceId.Substring(24)) + 1;
+                        int PrNumber = int.Parse(LastPO.InvoiceNo.Substring(24)) + 1;
                         SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
                     }
                     else

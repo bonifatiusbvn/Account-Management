@@ -14,5 +14,6 @@ public partial class PodeliveryAddress
     public int? UnitTypeId { get; set; }
 
     public string Address { get; set; } = null!;
+
     public bool? IsDeleted { get; set; }
 }

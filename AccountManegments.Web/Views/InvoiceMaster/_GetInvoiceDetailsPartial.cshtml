@@ -11,8 +11,8 @@
 @foreach (var item in Model)
 {
     <tr>
-        <td class="form_name">@item.FromSupplierName</td>
-        <td class="form_name" id="txtvendorid">@item.ToCompanyName</td>
+        <td class="form_name">@item.SupplierName</td>
+        <td class="form_name" id="txtvendorid">@item.CompanyName</td>
         <td class="form_name" id="txtinvoicetype">@item.InvoiceNo</td>
         <td class="form_name" id="txtinvoiceno">@item.PaymentStatus</td>
         <td class="form_name" id="txtinvoiceno">@item.IsPayOut</td>

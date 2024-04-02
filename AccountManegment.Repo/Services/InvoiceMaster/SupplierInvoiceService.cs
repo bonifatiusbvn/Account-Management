@@ -35,7 +35,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
 
         public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
         {
-            return await SupplierInvoice.GetSupplierInvoiceById(Id);
+            return await SupplierInvoice.GetSupplierInvoiceById(InvoiceId);
         }
 
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)

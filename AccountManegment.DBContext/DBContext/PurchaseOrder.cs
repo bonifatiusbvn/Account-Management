@@ -28,6 +28,7 @@ public partial class PurchaseOrder
     public decimal TotalAmount { get; set; }
 
     public string? BillingAddress { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
