@@ -1,6 +1,4 @@
 ﻿
-var TotalAmount = '';
-
 var _editCompanyselectedValue = "";
 var _editSupplierselectedValue = "";
 var _editItemselectedValue = "";
@@ -475,12 +473,20 @@ function GetCompanyDetails() {
     });
 }
 function GetItemDetails() {
-    $('#searchItemname').empty();
+    debugger
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
+
+            $('#searchItemname').empty();
+
             $.each(result, function (i, data) {
-                $('#searchItemname').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+                $('#searchItemname').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
+            });
+
+            $('#searchItemname').select2({
+                placeholder: "Select Product Name",
+                allowClear: true
             });
         }
     });
@@ -641,7 +647,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
-            }  
+            }
         },
         error: function (xhr, status, error) {
             Swal.fire({
@@ -685,7 +691,7 @@ function UpdateMultiplePurchaseOrderDetails() {
             CreatedBy: $("#createdbyid").val(),
         };
         orderDetails.push(objData);
-    }); 
+    });
     var form_data = new FormData();
     form_data.append("PODETAILS", JSON.stringify(orderDetails));
     $.ajax({
@@ -810,30 +816,9 @@ function validateAndInsertPurchaseOrder() {
         isValid = false;
     }
     if (isValid) {
-            InsertMultiplePurchaseOrderDetails();
+        InsertMultiplePurchaseOrderDetails();
     }
 }
-
-
-$(document).ready(function () {
-
-    $("#totalAmount").html('₹' + 00);
-    $('#txtSuppliername').change(function () {
-        debugger;
-        var CompanyId = $('#txtcompany').val();
-        var SupplierId = $(this).val();
-        $.ajax({
-            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
-            type: 'GET',
-            success: function (result) {
-                $("#invoicedetails").html(result);
-                $("#totalAmount").html('₹' + TotalAmount);
-            },
-
-        });
-    });
-});
-
 
 
 

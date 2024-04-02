@@ -38,22 +38,7 @@
 
 
                                 <div class="row w-100 ac-view-list card radius-10 w-100">
-                                    @* <div class="row hide-sm table-light ac-view-header">
-                                    <div class="col-5 text-center">
-                                    <h5>Item</h5>
-                                    </div>
-                                    <div class="col-3 ">
-                                    <h5>Quantity</h5>
-                                    </div>
-                                    <div class="col-2 ">
-                                    <h5>Approved</h5>
-                                    </div>
-                                    <div class="col-2">
-                                    <h5>Action</h5>
-                                    </div>
-                                    </div>
-                                    <div class="card" id="purchaseRequesttbody">
-                                    </div> *@
+
                                     <div class="row ">
                                         <div class="col-12">
                                             <div class="card-body">
@@ -173,15 +158,15 @@
                                     <label class="form-label">Purchase Request No</label>
                                     <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" readonly />
                                 </div>
-
-
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
-                                    <input type="text" class="form-control form-control" placeholder="Item Name" id="txtItemName" required>
-                                    <input type="hidden" id="PurchaseRequestId">
-                                    <input type="hidden" id="txtUserRole" value="@_userSession.UserRole">
+                                    <select class="form-control" id="ddlItemName">
+                                        <option value="">-- Select Item --</option>
+                                    </select>
+                                    <input type="hidden" id="hdnItemId">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
+
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
                                     <select class="form-control form-control" id="txtUnitType">
@@ -203,11 +188,9 @@
                                         </select>
                                         <span id="spnSiteName" class="text-danger"></span>
                                     </div>
-
                                 }
                                 else
                                 {
-
                                     <div class="col-12">
                                         <label class="form-label">Site</label>
                                         <select class="form-control form-control" id="txtPoSiteName" disabled>
@@ -216,8 +199,6 @@
                                         <span id="spnSiteName" class="text-danger"></span>
                                     </div>
                                 }
-
-
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
                                 </div>
@@ -233,6 +214,6 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="~/moduls/purchaserequestscript.js"></script>
-    <script src="~/moduls/itemmasterscript.js"></script>
 }
