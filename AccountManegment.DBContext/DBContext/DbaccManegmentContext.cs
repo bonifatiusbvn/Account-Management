@@ -310,6 +310,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.HasKey(e => e.InvoiceDetailsId);
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst)

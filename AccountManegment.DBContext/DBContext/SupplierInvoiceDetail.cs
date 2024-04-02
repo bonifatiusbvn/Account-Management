@@ -27,6 +27,8 @@ public partial class SupplierInvoiceDetail
 
     public decimal? TotalAmount { get; set; }
 
+    public DateTime? Date { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
