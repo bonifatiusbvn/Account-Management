@@ -9,6 +9,8 @@ public partial class PurchaseOrderDetail
 
     public Guid PorefId { get; set; }
 
+    public Guid? ItemId { get; set; }
+
     public string Item { get; set; } = null!;
 
     public int UnitTypeId { get; set; }
@@ -23,6 +25,8 @@ public partial class PurchaseOrderDetail
 
     public decimal ItemTotal { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
@@ -30,6 +34,8 @@ public partial class PurchaseOrderDetail
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ItemMaster? ItemNavigation { get; set; }
 
     public virtual PurchaseOrder Poref { get; set; } = null!;
 

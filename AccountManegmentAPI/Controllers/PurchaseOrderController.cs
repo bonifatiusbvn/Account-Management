@@ -67,6 +67,7 @@ namespace AccountManagement.API.Controllers
             var checkPONo = PurchaseOrder.CheckPONo();
             return Ok(new { code = 200, data = checkPONo });
         }
+
         [HttpPost]
         [Route("InsertMultiplePurchaseOrderDetails")]
         public async Task<IActionResult> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
@@ -85,5 +86,48 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpPost]
+        [Route("UpdateMultiplePurchaseOrderDetails")]
+        public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var PurchaseOrdermaster = await PurchaseOrder.UpdateMultiplePurchaseOrderDetails(PurchaseOrderDetails);
+            if (PurchaseOrdermaster.code == 200)
+            {
+                response.code = PurchaseOrdermaster.code;
+                response.message = PurchaseOrdermaster.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("DeletePurchaseOrderDetails")]
+        public async Task<IActionResult> DeletePurchaseOrderDetails(Guid POId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var PO = await PurchaseOrder.DeletePurchaseOrderDetails(POId);
+            try
+            {
+                if (PO != null)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = PO.message;
+                }
+                else
+                {
+                    response.message = PO.message;
+                    response.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }    
     }
 }

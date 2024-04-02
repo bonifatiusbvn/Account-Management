@@ -33,5 +33,9 @@ public partial class ItemMaster
 
     public DateTime? UpdatedOn { get; set; }
 
+    public virtual ICollection<ItemInword> ItemInwords { get; set; } = new List<ItemInword>();
+
+    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
+
     public virtual UnitMaster UnitTypeNavigation { get; set; } = null!;
 }

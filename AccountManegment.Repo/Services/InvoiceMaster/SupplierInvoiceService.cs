@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.InvoiceMaster
 {
-    public class SupplierInvoiceService:ISupplierInvoiceService
+    public class SupplierInvoiceService : ISupplierInvoiceService
     {
         public SupplierInvoiceService(ISupplierInvoice supplierInvoice)
         {
@@ -23,9 +23,14 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.AddSupplierInvoice(SupplierInvoiceDetails);
         }
 
-        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid InvoiceId)
+        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid Id)
         {
-            return await SupplierInvoice.DeleteSupplierInvoice(InvoiceId);
+            return await SupplierInvoice.DeleteSupplierInvoice(Id);
+        }
+
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        {
+            return await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
         }
 
         public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
@@ -38,9 +43,24 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
         }
 
+        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        {
+            return await SupplierInvoice.InsertMultipleSupplierItemDetails(SupplierItemDetails);
+        }
+
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetails)
         {
             return await SupplierInvoice.UpdateSupplierInvoice(SupplierInvoiceDetails);
+        }
+
+        public string CheckSupplierInvoiceNo()
+        {
+            return SupplierInvoice.CheckSupplierInvoiceNo();
+        }
+
+        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        {
+            return await SupplierInvoice.GetPayOutDetailsByInvoiceNo(InvoiceNo);
         }
     }
 }

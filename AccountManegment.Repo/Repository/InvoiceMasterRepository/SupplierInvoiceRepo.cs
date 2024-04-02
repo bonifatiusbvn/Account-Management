@@ -3,13 +3,16 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-
+#nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 {
     public class SupplierInvoiceRepo : ISupplierInvoice
@@ -28,17 +31,19 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             {
                 var SupplierInvoice = new SupplierInvoice()
                 {
-                    InvoiceId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
+                    InvoiceNo = SupplierInvoiceDetail.InvoiceNo,
                     SiteId = SupplierInvoiceDetail.SiteId,
-                    FromSupplierId = SupplierInvoiceDetail.FromSupplierId,
-                    ToCompanyId = SupplierInvoiceDetail.ToCompanyId,
+                    SupplierId = SupplierInvoiceDetail.SupplierId,
+                    CompanyId = SupplierInvoiceDetail.CompanyId,
                     TotalAmount = SupplierInvoiceDetail.TotalAmount,
                     Description = SupplierInvoiceDetail.Description,
-                    DeliveryShedule = SupplierInvoiceDetail.DeliveryShedule,
-                    TotalPrice = SupplierInvoiceDetail.TotalPrice,
+                    Date = DateTime.Now,
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
+                    IsPayOut=true,
+                    PaymentStatus = SupplierInvoiceDetail.PaymentStatus,
                     CreatedBy = SupplierInvoiceDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -54,16 +59,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid InvoiceId)
+        public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid Id)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var SupplierInvoice = Context.SupplierInvoices.Where(a => a.InvoiceId == InvoiceId).FirstOrDefault();
+                var SupplierInvoice = Context.SupplierInvoices.Where(a => a.Id == Id).FirstOrDefault();
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "SupplierInvoice" + " " + SupplierInvoice.InvoiceId + "is Removed Successfully!";
+                    response.message = "SupplierInvoice" + " " + SupplierInvoice.Id + "is Removed Successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -75,33 +80,70 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        {
+            try
+            {
+                var supplierInvoices = await (from a in Context.SupplierInvoices
+                                              where a.CompanyId == CompanyId
+                                                    && a.SupplierId == SupplierId
+                                                    && a.IsPayOut == false
+                                                    && a.PaymentStatus == "Pending"
+                                              join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                              join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                              select new SupplierInvoiceModel
+                                              {
+                                                  Id = a.Id,
+                                                  InvoiceNo = a.InvoiceNo,
+                                                  SupplierId = a.SupplierId,
+                                                  SupplierName = b.SupplierName,
+                                                  CompanyId = a.CompanyId,
+                                                  CompanyName = c.CompanyName,
+                                                  Date = DateTime.Now,
+                                                  TotalAmount = a.TotalAmount,
+                                                  TotalDiscount = a.TotalDiscount,
+                                                  TotalGstamount = a.TotalGstamount,
+                                                  Description = a.Description,
+                                                  Roundoff = a.Roundoff,
+                                                  IsPayOut = a.IsPayOut,
+                                                  PaymentStatus = a.PaymentStatus
+                                              }).ToListAsync();
+
+                return supplierInvoices;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
         {
 
             SupplierInvoiceModel supplierList = new SupplierInvoiceModel();
             try
             {
-                supplierList = (from a in Context.SupplierInvoices.Where(x => x.InvoiceId == InvoiceId)
-                            join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId 
-                            join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                            join d in Context.Sites on a.SiteId equals d.SiteId
-                            select new SupplierInvoiceModel
-                            {
-                                InvoiceId = a.InvoiceId,
-                                SiteId = a.SiteId,
-                                FromSupplierId = a.FromSupplierId,
-                                TotalAmount = a.TotalAmount,
-                                TotalDiscount = a.TotalDiscount,
-                                TotalGstamount = a.TotalGstamount,
-                                TotalPrice = a.TotalPrice,
-                                Description = a.Description,
-                                DeliveryShedule = a.DeliveryShedule,
-                                Roundoff = a.Roundoff,
-                                ToCompanyId = a.ToCompanyId,
-                                ToCompanyName = c.CompanyName,
-                                SiteName = d.SiteName,
-                                FromSupplierName = b.SupplierName
-                            }).First();
+                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
+                                join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                join d in Context.Sites on a.SiteId equals d.SiteId
+                                select new SupplierInvoiceModel
+                                {
+                                    Id = a.Id,
+                                    SupplierId = a.SupplierId,
+                                    SupplierName = b.SupplierName,
+                                    TotalAmount = a.TotalAmount,
+                                    TotalDiscount = a.TotalDiscount,
+                                    TotalGstamount = a.TotalGstamount,
+                                    Description = a.Description,
+                                    Roundoff = a.Roundoff,
+                                    CompanyId = a.CompanyId,
+                                    Date = DateTime.Now,
+                                    CompanyName = c.CompanyName,
+                                    SiteName = d.SiteName,
+
+                                }).First();
                 return supplierList;
             }
             catch (Exception ex)
@@ -115,25 +157,25 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var supplierList = (from a in Context.SupplierInvoices
-                                    join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                    join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                    join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                    join c in Context.Companies on a.CompanyId equals c.CompanyId
                                     join d in Context.Sites on a.SiteId equals d.SiteId
                                     select new SupplierInvoiceModel
                                     {
-                                        InvoiceId = a.InvoiceId,
+                                        Id = a.Id,
+                                        InvoiceNo = a.InvoiceNo,
                                         SiteId = a.SiteId,
-                                        FromSupplierId = a.FromSupplierId,
+                                        SupplierId = a.SupplierId,
                                         TotalAmount = a.TotalAmount,
                                         TotalDiscount = a.TotalDiscount,
                                         TotalGstamount = a.TotalGstamount,
-                                        TotalPrice = a.TotalPrice,
                                         Description = a.Description,
-                                        DeliveryShedule = a.DeliveryShedule,
                                         Roundoff = a.Roundoff,
-                                        ToCompanyId = a.ToCompanyId,
-                                        ToCompanyName = c.CompanyName,
+                                        CompanyId = a.CompanyId,
+                                        Date = DateTime.Now,
+                                        CompanyName = c.CompanyName,
                                         SiteName = d.SiteName,
-                                        FromSupplierName = b.SupplierName,
+                                        SupplierName = b.SupplierName,
                                         CreatedOn = a.CreatedOn,
                                     });
 
@@ -142,7 +184,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     searchText = searchText.ToLower();
                     supplierList = supplierList.Where(u =>
                         u.SiteName.ToLower().Contains(searchText) ||
-                        u.ToCompanyName.ToLower().Contains(searchText)
+                        u.CompanyName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -155,7 +197,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             supplierList = supplierList.Where(u => u.SiteName.ToLower().Contains(searchText));
                             break;
                         case "companyname":
-                            supplierList = supplierList.Where(u => u.ToCompanyName.ToLower().Contains(searchText));
+                            supplierList = supplierList.Where(u => u.CompanyName.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -204,19 +246,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetail)
         {
             ApiResponseModel model = new ApiResponseModel();
-            var supplierInvoice = Context.SupplierInvoices.Where(e => e.InvoiceId == SupplierInvoiceDetail.InvoiceId).FirstOrDefault();
+            var supplierInvoice = Context.SupplierInvoices.Where(e => e.Id == SupplierInvoiceDetail.Id).FirstOrDefault();
             try
             {
                 if (supplierInvoice != null)
                 {
-                    supplierInvoice.InvoiceId = SupplierInvoiceDetail.InvoiceId;
+                    supplierInvoice.Id = SupplierInvoiceDetail.Id;
                     supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
-                    supplierInvoice.FromSupplierId = SupplierInvoiceDetail.FromSupplierId;
-                    supplierInvoice.ToCompanyId = SupplierInvoiceDetail.ToCompanyId;
+                    supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
+                    supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
                     supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmount;
                     supplierInvoice.Description = SupplierInvoiceDetail.Description;
-                    supplierInvoice.DeliveryShedule = SupplierInvoiceDetail.DeliveryShedule;
-                    supplierInvoice.TotalPrice = SupplierInvoiceDetail.TotalPrice;
                     supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
                     supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
                     supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
@@ -231,6 +271,170 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
             return model;
+        }
+
+        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+
+                var firstOrderDetail = SupplierItemDetails.First();
+
+                var supplierInvoice = new SupplierInvoice()
+                {
+                    Id = Guid.NewGuid(),
+                    InvoiceNo = firstOrderDetail.InvoiceId,
+                    SiteId = firstOrderDetail.SiteId,
+                    SupplierId = firstOrderDetail.SupplierId,
+                    CompanyId = firstOrderDetail.CompanyId,
+                    Description = firstOrderDetail.Description,
+                    TotalDiscount = firstOrderDetail.TotalDiscount,
+                    TotalGstamount = firstOrderDetail.TotalGstamount,
+                    TotalAmount = firstOrderDetail.TotalAmount,
+                    PaymentStatus = "Pending",
+                    Roundoff = firstOrderDetail.Roundoff,
+                    IsPayOut = false,
+                    Date = DateTime.Now,
+                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                Context.SupplierInvoices.Add(supplierInvoice);
+
+                foreach (var item in SupplierItemDetails)
+                {
+                    var supplierInvoiceDetail = new SupplierInvoiceDetail()
+                    {
+                        RefInvoiceId = supplierInvoice.Id,
+                        Item = item.Item,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        DiscountPer = item.DiscountPer,
+                        Gst = item.Gst,
+                        Gstper = item.Gstper,
+                        TotalAmount = item.TotalAmount,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.SupplierInvoiceDetails.Add(supplierInvoiceDetail);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Supplier Order Inserted Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
+            }
+            return response;
+        }
+
+        public string CheckSupplierInvoiceNo()
+        {
+            try
+            {
+                var LastPO = Context.SupplierInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentDate = DateTime.Now;
+
+                int currentYear;
+                int lastYear;
+                if (currentDate.Month > 4)
+                {
+
+                    currentYear = currentDate.Year + 1;
+                    lastYear = currentDate.Year;
+                }
+                else
+                {
+
+                    currentYear = currentDate.Year;
+                    lastYear = currentDate.Year - 1;
+                }
+
+                string SupplierInvoiceId;
+                if (LastPO == null)
+                {
+
+                    SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
+                }
+                else
+                {
+                    if (LastPO.InvoiceNo.Length >= 25)
+                    {
+
+                        int PrNumber = int.Parse(LastPO.InvoiceNo.Substring(24)) + 1;
+                        SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("Supplier Invoice Id does not have the expected format.");
+                    }
+                }
+                return SupplierInvoiceId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        {
+            try
+            {
+                var supplierInvoices = new List<SupplierInvoiceModel>();
+                var data = await(from a in Context.SupplierInvoices
+                                             where a.InvoiceNo == InvoiceNo
+                                                   && a.IsPayOut == true
+                                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                             join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                             select new 
+                                             {
+                                                 a.Id,
+                                                 a.InvoiceNo,
+                                                 a.SupplierId,
+                                                 b.SupplierName,
+                                                 a.CompanyId,
+                                                 c.CompanyName,
+                                                 a.TotalAmount,
+                                                 a.TotalDiscount,
+                                                 a.TotalGstamount,
+                                                 a.Description,
+                                                 a.Roundoff,
+                                                 a.IsPayOut,
+                                                 a.PaymentStatus
+                                             }).ToListAsync();
+                if(data != null )
+                {
+                    foreach( var item in data )
+                    {
+                        supplierInvoices.Add( new SupplierInvoiceModel()
+                        {
+                            Id = item.Id,
+                            InvoiceNo = item.InvoiceNo,
+                            SupplierId = item.SupplierId,
+                            SupplierName = item.SupplierName,
+                            CompanyId = item.CompanyId,
+                            CompanyName = item.CompanyName,
+                            TotalAmount = item.TotalAmount,
+                            TotalDiscount = item.TotalDiscount,
+                            TotalGstamount = item.TotalGstamount,
+                            Description = item.Description,
+                            Roundoff = item.Roundoff,
+                            IsPayOut = item.IsPayOut,
+                            PaymentStatus = item.PaymentStatus
+                        });
+                    }
+                }
+                return supplierInvoices;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

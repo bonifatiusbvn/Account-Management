@@ -393,19 +393,19 @@ function WithGSTSelected() {
     var gstPercentageInput = document.getElementById('txtGstPerUnit');
     var priceInput = document.getElementById('txtPricePerUnit');
 
+
     if (isWithGstCheckbox.checked) {
         var price = parseFloat(priceInput.value); 
         var gstPercentage = parseFloat(gstPercentageInput.value); 
-
+        gstAmountInput.disabled = true;
         if (!isNaN(price) && !isNaN(gstPercentage)) {
             var gstAmount = (gstPercentage / 100) * price;
-            var totalAmount = price + gstAmount; 
             gstAmountInput.value = gstAmount.toFixed(2);
+            
         } else {
-            gstAmountInput.value = "Invalid input";
+            gstAmountInput.value = ""; 
+            gstAmountInput.disabled = true;
         }
-    } else {
-        gstAmountInput.value = "";
     }
 }
 

@@ -29,6 +29,8 @@ public partial class PurchaseOrder
 
     public string? BillingAddress { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

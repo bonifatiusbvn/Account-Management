@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public decimal ItemTotal { get; set; }
         public string ShippingAddress { get; set; } = null!;
+        public bool? IsDeleted { get; set; }
 
         public Guid CreatedBy { get; set; }
 
@@ -64,5 +66,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? SiteName { get; set; }
         public string? UnitName { get; set; }
         public Guid? ItemId { get; set; }
+        public List<POItemDetailsModel>? ItemList { get; set; }
+        public List<PODeliveryAddressModel>? AddressList { get; set; }
     }
+
+
 }

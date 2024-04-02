@@ -1,5 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +17,24 @@ namespace AccountManegments.Web.Controllers
         {
             APIServices = aPIServices;
         }
-        public IActionResult CreateInvoice()
+        public async Task<IActionResult> CreateInvoice()
         {
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "SupplierInvoice/CheckSupplierInvoiceNo");
+
+                if (Response.code == 200)
+                {
+                    ViewData["SupplierInvoiceNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
             return View();
         }
 
@@ -64,6 +82,125 @@ namespace AccountManegments.Web.Controllers
 
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
 
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IActionResult PayOutInvoice()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceDetails(Guid CompanyId, Guid SupplierId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                if (postuser.code == 200)
+                {
+                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
+                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
+
+                }
+                else
+                {
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemDetailById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<ItemMasterModel>(ItemId.ToString());
+                ItemMasterModel Items = new ItemMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
+                    Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/InvoiceMaster/_GetItemsDetailsListPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> InsertMultipleSupplierItemDetails()
+        {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["SupplierItems"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetPayOutDetailsByInvoiceNo()
+        {
+            try
+            {
+                var InvoiceNo = HttpContext.Request.Form["INVOICENO"];
+                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(InvoiceNo);
+                List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsByInvoiceNo?InvoiceNo=" + Details.InvoiceNo);
+                if (postuser.code == 200)
+                {
+                    GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
+                }
+                return new JsonResult(GetInvoiceList);
+            }
+            catch (Exception ex)
+            {
+                throw ex ;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertPayOutDetails()
+        {
+            try
+            {
+                var payout = HttpContext.Request.Form["PAYOUTDETAILS"];
+                var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceModel>(payout);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/AddSupplierInvoice");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser });
                 }
                 else
                 {

@@ -1,10 +1,14 @@
-﻿@using AccountManegments.Web.Models;
+﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
+@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "CreatePurchaseOrder";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Invoice</div>
     <div class="ps-3">
@@ -44,13 +48,25 @@
                                                 <div>
                                                     <label class="text-muted text-uppercase fw-semibold">CompanyName</label>
                                                 </div>
+
                                                 <div class="ms-auto">
-                                                    <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
-                                                        <option selected disabled value="">Select Company Name</option>
-                                                    </select>
+                                                    @if (Model.CompanyName != null)
+                                                    {
+                                                        <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
+                                                            <option selected disabled value="@Model.ToCompanyId">@Model.CompanyName</option>
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
+                                                            <option selected disabled value="">Select Company</option>
+                                                        </select>
+                                                    }
+
                                                     <span id="spncompanyname" class="text-danger"></span>
                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                     <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
+                                                    <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -66,10 +82,10 @@
                                                 </div>
                                                 <div class="mb-2" id="companybillingaddressDetails">
                                                     <div class="mb-2">
-                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" placeholder="Full Name" required />
+                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="@Model.CompanyName" placeholder="Full Name" required />
                                                     </div>
                                                     <div class="mb-2">
-                                                        <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                        <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.BillingAddress</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -90,7 +106,7 @@
                                                         <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
                                                     </div>
                                                     <div class="mb-2">
-                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" disabled>
+                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@Model.Date" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,9 +115,18 @@
                                                 <div>
                                                     <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
                                                 </div>
-                                                <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                                    <option selected disabled value="">Select Supplier Name</option>
-                                                </select>
+                                                @if (Model.SupplierName != null)
+                                                {
+                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                        <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
+                                                    </select>
+                                                }
+                                                else
+                                                {
+                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                        <option selected disabled value="">Select Supplier</option>
+                                                    </select>
+                                                }
                                                 <span id="spnsuppliername" class="text-danger"></span>
                                             </div>
                                             <!--end col-->
@@ -110,9 +135,19 @@
                                                     <div>
                                                         <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
                                                     </div>
-                                                    <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                                        <option selected disabled value="">Select ProductName</option>
-                                                    </select>
+                                                    @if (Model.Item != null)
+                                                    {
+                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                            <option selected disabled value="@Model.ItemId">@Model.Item</option>
+                                                        </select>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                            <option selected disabled value="">select Item</option>
+                                                        </select>
+                                                    }
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
                                                     <div id="searchvalidationMessage" class="text-danger"></div>
                                                 </div>
@@ -148,6 +183,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="addNewlink">
+                                                    @if (Model.ItemList != null)
+                                                    {
+                                                        @Html.Partial("_EditItemDetailsPartial", Model.ItemList)
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>
@@ -167,7 +206,7 @@
                                                             <tr>
                                                                 <th scope="row">Total Gst(18%)</th>
                                                                 <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -179,7 +218,7 @@
                                                             <tr class="border-top border-top-dashed">
                                                                 <th scope="row">Total Amount</th>
                                                                 <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -194,7 +233,7 @@
                                                 <div class="mb-2">
                                                     <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Delivery Schedule</label>
                                                     <div class="mb-2">
-                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" />
+                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" />
                                                         <span id="spndelivryschedule" class="text-danger"></span>
                                                     </div>
                                                 </div>
@@ -212,7 +251,7 @@
                                                                 <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
                                                             </div>
                                                             <div class="mb-2">
-                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
+                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.ShippingAddress</textarea>
                                                                 <span id="spnshippingaddress" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -227,12 +266,13 @@
                                             <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
                                         </div>
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="button" class="btn btn-success" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-success" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-success" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                             <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
                                             <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                         </div>
                                     </div>
-                                    
+
                                 </form>
                             </div>
                         </div>
@@ -245,13 +285,14 @@
     <!--end col-->
 </div>
 <!--end row-->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script>
-
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="~/moduls/purchaserequestscript.js"></script>
+}
+<script type="text/javascript">
+    _editCompanyselectedValue = "@Model.ToCompanyId";
+    _editSupplierselectedValue = "@Model.FromSupplierId";
+    _editItemselectedValue = "@Model.ItemId";
+</script>
 
 

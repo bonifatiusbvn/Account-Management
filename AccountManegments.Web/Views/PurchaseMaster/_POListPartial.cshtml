@@ -5,14 +5,16 @@
 @foreach (var item in Model)
 {
     <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
+        <td><a class="text-primary" href="/PurchaseMaster/DisplayPODetails?POId=@item.Id">@item.Poid</a></td>
         <td>@item.SupplierName</td>
+        <td>@item.CompanyName</td>
         <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
         <td>
             @if (_userSession.UserRole == 3)
             {
-                <a class="btn text-primary" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                <a class="btn text-primary" onclick="EditPODetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
             }
             else
             {
@@ -22,3 +24,4 @@
         </td>
     </tr>
 }
+
