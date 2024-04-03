@@ -1,4 +1,7 @@
 ﻿var TotalAmount = '';
+var TotalPending = ''
+var TotalCreditamount = ''
+
 
 GetCompanyDetails();
 GetSupplierDetails();
@@ -34,6 +37,8 @@ $(document).ready(function () {
     $("#pendingamount").html('₹' + 00);
     $("#txttotalcreditamount").html('₹' + 00);
     $("#txttotalpendingamount").html('₹' + 00);
+
+
     $('#txtSuppliername').change(function () {
         var CompanyId = $('#txtcompanyname').val();
         var SupplierId = $(this).val();
@@ -41,6 +46,7 @@ $(document).ready(function () {
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
             type: 'GET',
             success: function (result) {
+
                 if (result == "There is no data for selected Supplier!") {
                     Swal.fire({
                         title: 'Warning',
@@ -51,6 +57,8 @@ $(document).ready(function () {
                     });
                 } else {
                     $("#invoicedetails").html(result);
+                    $("#txttotalpendingamount").html(TotalPending);
+                    $("#txttotalcreditamount").html(TotalCreditamount);
                     $("#totalAmount").html('₹' + TotalAmount);
                     GetPayOutTotalAmount();
                 }
@@ -59,7 +67,8 @@ $(document).ready(function () {
     });
 });
 
-function GetPayOutTotalAmount() {debugger
+function GetPayOutTotalAmount() {
+
 
     var details = {
         CompanyId: $('#txtcompanyname').val(),
@@ -109,17 +118,17 @@ function GetPayOutTotalAmount() {debugger
 
 function InsertPayOutDetails() {
 
-        var objData = {
-            InvoiceNo: "PayOut",
-            SiteId: $("#txtSiteId").val(),
-            SupplierId: $("#txtSuppliername").val(),
-            CompanyId: $("#txtcompanyname").val(),
-            TotalAmount: $("#txtpayoutamount").val(),
-            TotalGstamount: $("#txtpayoutamount").val(),
-            PaymentStatus: $("#paymenttype").val(),
-            Description: $("#txtdescription").val(),
-            CreatedBy: $("#txtUserId").val(),
-        }; 
+    var objData = {
+        InvoiceNo: "PayOut",
+        SiteId: $("#txtSiteId").val(),
+        SupplierId: $("#txtSuppliername").val(),
+        CompanyId: $("#txtcompanyname").val(),
+        TotalAmount: $("#txtpayoutamount").val(),
+        TotalGstamount: $("#txtpayoutamount").val(),
+        PaymentStatus: $("#paymenttype").val(),
+        Description: $("#txtdescription").val(),
+        CreatedBy: $("#txtUserId").val(),
+    };
 
     var form_data = new FormData();
     form_data.append("PAYOUTDETAILS", JSON.stringify(objData));
@@ -157,7 +166,7 @@ function validateAndInsertPayOutDetails() {
     var payout = document.getElementById('txtpayoutamount').value.trim();
     var company = document.getElementById('txtcompanyname').value.trim();
     var supplier = document.getElementById('txtSuppliername').value.trim();
-    
+
     var isValid = true;
 
     if (payout === "") {

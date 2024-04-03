@@ -28,7 +28,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.DeleteSupplierInvoice(Id);
         }
 
-        public async Task<(InvoiceTotalAmount, decimal)> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
         {
             return await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
         }

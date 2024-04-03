@@ -1,14 +1,7 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceModel>
-@{
-    decimal? TotalAmount = 0;
+﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.InvoiceTotalAmount
 
-}
-@foreach (var item in Model)
-{
-    TotalAmount += item.TotalAmount;
-}
 
-@foreach (var item in Model)
+@foreach (var item in Model.InvoiceList)
 {
     <tr>
         <td class="form_name">@item.SupplierName</td>
@@ -20,5 +13,7 @@
 }
 
 <script>
-    var TotalAmount = '@TotalAmount';
+    var TotalAmount = '@Model.Alltotal';
+    var TotalPending = '@Model.InvoiceTotal';
+    var TotalCreditamount = '@Model.onlineCashSum';
 </script>

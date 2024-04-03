@@ -42,7 +42,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
                     TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
                     Roundoff = SupplierInvoiceDetail.Roundoff,
-                    IsPayOut=true,
+                    IsPayOut = true,
                     PaymentStatus = SupplierInvoiceDetail.PaymentStatus,
                     CreatedBy = SupplierInvoiceDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -80,14 +80,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<(InvoiceTotalAmount, decimal)> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
         {
             try
             {
                 var pendingSum = Context.SupplierInvoices
                     .Where(si => si.SupplierId == SupplierId &&
                                  si.CompanyId == CompanyId &&
-                                 si.PaymentStatus == "Pending")
+                                 si.PaymentStatus == "Unpaid")
                     .Sum(si => si.TotalAmount);
 
                 var onlineCashSum = Context.SupplierInvoices
@@ -96,7 +96,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                  (si.PaymentStatus == "Online" || si.PaymentStatus == "Cash"))
                     .Sum(si => si.TotalAmount);
 
-                var difference = pendingSum - onlineCashSum;
+                var difference = onlineCashSum - pendingSum;
+                var Alltottal = onlineCashSum + pendingSum;
 
                 var supplierInvoices = await (from a in Context.SupplierInvoices
                                               where a.CompanyId == CompanyId
@@ -126,10 +127,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var invoiceTotalAmount = new InvoiceTotalAmount
                 {
                     InvoiceList = supplierInvoices.ToList(),
-                    InvoiceTotal = difference
+                    InvoiceTotal = difference,
+                    onlineCashSum = onlineCashSum,
+                    Alltotal = Alltottal,
                 };
 
-                return (invoiceTotalAmount, difference);
+                return (invoiceTotalAmount);
             }
             catch (Exception ex)
             {
@@ -360,11 +363,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 bool PayOut;
                 if (firstOrderDetail.PaymentStatus == "Unpaid")
                 {
-                     PayOut = false;
+                    PayOut = false;
                 }
                 else
                 {
-                     PayOut = true;
+                    PayOut = true;
                 }
 
                 var supplierInvoice = new SupplierInvoice()
@@ -380,7 +383,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalAmount = firstOrderDetail.TotalAmount,
                     PaymentStatus = firstOrderDetail.PaymentStatus,
                     Roundoff = firstOrderDetail.Roundoff,
-                    IsPayOut= PayOut,
+                    IsPayOut = PayOut,
                     Date = DateTime.Now,
                     CreatedBy = firstOrderDetail.CreatedBy,
                     CreatedOn = DateTime.Now,

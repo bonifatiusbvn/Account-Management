@@ -6,6 +6,7 @@ using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
@@ -102,7 +103,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Invoice-View")]
+
         public IActionResult PayOutInvoice()
         {
             return View();
@@ -117,26 +118,32 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
                 if (postuser.code == 200)
                 {
-                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
-                    if(GetInvoiceList.Count == 0)
+                    var jsonString = postuser.data.ToString();
+                    var tupleResult = JsonConvert.DeserializeObject<InvoiceTotalAmount>(jsonString);
+
+                    if (tupleResult == null)
                     {
-                        return new JsonResult("There is no data for selected Supplier!");
+                        return new JsonResult("Failed to deserialize API response");
                     }
-                    else
-                    {
-                        return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
-                    }
+
+                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", tupleResult);
+
                 }
                 else
                 {
+
                     return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
             {
+
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
+
         }
+
+
 
 
         [HttpPost]
@@ -188,26 +195,26 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<JsonResult> GetPayOutDetailsForTotalAmount()
-        {
-            try
-            {
-                var TotalAmount = HttpContext.Request.Form["TOTALAMOUNT"];
-                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(TotalAmount);
-                List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsForTotalAmount?CompanyId=" + Details.CompanyId + "&SupplierId=" + Details.SupplierId);
-                if (postuser.code == 200)
-                {
-                    GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
-                }
-                return new JsonResult(GetInvoiceList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //[HttpPost]
+        //public async Task<JsonResult> GetPayOutDetailsForTotalAmount()
+        //{
+        //    try
+        //    {
+        //        var TotalAmount = HttpContext.Request.Form["TOTALAMOUNT"];
+        //        var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(TotalAmount);
+        //        List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
+        //        ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsForTotalAmount?CompanyId=" + Details.CompanyId + "&SupplierId=" + Details.SupplierId);
+        //        if (postuser.code == 200)
+        //        {
+        //            GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
+        //        }
+        //        return new JsonResult(GetInvoiceList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
 
         [HttpPost]

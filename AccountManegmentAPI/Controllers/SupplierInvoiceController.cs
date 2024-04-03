@@ -98,9 +98,10 @@ namespace AccountManagement.API.Controllers
         [Route("GetInvoiceDetailsById")]
         public async Task<IActionResult> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
         {
-            IEnumerable<InvoiceTotalAmount> supplierDetails = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
-            return Ok(new { code = 200, data = supplierDetails.ToList() });
+            var tupleResult = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
+            return Ok(new { code = 200, data = tupleResult });
         }
+
 
         [HttpPost]
         [Route("InsertMultipleSupplierItemDetails")]
@@ -128,12 +129,12 @@ namespace AccountManagement.API.Controllers
             var checkInvoiceNo = SupplierInvoice.CheckSupplierInvoiceNo();
             return Ok(new { code = 200, data = checkInvoiceNo });
         }
-        [HttpPost]
-        [Route("GetPayOutDetailsForTotalAmount")]
-        public async Task<IActionResult> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
-        {
-            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetPayOutDetailsForTotalAmount(CompanyId,SupplierId);
-            return Ok(new { code = 200, data = supplierDetails.ToList() });
-        }
+        //[HttpPost]
+        //[Route("GetPayOutDetailsForTotalAmount")]
+        //public async Task<IActionResult> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
+        //{
+        //    IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetPayOutDetailsForTotalAmount(CompanyId, SupplierId);
+        //    return Ok(new { code = 200, data = supplierDetails.ToList() });
+        //}
     }
 }
