@@ -1,10 +1,11 @@
 ﻿AllSupplierInvoiceListTable()
+InvoiceListTable();
 GetItemDetailsList()
 GetSiteDetails();
 GetCompanyDetails();
 GetSupplierDetails();
 function GetItemDetailsList() {
-    debugger
+
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
@@ -148,7 +149,7 @@ function SupplierInvoicesortTable() {
 }
 
 function DeleteSupplierInvoice(InvoiceId) {
-    debugger
+ 
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -214,7 +215,7 @@ function InsertMultipleSupplierItem() {
             CompanyId: $("#txtCompanyName").val(),
             TotalAmount: $("#cart-total").val(),
             TotalGstAmount: $("#totalgst").val(),
-            Item: orderRow.find("#ProductId").val(),
+            Item: orderRow.find("#txtItemName").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtProductQuantity").val(),
             Price: orderRow.find("#txtProductTotalAmount").val(),
@@ -688,3 +689,57 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
+
+function InvoiceListTable() {
+
+    var searchText = $('#txtInvoiceSearch').val();
+    var searchBy = $('#InvoiceSearchBy').val();
+
+    $.get("/InvoiceMaster/InvoiceListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
+
+
+            $("#Invoicetbody").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+function filterInvoiceTable() {
+
+    var searchText = $('#txtInvoiceSearch').val();
+    var searchBy = $('#InvoiceSearchBy').val();
+
+    $.ajax({
+        url: '/InvoiceMaster/InvoiceListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            $("#Invoicetbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}
+
+function InvoiceSortTable() {
+    var sortBy = $('#SortByInvoice').val();
+    $.ajax({
+        url: '/InvoiceMaster/InvoiceListAction',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            $("#Invoicetbody").html(result);
+        },
+        error: function (xhr, status, error) {
+
+        }
+    });
+}

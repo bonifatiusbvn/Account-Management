@@ -33,7 +33,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
         }
 
-        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid InvoiceId)
         {
             return await SupplierInvoice.GetSupplierInvoiceById(InvoiceId);
         }

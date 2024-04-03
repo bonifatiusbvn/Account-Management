@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,6 +51,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public Guid CompanyId { get; set; }
 
+        public DateTime? Date { get; set; }
+
         public string? Description { get; set; }
 
         public decimal TotalGstamount { get; set; }
@@ -66,5 +70,27 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SupplierName { get; set; }
 
         public string? CompanyName { get; set; }
+
+        public string? CompanyAddress { get; set; }
+
+        public string? CompanyArea { get; set; }
+
+        public int? CompanyCityId { get; set; }
+
+        public string? CompanyCityName { get; set; }
+
+        public int? CompanyStateId { get; set; }
+
+        public string? CompanyStateName { get; set; }
+
+        public int? CompanyCountryId { get; set; }
+
+        public string? CompanyCountryName { get; set; }
+
+        public string? CompanyGstNo { get; set; }
+
+        public string? CompanyPincode { get; set; }
+
+        public List<POItemDetailsModel>? ItemList { get; set; }
     }
 }

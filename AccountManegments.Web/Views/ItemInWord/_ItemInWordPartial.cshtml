@@ -1,0 +1,35 @@
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.ItemInWord.ItemInWordModel>
+
+@foreach (var item in Model)
+{
+    <tr id="userCard_@item.InwordId" class="" onclick="SelectItemInWordDetails('@item.InwordId', this)">
+        <td>@item.Item</td>
+        <td>@item.Quantity</td>
+        <td>
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.InwordId" @if (item.IsApproved ?? false)
+            {
+                <text>checked</text>
+            } onclick="ItemInWordIsApproved('@item.InwordId')">
+        </td>
+        <td>
+            @if (_userSession.UserRole == 3)
+            {
+                <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeleteItemInWord('@item.InwordId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+            else
+            {
+                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            }
+        </td>
+    </tr>
+}
+
+@section Scripts {
+
+    <script src="~/moduls/iteminwordscript.js"></script>
+}
