@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using System.Data.OleDb;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class ItemMasterController : Controller
     {
 
@@ -29,6 +31,7 @@ namespace AccountManegments.Web.Controllers
             _userSession = userSession;
             Configuration = configuration;
         }
+        [FormPermissionAttribute("Item-View")]
         public IActionResult ItemListView()
         {
             return View();
@@ -76,6 +79,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Item-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateItem(ItemMasterModel ItemDetails)
         {
@@ -131,6 +136,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Item-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateItemDetails(ItemMasterModel ItemDetails)
         {
@@ -151,6 +158,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Item-Edit")]
         [HttpPost]
         public async Task<IActionResult> ItemIsApproved(Guid ItemId)
         {
@@ -174,6 +182,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Item-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteItemDetails(Guid ItemId)
         {
@@ -213,6 +223,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Item-Add")]
         [HttpPost]
         public IActionResult ImportExcelFile(IFormFile FormFile)
         {

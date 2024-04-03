@@ -1,6 +1,7 @@
 ﻿@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+
 <!doctype html>
 <html lang="en" class="light-theme">
 
@@ -105,22 +106,8 @@
                         <div class="menu-title">Supplier</div>
                     </a>
                 </li>
-                <li>
-                    <a asp-action="CreateInvoice" asp-controller="InvoiceMaster">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Create Invoice</div>
-                    </a>
-                </li>
-                <li>
-                    <a asp-action="SupplierInvoiceListView" asp-controller="InvoiceMaster">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Supplier Invoice List</div>
-                    </a>
-                </li>
+
+
                 <li>
                     <a class="has-arrow">
                         <div class="parent-icon">
@@ -171,7 +158,32 @@
                         </li>
                     </ul>
                 </li>
-
+                <li>
+                    <a class="has-arrow">
+                        <div class="parent-icon">
+                            <ion-icon name="lock-closed-sharp"></ion-icon>
+                        </div>
+                        <div class="menu-title">Invoice</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a asp-action="CreateInvoice" asp-controller="InvoiceMaster">
+                                <div class="parent-icon">
+                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                </div>
+                                <div class="menu-title">Create Invoice</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="SupplierInvoiceListView" asp-controller="InvoiceMaster">
+                                <div class="parent-icon">
+                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                </div>
+                                <div class="menu-title">Invoice List</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li>
                     <a class="has-arrow">
                         <div class="parent-icon">

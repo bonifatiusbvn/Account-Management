@@ -2,12 +2,14 @@
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -29,10 +31,10 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                    
-                    UserSession.SiteId = SiteId.ToString();
-                    UserSession.SiteName = SiteId == null ? "All Site":SiteName.ToString();
-                
+
+                UserSession.SiteId = SiteId.ToString();
+                UserSession.SiteName = SiteId == null ? "All Site" : SiteName.ToString();
+
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
                 string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
 
@@ -65,6 +67,11 @@ namespace AccountManegments.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult UnAuthorised()
+        {
+            return View();
         }
     }
 }

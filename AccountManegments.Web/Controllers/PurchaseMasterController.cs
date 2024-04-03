@@ -31,6 +31,8 @@ namespace AccountManegments.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
 
+
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public async Task<IActionResult> PurchaseRequestListView()
         {
             try
@@ -100,6 +102,8 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+
+        [FormPermissionAttribute("PurchaseMaster-Add")]
         [HttpPost]
         public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PurchaseRequestDetails)
         {
@@ -133,7 +137,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("PurchaseMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel updatePurchaseRequest)
         {
@@ -155,6 +159,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("PurchaseMaster-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseRequest(Guid PurchaseId)
         {
@@ -176,6 +181,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("PurchaseMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> PurchaseRequestIsApproved(Guid PurchaseId)
         {
@@ -199,6 +205,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
 
         public async Task<IActionResult> CreatePurchaseOrder(Guid? id)
         {
@@ -232,6 +239,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("PurchaseMaster-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultiplePurchaseOrderDetails()
         {
@@ -255,6 +263,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public IActionResult PurchaseOrderList()
         {
             return View();
@@ -299,6 +309,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("PurchaseMaster-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails()
         {
@@ -321,6 +333,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("PurchaseMaster-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseOrderDetails(Guid POId)
         {
@@ -342,6 +356,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public async Task<IActionResult> POListView()
         {
             return View();
@@ -414,7 +429,7 @@ namespace AccountManegments.Web.Controllers
                     var textBuilder = new TextFragment();
 
                     string tableContent = "";
-                        int index = 1;
+                    int index = 1;
                     foreach (var item in orderDetails.ItemList)
                     {
                         tableContent += $@"

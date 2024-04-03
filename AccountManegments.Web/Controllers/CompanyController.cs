@@ -6,11 +6,13 @@ using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class CompanyController : Controller
     {
         public WebAPI WebAPI { get; }
@@ -27,7 +29,7 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Company-View")]
-        
+
         public IActionResult CreateCompany()
         {
             return View();
@@ -59,7 +61,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("Company-Add")]
         [HttpPost]
         public async Task<IActionResult> AddCompany(CompanyModel AddCompany)
         {
@@ -114,6 +116,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Company-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateCompany(CompanyModel UpdateCompany)
         {
@@ -131,6 +135,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Company-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
         {
@@ -151,7 +157,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Company-View")]
+
         [HttpGet]
         public async Task<JsonResult> GetCompanyNameList()
         {
