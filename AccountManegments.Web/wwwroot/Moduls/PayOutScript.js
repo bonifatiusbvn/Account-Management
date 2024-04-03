@@ -41,23 +41,34 @@ $(document).ready(function () {
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
             type: 'GET',
             success: function (result) {
-                $("#invoicedetails").html(result);
-                $("#totalAmount").html('₹' + TotalAmount);
-                GetPayOutTotalAmount();
+                if (result == "There is no data for selected Supplier!") {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: result,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                } else {
+                    $("#invoicedetails").html(result);
+                    $("#totalAmount").html('₹' + TotalAmount);
+                    GetPayOutTotalAmount();
+                }
             },
         });
     });
 });
 
-function GetPayOutTotalAmount() {
-    
-    var Invoice = {
-        InvoiceNo: document.getElementById("txtinvoicetype").innerText,
+function GetPayOutTotalAmount() {debugger
+
+    var details = {
+        CompanyId: $('#txtcompanyname').val(),
+        SupplierId: $('#txtSuppliername').val(),
     }
     var form_data = new FormData();
-    form_data.append("INVOICENO", JSON.stringify(Invoice));
+    form_data.append("TOTALAMOUNT", JSON.stringify(details));
     $.ajax({
-        url: '/InvoiceMaster/GetPayOutDetailsByInvoiceNo',
+        url: '/InvoiceMaster/GetPayOutDetailsForTotalAmount',
         type: 'Post',
         data: form_data,
         dataType: 'json',
@@ -97,38 +108,18 @@ function GetPayOutTotalAmount() {
 };
 
 function InsertPayOutDetails() {
-    
-    let val;
-    $("input[name=chk_child]:checked").each(function () {
-        val = $(this).attr("data-id");
-    });
 
-    var invoiceNo = val || "";
-    debugger
-    if (invoiceNo == "") {
         var objData = {
-            InvoiceNo: document.getElementById("txtinvoicetype").innerText,
+            InvoiceNo: "PayOut",
             SiteId: $("#txtSiteId").val(),
             SupplierId: $("#txtSuppliername").val(),
             CompanyId: $("#txtcompanyname").val(),
             TotalAmount: $("#txtpayoutamount").val(),
             TotalGstamount: $("#txtpayoutamount").val(),
             PaymentStatus: $("#paymenttype").val(),
+            Description: $("#txtdescription").val(),
             CreatedBy: $("#txtUserId").val(),
         }; 
-    } else {
-        var objData = {
-            InvoiceNo: invoiceNo,
-            SiteId: $("#txtSiteId").val(),
-            SupplierId: $("#txtSuppliername").val(),
-            CompanyId: $("#txtcompanyname").val(),
-            TotalAmount: $("#txtpayoutamount").val(),
-            TotalGstamount: $("#txtpayoutamount").val(),
-            PaymentStatus: $("#paymenttype").val(),
-            CreatedBy: $("#txtUserId").val(),
-        }; 
-    }
-
 
     var form_data = new FormData();
     form_data.append("PAYOUTDETAILS", JSON.stringify(objData));

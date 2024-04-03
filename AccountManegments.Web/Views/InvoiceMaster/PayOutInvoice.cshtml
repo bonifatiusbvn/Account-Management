@@ -111,7 +111,6 @@
                     <div class="col-auto ms-auto">
                         <div class="d-flex gap-2">
                             <select class="form-control bg-light border-0" id="txtcompanyname" name="txtcompanyname">
-                                <option selected disabled value="">--Company--</option>
                             </select>
                             <input type="hidden" id="txtcompany" />
                             <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
@@ -151,16 +150,9 @@
                         <table class="table align-middle table-nowrap" id="customerTable">
                             <thead class="table-light text-muted">
                                 <tr>
-                                    <th scope="col" style="width: 50px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
-                                        </div>
-                                    </th>
                                     <th class="sort" data-sort="date" scope="col">Supplier</th>
                                     <th class="sort" data-sort="currency_name" scope="col">Company</th>
                                     <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
-                                    <th class="sort" data-sort="to_name" scope="col">PaymentStatus</th>
-                                    <th class="sort" data-sort="status" scope="col">IsPayOut</th>
                                     <th class="sort" data-sort="to_name" scope="col">TotalGSTAmount</th>
                                     <th class="sort" data-sort="transaction_id" scope="col">TotalAmount</th>
                                 </tr>
@@ -212,7 +204,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label>Payment Type :</label>
+                                        <label>PaymentStatus</label>
                                         <select class="form-select" id="paymenttype">
                                             <option value="Cash">Cash</option>
                                             <option value="Cheque">Cheque</option>
@@ -222,6 +214,11 @@
                                     </div>
                                 </div><!-- end col -->
                             </div><!-- end row -->
+                            <div>
+                                <div class="input-group mb-3">
+                                    <textarea type="text" class="form-control" id="txtdescription" placeholder="Description"></textarea>
+                                </div>
+                            </div>
                             <div>
                                 <div class="input-group mb-3">
                                     <label class="input-group-text" for="txtpayoutamount">Amount</label>

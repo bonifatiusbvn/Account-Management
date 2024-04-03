@@ -48,4 +48,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? CompanyName { get; set; }
     }
+    public class InvoiceTotalAmount
+    {
+        public List<SupplierInvoiceModel> InvoiceList { get; set; }
+        public decimal InvoiceTotal {  get; set; }
+    }
 }

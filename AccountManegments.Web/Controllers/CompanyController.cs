@@ -151,7 +151,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Company-View")]
+        //[FormPermissionAttribute("Company-View")]
         [HttpGet]
         public async Task<JsonResult> GetCompanyNameList()
         {
