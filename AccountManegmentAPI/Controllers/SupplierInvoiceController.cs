@@ -98,7 +98,7 @@ namespace AccountManagement.API.Controllers
         [Route("GetInvoiceDetailsById")]
         public async Task<IActionResult> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
         {
-            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
+            IEnumerable<InvoiceTotalAmount> supplierDetails = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
             return Ok(new { code = 200, data = supplierDetails.ToList() });
         }
 
@@ -129,10 +129,10 @@ namespace AccountManagement.API.Controllers
             return Ok(new { code = 200, data = checkInvoiceNo });
         }
         [HttpPost]
-        [Route("GetPayOutDetailsByInvoiceNo")]
-        public async Task<IActionResult> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        [Route("GetPayOutDetailsForTotalAmount")]
+        public async Task<IActionResult> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
         {
-            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetPayOutDetailsByInvoiceNo(InvoiceNo);
+            IEnumerable<SupplierInvoiceModel> supplierDetails = await SupplierInvoice.GetPayOutDetailsForTotalAmount(CompanyId,SupplierId);
             return Ok(new { code = 200, data = supplierDetails.ToList() });
         }
     }

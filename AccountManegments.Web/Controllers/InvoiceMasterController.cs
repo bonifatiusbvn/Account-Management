@@ -118,8 +118,14 @@ namespace AccountManegments.Web.Controllers
                 if (postuser.code == 200)
                 {
                     List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
-                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
-
+                    if(GetInvoiceList.Count == 0)
+                    {
+                        return new JsonResult("There is no data for selected Supplier!");
+                    }
+                    else
+                    {
+                        return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
+                    }
                 }
                 else
                 {
@@ -183,14 +189,14 @@ namespace AccountManegments.Web.Controllers
 
 
         [HttpPost]
-        public async Task<JsonResult> GetPayOutDetailsByInvoiceNo()
+        public async Task<JsonResult> GetPayOutDetailsForTotalAmount()
         {
             try
             {
-                var InvoiceNo = HttpContext.Request.Form["INVOICENO"];
-                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(InvoiceNo);
+                var TotalAmount = HttpContext.Request.Form["TOTALAMOUNT"];
+                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(TotalAmount);
                 List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsByInvoiceNo?InvoiceNo=" + Details.InvoiceNo);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsForTotalAmount?CompanyId=" + Details.CompanyId + "&SupplierId=" + Details.SupplierId);
                 if (postuser.code == 200)
                 {
                     GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());

@@ -60,39 +60,38 @@ $(document).ready(function () {
     $("#txtOrderDate").prop("disabled", true);
 });
 
-//function searchItemDetailById() {
-//    debugger
-//    var GetItemId = {
-//        ItemId: $('#searchItemName').val(),
+function searchItemDetailById() {
+    var GetItemId = {
+        ItemId: $('#searchItemName').val(),
 
-//    }
-//    var form_data = new FormData();
-//    form_data.append("ITEMID", JSON.stringify(GetItemId));
+    }
+    var form_data = new FormData();
+    form_data.append("ITEMID", JSON.stringify(GetItemId));
 
 
-//    $.ajax({
-//        url: '/InvoiceMaster/DisplayItemDetailById',
-//        type: 'Post',
-//        datatype: 'json',
-//        data: form_data,
-//        processData: false,
-//        contentType: false,
-//        complete: function (Result) {
-//            if (Result.statusText === "success") {
-//                AddNewRow(Result.responseText);
-//            }
-//            else {
-//                var GetItemId = $('#searchItemName').val();
-//                if (GetItemId === "Select Product Name" || GetItemId === null) {
-//                    $('#searchvalidationMessage').text('Please select ProductName!!');
-//                }
-//                else {
-//                    $('#searchvalidationMessage').text('');
-//                }
-//            }
-//        }
-//    });
-//}
+    $.ajax({
+        url: '/InvoiceMaster/DisplayItemDetailById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
+            }
+            else {
+                var GetItemId = $('#searchItemName').val();
+                if (GetItemId === "Select Product Name" || GetItemId === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#searchvalidationMessage').text('');
+                }
+            }
+        }
+    });
+}
 
 function AllSupplierInvoiceListTable() {
 
@@ -222,6 +221,7 @@ function InsertMultipleSupplierItem() {
             GstPer: orderRow.find("#txtGSTPer").val(),
             Gst: orderRow.find("#txtProductAmountWithGST").val(),
             Discription: $("#txtDiscription").val(),
+            PaymentStatus: $("#ddlpaymentstatus").val(),
             CreatedBy: $("#createdById").val(),
         };
         orderDetails.push(objData);
