@@ -98,7 +98,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                  (si.PaymentStatus == "Online" || si.PaymentStatus == "Cash"))
                     .Sum(si => si.TotalAmount);
 
-                var difference = onlineCashSum - pendingSum;
+
                 var Alltottal = onlineCashSum + pendingSum;
 
                 var supplierInvoices = await (from a in Context.SupplierInvoices
@@ -129,7 +129,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var invoiceTotalAmount = new InvoiceTotalAmount
                 {
                     InvoiceList = supplierInvoices.ToList(),
-                    InvoiceTotal = difference,
+                    InvoiceTotal = pendingSum,
                     onlineCashSum = onlineCashSum,
                     Alltotal = Alltottal,
                 };
@@ -259,13 +259,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    // Default sorting by CreatedOn in descending order
+
                     supplierList = supplierList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+                    string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
@@ -447,6 +447,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
+        public Task<List<SupplierInvoiceModel>> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

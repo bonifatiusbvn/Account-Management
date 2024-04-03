@@ -195,26 +195,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<JsonResult> GetPayOutDetailsForTotalAmount()
-        //{
-        //    try
-        //    {
-        //        var TotalAmount = HttpContext.Request.Form["TOTALAMOUNT"];
-        //        var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(TotalAmount);
-        //        List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
-        //        ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsForTotalAmount?CompanyId=" + Details.CompanyId + "&SupplierId=" + Details.SupplierId);
-        //        if (postuser.code == 200)
-        //        {
-        //            GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
-        //        }
-        //        return new JsonResult(GetInvoiceList);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+
 
 
         [HttpPost]

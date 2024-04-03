@@ -67,54 +67,7 @@ $(document).ready(function () {
     });
 });
 
-function GetPayOutTotalAmount() {
 
-
-    var details = {
-        CompanyId: $('#txtcompanyname').val(),
-        SupplierId: $('#txtSuppliername').val(),
-    }
-    var form_data = new FormData();
-    form_data.append("TOTALAMOUNT", JSON.stringify(details));
-    $.ajax({
-        url: '/InvoiceMaster/GetPayOutDetailsForTotalAmount',
-        type: 'Post',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (result) {
-            var total = 0;
-            result.forEach(function (obj) {
-                if (obj.totalAmount) {
-                    total += obj.totalAmount;
-                }
-            });
-            var totalamount = $("#totalAmount").html().replace('₹', '');
-            $("#txttotalcreditamount").text('₹' + total);
-            var totalpendingAmount = totalamount - total;
-            var formattedAmount = '₹' + totalpendingAmount.toFixed(2);
-            $("#txttotalpendingamount").text(formattedAmount);
-            $("#pendingamount").text(formattedAmount);
-            $('#txtpayoutamount').on('input', function () {
-                var enteredAmount = parseFloat($(this).val());
-
-                if (!isNaN(enteredAmount)) {
-                    var pendingAmount = totalpendingAmount - enteredAmount;
-
-                    if (enteredAmount > totalpendingAmount) {
-                        $('#spnpayout').text('Entered amount cannot exceed pending amount.');
-                    } else {
-                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                    }
-                } else {
-                    $('#spnpayout').text('');
-                    $('#txtpendingamount').val('');
-                }
-            });
-        },
-    });
-};
 
 function InsertPayOutDetails() {
 
