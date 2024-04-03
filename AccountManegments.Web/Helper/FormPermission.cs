@@ -6,7 +6,7 @@ namespace AccountManegments.Web.Helper
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class FormPermissionAttribute : ActionFilterAttribute
-    {
+    { 
         private readonly string _FormnamewithPermisiion;
         public FormPermissionAttribute(string FormnamewithPermisiion)
         {
