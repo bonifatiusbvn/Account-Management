@@ -28,7 +28,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.DeleteSupplierInvoice(Id);
         }
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        public async Task<(InvoiceTotalAmount, decimal)> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
         {
             return await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
         }
@@ -58,9 +58,9 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return SupplierInvoice.CheckSupplierInvoiceNo();
         }
 
-        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsByInvoiceNo(string InvoiceNo)
+        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
         {
-            return await SupplierInvoice.GetPayOutDetailsByInvoiceNo(InvoiceNo);
+            return await SupplierInvoice.GetPayOutDetailsForTotalAmount(CompanyId, SupplierId);
         }
     }
 }

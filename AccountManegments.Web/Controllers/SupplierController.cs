@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Globalization;
@@ -12,6 +13,7 @@ using System.Reflection;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         public APIServices APIServices { get; }
@@ -20,11 +22,11 @@ namespace AccountManegments.Web.Controllers
         {
             APIServices = aPIServices;
         }
+        [FormPermissionAttribute("Supplier-View")]
         public IActionResult SupplierList()
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateSupplier(SupplierModel Supplier)
@@ -93,7 +95,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("Supplier-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSupplierDetails(SupplierModel UpdateSupplier)
         {
@@ -115,6 +117,8 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Supplier-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSupplierDetails(Guid SupplierId)
         {

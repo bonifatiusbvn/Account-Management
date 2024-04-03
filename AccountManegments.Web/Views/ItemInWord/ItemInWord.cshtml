@@ -1,0 +1,216 @@
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
+    ViewData["Title"] = "ItemInWord";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Item In Word</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0 align-items-center">
+                <li class="breadcrumb-item">
+                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Item in Word Details</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+
+                <form class="ms-auto position-relative">
+                    <button type="button" class="btn btn-info px-5" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item InWord</button>
+                </form>
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+
+
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+                                    @* <div class="row hide-sm table-light ac-view-header">
+                                    <div class="col-5 text-center">
+                                    <h5>Item</h5>
+                                    </div>
+                                    <div class="col-3 ">
+                                    <h5>Quantity</h5>
+                                    </div>
+                                    <div class="col-2 ">
+                                    <h5>Approved</h5>
+                                    </div>
+                                    <div class="col-2">
+                                    <h5>Action</h5>
+                                    </div>
+                                    </div>
+                                    <div class="card" id="purchaseRequesttbody">
+                                    </div> *@
+                                    <div class="row ">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3">
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <input class="form-control" id="txtItemInWordSearch" onkeyup="filterItemInWordTable()" placeholder="Search" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ItemInWordSearchBy" onchange="filterItemInWordTable()">
+                                                            <option selected="selected">All</option>
+                                                            <option>ItemName</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ItemInWordSortBy" onchange="sortItemInWordTable()">
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
+                                                            <option value="AscendingItem">ItemName(A-Z)</option>
+                                                            <option value="DescendingItem">ItemName(Z-A)</option>
+                                                        </select>
+                                                    </div>
+                                                </div><!--end row-->
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Item Name</th>
+                                                        <th>Quantity</th>
+                                                        <th>IsApproved</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="itemInWordtbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--end row-->
+
+
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                        <div class="card radius-10">
+                            <div class="card-body" style="height:650px">
+                                <h5 class="mb-0 mt-4">ItemInWord Details</h5>
+                                <hr>
+                                <div class="row g-3 ac-detail d-none">
+                                    <div class="col-12">
+                                        <label class="form-label">Item Name</label>
+                                        <input type="text" class="form-control" id="dspItem" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Unit Name</label>
+                                        <input type="text" class="form-control" id="dspUnitName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Site Name</label>
+                                        <input type="text" class="form-control" id="dspSiteId" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Quantity</label>
+                                        <input type="text" class="form-control" id="dspQuantity" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">DocumentName</label>
+                                        <input type="text" class="form-control" id="dspDocumentName" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">IsApproved</label>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input font-22" id="dspIsApproved" type="checkbox" style="margin-left:-35px;" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* </form> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItemInWord">
+        <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
+            <h5 class="m-0 me-2 text-white">Create Item</h5>
+
+            <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div data-simplebar class="h-100">
+                <div class="p-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
+                                <div class="col-12">
+                                    <label class="form-label">Item</label>
+                                    <select class="form-control" id="txtItemId">
+                                        <option value="">--Select Item--</option>
+                                    </select>
+                                    <input type="hidden" id="txtItemName">
+                                    <input type="hidden" id="txtItemInWordid">
+                                    <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
+                                    <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
+                                    <span id="spnItemName" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Unit Type</label>
+                                    <select class="form-control" id="txtUnitType">
+                                        <option selected disabled value="">--Select Unit Type--</option>
+                                    </select>
+                                    <span id="spnUnitType" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" required>
+                                    <span id="spnQuantity" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Document</label>
+                                    <input type="file" class="form-control" id="txtDocument" required>
+                                    <span id="spnDocument" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItemInWord()" id="btnitemInWord"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/moduls/iteminwordscript.js"></script>
+}
+

@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
+using AccountManegments.Web.Models;
 using Azure;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -296,6 +297,20 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             userModel.SiteId = tblUser.User.SiteId;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
+
+                            List<FromPermission> FromPermissionData = (List<FromPermission>)(from u in Context.RolewiseFormPermissions
+                                                                      join s in Context.Forms on u.FormId equals s.FormId
+                                                                      where u.RoleId == userModel.RoleId
+                                                                        select new FromPermission
+                                                                      {
+                                                                          FormName = s.FormName,
+                                                                          View = u.IsViewAllow,
+                                                                          Edit = u.IsEditAllow,
+                                                                          Delete = u.IsDeleteAllow,
+                                                                          
+                                                                      }).ToList();  
+
+                           userModel.FromPermissionData = FromPermissionData;
                         }
                         else
                         {

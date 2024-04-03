@@ -62,7 +62,6 @@ $(document).ready(function () {
 });
 
 function searchItemDetailById() {
-    debugger
     var GetItemId = {
         ItemId: $('#searchItemName').val(),
 
@@ -223,6 +222,7 @@ function InsertMultipleSupplierItem() {
             GstPer: orderRow.find("#txtGSTPer").val(),
             Gst: orderRow.find("#txtProductAmountWithGST").val(),
             Discription: $("#txtDiscription").val(),
+            PaymentStatus: $("#ddlpaymentstatus").val(),
             CreatedBy: $("#createdById").val(),
         };
         orderDetails.push(objData);

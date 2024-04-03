@@ -16,9 +16,9 @@ namespace AccountManagement.Repository.Interface.Services.InvoiceMaster
         Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id);
         Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetails);
         Task<ApiResponseModel> DeleteSupplierInvoice(Guid InvoiceId);
-        Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId);
+        Task<(InvoiceTotalAmount, decimal)> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId);
         Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails);
         string CheckSupplierInvoiceNo();
-        Task<List<SupplierInvoiceModel>> GetPayOutDetailsByInvoiceNo(string InvoiceNo);
+        Task<List<SupplierInvoiceModel>> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId);
     }
 }

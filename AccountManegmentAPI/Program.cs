@@ -40,6 +40,10 @@ using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using AccountManagement.Repository.Repository.PurchaseOrderRepository;
 using AccountManagement.Repository.Interface.Services.PurchaseOrderService;
 using AccountManagement.Repository.Services.PurchaseOrder;
+using AccountManagement.Repository.Interface.Repository.ItemInWord;
+using AccountManagement.Repository.Repository.ItemInWordRepository;
+using AccountManagement.Repository.Interface.Services.ItemInWordService;
+using AccountManagement.Repository.Services.ItemInWord;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,7 +66,9 @@ builder.Services.AddScoped<IPurchaseRequest, PurchaseRequestRepo>();
 builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepo>();
 builder.Services.AddScoped<IPurchaseOrderDetails, PurchaseOrderDetailsRepo>();
 builder.Services.AddScoped<ISupplierInvoice, SupplierInvoiceRepo>();
+builder.Services.AddScoped<Iiteminword,ItemInWordRepo>();
 builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
+builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 
 
@@ -77,6 +83,7 @@ builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>();
 builder.Services.AddScoped<IPurchaseOrderServices, PurchaseOrderServices>();
 builder.Services.AddScoped<IPurchaseOrderDetailsServices, PurchaseOrderDetailsServices>();
 builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
+builder.Services.AddScoped<IiteminwordService,ItemInWordService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 

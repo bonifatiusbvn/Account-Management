@@ -4,11 +4,13 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class SiteMasterController : Controller
     {
         public SiteMasterController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
@@ -24,11 +26,13 @@ namespace AccountManegments.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
 
+        [FormPermissionAttribute("Site-View")]
         public IActionResult SiteListView()
         {
             return View();
         }
 
+        [FormPermissionAttribute("Site-View")]
         public async Task<IActionResult> SiteListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -73,7 +77,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("Site-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateSite(SiteMasterModel createSite)
         {
@@ -116,6 +120,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Site-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSiteDetails(SiteMasterModel updateSite)
         {
@@ -137,6 +142,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Site-Edit")]
         [HttpPost]
         public async Task<IActionResult> ActiveDeactiveSite(Guid SiteId)
         {
@@ -182,7 +188,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("Site-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSite(Guid SiteId)
         {

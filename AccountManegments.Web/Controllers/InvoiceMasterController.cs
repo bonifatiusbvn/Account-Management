@@ -4,11 +4,13 @@ using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class InvoiceMasterController : Controller
     {
         public APIServices APIServices { get; }
@@ -17,6 +19,8 @@ namespace AccountManegments.Web.Controllers
         {
             APIServices = aPIServices;
         }
+
+        [FormPermissionAttribute("Invoice-Add")]
         public async Task<IActionResult> CreateInvoice()
         {
             try
@@ -28,7 +32,7 @@ namespace AccountManegments.Web.Controllers
                     ViewData["SupplierInvoiceNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
                 }
 
-                return View();
+
             }
             catch (Exception ex)
             {
@@ -38,10 +42,12 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("Invoice-View")]
         public IActionResult SupplierInvoiceListView()
         {
             return View();
         }
+
 
         public async Task<IActionResult> SupplierInvoiceListAction(string searchText, string searchBy, string sortBy)
         {
@@ -70,6 +76,8 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+
+        [FormPermissionAttribute("Invoice-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSupplierInvoice(Guid InvoiceId)
         {
@@ -94,10 +102,12 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Invoice-View")]
         public IActionResult PayOutInvoice()
         {
             return View();
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetInvoiceDetails(Guid CompanyId, Guid SupplierId)
@@ -108,8 +118,14 @@ namespace AccountManegments.Web.Controllers
                 if (postuser.code == 200)
                 {
                     List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
-                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
-
+                    if(GetInvoiceList.Count == 0)
+                    {
+                        return new JsonResult("There is no data for selected Supplier!");
+                    }
+                    else
+                    {
+                        return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", GetInvoiceList);
+                    }
                 }
                 else
                 {
@@ -146,6 +162,8 @@ namespace AccountManegments.Web.Controllers
         }
 
 
+        [FormPermissionAttribute("Invoice-Add")]
+
         [HttpPost]
         public async Task<IActionResult> InsertMultipleSupplierItemDetails()
         {
@@ -168,15 +186,17 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+
         [HttpPost]
-        public async Task<JsonResult> GetPayOutDetailsByInvoiceNo()
+        public async Task<JsonResult> GetPayOutDetailsForTotalAmount()
         {
             try
             {
-                var InvoiceNo = HttpContext.Request.Form["INVOICENO"];
-                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(InvoiceNo);
+                var TotalAmount = HttpContext.Request.Form["TOTALAMOUNT"];
+                var Details = JsonConvert.DeserializeObject<SupplierInvoiceModel>(TotalAmount);
                 List<SupplierInvoiceModel> GetInvoiceList = new List<SupplierInvoiceModel>();
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsByInvoiceNo?InvoiceNo=" + Details.InvoiceNo);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetPayOutDetailsForTotalAmount?CompanyId=" + Details.CompanyId + "&SupplierId=" + Details.SupplierId);
                 if (postuser.code == 200)
                 {
                     GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(postuser.data.ToString());
@@ -185,9 +205,10 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex ;
+                throw ex;
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> InsertPayOutDetails()

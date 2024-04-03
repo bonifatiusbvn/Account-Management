@@ -133,6 +133,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     var data = JsonConvert.SerializeObject(responsemodel.data);
                     userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                    
                     var claims = new List<Claim>()
             {
                 new Claim("UserId", userlogin.Data.Id.ToString()),
@@ -141,6 +142,7 @@ namespace AccountManegments.Web.Controllers
                 new Claim("SiteName", userlogin.Data.SiteName),
                 new Claim("SiteId", userlogin.Data.SiteId.ToString()),
                 new Claim("UserRole", userlogin.Data.RoleId.ToString()),
+                //new Claim("FormPermisionData", JsonConvert.SerializeObject(data.FromPermissionData)),
             };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -164,6 +166,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     UserSession.SiteId = userlogin.Data.SiteId.ToString();
                     UserSession.SiteName = userlogin.Data.SiteName;
+                    UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                     return RedirectToAction("Index", "Home");
                 }
