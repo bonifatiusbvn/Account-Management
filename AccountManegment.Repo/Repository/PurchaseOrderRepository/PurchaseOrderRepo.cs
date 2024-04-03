@@ -153,6 +153,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                  join d in Context.Sites on a.SiteId equals d.SiteId
                                  join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                 join e in Context.Cities on b.City equals e.CityId
+                                 join f in Context.States on b.State equals f.StatesId
                                  select new PurchaseOrderMasterView
                                  {
                                      Id = a.Id,
@@ -160,7 +162,12 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SiteName = d.SiteName,
                                      Poid = a.Poid,
                                      FromSupplierId = a.FromSupplierId,
+                                     Area = b.Area,
+                                     BuildingName = b.BuildingName,
                                      SupplierName = b.SupplierName,
+                                     Cityname = e.CityName,
+                                     Statename = f.StatesName,
+                                     Pincode = b.PinCode,
                                      ToCompanyId = a.ToCompanyId,
                                      CompanyName = c.CompanyName,
                                      TotalAmount = a.TotalAmount,

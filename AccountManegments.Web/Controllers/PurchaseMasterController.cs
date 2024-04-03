@@ -13,6 +13,7 @@ using Aspose.Pdf.Text;
 using Newtonsoft.Json;
 using System.Reflection;
 using Aspose.Pdf.Operators;
+using System.Text;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -404,6 +405,8 @@ namespace AccountManegments.Web.Controllers
                 {
                     orderDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
 
+                    var htmlContent = GetHtmlContentForPdf(orderDetails);
+
                     var document = new Document
                     {
                         PageInfo = new PageInfo { Margin = new MarginInfo(25, 25, 25, 40) }
@@ -412,163 +415,10 @@ namespace AccountManegments.Web.Controllers
                     var pdfPage = document.Pages.Add();
 
                     var textBuilder = new TextFragment();
-
-                    string tableContent = "";
-                        int index = 1;
-                    foreach (var item in orderDetails.ItemList)
-                    {
-                        tableContent += $@"
-                         <tr class='product'>
-                                <td>{index}</td>
-                                <td class='text-start'>
-                                <span class='fw-medium' id='txtproductname'>{item.ItemName}</span>
-                        <span class='fw-medium' id='txtproductid' hidden>{item.ItemId}</span>
-                        <p class='text-muted mb-0' id='txtdescription'>{item.GstPercentage}</p>
-                        <p class='text-muted mb-0' id='txtdescription'>{item.GstPercentage}</p>
-                        </td>
-                        <td id='txtperunitprice'>{item.PricePerUnit}</td>
-                        <td id='txtquantity'>{item.Quantity}</td>
-                        <td id='txtperunitwithgstprice'>{item.Gstamount}</td>
-                        <td class='text-end' id='txttotal'>{item.ItemAmount}</td>
-                        </tr>";
-
-                        index++;
-                    }
-
-                    string htmlContent = $@"<div class='row justify-content-center' id='printableContent'>" +
-                        "<div class='col-xxl-9'>" +
-                            "<div class='card' id='demo'>" +
-                                "<div class='row'>" +
-                                    "<div class='col-lg-12'>" +
-                                        "<div class='card-header border-bottom-dashed p-4'>" +
-                                            "<div class='d-flex'>" +
-                                                "<div class='flex-grow-1'>" +
-                                                    "<img src='~/UserHome/minimal/assets/images/logo - bonifatius.jpeg' class='card-logo card-logo-dark user-profile-image img-fluid' alt='logo dark' style='width:250px;'>" +
-                                                    "<div class='mt-sm-5 mt-4'>" +
-                                                        "<h6 class='text-muted text-uppercase fw-semibold'>Address</h6>" +
-                                                        "<h6><span class='text-muted fw-normal'>Bonifatius Technologies Pvt. Ltd.</span></h6>" +
-                                                        "<h6><span class='text-muted fw-normal'>SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span></h6>" +
-                                                        "<h6><span class='text-muted fw-normal'>Vadodara,Gujarat 390020</span></h6>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                                "<div class='flex-shrink-0 mt-sm-0 mt-3'>" +
-                                                    "<h6><span class='text-muted fw-normal'>Legal Registration No:</span><span>987654</span></h6>" +
-                                                    "<h6><span class='text-muted fw-normal'>Email:</span><span>bonifatius@gmail.com</span></h6>" +
-                                                    "<h6 class='mb-0'><span class='text-muted fw-normal'>Contact No: </span><span> +(91) 64 234 6789</span></h6>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</div>" +
-                                        "<!--end card-header-->" +
-                                    "</div><!--end col-->" +
-                                    "<div class='col-lg-12'>" +
-                                        "<div class='card-body p-4'>" +
-                                            "<div class='row g-3'>" +
-                                                "@if (firstItem != null)" +
-                                                "{" +
-                                                    "<div class='col-lg-3 col-6'>" +
-                                                        "<p class='text-muted mb-2 text-uppercase fw-semibold'>Invoice No</p>" +
-                                                        "<h5 class='fs-14 mb-0' id='txtinvoiceid'>" + orderDetails.Poid + "</h5>" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                    "<div class='col-lg-3 col-6'>" +
-                                                        "<p class='text-muted mb-2 text-uppercase fw-semibold'>Date</p>" +
-                                                        "<h5 class='fs-14 mb-0' id='txtDate'>" + orderDetails.Date + "</h5>" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                    "<div class='col-lg-3 col-6'>" +
-                                                        "<p class='text-muted mb-2 text-uppercase fw-semibold'>Payment Status</p>" +
-                                                        "<h5 class='bg-success-subtle text-success' id='txtDeliveryShedule'>" + orderDetails.DeliveryShedule + "</h5>" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                    "<div class='col-lg-3 col-6'>" +
-                                                        "<p class='text-muted mb-2 text-uppercase fw-semibold'>Total Amount</p>" +
-                                                        "<h5 class='fs-14 mb-0'>₹<span id='txttotalamount'>" + orderDetails.TotalAmount + "</span></h5>" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                "}" +
-                                            "</div>" +
-                                            "<!--end row-->" +
-                                        "</div>" +
-                                        "<!--end card-body-->" +
-                                    "</div><!--end col-->" +
-                                    "<div class='col-lg-12'>" +
-                                        "<div class='card-body p-4 border-top border-top-dashed'>" +
-                                            "@if (firstItem != null)" +
-                                            "{" +
-                                                "<div class='row g-3'>" +
-                                                    "<div class='col-6'>" +
-                                                        "<h6 class='text-muted text-uppercase fw-semibold mb-3'>Billing Address</h6>" +
-                                                        "<p class='fw-medium mb-2' id='txtcompanyname'>" + orderDetails.CompanyName + "</p>" +
-                                                        "<p class='text-muted mb-1' id='txtaddress'>" + orderDetails.BillingAddress + "</p>" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                    "<div class='col-6'>" +
-                                                        "<h6 class='text-muted text-uppercase fw-semibold mb-3'>Shipping Address</h6>" +
-                                                        "<p class='fw-medium mb-2' id='txtshippingcompany'>" + orderDetails.SupplierName + "</p>" +
-                                                        "@*<p class='text-muted mb-1' id='txtshippingaddress'>@firstItem.BillingAddress</p>*@" +
-                                                    "</div>" +
-                                                    "<!--end col-->" +
-                                                "</div>" +
-                                                "<!--end row-->" +
-                                            "}" +
-                                        "</div>" +
-                                        "<!--end card-body-->" +
-                                    "</div><!--end col-->" +
-                                    "<div class='col-lg-12'>" +
-                                        "<div class='card-body p-4'>" +
-                                            "<div class='table-responsive'>" +
-                                                "<table class='table table-borderless text-center table-nowrap align-middle mb-0'>" +
-                                                    "<thead>" +
-                                                        "<tr class='table-active'>" +
-                                                            "<th scope='col'>#</th>" +
-                                                            "<th scope='col'>Product Details</th>" +
-                                                            "<th scope='col'>Rate</th>" +
-                                                            "<th scope='col'>Quantity</th>" +
-                                                            "<th scope='col'>RateWithGst</th>" +
-                                                            "<th scope='col' class='text-end'>Amount</th>" +
-                                                        "</tr>" +
-                                                    "</thead>" +
-                                                    "<tbody id='products-list'>" +
-                                                       $"{tableContent}" +
-                                                    "</tbody>" +
-                                                "</table><!--end table-->" +
-                                            "</div>" +
-                                            "<div class='border-top border-top-dashed mt-2'>" +
-                                                "<table class='table table-borderless table-nowrap align-middle mb-0 ms-auto' style='width:250px'>" +
-                                                    "<tbody>" +
-                                                        "<tr class='border-top border-top-dashed fs-15'>" +
-                                                            "<th scope='row'>Total Amount</th>" +
-                                                            "<th class='text-end' id='txtTotalAmount'>₹" + orderDetails.TotalAmount + "</th>" +
-                                                        "</tr>" +
-                                                    "</tbody>" +
-                                                "</table>" +
-                                                "<!--end table-->" +
-                                            "</div>" +
-                                            "<div class='mt-4'>" +
-                                                "<div class='alert alert-primary'>" +
-                                                    "<p class='mb-0'>" +
-                                                        "<span class='fw-semibold'>NOTES:</span>" +
-                                                        "<span id='note'>" +
-                                                            "All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or" +
-                                                            "credit card or direct payment online. If account is not paid within 7" +
-                                                            "days the credits details supplied as confirmation of work undertaken" +
-                                                            "will be charged the agreed quoted fee noted above." +
-                                                        "</span>" +
-                                                    "</p>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</div>" +
-                                        "<!--end card-body-->" +
-                                    "</div><!--end col-->" +
-                                "</div><!--end row-->" +
-                            "</div>" +
-                            "<!--end card-->" +
-                        "</div>" +
-                        "<!--end col-->" +
-                    "</div>";
                     textBuilder.Text = htmlContent;
 
                     pdfPage.Paragraphs.Add(textBuilder);
+
                     using (var streamout = new MemoryStream())
                     {
                         document.Save(streamout);
@@ -586,6 +436,193 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        private string GetHtmlContentForPdf(PurchaseOrderMasterView orderDetails)
+        {
+            StringBuilder htmlBuilder = new StringBuilder();
+            htmlBuilder.Append($"<div class=\"row justify-content-center\" id=\"displayPODetail\">");
+            htmlBuilder.Append($"<div class=\"col-xxl-9\">");
+            htmlBuilder.Append($"<div class=\"card border\">");
+            htmlBuilder.Append($"<div class=\"row\">");
+            htmlBuilder.Append($"<div class=\"card-body\">");
+            htmlBuilder.Append($"<div class=\"d-flex\">");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-5 border\">");
+            htmlBuilder.Append($"<p class=\"text-muted text-uppercase\"><b>D. M. Infra</b></p>");
+            htmlBuilder.Append($"<p class=\"text-muted\">SF- 203, Peridot Complex, Varacha</p>");
+            htmlBuilder.Append($"<p class=\"text-muted\">Area- Surat,Gujarat 390020</p>");
+            htmlBuilder.Append($"<p class=\"text-muted\">State- Gujarat,Code:24</p>");
+            htmlBuilder.Append($"<p class=\"text-muted\">GST.NO- 24AAKCB0366M1ZJ</p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-4\">");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Purchase Order Id</label>");
+            htmlBuilder.Append("<p class=\"text-muted text-uppercase\"><b>" + orderDetails.Poid + "</b></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Mode/Terms of Payment</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>100% against Pi before dispatch</b></span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Buyer's Ref./Order No.</label>");
+            htmlBuilder.Append($"<p class=\"text-muted text-uppercase\"><b>" + orderDetails.Poid + "</b></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-3\">");
+            htmlBuilder.Append($"<!-- Seller Invoice Dates -->");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Dated</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted fw-normal\">" + orderDetails.Date + "</span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Mode/Terms of Payment</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>100% against Pi before dispatch</b></span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">References No.</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted fw-normal\">FM/BRD/SSD/180324/ROO</span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"card-body\" style=\"margin-top:-33px;\">");
+            htmlBuilder.Append($"<div class=\"d-flex\">");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-5 border\">");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<p class=\"text-muted\"><b>Consigner:@firstItem.SupplierName</b></p>");
+            htmlBuilder.Append($"<p class=\"text-muted\">" + orderDetails.BillingAddress + "</p>");
+            htmlBuilder.Append($"<br />");
+            htmlBuilder.Append($"<p class=\"text-muted\">GSTIN:- </p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<p class=\"text-muted\"><b>Consignee (Ship to):</b></p>");
+            htmlBuilder.Append($"<p class=\"text-muted text-uppercase\"><b>" + orderDetails.CompanyName + "</b></p>");
+            htmlBuilder.Append($"<p class=\"text-muted text-uppercase\">" + orderDetails.ShippingAddress + "</p>");
 
+            int Index = 1;
+            foreach (var item in orderDetails.AddressList)
+            {
+                htmlBuilder.Append($"<p><span>@Index</span><span> </span><span>" + @item.Address + "</span></p>");
+                Index++;
+            }
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-7 border\">");
+            htmlBuilder.Append($"<div class=\"d-flex\">");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-4\">");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Dispatched through</label>");
+            htmlBuilder.Append($"<p class=\"text-muted text-uppercase\">" + orderDetails.SupplierName + "<b></b></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-grow-1 col-3\">");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Destination</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>Bonifatius Technologies Pvt ltd,</b></span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"flex-shrink-0 mt-sm-0 mt-3 border\">");
+            htmlBuilder.Append($"<label class=\"form-label\">Terms of Delivery</label>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>2-3 Weeks</b></span></p>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>P & F-Inclusive</b></span></p>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>Freight-Extra at actual</b></span></p>");
+            htmlBuilder.Append($"<p><span class=\"text-muted\"><b>Note : Test Certificate required with material</b></span></p>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"<div class=\"card-body\" style=\"margin-top:-33px;\">");
+            htmlBuilder.Append($"<div class=\"table-responsive\">");
+            htmlBuilder.Append($"<table class=\"table table-border text-center table-nowrap align-middle mb-0\">");
+            htmlBuilder.Append($"<thead>");
+            htmlBuilder.Append($"<tr class=\"table-active\">");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">SRr.No.</th>");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">Product Details</th>");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">HSN / SAC</th>");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">Quantity</th>");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">Rate</th>");
+            htmlBuilder.Append($"<th class=\"border\" scope=\"col\">per</th>");
+            htmlBuilder.Append($"<th class=\"text-end border\" text-end scope=\"col\">Amount</th>");
+            htmlBuilder.Append($"</tr>");
+            htmlBuilder.Append($"</thead>");
+            htmlBuilder.Append($"<tbody id=\"products-list\">");
+
+            int index = 1;
+            foreach (var item in orderDetails.ItemList)
+            {
+                htmlBuilder.Append($"<tr class=\"product\">");
+                htmlBuilder.Append($"<td class=\"border\">" + index + "</td>");
+                htmlBuilder.Append($"<td class=\"text-start border\">");
+                htmlBuilder.Append($"<span class=\"fw-medium\" id=\"txtproductname\">" + item.ItemName + "</span>");
+                htmlBuilder.Append($"<span class=\"fw-medium\" id=\"txtproductid\" hidden>" + item.ItemId + "</span>");
+                htmlBuilder.Append($"<p class=\"text-muted mb-0\" id=\"txtdescription\">" + orderDetails.Description + "</p>");
+                htmlBuilder.Append($"</td>");
+                htmlBuilder.Append($"<td class=\"border\" id=\"txtHSN\"></td>");
+                htmlBuilder.Append($"<td class=\"border\" id=\"txtquantity\">" + item.Quantity + "</td>");
+                htmlBuilder.Append($"<td class=\"border\" id=\"txtpriceperunit\">₹" + item.PricePerUnit + "</td>");
+                htmlBuilder.Append($"<td class=\"border\" id=\"txtper\">No.</td>");
+                htmlBuilder.Append($"<td class=\"text-end border\" id=\"txttotal\">₹" + item.ItemAmount + "</td>");
+                htmlBuilder.Append($"</tr>");
+                index++;
+            }
+
+            htmlBuilder.Append($"<tr>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">Total</td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">₹</td>");
+            htmlBuilder.Append($"</tr>");
+
+            htmlBuilder.Append($"<tr>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">SGST 9%</td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">₹</td>");
+            htmlBuilder.Append($"</tr>");
+
+            htmlBuilder.Append($"<tr>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">CGST 9%</td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">₹</td>");
+            htmlBuilder.Append($"</tr>");
+
+            htmlBuilder.Append($"<tr>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">Round off</td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"</tr>");
+
+            htmlBuilder.Append($"<tr>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">Total</td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\"></td>");
+            htmlBuilder.Append($"<td class=\"border\">₹" + orderDetails.TotalAmount + "</td>");
+            htmlBuilder.Append($"</tr>");
+            htmlBuilder.Append($"</tbody>");
+            htmlBuilder.Append($"</table><!--end table-->");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</div>");
+            return htmlBuilder.ToString();
+        }
     }
 }

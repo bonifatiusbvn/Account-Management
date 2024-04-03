@@ -1,6 +1,8 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
@@ -117,33 +119,60 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
-        public async Task<SupplierInvoiceModel> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid InvoiceId)
         {
 
-            SupplierInvoiceModel supplierList = new SupplierInvoiceModel();
+            SupplierInvoiceMasterView supplierList = new SupplierInvoiceMasterView();
             try
             {
                 supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
                                 join d in Context.Sites on a.SiteId equals d.SiteId
-                                select new SupplierInvoiceModel
+                                join e in Context.Cities on c.CityId equals e.CityId
+                                join f in Context.States on c.StateId equals f.StatesId
+                                join g in Context.Countries on c.Country equals g.CountryId
+                                select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
+                                    InvoiceId = a.InvoiceNo,
+                                    SiteId = a.SiteId,
+                                    SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
                                     SupplierName = b.SupplierName,
+                                    CompanyId = a.CompanyId,
+                                    CompanyName = c.CompanyName,
+                                    Date = a.Date,
+                                    Description = a.Description,
                                     TotalAmount = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
-                                    Description = a.Description,
+                                    PaymentStatus = a.PaymentStatus,
+                                    IsPayOut = a.IsPayOut,
                                     Roundoff = a.Roundoff,
-                                    CompanyId = a.CompanyId,
-                                    Date = DateTime.Now,
-                                    CompanyName = c.CompanyName,
-                                    SiteName = d.SiteName,
-
+                                    CompanyAddress = c.Address,
+                                    CompanyArea = c.Area,
+                                    CompanyCityName = e.CityName,
+                                    CompanyCountryName = g.CountryName,
+                                    CompanyStateName = f.StatesName,
+                                    CompanyGstNo = c.Gstno,
+                                    CompanyPincode = c.Pincode,
                                 }).First();
+                List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
+                                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                                     select new POItemDetailsModel
+                                                     {
+                                                         ItemName = a.Item,
+                                                         Quantity = a.Quantity,
+                                                         Gstamount = a.Gst,
+                                                         UnitType = a.UnitTypeId,
+                                                         UnitTypeName = b.UnitName,
+                                                         PricePerUnit = a.Price,
+                                                         GstPercentage = a.Gstper,
+                                                     }).ToList();
+
+
+                supplierList.ItemList = itemlist;
                 return supplierList;
             }
             catch (Exception ex)
@@ -222,6 +251,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 supplierList = supplierList.OrderBy(u => u.SiteName);
                             else if (sortOrder == "descending")
                                 supplierList = supplierList.OrderByDescending(u => u.SiteName);
+                            break;
+                        case "invoiceno":
+                            if (sortOrder == "ascending")
+                                supplierList = supplierList.OrderBy(u => u.InvoiceNo);
+                            else if (sortOrder == "descending")
+                                supplierList = supplierList.OrderByDescending(u => u.InvoiceNo);
                             break;
                         case "createdon":
                             if (sortOrder == "ascending")

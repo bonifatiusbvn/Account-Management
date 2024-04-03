@@ -212,5 +212,55 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        public IActionResult InvoiceListView()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> InvoiceListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"SupplierInvoice/GetSupplierInvoiceList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(res.data.ToString());
+
+                    return PartialView("~/Views/InvoiceMaster/_InvoiceListPartial.cshtml", GetInvoiceList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Invoice list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<IActionResult> DisplayInvoiceDetails(Guid Id)
+        {
+            try
+            {
+                SupplierInvoiceMasterView order = new SupplierInvoiceMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                    response.data = order;
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

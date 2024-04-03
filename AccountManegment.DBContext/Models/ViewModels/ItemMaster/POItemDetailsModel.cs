@@ -18,6 +18,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public string? Hsncode { get; set; }
         public decimal Quantity { get; set; }
         public decimal ItemAmount { get; set; }
+        public string? UnitTypeName { get; set; }
         public int RowNumber { get; set; }
     }
 }

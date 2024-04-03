@@ -66,6 +66,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? SiteName { get; set; }
         public string? UnitName { get; set; }
         public Guid? ItemId { get; set; }
+        public string? BuildingName { get; set; }
+        public string? Area { get; set; }
+        public int? CityId { get; set; }
+        public int? StateId { get; set; }
+        public string? Cityname { get; set; }   
+        public string? Statename { get; set; }
+        public string? Pincode { get; set; }
+
         public List<POItemDetailsModel>? ItemList { get; set; }
         public List<PODeliveryAddressModel>? AddressList { get; set; }
     }

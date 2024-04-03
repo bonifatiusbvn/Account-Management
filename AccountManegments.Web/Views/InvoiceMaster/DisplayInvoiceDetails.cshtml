@@ -1,11 +1,8 @@
-﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
-@inject IHttpContextAccessor Accessor;
-@inject UserSession _userSession
+﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceMasterView
 @{
-    ViewData["Title"] = "DisplayPODetails";
+    ViewData["Title"] = "DisplayInvoiceDetails";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
 
 <style>
     .border-right {
@@ -19,50 +16,67 @@
 }
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Purchase Order</div>
+    <div class="breadcrumb-title pe-3">Invoice List</div>
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0 align-items-center">
                 <li class="breadcrumb-item">
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Purchase Order Details</li>
+                <li class="breadcrumb-item active" aria-current="page">Invoice List Details</li>
             </ol>
         </nav>
     </div>
 </div>
 <!-- end page title -->
 
-<div class="row justify-content-center" id="displayPODetail">
+<div class="row justify-content-center" id="displayInvoiceDetail">
     <div class="col-xxl-9">
         <div class="card border">
             <div class="row">
-                @*<div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-5 border">
-                            <h4 class="text-center">Purchase Order</h4>
-                        </div>
-                    </div>  
-                </div>*@
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-5 border">
-                            <p class="text-muted"><b>@firstItem.CompanyName</b></p>
-                            <p class="text-muted">@firstItem.BillingAddress</p>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <p class="text-muted"><b>@firstItem.CompanyName</b></p>
+                                <p class="text-muted">@firstItem.CompanyAddress,@firstItem.CompanyArea,@firstItem.CompanyCityName,@firstItem.CompanyStateName,@firstItem.CompanyCountryName,@firstItem.CompanyPincode</p>
+                                <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.CompanyGstNo</b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
+                                <p class="text-muted text-uppercase"><b>@firstItem.SiteName</b></p>
+                                <br />
+                                <p class="text-muted">GSTIN:- </p>
+                            </div>
                         </div>
                         <div class="flex-grow-1 col-4">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Purchase Order Id</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                                <label class="form-label">Invoice No</label>
+                                <p class="text-muted text-uppercase"><b>@firstItem.InvoiceId</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Mode/Terms of Payment</label>
-                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                                <label class="form-label">Delivery Note</label>
+                                <p class="text-muted"></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Buyer's Ref./Order No.</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                                <label class="form-label">Reference No. & Date</label>
+                                <p><span class="text-muted"><b></b></span></p>
                             </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Buyer's Order No</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Dispatch Doc No.</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Dispatched Through</label>
+                                <p class="text-muted text-uppercase"><b>Tempo</b></p>
+                            </div>
+
+                                <label class="form-label">Bill of Landing/LR-RR No.</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -71,43 +85,40 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Mode/Terms of Payment</label>
-                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                                <p><span class="text-muted text-uppercase"><b>7 days</b></span></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dispatched through</label>
-                                <p class="text-muted"><b>@firstItem.SupplierName</b></p>
+                                <label class="form-label">Other Reference</label>
+                                <p class="text-muted"></p>
                             </div>
-                        </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Dated</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Delivery Note Date</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Destination</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Motor Vehicle No</label>
+                                <p class="text-muted text-uppercase"><b>GJ27TT6505</b></p>
+                            </div>
+                        </div>   
                     </div>
                 </div>
                 <div class="card-body" id="cardbody2" style="margin-top:-33px;">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-5 border">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
-                                <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
-                                <br />
-                                <p class="text-muted">GSTIN:- </p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                <p class="text-muted text-uppercase"><b>@firstItem.SiteName</b></p>
-                                @{
-                                    int Index = 1;
-                                }
-                                @foreach (var item in Model.AddressList)
-                                {
-                                    <p><span>@Index</span><span> </span><span>@item.Address</span></p>
-                                    Index++;
-                                }
-                            </div>
+                            <p class="text-muted"><b>Buyer (Bill to)</b></p>
+                            <p class="text-muted"></p>
                         </div>
-                        <div class="flex-grow-1 col-7 border"> 
-                                <label class="form-label">Terms of Delivery</label>
-                                <p class="text-muted"><b>2-3 Weeks</b></p>
-                                <p class="text-muted"><b>P & F-Inclusive</b></p>
-                                <p class="text-muted"><b>Freight-Extra at actual</b></p>
-                                <p class="text-muted"><b>Note : Test Certificate required with material</b></p>
+                        <div class="flex-grow-1 col-7 border">
+                            <label class="form-label">Terms of Delivery</label>
+                            <p class="text-muted"><b>Dispatched from Rakhial,Ahemdabad</b></p>
                         </div>
                     </div>
                 </div>
@@ -116,11 +127,10 @@
                         <table class="table table-border text-center table-nowrap align-middle mb-0">
                             <thead>
                                 <tr class="table-active">
-                                    <th class="border" scope="col">SRr.No.</th>
+                                    <th class="border" scope="col">SINo.</th>
                                     <th class="border" scope="col">Product Details</th>
                                     <th class="border" scope="col">HSN / SAC</th>
                                     <th class="border" scope="col">Quantity</th>
-                                    <th class="border" scope="col">Rate</th>
                                     <th class="border" scope="col">per</th>
                                     <th class="text-end border" text-end scope="col">Amount</th>
                                 </tr>
@@ -135,14 +145,12 @@
                                         <td class="border">@index</td>
                                         <td class="text-start border">
                                             <span class="fw-medium" id="txtproductname">@item.ItemName</span>
-                                            <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
-                                            <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
+                                            <p class="text-muted mb-0" id="txtdescription">@firstItem.Description</p>
                                         </td>
-                                        <td class="border" id="txtHSN"></td>
-                                        <td class="border" id="txtquantity">@item.Quantity</td>
-                                        <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
-                                        <td class="border" id="txtper">No.</td>
-                                        <td class="text-end border" id="txttotal">₹@item.ItemAmount</td>
+                                        <td class="border" id="txtHSN">7261</td>
+                                        <td class="border" id="txtquantity">@item.Quantity @item.UnitTypeName</td>
+                                        <td class="border" id="txtper">@item.UnitTypeName</td>
+                                        <td class="text-end border" id="txttotal">@item.PricePerUnit</td>
                                     </tr>
                                     index++;
                                 }
@@ -151,41 +159,36 @@
                                     <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border"></td>
-                                    <td class="border">Total</td>
                                     <td class="border"></td>
-                                    <td class="border">₹</td>
+                                    <td class="border-top">@firstItem.TotalAmount</td>
                                 </tr>
                                 <tr>
                                     <td class="border"></td>
+                                    <td class="border">FREIGHT CHARGES</td>
+                                    <td class="border">9967</td>
                                     <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border"></td>
-                                    <td class="border">SGST 9%</td>
+                                </tr>
+                                  <tr>
                                     <td class="border"></td>
-                                    <td class="border">₹</td>
+                                    <td class="border">IGST 18%</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
                                 </tr>
                                 <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border">CGST 9%</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹</td>
-                                </tr>
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border">Round Off</td>
                                     <td class="border"></td>
                                     <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
                                 </tr>
                                 <tr>
                                     <td class="border"></td>
                                     <td class="border">Total</td>
-                                    <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border"></td>
@@ -203,7 +206,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script src="~/moduls/purchaserequestscript.js"></script>
-        }
