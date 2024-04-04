@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
@@ -80,6 +81,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = ItemInWordDetails.CreatedBy,
                     CreatedOn=DateTime.Now,
                     IsApproved = false,
+                    IsDeleted= false,
                 };
                 var postuser = await APIServices.PostAsync(ItemInword, "ItemInWord/AddItemInWordDetails");
                 if (postuser.code == 200)
@@ -164,10 +166,12 @@ namespace AccountManegments.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateItemInWordDetails(ItemInWordModel ItemInWordDetails)
+        public async Task<IActionResult> UpdateItemInWordDetails()
         {
             try
             {
+                var ItemInWord = HttpContext.Request.Form["ITEMINWORD"];
+                var ItemInWordDetails = JsonConvert.DeserializeObject<ItemInWordModel>(ItemInWord);
                 ApiResponseModel postUser = await APIServices.PostAsync(ItemInWordDetails, "ItemInWord/UpdateItemInWordDetails");
                 if (postUser.code == 200)
                 {

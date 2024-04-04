@@ -58,9 +58,6 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return SupplierInvoice.CheckSupplierInvoiceNo();
         }
 
-        public async Task<List<SupplierInvoiceModel>> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
-        {
-            return await SupplierInvoice.GetPayOutDetailsForTotalAmount(CompanyId, SupplierId);
-        }
+
     }
 }

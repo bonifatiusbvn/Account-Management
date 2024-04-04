@@ -36,6 +36,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Quantity = ItemInWordDetails.Quantity,
                     DocumentName = ItemInWordDetails.DocumentName,
                     IsApproved = ItemInWordDetails.IsApproved,
+                    IsDeleted = ItemInWordDetails.IsDeleted,
                     CreatedBy = ItemInWordDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -57,11 +58,14 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             try
             {
                 var itemInWordDetails = Context.ItemInwords.Where(a => a.InwordId == InwordId).FirstOrDefault();
-                if (InwordId != null)
+                if (itemInWordDetails != null)
                 {
-                    Context.ItemInwords.Remove(itemInWordDetails);
-                    response.message = "Item In Word" + " " + itemInWordDetails.Item + " " + " item is Removed Successfully!";
+                    itemInWordDetails.IsDeleted = true;
+                    Context.ItemInwords.Update(itemInWordDetails);
+                    Context.SaveChanges();
                     response.code = 200;
+                    response.data = itemInWordDetails;
+                    response.message = "Item In Word Deleted Successfully!";
                 }
                 Context.SaveChanges();
             }
@@ -79,7 +83,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 var ItemInWordList = (from a in Context.ItemInwords
                                            join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                            join c in Context.Sites on a.SiteId equals c.SiteId
-                                           where (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId)
+                                           where (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId) &&
+                                           a.IsDeleted == false
                                            select new ItemInWordModel
                                            {
 
@@ -218,11 +223,10 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 if (ItemInWordData != null)
                 {
                     ItemInWordData.InwordId = ItemInWordDetails.InwordId;
-                    ItemInWordData.SiteId = ItemInWordData.SiteId;
                     ItemInWordData.ItemId = ItemInWordDetails.ItemId;
-                    ItemInWordData.Item = ItemInWordData.Item;
+                    ItemInWordData.Item = ItemInWordDetails.Item;
                     ItemInWordData.UnitTypeId = ItemInWordDetails.UnitTypeId;
-                    ItemInWordData.Quantity = ItemInWordData.Quantity;
+                    ItemInWordData.Quantity = ItemInWordDetails.Quantity;
                     ItemInWordData.DocumentName = ItemInWordDetails.DocumentName;
 
 

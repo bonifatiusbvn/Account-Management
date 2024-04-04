@@ -86,20 +86,27 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         {
             try
             {
-                var pendingSum = Context.SupplierInvoices
+
+
+                var onlineCashSum = await Context.SupplierInvoices
+                 .Where(si => si.SupplierId == SupplierId &&
+                 si.CompanyId == CompanyId &&
+                 (si.PaymentStatus == "Online" || si.PaymentStatus == "Cash") &&
+                 si.InvoiceNo == "PayOut")
+                 .SumAsync(si => si.TotalAmount);
+
+                var unpaidSum = await Context.SupplierInvoices
                     .Where(si => si.SupplierId == SupplierId &&
                                  si.CompanyId == CompanyId &&
                                  si.PaymentStatus == "Unpaid")
-                    .Sum(si => si.TotalAmount);
+                    .SumAsync(si => si.TotalAmount);
 
-                var onlineCashSum = Context.SupplierInvoices
+                var totalPurchase = await Context.SupplierInvoices
                     .Where(si => si.SupplierId == SupplierId &&
-                                 si.CompanyId == CompanyId &&
-                                 (si.PaymentStatus == "Online" || si.PaymentStatus == "Cash"))
-                    .Sum(si => si.TotalAmount);
+                                 si.CompanyId == CompanyId)
+                    .SumAsync(si => si.TotalAmount);
 
-
-                var Alltottal = onlineCashSum + pendingSum;
+                var difference = onlineCashSum - unpaidSum;
 
                 var supplierInvoices = await (from a in Context.SupplierInvoices
                                               where a.CompanyId == CompanyId
@@ -129,9 +136,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var invoiceTotalAmount = new InvoiceTotalAmount
                 {
                     InvoiceList = supplierInvoices.ToList(),
-                    InvoiceTotal = pendingSum,
-                    onlineCashSum = onlineCashSum,
-                    Alltotal = Alltottal,
+                    TotalPending = difference,
+                    TotalCreadit = onlineCashSum,
+                    TotalOutstanding = unpaidSum,
+                    TotalPurchase = totalPurchase
+
                 };
 
                 return (invoiceTotalAmount);
@@ -413,55 +422,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         }
 
         public string CheckSupplierInvoiceNo()
-        {
-            try
-            {
-                var LastPO = Context.SupplierInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                var currentDate = DateTime.Now;
-
-                int currentYear;
-                int lastYear;
-                if (currentDate.Month > 4)
-                {
-
-                    currentYear = currentDate.Year + 1;
-                    lastYear = currentDate.Year;
-                }
-                else
-                {
-
-                    currentYear = currentDate.Year;
-                    lastYear = currentDate.Year - 1;
-                }
-
-                string SupplierInvoiceId;
-                if (LastPO == null)
-                {
-
-                    SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
-                }
-                else
-                {
-                    if (LastPO.InvoiceNo.Length >= 25)
-                    {
-
-                        int PrNumber = int.Parse(LastPO.InvoiceNo.Substring(24)) + 1;
-                        SupplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
-                    }
-                    else
-                    {
-                        throw new Exception("Supplier Invoice Id does not have the expected format.");
-                    }
-                }
-                return SupplierInvoiceId;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public Task<List<SupplierInvoiceModel>> GetPayOutDetailsForTotalAmount(Guid CompanyId, Guid SupplierId)
         {
             throw new NotImplementedException();
         }

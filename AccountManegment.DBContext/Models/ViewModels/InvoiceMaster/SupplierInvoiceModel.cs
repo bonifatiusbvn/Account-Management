@@ -51,8 +51,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
     public class InvoiceTotalAmount
     {
         public IEnumerable<SupplierInvoiceModel> InvoiceList { get; set; }
-        public decimal InvoiceTotal { get; set; }
-        public decimal onlineCashSum { get; set; }
-        public decimal Alltotal { get; set; }
+        public decimal TotalPending { get; set; }
+        public decimal TotalCreadit { get; set; }
+        public decimal TotalOutstanding { get; set; }
+        public decimal TotalPurchase { get; set; }
     }
 }

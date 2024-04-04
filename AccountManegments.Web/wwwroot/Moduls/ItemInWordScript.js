@@ -4,7 +4,7 @@ GetUnitType();
 
 
 
-function AllItemInWordListTable() {debugger
+function AllItemInWordListTable() {
     var searchText = $('#txtItemInWordSearch').val();
     var searchBy = $('#ItemInWordSearchBy').val();
 
@@ -55,7 +55,7 @@ function sortItemInWordTable() {
         }
     });
 }
-function SelectItemInWordDetails(InwordId, element) {debugger
+function SelectItemInWordDetails(InwordId, element) {
 
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -65,7 +65,7 @@ function SelectItemInWordDetails(InwordId, element) {debugger
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
 
             if (response) {
                 $('#dspInwordId').val(response.inwordId);
@@ -162,7 +162,6 @@ function validateAndCreateItemInWord() {
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("txtItemId").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
-    var Document = document.getElementById("txtDocument").value.trim();
 
     var isValid = true;
 
@@ -186,136 +185,132 @@ function validateAndCreateItemInWord() {
         isValid = false;
     }
 
-    if (Document === "") {
-        document.getElementById("spnDocument").innerText = "Select Document!";
-        isValid = false;
-    }
-
 
     if (isValid) {
-        AddItemInWordDetails();
-        //if ($("#ItemInWordId").val() == '') {
-        //    AddItemInWordDetails();
-        //}
-        //else {
-        //    UpdateItemInWordDetails();
-        //}
+        if ($("#txtItemInWordid").val() == '') {
+            AddItemInWordDetails();
+        }
+        else {
+            UpdateItemInWordDetails();
+        }
     }
 }
 function resetErrorsMessages() {
     document.getElementById("spnUnitType").innerText = "";
     document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnDocument").innerText = "";
     document.getElementById("spnQuantity").innerText = "";
 }
-//function EditItemInWordDetails(InwordId) {
+function EditItemInWordDetails(InwordId) {
 
-//    $.ajax({
-//        url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
-//        type: 'GET',
-//        contentType: 'application/json;charset=utf-8',
-//        dataType: 'json',
-//        success: function (response) {
+    $.ajax({
+        url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
 
-//            $('#dspInwordId').val(response.inwordId);
-//            $('#dspSiteId').val(response.siteId);
-//            $('#dspItemId').val(response.itemId);
-//            $('#dspItem').val(response.item);
-//            $('#dspUnitName').val(response.unitName);
-//            $('#dspQuantity').val(response.quantity);
-//            $('#dspDocumentName').val(response.documentName);
-//            var button = document.getElementById("btnitemInWord");
-//            if ($('#ItemInWordId').val() != '') {
-//                button.textContent = "Update";
-//            }
-//            var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
-//            resetErrorsMessages()
-//            offcanvas.show();
-//        },
-//        error: function (xhr, status, error) {
-//            console.error(xhr.responseText);
-//        }
-//    });
-//}
-//function UpdateItemInWordDetails() {
+            $('#txtItemInWordid').val(response.inwordId);
+            $('#txtUnitType').val(response.unitTypeId);
+            $('#txtItemId').val(response.itemId);
+            $('#txtItemName').val(response.item);
+            $('#txtQuantity').val(response.quantity);
+            $('#txtDocument').hide();
+            $('#labeldocument').hide();
+            var button = document.getElementById("btnitemInWord");
+            if ($('#txtItemInWordid').val() != '') {
+                button.textContent = "Update";
+            }
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
+            resetErrorsMessages();
+            offcanvas.show();
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+function UpdateItemInWordDetails() {
+    var objData = {
+        InwordId: $('#txtItemInWordid').val(),
+        UnitTypeId: $('#txtUnitType').val(),
+        ItemId: $('#txtItemId').val(),
+        Item: $('#txtItemName').val(),
+        Quantity: $('#txtQuantity').val(),
+    };
+    var form_data = new FormData();
+    form_data.append("ITEMINWORD", JSON.stringify(objData));
+    $.ajax({
+        url: '/ItemInWord/UpdateItemInWordDetails',
+        type: 'post',
+        data: form_data,
+        datatype: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
 
-//    var objData = {
-//        InwordId: $('#ItemInWordId').val(),
-//        UnitTypeId: $('#txtUnitType').val(),
-//        Item: $('#txtItemName').val(),
-//        SiteId: $('#txtPoSiteName').val(),
-//        Quantity: $('#txtQuantity').val(),
-//    }
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/ItemInWord/ItemInWord';
+            });
+        },
+    })
+}
+        
 
-//    $.ajax({
-//        url: '/ItemInWord/UpdateItemInWordDetails',
-//        type: 'post',
-//        data: objData,
-//        datatype: 'json',
-//        success: function (Result) {
+function DeleteItemInWord(InwordId) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ItemInWord/DeleteItemInWord?InwordId=' + InwordId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
 
-//            Swal.fire({
-//                title: Result.message,
-//                icon: 'success',
-//                confirmButtonColor: '#3085d6',
-//                confirmButtonText: 'OK'
-//            }).then(function () {
-//                window.location = '/ItemInWord/ItemInWord';
-//            });
-//        },
-//    })
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete ItemInWord!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
 
-//}
-//function DeleteItemInWord(InwordId) {
-//    Swal.fire({
-//        title: "Are you sure want to Delete This?",
-//        text: "You won't be able to revert this!",
-//        icon: "warning",
-//        showCancelButton: true,
-//        confirmButtonText: "Yes, Delete it!",
-//        cancelButtonText: "No, cancel!",
-//        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-//        cancelButtonClass: "btn btn-danger w-xs mt-2",
-//        buttonsStyling: false,
-//        showCloseButton: true
-//    }).then((result) => {
-//        if (result.isConfirmed) {
-//            $.ajax({
-//                url: '/PurchaseMaster/DeleteItemInWord?InwordId=' + InwordId,
-//                type: 'POST',
-//                dataType: 'json',
-//                success: function (Result) {
-
-//                    Swal.fire({
-//                        title: Result.message,
-//                        icon: 'success',
-//                        confirmButtonColor: '#3085d6',
-//                        confirmButtonText: 'OK'
-//                    }).then(function () {
-//                        window.location = '/ItemInWord/ItemInWord';
-//                    })
-//                },
-//                error: function () {
-//                    Swal.fire({
-//                        title: "Can't Delete ItemInWord!",
-//                        icon: 'warning',
-//                        confirmButtonColor: '#3085d6',
-//                        confirmButtonText: 'OK',
-//                    }).then(function () {
-//                        window.location = '/ItemInWord/ItemInWord';
-//                    })
-//                }
-//            })
-//        } else if (result.dismiss === Swal.DismissReason.cancel) {
-
-//            Swal.fire(
-//                'Cancelled',
-//                'Item In Word Have No Changes.!!😊',
-//                'error'
-//            );
-//        }
-//    });
-//}
+            Swal.fire(
+                'Cancelled',
+                'Item In Word Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 function ItemInWordIsApproved(InwordId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + InwordId).is(':checked');

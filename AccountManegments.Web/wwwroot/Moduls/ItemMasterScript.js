@@ -52,8 +52,6 @@ function sortItemTable() {
 }
 function DisplayItemDetails(ItemId, element) {
 
-    //$('.row.ac-card').removeClass('active');
-    //$(element).closest('.row.ac-card').addClass('active');
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');

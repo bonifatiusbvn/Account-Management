@@ -24,6 +24,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? DocumentName { get; set; }
 
         public bool? IsApproved { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid CreatedBy { get; set; }
 
