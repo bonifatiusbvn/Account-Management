@@ -1,20 +1,25 @@
-﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.InvoiceTotalAmount
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceModel>
 
 
-@foreach (var item in Model.InvoiceList)
+@foreach (var item in Model)
 {
-    <tr>
-        <td class="form_name">@item.SupplierName</td>
-        <td class="form_name" id="txtvendorid">@item.CompanyName</td>
-        <td class="form_name" id="txtinvoicetype">@item.InvoiceNo</td>
-        <td class="form_name" id="txtinvoiceno">@item.TotalGstamount</td>
-        <td class="form_name" id="txtdate">@item.TotalAmount</td>
-    </tr>
+    if(item.InvoiceNo == "PayOut")
+    {
+        <tr style="height:55px;">
+            <td>@item.InvoiceNo</td>
+            <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+            <td class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-danger"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> @item.TotalAmount</td>
+            <td></td>
+        </tr>
+    }
+    else
+    {
+        <tr style="height:55px;">
+            <td>@item.InvoiceNo</td>
+            <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+            <td></td>
+            <td class="text-success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down text-success"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg> @item.TotalAmount</td>
+        </tr>
+    }
 }
 
-<script>
-    var TotalPending = '@Model.TotalPending';
-    var TotalCreadit = '@Model.TotalCreadit';
-    var TotalOutstanding = '@Model.TotalOutstanding';
-    var TotalPurchase = '@Model.TotalPurchase';
-</script>

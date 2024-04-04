@@ -74,11 +74,11 @@
                         <div class="menu-title">Dashboard</div>
                     </a>
                 </li>
-                @foreach (var permission in UserSession.FormPermisionData)
+                @* @foreach (var permission in UserSession.FormPermisionData)
                 {
                     if (permission.View == true)
                     {
-                        <li>
+                        *@ <li>
                             <a class="has-arrow">
                                 <div class="parent-icon">
                                     <ion-icon name="lock-closed-sharp"></ion-icon>
@@ -120,7 +120,7 @@
                                 </li>
                             </ul>
                         </li>
-                    }
+                    
                     <li>
                         <a class="has-arrow">
                             <div class="parent-icon">
@@ -147,7 +147,7 @@
                             <div class="parent-icon">
                                 <ion-icon name="briefcase-sharp"></ion-icon>
                             </div>
-                            <div class="menu-title">Item In Word</div>
+                            <div class="menu-title">Item InWord</div>
                         </a>
                     </li>
                     <li>
@@ -187,7 +187,7 @@
                     <li>
                         <a asp-action="PayOutInvoice" asp-controller="InvoiceMaster">
                             <ion-icon name="ellipse-outline"></ion-icon>
-                            <div class="menu-title">PayOut Invoices</div>
+                            <div class="menu-title">Payment Out</div>
                         </a>
                     </li>
                     <li>
@@ -215,7 +215,7 @@
                         </a>
                     </li>
 
-                }
+                
             </ul>
 
             <!--end navigation-->
