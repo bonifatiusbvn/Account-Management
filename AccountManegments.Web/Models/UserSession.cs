@@ -75,8 +75,8 @@ namespace AccountManegments.Web.Models
                 if (string.IsNullOrEmpty(StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value))
                     return null;
                 else
-                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value; 
-               
+                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value;
+
             }
             set
             {
@@ -84,7 +84,7 @@ namespace AccountManegments.Web.Models
             }
         }
 
-        public static  List<FromPermission> FormPermisionData
+        public static List<FromPermission> FormPermisionData
         {
 
             get
@@ -97,9 +97,8 @@ namespace AccountManegments.Web.Models
             set
             {
                 StaticHttpContext.Session.SetObjectAsJson("FromPermission", value);
-
             }
-            
+
         }
 
     }

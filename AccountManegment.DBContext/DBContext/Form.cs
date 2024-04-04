@@ -11,6 +11,10 @@ public partial class Form
 
     public string FormName { get; set; } = null!;
 
+    public string? Controller { get; set; }
+
+    public string? Action { get; set; }
+
     public bool IsActive { get; set; }
 
     public virtual ICollection<RolewiseFormPermission> RolewiseFormPermissions { get; set; } = new List<RolewiseFormPermission>();

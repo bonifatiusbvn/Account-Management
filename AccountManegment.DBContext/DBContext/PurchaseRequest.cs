@@ -9,6 +9,8 @@ public partial class PurchaseRequest
 
     public Guid SiteId { get; set; }
 
+    public Guid? ItemId { get; set; }
+
     public string Item { get; set; } = null!;
 
     public int UnitTypeId { get; set; }
@@ -26,6 +28,8 @@ public partial class PurchaseRequest
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ItemMaster? ItemNavigation { get; set; }
 
     public virtual Site Site { get; set; } = null!;
 

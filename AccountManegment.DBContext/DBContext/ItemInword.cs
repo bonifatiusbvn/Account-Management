@@ -21,6 +21,8 @@ public partial class ItemInword
 
     public bool? IsApproved { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
