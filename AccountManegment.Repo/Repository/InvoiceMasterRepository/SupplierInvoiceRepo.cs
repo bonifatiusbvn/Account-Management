@@ -165,6 +165,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 join e in Context.Cities on c.CityId equals e.CityId
                                 join f in Context.States on c.StateId equals f.StatesId
                                 join g in Context.Countries on c.Country equals g.CountryId
+                                join supCity in Context.Cities on b.City equals supCity.CityId
+                                join supState in Context.States on b.State equals supState.StatesId
+                               
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
@@ -173,16 +176,18 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
                                     SupplierName = b.SupplierName,
+                                    SupplierArea = b.Area,
+                                    SupplierAccountNo = b.AccountNo,
+                                    SupplierBankName = b.BankName,
+                                    SupplierBuildingName = b.BuildingName,
+                                    SupplierCity = supCity.CityName,
+                                    SupplierGstNo = b.Gstno,
+                                    SupplierIFSCCode = b.Iffccode,
+                                    SupplierEmail = b.Email,
+                                    SupplierState = supState.StatesName,
+                                    SupplierPincode = b.PinCode,
                                     CompanyId = a.CompanyId,
                                     CompanyName = c.CompanyName,
-                                    Date = a.Date,
-                                    Description = a.Description,
-                                    TotalAmount = a.TotalAmount,
-                                    TotalDiscount = a.TotalDiscount,
-                                    TotalGstamount = a.TotalGstamount,
-                                    PaymentStatus = a.PaymentStatus,
-                                    IsPayOut = a.IsPayOut,
-                                    Roundoff = a.Roundoff,
                                     CompanyAddress = c.Address,
                                     CompanyArea = c.Area,
                                     CompanyCityName = e.CityName,
@@ -190,6 +195,15 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyStateName = f.StatesName,
                                     CompanyGstNo = c.Gstno,
                                     CompanyPincode = c.Pincode,
+                                    CompanyPanNo = c.PanNo,
+                                    Date = a.Date,
+                                    Description = a.Description,
+                                    TotalAmount = a.TotalAmount,
+                                    TotalDiscount = a.TotalDiscount,
+                                    TotalGstamount = a.TotalGstamount,
+                                    PaymentStatus = a.PaymentStatus,
+                                    IsPayOut = a.IsPayOut,
+                                    Roundoff = a.Roundoff,  
                                 }).First();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId

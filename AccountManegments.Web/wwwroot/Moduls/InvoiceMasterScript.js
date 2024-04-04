@@ -215,7 +215,7 @@ function InsertMultipleSupplierItem() {
             CompanyId: $("#txtCompanyName").val(),
             TotalAmount: $("#cart-total").val(),
             TotalGstAmount: $("#totalgst").val(),
-            Item: orderRow.find("#txtItemName").val(),
+            Item: orderRow.find("#searchItemName").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtProductQuantity").val(),
             Price: orderRow.find("#txtProductTotalAmount").val(),
@@ -742,4 +742,13 @@ function InvoiceSortTable() {
 
         }
     });
+}
+
+function printInvoiceDiv() {
+    debugger
+    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
 }
