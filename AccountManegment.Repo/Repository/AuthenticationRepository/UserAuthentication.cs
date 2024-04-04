@@ -164,7 +164,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
                 IEnumerable<LoginView> userList = (from e in Context.Users
                                                    join r in Context.UserRoles on e.RoleId equals r.RoleId
-                                                   
+
                                                    where e.IsDeleted == false
                                                    select new LoginView
                                                    {
@@ -257,7 +257,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     }
                 }
 
-                    return userList.ToList();
+                return userList.ToList();
             }
             catch (Exception ex)
             {
@@ -299,18 +299,19 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             response.Code = (int)HttpStatusCode.OK;
 
                             List<FromPermission> FromPermissionData = (List<FromPermission>)(from u in Context.RolewiseFormPermissions
-                                                                      join s in Context.Forms on u.FormId equals s.FormId
-                                                                      where u.RoleId == userModel.RoleId
-                                                                        select new FromPermission
-                                                                      {
-                                                                          FormName = s.FormName,
-                                                                          View = u.IsViewAllow,
-                                                                          Edit = u.IsEditAllow,
-                                                                          Delete = u.IsDeleteAllow,
-                                                                          
-                                                                      }).ToList();  
+                                                                                             join s in Context.Forms on u.FormId equals s.FormId
+                                                                                             where u.RoleId == userModel.RoleId
+                                                                                             select new FromPermission
+                                                                                             {
+                                                                                                 FormName = s.FormName,
+                                                                                                 GroupName = s.FormGroup,
+                                                                                                 View = u.IsViewAllow,
+                                                                                                 Edit = u.IsEditAllow,
+                                                                                                 Delete = u.IsDeleteAllow,
 
-                           userModel.FromPermissionData = FromPermissionData;
+                                                                                             }).ToList();
+
+                            userModel.FromPermissionData = FromPermissionData;
                         }
                         else
                         {
