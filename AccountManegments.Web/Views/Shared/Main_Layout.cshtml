@@ -69,157 +69,153 @@
                 <li>
                     <a asp-action="Index" asp-controller="Home">
                         <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                            <ion-icon name="home-sharp"></ion-icon>
                         </div>
                         <div class="menu-title">Dashboard</div>
                     </a>
                 </li>
-                <li>
-                    <a asp-action="CreateCompany" asp-controller="Company">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Company</div>
-                    </a>
-                </li>
-                <li>
-                    <a asp-action="SiteListView" asp-controller="SiteMaster">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Site</div>
-                    </a>
-                </li>
-                <li>
-                    <a asp-action="ItemListView" asp-controller="ItemMaster">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Item</div>
-                    </a>
-                </li>
-                <li>
-                    <a asp-action="SupplierList" asp-controller="Supplier">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Supplier</div>
-                    </a>
-                </li>
+                @foreach (var permission in UserSession.FormPermisionData)
+                {
+                    if (permission.View == true)
+                    {
+                        <li>
+                            <a class="has-arrow">
+                                <div class="parent-icon">
+                                    <ion-icon name="lock-closed-sharp"></ion-icon>
+                                </div>
+                                <div class="menu-title">Master</div>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a asp-action="CreateCompany" asp-controller="Company">
+                                        <div class="parent-icon">
+                                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">Company</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="SiteListView" asp-controller="SiteMaster">
+                                        <div class="parent-icon">
+                                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">Site</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="ItemListView" asp-controller="ItemMaster">
+                                        <div class="parent-icon">
+                                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">Item</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="SupplierList" asp-controller="Supplier">
+                                        <div class="parent-icon">
+                                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">Supplier</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li>
+                        <a class="has-arrow">
+                            <div class="parent-icon">
+                                <ion-icon name="person-circle-sharp"></ion-icon>
+                            </div>
+                            <div class="menu-title">User Master</div>
+                        </a>
+                        <ul>
+                            <li>
+
+                                <a asp-action="UserListView" asp-controller="User">
+                                    <ion-icon name="ellipse-outline"></ion-icon>User List
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="RolewisePermission" asp-controller="User">
+                                    <ion-icon name="ellipse-outline"></ion-icon>User Wise Permission
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a asp-action="ItemInWord" asp-controller="ItemInWord">
+                            <div class="parent-icon">
+                                <ion-icon name="briefcase-sharp"></ion-icon>
+                            </div>
+                            <div class="menu-title">Item In Word</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="InvoiceListView" asp-controller="InvoiceMaster">
+                            <div class="font-22">
+                                <i class="lni lni-list"></i>
+                            </div>
+                            <div class="menu-title">Invoice List</div>
+                        </a>
+                    </li>
 
 
-                <li>
-                    <a asp-action="ItemInWord" asp-controller="ItemInWord">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Item In Word</div>
-                    </a>
-                </li>
-                <li>
-                    <a asp-action="InvoiceListView" asp-controller="InvoiceMaster">
-                        <div class="parent-icon">
-                            <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                        </div>
-                        <div class="menu-title">Invoice List</div>
-                    </a>
-                </li>
-                <li>
-                    <a class="has-arrow">
-                        <div class="parent-icon">
-                            <ion-icon name="lock-closed-sharp"></ion-icon>
-                        </div>
-                        <div class="menu-title">Purchase Master</div>
-                    </a>
-                    <ul>
-                        <li>
-                            <a asp-action="PurchaseOrderList" asp-controller="PurchaseMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">Purchase Order</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="PurchaseRequestListView" asp-controller="PurchaseMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">Purchase Request</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">Create PurchaseOrder</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="PayOutInvoice" asp-controller="InvoiceMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">PayOut Invoices</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="POListView" asp-controller="PurchaseMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">PO List</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="has-arrow">
-                        <div class="parent-icon">
-                            <ion-icon name="lock-closed-sharp"></ion-icon>
-                        </div>
-                        <div class="menu-title">Invoice</div>
-                    </a>
-                    <ul>
-                        <li>
-                            <a asp-action="CreateInvoice" asp-controller="InvoiceMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">Create Invoice</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="SupplierInvoiceListView" asp-controller="InvoiceMaster">
-                                <div class="parent-icon">
-                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                </div>
-                                <div class="menu-title">Invoice List</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="has-arrow">
-                        <div class="parent-icon">
-                            <ion-icon name="lock-closed-sharp"></ion-icon>
-                        </div>
-                        <div class="menu-title">Manage Users</div>
-                    </a>
-                    <ul>
-                        <li>
-                            <a asp-action="UserListView" asp-controller="User">
-                                <ion-icon name="ellipse-outline"></ion-icon>User List
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="RolewisePermission" asp-controller="User">
-                                <ion-icon name="ellipse-outline"></ion-icon>User Wise Permission
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li>
+                        <a asp-action="PurchaseOrderList" asp-controller="PurchaseMaster">
+                            <div class="parent-icon">
+                                <ion-icon name="bag-handle-sharp"></ion-icon>
+                            </div>
+                            <div class="menu-title">Purchase Order</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="PurchaseRequestListView" asp-controller="PurchaseMaster">
+                            <div class="parent-icon">
+                                <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                            </div>
+                            <div class="menu-title">Purchase Request</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster">
+                            <div class="parent-icon">
+                                <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                            </div>
+                            <div class="menu-title">Create PurchaseOrder</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="PayOutInvoice" asp-controller="InvoiceMaster">
+                            <ion-icon name="ellipse-outline"></ion-icon>
+                            <div class="menu-title">PayOut Invoices</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="POListView" asp-controller="PurchaseMaster">
+                            <div class="font-22">
+                                <i class="lni lni-list"></i>
+                            </div>
+                            <div class="menu-title">PO List</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="CreateInvoice" asp-controller="InvoiceMaster">
+                            <div class="parent-icon">
+                                <ion-icon name="receipt-sharp"></ion-icon>
+                            </div>
+                            <div class="menu-title">Create Invoice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-action="SupplierInvoiceListView" asp-controller="InvoiceMaster">
+                            <div class="parent-icon">
+                                <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                            </div>
+                            <div class="menu-title">Invoice List</div>
+                        </a>
+                    </li>
+
+                }
             </ul>
 
             <!--end navigation-->

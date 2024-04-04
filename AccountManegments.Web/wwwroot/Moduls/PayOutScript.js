@@ -1,7 +1,7 @@
-﻿var TotalAmount = '';
-var TotalPending = ''
-var TotalCreditamount = ''
-
+﻿var TotalPending = '';
+var TotalCreadit = '';
+var TotalOutstanding = '';
+var TotalPurchase = '';
 
 GetCompanyDetails();
 GetSupplierDetails();
@@ -37,6 +37,7 @@ $(document).ready(function () {
     $("#pendingamount").html('₹' + 00);
     $("#txttotalcreditamount").html('₹' + 00);
     $("#txttotalpendingamount").html('₹' + 00);
+    $("#txttotalpurchase").html('₹' + 00);
 
 
     $('#txtSuppliername').change(function () {
@@ -58,8 +59,9 @@ $(document).ready(function () {
                 } else {
                     $("#invoicedetails").html(result);
                     $("#txttotalpendingamount").html(TotalPending);
-                    $("#txttotalcreditamount").html(TotalCreditamount);
-                    $("#totalAmount").html('₹' + TotalAmount);
+                    $("#txttotalcreditamount").html(TotalCreadit);
+                    $("#totalAmount").html('₹' + TotalOutstanding);
+                    $("#txttotalpurchase").html('₹' + TotalPurchase);
                     GetPayOutTotalAmount();
                 }
             },

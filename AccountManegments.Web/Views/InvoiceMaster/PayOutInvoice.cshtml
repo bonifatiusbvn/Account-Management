@@ -5,8 +5,8 @@
     ViewData["Title"] = "PayOutInvoice";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-<input type="hidden" id="txtSiteId" value="@UserSession.SiteId" hidden/>
-<input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden/>
+<input type="hidden" id="txtSiteId" value="@UserSession.SiteId" hidden />
+<input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden />
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">PayOut</div>
     <div class="ps-3">
@@ -30,8 +30,8 @@
                     <div class="flex-shrink-0">
                     </div>
                 </div>
-                <h3 class="mb-2">₹<span class="counter-value">0</span><small class="text-muted fs-13"></small></h3>
-                <h6 class="text-muted mb-0">Send (Previous Month)</h6>
+                <h3 class="mb-2" id="txttotalpurchase">₹<span class="counter-value">0</span><small class="text-muted fs-13"></small></h3>
+                <h6 class="text-muted mb-0">Total Purchase</h6>
             </div>
         </div>
         <!--end card-->
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <h3 class="mb-2 text-success" id="totalAmount"></h3>
-                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                            <h6 class="text-muted mb-0">Total Outstanding</h6>
                         </div>
                     </div>
                     <!--end card-->
@@ -207,7 +207,6 @@
                                         <label>PaymentStatus</label>
                                         <select class="form-select" id="paymenttype">
                                             <option value="Cash">Cash</option>
-                                            <option value="Cheque">Cheque</option>
                                             <option value="Online">Online</option>
                                         </select>
                                         <input type="hidden" class="text-muted text-uppercase fw-semibold" id="paymenttypeid">
