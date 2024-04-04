@@ -126,7 +126,8 @@ namespace AccountManegments.Web.Controllers
                         return new JsonResult("Failed to deserialize API response");
                     }
 
-                    return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", tupleResult);
+                    
+                    return new JsonResult(tupleResult);
 
                 }
                 else
@@ -140,11 +141,7 @@ namespace AccountManegments.Web.Controllers
 
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
-
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailById()
@@ -262,9 +259,81 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
-                    response.data = order;
+                    var number = order.TotalAmount;
+                    var totalAmountInWords = NumberToWords((int)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = order.TotalGstamount;
+                    var totalGstInWords = NumberToWords((int)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
                 return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+                if (number < 20)
+                    words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + unitsMap[number % 10];
+                }
+            }
+            return words;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSupplierInvoiceDetailsById(Guid SupplierId)
+        {
+            try
+            {
+                List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
+                ApiResponseModel response = await APIServices.PostAsync(null, "SupplierInvoice/GetSupplierInvoiceDetailsById?SupplierId=" + SupplierId);
+                if (response.code == 200)
+                {
+                    SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
+                }
+                return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", SupplierDetails);
             }
             catch (Exception ex)
             {

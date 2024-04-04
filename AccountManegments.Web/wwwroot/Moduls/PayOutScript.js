@@ -58,11 +58,28 @@ $(document).ready(function () {
                     });
                 } else {
                     $("#invoicedetails").html(result);
-                    $("#txttotalpendingamount").html(TotalPending);
-                    $("#txttotalcreditamount").html(TotalCreadit);
-                    $("#totalAmount").html('₹' + TotalOutstanding);
-                    $("#txttotalpurchase").html('₹' + TotalPurchase);
-                    GetPayOutTotalAmount();
+                    $("#txttotalpendingamount").html(result.totalPending);
+                    $("#pendingamount").html(result.totalPending);
+                    $("#txttotalcreditamount").html(result.totalCreadit);
+                    $("#totalAmount").html('₹' + result.totalOutstanding);
+                    $("#txttotalpurchase").html('₹' + result.totalPurchase);
+                    var totalpendingAmount = result.totalPending;
+                    $('#txtpayoutamount').on('input', function () {
+                        var enteredAmount = parseFloat($(this).val());
+
+                        if (!isNaN(enteredAmount)) {
+                            var pendingAmount = totalpendingAmount - enteredAmount;
+
+                            if (enteredAmount > totalpendingAmount) {
+                                $('#spnpayout').text('Entered amount cannot exceed pending amount.');
+                            } else {
+                                $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                            }
+                        } else {
+                            $('#spnpayout').text('');
+                            $('#txtpendingamount').val('');
+                        }
+                    });
                 }
             },
         });
@@ -145,30 +162,3 @@ function validateAndInsertPayOutDetails() {
         InsertPayOutDetails();
     }
 }
-
-$(document).ready(function () {
-    function anyCheckboxChecked() {
-        return $("input[name='chk_child']:checked").length > 0;
-    }
-
-    $('#UserallUnApprovedExpenseTable').on('change', 'input[name="chk_child"]', function () {
-        if (anyCheckboxChecked()) {
-            $('#remove-actions').show();
-        } else {
-            $('#remove-actions').hide();
-        }
-        var allChecked = $('input[name="chk_child"]:checked').length === $('input[name="chk_child"]').length;
-        $('#checkedAll').prop('checked', allChecked);
-    });
-
-    $('#checkedAll').on('change', function () {
-        $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
-        if ($(this).prop('checked')) {
-            $('#remove-actions').show();
-        } else {
-            if (!anyCheckboxChecked()) {
-                $('#remove-actions').hide();
-            }
-        }
-    });
-});

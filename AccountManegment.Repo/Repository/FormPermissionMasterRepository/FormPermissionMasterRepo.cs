@@ -180,7 +180,6 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             var UserData = new List<RolewiseFormPermissionModel>();
             var data = await (from e in Context.RolewiseFormPermissions.Where(x => x.RoleId == RoleId)
                               join r in Context.UserRoles on e.RoleId equals r.RoleId
-                              join u in Context.Users on e.CreatedBy equals u.Id
                               join f in Context.Forms on e.FormId equals f.FormId
                               select new RolewiseFormPermissionModel 
                               {
@@ -188,11 +187,11 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                   Role = r.Role, 
                                   RoleId = e.RoleId,
                                   FormId = e.FormId,
-                                  FormName = f.FormGroup,
-                                  FullName = u.FirstName + " " + u.LastName,
+                                  FormName = f.FormName,
                                   IsViewAllow = e.IsViewAllow,
                                   IsEditAllow = e.IsEditAllow,
                                   IsDeleteAllow = e.IsDeleteAllow,
+                                  IsAddAllow = e.IsAddAllow,
                                   CreatedBy = e.CreatedBy,
                                   CreatedOn = e.CreatedOn,
                               }).ToListAsync();

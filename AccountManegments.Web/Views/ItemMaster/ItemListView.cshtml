@@ -7,7 +7,7 @@
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Items</div>
-    <div class="ps-3">
+    <div class="ps-3 flex-grow-1">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0 align-items-center">
                 <li class="breadcrumb-item">
@@ -17,19 +17,17 @@
             </ol>
         </nav>
     </div>
+    <div class="d-flex align-items-center">
+        <form class="position-relative">
+            <button type="button" class="btn btn-primary" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
+        </form>
+    </div>
 </div>
 <div class="">
     <div class="">
-        <div class=" radius-10 w-100">
-            <div class="d-flex align-items-center">
-
-                <form class="ms-auto position-relative">
-                    <button type="button" class="btn btn-info px-5" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
-                </form>
-            </div>
+        <div class=" radius-10 w-100">           
             <div class="my-3 border-bottom"></div>
             <div class="">
-
                 <div class="row">
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
@@ -41,7 +39,7 @@
                                                 <div class="row g-3">
 
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtPurchaseRequestSearch" onkeyup="filterPurchaseRequestTable()" placeholder="Search" />
+                                                        <input class="form-control" id="txtItemSearch" onkeyup="filterItemTable()" placeholder="Search" />
                                                     </div>
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlItemSearchBy" onchange="filterItemTable()">

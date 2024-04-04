@@ -418,8 +418,16 @@ function sortPurchaseOrderTable() {
         }
     });
 }
+function GetSupplierInvoiceDetailsById(SupplierId) {
+
+    $.get("/InvoiceMaster/GetSupplierInvoiceDetailsById", { SupplierId: SupplierId })
+        .done(function (result) {
+
+            $("#supplierinvoicedetails").html(result);
+        })
+
+}
 function EditPurchaseOrderDetails(Id) {
-    debugger
 
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
@@ -439,14 +447,6 @@ function EditPurchaseOrderDetails(Id) {
             $('#cart-total').val(response.totalAmount);
             $('#txtdelivryschedule').val(response.deliveryShedule);
             $('#txtshippingAddress').val(response.shippingAddress);
-
-            //var button = document.getElementById("purchaseorderid");
-            //if ($('#purchaseorderid').val() != '') {
-            //    button.textContent = "Update";
-            //}
-            //var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
-            //resetErrorMessages()
-            //offcanvas.show();
             window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
         },
         error: function (xhr, status, error) {

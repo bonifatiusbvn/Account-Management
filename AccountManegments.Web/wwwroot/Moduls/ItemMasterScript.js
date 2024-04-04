@@ -52,8 +52,6 @@ function sortItemTable() {
 }
 function DisplayItemDetails(ItemId, element) {
 
-    //$('.row.ac-card').removeClass('active');
-    //$(element).closest('.row.ac-card').addClass('active');
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -203,7 +201,7 @@ function UpdateItemDetails() {
     })
 
 }
-function validateAndCreateItem() {
+function validateAndCreateItem() {debugger
 
     resetErrorMessages();
 
@@ -254,7 +252,7 @@ function validateAndCreateItem() {
         isValid = false;
     }
 
-    if (isValid) {
+    if (isValid) {debugger
         if ($("#txtItemid").val() == '') {
             CreateItem();
         }
@@ -279,7 +277,7 @@ function isValidPriceInput(PricePerUnit) {
 }
 function isValidGSTInput(GstAmount) {
 
-    var numberPattern = /^[0-9]+$/;
+    var numberPattern = /^\d+(\.\d+)?$/;
     return numberPattern.test(GstAmount);
 }
 

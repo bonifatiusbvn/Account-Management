@@ -69,6 +69,30 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? SupplierName { get; set; }
 
+        public string? SupplierGstNo { get; set; }
+
+        public string? SupplierEmail { get; set; }
+
+        public string? SupplierBuildingName { get; set; }
+
+        public string? SupplierArea { get; set; }
+
+        public string? SupplierState { get; set; } 
+
+        public int? SupplierStateId { get; set; } 
+
+        public string? SupplierCity { get; set; }
+
+        public int? SupplierCityId { get; set; }
+
+        public string? SupplierPincode { get; set; }
+
+        public string? SupplierBankName { get; set; }
+
+        public string? SupplierAccountNo { get; set; }
+
+        public string? SupplierIFSCCode { get; set; }
+
         public string? CompanyName { get; set; }
 
         public string? CompanyAddress { get; set; }
@@ -90,6 +114,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? CompanyGstNo { get; set; }
 
         public string? CompanyPincode { get; set; }
+        public string? CompanyPanNo { get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
     }
