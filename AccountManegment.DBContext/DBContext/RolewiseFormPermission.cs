@@ -11,6 +11,8 @@ public partial class RolewiseFormPermission
 
     public int FormId { get; set; }
 
+    public bool IsAddAllow { get; set; }
+
     public bool IsViewAllow { get; set; }
 
     public bool IsEditAllow { get; set; }

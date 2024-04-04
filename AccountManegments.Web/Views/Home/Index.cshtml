@@ -37,6 +37,19 @@
 
     </div>
 
+    <div class="col-12 col-lg-4 col-xl-4 d-flex">
+        <div class="card radius-10 w-100">
+            <form id="cmplistdashbord">
+
+                <select class="form-control form-control-lg" id="CompanyNameList">
+                    @if (_userSession.UserRole != 3)
+                    {
+                          <option selected disabled value="">Select Company</option>
+                    }
+                </select>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!--end breadcrumb-->
@@ -80,7 +93,6 @@
                             <tr>
                                 <th>Company</th>
                                 <th>Amount</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -126,12 +138,12 @@
             fn_fillsiteDropDown('#drpSiteName')
             $('#drpSiteName').val("@UserSession.SiteId")
             fn_ChangeSite();
+            GetCompanyList();
         });
 
 
-
         function fn_fillsiteDropDown(drpid) {
-            debugger
+
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 success: function (result) {
@@ -148,7 +160,6 @@
         function fn_ChangeSite() {
             var searchText = ""; ///$('#txtPurchaseRequestSearch').val();
             var searchBy = "";//$('#PurchaseRequestSearchBy').val();
-            debugger
 
             $.ajax({
                 url: '/Home/PurchaseRequestList',
@@ -166,6 +177,24 @@
                     $('#laySiteName').html($('#drpSiteName option:selected').text())
                     $('#drplaySiteName').val($('#drpSiteName option:selected').text())
 
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+        }
+
+        function GetCompanyList() {
+
+            $('#CompanyNameList').empty();
+            $.ajax({
+                url: '/Company/GetCompanyNameList',
+                success: function (result) {
+                    if (result.length > 0) {
+                        $.each(result, function (i, data) {
+                            $('#CompanyNameList').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
 
