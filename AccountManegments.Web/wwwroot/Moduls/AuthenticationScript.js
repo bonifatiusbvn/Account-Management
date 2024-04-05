@@ -469,7 +469,7 @@ $(document).on("click", "#remove", function () {
 });
 
 $(document).ready(function () {
-    debugger
+
     bindEventListeners();
 
 
@@ -491,4 +491,15 @@ $(document).ready(function () {
         $(this).trigger('input');
     });
 });
-
+$(document).ready(function () {
+    // Add shipping address when Add button is clicked
+    $('#shippingAddressContainer').on('click', '.add-address', function () {
+        // Clone the shipping address section
+        var clonedSection = $(this).closest('.shipping-address').clone();
+        // Clear input values in the cloned section
+        clonedSection.find('textarea').val('');
+        clonedSection.find('input[type="number"]').val('');
+        // Append the cloned section to the container
+        $('#shippingAddressContainer').append(clonedSection);
+    });
+});

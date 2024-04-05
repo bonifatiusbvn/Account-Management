@@ -2,7 +2,7 @@
 var _editCompanyselectedValue = "";
 var _editSupplierselectedValue = "";
 var _editItemselectedValue = "";
-
+var TotalPending = '';
 
 
 AllPurchaseRequestListTable();
@@ -607,6 +607,8 @@ function InsertMultiplePurchaseOrderDetails() {
             Gst: orderRow.find("#txtproductamountwithGST").val(),
             ItemTotal: orderRow.find("#txtproducttotalamount").val(),
             DeliveryShedule: $("#txtdelivryschedule").val(),
+            ContactName: $("#txtContectPerson").val(),
+            ContactNumber: $("#txtMobileNo").val(),
             CreatedBy: $("#createdbyid").val(),
         };
         orderDetails.push(objData);
@@ -970,8 +972,6 @@ function updateTotals() {
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
 }
-
-
 
 var taxRate = .125,
     shippingRate = 65,

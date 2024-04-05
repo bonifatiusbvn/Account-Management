@@ -27,6 +27,10 @@ public partial class PurchaseOrder
 
     public decimal TotalAmount { get; set; }
 
+    public string? ContactName { get; set; }
+
+    public string? ContactNumber { get; set; }
+
     public string? BillingAddress { get; set; }
 
     public bool? IsDeleted { get; set; }

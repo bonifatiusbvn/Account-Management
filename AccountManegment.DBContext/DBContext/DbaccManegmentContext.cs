@@ -54,7 +54,8 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    {
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -179,6 +180,8 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BillingAddress).HasMaxLength(500);
+            entity.Property(e => e.ContactName).HasMaxLength(50);
+            entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
@@ -312,6 +315,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("SupplierInvoice");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.ContactName).HasMaxLength(50);
+            entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(100);

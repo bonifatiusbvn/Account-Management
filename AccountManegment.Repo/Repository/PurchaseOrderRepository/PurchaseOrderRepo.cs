@@ -197,14 +197,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                      }).ToList();
 
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
-                                                     select new PODeliveryAddressModel
-                                                     {
-                                                         Poid = a.Poid,
-                                                         Quantity = a.Quantity,
-                                                         UnitTypeId = a.UnitTypeId,
-                                                         Address = a.Address,
-                                                         IsDeleted = a.IsDeleted,
-                                                     }).ToList();
+                                                            select new PODeliveryAddressModel
+                                                            {
+                                                                Poid = a.Poid,
+                                                                Quantity = a.Quantity,
+                                                                UnitTypeId = a.UnitTypeId,
+                                                                Address = a.Address,
+                                                                IsDeleted = a.IsDeleted,
+                                                            }).ToList();
 
                 PurchaseOrder.ItemList = itemlist;
                 PurchaseOrder.AddressList = addresslist;
@@ -324,33 +324,35 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                    var firstOrderDetail = PurchaseOrderDetails.First();
-                    var PurchaseOrder = new PurchaseOrder()
-                    {
-                        Id = Guid.NewGuid(),
-                        Poid= firstOrderDetail.Poid,
-                        SiteId = firstOrderDetail.SiteId,
-                        Date= firstOrderDetail.Date,
-                        FromSupplierId = firstOrderDetail.FromSupplierId,
-                        ToCompanyId = firstOrderDetail.ToCompanyId,
-                        TotalAmount = firstOrderDetail.TotalAmount,
-                        Description = firstOrderDetail.Description,
-                        DeliveryShedule = firstOrderDetail.DeliveryShedule,
-                        TotalDiscount = firstOrderDetail.TotalDiscount,
-                        TotalGstamount = firstOrderDetail.TotalGstamount,
-                        BillingAddress = firstOrderDetail.BillingAddress,
-                        IsDeleted=false,
-                        CreatedBy = firstOrderDetail.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                    };
-                    Context.PurchaseOrders.Add(PurchaseOrder);
-                    var PurchaseAddress = new PodeliveryAddress()
-                    {
-                        Poid = PurchaseOrder.Id,
-                        Address = firstOrderDetail.ShippingAddress,
-                        IsDeleted = false,
-                    };
-                    Context.PodeliveryAddresses.Add(PurchaseAddress);
+                var firstOrderDetail = PurchaseOrderDetails.First();
+                var PurchaseOrder = new PurchaseOrder()
+                {
+                    Id = Guid.NewGuid(),
+                    Poid = firstOrderDetail.Poid,
+                    SiteId = firstOrderDetail.SiteId,
+                    Date = firstOrderDetail.Date,
+                    FromSupplierId = firstOrderDetail.FromSupplierId,
+                    ToCompanyId = firstOrderDetail.ToCompanyId,
+                    TotalAmount = firstOrderDetail.TotalAmount,
+                    Description = firstOrderDetail.Description,
+                    DeliveryShedule = firstOrderDetail.DeliveryShedule,
+                    TotalDiscount = firstOrderDetail.TotalDiscount,
+                    TotalGstamount = firstOrderDetail.TotalGstamount,
+                    BillingAddress = firstOrderDetail.BillingAddress,
+                    ContactName = firstOrderDetail.ContactName,
+                    ContactNumber = firstOrderDetail.ContactNumber,
+                    IsDeleted = false,
+                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                Context.PurchaseOrders.Add(PurchaseOrder);
+                var PurchaseAddress = new PodeliveryAddress()
+                {
+                    Poid = PurchaseOrder.Id,
+                    Address = firstOrderDetail.ShippingAddress,
+                    IsDeleted = false,
+                };
+                Context.PodeliveryAddresses.Add(PurchaseAddress);
                 foreach (var item in PurchaseOrderDetails)
                 {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
@@ -415,9 +417,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Context.PurchaseOrders.Update(PurchaseOrder);
                 }
 
-                    foreach (var item in PurchaseOrderDetails)
-                    {
-                        var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.ItemId == item.ItemId);
+                foreach (var item in PurchaseOrderDetails)
+                {
+                    var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.ItemId == item.ItemId);
 
                     if (PODetail == null)
                     {
@@ -491,6 +493,6 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 throw ex;
             }
             return responseModel;
-        }   
+        }
     }
 }

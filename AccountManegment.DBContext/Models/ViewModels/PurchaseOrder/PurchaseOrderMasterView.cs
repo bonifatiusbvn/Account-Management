@@ -24,6 +24,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? Description { get; set; }
 
         public string? DeliveryShedule { get; set; }
+        public string? ContactName { get; set; }
+        public string? ContactNumber { get; set; }
 
         public decimal? TotalDiscount { get; set; }
 
@@ -70,7 +72,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? Area { get; set; }
         public int? CityId { get; set; }
         public int? StateId { get; set; }
-        public string? Cityname { get; set; }   
+        public string? Cityname { get; set; }
         public string? Statename { get; set; }
         public string? Pincode { get; set; }
 
