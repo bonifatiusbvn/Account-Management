@@ -1589,13 +1589,30 @@ tr.active {
     background-color: lightgrey
 }
 
-.card-body .table-responsive{
-    height:500px;
-    max-height:500px;
+.ac-view-list .card-body .table-responsive {
+    height: 500px;
+    max-height: 500px;
 }
 
 .flex-shrink-0.mt-sm-0.mt-3.border p {
     font-size: 12px;
     font-family: sans-serif;
     font-weight:bold;
+}
+
+.product-quantity {
+    width: 38%;
+}
+.input-step {
+    display: flex;
+    height: 35px;
+    width: 205px;
+}
+
+.ac-shippingadd .ac-columns {
+    display:flex;
+}
+
+.ac-shippingadd .ac-columns label{
+    width:35%
 }
