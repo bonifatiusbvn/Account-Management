@@ -224,7 +224,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Item-Add")]
+        //[FormPermissionAttribute("Item-Add")]
         [HttpPost]
         public IActionResult ImportExcelFile(IFormFile FormFile)
         {
@@ -250,7 +250,7 @@ namespace AccountManegments.Web.Controllers
                         break;
 
                     case ".xlsx":
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + filepath + ";Extended Properties='Excel 12.0 Xml; HDR=Yes'";
+                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR = YES'";
                         break;
                 }
                 DataTable dt = new DataTable();
