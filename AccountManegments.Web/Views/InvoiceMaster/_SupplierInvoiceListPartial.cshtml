@@ -7,11 +7,9 @@
 @foreach (var item in Model)
 {
     <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
-        <td>@item.SiteName</td>
+        <td><a class="text-primary" href="/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id">@item.SiteName</a></td>
         <td>@item.SupplierName</td>
         <td>@item.CompanyName</td>
-        <td>@item.Description</td>
-        @* <td>@item.DeliveryShedule</td> *@
         <td>@item.TotalAmount</td>
         <td>
             @if (_userSession.UserRole == 3)
