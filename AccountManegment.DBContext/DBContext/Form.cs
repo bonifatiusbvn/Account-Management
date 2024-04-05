@@ -13,6 +13,8 @@ public partial class Form
 
     public string? Controller { get; set; }
 
+    public int? OrderId { get; set; }
+
     public string? Action { get; set; }
 
     public bool IsActive { get; set; }
