@@ -411,4 +411,36 @@ document.getElementById('txtGstPerUnit').addEventListener('input', function () {
     WithGSTSelected();
 });
 
+function importExcelFile()
+{
+    debugger
+    $('#flipModal').modal('show');
+}
 
+function uploadExcelFile() {
+    debugger
+    var formData = new FormData();
+    formData.append("FormFile", $("#formFile")[0].files[0]);
+
+    $.ajax({
+        url: '/ItemMaster/ImportExcelFile', 
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            Swal.fire({
+                text: result.message,
+                icon: "success",
+                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                buttonsStyling: false
+            }).then(function () {
+                window.location = '/ItemMaster/ItemListView';
+            });
+        },
+        error: function (xhr, status, error) {
+            // Handle error
+            console.log(xhr.responseText);
+        }
+    });
+}
