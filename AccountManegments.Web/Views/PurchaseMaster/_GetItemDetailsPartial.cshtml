@@ -14,21 +14,21 @@
     <td class="text-start">
         <div class="input-step">
             <button type="button" class='minus btn btn-primary' id="minusbtn">–</button>
-            <input type="number" class="product-quantity form-control" id="txtproductquantity" value="1">
+            <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
             <button type="button" class='plus btn btn-primary' id="plusbtn">+</button>
         </div>
     </td>
     <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit"  />
+        <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit" />
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99"  maxlength="2"/>
+        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" />
     </td>
     <td class="text-start">
         <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" />
         <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
     </td>
-    
+
     <td class="text-start">
         <div>
             <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
