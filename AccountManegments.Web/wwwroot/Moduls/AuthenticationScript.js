@@ -452,13 +452,13 @@ function deleteUserDetails(UserId) {
 }
 
 $(document).on("click", ".plus", function () {
-    debugger
+
     updateProductQuantity($(this).closest(".product"), 1);
     return
 });
 
 $(document).on("click", ".minus", function () {
-    debugger
+
     updateProductQuantity($(this).closest(".product"), -1);
     return
 });
@@ -468,5 +468,27 @@ $(document).on("click", "#remove", function () {
     updateTotals();
 });
 
+$(document).ready(function () {
+    debugger
+    bindEventListeners();
 
+
+    $(document).on('input', '.product-quantity', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+
+    $(document).on('keydown', '.product-quantity', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+
+    $(document).on('focusout', '.product-quantity', function () {
+        $(this).trigger('input');
+    });
+});
 

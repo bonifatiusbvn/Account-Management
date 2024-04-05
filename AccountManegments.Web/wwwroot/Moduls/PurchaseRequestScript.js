@@ -11,7 +11,6 @@ GetCompanyDetails();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
-
 GetPOList();
 
 function AllPurchaseRequestListTable() {
@@ -426,7 +425,7 @@ function EditPurchaseOrderDetails(Id) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         success: function (response) {
-            debugger
+
 
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
@@ -465,7 +464,7 @@ function GetCompanyDetails() {
     });
 }
 function GetItemDetails() {
-    debugger
+
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
@@ -937,18 +936,19 @@ function updateProductTotalAmount() {
     });
 }
 
+
+
 function updateProductQuantity(row, increment) {
-
-    var quantityInput = row.find(".product-quantity").val();
-    var currentQuantity = parseInt(quantityInput);
-    var newQuantity = currentQuantity + increment;
+    var quantityInput = parseInt(row.find(".product-quantity").val());
+    var newQuantity = quantityInput + increment;
     if (newQuantity >= 0) {
-        row.find(".product-quantity").val(newQuantity.toFixed(2));;
-        updateProductTotalAmount();
+        row.find(".product-quantity").val(newQuantity);
+        updateProductTotalAmount(row);
         updateTotals();
-
     }
 }
+
+
 
 function updateTotals() {
 

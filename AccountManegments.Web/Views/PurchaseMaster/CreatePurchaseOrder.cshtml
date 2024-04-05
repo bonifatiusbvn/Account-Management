@@ -115,7 +115,7 @@
                                     </div>
                                     <!--end row-->
                                 </div>
-                                
+
                                 <!---- Product Details ---->
                                 <div class="row">
                                     <div class="col-lg-4 col-sm-6">
@@ -188,11 +188,11 @@
                                         </table>
                                     </div>
                                     <div class="row ">
-                                        <div class="col-lg-6 col-sm-12">
+                                        <div class="col-lg-4 col-sm-12">
                                             <div class="row ac-shippingadd">
                                                 <div class="col-lg-12 col-sm-12">
-                                                <label for="choices-payment-type" class="form-label">Delivery Schedule</label>
-                                                
+                                                    <label for="choices-payment-type" class="form-label">Delivery Schedule</label>
+
                                                     <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" />
                                                     <span id="spndelivryschedule" class="text-danger"></span>
                                                 </div>
@@ -217,7 +217,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="col-lg-6 col-sm-12">
                                             <div class="table">
                                                 <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
@@ -261,7 +261,7 @@
                                             </div>
                                             <div class="col-lg-4 col-sm-6">
                                                 <label>Qty</label>
-                                               <input type="number" class="form-control" />
+                                                <input type="number" class="form-control" />
                                             </div>
                                             <div class="col-lg-4 col-sm-6 pt-3">
 
@@ -276,31 +276,26 @@
                                                     <tr>
                                                         <th>Address</th>
                                                         <th>Qty</th>
-                                                        
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <th>Address1</th>
                                                         <th>250</th>
-                                                       
-                                                      
+
+
                                                     </tr>
-                                                   
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <!--end row-->
-                                    <div class="mt-4">
-                                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                                    </div>
+
                                     <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                         <button type="button" class="btn btn-success" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
                                         <button type="button" class="btn btn-success" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                     </div>
                                 </div>
 
