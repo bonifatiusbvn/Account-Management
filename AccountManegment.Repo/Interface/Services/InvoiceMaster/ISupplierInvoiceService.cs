@@ -19,6 +19,7 @@ namespace AccountManagement.Repository.Interface.Services.InvoiceMaster
         Task<InvoiceTotalAmount> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId);
         Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails);
         string CheckSupplierInvoiceNo();
+        Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId);
 
     }
 }

@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div>
                     <div class="row justify-content-center">
-                        <div class="col-xxl-9">
+                        <div class="col-xxl-12">
                             <div class="card">
                                 <form id="CreateInvoiceForm">
                                     <div class="card-body border-bottom border-bottom-dashed p-4">
@@ -37,7 +37,7 @@
                                                 <div class="profile-user mx-auto  mb-3">
                                                     <label for="profile-img-file-input" class="d-block" tabindex="0">
                                                         <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
+                                                            <img src="" class="card-logo card-logo-dark user-profile-image img-fluid" alt="Logo">
                                                         </span>
                                                     </label>
                                                 </div>
@@ -73,207 +73,238 @@
                                         </div>
                                         <!--end row-->
                                     </div>
-                                    <div class="card-body p-4 border-top border-top-dashed">
+                                </form>
+
+                                <div class="card-body p-4 border-top border-top-dashed">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <label for="txtPoId">Order No</label>
+                                                    <input type="text" class="form-control bg-light border-0" id="txtPoId" value="@ViewBag.PurchaseOrderNo" readonly />
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div>
+                                                        <div>
+                                                            <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@Model.Date" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-6 col-sm-6">
+                                            <br />
+                                            <div>
+                                                <label for="billingName" class="text-uppercase fw-semibold">Billing Address</label>
+                                            </div>
+                                            <div class="mb-2" id="companybillingaddressDetails">
+                                                <div class="mb-2">
+                                                    <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="@Model.CompanyName" placeholder="Full Name" required />
+                                                </div>
+                                                <div class="mb-2">
+                                                    <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.BillingAddress</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
+                                </div>
+                                
+                                <!---- Product Details ---->
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div>
+                                            <label for="txtSuppliername" class="form-label text-uppercase">Supplier Name</label>
+                                        </div>
+                                        @if (Model.SupplierName != null)
+                                        {
+                                            <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
+                                                <option selected disabled value="">Select Supplier</option>
+                                            </select>
+                                        }
+                                        <span id="spnsuppliername" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6">
+                                        <div>
+                                            <div>
+                                                <label for="searchItemname" class="form-label text-uppercase">Product Names</label>
+                                            </div>
+                                            @if (Model.Item != null)
+                                            {
+                                                <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                    <option selected disabled value="@Model.ItemId">@Model.Item</option>
+                                                </select>
+
+                                            }
+                                            else
+                                            {
+                                                <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
+                                                    <option selected disabled value="">select Item</option>
+                                                </select>
+                                            }
+                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
+                                            <div id="searchvalidationMessage" class="text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 pt-4">
+                                        <a id="addItemButton" class="btn btn-primary" onclick="SerchItemDetailsById()" style="">Add Product</a>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <div class="table-responsive" style="height:350px;">
+                                        <table class="invoice-table table table-bordered table-striped mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-start">#</th>
+                                                    <th class="text-start">Product Details</th>
+                                                    <th class="text-start">HSN Code</th>
+                                                    <th class="text-start">Quantity</th>
+                                                    <th class="text-start">Rate</th>
+                                                    <th class="text-start">GST (%)</th>
+                                                    <th class="text-start">With GST Amt</th>
+                                                    <th class="text-start">Amount</th>
+                                                    <th class="text-end">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="addNewlink">
+                                                @if (Model.ItemList != null)
+                                                {
+                                                    @Html.Partial("_EditItemDetailsPartial", Model.ItemList)
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="row ac-shippingadd">
+                                                <div class="col-lg-12 col-sm-12">
+                                                <label for="choices-payment-type" class="form-label">Delivery Schedule</label>
+                                                
+                                                    <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" />
+                                                    <span id="spndelivryschedule" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="col-lg-12 col-sm-12 mt-2 ">
+                                                    <div class="mb-2">
+                                                        <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Contect Person Name</label>
+                                                        <div class="mb-2">
+                                                            <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Contect Person Name" value="@Model.DeliveryShedule" />
+                                                            <span id="spndelivryschedule" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-sm-12 mt-2">
+                                                    <div class="mb-2">
+                                                        <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Mobile No</label>
+                                                        <div class="mb-2">
+                                                            <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Mobile No" value="@Model.DeliveryShedule" />
+                                                            <span id="spndelivryschedule" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="table">
+                                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">Sub Total</th>
+                                                            <td style="width:150px;">
+                                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Total Gst(18%)</th>
+                                                            <td>
+                                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Discount <small class="text-muted">()</small></th>
+                                                            <td>
+                                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="border-top border-top-dashed">
+                                                            <th scope="row">Total Amount</th>
+                                                            <td>
+                                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
                                         <div class="row">
+                                            <h4>Shipping Address</h4>
                                             <div class="col-lg-4 col-sm-6">
-                                                <br />
-                                                <div>
-                                                    <label for="billingName" class="text-uppercase fw-semibold">Billing Address</label>
-                                                </div>
-                                                <div class="mb-2" id="companybillingaddressDetails">
-                                                    <div class="mb-2">
-                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="@Model.CompanyName" placeholder="Full Name" required />
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.BillingAddress</textarea>
-                                                    </div>
-                                                </div>
+                                                <label>Shipping Address</label>
+                                                <textarea class="form-control" cols="2" rows="2" id="textshipping"></textarea>
                                             </div>
-                                            <!--end col-->
+                                            <div class="col-lg-4 col-sm-6">
+                                                <label>Qty</label>
+                                               <input type="number" class="form-control" />
+                                            </div>
+                                            <div class="col-lg-4 col-sm-6 pt-3">
+
+                                                <button type="button" class="btn btn-success" id="SavePOButton" onclick="><i class="ri-printer-line align-bottom me-1"></i> Add</button>
+                                            </div>
                                         </div>
-                                        <!--end row-->
                                     </div>
-                                    <div class="card-body p-4">
-                                        <div class="row g-3 ">
-                                            <div class="col-lg-3 col-sm-6">
-                                                <label for="txtPoId">Invoice No</label>
-                                                <input type="text" class="form-control bg-light border-0" id="txtPoId" value="@ViewBag.PurchaseOrderNo" readonly />
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <div>
-                                                        <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <input type="text" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@Model.Date" disabled>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <label for="txtSuppliername" class="text-muted text-uppercase fw-semibold">Supplier Name</label>
-                                                </div>
-                                                @if (Model.SupplierName != null)
-                                                {
-                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                                        <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
-                                                    </select>
-                                                }
-                                                else
-                                                {
-                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername" style="border:hidden;">
-                                                        <option selected disabled value="">Select Supplier</option>
-                                                    </select>
-                                                }
-                                                <span id="spnsuppliername" class="text-danger"></span>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <div>
-                                                        <label for="searchItemname" class="text-muted text-uppercase fw-semibold">Product Names</label>
-                                                    </div>
-                                                    @if (Model.Item != null)
-                                                    {
-                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                                            <option selected disabled value="@Model.ItemId">@Model.Item</option>
-                                                        </select>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <select id="searchItemname" class="form-control bg-light border-0" style="border:hidden;">
-                                                            <option selected disabled value="">select Item</option>
-                                                        </select>
-                                                    }
-                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchItemnameid">
-                                                    <div id="searchvalidationMessage" class="text-danger"></div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="input-light">
-                                                <div>
-                                                    <div class="col-sm-2">
-                                                        <a id="addItemButton" class="btn btn-primary fw-small" onclick="SerchItemDetailsById()" style="margin-left: 950px;width: 120px;">Add Product</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-
-                                    <!---- Product Details ---->
-
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive">
-                                            <table class="invoice-table table table-bordered table-striped mb-0">
+                                    <div id="dvshipping" class="col-lg-6">
+                                        <div class="row">
+                                            <table class="table table-sm table-nowrap align-middle mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-start">#</th>
-                                                        <th class="text-start">Product Details</th>
-                                                        <th class="text-start">Rate</th>
-                                                        <th class="text-start">GST (%)</th>
-                                                        <th class="text-start">GST Price</th>
-                                                        <th class="text-start">Quantity</th>
-                                                        <th class="text-start">Amount</th>
-                                                        <th class="text-end">Action</th>
+                                                        <th>Address</th>
+                                                        <th>Qty</th>
+                                                        
                                                     </tr>
                                                 </thead>
-                                                <tbody id="addNewlink">
-                                                    @if (Model.ItemList != null)
-                                                    {
-                                                        @Html.Partial("_EditItemDetailsPartial", Model.ItemList)
-                                                    }
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Address1</th>
+                                                        <th>250</th>
+                                                       
+                                                      
+                                                    </tr>
+                                                   
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <tbody>
-                                            <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
-                                            <tr class="border-top border-top-dashed mt-2">
-                                                <td colspan="3"></td>
-                                                <td colspan="2" class="p-0">
-                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th scope="row">Sub Total</th>
-                                                                <td style="width:150px;">
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Total Gst(18%)</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Discount <small class="text-muted">()</small></th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="border-top border-top-dashed">
-                                                                <th scope="row">Total Amount</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <!--end table-->
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                        <div class="row mt-3">
-                                            <div class="col-lg-4">
-                                                <div class="mb-2">
-                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Delivery Schedule</label>
-                                                    <div class="mb-2">
-                                                        <input type="text" id="txtdelivryschedule" class="form-control" name="txtdelivryschedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" />
-                                                        <span id="spndelivryschedule" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-6 ms-auto">
-                                                <div class="row">
-                                                    <div class="col-lg-8">
-                                                        <input type="checkbox" id="sameAsBillingAddress"> Same as billing address<br>
-                                                        <div>
-                                                            <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
-                                                        </div>
-                                                        <div class="mb-2" id="companyshippingaddressDetails">
-                                                            <div class="mb-2">
-                                                                <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
-                                                            </div>
-                                                            <div class="mb-2">
-                                                                <textarea class="form-control bg-light border-0" id="txtshippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required>@Model.ShippingAddress</textarea>
-                                                                <span id="spnshippingaddress" class="text-danger"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                        <div class="mt-4">
-                                            <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                                            <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="button" class="btn btn-success" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                            <button type="button" class="btn btn-success" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                            <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                                            <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
-                                        </div>
                                     </div>
+                                    <!--end row-->
+                                    <div class="mt-4">
+                                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
+                                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
+                                    </div>
+                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                        <button type="button" class="btn btn-success" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                        <button type="button" class="btn btn-success" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
+                                    </div>
+                                </div>
 
-                                </form>
+
                             </div>
                         </div>
                         <!--end col-->

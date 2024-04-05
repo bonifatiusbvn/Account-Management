@@ -4,6 +4,8 @@
     {
         public string FormName { get; set; }
         public string GroupName { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
         public bool Add { get; set; }
         public bool View { get; set; }
         public bool Edit { get; set; }

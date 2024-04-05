@@ -201,7 +201,7 @@ function UpdateItemDetails() {
     })
 
 }
-function validateAndCreateItem() {
+function validateAndCreateItem() {debugger
 
     resetErrorMessages();
 
@@ -252,7 +252,7 @@ function validateAndCreateItem() {
         isValid = false;
     }
 
-    if (isValid) {
+    if (isValid) {debugger
         if ($("#txtItemid").val() == '') {
             CreateItem();
         }
@@ -277,7 +277,7 @@ function isValidPriceInput(PricePerUnit) {
 }
 function isValidGSTInput(GstAmount) {
 
-    var numberPattern = /^[0-9]+$/;
+    var numberPattern = /^\d+(\.\d+)?$/;
     return numberPattern.test(GstAmount);
 }
 

@@ -55,7 +55,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -111,8 +110,10 @@ public partial class DbaccManegmentContext : DbContext
         {
             entity.ToTable("Form");
 
-            entity.Property(e => e.FormGroup).HasMaxLength(10);
-            entity.Property(e => e.FormName).HasMaxLength(20);
+            entity.Property(e => e.Action).HasMaxLength(50);
+            entity.Property(e => e.Controller).HasMaxLength(50);
+            entity.Property(e => e.FormGroup).HasMaxLength(50);
+            entity.Property(e => e.FormName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<ItemInword>(entity =>
@@ -123,7 +124,6 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.InwordId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DocumentName).HasMaxLength(100);
             entity.Property(e => e.Item).HasMaxLength(250);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -244,6 +244,10 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.PurchaseRequests)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("FK_PurchaseRequest_ItemMaster");
 
             entity.HasOne(d => d.Site).WithMany(p => p.PurchaseRequests)
                 .HasForeignKey(d => d.SiteId)
