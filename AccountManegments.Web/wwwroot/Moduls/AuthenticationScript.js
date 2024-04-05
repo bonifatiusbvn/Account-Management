@@ -98,8 +98,8 @@ function DisplayUserDetails(UserId) {
 
 function SelectUserDetails(UserId, element) {
 
-    $('.row.ac-card').removeClass('active');
-    $(element).closest('.row.ac-card').addClass('active');
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,

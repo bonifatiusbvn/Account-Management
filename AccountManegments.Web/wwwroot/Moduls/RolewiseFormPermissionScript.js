@@ -42,7 +42,10 @@ function ClearUserTextBox() {
 }
 
 
-function EditRoleWiseFormDetails(RoleId) {
+function EditRoleWiseFormDetails(RoleId,element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     var button = document.getElementById("btnUserRolewiseForm");
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createFormGroup'));
     offcanvas.show();
