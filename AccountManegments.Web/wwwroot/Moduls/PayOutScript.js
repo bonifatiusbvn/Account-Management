@@ -136,6 +136,7 @@ function InsertPayOutDetails() {
 function validateAndInsertPayOutDetails() {
 
     var payout = document.getElementById('txtpayoutamount').value.trim();
+    var pendingamount = document.getElementById('txtpendingamount').value.trim();
     var company = document.getElementById('txtcompanyname').value.trim();
     var supplier = document.getElementById('txtSuppliername').value.trim();
 
@@ -156,7 +157,15 @@ function validateAndInsertPayOutDetails() {
         document.getElementById("spnsupplier").innerText = "Please Select Supplier!";
         isValid = false;
     }
+    if (isNaN(pendingamount) || pendingamount === 0) {
+        document.getElementById("spnpendingamount").innerText = "Please Enter a valid value for Pending amount!";
+        isValid = false;
+    }
 
+    if (pendingamount > payout) {
+        document.getElementById("spnpayout").innerText = "Entered amount cannot exceed pending amount.";
+        isValid = false;
+    }
 
     if (isValid) {
         InsertPayOutDetails();

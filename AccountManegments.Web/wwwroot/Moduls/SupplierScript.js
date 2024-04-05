@@ -438,3 +438,14 @@ function UserActiveDecative(UserId) {
         }
     });
 }
+function GetSupplierInvoiceDetailsById(SupplierId, element) {debugger
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
+
+    $.get("/InvoiceMaster/GetSupplierInvoiceDetailsById", { SupplierId: SupplierId })
+        .done(function (result) {
+
+            $("#supplierinvoicedetails").html(result);
+        })
+}

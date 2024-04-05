@@ -20,6 +20,7 @@ public partial class ItemInword
     public string? DocumentName { get; set; }
 
     public bool? IsApproved { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }

@@ -418,15 +418,7 @@ function sortPurchaseOrderTable() {
         }
     });
 }
-function GetSupplierInvoiceDetailsById(SupplierId) {
 
-    $.get("/InvoiceMaster/GetSupplierInvoiceDetailsById", { SupplierId: SupplierId })
-        .done(function (result) {
-
-            $("#supplierinvoicedetails").html(result);
-        })
-
-}
 function EditPurchaseOrderDetails(Id) {
 
     $.ajax({

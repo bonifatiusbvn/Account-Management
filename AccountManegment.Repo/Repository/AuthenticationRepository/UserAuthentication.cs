@@ -298,20 +298,22 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
 
-                            List<FromPermission> FromPermissionData = (List<FromPermission>)(from u in Context.RolewiseFormPermissions
-                                                                                             join s in Context.Forms on u.FormId equals s.FormId
-                                                                                             where u.RoleId == userModel.RoleId
-                                                                                             select new FromPermission
-                                                                                             {
-                                                                                                 FormName = s.FormName,
-                                                                                                 GroupName = s.FormGroup,
-                                                                                                 Controller = s.Controller,
-                                                                                                 Action = s.Action,
-                                                                                                 View = u.IsViewAllow,
-                                                                                                 Edit = u.IsEditAllow,
-                                                                                                 Delete = u.IsDeleteAllow,
+                            List<FromPermission> FromPermissionData = (from u in Context.RolewiseFormPermissions
+                                                                       join s in Context.Forms on u.FormId equals s.FormId
+                                                                       where u.RoleId == userModel.RoleId && s.IsActive == true
+                                                                       orderby s.OrderId ascending
+                                                                       select new FromPermission
+                                                                       {
+                                                                           FormName = s.FormName,
+                                                                           GroupName = s.FormGroup,
+                                                                           Controller = s.Controller,
+                                                                           Action = s.Action,
+                                                                           View = u.IsViewAllow,
+                                                                           Edit = u.IsEditAllow,
+                                                                           Delete = u.IsDeleteAllow,
 
-                                                                                             }).ToList();
+                                                                       }).ToList();
+
 
                             userModel.FromPermissionData = FromPermissionData;
                         }

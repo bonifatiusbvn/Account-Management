@@ -45,8 +45,8 @@
             </div>
         </div>
     </div> *@
-    <tr id="userCard_@item.SupplierId" onclick="SelectSupplierDetails('@item.SupplierId', this)">
-        <td>@item.SupplierName</td>
+    <tr id="userCard_@item.SupplierId" class="" onclick="GetSupplierInvoiceDetailsById('@item.SupplierId', this)">
+        <td><a class="text-primary">@item.SupplierName</td>
         <td>@item.Gstno</td>
         <td>
             @if (item.IsApproved == true)
@@ -73,4 +73,8 @@
             }
         </td>
     </tr>
+}
+
+@section Scripts {
+    <script src="~/moduls/SupplierScript.js"></script>
 }
