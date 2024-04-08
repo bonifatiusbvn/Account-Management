@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -227,7 +228,7 @@ namespace AccountManegments.Web.Controllers
 
         //[FormPermissionAttribute("Item-Add")]
         [HttpPost]
-        public IActionResult ImportExcelFile(IFormFile FormFile)
+        public async Task<IActionResult> ImportExcelFile(IFormFile FormFile)
         {
             try
             {
@@ -255,16 +256,16 @@ namespace AccountManegments.Web.Controllers
                         break;
                 }
 
-                string sqlConString = "Data Source=BONI002;Initial Catalog=DBAccManegment;User ID=BoniEmp;Password=Admin123;Encrypt=False";
-                if (string.IsNullOrEmpty(sqlConString))
-                {
-                    throw new Exception("Connection string 'ACCDbconn' is missing or empty.");
-                }
-
                 DataTable dt = new DataTable();
-                dt.Columns.Add("ItemId", typeof(Guid)); 
-                dt.Columns.Add("CreatedBy", typeof(Guid)); 
-                dt.Columns.Add("UpdatedBy", typeof(Guid)); 
+                dt.Columns.Add("ItemName", typeof(string));
+                dt.Columns.Add("UnitType", typeof(int));
+                dt.Columns.Add("PricePerUnit", typeof(decimal));
+                dt.Columns.Add("IsWithGST", typeof(bool));
+                dt.Columns.Add("GSTAmount", typeof(decimal));
+                dt.Columns.Add("GSTPer", typeof(decimal));
+                dt.Columns.Add("HSNCode", typeof(string));
+                dt.Columns.Add("IsApproved", typeof(bool));
+                dt.Columns.Add("IsDeleted", typeof(bool));
 
                 excelConString = string.Format(excelConString, filepath);
                 using (OleDbConnection conExcel = new OleDbConnection(excelConString))
@@ -285,49 +286,47 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
 
-                // Generate a new GUID for each row
+                var items = new List<ItemMasterModel>();
+
                 foreach (DataRow row in dt.Rows)
                 {
-                    row["ItemId"] = Guid.NewGuid();
-                    row["CreatedBy"] = _userSession.UserId;
-                    row["UpdatedBy"] = _userSession.UserId;
+                    var item = new ItemMasterModel
+                    {
+                        ItemName = row["ItemName"].ToString(),
+                        UnitType = Convert.ToInt32(row["UnitType"]),
+                        PricePerUnit = Convert.ToDecimal(row["PricePerUnit"]),
+                        IsWithGst = Convert.ToBoolean(row["IsWithGST"]),
+                        Gstamount = Convert.ToDecimal(row["GSTAmount"]),
+                        Gstper = Convert.ToDecimal(row["GSTPer"]),
+                        Hsncode = row["HSNCode"].ToString(),
+                        IsApproved = Convert.ToBoolean(row["IsApproved"]),
+                        IsDeleted = Convert.ToBoolean(row["IsDeleted"]),
+                        CreatedBy = _userSession.UserId,
+                        CreatedOn = DateTime.Now,
+                        UpdatedBy = _userSession.UserId,
+                        UpdatedOn = DateTime.Now
+                    };
+
+                    items.Add(item);
                 }
 
-                using (SqlConnection con = new SqlConnection(sqlConString))
+                ApiResponseModel postUser = await APIServices.PostAsync(items, "ItemMaster/InsertItemDetailsFromExcel");
+                if (postUser.code == 200)
                 {
-                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(con))
-                    {
-                        bulkCopy.DestinationTableName = "ItemMaster";
-                        bulkCopy.ColumnMappings.Add("ItemId", "ItemId");
-                        bulkCopy.ColumnMappings.Add("ItemName", "ItemName");
-                        bulkCopy.ColumnMappings.Add("UnitType", "UnitType");
-                        bulkCopy.ColumnMappings.Add("PricePerUnit", "PricePerUnit");
-                        bulkCopy.ColumnMappings.Add("IsWithGST", "IsWithGST");
-                        bulkCopy.ColumnMappings.Add("GSTAmount", "GSTAmount");
-                        bulkCopy.ColumnMappings.Add("GSTPer", "GSTPer");
-                        bulkCopy.ColumnMappings.Add("HSNCode", "HSNCode");
-                        bulkCopy.ColumnMappings.Add("IsApproved", "IsApproved");
-                        bulkCopy.ColumnMappings.Add("IsDeleted", "IsDeleted");
-                        bulkCopy.ColumnMappings.Add("CreatedBy", "CreatedBy");
-                        bulkCopy.ColumnMappings.Add("CreatedOn", "CreatedOn");
-                        bulkCopy.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
-                        bulkCopy.ColumnMappings.Add("UpdatedOn", "UpdatedOn");
-                        con.Open();
-                        bulkCopy.WriteToServer(dt);
-                        con.Close();
-                    }
+                    return RedirectToAction("ItemListView");
+                }
+                else
+                {
+                    ViewBag.Message = postUser.message;
+                    ViewBag.Code = postUser.code;                   
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(ex.Message);
             }
-
-            return RedirectToAction("ItemListView");
+            return View("ItemListView");
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailsById()

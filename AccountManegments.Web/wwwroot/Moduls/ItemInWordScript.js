@@ -56,7 +56,6 @@ function sortItemInWordTable() {
     });
 }
 function SelectItemInWordDetails(InwordId, element) {
-
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -74,8 +73,11 @@ function SelectItemInWordDetails(InwordId, element) {
                 $('#dspItem').val(response.item);
                 $('#dspUnitName').val(response.unitName);
                 $('#dspQuantity').val(response.quantity);
-                $('#dspDocumentName').val(response.documentName);
+                $('#dspDocumentName').attr("src", "/Content/InWordDocument/" + response.documentName);
                 $('#dspIsApproved').prop('checked', response.isApproved);
+                $('#dspVehicleNumber').val(response.vehicleNumber);
+                $('#dspReceiverName').val(response.receiverName);
+                $('#dspDate').val(response.date);
             } else {
                 console.log('Empty response received.');
             }
@@ -123,6 +125,8 @@ function AddItemInWordDetails() {
     formData.append("SiteId", $("#txtSiteid").val());
     formData.append("DocumentName", $("#txtDocument")[0].files[0]);
     formData.append("CreatedBy", $("#txtCreatedBy").val());
+    formData.append("VehicleNumber", $("#txtVehicleNumber").val());
+    formData.append("ReceiverName", $("#txtReceiverName").val());
     $.ajax({
         url: '/ItemInWord/AddItemInWordDetails',
         type: 'post',
@@ -149,6 +153,8 @@ function ClearItemInWordTextBox() {
     $('#txtUnitType').val('');
     $('#txtQuantity').val('');
     $('#txtDocument').val('');
+    $('#txtVehicleNumber').val('');
+    $('#txtReceiverName').val('');
     var button = document.getElementById("btnitemInWord");
     if ($('#txtItemInWordid').val() == '') {
         button.textContent = "Create";
@@ -162,6 +168,8 @@ function validateAndCreateItemInWord() {
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("txtItemId").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
+    var VehicleNumber = document.getElementById("txtVehicleNumber").value.trim();
+    var ReceiverName = document.getElementById("txtReceiverName").value.trim();
 
     var isValid = true;
 
@@ -186,6 +194,17 @@ function validateAndCreateItemInWord() {
     }
 
 
+    if (VehicleNumber === "") {
+        document.getElementById("spnVehicleNumber").innerText = "Vehicle Number is required.";
+        isValid = false;
+    }
+
+
+    if (ReceiverName === "") {
+        document.getElementById("spnReceiverName").innerText = "Receiver Name is required.";
+        isValid = false;
+    }
+
     if (isValid) {
         if ($("#txtItemInWordid").val() == '') {
             AddItemInWordDetails();
@@ -199,6 +218,8 @@ function resetErrorsMessages() {
     document.getElementById("spnUnitType").innerText = "";
     document.getElementById("spnItemName").innerText = "";
     document.getElementById("spnQuantity").innerText = "";
+    document.getElementById("spnVehicleNumber").innerText = "";
+    document.getElementById("spnReceiverName").innerText = "";
 }
 function EditItemInWordDetails(InwordId) {
 
@@ -208,14 +229,16 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+        
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
-            $('#txtDocument').hide();
-            $('#labeldocument').hide();
+            $("#txtVehicleNumber").val(response.vehicleNumber),
+            $("#txtReceiverName").val(response.receiverName),
+                $("#txtDocumentName").val(response.documentName),
+            $('#displayImage').attr("src", "/Content/InWordDocument/" + response.documentName);
             var button = document.getElementById("btnitemInWord");
             if ($('#txtItemInWordid').val() != '') {
                 button.textContent = "Update";
@@ -230,15 +253,30 @@ function EditItemInWordDetails(InwordId) {
     });
 }
 function UpdateItemInWordDetails() {
+    debugger
+    var documentFile = $("#txtDocument")[0].files[0];
+    var documentName = null;
+    if (documentFile == undefined)
+    {
+       documentName = $("#txtDocumentName").val();
+    }
+    else
+    {
+        documentName = documentFile.name;
+    }
     var objData = {
         InwordId: $('#txtItemInWordid').val(),
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#txtItemId').val(),
         Item: $('#txtItemName').val(),
         Quantity: $('#txtQuantity').val(),
+        VehicleNumber: $("#txtVehicleNumber").val(),
+        ReceiverName: $("#txtReceiverName").val(),
+        DocumentName : documentName,
     };
     var form_data = new FormData();
     form_data.append("ITEMINWORD", JSON.stringify(objData));
+
     $.ajax({
         url: '/ItemInWord/UpdateItemInWordDetails',
         type: 'post',
@@ -359,5 +397,30 @@ function ItemInWordIsApproved(InwordId) {
                 window.location = '/ItemInWord/ItemInWord';
             });;
         }
+    });
+}
+
+$(document).ready(() => {
+    $('#txtDocument').change(function () {
+        const file = this.files[0];
+        console.log(file);
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                console.log(event.target.result);
+                $('#displayImage').attr('src', event.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+var closebtns = document.getElementsByClassName("close");
+var i;
+
+for (i = 0; i < closebtns.length; i++) {
+    closebtns[i].addEventListener("click", function () {
+        $('#displayImage').attr('src', '');
+        $('#txtDocument').val('');
     });
 }

@@ -23,6 +23,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
 
+    public virtual DbSet<ItemInWordDocument> ItemInWordDocuments { get; set; }
+
     public virtual DbSet<ItemInword> ItemInwords { get; set; }
 
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
@@ -54,8 +56,9 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=DBAccManegment;User ID=BoniEmp;Password=Admin123;Encrypt=False");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -117,6 +120,14 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.FormName).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<ItemInWordDocument>(entity =>
+        {
+            entity.HasOne(d => d.RefInWord).WithMany(p => p.ItemInWordDocuments)
+                .HasForeignKey(d => d.RefInWordId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ItemInWordDocuments_ItemInword");
+        });
+
         modelBuilder.Entity<ItemInword>(entity =>
         {
             entity.HasKey(e => e.InwordId);
@@ -125,9 +136,12 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.InwordId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.Item).HasMaxLength(250);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.ReceiverName).HasMaxLength(100);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VehicleNumber).HasMaxLength(20);
 
             entity.HasOne(d => d.ItemNavigation).WithMany(p => p.ItemInwords)
                 .HasForeignKey(d => d.ItemId)

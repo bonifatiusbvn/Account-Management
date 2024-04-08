@@ -167,7 +167,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 join g in Context.Countries on c.Country equals g.CountryId
                                 join supCity in Context.Cities on b.City equals supCity.CityId
                                 join supState in Context.States on b.State equals supState.StatesId
-                               
+
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
@@ -203,7 +203,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     TotalGstamount = a.TotalGstamount,
                                     PaymentStatus = a.PaymentStatus,
                                     IsPayOut = a.IsPayOut,
-                                    Roundoff = a.Roundoff,  
+                                    Roundoff = a.Roundoff,
                                 }).First();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
@@ -427,14 +427,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var lastInvoice = Context.SupplierInvoices
-                                         .OrderByDescending(e => e.CreatedOn).Where(a=>a.InvoiceNo!="PayOut")
+                                         .OrderByDescending(e => e.CreatedOn).Where(a => a.InvoiceNo != "PayOut")
                                          .FirstOrDefault();
                 var currentDate = DateTime.Now;
                 int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
                 int lastYear = currentYear - 1;
 
                 string supplierInvoiceId;
-                if (lastInvoice == null )
+                if (lastInvoice == null)
                 {
                     supplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
                 }
@@ -464,27 +464,27 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         {
             try
             {
-                var supplierInvoices = (from a in Context.SupplierInvoices 
+                var supplierInvoices = (from a in Context.SupplierInvoices
                                         join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                         join c in Context.Companies on a.CompanyId equals c.CompanyId
                                         where a.SupplierId == SupplierId
                                         select new SupplierInvoiceModel
-                                             {
-                                                 Id = a.Id,
-                                                 InvoiceNo = a.InvoiceNo,
-                                                 SupplierId = a.SupplierId,
-                                                 SupplierName = b.SupplierName,
-                                                 CompanyId = a.CompanyId,
-                                                 CompanyName = c.CompanyName,
-                                                 Date = DateTime.Now,
-                                                 TotalAmount = a.TotalAmount,
-                                                 TotalDiscount = a.TotalDiscount,
-                                                 TotalGstamount = a.TotalGstamount,
-                                                 Description = a.Description,
-                                                 Roundoff = a.Roundoff,
-                                                 IsPayOut = a.IsPayOut,
-                                                 PaymentStatus = a.PaymentStatus
-                                             });
+                                        {
+                                            Id = a.Id,
+                                            InvoiceNo = a.InvoiceNo,
+                                            SupplierId = a.SupplierId,
+                                            SupplierName = b.SupplierName,
+                                            CompanyId = a.CompanyId,
+                                            CompanyName = c.CompanyName,
+                                            Date = DateTime.Now,
+                                            TotalAmount = a.TotalAmount,
+                                            TotalDiscount = a.TotalDiscount,
+                                            TotalGstamount = a.TotalGstamount,
+                                            Description = a.Description,
+                                            Roundoff = a.Roundoff,
+                                            IsPayOut = a.IsPayOut,
+                                            PaymentStatus = a.PaymentStatus
+                                        });
                 return (supplierInvoices);
             }
             catch (Exception ex)

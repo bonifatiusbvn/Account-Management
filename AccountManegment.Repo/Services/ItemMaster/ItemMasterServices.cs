@@ -57,5 +57,10 @@ namespace AccountManagement.Repository.Services.ItemMaster
         {
             return await ItemMaster.UpdateItemDetails(ItemDetails);
         }
+
+        public async Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList)
+        {
+            return await ItemMaster.InsertItemDetailsFromExcel(itemDetailsList);
+        }
     }
 }

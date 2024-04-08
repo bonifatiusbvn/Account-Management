@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
@@ -7,6 +8,7 @@ using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
 using AccountManagement.Repository.Services.ItemInWord;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
@@ -117,6 +119,25 @@ namespace AccountManagement.API.Controllers
             catch (Exception ex)
             {
                 response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
+
+        [HttpPost]
+        [Route("InsertMultipleItemInWordDetails")]
+        public async Task<IActionResult> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var itemInword = await ItemInWord.InsertMultipleItemInWordDetails(ItemInWordDetails);
+            if (itemInword.code == 200)
+            {
+                response.code = itemInword.code;
+                response.message = itemInword.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Inserting!";
             }
             return StatusCode(response.code, response);
         }

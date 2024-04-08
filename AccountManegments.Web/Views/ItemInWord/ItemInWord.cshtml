@@ -105,13 +105,27 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">DocumentName</label>
-                                        <input type="text" class="form-control" id="dspDocumentName" readonly>
+                                        <div class="holder m-2">
+                                            <img id="dspDocumentName" src="#" alt="pic" />
+                                        </div>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">IsApproved</label>
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input font-22" id="dspIsApproved" type="checkbox" style="margin-left:-35px;" disabled>
                                         </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Date</label>
+                                        <input type="text" class="form-control" id="dspDate" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">VehicleNumber</label>
+                                        <input type="text" class="form-control" id="dspVehicleNumber" readonly>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">ReceiverName</label>
+                                        <input type="text" class="form-control" id="dspReceiverName" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +139,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItemInWord">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item</h5>
+            <h5 class="m-0 me-2 text-white">Create Item InWord</h5>
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
@@ -157,9 +171,25 @@
                                     <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" required>
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
+                                <div class="col-6">
+                                    <label class="form-label">Receiver Name</label>
+                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" required>
+                                    <span id="spnReceiverName" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Vehicle Number</label>
+                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" required>
+                                    <span id="spnVehicleNumber" class="text-danger"></span>
+                                </div>
                                 <div class="col-12">
                                     <label class="form-label" id="labeldocument">Document</label>
+                                    <input type="text" class="form-control" id="txtDocumentName" hidden>
                                     <input type="file" class="form-control" id="txtDocument" required>
+                                    <div class="holder m-2" style="position: relative; width: 250px; height: 250px;">
+                                        <img id="displayImage" src="#" alt="pic" style="height: 230px; width: 230px; border: solid black;" />
+                                        <span class="close btn-sm btn-outline-danger" style="position: absolute; top: 2.5px; right: 23px;">&times;</span>
+                                    </div>
+
                                     <span id="spnDocument" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">

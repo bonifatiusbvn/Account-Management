@@ -51,19 +51,15 @@
                                                         <select class="form-select" id="SupplierSearchBy" onchange="filterSupplierTable()">
                                                             <option selected="selected">All</option>
                                                             <option>Supplier Name</option>
-                                                            <option>Email</option>
-                                                            <option>Phone</option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="DescendingCreatedOn">First Created</option>
+                                                        <select class="form-select" id="SupplierSortBy" onchange="sortSupplierTable()">
+                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingSupplierName">SupplierName(a-z)</option>
                                                             <option value="DescendingSupplierName">SupplierName(z-a)</option>
-                                                            <option value="AscendingEmail">Email-Asc </option>
-                                                            <option value="DescendingEmail">Email-Asc</option>
                                                         </select>
                                                     </div>
                                                 </div><!--end row-->
@@ -277,7 +273,7 @@
                                         <span id="spnIFFC" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnuser">Submit</button>
+                                        <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnsupplier">Submit</button>
                                     </div>
                                 </form>
 
