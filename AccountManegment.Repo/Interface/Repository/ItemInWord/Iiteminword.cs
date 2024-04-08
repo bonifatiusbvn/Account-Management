@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using System;
@@ -17,5 +18,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemInWord
         Task<ApiResponseModel> UpdateItemInWordDetails(ItemInWordModel ItemInWordDetails);
         Task<ApiResponseModel> ItemInWordIsApproved(Guid InwordId);
         Task<ApiResponseModel> DeleteItemInWord(Guid InwordId);
+        Task<ApiResponseModel> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails);
     }
 }

@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.ItemMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,32 +27,52 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var ItemMaster = new ItemMaster()
+                if (ItemDetails != null)
                 {
-                    ItemId = Guid.NewGuid(),
-                    ItemName = ItemDetails.ItemName,
-                    UnitType = ItemDetails.UnitType,
-                    PricePerUnit = ItemDetails.PricePerUnit,
-                    IsWithGst = ItemDetails.IsWithGst,
-                    Gstamount = ItemDetails.Gstamount,
-                    Gstper = ItemDetails.Gstper,
-                    Hsncode = ItemDetails.Hsncode,
-                    IsDeleted = ItemDetails.IsDeleted,
-                    IsApproved = ItemDetails.IsApproved,
-                    CreatedBy = ItemDetails.CreatedBy,
-                    CreatedOn = DateTime.Now,
-                };
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "ItemDetails Successfully Inserted";
-                Context.ItemMasters.Add(ItemMaster);
-                Context.SaveChanges();
+                    var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == ItemDetails.ItemName);
+                    if (existingItem != null)
+                    {
+                        response.code = 400;
+                        response.message = "ItemDetails Already Inserted";
+                    }
+                    else
+                    {
+                        var ItemMaster = new ItemMaster()
+                        {
+                            ItemId = Guid.NewGuid(),
+                            ItemName = ItemDetails.ItemName,
+                            UnitType = ItemDetails.UnitType,
+                            PricePerUnit = ItemDetails.PricePerUnit,
+                            IsWithGst = ItemDetails.IsWithGst,
+                            Gstamount = ItemDetails.Gstamount,
+                            Gstper = ItemDetails.Gstper,
+                            Hsncode = ItemDetails.Hsncode,
+                            IsDeleted = ItemDetails.IsDeleted,
+                            IsApproved = ItemDetails.IsApproved,
+                            CreatedBy = ItemDetails.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                        };
+                        response.code = (int)HttpStatusCode.OK;
+                        response.message = "ItemDetails Successfully Inserted";
+                        Context.ItemMasters.Add(ItemMaster);
+                        Context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "ItemDetails is null";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+
+                response.code = 500;
+                response.message = "An error occurred while processing the request";
             }
             return response;
         }
+
 
         public async Task<ApiResponseModel> DeleteItemDetails(Guid ItemId)
         {
@@ -136,6 +157,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                     Gstper = a.Gstper,
                                     Hsncode = a.Hsncode,
                                     IsApproved = a.IsApproved,
+                                    CreatedOn = a.CreatedOn,
                                 });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -167,13 +189,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     }
                 }
 
-                if (!string.IsNullOrEmpty(sortBy))
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    ItemList = ItemList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
+                        case "createdon":
+                            if (sortOrder == "ascending")
+                                ItemList = ItemList.OrderBy(u => u.CreatedOn);
+                            else if (sortOrder == "descending")
+                                ItemList = ItemList.OrderByDescending(u => u.CreatedOn);
+                            break;
                         case "itemname":
                             if (sortOrder == "ascending")
                                 ItemList = ItemList.OrderBy(u => u.ItemName);
@@ -274,5 +306,51 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
             return model;
         }
+
+        public async Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var itemDetails in itemDetailsList)
+                {
+                    var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == itemDetails.ItemName);
+                    if (existingItem != null)
+                    {
+                        response.code = 400;
+                        response.message = "Item is Already Inserted";
+                    }
+                    else
+                    {
+                        var itemMaster = new ItemMaster()
+                        {
+                            ItemId = Guid.NewGuid(),
+                            ItemName = itemDetails.ItemName,
+                            UnitType = itemDetails.UnitType,
+                            PricePerUnit = itemDetails.PricePerUnit,
+                            IsWithGst = itemDetails.IsWithGst,
+                            Gstamount = itemDetails.Gstamount,
+                            Gstper = itemDetails.Gstper,
+                            Hsncode = itemDetails.Hsncode,
+                            IsDeleted = itemDetails.IsDeleted,
+                            IsApproved = itemDetails.IsApproved,
+                            CreatedBy = itemDetails.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                        };
+                        Context.ItemMasters.Add(itemMaster);
+                        await Context.SaveChangesAsync();
+                        response.code = (int)HttpStatusCode.OK;
+                        response.message = "Item Details Successfully Inserted";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "An error occurred while processing the request";
+            }
+            return response;
+        }
     }
 }
+

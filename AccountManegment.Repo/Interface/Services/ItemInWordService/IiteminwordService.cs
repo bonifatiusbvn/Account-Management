@@ -16,5 +16,6 @@ namespace AccountManagement.Repository.Interface.Services.ItemInWordService
         Task<ApiResponseModel> UpdateItemInWordDetails(ItemInWordModel ItemInWordDetails);
         Task<ApiResponseModel> ItemInWordIsApproved(Guid InwordId);
         Task<ApiResponseModel> DeleteItemInWord(Guid InwordId);
+        Task<ApiResponseModel> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails);
     }
 }

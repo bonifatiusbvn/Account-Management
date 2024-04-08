@@ -94,6 +94,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     StateId = a.StateId,
                     Country = a.Country,
                     Pincode = a.Pincode,
+                    CreatedOn = a.CreatedOn,
                 });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -101,7 +102,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company = company.Where(u =>
                         u.CompanyName.ToLower().Contains(searchText) ||
                         u.Gstno.ToString().Contains(searchText) ||
-                        u.PanNo.ToString().Contains(searchText)
+                        u.PanNo.ToString().ToUpper().Contains(searchText.ToUpper())
                     );
                 }
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
@@ -116,14 +117,19 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                             company = company.Where(u => u.Gstno.ToString().Contains(searchText));
                             break;
                         case "panno":
-                            company = company.Where(u => u.PanNo.ToString().Contains(searchText));
+                            company = company.Where(u => u.PanNo.ToString().Contains(searchText.ToUpper()));
                             break;
                         default:
 
                             break;
                     }
                 }
-                if (!string.IsNullOrEmpty(sortBy))
+
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    company = company.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);
@@ -136,18 +142,12 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                             else if (sortOrder == "descending")
                                 company = company.OrderByDescending(u => u.CompanyName);
                             break;
-                        case "gstno":
+                        case "createdon":
                             if (sortOrder == "ascending")
-                                company = company.OrderBy(u => u.Gstno);
+                                company = company.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
-                                company = company.OrderByDescending(u => u.Gstno);
-                            break;
-                        case "panno":
-                            if (sortOrder == "ascending")
-                                company = company.OrderBy(u => u.PanNo);
-                            else if (sortOrder == "descending")
-                                company = company.OrderByDescending(u => u.PanNo);
-                            break;
+                                company = company.OrderByDescending(u => u.CreatedOn);
+                            break;                       
                         default:
                             break;
                     }
