@@ -81,6 +81,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Pid = Guid.NewGuid(),
                     PrNo = PurchaseRequestDetails.PrNo,
                     Item = PurchaseRequestDetails.Item,
+                    ItemId= PurchaseRequestDetails.ItemId,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
@@ -134,6 +135,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                            Pid = a.Pid,
                                            PrNo = a.PrNo,
                                            Item = a.Item,
+                                           ItemId = a.ItemId,
                                            UnitTypeId = a.UnitTypeId,
                                            Quantity = a.Quantity,
                                            UnitName = b.UnitName,
@@ -164,6 +166,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
 
                                                Pid = a.Pid,
                                                Item = a.Item,
+                                               ItemId=a.ItemId,
                                                PrNo = a.PrNo,
                                                Quantity = a.Quantity,
                                                UnitTypeId = a.UnitTypeId,
@@ -180,7 +183,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
                         u.Item.ToLower().Contains(searchText) ||
-                        u.UnitName.ToLower().Contains(searchText)
+                        u.UnitName.ToLower().Contains(searchText)||
+                        u.Quantity.ToString().Contains(searchText)
                     );
                 }
 
@@ -192,7 +196,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                         case "unitname":
                             PurchaseRequestList = PurchaseRequestList.Where(u => u.UnitName.ToLower().Contains(searchText));
                             break;
-                        case "item":
+                        case "itemname":
                             PurchaseRequestList = PurchaseRequestList.Where(u => u.Item.ToLower().Contains(searchText));
                             break;
                         default:
@@ -251,6 +255,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.Pid = PurchaseRequestDetails.Pid;
                     PurchaseRequestData.PrNo = PurchaseRequestDetails.PrNo;
                     PurchaseRequestData.Item = PurchaseRequestDetails.Item;
+                    PurchaseRequestData.ItemId = PurchaseRequestDetails.ItemId;
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;

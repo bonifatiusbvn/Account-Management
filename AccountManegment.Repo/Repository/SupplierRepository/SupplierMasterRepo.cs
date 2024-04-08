@@ -79,7 +79,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 Context.SupplierMasters.Update(Userdata);
                 Context.SaveChanges();
                 response.code = 200;
-                response.message = "Company is Deleted Successfully";
+                response.message = "Supplier is Deleted Successfully";
             }
             return response;
         }

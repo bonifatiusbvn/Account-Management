@@ -43,12 +43,12 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.GetPurchaseOrderList(searchText, searchBy, sortBy);
         }
 
-        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             return await PurchaseOrder.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
         }
 
-        public async Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        public async Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             return await PurchaseOrder.UpdateMultiplePurchaseOrderDetails(PurchaseOrderDetails);
         }

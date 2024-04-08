@@ -1,0 +1,16 @@
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PODeliveryAddressModel>
+
+@foreach (var item in Model)
+{
+    <tr class="ShippingAddress">
+        <td id='shippingaddress'>@item.Address</td>
+        <td id='shippingquantity'>@item.Quantity</td>
+        <td>
+            <a id="removeAddress" class="btn text-primary"><i class="lni lni-trash"></i></a>
+        </td>
+    </tr>
+}
+
+@section Scripts {
+    <script src="~/moduls/purchaserequestscript.js"></script>
+}

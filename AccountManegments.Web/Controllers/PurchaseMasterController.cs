@@ -115,6 +115,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     Pid = Guid.NewGuid(),
                     Item = PurchaseRequestDetails.Item,
+                    ItemId = PurchaseRequestDetails.ItemId,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     SiteId = PurchaseRequestDetails.SiteId,
                     Quantity = PurchaseRequestDetails.Quantity,
@@ -248,7 +249,7 @@ namespace AccountManegments.Web.Controllers
             {
 
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
+                var InsertDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
@@ -318,7 +319,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
-                var UpdateDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
+                var UpdateDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "PurchaseOrder/UpdateMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {

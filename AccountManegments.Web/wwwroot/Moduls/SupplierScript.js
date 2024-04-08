@@ -229,7 +229,7 @@ function UpdateSupplierDetails() {
     })
 
 }
-function DeleteSupplierDetails(SupplierId) {
+function DeleteSupplierDetails(SupplierId) {debugger
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -242,7 +242,7 @@ function DeleteSupplierDetails(SupplierId) {
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.isConfirmed) {debugger
             $.ajax({
                 url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
                 type: 'POST',

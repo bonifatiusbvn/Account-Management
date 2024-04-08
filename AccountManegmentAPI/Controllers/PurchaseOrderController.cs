@@ -70,7 +70,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("InsertMultiplePurchaseOrderDetails")]
-        public async Task<IActionResult> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        public async Task<IActionResult> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var PurchaseOrdermaster = await PurchaseOrder.InsertMultiplePurchaseOrderDetails(PurchaseOrderDetails);
@@ -88,7 +88,7 @@ namespace AccountManagement.API.Controllers
         }
         [HttpPost]
         [Route("UpdateMultiplePurchaseOrderDetails")]
-        public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var PurchaseOrdermaster = await PurchaseOrder.UpdateMultiplePurchaseOrderDetails(PurchaseOrderDetails);

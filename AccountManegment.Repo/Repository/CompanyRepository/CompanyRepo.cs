@@ -101,7 +101,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company = company.Where(u =>
                         u.CompanyName.ToLower().Contains(searchText) ||
                         u.Gstno.ToString().Contains(searchText) ||
-                        u.PanNo.ToString().Contains(searchText)
+                        u.PanNo.ToLower().Contains(searchText)
                     );
                 }
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
@@ -116,7 +116,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                             company = company.Where(u => u.Gstno.ToString().Contains(searchText));
                             break;
                         case "panno":
-                            company = company.Where(u => u.PanNo.ToString().Contains(searchText));
+                            company = company.Where(u => u.PanNo.ToLower().Contains(searchText));
                             break;
                         default:
 

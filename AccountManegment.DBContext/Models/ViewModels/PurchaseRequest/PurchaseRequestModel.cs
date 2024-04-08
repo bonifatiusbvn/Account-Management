@@ -10,6 +10,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
     {
         public Guid Pid { get; set; }
 
+        public Guid? ItemId { get; set; }
         public string Item { get; set; } = null!;
 
         public int UnitTypeId { get; set; }
@@ -24,7 +25,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
 
         public Guid CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
 

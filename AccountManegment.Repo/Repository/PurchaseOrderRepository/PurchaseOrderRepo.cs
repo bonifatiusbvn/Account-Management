@@ -178,6 +178,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      BillingAddress = a.BillingAddress,
                                      ShippingAddress = g.Address,
                                      Date = a.Date,
+                                     ContactName = a.ContactName,
+                                     ContactNumber = a.ContactNumber,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
@@ -199,6 +201,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
                                                             select new PODeliveryAddressModel
                                                             {
+                                                                Aid=a.Aid,
                                                                 Poid = a.Poid,
                                                                 Quantity = a.Quantity,
                                                                 UnitTypeId = a.UnitTypeId,
@@ -319,41 +322,34 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
-        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var firstOrderDetail = PurchaseOrderDetails.First();
                 var PurchaseOrder = new PurchaseOrder()
                 {
                     Id = Guid.NewGuid(),
-                    Poid = firstOrderDetail.Poid,
-                    SiteId = firstOrderDetail.SiteId,
-                    Date = firstOrderDetail.Date,
-                    FromSupplierId = firstOrderDetail.FromSupplierId,
-                    ToCompanyId = firstOrderDetail.ToCompanyId,
-                    TotalAmount = firstOrderDetail.TotalAmount,
-                    Description = firstOrderDetail.Description,
-                    DeliveryShedule = firstOrderDetail.DeliveryShedule,
-                    TotalDiscount = firstOrderDetail.TotalDiscount,
-                    TotalGstamount = firstOrderDetail.TotalGstamount,
-                    BillingAddress = firstOrderDetail.BillingAddress,
-                    ContactName = firstOrderDetail.ContactName,
-                    ContactNumber = firstOrderDetail.ContactNumber,
+                    Poid = PurchaseOrderDetails.Poid,
+                    SiteId = PurchaseOrderDetails.SiteId,
+                    Date = PurchaseOrderDetails.Date,
+                    FromSupplierId = PurchaseOrderDetails.FromSupplierId,
+                    ToCompanyId = PurchaseOrderDetails.ToCompanyId,
+                    TotalAmount = PurchaseOrderDetails.TotalAmount,
+                    Description = PurchaseOrderDetails.Description,
+                    DeliveryShedule = PurchaseOrderDetails.DeliveryShedule,
+                    TotalDiscount = PurchaseOrderDetails.TotalDiscount,
+                    TotalGstamount = PurchaseOrderDetails.TotalGstamount,
+                    BillingAddress = PurchaseOrderDetails.BillingAddress,
+                    ContactName = PurchaseOrderDetails.ContactName,
+                    ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
-                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
                 Context.PurchaseOrders.Add(PurchaseOrder);
-                var PurchaseAddress = new PodeliveryAddress()
-                {
-                    Poid = PurchaseOrder.Id,
-                    Address = firstOrderDetail.ShippingAddress,
-                    IsDeleted = false,
-                };
-                Context.PodeliveryAddresses.Add(PurchaseAddress);
-                foreach (var item in PurchaseOrderDetails)
+                
+                foreach (var item in PurchaseOrderDetails.ItemOrderlist)
                 {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
                     {
@@ -367,14 +363,25 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Discount = item.Discount,
                         Gst = item.Gst,
                         IsDeleted = false,
-                        CreatedBy = item.CreatedBy,
+                        CreatedBy = PurchaseOrderDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
                     Context.PurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
+                foreach (var item in PurchaseOrderDetails.ShippingAddressList)
+                {
+                    var PurchaseAddress = new PodeliveryAddress()
+                    {
+                        Poid = PurchaseOrder.Id,
+                        Address = item.ShippingAddress,
+                        IsDeleted = false,
+                        UnitTypeId= PurchaseOrderDetails.UnitTypeId,
+                        Quantity=item.ShippingQuantity,
+                    };
+                    Context.PodeliveryAddresses.Add(PurchaseAddress);
+                }
 
-
-                await Context.SaveChangesAsync();
+                    await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase Order Inserted Successfully";
             }
@@ -385,80 +392,56 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
             return response;
         }
-        public async Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(List<PurchaseOrderMasterView> PurchaseOrderDetails)
+
+        public async Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
-
             try
             {
-                foreach (var PODetails in PurchaseOrderDetails)
+                var PurchaseOrder = await Context.PurchaseOrders.FindAsync(PurchaseOrderDetails.Id);
+
+                if (PurchaseOrder == null)
                 {
-                    var PurchaseOrder = await Context.PurchaseOrders.FindAsync(PODetails.Id);
-
-                    if (PurchaseOrder == null)
-                    {
-                        response.code = (int)HttpStatusCode.NotFound;
-                        response.message = $"Purchase order with ID {PODetails.Id} not found";
-                        return response;
-                    }
-                    PurchaseOrder.Id = PODetails.Id;
-                    PurchaseOrder.Poid = PODetails.Poid;
-                    PurchaseOrder.SiteId = PODetails.SiteId;
-                    PurchaseOrder.Date = PODetails.Date;
-                    PurchaseOrder.FromSupplierId = PODetails.FromSupplierId;
-                    PurchaseOrder.ToCompanyId = PODetails.ToCompanyId;
-                    PurchaseOrder.TotalAmount = PODetails.TotalAmount;
-                    PurchaseOrder.Description = PODetails.Description;
-                    PurchaseOrder.DeliveryShedule = PODetails.DeliveryShedule;
-                    PurchaseOrder.TotalDiscount = PODetails.TotalDiscount;
-                    PurchaseOrder.TotalGstamount = PODetails.TotalGstamount;
-                    PurchaseOrder.BillingAddress = PODetails.BillingAddress;
-
-                    Context.PurchaseOrders.Update(PurchaseOrder);
+                    response.code = (int)HttpStatusCode.NotFound;
+                    response.message = $"Purchase order with ID {PurchaseOrderDetails.Id} not found";
+                    return response;
                 }
 
-                foreach (var item in PurchaseOrderDetails)
+                PurchaseOrder.Id = PurchaseOrderDetails.Id;
+                PurchaseOrder.Poid = PurchaseOrderDetails.Poid;
+                PurchaseOrder.SiteId = PurchaseOrderDetails.SiteId;
+                PurchaseOrder.Date = PurchaseOrderDetails.Date;
+                PurchaseOrder.FromSupplierId = PurchaseOrderDetails.FromSupplierId;
+                PurchaseOrder.ToCompanyId = PurchaseOrderDetails.ToCompanyId;
+                PurchaseOrder.TotalAmount = PurchaseOrderDetails.TotalAmount;
+                PurchaseOrder.Description = PurchaseOrderDetails.Description;
+                PurchaseOrder.DeliveryShedule = PurchaseOrderDetails.DeliveryShedule;
+                PurchaseOrder.TotalDiscount = PurchaseOrderDetails.TotalDiscount;
+                PurchaseOrder.TotalGstamount = PurchaseOrderDetails.TotalGstamount;
+                PurchaseOrder.BillingAddress = PurchaseOrderDetails.BillingAddress;
+                PurchaseOrder.ContactName = PurchaseOrderDetails.ContactName;
+                PurchaseOrder.ContactNumber = PurchaseOrderDetails.ContactNumber;
+                Context.PurchaseOrders.Update(PurchaseOrder);
+
+                foreach (var item in PurchaseOrderDetails.ShippingAddressList)
                 {
-                    var PODetail = Context.PurchaseOrderDetails.FirstOrDefault(e => e.ItemId == item.ItemId);
+                    var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.UnitTypeId == PurchaseOrderDetails.UnitTypeId);
 
-                    if (PODetail == null)
-                    {
-                        continue;
-                    }
-
-                    PODetail.ItemId = item.ItemId;
-                    PODetail.Item = item.Item;
-                    PODetail.ItemTotal = item.ItemTotal;
-                    PODetail.UnitTypeId = item.UnitTypeId;
-                    PODetail.Quantity = item.Quantity;
-                    PODetail.Price = item.Price;
-                    PODetail.Discount = item.Discount;
-                    PODetail.Gst = item.Gst;
-
-                    Context.PurchaseOrderDetails.Update(PODetail);
-                }
-                foreach (var item in PurchaseOrderDetails)
-                {
-                    var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.Poid == item.Id);
-
-                    if (DeliveryAddress != null)
-                    {
-                        DeliveryAddress.Address = item.ShippingAddress;
-                        Context.PodeliveryAddresses.Update(DeliveryAddress);
-                    }
+                    DeliveryAddress.Poid = PurchaseOrderDetails.Id;
+                    DeliveryAddress.Address = item.ShippingAddress;
+                    DeliveryAddress.Quantity = item.ShippingQuantity;
+                    Context.PodeliveryAddresses.Update(DeliveryAddress);
                 }
 
                 await Context.SaveChangesAsync();
-
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Purchase Orders Updated Successfully";
+                response.message = "Purchase Order Updated Successfully";
             }
             catch (Exception ex)
             {
-                response.code = (int)HttpStatusCode.InternalServerError;
-                response.message = "Error updating purchase orders: " + ex.Message;
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
             }
-
             return response;
         }
 
