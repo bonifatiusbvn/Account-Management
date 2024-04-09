@@ -489,7 +489,7 @@ function GetItemDetails() {
             $.each(result, function (i, data) {
                 $('#searchItemname').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-
+            debugger
             $('#searchItemname').select2({
                 placeholder: "Select Product Name",
                 allowClear: true
@@ -698,6 +698,7 @@ function checkAndDisableAddButton() {
     } else {
         $('.add-address').prop('disabled', false);
     }
+   
 }
 
 $(document).ready(function () {
@@ -717,16 +718,27 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $(".add-address").click(function () {
+
+    var totalQuantity = 0;
+    $(".add-address").click(function () {debugger
         checkAndDisableAddButton();
         var quantity = $("#quantity").val();
         var address = $("#address").text();
-        if (quantity.trim() === "" || address.trim() === "") {
+        var ItemQuantity = parseInt($("#txtproductquantity").val());
+
+        if (quantity <= 0 || isNaN(quantity) || address.trim() === "") {
             document.getElementById("spnShippingQuantity").innerText = "Please Enter Quantity!";
             document.getElementById("spnSiteAddress").innerText = "Please Select Site!";
             return;
         }
+        debugger
+        if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
+            document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
+            return;
+        }
+
+        totalQuantity += parseInt(quantity);
+
         var newRow = "<tr class='ShippingAddress'><td id='shippingaddress'>" + address + "</td><td id='shippingquantity'>" + quantity + "</td><td><a id = 'removeAddress' class='btn text-primary'><i class='lni lni-trash'></i></a></td></tr>";
         $("#dvshipping table tbody").append(newRow);
     });

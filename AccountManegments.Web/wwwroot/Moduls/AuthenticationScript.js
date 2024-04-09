@@ -462,11 +462,7 @@ $(document).on("click", ".minus", function () {
     updateProductQuantity($(this).closest(".product"), -1);
     return
 });
-$(document).on("click", "#remove", function () {
-    var row = $(this).closest("tr");
-    row.remove();
-    updateTotals();
-});
+
 
 $(document).ready(function () {
 
@@ -491,35 +487,6 @@ $(document).ready(function () {
         $(this).trigger('input');
     });
 });
-$(document).ready(function () {
 
-    var addressCount = 1;
-
-    $('#shippingAddressContainer').on('click', '.add-address', function () {
-
-        var clonedSection = $(this).closest('.shipping-address').clone();
-
-        clonedSection.find('textarea').val('');
-        clonedSection.find('input[type="number"]').val('');
-
-        $('#shippingAddressContainer').append(clonedSection);
-
-        addressCount++;
-
-        if (addressCount > 1) {
-
-            if (!clonedSection.find('.remove-address').length) {
-                var removeButton = $('<button type="button" class="btn btn-danger remove-address"><i class="lni lni-trash"></i></button>');
-                clonedSection.find('.pt-3').append(removeButton);
-            }
-        }
-    });
-
-    $('#shippingAddressContainer').on('click', '.remove-address', function () {
-        $(this).closest('.shipping-address').remove();
-
-        addressCount--;
-    });
-});
 
 
