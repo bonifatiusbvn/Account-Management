@@ -259,12 +259,11 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             return model;
         }
 
-        public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails)
+        public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(ItemInWordMasterView firstItemInWordDetail)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var firstItemInWordDetail = ItemInWordDetails.First();
                 var ItemDetails = new ItemInword()
                 {
                     InwordId = Guid.NewGuid(),
@@ -277,13 +276,13 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Date = DateTime.Now,
                     VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
                     ReceiverName = firstItemInWordDetail.ReceiverName,
-                    IsApproved = firstItemInWordDetail.IsApproved,
-                    IsDeleted = firstItemInWordDetail.IsDeleted,
+                    IsApproved = false,
+                    IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
                 }; 
                 Context.ItemInwords.Add(ItemDetails);
-                foreach (var item in ItemInWordDetails)
+                foreach (var item in firstItemInWordDetail.DocumentLists)
                 {
                     var DocumentDetailS = new ItemInWordDocument()
                     {

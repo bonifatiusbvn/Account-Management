@@ -1,0 +1,16 @@
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.ItemInWord.ItemInWordDocumentModel>
+
+@foreach (var item in Model)
+{
+    <tr class="DocumentName">
+        <td id="displayImage" src="#" alt="pic">
+            @item.DocumentName
+            <span class="close btn-sm btn-outline-danger">&times;</span>
+        </td>
+    </tr>
+}
+
+@section Scripts {
+
+    <script src="~/moduls/iteminwordscript.js"></script>
+}

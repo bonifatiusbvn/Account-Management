@@ -1,4 +1,5 @@
-﻿@using AccountManegments.Web.Models;
+﻿@model AccountManagement.DBContext.Models.ViewModels.ItemInWord.ItemInWordMasterView
+@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
@@ -181,17 +182,31 @@
                                     <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" required>
                                     <span id="spnVehicleNumber" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label" id="labeldocument">Document</label>
-                                    <input type="text" class="form-control" id="txtDocumentName" hidden>
-                                    <input type="file" class="form-control" id="txtDocument" required>
-                                    <div class="holder m-2" style="position: relative; width: 250px; height: 250px;">
-                                        <img id="displayImage" src="#" alt="pic" style="height: 230px; width: 230px; border: solid black;" />
-                                        <span class="close btn-sm btn-outline-danger" style="position: absolute; top: 2.5px; right: 23px;">&times;</span>
+                                <div class="container">
+                                    <div id="MultipleImageContainer">
+                                        <div class="row multiple-images">
+                                            <div class="col-10">
+                                                <label>Document</label>
+                                                <input type="file" class="form-control" id="txtDocument" multiple required>
+                                                <span id="spnDocument" class="text-danger"></span>
+                                            </div>
+                                            <div class="col-2 pt-3">
+                                                <button type="button" class="btn btn-success add-Images">Add</button>
+                                                <span id="spnMultiImagesbutton" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <span id="spnDocument" class="text-danger"></span>
                                 </div>
+
+                                <div id="dvDisplayImages" class="col-lg-6">
+                                    <div class="row">
+                                        <table class="table table-sm table-nowrap align-middle mb-0">
+                                            <tbody id="addNewImage"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!--end row-->
+                               
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItemInWord()" id="btnitemInWord"></button>
                                 </div>
