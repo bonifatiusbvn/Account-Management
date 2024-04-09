@@ -509,7 +509,7 @@ $(document).ready(function () {
         if (addressCount > 1) {
 
             if (!clonedSection.find('.remove-address').length) {
-                var removeButton = $('<button type="button" class="btn btn-danger remove-address"><i class="ri-close-line align-bottom me-1"></i> Remove</button>');
+                var removeButton = $('<button type="button" class="btn btn-danger remove-address"><i class="lni lni-trash"></i></button>');
                 clonedSection.find('.pt-3').append(removeButton);
             }
         }

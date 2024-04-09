@@ -275,12 +275,8 @@
                                                     <label>Shipping Address</label>
                                                     <textarea class="form-control" cols="2" rows="2" name="textshipping"></textarea>
                                                 </div>
-                                                <div class="col-lg-3 col-sm-6">
-                                                    <label>Qty</label>
-                                                    <input type="number" class="form-control" name="quantity" />
-                                                </div>
                                                 <div class="col-lg-4 col-sm-6 pt-3">
-                                                    <button type="button" class="btn btn-success add-address"><i class="ri-printer-line align-bottom me-1"></i> Add</button>
+                                                    <button type="button" class="btn btn-primary add-address"><i class="ri-printer-line align-bottom me-1"></i> Add</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,18 +289,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Address</th>
-                                                        <th>Qty</th>
 
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <th>Address1</th>
-                                                        <th>250</th>
-
-
+                                                        <th>Address2</th>
                                                     </tr>
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -315,11 +306,11 @@
                                         @if (Model.Id == Guid.Empty)
                                         {
 
-                                            <button type="button" class="btn btn-lg btn-success px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
                                         }
                                         else
                                         {
-                                            <button type="button" class="btn btn-lg btn-success px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                         }
                                     </div>
                                 </div>
