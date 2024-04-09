@@ -79,7 +79,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 Context.SupplierMasters.Update(Userdata);
                 Context.SaveChanges();
                 response.code = 200;
-                response.message = "Company is Deleted Successfully";
+                response.message = "Supplier is Deleted Successfully";
             }
             return response;
         }
@@ -138,6 +138,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                                                Mobile = e.Mobile,
                                                                IsApproved = e.IsApproved,
                                                                CityName = c.CityName,
+                                                               CreatedOn = e.CreatedOn,
                                                            });
 
 
@@ -145,14 +146,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 {
                     searchText = searchText.ToLower();
                     SupplierList = SupplierList.Where(u =>
-                        u.SupplierName.ToLower().Contains(searchText) ||
-                        u.Email.ToLower().Contains(searchText) ||
-                        u.Mobile.ToLower().Contains(searchText) ||
-                        u.CityName.ToLower().Contains(searchText) ||
-                        u.Gstno.ToLower().Contains(searchText)
-
-
-
+                        u.SupplierName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -163,20 +157,17 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     {
                         case "suppliername":
                             SupplierList = SupplierList.Where(u => u.SupplierName.ToLower().Contains(searchText));
-                            break;
-                        case "email":
-                            SupplierList = SupplierList.Where(u => u.Email.ToLower().Contains(searchText));
-                            break;
-                        case "mobile":
-                            SupplierList = SupplierList.Where(u => u.Mobile.ToLower().Contains(searchText));
-                            break;
+                            break;                       
                         default:
-
                             break;
                     }
                 }
 
-                if (!string.IsNullOrEmpty(sortBy))
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    SupplierList = SupplierList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);
@@ -189,18 +180,12 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                             else if (sortOrder == "descending")
                                 SupplierList = SupplierList.OrderByDescending(u => u.SupplierName);
                             break;
-                        case "email":
+                        case "createdon":
                             if (sortOrder == "ascending")
-                                SupplierList = SupplierList.OrderBy(u => u.Email);
+                                SupplierList = SupplierList.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
-                                SupplierList = SupplierList.OrderByDescending(u => u.Email);
-                            break;
-                        case "mobile":
-                            if (sortOrder == "ascending")
-                                SupplierList = SupplierList.OrderBy(u => u.Mobile);
-                            else if (sortOrder == "descending")
-                                SupplierList = SupplierList.OrderByDescending(u => u.Mobile);
-                            break;
+                                SupplierList = SupplierList.OrderByDescending(u => u.CreatedOn);
+                            break;                       
                         default:
 
                             break;

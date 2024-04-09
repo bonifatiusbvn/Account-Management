@@ -26,7 +26,7 @@
 </div>
 <div class="">
     <div class="">
-        <div class=" radius-10 w-100">           
+        <div class=" radius-10 w-100">
             <div class="my-3 border-bottom"></div>
             <div class="">
                 <div class="row">
@@ -38,6 +38,13 @@
                                         <div class="col-12">
                                             <div class="card-body">
                                                 <div class="row g-3">
+                                                    @if (ViewBag.Code != null && ViewBag.Message != null)
+                                                    {
+                                                        <div class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+                                                            <h3 class="text-danger">@ViewBag.Code @ViewBag.Message</h3>
+                                                            <button id="errorCloseButton" class="btn btn-outline-danger btn-lg" aria-label="Close">×</button>
+                                                        </div>
+                                                    }
 
                                                     <div class="col-12 col-lg-4">
                                                         <input class="form-control" id="txtItemSearch" onkeyup="filterItemTable()" placeholder="Search" />
@@ -53,8 +60,8 @@
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlItemSortBy" onchange="sortItemTable()">
-                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingItemName">ItemName(a-z)</option>
                                                             <option value="DescendingItemName">ItemName(z-a)</option>
                                                             <option value="AscendingPerUnitPrice">PerUnitPrice-Asc </option>
@@ -234,7 +241,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </div>
-                   
+
 @section Scripts {
     <script src="~/moduls/itemmasterscript.js"></script>
 }

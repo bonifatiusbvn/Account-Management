@@ -48,8 +48,8 @@
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="PurchaseRequestSearchBy" onchange="filterPurchaseRequestTable()">
                                                             <option selected="selected">All</option>
-                                                            <option>Item Name</option>
-                                                            <option>Unit Name</option>
+                                                            <option>ItemName</option>
+                                                            <option>UnitName</option>
                                                         </select>
                                                     </div>
 
@@ -142,7 +142,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreatePurchaseRequest">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item</h5>
+            <h5 class="m-0 me-2 text-white">Purchase Request</h5>
 
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -155,13 +155,15 @@
                                 <div class="col-12">
                                     <label class="form-label">Purchase Request No</label>
                                     <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" readonly />
+                                    <input type="hidden" class="form-control form-control" id="PurchaseRequestId" readonly />
+                                    <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
-                                    <select class="form-control" id="ddlItemName">
+                                    <select class="form-control" id="searchItemname">
                                         <option value="">-- Select Item --</option>
                                     </select>
-                                    <input type="hidden" id="hdnItemId">
+                                    <input type="hidden" id="txtItemName">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
 

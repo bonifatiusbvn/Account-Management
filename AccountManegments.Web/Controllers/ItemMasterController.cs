@@ -4,9 +4,11 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Newtonsoft.Json;
 using System.Data;
 using System.Data.OleDb;
@@ -226,7 +228,7 @@ namespace AccountManegments.Web.Controllers
 
         //[FormPermissionAttribute("Item-Add")]
         [HttpPost]
-        public IActionResult ImportExcelFile(IFormFile FormFile)
+        public async Task<IActionResult> ImportExcelFile(IFormFile FormFile)
         {
             try
             {
@@ -242,20 +244,31 @@ namespace AccountManegments.Web.Controllers
                 }
                 var filename = FormFile.FileName;
                 string extension = Path.GetExtension(filename);
-                string conString = string.Empty;
+                string excelConString = string.Empty;
                 switch (extension)
                 {
                     case ".xls":
-                        conString = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
+                        excelConString = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
                         break;
 
                     case ".xlsx":
-                        conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR = YES'";
+                        excelConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR = YES'";
                         break;
                 }
+
                 DataTable dt = new DataTable();
-                conString = string.Format(conString, filepath);
-                using (OleDbConnection conExcel = new OleDbConnection(conString))
+                dt.Columns.Add("ItemName", typeof(string));
+                dt.Columns.Add("UnitType", typeof(int));
+                dt.Columns.Add("PricePerUnit", typeof(decimal));
+                dt.Columns.Add("IsWithGST", typeof(bool));
+                dt.Columns.Add("GSTAmount", typeof(decimal));
+                dt.Columns.Add("GSTPer", typeof(decimal));
+                dt.Columns.Add("HSNCode", typeof(string));
+                dt.Columns.Add("IsApproved", typeof(bool));
+                dt.Columns.Add("IsDeleted", typeof(bool));
+
+                excelConString = string.Format(excelConString, filepath);
+                using (OleDbConnection conExcel = new OleDbConnection(excelConString))
                 {
                     using (OleDbCommand cmdExcel = new OleDbCommand())
                     {
@@ -272,38 +285,47 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
                 }
-                conString = Configuration.GetConnectionString("ACCDbconn");
-                using (SqlConnection con = new SqlConnection(conString))
+
+                var items = new List<ItemMasterModel>();
+
+                foreach (DataRow row in dt.Rows)
                 {
-                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(con))
+                    var item = new ItemMasterModel
                     {
-                        bulkCopy.DestinationTableName = "ItemMaster";
-                        bulkCopy.ColumnMappings.Add("ItemId", "ItemId");
-                        bulkCopy.ColumnMappings.Add("ItemName", "ItemName");
-                        bulkCopy.ColumnMappings.Add("UnitType", "UnitType");
-                        bulkCopy.ColumnMappings.Add("PricePerUnit", "PricePerUnit");
-                        bulkCopy.ColumnMappings.Add("IsWithGST", "IsWithGST");
-                        bulkCopy.ColumnMappings.Add("GSTAmount", "GSTAmount");
-                        bulkCopy.ColumnMappings.Add("GSTPer", "GSTPer");
-                        bulkCopy.ColumnMappings.Add("HSNCode", "HSNCode");
-                        bulkCopy.ColumnMappings.Add("IsApproved", "IsApproved");
-                        bulkCopy.ColumnMappings.Add("IsDeleted", "IsDeleted");
-                        bulkCopy.ColumnMappings.Add("CreatedBy", "CreatedBy");
-                        bulkCopy.ColumnMappings.Add("CreatedOn", "CreatedOn");
-                        bulkCopy.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
-                        bulkCopy.ColumnMappings.Add("UpdatedOn", "UpdatedOn");
-                        con.Open();
-                        bulkCopy.WriteToServer(dt);
-                        con.Close();
-                    }
+                        ItemName = row["ItemName"].ToString(),
+                        UnitType = Convert.ToInt32(row["UnitType"]),
+                        PricePerUnit = Convert.ToDecimal(row["PricePerUnit"]),
+                        IsWithGst = Convert.ToBoolean(row["IsWithGST"]),
+                        Gstamount = Convert.ToDecimal(row["GSTAmount"]),
+                        Gstper = Convert.ToDecimal(row["GSTPer"]),
+                        Hsncode = row["HSNCode"].ToString(),
+                        IsApproved = Convert.ToBoolean(row["IsApproved"]),
+                        IsDeleted = Convert.ToBoolean(row["IsDeleted"]),
+                        CreatedBy = _userSession.UserId,
+                        CreatedOn = DateTime.Now,
+                        UpdatedBy = _userSession.UserId,
+                        UpdatedOn = DateTime.Now
+                    };
+
+                    items.Add(item);
                 }
 
+                ApiResponseModel postUser = await APIServices.PostAsync(items, "ItemMaster/InsertItemDetailsFromExcel");
+                if (postUser.code == 200)
+                {
+                    return RedirectToAction("ItemListView");
+                }
+                else
+                {
+                    ViewBag.Message = postUser.message;
+                    ViewBag.Code = postUser.code;                   
+                }
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
+                return BadRequest(ex.Message);
             }
-            return RedirectToAction("ItemListView");
+            return View("ItemListView");
         }
 
         [HttpPost]

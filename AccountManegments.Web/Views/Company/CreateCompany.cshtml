@@ -54,7 +54,8 @@
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlSortBy" onchange="sortCompanyTable()">
-                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingCompanyName">CompanyName(a-z)</option>
                                                             <option value="DescendingCompanyName">CompanyName(z-a)</option>
                                                         </select>
@@ -150,7 +151,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createCompany">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item</h5>
+            <h5 class="m-0 me-2 text-white">Create Company</h5>
 
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>

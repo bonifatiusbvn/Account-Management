@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.ItemInWord;
+using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,13 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     InwordId = Guid.NewGuid(),
                     SiteId = ItemInWordDetails.SiteId,
                     ItemId = ItemInWordDetails.ItemId,
-                    Item= ItemInWordDetails.Item,
+                    Item = ItemInWordDetails.Item,
                     UnitTypeId = ItemInWordDetails.UnitTypeId,
                     Quantity = ItemInWordDetails.Quantity,
                     DocumentName = ItemInWordDetails.DocumentName,
+                    Date = DateTime.Now,
+                    VehicleNumber = ItemInWordDetails.VehicleNumber.ToUpper(),
+                    ReceiverName = ItemInWordDetails.ReceiverName,
                     IsApproved = ItemInWordDetails.IsApproved,
                     IsDeleted = ItemInWordDetails.IsDeleted,
                     CreatedBy = ItemInWordDetails.CreatedBy,
@@ -81,24 +85,26 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             try
             {
                 var ItemInWordList = (from a in Context.ItemInwords
-                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                           join c in Context.Sites on a.SiteId equals c.SiteId
-                                           where (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId) &&
-                                           a.IsDeleted == false
-                                           select new ItemInWordModel
-                                           {
-
-                                               InwordId = a.InwordId,
-                                               SiteId = a.SiteId,
-                                               ItemId = a.ItemId,
-                                               Item = a.Item,
-                                               UnitTypeId = a.UnitTypeId,
-                                               Quantity = a.Quantity,
-                                               DocumentName = a.DocumentName,
-                                               CreatedBy = a.CreatedBy,
-                                               CreatedOn = a.CreatedOn,
-                                               IsApproved = a.IsApproved,
-                                           });
+                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                      join c in Context.Sites on a.SiteId equals c.SiteId
+                                      where (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId) &&
+                                      a.IsDeleted == false
+                                      select new ItemInWordModel
+                                      {
+                                          InwordId = a.InwordId,
+                                          SiteId = a.SiteId,
+                                          ItemId = a.ItemId,
+                                          Item = a.Item,
+                                          UnitTypeId = a.UnitTypeId,
+                                          Quantity = a.Quantity,
+                                          DocumentName = a.DocumentName,
+                                          Date = a.Date,
+                                          ReceiverName = a.ReceiverName,
+                                          VehicleNumber = a.VehicleNumber,
+                                          CreatedBy = a.CreatedBy,
+                                          CreatedOn = a.CreatedOn,
+                                          IsApproved = a.IsApproved,
+                                      });
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -139,6 +145,12 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                             else if (sortOrder == "descending")
                                 ItemInWordList = ItemInWordList.OrderByDescending(u => u.Item);
                             break;
+                        case "createdon":
+                            if (sortOrder == "ascending")
+                                ItemInWordList = ItemInWordList.OrderBy(u => u.CreatedOn);
+                            else if (sortOrder == "descending")
+                                ItemInWordList = ItemInWordList.OrderByDescending(u => u.CreatedOn);
+                            break;
                         default:
 
                             break;
@@ -159,23 +171,26 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             try
             {
                 itemInWordList = (from a in Context.ItemInwords.Where(x => x.InwordId == InwordId)
-                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                       join c in Context.Sites on a.SiteId equals c.SiteId
-                                       select new ItemInWordModel
-                                       {
-                                           InwordId = a.InwordId,
-                                           SiteId = a.SiteId,
-                                           SiteName=c.SiteName,
-                                           ItemId = a.ItemId,
-                                           Item = a.Item,
-                                           UnitTypeId = a.UnitTypeId,
-                                           UnitName=b.UnitName,
-                                           Quantity = a.Quantity,
-                                           DocumentName = a.DocumentName,
-                                           IsApproved = a.IsApproved,
-                                           CreatedBy = a.CreatedBy,
-                                           CreatedOn = a.CreatedOn,
-                                       }).First();
+                                  join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                  join c in Context.Sites on a.SiteId equals c.SiteId
+                                  select new ItemInWordModel
+                                  {
+                                      InwordId = a.InwordId,
+                                      SiteId = a.SiteId,
+                                      SiteName = c.SiteName,
+                                      ItemId = a.ItemId,
+                                      Item = a.Item,
+                                      UnitTypeId = a.UnitTypeId,
+                                      UnitName = b.UnitName,
+                                      Quantity = a.Quantity,
+                                      DocumentName = a.DocumentName,
+                                      ReceiverName = a.ReceiverName,
+                                      VehicleNumber = a.VehicleNumber,
+                                      Date = a.Date,
+                                      IsApproved = a.IsApproved,
+                                      CreatedBy = a.CreatedBy,
+                                      CreatedOn = a.CreatedOn,
+                                  }).First();
                 return itemInWordList;
             }
             catch (Exception ex)
@@ -228,7 +243,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.UnitTypeId = ItemInWordDetails.UnitTypeId;
                     ItemInWordData.Quantity = ItemInWordDetails.Quantity;
                     ItemInWordData.DocumentName = ItemInWordDetails.DocumentName;
-
+                    ItemInWordData.ReceiverName = ItemInWordDetails.ReceiverName;
+                    ItemInWordData.VehicleNumber = ItemInWordDetails.VehicleNumber;
 
                 }
                 Context.ItemInwords.Update(ItemInWordData);
@@ -241,6 +257,52 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 throw ex;
             }
             return model;
+        }
+
+        public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var firstItemInWordDetail = ItemInWordDetails.First();
+                var ItemDetails = new ItemInword()
+                {
+                    InwordId = Guid.NewGuid(),
+                    SiteId = firstItemInWordDetail.SiteId,
+                    ItemId = firstItemInWordDetail.ItemId,
+                    Item = firstItemInWordDetail.Item,
+                    UnitTypeId = firstItemInWordDetail.UnitTypeId,
+                    Quantity = firstItemInWordDetail.Quantity,
+                    DocumentName = firstItemInWordDetail.DocumentName,
+                    Date = DateTime.Now,
+                    VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
+                    ReceiverName = firstItemInWordDetail.ReceiverName,
+                    IsApproved = firstItemInWordDetail.IsApproved,
+                    IsDeleted = firstItemInWordDetail.IsDeleted,
+                    CreatedBy = firstItemInWordDetail.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                }; 
+                Context.ItemInwords.Add(ItemDetails);
+                foreach (var item in ItemInWordDetails)
+                {
+                    var DocumentDetailS = new ItemInWordDocument()
+                    {
+                        RefInWordId = ItemDetails.InwordId,
+                        DocumentName = item.DocumentName,
+                    };
+                    Context.ItemInWordDocuments.Add(DocumentDetailS);
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Item In Word Successfully Inserted";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating Item InWord: " + ex.Message;
+            }
+            return response;
         }
     }
 }

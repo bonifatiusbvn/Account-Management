@@ -19,6 +19,12 @@ public partial class ItemInword
 
     public string? DocumentName { get; set; }
 
+    public DateTime? Date { get; set; }
+
+    public string? VehicleNumber { get; set; }
+
+    public string? ReceiverName { get; set; }
+
     public bool? IsApproved { get; set; }
 
     public bool? IsDeleted { get; set; }
@@ -30,6 +36,8 @@ public partial class ItemInword
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<ItemInWordDocument> ItemInWordDocuments { get; set; } = new List<ItemInWordDocument>();
 
     public virtual ItemMaster ItemNavigation { get; set; } = null!;
 }

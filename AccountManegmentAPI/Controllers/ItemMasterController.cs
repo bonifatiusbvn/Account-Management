@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
+using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using AccountManagement.Repository.Interface.Services.ItemMaster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -125,6 +126,25 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<ItemMasterModel> ItemName = await ItemMaster.GetItemNameList();
             return Ok(new { code = 200, data = ItemName.ToList() });
+        }
+
+        [HttpPost]
+        [Route("InsertItemDetailsFromExcel")]
+        public async Task<IActionResult> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var ItemDetailsList = await ItemMaster.InsertItemDetailsFromExcel(itemDetailsList);
+            if (ItemDetailsList.code == 200)
+            {
+                response.code = ItemDetailsList.code;
+                response.message = ItemDetailsList.message;
+            }
+            else
+            {
+                response.code = ItemDetailsList.code;
+                response.message = ItemDetailsList.message;
+            }
+            return StatusCode(response.code, response);
         }
     }
 }

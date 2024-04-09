@@ -38,8 +38,8 @@ function CreateSupplier() {
 }
 
 
-function ClearTextBox() {
-
+function ClearSupplierTextBox() {
+    debugger
     $('#dspSupplierId').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
@@ -56,7 +56,7 @@ function ClearTextBox() {
     $('#ddlCountry').val('');
 
 
-    var button = document.getElementById("btnuser");
+    var button = document.getElementById("btnsupplier");
     if ($('#dspSupplierId').val() == '') {
         button.textContent = "Create";
     }
@@ -87,7 +87,7 @@ function DisplaySupplierDetails(SupplierId) {
             $('#txtIFFC').val(response.iffccode);
 
             setTimeout(function () { $('#ddlCity').val(response.city); }, 100)
-            var button = document.getElementById("btnuser");
+            var button = document.getElementById("btnsupplier");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
             }
@@ -138,9 +138,8 @@ function SelectSupplierDetails(SupplierId, element) {
 
 function AllUserTable() {
 
-
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSupplierSearch').val();
+    var searchBy = $('#SupplierSearchBy').val();
 
     $.get("/Supplier/SupplierListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
@@ -153,10 +152,10 @@ function AllUserTable() {
         });
 }
 
-function filterTable() {
+function filterSupplierTable() {
 
-    var searchText = $('#txtSearch').val();
-    var searchBy = $('#ddlSearchBy').val();
+    var searchText = $('#txtSupplierSearch').val();
+    var searchBy = $('#SupplierSearchBy').val();
 
     $.ajax({
         url: '/Supplier/SupplierListAction',
@@ -174,8 +173,8 @@ function filterTable() {
     });
 }
 
-function sortTable() {
-    var sortBy = $('#ddlSortBy').val();
+function sortSupplierTable() {
+    var sortBy = $('#SupplierSortBy').val();
     $.ajax({
         url: '/Supplier/SupplierListAction',
         type: 'GET',
@@ -229,7 +228,7 @@ function UpdateSupplierDetails() {
     })
 
 }
-function DeleteSupplierDetails(SupplierId) {
+function DeleteSupplierDetails(SupplierId) {debugger
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -242,7 +241,7 @@ function DeleteSupplierDetails(SupplierId) {
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.isConfirmed) {debugger
             $.ajax({
                 url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
                 type: 'POST',
