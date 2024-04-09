@@ -265,14 +265,8 @@
                                                     </select>
                                                     <span id="spnSiteAddress" style="color:red;"></span>
                                                 </div>
-                                                <div class="col-lg-3 col-sm-6">
-                                                    <label>Qty</label>
-                                                    <input type="number" class="form-control" id="quantity" name="quantity" />
-                                                    <span id="spnShippingQuantity" style="color:red;"></span>
-                                                </div>
                                                 <div class="col-lg-4 col-sm-6 pt-3">
-                                                    <button type="button" class="btn btn-success add-address">Add</button>
-                                                    <span id="spnaddressbutton" style="color:red;"></span>
+                                                    <button type="button" class="btn btn-primary add-address"><i class="ri-printer-line align-bottom me-1"></i> Add</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -306,11 +300,11 @@
                                         @if (Model.Id == Guid.Empty)
                                         {
 
-                                            <button type="button" class="btn btn-lg btn-success px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
                                         }
                                         else
                                         {
-                                            <button type="button" class="btn btn-lg btn-success px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                         }
                                     </div>
                                 </div>

@@ -47,20 +47,20 @@ $(document).ready(function () {
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
             type: 'GET',
             success: function (result) {
-
-                if (result == "There is no data for selected Supplier!") {
+                debugger;
+                if (result.totalPurchase == 0) {
                     Swal.fire({
                         title: 'Warning',
-                        text: result,
+                        text: 'No Data Found',
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     });
                 } else {
                     $("#invoicedetails").html(result);
-                    $("#txttotalpendingamount").html(result.totalPending);
-                    $("#pendingamount").html(result.totalPending);
-                    $("#txttotalcreditamount").html(result.totalCreadit);
+                    $("#txttotalpendingamount").html('₹' + result.totalPending);
+                    $("#pendingamount").html('₹' + result.totalPending);
+                    $("#txttotalcreditamount").html('₹' + result.totalCreadit);
                     $("#totalAmount").html('₹' + result.totalOutstanding);
                     $("#txttotalpurchase").html('₹' + result.totalPurchase);
                     var totalpendingAmount = result.totalPending;
@@ -84,6 +84,8 @@ $(document).ready(function () {
             },
         });
     });
+
+
 });
 
 
