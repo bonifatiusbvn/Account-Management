@@ -13,6 +13,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public string? ItemName { get; set; }
         public int UnitType { get; set; }
         public decimal PricePerUnit { get; set; }
+        public decimal? DiscountPer { get; set; }
         public decimal? Gstamount { get; set; }
         public decimal? GstPercentage { get; set; }
         public string? Hsncode { get; set; }

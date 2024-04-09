@@ -1,6 +1,6 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
-function CreateSupplier() {
+function CreateSupplier() {debugger
 
     var objData = {
         SupplierName: $('#txtSupplierName').val(),
@@ -23,7 +23,7 @@ function CreateSupplier() {
         type: 'post',
         data: objData,
         datatype: 'json',
-        success: function (Result) {
+        success: function (Result) {debugger
 
             Swal.fire({
                 title: Result.message,
@@ -353,8 +353,8 @@ function validateAndCreateSupplier() {
     }
 
 
-    if (isValid) {
-        if ($("#dspSupplierId").val() == '') {
+    if (isValid) {debugger
+        if ($("#txtSupplierid").val() == '') {
             CreateSupplier();
         }
         else {

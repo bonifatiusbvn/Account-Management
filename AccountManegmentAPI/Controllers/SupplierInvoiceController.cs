@@ -105,7 +105,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("InsertMultipleSupplierItemDetails")]
-        public async Task<IActionResult> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        public async Task<IActionResult> InsertMultipleSupplierItemDetails(SupplierInvoiceMasterView SupplierItemDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var SupplierInvoicemaster = await SupplierInvoice.InsertMultipleSupplierItemDetails(SupplierItemDetails);

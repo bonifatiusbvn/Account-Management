@@ -14,13 +14,13 @@
                 <li class="breadcrumb-item">
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Supplier Invoice List</li>
+                <li class="breadcrumb-item active" aria-current="page">Supplier List</li>
             </ol>
         </nav>
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearSupplierTextBox()"><i class="lni lni-circle-plus"></i>Create Invoice</button>
+            <button type="button" class="btn btn-primary" onclick="ClearSupplierTextBox()"><i class="lni lni-circle-plus"></i>Supplier</button>
         </form>
     </div>
 </div>
@@ -94,16 +94,14 @@
                             </div>
                         </div>
                         <!--end row-->
-
-
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body" style="height:650px">
-                                <h5 class="mb-0 mt-4">Supplier  Information</h5>
+                            <div class="card-body" style="height: 658px;">
+                                <h5 class="mb-0 mt-4">Supplier Information</h5>
                                 <hr>
-                                <div class="card-body">
-                                    <div class="table-responsive table-card">
+                                <div class="card-body" style="overflow-y: scroll; max-height: 550px;">
+                                    <div class="table-responsive" style="width: 100%;">
                                         <table class="table align-middle mb-0" id="customerTable">
                                             <thead class="table-light">
                                                 <tr>
@@ -112,18 +110,16 @@
                                                     <th>YouGave</th>
                                                     <th>YouGet</th>
                                                 </tr>
-                                                <!--end tr-->
                                             </thead>
                                             <tbody id="supplierinvoicedetails">
                                             </tbody>
                                         </table>
-                                        <!--end table-->
                                     </div>
                                 </div>
-                                <!-- end cardbody -->
                             </div>
                         </div>
                     </div>
+
                     @* <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:650px">
