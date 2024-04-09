@@ -203,32 +203,35 @@ function DeleteSupplierInvoice(InvoiceId) {
 function InsertMultipleSupplierItem() {debugger
 
     var orderDetails = [];
-    var numOrders = $(".product").length;
     $(".product").each(function () {
 
         var orderRow = $(this);
         var objData = {
-            SiteId: $("#siteid").val(),
-            InvoiceId: $("#txtSupplierInvoiceId").val(),
-            Date: $("#orderdate").val(),
-            SupplierId: $("#txtSupplierName").val(),
-            CompanyId: $("#txtCompanyName").val(),
-            TotalAmount: $("#cart-total").val(),
-            TotalGstAmount: $("#totalgst").val(),
-            Item: orderRow.find("#searchItemName").val(),
-            UnitTypeId: orderRow.find("#UnitTypeId").val(),
+            ItemName: orderRow.find("#ProductId").val(),
+            UnitType: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtProductQuantity").val(),
-            Price: orderRow.find("#txtProductTotalAmount").val(),
-            GstPer: orderRow.find("#txtGSTPer").val(),
-            Gst: orderRow.find("#txtProductAmountWithGST").val(),
-            Discription: $("#txtDiscription").val(),
-            PaymentStatus: $("#ddlpaymentstatus").val(),
-            CreatedBy: $("#createdById").val(),
+            PricePerUnit: orderRow.find("#txtProductTotalAmount").val(),
+            GstPercentage: orderRow.find("#txtGSTPer").val(),
+            Gstamount: orderRow.find("#txtProductAmountWithGST").val(),
         };
         orderDetails.push(objData);
     });
+    var InvoiceDetails = {
+        SiteId: $("#siteid").val(),
+        InvoiceId: $("#txtSupplierInvoiceId").val(),
+        Date: $("#txtOrderDate").val(),
+        SupplierId: $("#txtSupplierName").val(),
+        CompanyId: $("#txtCompanyName").val(),
+        TotalAmount: $("#cart-total").val(),
+        TotalGstAmount: $("#totalgst").val(),
+        Description: $("#txtDiscription").val(),
+        PaymentStatus: $("#ddlpaymentstatus").val(),
+        CreatedBy: $("#createdById").val(),
+        ItemList: orderDetails,
+    }
+    debugger
     var form_data = new FormData();
-    form_data.append("SupplierItems", JSON.stringify(orderDetails));
+    form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
     $.ajax({
         url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
         type: 'POST',
@@ -273,7 +276,6 @@ function validateAndInsertSupplierItem() {
     var companyname = document.getElementById("txtCompanyName").value.trim();
     var suppliername = document.getElementById("txtSupplierName").value.trim();
     var productname = document.getElementById("searchItemName").value.trim();
-    var PaymentStatus = document.getElementById("txtPaymentStatus").value.trim();
 
     var isValid = true;
 
@@ -287,10 +289,6 @@ function validateAndInsertSupplierItem() {
     }
     if (productname === "") {
         document.getElementById("spnsearchItemName").innerText = "Please Select Product!";
-        isValid = false;
-    }
-    if (PaymentStatus === "") {
-        document.getElementById("spnPaymentStatus").innerText = "Enter Payment Status";
         isValid = false;
     }
     if (isValid) {

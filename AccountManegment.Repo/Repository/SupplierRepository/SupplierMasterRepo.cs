@@ -146,7 +146,8 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 {
                     searchText = searchText.ToLower();
                     SupplierList = SupplierList.Where(u =>
-                        u.SupplierName.ToLower().Contains(searchText)
+                        u.SupplierName.ToLower().Contains(searchText) ||
+                        u.Gstno.ToLower().Contains(searchText)
                     );
                 }
 

@@ -7,33 +7,33 @@
     foreach (var item in Model)
     {
         <div id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
-            <div class="row card mb-3">
-                <div class="col-5">
+            <div class="row  mb-2">
+                <div class="col-3">
                     <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
                     <input type="text" id="txtRoleId" value="@item.RoleId" hidden/>
                     <input type="text" id="formId" value="@item.FormId" hidden />
                 </div>
-                <div class="col-7">
+                <div class="col-9">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isAdd" name="isAdd" @(item.IsAddAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isAdd">Add</label>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isView" name="isView" @(item.IsViewAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isView">View</label>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isEdit" name="isEdit" @(item.IsEditAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isEdit">Edit</label>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isDelete" name="isDelete" @(item.IsDeleteAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isDelete">Delete</label>

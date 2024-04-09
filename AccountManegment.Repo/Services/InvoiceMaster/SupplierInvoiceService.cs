@@ -43,7 +43,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
         }
 
-        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(SupplierInvoiceMasterView SupplierItemDetails)
         {
             return await SupplierInvoice.InsertMultipleSupplierItemDetails(SupplierItemDetails);
         }

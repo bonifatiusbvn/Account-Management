@@ -355,14 +355,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return model;
         }
 
-        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(List<SupplierInvoiceMasterView> SupplierItemDetails)
+        public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(SupplierInvoiceMasterView SupplierItemDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var firstOrderDetail = SupplierItemDetails.First();
                 bool PayOut;
-                if (firstOrderDetail.PaymentStatus == "Unpaid")
+                if (SupplierItemDetails.PaymentStatus == "Unpaid")
                 {
                     PayOut = false;
                 }
@@ -374,37 +373,37 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierInvoice = new SupplierInvoice()
                 {
                     Id = Guid.NewGuid(),
-                    InvoiceNo = firstOrderDetail.InvoiceId,
-                    SiteId = firstOrderDetail.SiteId,
-                    SupplierId = firstOrderDetail.SupplierId,
-                    CompanyId = firstOrderDetail.CompanyId,
-                    Description = firstOrderDetail.Description,
-                    TotalDiscount = firstOrderDetail.TotalDiscount,
-                    TotalGstamount = firstOrderDetail.TotalGstamount,
-                    TotalAmount = firstOrderDetail.TotalAmount,
-                    PaymentStatus = firstOrderDetail.PaymentStatus,
-                    Roundoff = firstOrderDetail.Roundoff,
+                    InvoiceNo = SupplierItemDetails.InvoiceId,
+                    SiteId = SupplierItemDetails.SiteId,
+                    SupplierId = SupplierItemDetails.SupplierId,
+                    CompanyId = SupplierItemDetails.CompanyId,
+                    Description = SupplierItemDetails.Description,
+                    TotalDiscount = SupplierItemDetails.TotalDiscount,
+                    TotalGstamount = SupplierItemDetails.TotalGstamount,
+                    TotalAmount = SupplierItemDetails.TotalAmount,
+                    PaymentStatus = SupplierItemDetails.PaymentStatus,
+                    Roundoff = SupplierItemDetails.Roundoff,
                     IsPayOut = PayOut,
                     Date = DateTime.Now,
-                    CreatedBy = firstOrderDetail.CreatedBy,
+                    CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
                 Context.SupplierInvoices.Add(supplierInvoice);
 
-                foreach (var item in SupplierItemDetails)
+                foreach (var item in SupplierItemDetails.ItemList)
                 {
                     var supplierInvoiceDetail = new SupplierInvoiceDetail()
                     {
                         RefInvoiceId = supplierInvoice.Id,
-                        Item = item.Item,
-                        UnitTypeId = item.UnitTypeId,
+                        Item = item.ItemName,
+                        UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
-                        Price = item.Price,
+                        Price = item.PricePerUnit,
                         DiscountPer = item.DiscountPer,
-                        Gst = item.Gst,
-                        Gstper = item.Gstper,
-                        TotalAmount = item.TotalAmount,
-                        CreatedBy = item.CreatedBy,
+                        Gst = item.Gstamount,
+                        Gstper = item.GstPercentage,
+                        TotalAmount = SupplierItemDetails.TotalAmount,
+                        CreatedBy = SupplierItemDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
                     Context.SupplierInvoiceDetails.Add(supplierInvoiceDetail);

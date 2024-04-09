@@ -110,7 +110,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 {
                     searchText = searchText.ToLower();
                     ItemInWordList = ItemInWordList.Where(u =>
-                        u.Item.ToLower().Contains(searchText)
+                        u.Item.ToLower().Contains(searchText)||
+                        u.Quantity.ToString().Contains(searchText)
                     );
                 }
 
