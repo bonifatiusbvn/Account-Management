@@ -1,6 +1,7 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
@@ -166,15 +167,15 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             }
         }
 
-        public async Task<ItemInWordModel> GetItemInWordtDetailsById(Guid InwordId)
+        public async Task<ItemInWordMasterView> GetItemInWordtDetailsById(Guid InwordId)
         {
-            ItemInWordModel itemInWordList = new ItemInWordModel();
+            ItemInWordMasterView itemInWordList = new ItemInWordMasterView();
             try
             {
                 itemInWordList = (from a in Context.ItemInwords.Where(x => x.InwordId == InwordId)
                                   join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                   join c in Context.Sites on a.SiteId equals c.SiteId
-                                  select new ItemInWordModel
+                                  select new ItemInWordMasterView
                                   {
                                       InwordId = a.InwordId,
                                       SiteId = a.SiteId,
@@ -192,6 +193,15 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       CreatedBy = a.CreatedBy,
                                       CreatedOn = a.CreatedOn,
                                   }).First();
+
+                List<ItemInWordDocumentModel> documentList = (from a in Context.ItemInWordDocuments.Where(a => a.RefInWordId == itemInWordList.InwordId)
+                                                     select new ItemInWordDocumentModel
+                                                     {
+                                                         Id = a.Id,
+                                                         RefInWordId = a.RefInWordId,
+                                                         DocumentName = a.DocumentName,
+                                                     }).ToList();
+                itemInWordList.DocumentLists = documentList;
                 return itemInWordList;
             }
             catch (Exception ex)
@@ -246,6 +256,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.DocumentName = ItemInWordDetails.DocumentName;
                     ItemInWordData.ReceiverName = ItemInWordDetails.ReceiverName;
                     ItemInWordData.VehicleNumber = ItemInWordDetails.VehicleNumber;
+                    ItemInWordData.Date = ItemInWordDetails.Date;
 
                 }
                 Context.ItemInwords.Update(ItemInWordData);
@@ -274,7 +285,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     UnitTypeId = firstItemInWordDetail.UnitTypeId,
                     Quantity = firstItemInWordDetail.Quantity,
                     DocumentName = firstItemInWordDetail.DocumentName,
-                    Date = DateTime.Now,
+                    Date = firstItemInWordDetail.Date,
                     VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
                     ReceiverName = firstItemInWordDetail.ReceiverName,
                     IsApproved = false,
@@ -301,6 +312,54 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             {
                 response.code = 500;
                 response.message = "Error creating Item InWord: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();     
+            try
+            {
+                var ItemInWordData = await Context.ItemInwords.FindAsync(UpdateInWordDetails.InwordId);
+                if (ItemInWordData == null)
+                {
+                    response.code = (int)HttpStatusCode.NotFound;
+                    response.message = $"Item InWord with ID {UpdateInWordDetails.InwordId} not found";
+                    return response;
+                }
+                else
+                {
+                    ItemInWordData.InwordId = UpdateInWordDetails.InwordId;
+                    ItemInWordData.ItemId = UpdateInWordDetails.ItemId;
+                    ItemInWordData.Item = UpdateInWordDetails.Item;
+                    ItemInWordData.UnitTypeId = UpdateInWordDetails.UnitTypeId;
+                    ItemInWordData.Quantity = UpdateInWordDetails.Quantity;
+                    ItemInWordData.ReceiverName = UpdateInWordDetails.ReceiverName;
+                    ItemInWordData.VehicleNumber = UpdateInWordDetails.VehicleNumber;
+                    ItemInWordData.Date = UpdateInWordDetails.Date;
+
+                    Context.ItemInwords.Update(ItemInWordData);
+                }                
+                var DocumentDetails = Context.ItemInWordDocuments.Where(a => a.RefInWordId == UpdateInWordDetails.InwordId) .ToList();
+
+                for (int i = 0; i < Math.Min(UpdateInWordDetails.DocumentLists.Count, DocumentDetails.Count); i++)
+                {
+                    var item = UpdateInWordDetails.DocumentLists[i];
+                    var doc = DocumentDetails[i];
+
+                    doc.RefInWordId = UpdateInWordDetails.InwordId;
+                    doc.DocumentName = item.DocumentName;
+                    Context.ItemInWordDocuments.Update(doc);
+                }
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Item InWord Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
             }
             return response;
         }

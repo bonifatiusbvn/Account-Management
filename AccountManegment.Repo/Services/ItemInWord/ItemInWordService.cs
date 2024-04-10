@@ -34,7 +34,7 @@ namespace AccountManagement.Repository.Services.ItemInWord
             return await itemInWord.GetItemInWordList(searchText, searchBy, sortBy, siteId);
         }
 
-        public async Task<ItemInWordModel> GetItemInWordtDetailsById(Guid InwordId)
+        public async Task<ItemInWordMasterView> GetItemInWordtDetailsById(Guid InwordId)
         {
             return await itemInWord.GetItemInWordtDetailsById(InwordId);
         }
@@ -51,6 +51,11 @@ namespace AccountManagement.Repository.Services.ItemInWord
         public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(ItemInWordMasterView ItemInWordDetails)
         {
             return await itemInWord.InsertMultipleItemInWordDetails(ItemInWordDetails);
+        }
+
+        public async Task<ApiResponseModel> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails)
+        {
+            return await itemInWord.UpdatetMultipleItemInWordDetails(UpdateInWordDetails);
         }
     }
 }
