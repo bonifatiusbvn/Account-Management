@@ -36,7 +36,8 @@ namespace AccountManegments.Web.Controllers
                 UserSession.SiteName = SiteId == null ? "All Site" : SiteName.ToString();
 
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
-                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+
+                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 

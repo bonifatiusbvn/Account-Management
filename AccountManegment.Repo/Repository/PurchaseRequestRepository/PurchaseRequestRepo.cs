@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +82,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Pid = Guid.NewGuid(),
                     PrNo = PurchaseRequestDetails.PrNo,
                     Item = PurchaseRequestDetails.Item,
-                    ItemId= PurchaseRequestDetails.ItemId,
+                    ItemId = PurchaseRequestDetails.ItemId,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
@@ -153,37 +154,36 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             }
         }
 
-        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy,Guid? siteId)
+        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
         {
             try
             {
-                var PurchaseRequestList = (from a in Context.PurchaseRequests
-                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                           join c in Context.Sites on a.SiteId equals c.SiteId
-                                           where (siteId == null && a.SiteId ==a.SiteId)||(siteId != null && a.SiteId == siteId)
-                                           select new PurchaseRequestModel
-                                           {
-
-                                               Pid = a.Pid,
-                                               Item = a.Item,
-                                               ItemId=a.ItemId,
-                                               PrNo = a.PrNo,
-                                               Quantity = a.Quantity,
-                                               UnitTypeId = a.UnitTypeId,
-                                               UnitName = b.UnitName,
-                                               SiteId = a.SiteId,
-                                               SiteName = c.SiteName,
-                                               CreatedBy = a.CreatedBy,
-                                               CreatedOn = a.CreatedOn,
-                                               IsApproved = a.IsApproved,
-                                           });
+                var PurchaseRequestList = from a in Context.PurchaseRequests
+                                          join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                          join c in Context.Sites on a.SiteId equals c.SiteId
+                                          where siteId == null || a.SiteId == siteId
+                                          select new PurchaseRequestModel
+                                          {
+                                              Pid = a.Pid,
+                                              Item = a.Item,
+                                              ItemId = a.ItemId,
+                                              PrNo = a.PrNo,
+                                              Quantity = a.Quantity,
+                                              UnitTypeId = a.UnitTypeId,
+                                              UnitName = b.UnitName,
+                                              SiteId = a.SiteId,
+                                              SiteName = c.SiteName,
+                                              CreatedBy = a.CreatedBy,
+                                              CreatedOn = a.CreatedOn,
+                                              IsApproved = a.IsApproved
+                                          };
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
                         u.Item.ToLower().Contains(searchText) ||
-                        u.UnitName.ToLower().Contains(searchText)||
+                        u.UnitName.ToLower().Contains(searchText) ||
                         u.Quantity.ToString().Contains(searchText)
                     );
                 }
@@ -207,7 +207,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    // Default sorting by CreatedOn in descending order
+
                     PurchaseRequestList = PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
@@ -218,16 +218,10 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     switch (field.ToLower())
                     {
                         case "item":
-                            if (sortOrder == "ascending")
-                                PurchaseRequestList = PurchaseRequestList.OrderBy(u => u.Item);
-                            else if (sortOrder == "descending")
-                                PurchaseRequestList = PurchaseRequestList.OrderByDescending(u => u.Item);
+                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.Item) : PurchaseRequestList.OrderByDescending(u => u.Item);
                             break;
                         case "createdon":
-                            if (sortOrder == "ascending")
-                                PurchaseRequestList = PurchaseRequestList.OrderBy(u => u.CreatedOn);
-                            else if (sortOrder == "descending")
-                                PurchaseRequestList = PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
+                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.CreatedOn) : PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
 
@@ -235,13 +229,14 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     }
                 }
 
-                return PurchaseRequestList;
+                return await PurchaseRequestList.ToListAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
 
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
         {

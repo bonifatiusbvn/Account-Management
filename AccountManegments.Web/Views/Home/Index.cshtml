@@ -22,16 +22,16 @@
             <form id="frmdrpdashbord">
 
                 <select class="form-control form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
-                    @if (_userSession.UserRole != 3)
+                    @if (_userSession.UserRole == 3)
+                    {
+                        <option value="null" selected>All Site</option>
+
+                    }
+                    else
                     {
                         <option value="@UserSession.SiteId" selected>@UserSession.SiteName</option>
-                    }else
-                    {
-                        <option value="" selected>All Site</option>
                     }
                 </select>
-
-
             </form>
         </div>
 
@@ -44,7 +44,7 @@
                 <select class="form-control form-control-lg" id="CompanyNameList">
                     @if (_userSession.UserRole != 3)
                     {
-                          <option selected disabled value="">Select Company</option>
+                        <option selected disabled value="">Select Company</option>
                     }
                 </select>
             </form>
@@ -152,14 +152,17 @@
                         $(drpid).append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
 
                     });
-                    $('#drpSiteName').val("@UserSession.SiteId")
+
                 }
             });
         }
 
         function fn_ChangeSite() {
-            var searchText = ""; ///$('#txtPurchaseRequestSearch').val();
-            var searchBy = "";//$('#PurchaseRequestSearchBy').val();
+            debugger
+            var selectedSiteId = $('#drpSiteName').val();
+            var SiteName = $('#drpSiteName').text()
+            var searchText = "";
+            var searchBy = "";
 
             $.ajax({
                 url: '/Home/PurchaseRequestList',
@@ -167,22 +170,20 @@
                 data: {
                     searchText: searchText,
                     searchBy: searchBy,
-                    SiteId: $('#drpSiteName').val(),
-                    SiteName: $('#drpSiteName option:selected').text()
+                    SiteId: selectedSiteId,
+
                 },
                 success: function (result) {
                     debugger
                     $("#tbPndingApproval").html(result);
-
-                    $('#laySiteName').html($('#drpSiteName option:selected').text())
-                    $('#drplaySiteName').val($('#drpSiteName option:selected').text())
-
+                    $('#drplaySiteName').val($('#drpSiteName option:selected').text());
                 },
                 error: function (xhr, status, error) {
-
+                    // Handle error if needed
                 }
             });
         }
+
 
         function GetCompanyList() {
 

@@ -16,13 +16,12 @@ checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
 function AllPurchaseRequestListTable() {
+    debugger
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
     $.get("/PurchaseMaster/PurchaseRequestListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
-
             $("#purchaseRequesttbody").html(result);
         })
 
@@ -483,7 +482,8 @@ function GetItemDetails() {
 
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
-        success: function (result) {debugger
+        success: function (result) {
+            debugger
 
             $('#searchItemname').empty();
 
@@ -560,7 +560,7 @@ $(document).ready(function () {
 });
 
 function SerchItemDetailsById(ItemId) {
-    
+
     var form_data = new FormData();
     form_data.append("ITEMID", JSON.stringify(ItemId));
 
