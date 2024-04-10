@@ -444,13 +444,13 @@ function ActiveDecativeSite(SiteId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("SiteId", SiteId);
-         
+            debugger
             $.ajax({
                 url: '/SiteMaster/ActiveDeactiveSite?SiteId=' + SiteId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
-                success: function (Result) {
+                success: function (Result) {debugger
                     Swal.fire({
                         title: isChecked ? "Active!" : "DeActive!",
                         text: Result.message,

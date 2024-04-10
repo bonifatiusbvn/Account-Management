@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "SiteListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -77,7 +79,10 @@
                                                         <th>Site Name</th>
                                                         <th>Contact Name</th>
                                                         <th>Active</th>
-                                                        <th>Action</th>
+                                                        @if (_userSession.UserRole == 3)
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="Sitetbody">

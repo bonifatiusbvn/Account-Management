@@ -108,7 +108,7 @@ function ClearTextBox() {
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
     offcanvas.show();
 }
-function CreateItem() {debugger
+function CreateItem() {
 
     var objData = {
         ItemName: $('#txtItemName').val(),
@@ -119,7 +119,6 @@ function CreateItem() {debugger
         Gstper: $('#txtGstPerUnit').val(),
         Hsncode: $('#txtHSNCode').val(),
     }
-    debugger
     $.ajax({
         url: '/ItemMaster/CreateItem',
         type: 'post',
@@ -201,7 +200,7 @@ function UpdateItemDetails() {
     })
 
 }
-function validateAndCreateItem() {debugger
+function validateAndCreateItem() {
 
     resetErrorMessages();
 
@@ -252,7 +251,7 @@ function validateAndCreateItem() {debugger
         isValid = false;
     }
 
-    if (isValid) {debugger
+    if (isValid) {
         if ($("#txtItemid").val() == '') {
             CreateItem();
         }
@@ -283,7 +282,7 @@ function isValidGSTInput(GstAmount) {
 
 
 function ItemIsApproved(ItemId) {
-    debugger
+
     var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Approve this Item?" : "Are you sure want to UnApprove this Item?";
 
@@ -302,7 +301,6 @@ function ItemIsApproved(ItemId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("ItemId", ItemId);
-            debugger
             $.ajax({
                 url: '/ItemMaster/ItemIsApproved?ItemId=' + ItemId,
                 type: 'Post',
@@ -327,7 +325,7 @@ function ItemIsApproved(ItemId) {
                 'error'
             ).then(function () {
                 window.location = '/ItemMaster/ItemListView';
-            });;
+            });
         }
     });
 }
@@ -412,7 +410,7 @@ document.getElementById('txtGstPerUnit').addEventListener('input', function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    debugger
+
     var closeButton = document.getElementById("errorCloseButton");
     if (closeButton) {
         closeButton.addEventListener("click", function () {

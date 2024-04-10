@@ -58,20 +58,15 @@
                 <span class="badge bg-light-warning text-warning w-100">Pending</span>
             }
         </td>
-
+        @if (_userSession.UserRole == 3)
+        {
         <td>
-            @if (_userSession.UserRole == 3)
-            {
+            
                 <a class="btn text-primary" onclick="DisplaySupplierDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierDetails('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
 
-            }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
         </td>
+        }
     </tr>
 }
 
