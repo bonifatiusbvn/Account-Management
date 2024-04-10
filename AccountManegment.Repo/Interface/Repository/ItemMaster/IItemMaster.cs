@@ -21,6 +21,8 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
         Task<ApiResponseModel> ItemIsApproved(Guid ItemId);
         Task<ApiResponseModel> DeleteItemDetails(Guid ItemId);
         Task<IEnumerable<ItemMasterModel>> GetItemNameList();
+        Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText);
+
         Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList);
     }
 }

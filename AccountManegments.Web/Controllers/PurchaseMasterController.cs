@@ -14,6 +14,8 @@ using Newtonsoft.Json;
 using System.Reflection;
 using Aspose.Pdf.Operators;
 using System.Text;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Globalization;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -640,5 +642,29 @@ namespace AccountManegments.Web.Controllers
             htmlBuilder.Append($"</div>");
             return htmlBuilder.ToString();
         }
+
+
+        public async Task<IActionResult> GetAllItemDetailsList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ItemMaster/GetAllItemDetailsList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ItemMasterModel> Items = JsonConvert.DeserializeObject<List<ItemMasterModel>>(response.data.ToString());
+                    return PartialView("~/Views/PurchaseMaster/_showAllItemPartial.cshtml", Items);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+
 }

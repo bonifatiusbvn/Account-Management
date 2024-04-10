@@ -1,4 +1,4 @@
-﻿    @model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
+﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
 @using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
@@ -39,23 +39,22 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
-
                                                                 <label for="txtSuppliername" class="form-label ">Supplier Name</label>
-
                                                                 @if (Model.SupplierName != null)
                                                                 {
-                                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername">
+                                                                    <select class="form-control" id="txtSuppliername">
                                                                         <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
                                                                     </select>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <select class="form-control bg-light border-0" id="txtSuppliername" name="txtSuppliername">
+                                                                    <select class="form-control" id="txtSuppliername">
                                                                         <option selected disabled value="">Select Supplier</option>
                                                                     </select>
                                                                 }
                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                             </div>
+
                                                             <div class="col-6 col-lg-6 ">
 
                                                                 <label for="" class="form-label ">Mobile No</label>
@@ -68,7 +67,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label for="" class="form-label ">Address</label>
-                                                                <input type="text" id="txtSupplierAddress" value="" class="form-control" placeholder="Address" />
+                                                                <textarea type="text" id="txtSupplierAddress" value="" class="form-control" placeholder="Address"></textarea>
                                                                 <span id="spnsuppliername" class="text-danger"></span>
 
                                                             </div>
@@ -76,7 +75,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtSuppliermobile" value="" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="txtSupplierGST" value="" class="form-control" placeholder="GST No" />
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -121,18 +120,15 @@
                                                                 <input type="text" class="form-control" id="txtPoId" value="@ViewBag.PurchaseOrderNo" readonly />
                                                             </div>
                                                             <div class="col-3 col-lg-3 ">
-
                                                                 <label for="orderdate" class="form-label">Order Date</label>
-
                                                                 <input type="date" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@Model.Date">
-
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label for="" class="form-label ">Billing Address</label>
-                                                                <input type="text" id="companybillingaddressDetails" value="" class="form-control" placeholder="Billing Address" />
+                                                                <textarea type="text" id="companybillingaddressDetails" value="" class="form-control" placeholder="Billing Address"></textarea>
                                                                 <span id="spnsuppliername" class="text-danger"></span>
 
                                                             </div>
@@ -140,7 +136,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtSuppliermobile" value="" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="txtCompanyGstNo" value="" class="form-control" placeholder="GST No" />
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -362,13 +358,13 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <th scope="row">Total Gst(18%)</th>
+                                                                <th scope="row">Total GST</th>
                                                                 <td>
                                                                     <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <th scope="row">Discount <small class="text-muted">()</small></th>
+                                                                <th scope="row">Discount <small class="text-muted"></small></th>
                                                                 <td>
                                                                     <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
                                                                 </td>
@@ -512,7 +508,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
 
 
@@ -571,28 +567,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-header">
-
                 <label class="form-label">Search Product</label>
-                <input class="form-control" value="" id="mdProductSearch" />
+                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
             </div>
 
-            <div class="modal-body" id="mdlistofItem" >
-                <div class="row item">
-                     <div class="col-5 col-sm-5">
-                        <p id="ptimeName">Item 1</p>
-                    </div>
-                    <div class="col-3 col-sm-3">
-                        <p id="pQtyType">kgs</p>
-                    </div>
-                    <div class="col-4 col-sm-4">
-                        <div class="input-step">
-                            <button type="button" class="minus btn btn-primary" id="minusbtn">–</button>
-                            <input type="number" class="product-quantity form-control" id="txtproductquantity" value="0">
-                            <button type="button" class="plus btn btn-primary" id="plusbtn">+</button>
-
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body" id="mdlistofItem">
             </div>
 
         </div>
@@ -620,19 +599,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                            <div class="col-2 col-sm-2">
-                                                                        <label id="lblshprownum`+ rowcount + `">` + rowcount + `</label>
-                                                            </div>
-                                                            <div class="col-5 col-sm-5">
-                                                                        <p id="pshAddress`+ rowcount + `">` + $('#txtmdAddress').val() + `</p>
-                                                            </div>
-                                                            <div class="col-3 col-sm-3">
-                                                                            <p id="pQty`+ rowcount + `">` + $('#txtmdqty').val() + `</p>
-                                                            </div>
-                                                            <div class="col-2 col-sm-2">
-                                                                <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
-                                                            </div>
-                                                        </div>`
+                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

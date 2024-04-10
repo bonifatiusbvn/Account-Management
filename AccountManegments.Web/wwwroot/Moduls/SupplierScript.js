@@ -1,6 +1,7 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
-function CreateSupplier() {debugger
+function CreateSupplier() {
+    debugger
 
     var objData = {
         SupplierName: $('#txtSupplierName').val(),
@@ -23,7 +24,8 @@ function CreateSupplier() {debugger
         type: 'post',
         data: objData,
         datatype: 'json',
-        success: function (Result) {debugger
+        success: function (Result) {
+            debugger
 
             Swal.fire({
                 title: Result.message,
@@ -228,7 +230,8 @@ function UpdateSupplierDetails() {
     })
 
 }
-function DeleteSupplierDetails(SupplierId) {debugger
+function DeleteSupplierDetails(SupplierId) {
+    debugger
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -241,7 +244,8 @@ function DeleteSupplierDetails(SupplierId) {debugger
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
-        if (result.isConfirmed) {debugger
+        if (result.isConfirmed) {
+            debugger
             $.ajax({
                 url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
                 type: 'POST',
@@ -353,7 +357,8 @@ function validateAndCreateSupplier() {
     }
 
 
-    if (isValid) {debugger
+    if (isValid) {
+        debugger
         if ($("#txtSupplierid").val() == '') {
             CreateSupplier();
         }
@@ -437,7 +442,7 @@ function UserActiveDecative(UserId) {
         }
     });
 }
-function GetSupplierInvoiceDetailsById(SupplierId, element) {debugger
+function GetSupplierInvoiceDetailsById(SupplierId, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');

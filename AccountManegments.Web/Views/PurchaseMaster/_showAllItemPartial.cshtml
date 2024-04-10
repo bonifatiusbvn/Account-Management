@@ -1,0 +1,18 @@
+﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel>
+
+@foreach (var item in Model)
+{
+    <div class="row item">
+        <div class="col-5 col-sm-5">
+            <p id="ptimeName">@item.ItemName</p>
+        </div>
+        <div class="col-3 col-sm-3">
+            <p id="pQtyType">@item.PricePerUnit</p>
+        </div>
+        <div class="col-4 col-sm-4">
+            <div class="input-step">
+                <a id="addItemButton" class="btn btn-primary" onclick="SerchItemDetailsById('@item.ItemId')" style="">Add Product</a>
+            </div>
+        </div>
+    </div>
+}

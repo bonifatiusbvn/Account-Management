@@ -147,7 +147,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                                 company = company.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
                                 company = company.OrderByDescending(u => u.CreatedOn);
-                            break;                       
+                            break;
                         default:
                             break;
                     }
@@ -203,6 +203,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                                Pincode = a.Pincode,
                                CreatedBy = a.CreatedBy,
                                CreatedOn = a.CreatedOn,
+                               FullAddress = a.Address + "-" + a.Area + "," + b.CityName + "," + c.StatesName + "-" + a.Pincode
                            }).First();
                 return company;
             }
