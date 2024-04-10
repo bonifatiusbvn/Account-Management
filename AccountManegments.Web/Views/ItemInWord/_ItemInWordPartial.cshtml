@@ -9,12 +9,6 @@
         <td>@item.Item</td>
         <td>@item.Quantity</td>
         <td>
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.InwordId" @if (item.IsApproved ?? false)
-            {
-                <text>checked</text>
-            } onclick="ItemInWordIsApproved('@item.InwordId')">
-        </td>
-        <td>
             @if (_userSession.UserRole == 3)
             {
                 <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>

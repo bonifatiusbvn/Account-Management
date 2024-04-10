@@ -462,11 +462,7 @@ $(document).on("click", ".minus", function () {
     updateProductQuantity($(this).closest(".product"), -1);
     return
 });
-$(document).on("click", "#remove", function () {
-    var row = $(this).closest("tr");
-    row.remove();
-    updateTotals();
-});
+
 
 $(document).ready(function () {
 

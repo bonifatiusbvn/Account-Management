@@ -48,7 +48,7 @@ namespace AccountManagement.Repository.Services.ItemInWord
         {
             return await itemInWord.UpdateItemInWordDetails(ItemInWordDetails);
         }
-        public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails)
+        public async Task<ApiResponseModel> InsertMultipleItemInWordDetails(ItemInWordMasterView ItemInWordDetails)
         {
             return await itemInWord.InsertMultipleItemInWordDetails(ItemInWordDetails);
         }

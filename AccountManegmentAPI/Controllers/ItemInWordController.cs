@@ -125,7 +125,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("InsertMultipleItemInWordDetails")]
-        public async Task<IActionResult> InsertMultipleItemInWordDetails(List<ItemInWordMasterView> ItemInWordDetails)
+        public async Task<IActionResult> InsertMultipleItemInWordDetails(ItemInWordMasterView ItemInWordDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var itemInword = await ItemInWord.InsertMultipleItemInWordDetails(ItemInWordDetails);

@@ -174,7 +174,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["SupplierItems"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(OrderDetails.ToString());
+                var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
