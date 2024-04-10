@@ -55,6 +55,7 @@ function sortItemInWordTable() {
         }
     });
 }
+
 function SelectItemInWordDetails(InwordId, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -65,7 +66,6 @@ function SelectItemInWordDetails(InwordId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
             if (response) {
                 $('#dspInwordId').val(response.inwordId);
                 $('#dspSiteId').val(response.siteName);
@@ -73,11 +73,29 @@ function SelectItemInWordDetails(InwordId, element) {
                 $('#dspItem').val(response.item);
                 $('#dspUnitName').val(response.unitName);
                 $('#dspQuantity').val(response.quantity);
-                $('#dspDocumentName').attr("src", "/Content/InWordDocument/" + response.documentName);
                 $('#dspIsApproved').prop('checked', response.isApproved);
                 $('#dspVehicleNumber').val(response.vehicleNumber);
                 $('#dspReceiverName').val(response.receiverName);
-                $('#dspDate').val(response.date);
+                var date = new Date(response.date);
+                var formattedDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                $('#dspDate').val(formattedDate);
+                if (response.documentName != null) {
+                    $('#dspDocumentName').attr("src", "/Content/InWordDocument/" + response.documentName).css({
+                        'height': '250px',
+                        'width': '250px'
+                    });;
+                } else {
+                    $('#dspDocumentName').empty();
+                    $('.holder').empty();
+                    response.documentLists.forEach(function (document) {
+                        var imageURL = "/Content/InWordDocument/" + document.documentName;
+                        var imageElement = $('<img>').attr('src', imageURL).addClass('document-image').css({
+                            'height': '100px', 'width': '100px'
+                        });
+                        $('.holder').append(imageElement);
+                    });
+                }
+
             } else {
                 console.log('Empty response received.');
             }
@@ -210,7 +228,7 @@ function validateAndCreateItemInWord() {
             InsertMultipleItemInWordDetails();
         }
         else {
-            UpdateItemInWordDetails();
+            UpdateMultipleItemInWordDetails();
         }
     }
 }
@@ -222,27 +240,36 @@ function resetErrorsMessages() {
     document.getElementById("spnReceiverName").innerText = "";
 }
 function EditItemInWordDetails(InwordId) {
-
+    debugger
     $.ajax({
         url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
-            $("#txtVehicleNumber").val(response.vehicleNumber),
-                $("#txtReceiverName").val(response.receiverName),
-                $("#txtDocumentName").val(response.documentName),
-                $('#displayImage').attr("src", "/Content/InWordDocument/" + response.documentName);
+            $("#txtVehicleNumber").val(response.vehicleNumber);
+            $("#txtReceiverName").val(response.receiverName);
+            var date = response.date;
+            var formattedDate = date.substr(0, 10);
+            $('#txtIteminwordDate').val(formattedDate);
+
+            if (response.documentLists && response.documentLists.length > 0) {
+                $.each(response.documentLists, function (index, document) {
+                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id +"'><td><div><span onclick='CancelImage()' class='close btn-sm btn-outline-danger'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
+                    $("#addNewImage").append(newRow);
+                    additionalFiles.push({ id: document.id,file: document }); 
+                });
+            }
             var button = document.getElementById("btnitemInWord");
             if ($('#txtItemInWordid').val() != '') {
                 button.textContent = "Update";
             }
+
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
             resetErrorsMessages();
             offcanvas.show();
@@ -252,6 +279,7 @@ function EditItemInWordDetails(InwordId) {
         }
     });
 }
+
 function UpdateItemInWordDetails() {
     debugger
     var documentFile = $("#txtDocument")[0].files[0];
@@ -295,8 +323,6 @@ function UpdateItemInWordDetails() {
         },
     })
 }
-
-
 function DeleteItemInWord(InwordId) {
     Swal.fire({
         title: "Are you sure want to Delete This?",
@@ -398,31 +424,36 @@ function ItemInWordIsApproved(InwordId) {
     });
 }
 
-$(document).ready(function () {
-    $(".add-Images").click(function () {
-  
-        var files = $("#txtDocument")[0].files;
-
-        if (files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-                const file = files[i];
-                let reader = new FileReader();
-                reader.onload = function (event) {
-                    var newRow = "<tr class='DocumentName'><td><div><span class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img id='txtDocument' src='" + event.target.result + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
-                    $("#addNewImage").append(newRow);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
+var additionalFiles = [];
+function CancelImage() {
     $(document).on('click', '.close', function () {
-        $(this).closest('tr').remove();
+        var row = $(this).closest('tr');
+        var documentName = row.find('img').attr('src').split('/').pop();
+        row.remove();
+
+        additionalFiles = additionalFiles.filter(function (item) {
+            return item.file.documentName !== documentName;
+        });
     });
-});
+}
+function showpictures() {
+    debugger
+    var files = $("#txtDocument")[0].files;
+    if (files.length > 0) {
+        for (var i = 0; i < files.length; i++) {
+            const file = files[i];
+            additionalFiles.push(file); 
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                var newRow = "<tr class='DocumentName'><td><div><span class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img src='" + event.target.result + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
+                $("#addNewImage").append(newRow);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+}
 
 function InsertMultipleItemInWordDetails() {
-    var DocumentDetails = $("#txtDocument")[0].files;
     var ItemInWordRequest = {
         UnitTypeId: $("#txtUnitType").val(),
         ItemId: $("#txtItemId").val(),
@@ -432,14 +463,14 @@ function InsertMultipleItemInWordDetails() {
         CreatedBy: $("#txtCreatedBy").val(),
         VehicleNumber: $("#txtVehicleNumber").val(),
         ReceiverName: $("#txtReceiverName").val(),
+        Date: $("#txtIteminwordDate").val(),
     };
 
     var form_data = new FormData();
     form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 
-    for (var i = 0; i < DocumentDetails.length; i++) {
-        debugger
-        form_data.append("DocDetails", DocumentDetails[i]);
+    for (var i = 0; i < additionalFiles.length; i++) {
+        form_data.append("DocDetails", additionalFiles[i]);
     }
 
     $.ajax({
@@ -450,7 +481,7 @@ function InsertMultipleItemInWordDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            if (Result.code == 200){
+            if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -460,7 +491,7 @@ function InsertMultipleItemInWordDetails() {
                     window.location = '/ItemInWord/ItemInWord';
                 });
             }
-            else{
+            else {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -469,7 +500,75 @@ function InsertMultipleItemInWordDetails() {
                 }).then(function () {
                     window.location = '/ItemInWord/ItemInWord';
                 });
-            }           
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
+    });
+}
+
+function UpdateMultipleItemInWordDetails() {
+    debugger
+    var UpdateItemInWord = {
+        InwordId: $('#txtItemInWordid').val(),
+        UnitTypeId: $("#txtUnitType").val(),
+        ItemId: $("#txtItemId").val(),
+        Item: $("#txtItemName").val(),
+        Quantity: $("#txtQuantity").val(),
+        VehicleNumber: $("#txtVehicleNumber").val(),
+        ReceiverName: $("#txtReceiverName").val(),
+        Date: $("#txtIteminwordDate").val(),
+    };
+
+    var form_data = new FormData();
+    form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
+
+    //if (additionalFiles.length > 0) {
+    //    for (var i = 0; i < additionalFiles.length; i++) {
+    //        debugger
+    //        form_data.append("DocDetails", additionalFiles[i]);
+    //    }
+    //}
+    if (additionalFiles.length > 0) {
+        additionalFiles.forEach(function (fileData) {
+            form_data.append("DocDetails", fileData.file); 
+        });
+    }
+
+    $.ajax({
+        url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemInWord/ItemInWord';
+                });
+            } else {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemInWord/ItemInWord';
+                });
+            }
         },
         error: function (xhr, status, error) {
             Swal.fire({

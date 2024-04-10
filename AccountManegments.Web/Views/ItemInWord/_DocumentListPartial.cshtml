@@ -2,10 +2,10 @@
 
 @foreach (var item in Model)
 {
-    <tr class="DocumentName">
+    <tr class='DocumentName'>
         <td id="displayImage" src="#" alt="pic">
             @item.DocumentName
-            <span class="close btn-sm btn-outline-danger">&times;</span>
+            <span onclick='CancelImage()' class="close btn-sm btn-outline-danger">&times;</span>
         </td>
     </tr>
 }

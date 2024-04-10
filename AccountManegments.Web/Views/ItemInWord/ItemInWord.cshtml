@@ -106,7 +106,7 @@
                                     <div class="col-6">
                                         <label class="form-label">DocumentName</label>
                                         <div class="holder m-2">
-                                            <img id="dspDocumentName" src="#" alt="pic" />
+                                            <img id="dspDocumentName" src="#" />
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -181,21 +181,23 @@
                                     <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" required>
                                     <span id="spnVehicleNumber" class="text-danger"></span>
                                 </div>
+                                <div class="col-6">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" id="txtIteminwordDate" class="form-control" required />
+                                    <span id="spnDate" class="text-danger"></span>
+                                </div>
                                 <div class="container">
                                     <div id="MultipleImageContainer">
                                         <div class="row multiple-images">
-                                            <div class="col-10">
+                                            <div class="col-12">
                                                 <label>Document</label>
-                                                <input type="file" class="form-control" id="txtDocument" multiple required>
+                                                <input type="text" id="txtDocumentName" class="form-control" hidden>
+                                                <input type="file" id="txtDocument" class="form-control" onchange="showpictures()" multiple>
                                                 <span id="spnDocument" class="text-danger"></span>
-                                            </div>
-                                            <div class="col-2 pt-3">
-                                                <button type="button" class="btn btn-success add-Images">Add</button>
-                                                <span id="spnMultiImagesbutton" class="text-danger"></span>
-                                            </div>
+                                            </div>                              
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
 
                                 <div id="dvDisplayImages" class="col-lg-6">
                                     <div class="row">
