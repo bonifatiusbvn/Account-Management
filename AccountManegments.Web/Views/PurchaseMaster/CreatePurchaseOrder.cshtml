@@ -260,24 +260,24 @@
                                 </div> *@
                             </div>
                             <div class="card">
-                                <div class="row  p-3">
-                                    
-                                        <h5 class="card-header">
-                                            Purchase Details
-                                           
-                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
-                                        </h5>
-                                    
-                                    
+                                <div class="row p-3">
+
+                                    <h5 class="card-header">
+                                        Purchase Details
+
+                                        <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                            <i class="lni lni-circle-plus"></i>
+                                        </a>
+                                    </h5>
+
+
                                 </div>
 
-                                <div class="card-body p-2">
+                                <div class="card-body pt-0">
                                     <div class="table-responsive" style="height:350px">
                                         <table class="table align-middle mb-0">
                                             <thead class="table-secondary">
-                                                <tr>
+                                                <tr class="text-uppercase">
                                                     <th>#</th>
                                                     <th>Product Details</th>
                                                     <th>HSN Code</th>
@@ -285,8 +285,8 @@
                                                     <th>Qty Type</th>
                                                     <th>Price</th>
                                                     <th>GST (%)</th>
-                                                    <th>GST Amt(₹)</th>
-                                                    <th>Amount(₹)</th>
+                                                    <th>GST Amt (₹)</th>
+                                                    <th>Amount (₹)</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -302,21 +302,23 @@
                                         </table>
 
                                     </div>
-                                    <table class="table align-middle mb-0">
-                                        <thead class="table align-middle mb-0">
-                                            <tr>
-                                                <th>#</th>
-                                                <th colspan="2">Total</th>
+                                    <div class="card-footer">
+                                        <table class="table align-middle mb-0">
+                                            <thead class="table align-middle mb-0">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th colspan="2">Total</th>
 
-                                                <th>10</th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                                    <th>10</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                     <div class=" card">
                                         <div class="row card-body">
                                             <div class="col-lg-6 col-sm-12 ">
@@ -389,15 +391,15 @@
                             <div class="row">
                                 <div class="col-6 col-sm-6">
                                     <div class="card">
-                                        
-                                            <h5 class="card-header">
-                                                Shipping Addresses 
-                                                <a class="font-22" onclick="fn_OpenShippingModal()">
-                                                    <i class="lni lni-circle-plus"></i>
-                                                </a>
-                                            </h5>
-                                            
-                                        
+
+                                        <h5 class="card-header">
+                                            Shipping Addresses
+                                            <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                <i class="lni lni-circle-plus"></i>
+                                            </a>
+                                        </h5>
+
+
                                         <div class="card-body" id="dvshippingAdd">
                                             <div class="row ac-invoice-shippingadd">
                                                 <div class="col-2 col-sm-2">
@@ -410,7 +412,7 @@
                                                     <p id="pQty">250 kgs</p>
                                                 </div>
                                                 <div class="col-2 col-sm-2">
-                                                    <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>   
+                                                    <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
                                                 </div>
                                             </div>
                                             <div class="row ac-invoice-shippingadd">
@@ -442,24 +444,24 @@
                                                 </div>
                                             </div>
 
-                                            @* <div class="table-responsive"> 
+                                            @* <div class="table-responsive">
                                             <table class="table align-middle mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Address</th>
-                                                        <th>Qty</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="addNewShipping">
-                                                    <tr>
-                                                        <td id="address" hidden></td>
-                                                    </tr>
-                                                    @if (Model.AddressList != null)
-                                                    {
-                                                        @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                                    }
-                                                </tbody>
+                                            <thead>
+                                            <tr>
+                                            <th>Address</th>
+                                            <th>Qty</th>
+                                            <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="addNewShipping">
+                                            <tr>
+                                            <td id="address" hidden></td>
+                                            </tr>
+                                            @if (Model.AddressList != null)
+                                            {
+                                            @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                            }
+                                            </tbody>
                                             </table>
                                             </div> *@
                                         </div>
@@ -467,47 +469,50 @@
                                 </div>
                             </div>
                             @* <div class="container">
-                                <h4>Shipping Address</h4>
-                                <div id="shippingAddressContainer">
-                                    <div class="row shipping-address">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <label>Shipping Address</label>
-                                            <select class="form-control form-control" id="txtPoSiteName" required>
-                                                <option selected value="">--Select Site--</option>
-                                            </select>
-                                            <span id="spnSiteAddress" style="color:red;"></span>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <label>Qty</label>
-                                            <input type="number" class="form-control" id="quantity" name="quantity" />
-                                            <span id="spnShippingQuantity" style="color:red;"></span>
-                                        </div>
-                                        <div class="col-lg-4 col-sm-6 pt-3">
-                                            <button type="button" class="btn btn-success add-address">Add</button>
-                                            <span id="spnaddressbutton" style="color:red;"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <h4>Shipping Address</h4>
+                            <div id="shippingAddressContainer">
+                            <div class="row shipping-address">
+                            <div class="col-lg-3 col-sm-6">
+                            <label>Shipping Address</label>
+                            <select class="form-control form-control" id="txtPoSiteName" required>
+                            <option selected value="">--Select Site--</option>
+                            </select>
+                            <span id="spnSiteAddress" style="color:red;"></span>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                            <label>Qty</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" />
+                            <span id="spnShippingQuantity" style="color:red;"></span>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 pt-3">
+                            <button type="button" class="btn btn-success add-address">Add</button>
+                            <span id="spnaddressbutton" style="color:red;"></span>
+                            </div>
+                            </div>
+                            </div>
                             </div> *@
 
                             <div id="dvshipping" class="col-lg-6">
                                 <div class="row">
-                                    
                                 </div>
                             </div>
                             <!--end row-->
+                            .<div class="card">
+                                <div class="card-body">
+                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                        @if (Model.Id == Guid.Empty)
+                                        {
 
-                            <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                @if (Model.Id == Guid.Empty)
-                                {
-
-                                    <button type="button" class="btn btn-lg btn-success px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-lg btn-success px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                }
+                                            <button type="button" class="btn btn-lg btn-success px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-lg btn-success px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                        }
+                                    </div>
+                                </div>
                             </div>
+                            
 
 
 
@@ -545,15 +550,51 @@
                             <label class="form-lable">Qty</label>
                             <input class="form-control" id="txtmdqty" value="" required />
                         </div>
-                       
+
                     </div>
-                        
+
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button>
-             </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Select Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-header">
+
+                <label class="form-label">Search Product</label>
+                <input class="form-control" value="" id="mdProductSearch" />
+            </div>
+
+            <div class="modal-body" id="mdlistofItem" >
+                <div class="row item">
+                     <div class="col-5 col-sm-5">
+                        <p id="ptimeName">Item 1</p>
+                    </div>
+                    <div class="col-3 col-sm-3">
+                        <p id="pQtyType">kgs</p>
+                    </div>
+                    <div class="col-4 col-sm-4">
+                        <div class="input-step">
+                            <button type="button" class="minus btn btn-primary" id="minusbtn">–</button>
+                            <input type="number" class="product-quantity form-control" id="txtproductquantity" value="0">
+                            <button type="button" class="plus btn btn-primary" id="plusbtn">+</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -574,32 +615,38 @@
         $('#txtmdqty').val('');
         $('#mdShippingAdd').modal('show');
     }
-    function fn_mdAddAddress(){
+
+    function fn_mdAddAddress() {
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                    <div class="col-2 col-sm-2">
-                                                                <label id="lblshprownum`+ rowcount + `">` + rowcount + `</label>
-                                                    </div>
-                                                    <div class="col-5 col-sm-5">
-                                                                <p id="pshAddress`+ rowcount + `">` + $('#txtmdAddress').val() + `</p>
-                                                    </div>
-                                                    <div class="col-3 col-sm-3">
-                                                                    <p id="pQty`+ rowcount + `">` + $('#txtmdqty').val() + `</p>
-                                                    </div>
-                                                    <div class="col-2 col-sm-2">
-                                                        <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
-                                                    </div>
-                                                </div>`
+                                                            <div class="col-2 col-sm-2">
+                                                                        <label id="lblshprownum`+ rowcount + `">` + rowcount + `</label>
+                                                            </div>
+                                                            <div class="col-5 col-sm-5">
+                                                                        <p id="pshAddress`+ rowcount + `">` + $('#txtmdAddress').val() + `</p>
+                                                            </div>
+                                                            <div class="col-3 col-sm-3">
+                                                                            <p id="pQty`+ rowcount + `">` + $('#txtmdqty').val() + `</p>
+                                                            </div>
+                                                            <div class="col-2 col-sm-2">
+                                                                <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
+                                                            </div>
+                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
-            $('#txtmdAddress').focus(); 
+            $('#txtmdAddress').focus();
         }
-        
+
     }
     function fn_removeShippingAdd(that) {
         $(that).closest('.ac-invoice-shippingadd').remove();
+    }
+
+    function fn_OpenAddproductmodal() {
+        $('#mdProductSearch').val('');
+        $('#mdPoproductModal').modal('show');
     }
 </script>
 
