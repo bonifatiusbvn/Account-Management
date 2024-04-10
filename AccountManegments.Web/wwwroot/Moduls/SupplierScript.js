@@ -1,7 +1,6 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
-    debugger
 
     var objData = {
         SupplierName: $('#txtSupplierName').val(),
@@ -25,7 +24,6 @@ function CreateSupplier() {
         data: objData,
         datatype: 'json',
         success: function (Result) {
-            debugger
 
             Swal.fire({
                 title: Result.message,
@@ -41,7 +39,6 @@ function CreateSupplier() {
 
 
 function ClearSupplierTextBox() {
-    debugger
     $('#dspSupplierId').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
@@ -231,7 +228,6 @@ function UpdateSupplierDetails() {
 
 }
 function DeleteSupplierDetails(SupplierId) {
-    debugger
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -245,7 +241,6 @@ function DeleteSupplierDetails(SupplierId) {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            debugger
             $.ajax({
                 url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
                 type: 'POST',
@@ -358,7 +353,6 @@ function validateAndCreateSupplier() {
 
 
     if (isValid) {
-        debugger
         if ($("#txtSupplierid").val() == '') {
             CreateSupplier();
         }

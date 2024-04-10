@@ -483,7 +483,7 @@ function GetItemDetails() {
 
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
-        success: function (result) {
+        success: function (result) {debugger
 
             $('#searchItemname').empty();
 
@@ -500,6 +500,8 @@ function GetItemDetails() {
         }
     });
 }
+
+
 $(document).ready(function () {
     $('#searchItemname').change(function () {
         var Text = $("#searchItemname Option:Selected").text();
@@ -558,7 +560,7 @@ $(document).ready(function () {
 });
 
 function SerchItemDetailsById(ItemId) {
-    debugger
+    
     var form_data = new FormData();
     form_data.append("ITEMID", JSON.stringify(ItemId));
 

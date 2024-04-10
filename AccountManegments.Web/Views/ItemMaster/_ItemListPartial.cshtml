@@ -9,16 +9,27 @@
         <td>@item.ItemName</td>
         <td>@item.PricePerUnit</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @if (item.IsApproved ?? false)
             {
-                <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                <text>checked</text>
+            } onclick="ItemIsApproved('@item.ItemId')">
+            @* @if (item.IsApproved == true)
+            {
+                <span class="badge bg-light-success text-success w-100">Approved</span>
             }
             else
             {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
+                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+            } *@
         </td>
+        @if (_userSession.UserRole == 3)
+        {
+        <td>
+            
+                <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+
+        </td>
+        }
     </tr>
 }

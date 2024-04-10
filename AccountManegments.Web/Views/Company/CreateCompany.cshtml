@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "CreateCompany";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -77,7 +79,10 @@
                                                         <th>Company Name</th>
                                                         <th>Gst No</th>
                                                         <th>Pan No</th>
-                                                        <th>Action</th>
+                                                        @if (_userSession.UserRole == 3)
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="Companytbody">

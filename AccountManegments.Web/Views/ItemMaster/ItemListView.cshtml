@@ -79,7 +79,11 @@
                                                     <tr>
                                                         <th>Item Name</th>
                                                         <th>Price</th>
-                                                        <th>Action</th>
+                                                        <th>Approved</th>
+                                                        @if (_userSession.UserRole == 3)
+                                                        {
+                                                            <th>Action</th>
+                                                        } 
                                                     </tr>
                                                 </thead>
                                                 <tbody id="itemtbody">
