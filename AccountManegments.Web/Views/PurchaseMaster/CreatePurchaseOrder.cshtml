@@ -396,70 +396,8 @@
                                         </h5>
 
 
-                                        <div class="card-body" id="dvshippingAdd">
-                                            <div class="row ac-invoice-shippingadd">
-                                                <div class="col-2 col-sm-2">
-                                                    <label id="lblshprownum1">1</label>
-                                                </div>
-                                                <div class="col-5 col-sm-5">
-                                                    <p id="pshAddress1">Address1,Address,Address,city,State,country</p>
-                                                </div>
-                                                <div class="col-3 col-sm-3">
-                                                    <p id="pQty">250 kgs</p>
-                                                </div>
-                                                <div class="col-2 col-sm-2">
-                                                    <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="row ac-invoice-shippingadd">
-                                                <div class="col-2 col-sm-2">
-                                                    <label>1</label>
-                                                </div>
-                                                <div class="col-5 col-sm-5">
-                                                    <p>Address1,Address,Address,city,State,country</p>
-                                                </div>
-                                                <div class="col-3 col-sm-3">
-                                                    <p>250 kgs</p>
-                                                </div>
-                                                <div class="col-2 col-sm-2">
-                                                    <a id="remove" class="btn text-primary"><i class="lni lni-trash"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="row ac-invoice-shippingadd">
-                                                <div class="col-2 col-sm-2">
-                                                    <label>1</label>
-                                                </div>
-                                                <div class="col-5 col-sm-5">
-                                                    <p>Address1,Address,Address,city,State,country</p>
-                                                </div>
-                                                <div class="col-3 col-sm-3">
-                                                    <p>250 kgs</p>
-                                                </div>
-                                                <div class="col-2 col-sm-2">
-                                                    <a id="remove" class="btn text-primary"><i class="lni lni-trash"></i></a>
-                                                </div>
-                                            </div>
-
-                                            @* <div class="table-responsive">
-                                            <table class="table align-middle mb-0">
-                                            <thead>
-                                            <tr>
-                                            <th>Address</th>
-                                            <th>Qty</th>
-                                            <th></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="addNewShipping">
-                                            <tr>
-                                            <td id="address" hidden></td>
-                                            </tr>
-                                            @if (Model.AddressList != null)
-                                            {
-                                            @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                            }
-                                            </tbody>
-                                            </table>
-                                            </div> *@
+                                        <div class="card-body Address" id="dvshippingAdd">
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -499,7 +437,7 @@
                                         @if (Model.Id == Guid.Empty)
                                         {
 
-                                            <button type="button" class="btn btn-lg btn-success px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
                                         }
                                         else
                                         {
@@ -540,20 +478,23 @@
                     <div class="row mt-2">
                         <div class="col-9 col-sm-9">
                             <label class="form-lable">Address</label>
-                            <input class="form-control" id="txtmdAddress" required>
+                            <textarea class="form-control" id="txtmdAddress" style="height:90px;" required></textarea>
+                            <span id="spnSiteAddress" style="color:red;"></span>
                         </div>
                         <div class="col-3 col-sm-3">
                             <label class="form-lable">Qty</label>
                             <input class="form-control" id="txtmdqty" value="" required />
+                            <span id="spnShippingQuantity" style="color:red;"></span>
                         </div>
-
                     </div>
 
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button>
+                <button type="button" class="btn btn-primary add-address" onclick="AddShippingAddress()">Add</button>
+                <span id="spnaddressbutton" style="color:red;"></span>
+                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
             </div>
         </div>
     </div>
@@ -616,25 +557,3 @@
         $('#mdPoproductModal').modal('show');
     }
 </script>
-
-
-<td colspan="3">
-    <div class="row">
-        <div class="col-6">
-
-            <label for="searchItemname" class="form-label ">Product Names</label>
-
-            <select id="searchItemname" class="form-Select">
-                <option selected disabled value="">select Item</option>
-            </select>
-
-            <input type="hidden" id="searchItemnameid">
-            <div id="searchvalidationMessage" class="text-danger"></div>
-
-        </div>
-        <div class="col-6">
-            <a id="addItemButton" class="btn btn-primary" onclick="SerchItemDetailsById()" style="">Add Product</a>
-            <span id="spnitembutton" class="text-danger"></span>
-        </div>
-    </div>
-</td>
