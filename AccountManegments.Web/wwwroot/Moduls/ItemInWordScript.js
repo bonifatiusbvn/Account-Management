@@ -207,7 +207,7 @@ function validateAndCreateItemInWord() {
 
     if (isValid) {
         if ($("#txtItemInWordid").val() == '') {
-            AddItemInWordDetails();
+            InsertMultipleItemInWordDetails();
         }
         else {
             UpdateItemInWordDetails();
@@ -229,16 +229,16 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-        
+
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
             $("#txtVehicleNumber").val(response.vehicleNumber),
-            $("#txtReceiverName").val(response.receiverName),
+                $("#txtReceiverName").val(response.receiverName),
                 $("#txtDocumentName").val(response.documentName),
-            $('#displayImage').attr("src", "/Content/InWordDocument/" + response.documentName);
+                $('#displayImage').attr("src", "/Content/InWordDocument/" + response.documentName);
             var button = document.getElementById("btnitemInWord");
             if ($('#txtItemInWordid').val() != '') {
                 button.textContent = "Update";
@@ -256,12 +256,10 @@ function UpdateItemInWordDetails() {
     debugger
     var documentFile = $("#txtDocument")[0].files[0];
     var documentName = null;
-    if (documentFile == undefined)
-    {
-       documentName = $("#txtDocumentName").val();
+    if (documentFile == undefined) {
+        documentName = $("#txtDocumentName").val();
     }
-    else
-    {
+    else {
         documentName = documentFile.name;
     }
     var objData = {
@@ -272,7 +270,7 @@ function UpdateItemInWordDetails() {
         Quantity: $('#txtQuantity').val(),
         VehicleNumber: $("#txtVehicleNumber").val(),
         ReceiverName: $("#txtReceiverName").val(),
-        DocumentName : documentName,
+        DocumentName: documentName,
     };
     var form_data = new FormData();
     form_data.append("ITEMINWORD", JSON.stringify(objData));
@@ -297,7 +295,7 @@ function UpdateItemInWordDetails() {
         },
     })
 }
-        
+
 
 function DeleteItemInWord(InwordId) {
     Swal.fire({
@@ -400,27 +398,93 @@ function ItemInWordIsApproved(InwordId) {
     });
 }
 
-$(document).ready(() => {
-    $('#txtDocument').change(function () {
-        const file = this.files[0];
-        console.log(file);
-        if (file) {
-            let reader = new FileReader();
-            reader.onload = function (event) {
-                console.log(event.target.result);
-                $('#displayImage').attr('src', event.target.result);
+$(document).ready(function () {
+    $(".add-Images").click(function () {
+  
+        var files = $("#txtDocument")[0].files;
+
+        if (files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+                const file = files[i];
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    var newRow = "<tr class='DocumentName'><td><div><span class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img id='txtDocument' src='" + event.target.result + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
+                    $("#addNewImage").append(newRow);
+                }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
         }
+    });
+
+    $(document).on('click', '.close', function () {
+        $(this).closest('tr').remove();
     });
 });
 
-var closebtns = document.getElementsByClassName("close");
-var i;
+function InsertMultipleItemInWordDetails() {
+    var DocumentDetails = $("#txtDocument")[0].files;
+    var ItemInWordRequest = {
+        UnitTypeId: $("#txtUnitType").val(),
+        ItemId: $("#txtItemId").val(),
+        Item: $("#txtItemName").val(),
+        Quantity: $("#txtQuantity").val(),
+        SiteId: $("#txtSiteid").val(),
+        CreatedBy: $("#txtCreatedBy").val(),
+        VehicleNumber: $("#txtVehicleNumber").val(),
+        ReceiverName: $("#txtReceiverName").val(),
+    };
 
-for (i = 0; i < closebtns.length; i++) {
-    closebtns[i].addEventListener("click", function () {
-        $('#displayImage').attr('src', '');
-        $('#txtDocument').val('');
+    var form_data = new FormData();
+    form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
+
+    for (var i = 0; i < DocumentDetails.length; i++) {
+        debugger
+        form_data.append("DocDetails", DocumentDetails[i]);
+    }
+
+    $.ajax({
+        url: '/ItemInWord/InsertMultipleItemInWordDetail',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.code == 200){
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemInWord/ItemInWord';
+                });
+            }
+            else{
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemInWord/ItemInWord';
+                });
+            }           
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
     });
 }
+
+
+
+
+
+

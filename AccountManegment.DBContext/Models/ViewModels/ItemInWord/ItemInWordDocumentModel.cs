@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,19 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
 {
     public class ItemInWordDocumentModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public Guid RefInWordId { get; set; }
+        public Guid? RefInWordId { get; set; }
 
         public string? DocumentName { get; set; }
+    }
+
+    public class ItemInWordRequestDocumentModel
+    {
+        public int? Id { get; set; }
+
+        public Guid? RefInWordId { get; set; }
+
+        public IFormFile? DocumentName { get; set; }
     }
 }
