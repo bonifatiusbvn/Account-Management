@@ -4,42 +4,7 @@
 
 @foreach (var item in Model)
 {
-    @* <div class="row ac-card" id="userCard_@item.ItemId">
-        <div class="card  border mb-0">
-            <div class="card-body">
-                <div class="row align-items-center" onclick="DisplayItemDetails('@item.ItemId', this)">
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-5">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="widget-icon-2 bg-light-primary text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0 text-primary">@item.ItemName</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-3">
-                        <div>
-                            <p class="mb-0 text-primary">@item.PricePerUnit</p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-1">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input font-22" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @if (item.IsApproved ?? false)
-                            {
-                                <text>checked</text>
-                            } onclick="ItemIsApproved('@item.ItemId')">
-                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.ItemId"></label>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
-                        <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> *@
+
     <tr id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">
         <td>@item.ItemName</td>
         <td>@item.PricePerUnit</td>
@@ -57,17 +22,14 @@
                 <span class="badge bg-light-warning text-warning w-100">Pending</span>
             } *@
         </td>
+        @if (_userSession.UserRole == 3)
+        {
         <td>
-            @if (_userSession.UserRole == 3)
-            {
+            
                 <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
+
         </td>
+        }
     </tr>
 }

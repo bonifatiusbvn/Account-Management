@@ -31,7 +31,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.CompanyModels
         public string? CountryName { get; set; }
 
         public string Pincode { get; set; } = null!;
-        public bool? IsDelete { get; set; } 
+        public bool? IsDelete { get; set; }
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -39,5 +39,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.CompanyModels
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? FullAddress { get; set; }
     }
 }

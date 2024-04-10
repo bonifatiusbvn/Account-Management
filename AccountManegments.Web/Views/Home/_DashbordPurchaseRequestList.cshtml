@@ -1,0 +1,30 @@
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.PurchaseRequest.PurchaseRequestModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@foreach (var item in Model)
+{
+    <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
+        <td>@item.Item</td>
+        <td>@item.UnitName</td>
+        <td>@item.Quantity</td>
+        <td>@item.SiteName</td>
+        <td>
+            @if (item.IsApproved == true)
+            {
+                <span class="badge bg-light-success text-success w-100">Approved</span>
+            }
+            else
+            {
+                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+            }
+        </td>
+        <td>@Convert.ToDateTime(item.CreatedOn).Date</td>
+        
+    </tr>
+}

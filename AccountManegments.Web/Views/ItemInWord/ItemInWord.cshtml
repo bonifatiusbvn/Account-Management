@@ -6,6 +6,7 @@
     ViewData["Title"] = "ItemInWord";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Item InWord</div>
@@ -149,10 +150,16 @@
                         <div class="card-body">
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <div class="col-12">
-                                    <label class="form-label">Item</label>
+                                    <label for="txtItemId" class="form-label ">Product Names</label>
+                                    <select id="txtItemId" class="form-control select2">
+                                        <option selected disabled value="">select Item</option>
+                                    </select>
+
+                                    <input type="hidden" id="searchItemnameid">
+                                    @* <label class="form-label">Item</label>
                                     <select class="form-control" id="txtItemId">
                                         <option value="">--Select Item--</option>
-                                    </select>
+                                    </select> *@
                                     <input type="hidden" id="txtItemName">
                                     <input type="hidden" id="txtItemInWordid">
                                     <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
@@ -221,7 +228,7 @@
 </div>
 
 @section Scripts {
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="~/moduls/iteminwordscript.js"></script>
 }
 

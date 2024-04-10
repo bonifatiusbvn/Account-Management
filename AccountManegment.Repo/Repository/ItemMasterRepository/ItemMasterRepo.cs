@@ -351,6 +351,37 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
             return response;
         }
+
+        public async Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText)
+        {
+            var ItemList = (from a in Context.ItemMasters
+                            join b in Context.UnitMasters on a.UnitType equals b.UnitId
+                            where a.IsDeleted == false
+                            select new ItemMasterModel
+                            {
+                                ItemId = a.ItemId,
+                                ItemName = a.ItemName,
+                                UnitType = a.UnitType,
+                                UnitTypeName = b.UnitName,
+                                PricePerUnit = a.PricePerUnit,
+                                IsWithGst = a.IsWithGst,
+                                Gstamount = a.Gstamount,
+                                Gstper = a.Gstper,
+                                Hsncode = a.Hsncode,
+                                IsApproved = a.IsApproved,
+                                CreatedOn = a.CreatedOn,
+                            });
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                searchText = searchText.ToLower();
+                ItemList = ItemList.Where(u =>
+                    u.ItemName.ToLower().Contains(searchText)
+                );
+            }
+
+            return ItemList;
+        }
     }
 }
 

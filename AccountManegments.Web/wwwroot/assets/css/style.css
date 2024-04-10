@@ -1616,3 +1616,12 @@ tr.active {
 .ac-shippingadd .ac-columns label{
     width:35%
 }
+
+/*.card.ac-invoice-total {
+    position: relative;
+    top: -24px;
+    left: 220px;
+}*/
+.row.ac-invoice-shippingadd {
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+}

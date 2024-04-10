@@ -46,5 +46,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? FullAddress { get; set; }
     }
 }

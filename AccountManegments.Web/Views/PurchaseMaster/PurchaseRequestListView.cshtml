@@ -5,6 +5,10 @@
     ViewData["Title"] = "PurchaseRequestListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<!-- CSS -->
+<link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+@* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Purchase Request</div>
@@ -159,11 +163,18 @@
                                     <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Item Name</label>
-                                    <select class="form-control" id="searchItemname">
-                                        <option value="">-- Select Item --</option>
+                                    <label for="searchItemname" class="form-label">Product Names</label>
+
+                                    <select id="searchItemname" class="single-select">
+                                        <option selected disabled value="">select Item</option>
                                     </select>
+
                                     <input type="hidden" id="txtItemName">
+
+                                   @*  <select class="form-control" id="searchItemname">
+                                        <option selected disabled value="">select Item</option>
+                                    </select>
+                                    <input type="hidden" id="txtItemName"> *@
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
 
@@ -214,6 +225,8 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+   @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    <script src="~/assets/js/form-select2.js"></script>
     <script src="~/moduls/purchaserequestscript.js"></script>
 }

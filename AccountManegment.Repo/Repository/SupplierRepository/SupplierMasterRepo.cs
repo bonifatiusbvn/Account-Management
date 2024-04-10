@@ -112,6 +112,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                 BankName = e.BankName,
                                 AccountNo = e.AccountNo,
                                 Iffccode = e.Iffccode,
+                                FullAddress = e.BuildingName + "-" + e.Area + "," + c.CityName + "," + s.StatesName + "-" + e.PinCode
                             }).First();
                 return Userdata;
             }
@@ -158,7 +159,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     {
                         case "suppliername":
                             SupplierList = SupplierList.Where(u => u.SupplierName.ToLower().Contains(searchText));
-                            break;                       
+                            break;
                         default:
                             break;
                     }
@@ -186,7 +187,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                 SupplierList = SupplierList.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
                                 SupplierList = SupplierList.OrderByDescending(u => u.CreatedOn);
-                            break;                       
+                            break;
                         default:
 
                             break;

@@ -14,6 +14,7 @@ GetPurchaseOrderList();
 GetPOList();
 checkAndDisableAddButton();
 GetAllUnitType();
+GetAllItemDetailsList();
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -482,14 +483,16 @@ function GetItemDetails() {
 
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
-        success: function (result) {
+        success: function (result) {debugger
 
             $('#searchItemname').empty();
 
             $.each(result, function (i, data) {
                 $('#searchItemname').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-            debugger
+            $.each(result, function (i, data) {
+                $('#Itemnamesearch').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
+            });
             $('#searchItemname').select2({
                 placeholder: "Select Product Name",
                 allowClear: true
@@ -497,6 +500,8 @@ function GetItemDetails() {
         }
     });
 }
+
+
 $(document).ready(function () {
     $('#searchItemname').change(function () {
         var Text = $("#searchItemname Option:Selected").text();
@@ -554,14 +559,10 @@ $(document).ready(function () {
     });
 });
 
-function SerchItemDetailsById() {
-
-    var GetItemId = {
-        ItemId: $('#searchItemname').val(),
-
-    }
+function SerchItemDetailsById(ItemId) {
+    
     var form_data = new FormData();
-    form_data.append("ITEMID", JSON.stringify(GetItemId));
+    form_data.append("ITEMID", JSON.stringify(ItemId));
 
 
     $.ajax({
@@ -599,11 +600,11 @@ $(document).ready(function () {
 
     today = yyyy + '-' + mm + '-' + dd;
     $("#orderdate").val(today);
-    $("#orderdate").prop("disabled", true);
+
 });
 
 function InsertMultiplePurchaseOrderDetails() {
-    
+
     var orderDetails = [];
     var AddressDetails = [];
     $(".product").each(function () {
@@ -623,7 +624,7 @@ function InsertMultiplePurchaseOrderDetails() {
         };
         orderDetails.push(objData);
     });
-        
+
     $(".ShippingAddress").each(function () {
         var shippingAddress = $(this);
         var addressData = {
@@ -652,7 +653,7 @@ function InsertMultiplePurchaseOrderDetails() {
     }
 
     var form_data = new FormData();
-    form_data.append("PODETAILS", JSON.stringify(PORequest));    
+    form_data.append("PODETAILS", JSON.stringify(PORequest));
 
     $.ajax({
         url: '/PurchaseMaster/InsertMultiplePurchaseOrderDetails',
@@ -692,16 +693,17 @@ function InsertMultiplePurchaseOrderDetails() {
     });
 }
 
-function checkAndDisableAddButton() {   
+function checkAndDisableAddButton() {
     if ($('#addNewlink tr').length > 1) {
         $('.add-address').prop('disabled', true);
     } else {
         $('.add-address').prop('disabled', false);
     }
-   
+
 }
 
 $(document).ready(function () {
+
     $('#txtPoSiteName').change(function () {
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
@@ -720,7 +722,8 @@ $(document).ready(function () {
     });
 
     var totalQuantity = 0;
-    $(".add-address").click(function () {debugger
+    $(".add-address").click(function () {
+
         checkAndDisableAddButton();
         var quantity = $("#quantity").val();
         var address = $("#address").text();
@@ -731,7 +734,7 @@ $(document).ready(function () {
             document.getElementById("spnSiteAddress").innerText = "Please Select Site!";
             return;
         }
-        debugger
+
         if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
             document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
             return;
@@ -748,6 +751,58 @@ $(document).ready(function () {
         $('.add-address').prop('disabled', false);
     });
 });
+
+$(document).ready(function () {
+
+    $('#txtSuppliername').change(function () {
+        getSupplierDetails($(this).val());
+    });
+});
+
+function getSupplierDetails(SupplierId) {
+
+    $.ajax({
+        url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            if (response) {
+                $('#txtSuppliermobile').val(response.mobile);
+                $('#txtSupplierGST').val(response.gstno);
+                $('#txtSupplierAddress').val(response.fullAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
+
+$(document).ready(function () {
+
+    $('#txtcompanyname').change(function () {
+        getCompanyDetails($(this).val());
+    });
+});
+function getCompanyDetails(CompanyId) {
+
+    $.ajax({
+        url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            if (response) {
+                $('#txtCompanyGstNo').val(response.gstno);
+                $('#companybillingaddressDetails').val(response.fullAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
 
 
 function UpdateMultiplePurchaseOrderDetails() {
@@ -908,7 +963,7 @@ function validateAndInsertPurchaseOrder() {
     if ($('#addNewlink tr').length == 0) {
         document.getElementById("spnitembutton").innerText = "Please Select Product!";
         isValid = false;
-    } 
+    }
 
     if (isValid) {
         InsertMultiplePurchaseOrderDetails();
@@ -1327,6 +1382,35 @@ function GetPOList() {
         .fail(function (error) {
             console.error(error);
         });
+}
+
+function GetAllItemDetailsList() {
+
+    var searchText = $('#mdProductSearch').val();
+
+    $.get("/PurchaseMaster/GetAllItemDetailsList", { searchText: searchText })
+        .done(function (result) {
+
+
+            $("#mdlistofItem").html(result);
+        })
+}
+
+function filterallItemTable() {
+    debugger
+    var searchText = $('#mdProductSearch').val();
+
+    $.ajax({
+        url: '/PurchaseMaster/GetAllItemDetailsList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+        },
+        success: function (result) {
+            $("#mdlistofItem").html(result);
+        },
+
+    });
 }
 
 function filterPOTable() {

@@ -2,9 +2,9 @@
 
 
 <tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product" data-product-id="@Model.ItemId">
-    <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
+    <td scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</td>
     <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtItemName" value="@Model.ItemName" readonly />
+        <p id="txtItemName" style="padding-top:5px !important;">@Model.ItemName</p>
         <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@Model.ItemId" />
         <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@Model.UnitType" />
     </td>
@@ -12,20 +12,33 @@
         <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@Model.Hsncode" readonly/>
     </td>
     <td class="text-start">
-        <div class="input-step">
-            <button type="button" class='minus btn btn-primary' id="minusbtn">–</button>
+        <div class="">
+            @* <button type="button" class='minus btn btn-primary' id="minusbtn">–</button> *@
             <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
-            <button type="button" class='plus btn btn-primary' id="plusbtn">+</button>
+          @*   <button type="button" class='plus btn btn-primary' id="plusbtn">+</button> *@
+          
+        </div>
+    </td>
+    <td class="text-start">
+        <div class="">
+               <select class="form-select">
+                <option>kgs</option>
+            </select>
         </div>
     </td>
     <td class="text-start">
         <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit" readonly />
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" readonly />
+        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" />
+        
     </td>
     <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" readonly />
+       
+        <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@Model.Gstamount" maxlength="2" />
+    </td>
+    <td class="text-start d-none"  >
+        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" />
         <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
     </td>
 
@@ -38,6 +51,7 @@
         <a id="remove" class="btn text-primary"><i class="lni lni-trash"></i></a>
     </td>
 </tr>
+
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js"></script>
 }

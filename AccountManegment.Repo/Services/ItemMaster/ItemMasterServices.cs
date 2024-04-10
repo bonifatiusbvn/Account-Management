@@ -62,5 +62,10 @@ namespace AccountManagement.Repository.Services.ItemMaster
         {
             return await ItemMaster.InsertItemDetailsFromExcel(itemDetailsList);
         }
+
+        public async Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText)
+        {
+            return await ItemMaster.GetAllItemDetailsList(searchText);
+        }
     }
 }
