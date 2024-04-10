@@ -482,7 +482,7 @@ function GetItemDetails() {
 
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
-        success: function (result) {
+        success: function (result) {debugger
 
             $('#searchItemname').empty();
 
@@ -497,6 +497,8 @@ function GetItemDetails() {
         }
     });
 }
+
+
 $(document).ready(function () {
     $('#searchItemname').change(function () {
         var Text = $("#searchItemname Option:Selected").text();

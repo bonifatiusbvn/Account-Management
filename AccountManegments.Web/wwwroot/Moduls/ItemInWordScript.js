@@ -87,12 +87,32 @@ function SelectItemInWordDetails(InwordId, element) {
         }
     });
 }
+//function GetItemDetails() {
+//    $.ajax({
+//        url: '/ItemMaster/GetItemNameList',
+//        success: function (result) {
+//            $.each(result, function (i, data) {
+//                $('#txtItemId').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+//            });
+//        }
+//    });
+//}
 function GetItemDetails() {
+
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
+            debugger
+
+            $('#txtItemId').empty();
+
             $.each(result, function (i, data) {
-                $('#txtItemId').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
+                $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
+            });
+            debugger
+            $('#txtItemId').select2({
+                placeholder: "Select Product Name",
+                allowClear: true
             });
         }
     });
@@ -108,7 +128,7 @@ function GetUnitType() {
 
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
-        success: function (result) {
+        success: function (result) {debugger
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });

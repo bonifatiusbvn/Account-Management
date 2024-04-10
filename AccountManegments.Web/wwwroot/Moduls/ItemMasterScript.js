@@ -210,7 +210,6 @@ function validateAndCreateItem() {debugger
     var PricePerUnit = document.getElementById("txtPricePerUnit").value.trim();
     var GstAmount = document.getElementById("txtGstAmount").value.trim();
     var GstPerUnit = document.getElementById("txtGstPerUnit").value.trim();
-    var HSNCode = document.getElementById("txtHSNCode").value.trim();
 
     var isValid = true;
 
@@ -244,11 +243,6 @@ function validateAndCreateItem() {debugger
 
     if (GstPerUnit === "") {
         document.getElementById("spnGstPerUnit").innerText = "GstPer Unit is required.";
-        isValid = false;
-    }
-
-    if (HSNCode === "") {
-        document.getElementById("spnHSNCode").innerText = "Hsn Code is required.";
         isValid = false;
     }
 
