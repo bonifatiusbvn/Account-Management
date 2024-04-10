@@ -141,5 +141,24 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpPost]
+        [Route("UpdatetMultipleItemInWordDetails")]
+        public async Task<IActionResult> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var itemInword = await ItemInWord.UpdatetMultipleItemInWordDetails(UpdateInWordDetails);
+            if (itemInword.code == 200)
+            {
+                response.code = itemInword.code;
+                response.message = itemInword.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Updating Details!";
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

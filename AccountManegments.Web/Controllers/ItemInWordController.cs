@@ -132,13 +132,13 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ItemInWordModel SiteDetails = new ItemInWordModel();
+                ItemInWordMasterView ItemInWordDetails = new ItemInWordMasterView();
                 ApiResponseModel res = await APIServices.GetAsync("", "ItemInWord/GetItemInWordtDetailsById?InwordId=" + InwordId);
                 if (res.code == 200)
                 {
-                    SiteDetails = JsonConvert.DeserializeObject<ItemInWordModel>(res.data.ToString());
+                    ItemInWordDetails = JsonConvert.DeserializeObject<ItemInWordMasterView>(res.data.ToString());
                 }
-                return new JsonResult(SiteDetails);
+                return new JsonResult(ItemInWordDetails);
             }
             catch (Exception ex)
             {
@@ -228,7 +228,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = InsertDetails.CreatedBy,
                     ReceiverName = InsertDetails.ReceiverName,
                     VehicleNumber = InsertDetails.VehicleNumber,
-                    Date = DateTime.Now,
+                    Date = InsertDetails.Date,
                     CreatedOn = DateTime.Now,
                     DocumentLists = documentList,
                    
@@ -250,5 +250,61 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-    }
+        public async Task<IActionResult> UpdatetMultipleItemInWordDetails(List<IFormFile> DocDetails)
+        {
+            try
+            {
+                var inWordDetails = HttpContext.Request.Form["UpdateItemInWord"];
+                var UpdateDetails = JsonConvert.DeserializeObject<ItemInWordMasterView>(inWordDetails);
+
+                List<ItemInWordDocumentModel> documentList = new List<ItemInWordDocumentModel>();
+
+                if (DocDetails != null && DocDetails.Count > 0)
+                {
+                    foreach (var file in DocDetails)
+                    {
+                        var path = Environment.WebRootPath;
+                        var filepath = "Content/InWordDocument/" + file.FileName;
+                        var fullpath = Path.Combine(path, filepath);
+                        UploadFile(file, fullpath);
+
+                        var document = new ItemInWordDocumentModel
+                        {
+                            DocumentName = file.FileName,
+                        };
+                        documentList.Add(document);
+                    }
+                }
+
+                var ItemInwordDetails = new ItemInWordMasterView()
+                {  
+                    InwordId = UpdateDetails.InwordId,
+                    ItemId = UpdateDetails.ItemId,
+                    Item = UpdateDetails.Item,
+                    UnitTypeId = UpdateDetails.UnitTypeId,
+                    Quantity = UpdateDetails.Quantity,
+                    ReceiverName = UpdateDetails.ReceiverName,
+                    VehicleNumber = UpdateDetails.VehicleNumber,
+                    Date = UpdateDetails.Date,
+                    DocumentLists = documentList,
+
+                };
+
+                ApiResponseModel postuser = await APIServices.PostAsync(ItemInwordDetails, "ItemInWord/UpdatetMultipleItemInWordDetails");
+
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+    }    
 }

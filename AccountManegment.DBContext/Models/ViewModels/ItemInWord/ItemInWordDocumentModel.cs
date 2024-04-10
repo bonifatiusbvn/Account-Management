@@ -9,7 +9,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
 {
     public class ItemInWordDocumentModel
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         public Guid? RefInWordId { get; set; }
 

@@ -559,10 +559,13 @@ $(document).ready(function () {
     });
 });
 
-function SerchItemDetailsById(ItemId) {
+function SerchItemDetailsById(Id) {
+    var Item = {
+        ItemId: Id,
+    }
 
     var form_data = new FormData();
-    form_data.append("ITEMID", JSON.stringify(ItemId));
+    form_data.append("ITEMID", JSON.stringify(Item));
 
 
     $.ajax({
@@ -711,46 +714,104 @@ $(document).ready(function () {
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
-                $('#address').empty().append(
-                    '<td>' + result.address + ' , ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</td>'
-                );
+                $('#txtmdAddress').val(result.address + ' , ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode);
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching company details:", error);
             }
         });
     });
-
-    var totalQuantity = 0;
-    $(".add-address").click(function () {
-
-        checkAndDisableAddButton();
-        var quantity = $("#quantity").val();
-        var address = $("#address").text();
-        var ItemQuantity = parseInt($("#txtproductquantity").val());
-
-        if (quantity <= 0 || isNaN(quantity) || address.trim() === "") {
-            document.getElementById("spnShippingQuantity").innerText = "Please Enter Quantity!";
-            document.getElementById("spnSiteAddress").innerText = "Please Select Site!";
-            return;
-        }
-
-        if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
-            document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
-            return;
-        }
-
-        totalQuantity += parseInt(quantity);
-
-        var newRow = "<tr class='ShippingAddress'><td id='shippingaddress'>" + address + "</td><td id='shippingquantity'>" + quantity + "</td><td><a id = 'removeAddress' class='btn text-primary'><i class='lni lni-trash'></i></a></td></tr>";
-        $("#dvshipping table tbody").append(newRow);
-    });
-
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-address').prop('disabled', false);
     });
 });
+
+var totalQuantity = 0;
+
+function AddShippingAddress() {debugger
+    var quantity = $("#txtmdqty").val();
+    var address = $("#txtmdAddress").val();
+    var ItemQuantity = parseInt($("#txtproductquantity").val());
+    var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
+
+
+    if (quantity <= 0 || isNaN(quantity) || address.trim() === "") {
+        document.getElementById("spnShippingQuantity").innerText = "Please Enter Quantity!";
+        document.getElementById("spnSiteAddress").innerText = "Please Select Site!";
+        return;
+    }
+
+    if (isNaN(ItemQuantity)) {
+        document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
+        return;
+    }
+
+    if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {debugger
+        document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
+        return;
+    }
+    checkAndDisableAddButton();
+    totalQuantity += parseInt(quantity);
+
+    var newRow = String;
+
+    if (rowcount == 1) {
+        newRow = '<div class="row ac-invoice-shippingadd">' +
+            '<div class="col-2 col-sm-2">' +
+            '<label id="lblshprownum1">' + rowcount + '</label>' +
+            '</div>' +
+            '<div class="col-5 col-sm-5">' +
+            '<p id="pshAddress1">' + address + '</p>' +
+            '</div>' +
+            '<div class="col-3 col-sm-3">' +
+            '<p id="pQty">' + quantity + '</p>' +
+            '</div>' +
+            '</div>';
+    } else {
+        newRow = '<div class="row ac-invoice-shippingadd">' +
+            '<div class="col-2 col-sm-2">' +
+            '<label id="lblshprownum1">' + rowcount + '</label>' +
+            '</div>' +
+            '<div class="col-5 col-sm-5">' +
+            '<p id="pshAddress1">' + address + '</p>' +
+            '</div>' +
+            '<div class="col-3 col-sm-3">' +
+            '<p id="pQty">' + quantity + '</p>' +
+            '</div>' +
+            '<div class="col-2 col-sm-2">' +
+            '<a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
+            '</div>' +
+            '</div>';
+    }
+
+    AddShippingAddressRow(newRow, address);
+}
+
+function AddShippingAddressRow(newRow, address) {debugger
+    var isDuplicate = false;
+
+    $('.Address').each(function () {debugger
+        var existingProductId = $(this).text().trim();
+        if (existingProductId === address) {
+            isDuplicate = true;
+            return false;
+        }
+    });
+
+    if (!isDuplicate) {debugger
+        $('#dvshippingAdd').append(newRow);
+    } else {
+        Swal.fire({
+            title: "Address already added!",
+            text: "The selected Address is already added.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        });
+    }
+}
+
 
 $(document).ready(function () {
 
@@ -1094,7 +1155,7 @@ function updateProductTotalAmount() {
         var totalGst = (productPrice * quantity * gst) / 100;
         var totalAmount = productPrice * quantity;
 
-        row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
+        row.find("#txtgstAmount").val(totalGst.toFixed(2));
         row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
     });
 }
@@ -1122,7 +1183,7 @@ function updateTotals() {
     $(".product").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
-        var gst = parseFloat(row.find("#txtproductamountwithGST").val());
+        var gst = parseFloat(row.find("#txtgstAmount").val());
 
         totalSubtotal += subtotal;
         totalGst += gst;
