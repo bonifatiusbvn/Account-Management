@@ -65,7 +65,7 @@
 
                                                                 <label for="" class="form-label ">Mobile No</label>
 
-                                                                <input type="text" id="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" />
+                                                                <input type="text" id="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" readonly/>
                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -73,7 +73,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label for="" class="form-label ">Address</label>
-                                                                <input type="text" id="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" />
+                                                                <input type="text" id="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" readonly/>
                                                                 <span id="spnsuppliername" class="text-danger"></span>
 
                                                             </div>
@@ -81,7 +81,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" readonly/>
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -133,14 +133,14 @@
 
                                                                 <label for="" class="form-label ">Billing Address</label>
                                                                 <input type="text" id="companybillingaddressDetails" value="@Model.BillingAddress" class="form-control" placeholder="Billing Address" />
-                                                                <span id="spnsuppliername" class="text-danger"></span>
+                                                                <span id="spnbillingaddress" class="text-danger"></span>
 
                                                             </div>
 
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" readonly/>
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -240,7 +240,7 @@
                                                     <div class="col-lg-12 col-sm-12">
                                                         <div class="input-group mb-3">
                                                             <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
-                                                            <input type="text" class="form-control" id="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule">
+                                                            <input type="text" class="form-control" id="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" >
                                                         </div>
                                                         <span id="spnDeliverySchedule" class="text-danger"></span>
                                                     </div>
@@ -313,9 +313,11 @@
                                             </a>
                                             <span id="spnshipping" style="color:red;"></span>
                                         </h5>
-
-
                                         <div class="card-body Address" id="dvshippingAdd">
+                                            @if (Model.AddressList != null)
+                                            {
+                                                @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -323,10 +325,7 @@
 
                             <div id="dvshipping" class="col-lg-6">
                                 <div class="row">
-                                    @if (Model.AddressList != null)
-                                    {
-                                        @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                    }
+                                   
                                 </div>
                             </div>
                             <!--end row-->
@@ -340,7 +339,7 @@
                                         }
                                         else
                                         {
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                         }
                                     </div>
                                 </div>

@@ -988,12 +988,12 @@ function deleteItemDetails(POId) {
     });
 }
 
-function validateAndInsertPurchaseOrder() {
+function validateAndInsertPurchaseOrder() {debugger
 
     var deliveryschedule = document.getElementById("txtDeliverySchedule").value.trim();
     var contactPerson = document.getElementById("txtContectPerson").value.trim();
     var MobileNo = document.getElementById("txtMobileNo").value.trim();
-    var supplierName = document.getElementById("txtSupplierAddress").value.trim();
+    var supplierName = document.getElementById("txtSuppliername").value.trim();
     var companyName = document.getElementById("companybillingaddressDetails").value.trim();
 
     var isValid = true;
@@ -1001,37 +1001,60 @@ function validateAndInsertPurchaseOrder() {
     if (deliveryschedule === "") {
         document.getElementById("spnDeliverySchedule").innerText = "Enter Delievery Schedule";
         isValid = false;
+    } else {
+        document.getElementById("spnDeliverySchedule").innerText = "";
     }
+
     if (contactPerson === "") {
         document.getElementById("spnContectPerson").innerText = "Enter ContectPerson Name";
         isValid = false;
+    } else {
+        document.getElementById("spnContectPerson").innerText = "";
     }
+
     if (MobileNo === "") {
         document.getElementById("spnMobileNo").innerText = "Enter Mobile Number";
         isValid = false;
     } else if (!isValidPhoneNo(MobileNo)) {
         document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
         isValid = false;
+    }else {
+        document.getElementById("spnMobileNo").innerText = "";
     }
+
     if ($('#addNewlink tr').length == 0) {
         document.getElementById("spnitembutton").innerText = "Please Select Product!";
         isValid = false;
+    } else {
+        document.getElementById("spnitembutton").innerText = "";
     }
-    if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+
+    if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {debugger
         document.getElementById("spnshipping").innerText = "Please Select Shipping Address!";
         isValid = false;
+    } else {
+        document.getElementById("spnshipping").innerText = "";
     }
+
     if (supplierName === "") {
         document.getElementById("spnsuppliername").innerText = "Please Select Supplier!";
         isValid = false;
+    } else {
+        document.getElementById("spnsuppliername").innerText = "";
     }
+
     if (companyName === "") {
-        document.getElementById("spncompanyname").innerText = "Please Select Company!";
+        document.getElementById("spnbillingaddress").innerText = "Please Enter Billing Address!";
         isValid = false;
     }
 
-    if (isValid) {
-        InsertMultiplePurchaseOrderDetails();
+    if (isValid) {debugger
+        if ($("#RefPOid").val() == '') {
+            InsertMultiplePurchaseOrderDetails();
+        }
+        else {
+            UpdateMultiplePurchaseOrderDetails();
+        }
     }
 }
 
