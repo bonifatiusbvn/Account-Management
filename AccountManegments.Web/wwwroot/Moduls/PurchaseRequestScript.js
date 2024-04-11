@@ -16,7 +16,6 @@ checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
 function AllPurchaseRequestListTable() {
-    debugger
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
@@ -483,7 +482,6 @@ function GetItemDetails() {
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
-            debugger
 
             $('#searchItemname').empty();
 
@@ -705,6 +703,8 @@ function checkAndDisableAddButton() {
 
 }
 
+
+
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
@@ -714,7 +714,7 @@ $(document).ready(function () {
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
-                $('#txtmdAddress').val(result.address + ' , ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode);
+                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching company details:", error);
@@ -729,10 +729,11 @@ $(document).ready(function () {
 
 var totalQuantity = 0;
 
-function AddShippingAddress() {debugger
+function AddShippingAddress() {
     var quantity = $("#txtmdqty").val();
     var address = $("#txtmdAddress").val();
-    var ItemQuantity = parseInt($("#txtproductquantity").val());
+    var ItemQuantity = $("#TotalProductQuantity").text();
+    
     var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
 
 
@@ -742,12 +743,12 @@ function AddShippingAddress() {debugger
         return;
     }
 
-    if (isNaN(ItemQuantity)) {
+    if (ItemQuantity === "") {
         document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
         return;
     }
 
-    if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {debugger
+    if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
         document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
         return;
     }
@@ -788,10 +789,10 @@ function AddShippingAddress() {debugger
     AddShippingAddressRow(newRow, address);
 }
 
-function AddShippingAddressRow(newRow, address) {debugger
+function AddShippingAddressRow(newRow, address) {
     var isDuplicate = false;
 
-    $('.Address').each(function () {debugger
+    $('.Address').each(function () {
         var existingProductId = $(this).text().trim();
         if (existingProductId === address) {
             isDuplicate = true;
@@ -799,7 +800,7 @@ function AddShippingAddressRow(newRow, address) {debugger
         }
     });
 
-    if (!isDuplicate) {debugger
+    if (!isDuplicate) {
         $('#dvshippingAdd').append(newRow);
     } else {
         Swal.fire({
@@ -1179,20 +1180,24 @@ function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
+    var TotalItemQuantity = 0;
 
     $(".product").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
 
         totalSubtotal += subtotal;
         totalGst += gst;
         totalAmount += subtotal + gst;
+        TotalItemQuantity += totalquantity;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
+    $("#TotalProductQuantity").text(TotalItemQuantity);
 }
 
 var taxRate = .125,
@@ -1458,7 +1463,7 @@ function GetAllItemDetailsList() {
 }
 
 function filterallItemTable() {
-    debugger
+    
     var searchText = $('#mdProductSearch').val();
 
     $.ajax({
