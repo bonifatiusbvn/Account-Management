@@ -9,7 +9,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <style>
     .disabled {
-        opacity: 0.5; 
+        opacity: 0.5;
         pointer-events: none;
     }
 </style>
@@ -157,7 +157,6 @@
 
                             <!---- Product Details ---->
                             <div class="row">
-
                             </div>
                             <div class="card">
                                 <div class="row p-3">
@@ -167,9 +166,10 @@
                                         @if (Model.ItemList != null)
                                         {
                                             <a class="disabled">
-                                                 <i class="lni lni-circle-plus"></i>
-                                             </a>
-                                        } else
+                                                <i class="lni lni-circle-plus"></i>
+                                            </a>
+                                        }
+                                        else
                                         {
                                             <a class="font-22" onclick="fn_OpenAddproductmodal()">
                                                 <i class="lni lni-circle-plus"></i>
@@ -197,19 +197,20 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            
-                                                @if (Model.ItemList != null)
-                                                {
+
+                                            @if (Model.ItemList != null)
+                                            {
                                                 <tbody id="addNewlink" class="disabled">
                                                     @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
                                                 </tbody>
-                                                }else
-                                                {
-                                                <tbody id="addNewlink"> 
+                                            }
+                                            else
+                                            {
+                                                <tbody id="addNewlink">
                                                 </tbody>
-                                                }
+                                            }
 
-                                           
+
 
                                         </table>
 
@@ -223,9 +224,10 @@
 
                                                     <th id="TotalProductQuantity"></th>
                                                     <th></th>
+                                                    <th id="TotalProductPrice"></th>
                                                     <th></th>
-                                                    <th></th>
-                                                    <th></th>
+                                                    <th id="TotalProductGST"></th>
+                                                    <th id="TotalProductAmount"></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -433,7 +435,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

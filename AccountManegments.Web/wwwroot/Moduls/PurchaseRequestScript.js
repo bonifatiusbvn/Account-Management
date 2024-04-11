@@ -1171,7 +1171,7 @@ function updateProductTotalAmount() {
         var quantity = parseInt(row.find("#txtproductquantity").val());
         var gst = parseFloat(row.find("#txtgst").val());
         var totalGst = (productPrice * quantity * gst) / 100;
-        var totalAmount = productPrice * quantity;
+        var totalAmount = productPrice * quantity + totalGst;
 
         row.find("#txtgstAmount").val(totalGst.toFixed(2));
         row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
@@ -1201,13 +1201,13 @@ function updateTotals() {
 
     $(".product").each(function () {
         var row = $(this);
-        var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
+        var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
 
-        totalSubtotal += subtotal;
+        totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount += subtotal + gst;
+        totalAmount += totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
     });
 
@@ -1215,6 +1215,9 @@ function updateTotals() {
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
+    $("#TotalProductPrice").html(totalSubtotal);
+    $("#TotalProductGST").html(totalGst.toFixed(2));
+    $("#TotalProductAmount").html(totalAmount);
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();
