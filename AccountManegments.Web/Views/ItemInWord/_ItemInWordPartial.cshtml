@@ -9,13 +9,19 @@
         <td>@item.Item</td>
         <td>@item.Quantity</td>
         <td>
-            @if (item.IsApproved == true)
+            @if (_userSession.UserRole == 3)
             {
-                <span class="badge bg-light-success text-success w-100">Approved</span>
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.InwordId" @if (item.IsApproved ?? false)
+                {
+                    <text>checked</text>
+                } onclick="ItemInWordIsApproved('@item.InwordId')" />
             }
             else
             {
-                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                <input class="form-check-input" type="checkbox" disabled id="flexSwitchCheckChecked_@item.InwordId" @if (item.IsApproved ?? false)
+                {
+                    <text>checked</text>
+                }/>
             }
         </td>
         <td>

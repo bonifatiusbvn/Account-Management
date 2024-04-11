@@ -85,6 +85,14 @@ function DisplaySiteDetails(SiteId) {
     
             setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
 
+            if (response.address == response.shippingAddress ) {
+                $('#hideShippingAddress').prop('checked', true); 
+                $('#shippingAddressFields').hide(); 
+            } else {
+                $('#hideShippingAddress').prop('checked', false); 
+                $('#shippingAddressFields').show(); 
+            }
+
             var button = document.getElementById("btnSite");
             if ($('#txtSiteid').val() != '') {
                 button.textContent = "Update";
@@ -444,13 +452,13 @@ function ActiveDecativeSite(SiteId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("SiteId", SiteId);
-            debugger
+           
             $.ajax({
                 url: '/SiteMaster/ActiveDeactiveSite?SiteId=' + SiteId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
-                success: function (Result) {debugger
+                success: function (Result) {
                     Swal.fire({
                         title: isChecked ? "Active!" : "DeActive!",
                         text: Result.message,
