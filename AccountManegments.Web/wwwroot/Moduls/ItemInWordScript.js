@@ -188,11 +188,14 @@ function AddItemInWordDetails() {
 function ClearItemInWordTextBox() {
     resetErrorsMessages();
     $('#txtItemName').val('');
+    $('#txtItemInWordid').val('');
+    $('#txtItemId').val('');
     $('#txtUnitType').val('');
     $('#txtQuantity').val('');
     $('#txtDocument').val('');
     $('#txtVehicleNumber').val('');
     $('#txtReceiverName').val('');
+    $('#addNewImage').empty();
     var button = document.getElementById("btnitemInWord");
     if ($('#txtItemInWordid').val() == '') {
         button.textContent = "Create";
@@ -279,12 +282,15 @@ function EditItemInWordDetails(InwordId) {
             $('#txtIteminwordDate').val(formattedDate);
 
             if (response.documentLists && response.documentLists.length > 0) {
+                var documentNames = "";
                 $.each(response.documentLists, function (index, document) {
-                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id +"'><td><div><span onclick='CancelImage()' class='close btn-sm btn-outline-danger'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
+                    documentNames += document.documentName + ";";
+                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id + "'><td><div id='showimages'><span onclick='CancelImage()' class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
                     $("#addNewImage").append(newRow);
-                    additionalFiles.push({ id: document.id,file: document }); 
                 });
+                $("#txtDocumentName").val(documentNames);
             }
+
             var button = document.getElementById("btnitemInWord");
             if ($('#txtItemInWordid').val() != '') {
                 button.textContent = "Update";
@@ -451,9 +457,12 @@ function CancelImage() {
         var documentName = row.find('img').attr('src').split('/').pop();
         row.remove();
 
-        additionalFiles = additionalFiles.filter(function (item) {
-            return item.file.documentName !== documentName;
+        // Remove the document name from the txtDocumentName input
+        var currentDocumentNames = $("#txtDocumentName").val().split(';');
+        var updatedDocumentNames = currentDocumentNames.filter(function (name) {
+            return name !== documentName;
         });
+        $("#txtDocumentName").val(updatedDocumentNames.join(';'));
     });
 }
 function showpictures() {
@@ -536,6 +545,7 @@ function InsertMultipleItemInWordDetails() {
 
 function UpdateMultipleItemInWordDetails() {
     debugger
+    var documentName = $("#txtDocumentName").val();
     var UpdateItemInWord = {
         InwordId: $('#txtItemInWordid').val(),
         UnitTypeId: $("#txtUnitType").val(),
@@ -545,21 +555,17 @@ function UpdateMultipleItemInWordDetails() {
         VehicleNumber: $("#txtVehicleNumber").val(),
         ReceiverName: $("#txtReceiverName").val(),
         Date: $("#txtIteminwordDate").val(),
+        DocumentName: documentName,
     };
 
     var form_data = new FormData();
     form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 
-    //if (additionalFiles.length > 0) {
-    //    for (var i = 0; i < additionalFiles.length; i++) {
-    //        debugger
-    //        form_data.append("DocDetails", additionalFiles[i]);
-    //    }
-    //}
     if (additionalFiles.length > 0) {
-        additionalFiles.forEach(function (fileData) {
-            form_data.append("DocDetails", fileData.file); 
-        });
+        for (var i = 0; i < additionalFiles.length; i++) {
+            debugger
+            form_data.append("DocDetails", additionalFiles[i]);
+        }
     }
 
     $.ajax({

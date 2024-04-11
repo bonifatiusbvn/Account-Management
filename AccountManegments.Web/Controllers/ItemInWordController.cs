@@ -286,6 +286,7 @@ namespace AccountManegments.Web.Controllers
                     ReceiverName = UpdateDetails.ReceiverName,
                     VehicleNumber = UpdateDetails.VehicleNumber,
                     Date = UpdateDetails.Date,
+                    DocumentName= UpdateDetails.DocumentName,
                     DocumentLists = documentList,
 
                 };

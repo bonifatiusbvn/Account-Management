@@ -111,7 +111,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 {
                     searchText = searchText.ToLower();
                     ItemInWordList = ItemInWordList.Where(u =>
-                        u.Item.ToLower().Contains(searchText)||
+                        u.Item.ToLower().Contains(searchText) ||
                         u.Quantity.ToString().Contains(searchText)
                     );
                 }
@@ -195,12 +195,12 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                   }).First();
 
                 List<ItemInWordDocumentModel> documentList = (from a in Context.ItemInWordDocuments.Where(a => a.RefInWordId == itemInWordList.InwordId)
-                                                     select new ItemInWordDocumentModel
-                                                     {
-                                                         Id = a.Id,
-                                                         RefInWordId = a.RefInWordId,
-                                                         DocumentName = a.DocumentName,
-                                                     }).ToList();
+                                                              select new ItemInWordDocumentModel
+                                                              {
+                                                                  Id = a.Id,
+                                                                  RefInWordId = a.RefInWordId,
+                                                                  DocumentName = a.DocumentName,
+                                                              }).ToList();
                 itemInWordList.DocumentLists = documentList;
                 return itemInWordList;
             }
@@ -292,7 +292,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
-                }; 
+                };
                 Context.ItemInwords.Add(ItemDetails);
                 foreach (var item in firstItemInWordDetail.DocumentLists)
                 {
@@ -318,7 +318,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
 
         public async Task<ApiResponseModel> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails)
         {
-            ApiResponseModel response = new ApiResponseModel();     
+            ApiResponseModel response = new ApiResponseModel();
             try
             {
                 var ItemInWordData = await Context.ItemInwords.FindAsync(UpdateInWordDetails.InwordId);
@@ -340,17 +340,29 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.Date = UpdateInWordDetails.Date;
 
                     Context.ItemInwords.Update(ItemInWordData);
-                }                
-                var DocumentDetails = Context.ItemInWordDocuments.Where(a => a.RefInWordId == UpdateInWordDetails.InwordId) .ToList();
+                }
 
-                for (int i = 0; i < Math.Min(UpdateInWordDetails.DocumentLists.Count, DocumentDetails.Count); i++)
+                var documentNames = UpdateInWordDetails.DocumentName.Split(';');
+                var existingDocuments = Context.ItemInWordDocuments.Where(d => d.RefInWordId == UpdateInWordDetails.InwordId).ToList();
+                foreach (var existingDoc in existingDocuments)
                 {
-                    var item = UpdateInWordDetails.DocumentLists[i];
-                    var doc = DocumentDetails[i];
-
-                    doc.RefInWordId = UpdateInWordDetails.InwordId;
-                    doc.DocumentName = item.DocumentName;
-                    Context.ItemInWordDocuments.Update(doc);
+                    if (documentNames.Contains(existingDoc.DocumentName))
+                    {
+                        Context.ItemInWordDocuments.Update(existingDoc);
+                    }
+                    else
+                    {
+                        Context.ItemInWordDocuments.Remove(existingDoc);
+                    }
+                }
+                foreach (var item in UpdateInWordDetails.DocumentLists)
+                {
+                    var DocumentDetailS = new ItemInWordDocument()
+                    {
+                        RefInWordId = ItemInWordData.InwordId,
+                        DocumentName = item.DocumentName,
+                    };
+                    Context.ItemInWordDocuments.Add(DocumentDetailS);
                 }
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
@@ -359,9 +371,10 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating orders: " + ex.Message;
+                response.message = "Error updating item InWord: " + ex.Message;
             }
             return response;
         }
     }
 }
+

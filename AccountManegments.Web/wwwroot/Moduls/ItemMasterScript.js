@@ -109,7 +109,6 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function CreateItem() {
-
     var objData = {
         ItemName: $('#txtItemName').val(),
         UnitType: $('#txtUnitType').val(),
@@ -118,25 +117,47 @@ function CreateItem() {
         Gstamount: $('#txtGstAmount').val(),
         Gstper: $('#txtGstPerUnit').val(),
         Hsncode: $('#txtHSNCode').val(),
-    }
+    };
+
     $.ajax({
         url: '/ItemMaster/CreateItem',
-        type: 'post',
+        type: 'POST',
         data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 200) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemMaster/ItemListView';
+                });
+            } else {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemMaster/ItemListView';
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
             Swal.fire({
-                title: Result.message,
-                icon: 'success',
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/ItemMaster/ItemListView';
             });
-        },
-    })
+        }
+    });
 }
+
 function EditItemDetails(ItemId) {
 
     $.ajax({
