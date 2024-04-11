@@ -32,7 +32,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == ItemDetails.ItemName);
                     if (existingItem != null)
                     {
-                        response.code = 400;
+                        response.code = 403;
                         response.message = "ItemDetails Already Inserted";
                     }
                     else
@@ -234,7 +234,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         {
             try
             {
-                IEnumerable<ItemMasterModel> ItemName = Context.ItemMasters.ToList().Select(a => new ItemMasterModel
+                IEnumerable<ItemMasterModel> ItemName = Context.ItemMasters.Where(e => e.IsDeleted == false).ToList().Select(a => new ItemMasterModel
                 {
                     ItemId = a.ItemId,
                     ItemName = a.ItemName,

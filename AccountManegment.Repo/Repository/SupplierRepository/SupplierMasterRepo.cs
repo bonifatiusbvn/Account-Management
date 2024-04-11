@@ -206,7 +206,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
         {
             try
             {
-                IEnumerable<SupplierModel> SupplierName = Context.SupplierMasters.ToList().Select(a => new SupplierModel
+                IEnumerable<SupplierModel> SupplierName = Context.SupplierMasters.Where(e => e.IsDelete == false).ToList().Select(a => new SupplierModel
                 {
                     SupplierId = a.SupplierId,
                     SupplierName = a.SupplierName,

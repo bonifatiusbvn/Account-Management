@@ -9,20 +9,20 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Item InWord</div>
+    <div class="breadcrumb-title pe-3">Item Inward</div>
     <div class="ps-3 flex-grow-1">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0 align-items-center">
                 <li class="breadcrumb-item">
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Item InWord Details</li>
-            </ol>
+                <li class="breadcrumb-item active" aria-current="page">Item Inward Details</li>
+            </ol>   
         </nav>
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item InWord</button>
+            <button type="button" class="btn btn-primary" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
         </form>
     </div>
 </div>
@@ -140,7 +140,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItemInWord">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item InWord</h5>
+            <h5 class="m-0 me-2 text-white">Create Item Inward</h5>
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Date</label>
-                                    <input type="date" id="txtIteminwordDate" class="form-control" required />
+                                    <input type="date" id="txtIteminwordDate" class="form-control" required max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                                     <span id="spnDate" class="text-danger"></span>
                                 </div>
                                 <div class="container">
