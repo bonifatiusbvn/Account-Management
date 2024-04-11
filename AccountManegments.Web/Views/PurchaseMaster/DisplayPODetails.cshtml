@@ -46,11 +46,11 @@
                 </div>*@
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
-                        <div class="flex-grow-1 col-5 border">
+                        <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>@firstItem.CompanyName</b></p>
                             <p class="text-muted">@firstItem.BillingAddress</p>
                         </div>
-                        <div class="flex-grow-1 col-5">
+                        <div class="flex-grow-1 col-4">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Purchase Order Id</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
@@ -80,7 +80,7 @@
                 </div>
                 <div class="card-body" id="cardbody2" style="margin-top:-33px;">
                     <div class="d-flex">
-                        <div class="flex-grow-1 col-5 border">
+                        <div class="flex-grow-1 col-6 border">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
                                 <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
@@ -100,7 +100,7 @@
                                 }
                             </div>
                         </div>
-                        <div class="flex-grow-1 col-7 border"> 
+                        <div class="flex-grow-1 col-6 border"> 
                                 <label class="form-label">Terms of Delivery</label>
                                 <p class="text-muted"><b>2-3 Weeks</b></p>
                                 <p class="text-muted"><b>P & F-Inclusive</b></p>
@@ -116,16 +116,17 @@
                                 <tr class="table-active">
                                     <th class="border" scope="col">SRr.No.</th>
                                     <th class="border" scope="col">Product Details</th>
-                                    <th class="border" scope="col">HSN / SAC</th>
+                                 @*   <th class="border" scope="col">HSN / SAC</th>*@
                                     <th class="border" scope="col">Quantity</th>
                                     <th class="border" scope="col">Rate</th>
-                                    <th class="border" scope="col">per</th>
-                                    <th class="text-end border" text-end scope="col">Amount</th>
+                                    <th class="border" scope="col">GST</th>
+                                    <th class="border" scope="col">Amount</th>
                                 </tr>
                             </thead>
                             <tbody id="products-list">
                                 @{
                                     int index = 1;
+                                    decimal subtotal = 0;
                                 }
                                 @foreach (var item in Model.ItemList)
                                 {
@@ -136,45 +137,37 @@
                                             <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
                                             <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
                                         </td>
-                                        <td class="border" id="txtHSN"></td>
+                                        @*<td class="border" id="txtHSN"></td>*@
                                         <td class="border" id="txtquantity">@item.Quantity</td>
                                         <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
-                                        <td class="border" id="txtper">No.</td>
-                                        <td class="text-end border" id="txttotal">₹@item.ItemAmount</td>
+                                        <td class="border" id="txtgstpercentage">@item.GstPercentage%</td>
+                                        <td class="border" id="txttotal">₹@item.ItemAmount</td>
                                     </tr>
+                                    subtotal += item.ItemAmount;
                                     index++;
                                 }
                                 <tr>
                                     <td class="border"></td>
                                     <td class="border"></td>
+                                    @*<td class="border"></td>*@
                                     <td class="border"></td>
+                                    <td class="border">Sub Total</td>
                                     <td class="border"></td>
-                                    <td class="border">Total</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹</td>
+                                    <td class="border">₹@subtotal</td>
                                 </tr>
                                 <tr>
                                     <td class="border"></td>
                                     <td class="border"></td>
+                                    @*<td class="border"></td>*@
                                     <td class="border"></td>
+                                    <td class="border">Gst</td>
                                     <td class="border"></td>
-                                    <td class="border">SGST 9%</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹</td>
+                                    <td class="border">₹@Model.TotalGstamount</td>
                                 </tr>
                                 <tr>
                                     <td class="border"></td>
                                     <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border">CGST 9%</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹</td>
-                                </tr>
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
+                                    @*<td class="border"></td>*@
                                     <td class="border"></td>
                                     <td class="border">Round Off</td>
                                     <td class="border"></td>
@@ -182,10 +175,10 @@
                                 </tr>
                                 <tr>
                                     <td class="border"></td>
+                                    <td class="border"></td>
+                                  @*<td class="border"></td>*@
+                                    <td class="border"></td>
                                     <td class="border">Total</td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
                                     <td class="border"></td>
                                     <td class="border">₹@firstItem.TotalAmount</td>
                                 </tr>
