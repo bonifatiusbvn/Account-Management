@@ -106,7 +106,7 @@ namespace AccountManegments.Web.Controllers
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(item, "ItemMaster/AddItemDetails");
-                if (postUser.code == 200)
+                if (postUser!= null)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
                 }

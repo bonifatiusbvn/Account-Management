@@ -43,11 +43,12 @@ namespace AccountManagement.API.Controllers
         {
             ApiResponseModel response = new ApiResponseModel();
             var itemmaster = await ItemMaster.AddItemDetails(ItemDetails);
-            if (itemmaster.code == 200)
+            if (itemmaster != null)
             {
                 response.code = itemmaster.code;
                 response.message = itemmaster.message;
             }
+           
             return StatusCode(response.code, response);
         }
         [HttpPost]

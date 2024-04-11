@@ -32,7 +32,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == ItemDetails.ItemName);
                     if (existingItem != null)
                     {
-                        response.code = 400;
+                        response.code = 403;
                         response.message = "ItemDetails Already Inserted";
                     }
                     else
