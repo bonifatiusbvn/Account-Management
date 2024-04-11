@@ -165,6 +165,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      Area = b.Area,
                                      BuildingName = b.BuildingName,
                                      SupplierName = b.SupplierName,
+                                     SupplierGstno = b.Gstno,
+                                     SupplierMobile = b.Mobile,
                                      Cityname = e.CityName,
                                      Statename = f.StatesName,
                                      Pincode = b.PinCode,
@@ -182,10 +184,12 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      ContactNumber = a.ContactNumber,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
+                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName + "-" + b.PinCode
                                  }).First();
 
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
                                                      join b in Context.ItemMasters on a.ItemId equals b.ItemId
+                                                     join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
                                                      select new POItemDetailsModel
                                                      {
                                                          ItemName = a.Item,
@@ -194,8 +198,10 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          ItemAmount = a.ItemTotal,
                                                          Gstamount = a.Gst,
                                                          UnitType = a.UnitTypeId,
+                                                         UnitTypeName=c.UnitName,
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = b.Gstper,
+                                                         Hsncode = b.Hsncode,
                                                      }).ToList();
 
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
@@ -384,6 +390,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase Order Inserted Successfully";
+                response.data = PurchaseOrder.Id;
             }
             catch (Exception ex)
             {

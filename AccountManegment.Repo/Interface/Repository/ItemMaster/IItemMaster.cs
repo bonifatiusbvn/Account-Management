@@ -24,5 +24,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
         Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText);
 
         Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList);
+        Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId);
     }
 }

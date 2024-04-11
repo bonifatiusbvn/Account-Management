@@ -43,11 +43,12 @@ namespace AccountManagement.API.Controllers
         {
             ApiResponseModel response = new ApiResponseModel();
             var itemmaster = await ItemMaster.AddItemDetails(ItemDetails);
-            if (itemmaster.code == 200)
+            if (itemmaster != null)
             {
                 response.code = itemmaster.code;
                 response.message = itemmaster.message;
             }
+           
             return StatusCode(response.code, response);
         }
         [HttpPost]
@@ -153,6 +154,14 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<ItemMasterModel> ItemName = await ItemMaster.GetAllItemDetailsList(searchText);
             return Ok(new { code = 200, data = ItemName.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetItemDetailsListById")]
+        public async Task<IActionResult> GetItemDetailsListById(Guid ItemId)
+        {
+            IEnumerable<POItemDetailsModel> ItemList = await ItemMaster.GetItemDetailsListById(ItemId);
+            return Ok(new { code = 200, data = ItemList });
         }
     }
 }

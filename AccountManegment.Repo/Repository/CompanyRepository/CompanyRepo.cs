@@ -164,7 +164,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
         {
             try
             {
-                IEnumerable<CompanyModel> CompanyName = Context.Companies.ToList().Select(a => new CompanyModel
+                IEnumerable<CompanyModel> CompanyName = Context.Companies.Where(c => c.IsDelete == false).ToList().Select(a => new CompanyModel
                 {
                     CompanyId = a.CompanyId,
                     CompanyName = a.CompanyName,

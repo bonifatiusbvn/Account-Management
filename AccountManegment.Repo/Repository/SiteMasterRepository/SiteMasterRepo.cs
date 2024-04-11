@@ -37,14 +37,14 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     Area = SiteDetails.Area,
                     CityId = SiteDetails.CityId,
                     StateId = SiteDetails.StateId,
-                    Country= SiteDetails.Country,
+                    Country = SiteDetails.Country,
                     Pincode = SiteDetails.Pincode,
                     ShippingAddress = SiteDetails.ShippingAddress,
                     ShippingArea = SiteDetails.ShippingArea,
                     ShippingCityId = SiteDetails.ShippingCityId,
                     ShippingStateId = SiteDetails.ShippingStateId,
-                    ShippingCountry= SiteDetails.ShippingCountry,
-                    ShippingPincode= SiteDetails.ShippingPincode,
+                    ShippingCountry = SiteDetails.ShippingCountry,
+                    ShippingPincode = SiteDetails.ShippingPincode,
                     CreatedBy = SiteDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -116,39 +116,39 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             {
                 var SiteList = (from a in Context.Sites
                                 join b in Context.Cities on a.CityId equals b.CityId
-                               join c in Context.States on a.StateId equals c.StatesId
-                               join d in Context.Countries on a.Country equals d.CountryId
-                               join e in Context.Countries on a.ShippingCountry equals e.CountryId
-                               join f in Context.States on a.ShippingStateId equals f.StatesId
-                               join g in Context.Cities on a.ShippingCityId equals g.CityId
-                               select new SiteMasterModel
-                               {
-                                   SiteId = a.SiteId,
-                                   SiteName = a.SiteName,
-                                   IsActive = a.IsActive,
-                                   ContectPersonName = a.ContectPersonName,
-                                   ContectPersonPhoneNo = a.ContectPersonPhoneNo,
-                                   Address = a.Address,
-                                   Area = a.Area,
-                                   CityId = a.CityId,
-                                   CityName=b.CityName,
-                                   StateId = a.StateId,
-                                   StateName=c.StatesName,
-                                   Country = a.Country,
-                                   CountryName=d.CountryName,
-                                   Pincode = a.Pincode,
-                                   ShippingAddress = a.ShippingAddress,
-                                   ShippingArea = a.ShippingArea,
-                                   ShippingCityId = a.ShippingCityId,
-                                   ShippingCityName=g.CityName,
-                                   ShippingStateId = a.ShippingStateId,
-                                   ShippingStateName=f.StatesName,
-                                   ShippingCountry = a.ShippingCountry,
-                                   ShippingCountryName=e.CountryName,
-                                   ShippingPincode = a.ShippingPincode,
-                                   CreatedBy = a.CreatedBy,
-                                   CreatedOn = a.CreatedOn,
-                               });
+                                join c in Context.States on a.StateId equals c.StatesId
+                                join d in Context.Countries on a.Country equals d.CountryId
+                                join e in Context.Countries on a.ShippingCountry equals e.CountryId
+                                join f in Context.States on a.ShippingStateId equals f.StatesId
+                                join g in Context.Cities on a.ShippingCityId equals g.CityId
+                                select new SiteMasterModel
+                                {
+                                    SiteId = a.SiteId,
+                                    SiteName = a.SiteName,
+                                    IsActive = a.IsActive,
+                                    ContectPersonName = a.ContectPersonName,
+                                    ContectPersonPhoneNo = a.ContectPersonPhoneNo,
+                                    Address = a.Address,
+                                    Area = a.Area,
+                                    CityId = a.CityId,
+                                    CityName = b.CityName,
+                                    StateId = a.StateId,
+                                    StateName = c.StatesName,
+                                    Country = a.Country,
+                                    CountryName = d.CountryName,
+                                    Pincode = a.Pincode,
+                                    ShippingAddress = a.ShippingAddress,
+                                    ShippingArea = a.ShippingArea,
+                                    ShippingCityId = a.ShippingCityId,
+                                    ShippingCityName = g.CityName,
+                                    ShippingStateId = a.ShippingStateId,
+                                    ShippingStateName = f.StatesName,
+                                    ShippingCountry = a.ShippingCountry,
+                                    ShippingCountryName = e.CountryName,
+                                    ShippingPincode = a.ShippingPincode,
+                                    CreatedBy = a.CreatedBy,
+                                    CreatedOn = a.CreatedOn,
+                                });
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -292,23 +292,23 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 if (SiteId != null)
                 {
                     Context.Sites.Remove(siteDetails);
-                    response.message = "Site" + " " +  siteDetails.SiteName +" " +"is Removed Successfully!";
+                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is Removed Successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
-             return response;
+            return response;
         }
 
         public async Task<IEnumerable<SiteMasterModel>> GetSiteNameList()
         {
             try
             {
-                IEnumerable<SiteMasterModel> SiteName = Context.Sites.ToList().Select(a => new SiteMasterModel
+                IEnumerable<SiteMasterModel> SiteName = Context.Sites.Where(e => e.IsActive == false).ToList().Select(a => new SiteMasterModel
                 {
                     SiteId = a.SiteId,
                     SiteName = a.SiteName,

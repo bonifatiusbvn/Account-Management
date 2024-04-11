@@ -106,7 +106,7 @@ namespace AccountManegments.Web.Controllers
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(item, "ItemMaster/AddItemDetails");
-                if (postUser.code == 200)
+                if (postUser!= null)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
@@ -341,6 +341,27 @@ namespace AccountManegments.Web.Controllers
                 {
                     Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
                     Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemDetailsListById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<POItemDetailsModel>(ItemId.ToString());
+                List<POItemDetailsModel> Items = new List<POItemDetailsModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsListById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    //Items.RowNumber = Items.RowNumber;
                 }
                 return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
             }
