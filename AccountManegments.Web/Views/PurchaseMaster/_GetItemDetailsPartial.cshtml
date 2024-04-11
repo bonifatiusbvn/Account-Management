@@ -14,7 +14,14 @@
         </td>
         <td class="text-start">
             <div class="">
-                <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
+                @if (item.Quantity == 0)
+                {
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
+                }
+                else
+                {
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity">
+                }
             </div>
         </td>
         <td class="text-start">
@@ -22,7 +29,6 @@
                 <select class="form-control" id="txtPOUnitType_@item.ItemId">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
-
             </div>
         </td>
         <td class="text-start">
@@ -30,10 +36,8 @@
         </td>
         <td class="text-start">
             <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="2" readonly />
-
         </td>
         <td class="text-start">
-
             <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" maxlength="2" readonly/>
         </td>
         <td class="text-start">

@@ -15,6 +15,7 @@ GetPOList();
 checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
+updateTotals();
 
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
@@ -753,6 +754,8 @@ function AddShippingAddress() {
         document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
         return;
     }
+    checkAndDisableAddButton();
+    totalQuantity += parseInt(quantity);
 
     var isDuplicate = false;
 
