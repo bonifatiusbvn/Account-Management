@@ -7,7 +7,7 @@ var TotalPending = '';
 
 AllPurchaseRequestListTable();
 GetSiteDetails();
-GetCompanyDetails();
+GetCompanyName();
 GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
@@ -462,19 +462,17 @@ function EditPurchaseOrderDetails(Id) {
     });
 }
 
-function GetCompanyDetails() {
-    $('#txtcompanyname').empty();
+function GetCompanyName() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             if (result.length > 0) {
                 $.each(result, function (i, data) {
-                    $('#txtcompanyname').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                    $('#txtcompanyname').append('<option value=' + data.companyId + '>' + data.companyName + '</option>');
                 });
-            }
+                $('#txtcompanyname option:first').prop('selected', true);
 
-            if (_editCompanyselectedValue != "") {
-                $('#txtcompanyname').val(_editCompanyselectedValue);
+                $('#txtcompanyname').trigger('change');
             }
         }
     });
@@ -509,7 +507,7 @@ $(document).ready(function () {
     });
 });
 function GetSupplierDetails() {
-    $('#txtSuppliername').empty();
+
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
         success: function (result) {
@@ -518,9 +516,7 @@ function GetSupplierDetails() {
                     $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
                 });
             }
-            if (_editSupplierselectedValue != "") {
-                $('#txtSuppliername').val(_editSupplierselectedValue);
-            }
+
         }
     });
 }
@@ -537,9 +533,7 @@ $(document).ready(function () {
                     '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
                 );
             },
-            error: function (xhr, status, error) {
-                console.error("Error fetching company details:", error);
-            }
+
         });
     });
 
@@ -845,16 +839,18 @@ $(document).ready(function () {
     $('#txtcompanyname').change(function () {
         getCompanyDetails($(this).val());
     });
-});
-function getCompanyDetails(CompanyId) {
 
+
+});
+
+function getCompanyDetails(CompanyId) {
+    debugger
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
             if (response) {
                 $('#txtCompanyGstNo').val(response.gstno);
                 $('#companybillingaddressDetails').val(response.fullAddress);
@@ -864,6 +860,7 @@ function getCompanyDetails(CompanyId) {
         },
     });
 }
+
 
 
 function UpdateMultiplePurchaseOrderDetails() {
