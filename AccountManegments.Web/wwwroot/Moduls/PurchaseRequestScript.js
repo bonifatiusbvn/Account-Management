@@ -568,7 +568,7 @@ function SerchItemDetailsById(Id) {
 
 
     $.ajax({
-        url: '/ItemMaster/DisplayItemDetailsById',
+        url: '/ItemMaster/DisplayItemDetailsListById',
         type: 'Post',
         datatype: 'json',
         data: form_data,

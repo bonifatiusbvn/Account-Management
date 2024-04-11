@@ -57,6 +57,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? Statename { get; set; }
         public string? Pincode { get; set; }
         public string? ShippingAddress { get; set; }
+        public string? SupplierMobile { get; set; } 
+        public string? SupplierGstno { get; set; }
+        public string? SupplierFullAddress { get; set; }
         public List<ItemOrderlist>? ItemOrderlist { get; set; }
         public List<OrderShippingAddress>? ShippingAddressList { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }

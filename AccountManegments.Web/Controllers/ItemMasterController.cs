@@ -349,5 +349,26 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemDetailsListById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<POItemDetailsModel>(ItemId.ToString());
+                List<POItemDetailsModel> Items = new List<POItemDetailsModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsListById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    //Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

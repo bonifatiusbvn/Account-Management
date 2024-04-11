@@ -155,5 +155,13 @@ namespace AccountManagement.API.Controllers
             IEnumerable<ItemMasterModel> ItemName = await ItemMaster.GetAllItemDetailsList(searchText);
             return Ok(new { code = 200, data = ItemName.ToList() });
         }
+
+        [HttpGet]
+        [Route("GetItemDetailsListById")]
+        public async Task<IActionResult> GetItemDetailsListById(Guid ItemId)
+        {
+            IEnumerable<POItemDetailsModel> ItemList = await ItemMaster.GetItemDetailsListById(ItemId);
+            return Ok(new { code = 200, data = ItemList });
+        }
     }
 }
