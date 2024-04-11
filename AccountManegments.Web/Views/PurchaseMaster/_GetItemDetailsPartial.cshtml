@@ -1,26 +1,27 @@
-﻿@model AccountManagement.DBContext.Models.ViewModels.ItemMaster.ItemMasterModel
+﻿@model List<AccountManagement.DBContext.Models.ViewModels.ItemMaster.POItemDetailsModel>
 
-
-<tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product" data-product-id="@Model.ItemId">
-    <td scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</td>
-    <td class="text-start">
-        <p id="txtItemName" style="padding-top:5px !important;">@Model.ItemName</p>
-        <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@Model.ItemId" />
-        <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@Model.UnitType" />
-    </td>
-    <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@Model.Hsncode" readonly />
-    </td>
-    <td class="text-start">
-        <div class="">
-            <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
-        </div>
-    </td>
-    <td class="text-start">
-        <div class="">
-            <select class="form-control" id="txtPOUnitType_@Model.ItemId">
-                <option value="@Model.UnitType">@Model.UnitTypeName</option>
-            </select>
+@foreach(var item in Model)
+{
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId">
+        <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
+        <td class="text-start">
+            <p id="txtItemName" style="padding-top:5px !important;">@item.ItemName</p>
+            <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@item.ItemId" />
+            <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@item.UnitType" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly />
+        </td>
+        <td class="text-start">
+            <div class="">
+                <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="">
+                <select class="form-control" id="txtPOUnitType_@item.ItemId">
+                    <option value="@item.UnitType">@item.UnitTypeName</option>
+                </select>
 
         </div>
     </td>
@@ -30,22 +31,22 @@
     <td class="text-start">
         <input type="text" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" />
 
-    </td>
-    <td class="text-start">
+        </td>
+        <td class="text-start">
 
-        <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@Model.Gstamount" maxlength="2" readonly />
-    </td>
+            <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" maxlength="2" readonly/>
+        </td>
+        <td class="text-start">
+            <div>
+                <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" value="@item.ItemAmount" readonly />
+            </div>
+        </td>
+        <td class="product-removal">
+            <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+        </td>
+    </tr>
+}
 
-    <td class="text-start">
-        <div>
-            <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
-        </div>
-    </td>
-    <td class="product-removal">
-        <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
-    </td>
-
-</tr>
 
 @section Scripts {
 

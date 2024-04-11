@@ -383,9 +383,47 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             return ItemList;
         }
 
-        public Task<List<ItemMasterModel>> GetItemDetailsListById(Guid ItemId)
+        public async Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var ItemList = new List<POItemDetailsModel>();
+                var data =await (from a in Context.ItemMasters.Where(x => x.ItemId == ItemId)
+                            join b in Context.UnitMasters on a.UnitType equals b.UnitId
+                            select new POItemDetailsModel
+                            {
+                                ItemId = a.ItemId,
+                                ItemName = a.ItemName,
+                                UnitType = a.UnitType,
+                                UnitTypeName = b.UnitName,
+                                PricePerUnit = a.PricePerUnit,
+                                Gstamount = a.Gstamount,
+                                GstPercentage = a.Gstper,
+                                Hsncode = a.Hsncode,
+                            }).ToListAsync();
+                if(data != null)
+                {
+                    foreach(var item in data)
+                    {
+                        ItemList.Add(new POItemDetailsModel()
+                        {
+                            ItemId = item.ItemId,
+                            ItemName = item.ItemName,
+                            UnitType = item.UnitType,
+                            UnitTypeName = item.UnitTypeName,
+                            PricePerUnit = item.PricePerUnit,
+                            Gstamount = item.Gstamount,
+                            GstPercentage = item.GstPercentage,
+                            Hsncode = item.Hsncode,
+                        });
+                    }
+                }
+                return ItemList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -2,13 +2,20 @@
 
 @foreach (var item in Model)
 {
-    <tr class="ShippingAddress">
-        <td id='shippingaddress'>@item.Address</td>
-        <td id='shippingquantity'>@item.Quantity</td>
-        <td>
-            <a id="removeAddress" class="btn text-primary"><i class="lni lni-trash"></i></a>
-        </td>
-    </tr>
+    <div class="row ac-invoice-shippingadd ShippingAddress"> 
+        <div class="col-2 col-sm-2">
+            <label id="lblshprownum1"></label>
+        </div>
+        <div class="col-5 col-sm-5">
+            <p id="shippingaddress">@item.Address</p>
+        </div>
+        <div class="col-3 col-sm-3">
+            <p id="shippingquantity">@item.Quantity</p>
+        </div>
+        <div class="col-2 col-sm-2">
+            <a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>
+        </div>
+    </div>
 }
 
 @section Scripts {
