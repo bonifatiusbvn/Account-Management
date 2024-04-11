@@ -172,6 +172,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      Pincode = b.PinCode,
                                      ToCompanyId = a.ToCompanyId,
                                      CompanyName = c.CompanyName,
+                                     CompanyGstno = c.Gstno,
                                      TotalAmount = a.TotalAmount,
                                      Description = a.Description,
                                      DeliveryShedule = a.DeliveryShedule,
@@ -430,15 +431,39 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.ContactNumber = PurchaseOrderDetails.ContactNumber;
                 Context.PurchaseOrders.Update(PurchaseOrder);
 
-                foreach (var item in PurchaseOrderDetails.ShippingAddressList)
+                foreach (var address in PurchaseOrderDetails.ShippingAddressList)
                 {
-                    var DeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.UnitTypeId == PurchaseOrderDetails.UnitTypeId);
+                    var existingDeliveryAddress = Context.PodeliveryAddresses.FirstOrDefault(e => e.Poid == PurchaseOrderDetails.Id && e.Address == address.ShippingAddress);
 
-                    DeliveryAddress.Poid = PurchaseOrderDetails.Id;
-                    DeliveryAddress.Address = item.ShippingAddress;
-                    DeliveryAddress.Quantity = item.ShippingQuantity;
-                    Context.PodeliveryAddresses.Update(DeliveryAddress);
+                    if (existingDeliveryAddress != null)
+                    {
+                        existingDeliveryAddress.Address = address.ShippingAddress;
+                        existingDeliveryAddress.Quantity = address.ShippingQuantity;
+                        existingDeliveryAddress.UnitTypeId = PurchaseOrderDetails.UnitTypeId;
+
+                        Context.PodeliveryAddresses.Update(existingDeliveryAddress);
+                    }
+                    else
+                    {
+                        var newDeliveryAddress = new PodeliveryAddress()
+                        {
+                            Poid = PurchaseOrderDetails.Id,
+                            Address = address.ShippingAddress,
+                            Quantity = address.ShippingQuantity,
+                            UnitTypeId = PurchaseOrderDetails.UnitTypeId,
+                        };
+
+                        Context.PodeliveryAddresses.Add(newDeliveryAddress);
+                    }
                 }
+
+                var purchaseOrderShippingAddresses = PurchaseOrderDetails.ShippingAddressList.Select(a => a.ShippingAddress).ToList();
+
+                var deliveryAddressesToRemove = Context.PodeliveryAddresses
+                    .Where(e => e.Poid == PurchaseOrderDetails.Id && !purchaseOrderShippingAddresses.Contains(e.Address))
+                    .ToList();
+
+                Context.PodeliveryAddresses.RemoveRange(deliveryAddressesToRemove);
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
