@@ -1,6 +1,6 @@
 ﻿@model List<AccountManagement.DBContext.Models.ViewModels.ItemMaster.POItemDetailsModel>
 
-@foreach(var item in Model)
+@foreach (var item in Model)
 {
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
@@ -30,17 +30,17 @@
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
 
-        </div>
-    </td>
-    <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
-    </td>
-    <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="2" />
+            </div>
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="4" />
 
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" maxlength="2" readonly/>
+            <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" maxlength="2" readonly />
         </td>
         <td class="text-start">
             <div>
