@@ -1625,3 +1625,27 @@ tr.active {
 .row.ac-invoice-shippingadd {
     border-bottom: 1px solid rgba(0, 0, 0, .125);
 }
+
+.row.ac-item {
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 10px;
+  
+    font: caption;
+    margin: 8px 2px 0 0px;
+}
+
+.row.ac-item div {
+    position: relative;
+    top: 0px;
+    padding-top: 2px;
+}
+.row.ac-item.order2 {
+    top: 9px;
+}
+    .row.ac-item.order3 {
+        top: 6px;
+    }
+
+.row.ac-item.order1 {
+    top: 6px;
+}
