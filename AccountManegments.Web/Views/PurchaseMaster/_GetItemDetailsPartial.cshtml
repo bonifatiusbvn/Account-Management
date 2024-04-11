@@ -9,7 +9,7 @@
         <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@Model.UnitType" />
     </td>
     <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@Model.Hsncode" readonly/>
+        <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@Model.Hsncode" readonly />
     </td>
     <td class="text-start">
         <div class="">
@@ -18,10 +18,10 @@
     </td>
     <td class="text-start">
         <div class="">
-            <select class="form-control" id="txtPOUnitType">
+            <select class="form-control" id="txtPOUnitType_@Model.ItemId">
                 <option value="@Model.UnitType">@Model.UnitTypeName</option>
             </select>
-         
+
         </div>
     </td>
     <td class="text-start">
@@ -29,25 +29,22 @@
     </td>
     <td class="text-start">
         <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" />
-        
+
     </td>
     <td class="text-start">
-       
+
         <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@Model.Gstamount" maxlength="2" />
     </td>
-@*     <td class="text-start d-none"  >
-        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" />
-        <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
-    </td>
- *@
+
     <td class="text-start">
         <div>
             <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
         </div>
     </td>
     <td class="product-removal">
-        <a id="remove" class="btn text-primary"><i class="lni lni-trash"></i></a>
+        <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
     </td>
+
 </tr>
 
 @section Scripts {

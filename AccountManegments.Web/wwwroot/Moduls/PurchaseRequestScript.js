@@ -15,6 +15,7 @@ GetPOList();
 checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
+
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
@@ -371,13 +372,13 @@ function PurchaseRequestIsApproved(PurchaseId) {
     });
 }
 function GetAllUnitType() {
-    
+
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
-                $('#txtPOUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
+                $('#txtPOUnitType_').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
         }
     });
@@ -635,7 +636,7 @@ function InsertMultiplePurchaseOrderDetails() {
         };
         AddressDetails.push(addressData);
     });
-    debugger
+
     var PORequest = {
         SiteId: $("#siteid").val(),
         Poid: $("#txtPoId").val(),
@@ -653,7 +654,7 @@ function InsertMultiplePurchaseOrderDetails() {
         ItemOrderlist: orderDetails,
         ShippingAddressList: AddressDetails,
     }
-    debugger
+
     var form_data = new FormData();
     form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -731,12 +732,11 @@ $(document).ready(function () {
 var totalQuantity = 0;
 
 function AddShippingAddress() {
+
     var quantity = $("#txtmdqty").val();
     var address = $("#txtmdAddress").val();
     var ItemQuantity = $("#TotalProductQuantity").text();
-    
     var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
-
 
     if (quantity <= 0 || isNaN(quantity) || address.trim() === "") {
         document.getElementById("spnShippingQuantity").innerText = "Please Enter Quantity!";
@@ -753,60 +753,58 @@ function AddShippingAddress() {
         document.getElementById("spnShippingQuantity").innerText = "Enter Quantity is more than Item Total Quantity!";
         return;
     }
-    checkAndDisableAddButton();
-    totalQuantity += parseInt(quantity);
 
-    var newRow = String;
-
-    if (rowcount == 1) {
-        newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
-            '<div class="col-2 col-sm-2">' +
-            '<label id="lblshprownum1">' + rowcount + '</label>' +
-            '</div>' +
-            '<div class="col-5 col-sm-5">' +
-            '<p id="shippingaddress">' + address + '</p>' +
-            '</div>' +
-            '<div class="col-3 col-sm-3">' +
-            '<p id="shippingquantity">' + quantity + '</p>' +
-            '</div>' +
-            '</div>';
-    } else {
-        newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
-            '<div class="col-2 col-sm-2">' +
-            '<label id="lblshprownum1">' + rowcount + '</label>' +
-            '</div>' +
-            '<div class="col-5 col-sm-5">' +
-            '<p id="shippingaddress">' + address + '</p>' +
-            '</div>' +
-            '<div class="col-3 col-sm-3">' +
-            '<p id="shippingquantity">' + quantity + '</p>' +
-            '</div>' +
-            '<div class="col-2 col-sm-2">' +
-            '<a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
-            '</div>' +
-            '</div>';
-    }
-
-    AddShippingAddressRow(newRow, address);
-}
-
-function AddShippingAddressRow(newRow, address) {
     var isDuplicate = false;
 
-    $('.Address').each(function () {
-        var existingProductId = $(this).text().trim();
-        if (existingProductId === address) {
+
+    $('#dvshippingAdd .ac-invoice-shippingadd').each(function () {
+        var existingAddress = $(this).find('#shippingaddress').text().trim();
+        if (existingAddress === address) {
             isDuplicate = true;
             return false;
         }
     });
 
     if (!isDuplicate) {
+
+        var newRow = '';
+        if (rowcount == 1) {
+            newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
+                '<div class="col-2 col-sm-2">' +
+                '<label id="lblshprownum1">' + rowcount + '</label>' +
+                '</div>' +
+                '<div class="col-5 col-sm-5">' +
+                '<p id="shippingaddress">' + address + '</p>' +
+                '</div>' +
+                '<div class="col-3 col-sm-3">' +
+                '<p id="shippingquantity">' + quantity + '</p>' +
+                '</div>' +
+                '</div>';
+        } else {
+            newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
+                '<div class="col-2 col-sm-2">' +
+                '<label id="lblshprownum1">' + rowcount + '</label>' +
+                '</div>' +
+                '<div class="col-5 col-sm-5">' +
+                '<p id="shippingaddress">' + address + '</p>' +
+                '</div>' +
+                '<div class="col-3 col-sm-3">' +
+                '<p id="shippingquantity">' + quantity + '</p>' +
+                '</div>' +
+                '<div class="col-2 col-sm-2">' +
+                '<a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
+                '</div>' +
+                '</div>';
+        }
+
         $('#dvshippingAdd').append(newRow);
+        updateProductTotalAmount();
+        updateTotals();
+        updateRowNumbers();
     } else {
         Swal.fire({
             title: "Address already added!",
-            text: "The selected Address is already added.",
+            text: "The selected address is already added.",
             icon: "warning",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK"
@@ -1042,7 +1040,17 @@ function isValidPhoneNo(phoneNo) {
     var phoneNoPattern = /^\d{10}$/;
     return phoneNoPattern.test(phoneNo);
 }
+function PopulateUnitTypeDropdown(itemId) {
 
+    $.ajax({
+        url: '/ItemMaster/GetAllUnitType',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtPOUnitType_' + itemId).append('<option value=' + data.unitId + '>' + data.unitName + '</option>');
+            });
+        }
+    });
+}
 
 
 var paymentSign = "$";
@@ -1089,8 +1097,10 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-    GetAllUnitType();
+
     var newProductRow = $(Result);
+    var itemId = newProductRow.data('product-id');
+    PopulateUnitTypeDropdown(itemId);
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;
 
@@ -1119,6 +1129,7 @@ function AddNewRow(Result) {
         });
     }
 }
+
 
 
 function updateRowNumbers() {
@@ -1205,26 +1216,20 @@ function updateTotals() {
     $("#cart-total").val(totalAmount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
 }
+function removeItem(btn) {
+    $(btn).closest("tr").remove();
+    updateRowNumbers();
+    updateTotals();
+}
+
+
 
 var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
 
-function remove() {
-    Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
-        e.addEventListener("click", function (e) {
-            removeItem(e), resetRow()
-        })
-    })
-}
 
-function resetRow() {
-    Array.from(document.getElementById("addNewlink").querySelectorAll("tr")).forEach(function (e, t) {
-        t += 1;
-        e.querySelector("#product-id").innerHTML = t
-    })
-}
 
 function recalculateCart() {
     var t = 0,
@@ -1255,9 +1260,7 @@ function updateQuantity(e, t, n) {
     n.value = paymentSign + e, recalculateCart()
 }
 
-function removeItem(e) {
-    e.target.closest("tr").remove(), recalculateCart()
-}
+
 amountKeyup();
 var genericExamples = document.querySelectorAll("[data-trigger]");
 
@@ -1469,7 +1472,7 @@ function GetAllItemDetailsList() {
 }
 
 function filterallItemTable() {
-    
+
     var searchText = $('#mdProductSearch').val();
 
     $.ajax({
