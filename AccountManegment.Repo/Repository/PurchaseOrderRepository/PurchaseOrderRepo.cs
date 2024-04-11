@@ -384,6 +384,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase Order Inserted Successfully";
+                response.data = PurchaseOrder.Id;
             }
             catch (Exception ex)
             {

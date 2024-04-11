@@ -371,12 +371,13 @@ function PurchaseRequestIsApproved(PurchaseId) {
     });
 }
 function GetAllUnitType() {
-
+    
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
+                $('#txtPOUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
         }
     });
@@ -612,13 +613,13 @@ function InsertMultiplePurchaseOrderDetails() {
         var orderRow = $(this);
         var objData = {
 
-            Item: orderRow.find("#txtItemName").val(),
+            Item: orderRow.find("#txtItemName").text(),
             ItemId: orderRow.find("#txtItemId").val(),
             UnitTypeId: orderRow.find("#UnitTypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
             TotalPrice: orderRow.find("#txtproductamount").val(),
             Price: orderRow.find("#txtproductamount").val(),
-            Gst: orderRow.find("#txtproductamountwithGST").val(),
+            Gst: orderRow.find("#txtgstAmount").val(),
             ItemTotal: orderRow.find("#txtproducttotalamount").val(),
             Hsncode: orderRow.find("#txtHSNcode").val(),
 
@@ -634,7 +635,7 @@ function InsertMultiplePurchaseOrderDetails() {
         };
         AddressDetails.push(addressData);
     });
-
+    debugger
     var PORequest = {
         SiteId: $("#siteid").val(),
         Poid: $("#txtPoId").val(),
@@ -652,7 +653,7 @@ function InsertMultiplePurchaseOrderDetails() {
         ItemOrderlist: orderDetails,
         ShippingAddressList: AddressDetails,
     }
-
+    debugger
     var form_data = new FormData();
     form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -671,7 +672,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
-                    window.location = '/PurchaseMaster/POListView';
+                    window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
                 });
             } else {
                 Swal.fire({
@@ -758,27 +759,27 @@ function AddShippingAddress() {
     var newRow = String;
 
     if (rowcount == 1) {
-        newRow = '<div class="row ac-invoice-shippingadd">' +
+        newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
             '<div class="col-2 col-sm-2">' +
             '<label id="lblshprownum1">' + rowcount + '</label>' +
             '</div>' +
             '<div class="col-5 col-sm-5">' +
-            '<p id="pshAddress1">' + address + '</p>' +
+            '<p id="shippingaddress">' + address + '</p>' +
             '</div>' +
             '<div class="col-3 col-sm-3">' +
-            '<p id="pQty">' + quantity + '</p>' +
+            '<p id="shippingquantity">' + quantity + '</p>' +
             '</div>' +
             '</div>';
     } else {
-        newRow = '<div class="row ac-invoice-shippingadd">' +
+        newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
             '<div class="col-2 col-sm-2">' +
             '<label id="lblshprownum1">' + rowcount + '</label>' +
             '</div>' +
             '<div class="col-5 col-sm-5">' +
-            '<p id="pshAddress1">' + address + '</p>' +
+            '<p id="shippingaddress">' + address + '</p>' +
             '</div>' +
             '<div class="col-3 col-sm-3">' +
-            '<p id="pQty">' + quantity + '</p>' +
+            '<p id="shippingquantity">' + quantity + '</p>' +
             '</div>' +
             '<div class="col-2 col-sm-2">' +
             '<a id="remove" class="btn text-primary" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
@@ -994,8 +995,8 @@ function validateAndInsertPurchaseOrder() {
     var deliveryschedule = document.getElementById("txtDeliverySchedule").value.trim();
     var contactPerson = document.getElementById("txtContectPerson").value.trim();
     var MobileNo = document.getElementById("txtMobileNo").value.trim();
-    var ShippingAddress = document.getElementById("txtPoSiteName").value.trim();
-    var ShippingQuantity = document.getElementById("quantity").value.trim();
+    var supplierName = document.getElementById("txtSupplierAddress").value.trim();
+    var companyName = document.getElementById("companybillingaddressDetails").value.trim();
 
     var isValid = true;
 
@@ -1014,16 +1015,20 @@ function validateAndInsertPurchaseOrder() {
         document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
         isValid = false;
     }
-    if (ShippingAddress === "") {
-        document.getElementById("spnSiteAddress").innerText = "Select Site Name!";
-        isValid = false;
-    }
-    if (ShippingQuantity === "") {
-        document.getElementById("spnShippingQuantity").innerText = "Enter Quantity";
-        isValid = false;
-    }
     if ($('#addNewlink tr').length == 0) {
         document.getElementById("spnitembutton").innerText = "Please Select Product!";
+        isValid = false;
+    }
+    if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+        document.getElementById("spnshipping").innerText = "Please Select Shipping Address!";
+        isValid = false;
+    }
+    if (supplierName === "") {
+        document.getElementById("spnsuppliername").innerText = "Please Select Supplier!";
+        isValid = false;
+    }
+    if (companyName === "") {
+        document.getElementById("spncompanyname").innerText = "Please Select Company!";
         isValid = false;
     }
 
@@ -1084,6 +1089,7 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
+    GetAllUnitType();
     var newProductRow = $(Result);
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;

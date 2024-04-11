@@ -382,6 +382,11 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
 
             return ItemList;
         }
+
+        public Task<List<ItemMasterModel>> GetItemDetailsListById(Guid ItemId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

@@ -13,17 +13,15 @@
     </td>
     <td class="text-start">
         <div class="">
-            @* <button type="button" class='minus btn btn-primary' id="minusbtn">–</button> *@
             <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
-          @*   <button type="button" class='plus btn btn-primary' id="plusbtn">+</button> *@
-          
         </div>
     </td>
     <td class="text-start">
         <div class="">
-               <select class="form-select">
-                <option>kgs</option>
+            <select class="form-control" id="txtPOUnitType">
+                <option value="@Model.UnitType">@Model.UnitTypeName</option>
             </select>
+         
         </div>
     </td>
     <td class="text-start">
@@ -53,5 +51,6 @@
 </tr>
 
 @section Scripts {
+
     <script src="~/moduls/purchaserequestscript.js"></script>
 }
