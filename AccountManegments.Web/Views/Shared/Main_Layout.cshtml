@@ -147,22 +147,7 @@
                             </li>
                         }
                     }
-                    @if (group == "Create Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
-                    {
-                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="receipt-sharp"></ion-icon>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
-                        }
-
-                    }
-                    @if (group == "Invoice List" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    @if (group == "Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {
@@ -177,20 +162,27 @@
                         }
 
                     }
+
+
                     @if (group == "Purchase Order" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
-                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
+                        <li>
+
+                            @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                            {
                             <li>
+
                                 <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="bag-handle-sharp"></ion-icon>
+                                    <div class="font-22">
+                                        <i class="lni lni-clipboard"></i>
                                     </div>
                                     <div class="menu-title">@item.FormName</div>
                                 </a>
                             </li>
-                        }
 
+                            }
+
+                        </li>
                     }
                     @if (group == "Purchase Request" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
@@ -205,20 +197,7 @@
                                 </a>
                             </li>
                         }    }
-                    @if (group == "Create PurchaseOrder" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
-                    {
-                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="font-22">
-                                        <i class="lni lni-clipboard"></i>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
-                        }
-                    }
+
                     @if (group == "Payment Out" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
@@ -232,21 +211,6 @@
                                 </a>
                             </li>
 
-                        }
-
-                    }
-                    @if (group == "PO ListView" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
-                    {
-                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="newspaper-sharp"></ion-icon>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
                         }
 
                     }
