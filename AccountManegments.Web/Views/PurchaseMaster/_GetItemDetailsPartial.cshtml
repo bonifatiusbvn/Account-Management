@@ -19,7 +19,7 @@
         </td>
         <td class="text-start">
             <div class="">
-                <select class="form-control" id="txtPOUnitType">
+                <select class="form-control" id="txtPOUnitType_@item.ItemId">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
 
@@ -42,7 +42,7 @@
             </div>
         </td>
         <td class="product-removal">
-            <a id="remove" class="btn text-primary"><i class="lni lni-trash"></i></a>
+            <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
         </td>
     </tr>
 }
