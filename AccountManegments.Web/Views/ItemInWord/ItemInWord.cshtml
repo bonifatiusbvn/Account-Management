@@ -69,6 +69,7 @@
                                                     <tr>
                                                         <th>Item Name</th>
                                                         <th>Quantity</th>
+                                                        <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -85,7 +86,7 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:650px">
-                                <h5 class="mb-0 mt-4">ItemInWord Details</h5>
+                                <h5 class="mb-0 mt-4">Item Inward Details</h5>
                                 <hr>
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-12">
@@ -100,16 +101,10 @@
                                         <label class="form-label">Site Name</label>
                                         <input type="text" class="form-control" id="dspSiteId" readonly>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         <label class="form-label">Quantity</label>
                                         <input type="text" class="form-control" id="dspQuantity" readonly>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">DocumentName</label>
-                                        <div class="holder m-2">
-                                            <img id="dspDocumentName" src="#" />
-                                        </div>
-                                    </div>
+                                    </div>                                 
                                     <div class="col-6">
                                         <label class="form-label">IsApproved</label>
                                         <div class="form-check form-switch mb-3">
@@ -127,6 +122,12 @@
                                     <div class="col-6">
                                         <label class="form-label">ReceiverName</label>
                                         <input type="text" class="form-control" id="dspReceiverName" readonly>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">DocumentName</label>
+                                        <div class="holder m-2">
+                                            <img id="dspDocumentName" src="#" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

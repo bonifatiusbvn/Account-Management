@@ -483,6 +483,31 @@ $(document).ready(function () {
     });
 
 
+    $(document).on('input', '#txtproductamount', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+
+    $(document).on('keydown', '#txtproductamount', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+    $(document).on('input', '#txtgst', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+    $(document).on('keydown', '#txtgst', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
     });

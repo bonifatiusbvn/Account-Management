@@ -6,6 +6,7 @@ using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Aspose.Pdf.Operators;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -204,14 +205,15 @@ namespace AccountManegments.Web.Controllers
                 {
                     foreach (var file in DocDetails)
                     {
+                        var fileName = Guid.NewGuid() + "_" + file.FileName;
                         var path = Environment.WebRootPath;
-                        var filepath = "Content/InWordDocument/" + file.FileName;
+                        var filepath = "Content/InWordDocument/" + fileName;
                         var fullpath = Path.Combine(path, filepath);
                         UploadFile(file, fullpath);
 
                         var document = new ItemInWordDocumentModel
                         {
-                            DocumentName = file.FileName,
+                            DocumentName = fileName,
                         };
                         documentList.Add(document);
                     }
@@ -263,14 +265,15 @@ namespace AccountManegments.Web.Controllers
                 {
                     foreach (var file in DocDetails)
                     {
+                        var fileName = Guid.NewGuid() + "_" + file.FileName;
                         var path = Environment.WebRootPath;
-                        var filepath = "Content/InWordDocument/" + file.FileName;
+                        var filepath = "Content/InWordDocument/" + fileName;
                         var fullpath = Path.Combine(path, filepath);
                         UploadFile(file, fullpath);
 
                         var document = new ItemInWordDocumentModel
                         {
-                            DocumentName = file.FileName,
+                            DocumentName = fileName,
                         };
                         documentList.Add(document);
                     }

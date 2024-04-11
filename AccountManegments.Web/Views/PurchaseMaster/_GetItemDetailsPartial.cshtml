@@ -29,13 +29,15 @@
                 <select class="form-control" id="txtPOUnitType_@item.ItemId">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
-            </div>
-        </td>
-        <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" readonly />
-        </td>
-        <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="2" readonly />
+
+        </div>
+    </td>
+    <td class="text-start">
+        <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PricePerUnit" />
+    </td>
+    <td class="text-start">
+        <input type="text" class="form-control bg-light border-0" id="txtgst" value="@Model.Gstper" max="99" maxlength="2" />
+
         </td>
         <td class="text-start">
             <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" maxlength="2" readonly/>

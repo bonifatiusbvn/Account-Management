@@ -120,14 +120,12 @@ function GetItemDetails() {
     $.ajax({
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
-            debugger
 
             $('#txtItemId').empty();
 
             $.each(result, function (i, data) {
                 $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-            debugger
             $('#txtItemId').select2({
                 placeholder: "Select Product Name",
                 allowClear: true
@@ -146,7 +144,7 @@ function GetUnitType() {
 
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
-        success: function (result) {debugger
+        success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
@@ -263,13 +261,14 @@ function resetErrorsMessages() {
     document.getElementById("spnReceiverName").innerText = "";
 }
 function EditItemInWordDetails(InwordId) {
-    debugger
+    $('#addNewImage').empty();
     $.ajax({
         url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            debugger
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
@@ -285,7 +284,7 @@ function EditItemInWordDetails(InwordId) {
                 var documentNames = "";
                 $.each(response.documentLists, function (index, document) {
                     documentNames += document.documentName + ";";
-                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id + "'><td><div id='showimages'><span onclick='CancelImage()' class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
+                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id + "'><td><div id='showimages'><span onclick='CancelImage()' class='close btn-sm btn-outline-danger' style='margin-left:125px;'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;'></div></td></tr>";
                     $("#addNewImage").append(newRow);
                 });
                 $("#txtDocumentName").val(documentNames);
@@ -307,7 +306,6 @@ function EditItemInWordDetails(InwordId) {
 }
 
 function UpdateItemInWordDetails() {
-    debugger
     var documentFile = $("#txtDocument")[0].files[0];
     var documentName = null;
     if (documentFile == undefined) {
@@ -456,8 +454,6 @@ function CancelImage() {
         var row = $(this).closest('tr');
         var documentName = row.find('img').attr('src').split('/').pop();
         row.remove();
-
-        // Remove the document name from the txtDocumentName input
         var currentDocumentNames = $("#txtDocumentName").val().split(';');
         var updatedDocumentNames = currentDocumentNames.filter(function (name) {
             return name !== documentName;
@@ -465,19 +461,34 @@ function CancelImage() {
         $("#txtDocumentName").val(updatedDocumentNames.join(';'));
     });
 }
+
+function removenewaddImage()
+{
+    $(document).on('click', '.cross', function () {
+        debugger
+        var row = $(this).closest('tr');
+        var documentNames = row.find('img').data('document');
+        row.remove();
+        additionalFiles = additionalFiles.filter(function (item) {
+            return item.name !== documentNames;
+        });
+    });
+}
 function showpictures() {
-    debugger
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
         for (var i = 0; i < files.length; i++) {
             const file = files[i];
-            additionalFiles.push(file); 
             let reader = new FileReader();
-            reader.onload = function (event) {
-                var newRow = "<tr class='DocumentName'><td><div><span class='close btn-sm btn-outline-danger' style='margin-left:205px;'>&times;</span><img src='" + event.target.result + "' class='displayImage' style='height: 230px; width: 230px; border: solid black;'></div></td></tr>";
-                $("#addNewImage").append(newRow);
-            }
+            reader.onload = (function (fileName) {
+                return function (event) {
+                    var documentName = fileName; 
+                    var newRow = "<tr class='DocumentName'><td><div><span onclick='removenewaddImage()' class='cross btn-sm btn-outline-danger' style='margin-left:125px;'>&times;</span><img src='" + event.target.result + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;' data-document='" + documentName + "'></div></td></tr>";
+                    $("#addNewImage").append(newRow);
+                };
+            })(file.name);
             reader.readAsDataURL(file);
+            additionalFiles.push(file);
         }
     }
 }
@@ -563,7 +574,6 @@ function UpdateMultipleItemInWordDetails() {
 
     if (additionalFiles.length > 0) {
         for (var i = 0; i < additionalFiles.length; i++) {
-            debugger
             form_data.append("DocDetails", additionalFiles[i]);
         }
     }

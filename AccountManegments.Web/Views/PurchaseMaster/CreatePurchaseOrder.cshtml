@@ -49,13 +49,13 @@
                                                                 @if (Model.SupplierName != null)
                                                                 {
                                                                     <select class="form-control" id="txtSuppliername">
-                                                                        <option selected disabled value="@Model.FromSupplierId">@Model.SupplierName</option>
+                                                                        <option selected value="@Model.FromSupplierId">@Model.SupplierName</option>
                                                                     </select>
                                                                 }
                                                                 else
                                                                 {
                                                                     <select class="form-control" id="txtSuppliername">
-                                                                        <option selected disabled value="">Select Supplier</option>
+                                                                        <option selected value="">--Select Supplier--</option>
                                                                     </select>
                                                                 }
                                                                 <span id="spnsuppliername" class="text-danger"></span>
@@ -86,7 +86,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div> 
+                                                </div>
                                             </div>
 
                                             <div class="col-6 col-lg-6">
@@ -104,13 +104,12 @@
                                                                     @if (Model.CompanyName != null)
                                                                     {
                                                                         <select class="form-select" id="txtcompanyname" name="txtcompanyname">
-                                                                            <option selected disabled value="@Model.ToCompanyId">@Model.CompanyName</option>
+                                                                            <option selected value="@Model.ToCompanyId">@Model.CompanyName</option>
                                                                         </select>
                                                                     }
                                                                     else
                                                                     {
                                                                         <select class="form-select" id="txtcompanyname" name="txtcompanyname">
-                                                                            <option selected disabled value="">Select Company</option>
                                                                         </select>
                                                                     }
 
@@ -178,7 +177,7 @@
                                         }
                                         <span id="spnitembutton" style="color:red;"></span>
                                     </h5>
-                                    
+
                                 </div>
 
                                 <div class="card-body pt-0">
@@ -312,7 +311,7 @@
                                             </a>
                                             <span id="spnshipping" style="color:red;"></span>
                                         </h5>
-                                        
+
 
                                         <div class="card-body Address" id="dvshippingAdd">
                                         </div>
@@ -434,7 +433,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
