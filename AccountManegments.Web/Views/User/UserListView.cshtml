@@ -183,13 +183,25 @@
                                         <input type="text" class="form-control" placeholder="User Name" id="txtUserName" required>
                                         <span id="spnUserName" class="text-danger"></span>
                                     </div>
-                                    <div class="col-12">
-                                        <label class="form-label">Site</label>
-                                        <select class="form-control" id="txtuserSiteName" required>
-                                            <option selected disabled value="">--Select--</option>
-                                        </select>
-                                        <span id="spnSiteName" class="text-danger"></span>
-                                    </div>
+                                    @if(_userSession.UserRole == 3)
+                                    {
+                                        <div class="col-12">
+                                            <label class="form-label">Site</label>
+                                            <select class="form-control" id="txtuserSiteName" required>
+                                                <option selected disabled value="">--Select--</option>
+                                            </select>
+                                            <span id="spnSiteName" class="text-danger"></span>
+                                        </div>
+                                    }
+                                    else{
+                                        <div class="col-12">
+                                            <label class="form-label">Site</label>
+                                            <select class="form-control" id="txtuserSiteName" disabled>
+                                                <option selected disabled value="">--Select--</option>
+                                            </select>
+                                            <span id="spnSiteName" class="text-danger"></span>
+                                        </div>
+                                    }
                                     <div class="col-12">
                                         <label class="form-label">Role</label>
                                         <select class="form-control" id="ddlUserRole" required>

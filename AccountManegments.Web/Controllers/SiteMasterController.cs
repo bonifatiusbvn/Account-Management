@@ -172,14 +172,11 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 List<SiteMasterModel> SiteName = new List<SiteMasterModel>();
-                if (UserSession.UserRole == 3)
-                {
                     ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteNameList");
                     if (res.code == 200)
                     {
                         SiteName = JsonConvert.DeserializeObject<List<SiteMasterModel>>(res.data.ToString());
                     }
-                }
 
                 return new JsonResult(SiteName);
             }
