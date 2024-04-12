@@ -1,8 +1,18 @@
 ﻿AllItemInWordListTable();
 GetItemDetails();
 GetUnitType();
+GetSiteList();
+toggleSiteList();
 
-
+function toggleSiteList() {
+    debugger
+    var roleuserId = $('#userRoleId').val();
+    if (roleuserId == 3) {
+        document.getElementById("siteSection").style.display = "block";
+    } else {
+        document.getElementById("siteSection").style.display = "none";
+    }
+}
 
 function AllItemInWordListTable() {
     var searchText = $('#txtItemInWordSearch').val();
@@ -154,6 +164,20 @@ function GetUnitType() {
         }
     });
 }
+
+function GetSiteList() {
+
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            debugger
+            $.each(result, function (i, data) {
+                $('#siteNameList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')              
+            });
+        }
+    });
+}
+
 function AddItemInWordDetails() {
 
     var formData = new FormData();
@@ -196,6 +220,7 @@ function ClearItemInWordTextBox() {
     $('#txtDocument').val('');
     $('#txtVehicleNumber').val('');
     $('#txtReceiverName').val('');
+    $('#siteNameList').val('');
     $('#addNewImage').empty();
     var button = document.getElementById("btnitemInWord");
     if ($('#txtItemInWordid').val() == '') {
@@ -205,13 +230,15 @@ function ClearItemInWordTextBox() {
     offcanvas.show();
 }
 function validateAndCreateItemInWord() {
-
+    debugger
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("txtItemId").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
     var VehicleNumber = document.getElementById("txtVehicleNumber").value.trim();
     var ReceiverName = document.getElementById("txtReceiverName").value.trim();
+    var SiteName = document.getElementById("siteNameList").value.trim();
+    var roleUserId = $('#userRoleId').val();
 
     var isValid = true;
 
@@ -247,6 +274,15 @@ function validateAndCreateItemInWord() {
         isValid = false;
     }
 
+
+    if (SiteName === "" && roleUserId == 3) {
+        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
+        isValid = false;
+    } else if (SiteName === "--Select Unit Type--" && roleUserId == 3) {
+        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
+        isValid = false;
+    }
+
     if (isValid) {
         if ($("#txtItemInWordid").val() == '') {
             InsertMultipleItemInWordDetails();
@@ -262,6 +298,7 @@ function resetErrorsMessages() {
     document.getElementById("spnQuantity").innerText = "";
     document.getElementById("spnVehicleNumber").innerText = "";
     document.getElementById("spnReceiverName").innerText = "";
+    document.getElementById("spnInWardSiteName").innerText = "";
 }
 function EditItemInWordDetails(InwordId) {
     $('#addNewImage').empty();
@@ -279,6 +316,7 @@ function EditItemInWordDetails(InwordId) {
             $('#txtQuantity').val(response.quantity);
             $("#txtVehicleNumber").val(response.vehicleNumber);
             $("#txtReceiverName").val(response.receiverName);
+            $("#siteNameList").val(response.siteId);
             var date = response.date;
             var formattedDate = date.substr(0, 10);
             $('#txtIteminwordDate').val(formattedDate);
@@ -287,7 +325,7 @@ function EditItemInWordDetails(InwordId) {
                 var documentNames = "";
                 $.each(response.documentLists, function (index, document) {
                     documentNames += document.documentName + ";";
-                    var newRow = "<div class='col-6 col-sm-6 DocumentName' id='itemInWordId_" + document.id + "'><div><div id='showimages'><div onclick='CancelImage()' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage'></div></div></div>";
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName' id='itemInWordId_" + document.id + "'><div><div id='showimages'><div onclick='CancelImage(\"" + document.documentName + "\")' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage'></div></div></div>";
                     $("#addNewImage").append(newRow);
                 });
                 $("#txtDocumentName").val(documentNames);
@@ -452,40 +490,39 @@ function ItemInWordIsApproved(InwordId) {
 }
 
 var additionalFiles = [];
-function CancelImage() {
-    $(document).on('click', '.close', function () {
-        var row = $(this).closest('div.DocumentName');
-        var documentName = row.find('img').attr('src').split('/').pop();
-        row.remove();
-        var currentDocumentNames = $("#txtDocumentName").val().split(';');
-        var updatedDocumentNames = currentDocumentNames.filter(function (name) {
-            return name !== documentName;
-        });
-        $("#txtDocumentName").val(updatedDocumentNames.join(';'));
-    });
-}
+function CancelImage(documentName) {
+    $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
 
+    var currentDocumentNames = $("#txtDocumentName").val().split(';');
+    var updatedDocumentNames = currentDocumentNames.filter(function (name) {
+        return name !== documentName;
+    });
+    $("#txtDocumentName").val(updatedDocumentNames.join(';'));
+}
 function removenewaddImage() {
-    $(document).on('click', '.cross', function () {
-        debugger
-        var row = $(this).closest('tr');
-        var documentNames = row.find('img').data('document');
+    $(document).on('click', '.img-remove', function () {
+        var row = $(this).closest('.DocumentName');
+        var documentName = row.find('img').data('document');
         row.remove();
         additionalFiles = additionalFiles.filter(function (item) {
-            return item.name !== documentNames;
+            return item.name !== documentName;
         });
     });
 }
 function showpictures() {
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
+        if ($("#addNewImage .DocumentName").length + files.length > 5) {
+            toastr.error("You can only add a maximum of 5 images.");
+            return;
+        }
         for (var i = 0; i < files.length; i++) {
             const file = files[i];
             let reader = new FileReader();
             reader.onload = (function (fileName) {
                 return function (event) {
                     var documentName = fileName;
-                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div><div onclick='removenewaddImage()' class='cross btn-sm img-remove'><div class='font-22'><i class='lni lni-close' ></i></div></div><img src='" + event.target.result + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;' data-document='" + documentName + "'></div></div></tr>";
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div id='showimages'><div onclick='removenewaddImage()' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='" + event.target.result + "' class='displayImage' data-document='" + documentName + "'></div></div></div>";
                     $("#addNewImage").append(newRow);
                 };
             })(file.name);
@@ -496,12 +533,21 @@ function showpictures() {
 }
 
 function InsertMultipleItemInWordDetails() {
+    debugger
+    var siteId = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteId = $("#siteNameList").val();
+    }
+    else {
+        siteId = $("#txtSiteid").val();
+    }
     var ItemInWordRequest = {
         UnitTypeId: $("#txtUnitType").val(),
         ItemId: $("#txtItemId").val(),
         Item: $("#txtItemName").val(),
         Quantity: $("#txtQuantity").val(),
-        SiteId: $("#txtSiteid").val(),
+        SiteId: siteId,
         CreatedBy: $("#txtCreatedBy").val(),
         VehicleNumber: $("#txtVehicleNumber").val(),
         ReceiverName: $("#txtReceiverName").val(),
@@ -558,6 +604,14 @@ function InsertMultipleItemInWordDetails() {
 
 function UpdateMultipleItemInWordDetails() {
     debugger
+    var siteId = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteId = $("#siteNameList").val();
+    }    
+    else {
+        siteId = $("#txtSiteid").val();
+    }
     var documentName = $("#txtDocumentName").val();
     var UpdateItemInWord = {
         InwordId: $('#txtItemInWordid').val(),
@@ -569,6 +623,7 @@ function UpdateMultipleItemInWordDetails() {
         ReceiverName: $("#txtReceiverName").val(),
         Date: $("#txtIteminwordDate").val(),
         DocumentName: documentName,
+        SiteId:siteId,
     };
 
     var form_data = new FormData();

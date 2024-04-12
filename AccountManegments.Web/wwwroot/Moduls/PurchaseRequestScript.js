@@ -16,6 +16,7 @@ checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
 updateTotals();
+toggleSiteDetails();
 
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
@@ -49,6 +50,14 @@ function filterPurchaseRequestTable() {
     });
 }
 
+function toggleSiteDetails() {
+    var roleuserId = $('#RoleIdinPR').val();
+    if (roleuserId == 3) {
+        document.getElementById("siteDetails").style.display = "block";
+    } else {
+        document.getElementById("siteDetails").style.display = "none";
+    }
+}
 function GetSiteDetails() {
 
     $.ajax({
@@ -108,12 +117,20 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
-
+    debugger
+    var siteName = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteName = $("#txtPoSiteName").val();
+    }
+    else {
+        siteName = $("#SiteIdinPR").val();
+    }
     var objData = {
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtPoSiteName').val(),
+        SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
     }
@@ -158,12 +175,13 @@ function ClearPurchaseRequestTextBox() {
 }
 
 function validateAndCreatePurchaseRequest() {
-
+    debugger
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("searchItemname").value.trim();
     var SiteId = document.getElementById("txtPoSiteName").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
+    var UserRoleId = $('#RoleIdinPR').val();
 
     var isValid = true;
 
@@ -182,10 +200,10 @@ function validateAndCreatePurchaseRequest() {
     }
 
 
-    if (SiteId === "") {
+    if (SiteId === "" && UserRoleId == 3) {
         document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
-    } else if (SiteId === "--Select SiteName--") {
+    } else if (SiteId === "--Select SiteName--" && UserRoleId == 3) {
         document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
     }
@@ -215,7 +233,7 @@ function resetErrorsMessages() {
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
-
+    debugger
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -246,13 +264,20 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-
+    var siteName = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteName = $("#txtPoSiteName").val();
+    }
+    else {
+        siteName = $("#SiteIdinPR").val();
+    }
     var objData = {
         Pid: $('#PurchaseRequestId').val(),
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtPoSiteName').val(),
+        SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
         CreatedBy: $('#txtcreatedby').val(),
