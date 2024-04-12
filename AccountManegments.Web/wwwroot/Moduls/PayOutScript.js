@@ -47,7 +47,7 @@ $(document).ready(function () {
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
             type: 'GET',
             success: function (result) {
-                debugger;
+
                 if (result.totalPurchase == 0) {
                     Swal.fire({
                         title: 'Warning',

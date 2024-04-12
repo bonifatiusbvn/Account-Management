@@ -33,13 +33,13 @@ function CreateUser() {
     })
 }
 function GetSiteDetails() {
-    
+
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-           
+
             $.each(result, function (i, data) {
-               debugger
+
                 $('#txtuserSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
                 $('#txtSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
             });
@@ -332,7 +332,7 @@ function UserActiveDecative(UserId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("UserId", UserId);
-            
+
             $.ajax({
                 url: '/User/UserActiveDecative?UserId=' + UserId,
                 type: 'Post',

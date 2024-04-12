@@ -110,7 +110,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
-    debugger
+
     var siteName = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
@@ -168,7 +168,7 @@ function ClearPurchaseRequestTextBox() {
 }
 
 function validateAndCreatePurchaseRequest() {
-    debugger
+
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("searchItemname").value.trim();
@@ -226,7 +226,7 @@ function resetErrorsMessages() {
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
-    debugger
+
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -639,7 +639,7 @@ $.validator.addMethod("validMobileNo", function (value, element) {
     return isValidPhoneNo(value);
 }, "Enter a valid 10-digit Mobile No");
 $(document).ready(function () {
-    debugger
+
     $("#CreatePOForm").validate({
 
         rules: {
@@ -920,13 +920,13 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     $('#txtSuppliername').change(function () {
-        debugger
+
         getSupplierDetails($(this).val());
     });
 });
 
 function getSupplierDetails(SupplierId) {
-    debugger
+
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
@@ -948,7 +948,7 @@ function getSupplierDetails(SupplierId) {
 $(document).ready(function () {
 
     $('#txtcompanyname').change(function () {
-        debugger
+
         getCompanyDetails($(this).val());
     });
 

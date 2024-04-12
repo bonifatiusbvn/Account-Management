@@ -266,7 +266,7 @@ function validateAndCreateItem() {
         isValid = false;
     }
 
-    if (isValid) {debugger
+    if (isValid) {
         if ($("#txtItemid").val() == '') {
             CreateItem();
         }
@@ -406,15 +406,15 @@ function WithGSTSelected() {
 
 
     if (isWithGstCheckbox.checked) {
-        var price = parseFloat(priceInput.value); 
-        var gstPercentage = parseFloat(gstPercentageInput.value); 
+        var price = parseFloat(priceInput.value);
+        var gstPercentage = parseFloat(gstPercentageInput.value);
         gstAmountInput.disabled = true;
         if (!isNaN(price) && !isNaN(gstPercentage)) {
             var gstAmount = (gstPercentage / 100) * price;
             gstAmountInput.value = gstAmount.toFixed(2);
-            
+
         } else {
-            gstAmountInput.value = ""; 
+            gstAmountInput.value = "";
             gstAmountInput.disabled = true;
         }
     }

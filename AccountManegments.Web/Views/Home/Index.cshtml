@@ -158,7 +158,7 @@
         }
 
         function fn_ChangeSite() {
-            debugger
+
             var selectedSiteId = $('#drpSiteName').val();
             var SiteName = $('#drpSiteName').text()
             var searchText = "";
@@ -174,7 +174,7 @@
 
                 },
                 success: function (result) {
-                    debugger
+
                     $("#tbPndingApproval").html(result);
                     $('#drplaySiteName').val($('#drpSiteName option:selected').text());
                 },

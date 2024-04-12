@@ -16,7 +16,7 @@ function GetItemDetailsList() {
                 $('#searchItemName').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
 
-            
+
         }
     });
 }
@@ -146,7 +146,7 @@ function SupplierInvoicesortTable() {
 }
 
 function DeleteSupplierInvoice(InvoiceId) {
- 
+
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -197,7 +197,7 @@ function DeleteSupplierInvoice(InvoiceId) {
     });
 }
 
-function InsertMultipleSupplierItem() {debugger
+function InsertMultipleSupplierItem() {
 
     var orderDetails = [];
     $(".product").each(function () {
@@ -226,7 +226,7 @@ function InsertMultipleSupplierItem() {debugger
         CreatedBy: $("#createdById").val(),
         ItemList: orderDetails,
     }
-    debugger
+
     var form_data = new FormData();
     form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
     $.ajax({
@@ -740,7 +740,7 @@ function InvoiceSortTable() {
 }
 
 function printInvoiceDiv() {
-    debugger
+
     var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
     var originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
