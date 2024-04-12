@@ -138,7 +138,7 @@
                             </ul>
                         </li>
                     }
-                    @if (group == "Item InWord" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    @if (group == "Item Inward" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {

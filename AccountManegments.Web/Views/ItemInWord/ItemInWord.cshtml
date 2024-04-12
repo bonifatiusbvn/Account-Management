@@ -22,7 +22,7 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item InWord" && (a.Add == true)))
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item Inward" && (a.Add == true)))
             {
                 <button type="button" class="btn btn-primary" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
             }
@@ -73,7 +73,7 @@
                                                         <th>Item Name</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item InWord" && (a.Edit == true || a.Delete == true)))
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item Inward" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>
                                                         }
@@ -92,7 +92,7 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <h5 class="card-header">Item Inward Details</h5>
-                            <div class="card-body" style="height:650px;overflow-y: auto;">                                                             
+                            <div class="card-body" style="height:650px;overflow-y: auto;">
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-12">
                                         <label class="form-label">Item Name</label>
@@ -167,7 +167,7 @@
                                     <option value="">--Select Item--</option>
                                     </select> *@
                                     <input type="hidden" id="txtItemName">
-                                    <input type="hidden" id="txtItemInWordid"> 
+                                    <input type="hidden" id="txtItemInWordid">
                                     <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
                                     <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
                                     <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
@@ -244,8 +244,7 @@
 
 <style>
     #txtUnitType-error, #txtQuantity-error, #txtReceiverName-error,
-    #txtVehicleNumber-error, #txtDocument-error 
-    {
+    #txtVehicleNumber-error, #txtDocument-error {
         color: red;
     }
 
