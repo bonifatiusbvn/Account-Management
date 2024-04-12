@@ -4,7 +4,7 @@ GetUnitType();
 GetSiteList();
 toggleSiteList();
 
-function toggleSiteList() {    
+function toggleSiteList() {
     var roleuserId = $('#userRoleId').val();
     if (roleuserId == 3) {
         document.getElementById("siteSection").style.display = "block";
@@ -168,9 +168,9 @@ function GetSiteList() {
 
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
-        success: function (result) {          
+        success: function (result) {
             $.each(result, function (i, data) {
-                $('#siteNameList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')              
+                $('#siteNameList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
             });
         }
     });
@@ -178,8 +178,7 @@ function GetSiteList() {
 
 function AddItemInWordDetails() {
 
-    if ($("#itemInWordForm").valid())
-    {
+    if ($("#itemInWordForm").valid()) {
         var formData = new FormData();
         formData.append("UnitTypeId", $("#txtUnitType").val());
         formData.append("ItemId", $("#txtItemId").val());
@@ -220,6 +219,7 @@ function AddItemInWordDetails() {
     }
 }
 function ClearItemInWordTextBox() {
+
     resetErrorsMessages();
     $('#txtItemName').val('');
     $('#txtItemInWordid').val('');
@@ -248,39 +248,7 @@ function validateAndCreateItemInWord() {
     var SiteName = document.getElementById("siteNameList").value.trim();
     var roleUserId = $('#userRoleId').val();
 
-
-//    if (ItemName === "") {
-//        document.getElementById("spnItemName").innerText = "Item is required.";
-//        isValid = false;
-//    }
-
-
-//    if (Quantity === "") {
-//        document.getElementById("spnQuantity").innerText = "Quantity is required.";
-//        isValid = false;
-//    }
-
-
-//    if (VehicleNumber === "") {
-//        document.getElementById("spnVehicleNumber").innerText = "Vehicle Number is required.";
-//        isValid = false;
-//    }
-
-
-//    if (ReceiverName === "") {
-//        document.getElementById("spnReceiverName").innerText = "Receiver Name is required.";
-//        isValid = false;
-//    }
-
-//    if (isValid) {
-//        if ($("#txtItemInWordid").val() == '') {
-//            InsertMultipleItemInWordDetails();
-//        }
-//        else {
-//            UpdateMultipleItemInWordDetails();
-//        }
-//    }
-//}
+}
 
 $(document).ready(function () {
 
@@ -317,7 +285,7 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-        
+
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
@@ -615,7 +583,7 @@ function UpdateMultipleItemInWordDetails() {
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
         siteId = $("#siteNameList").val();
-    }    
+    }
     else {
         siteId = $("#txtSiteid").val();
     }
@@ -630,7 +598,7 @@ function UpdateMultipleItemInWordDetails() {
         ReceiverName: $("#txtReceiverName").val(),
         Date: $("#txtIteminwordDate").val(),
         DocumentName: documentName,
-        SiteId:siteId,
+        SiteId: siteId,
     };
 
     var form_data = new FormData();
