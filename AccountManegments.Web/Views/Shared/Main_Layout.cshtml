@@ -96,14 +96,17 @@
                             <ul>
                                 @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                                 {
-                                    <li>
-                                        <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                            <div class="parent-icon">
-                                                <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
-                                            </div>
-                                            <div class="menu-title">@item.FormName</div>
-                                        </a>
-                                    </li>
+                                    @if (item.View)
+                                    {
+                                        <li>
+                                            <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                                <div class="parent-icon">
+                                                    <ion-icon name="ellipse-outline" role="img" class="md hydrated" aria-label="ellipse outline"></ion-icon>
+                                                </div>
+                                                <div class="menu-title">@item.FormName</div>
+                                            </a>
+                                        </li>
+                                    }
                                 }
 
                             </ul>
@@ -121,14 +124,15 @@
                             </a>
                             <ul>
                                 @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                                {
-                                    <li>
+                                {@if (item.View)
+                                    {
+                                        <li>
 
-                                        <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                            <ion-icon name="ellipse-outline"></ion-icon>@item.FormName
-                                        </a>
-                                    </li>
-
+                                            <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                                <ion-icon name="ellipse-outline"></ion-icon>@item.FormName
+                                            </a>
+                                        </li>
+                                    }
                                 }
 
                             </ul>
@@ -138,28 +142,34 @@
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="create-sharp"></ion-icon>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
+                            @if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="parent-icon">
+                                            <ion-icon name="create-sharp"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
                         }
                     }
                     @if (group == "Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="newspaper-sharp"></ion-icon>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
+                            @if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="parent-icon">
+                                            <ion-icon name="newspaper-sharp"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
                         }
 
                     }
@@ -171,15 +181,18 @@
 
                             @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                             {
-                            <li>
+                                @if (item.View)
+                                {
+                                <li>
 
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="font-22">
-                                        <i class="lni lni-clipboard"></i>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="font-22">
+                                            <i class="lni lni-clipboard"></i>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                                }
 
                             }
 
@@ -188,30 +201,33 @@
                     @if (group == "Purchase Request" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="parent-icon">
-                                        <ion-icon name="bag-handle-sharp"></ion-icon>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
+                        {@if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="parent-icon">
+                                            <ion-icon name="bag-handle-sharp"></ion-icon>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
                         }    }
 
                     @if (group == "Payment Out" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {
-                            <li>
-                                <a asp-action="@item.Action" asp-controller="@item.Controller">
-                                    <div class="font-22">
-                                        <i class="lni lni-credit-cards"></i>
-                                    </div>
-                                    <div class="menu-title">@item.FormName</div>
-                                </a>
-                            </li>
-
+                        {@if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="font-22">
+                                            <i class="lni lni-credit-cards"></i>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
                         }
 
                     }

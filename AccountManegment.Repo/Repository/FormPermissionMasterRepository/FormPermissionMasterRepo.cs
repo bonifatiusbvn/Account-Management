@@ -61,6 +61,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                          join r in Context.UserRoles on e.RoleId equals r.RoleId
                          join u in Context.Users on e.CreatedBy equals u.Id
                          join f in Context.Forms on e.FormId equals f.FormId
+                         where f.IsActive == true
                          select new RolewiseFormPermissionModel
                          {
                              Id = e.Id,
@@ -92,6 +93,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                                                               join r in Context.UserRoles on a.RoleId equals r.RoleId
                                                                               join u in Context.Users on a.CreatedBy equals u.Id
                                                                               join f in Context.Forms on a.FormId equals f.FormId
+                                                                              where f.IsActive == true
                                                                               select new RolewiseFormPermissionModel
                                                                               {
                                                                                   Id = a.Id,
@@ -181,6 +183,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             var data = await (from e in Context.RolewiseFormPermissions.Where(x => x.RoleId == RoleId)
                               join r in Context.UserRoles on e.RoleId equals r.RoleId
                               join f in Context.Forms on e.FormId equals f.FormId
+                              where f.IsActive == true
                               select new RolewiseFormPermissionModel
                               {
                                   Id = e.Id,

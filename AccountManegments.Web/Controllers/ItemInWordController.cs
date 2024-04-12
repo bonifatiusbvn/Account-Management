@@ -7,11 +7,13 @@ using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Aspose.Pdf.Operators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class ItemInWordController : Controller
     {
         public ItemInWordController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
@@ -83,9 +85,9 @@ namespace AccountManegments.Web.Controllers
                     ReceiverName = ItemInWordDetails.ReceiverName,
                     VehicleNumber = ItemInWordDetails.VehicleNumber,
                     Date = DateTime.Now,
-                    CreatedOn=DateTime.Now,
+                    CreatedOn = DateTime.Now,
                     IsApproved = false,
-                    IsDeleted= false,
+                    IsDeleted = false,
                 };
                 var postuser = await APIServices.PostAsync(ItemInword, "ItemInWord/AddItemInWordDetails");
                 if (postuser.code == 200)
@@ -233,7 +235,7 @@ namespace AccountManegments.Web.Controllers
                     Date = InsertDetails.Date,
                     CreatedOn = DateTime.Now,
                     DocumentLists = documentList,
-                   
+
                 };
 
                 ApiResponseModel postuser = await APIServices.PostAsync(ItemInwordDetails, "ItemInWord/InsertMultipleItemInWordDetails");
@@ -280,7 +282,7 @@ namespace AccountManegments.Web.Controllers
                 }
 
                 var ItemInwordDetails = new ItemInWordMasterView()
-                {  
+                {
                     InwordId = UpdateDetails.InwordId,
                     ItemId = UpdateDetails.ItemId,
                     Item = UpdateDetails.Item,
@@ -289,7 +291,7 @@ namespace AccountManegments.Web.Controllers
                     ReceiverName = UpdateDetails.ReceiverName,
                     VehicleNumber = UpdateDetails.VehicleNumber,
                     Date = UpdateDetails.Date,
-                    DocumentName= UpdateDetails.DocumentName,
+                    DocumentName = UpdateDetails.DocumentName,
                     DocumentLists = documentList,
                     SiteId = UpdateDetails.SiteId,
 
@@ -311,5 +313,5 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-    }    
+    }
 }

@@ -6,11 +6,22 @@
     ViewData["Title"] = "CreatePurchaseOrder";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-@* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
+
 <style>
     .disabled {
         opacity: 0.5;
         pointer-events: none;
+    }
+
+    #txtSuppliername-error, #companybillingaddressDetails-error, #txtcompanyname-error,
+    #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error
+    {
+        color: red;
+    }
+
+    #txtPoSiteName-error, #txtmdqty-error
+    {
+        color: red;
     }
 </style>
 
@@ -31,12 +42,13 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="" id="invoiceList">
+            <form id="CreatePOForm">
             <div class="">
                 <div>
                     <div class="row justify-content-center">
                         <div class="col-xxl-12">
                             <div class="">
-                                <form id="CreateInvoiceForm">
+                                
                                     <div class=" border-bottom border-bottom-dashed">
                                         <div class="row">
                                             <div class="col-6 col-lg-6">
@@ -48,13 +60,13 @@
                                                                 <label for="txtSuppliername" class="form-label ">Supplier Name</label>
                                                                 @if (Model.SupplierName != null)
                                                                 {
-                                                                    <select class="form-control" id="txtSuppliername">
+                                                                    <select class="form-control" id="txtSuppliername" name="txtSuppliername">
                                                                         <option selected value="@Model.FromSupplierId">@Model.SupplierName</option>
                                                                     </select>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <select class="form-control" id="txtSuppliername">
+                                                                    <select class="form-control" id="txtSuppliername" name="txtSuppliername">
                                                                         <option selected value="">--Select Supplier--</option>
                                                                     </select>
                                                                 }
@@ -132,7 +144,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label for="" class="form-label ">Billing Address</label>
-                                                                <input type="text" id="companybillingaddressDetails" value="@Model.BillingAddress" class="form-control" placeholder="Billing Address" />
+                                                                <input type="text" id="companybillingaddressDetails" name="companybillingaddressDetails" value="@Model.BillingAddress" class="form-control" placeholder="Billing Address" />
                                                                 <span id="spnbillingaddress" class="text-danger"></span>
 
                                                             </div>
@@ -152,7 +164,7 @@
 
                                     </div>
                                     <!--end row-->
-                                </form>
+                              
                             </div>
 
                             <!---- Product Details ---->
@@ -175,7 +187,7 @@
                                                 <i class="lni lni-circle-plus"></i>
                                             </a>
                                         }
-                                        <span id="spnitembutton" style="color:red;"></span>
+                                        <span id="spnitembutton" class="text-danger"></span>
                                     </h5>
 
                                 </div>
@@ -237,35 +249,36 @@
                                     </div>
                                     <div class=" card">
                                         <div class="row card-body">
-                                            <div class="col-lg-6 col-sm-12 ">
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-sm-12">
-                                                        <div class="input-group mb-3">
-                                                            <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
-                                                            <input type="text" class="form-control" id="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" >
-                                                        </div>
-                                                        <span id="spnDeliverySchedule" class="text-danger"></span>
-                                                    </div>
-                                                    <div class="col-lg-12 col-sm-12 mt-2 ">
-                                                        <div class="mb-2">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12">
                                                             <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="txtdelivryschedule">Contect Person</label>
-                                                                <input type="text" id="txtContectPerson" class="form-control" placeholder="Contect Person Name" value="@Model.ContactName">
+                                                                <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
+                                                                <input type="text" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule">
                                                             </div>
-                                                            <span id="spnContectPerson" class="text-danger"></span>
+                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-sm-12 mt-2">
-                                                        <div class="mb-2">
-                                                            <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
-                                                                <input type="text" id="txtMobileNo" class="form-control" placeholder="Mobile No" value="@Model.ContactNumber">
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="txtdelivryschedule">Contect Person</label>
+                                                                    <input type="text" id="txtContectPerson" class="form-control" name="txtContectPerson" placeholder="Contect Person Name" value="@Model.ContactName">
+                                                                </div>
+                                                                <span id="spnContectPerson" class="text-danger"></span>
                                                             </div>
-                                                            <span id="spnMobileNo" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
+                                                                    <input type="text" id="txtMobileNo" name="txtMobileNo" class="form-control" placeholder="Mobile No" value="@Model.ContactNumber">
+                                                                </div>
+                                                                <span id="spnMobileNo" class="text-danger"></span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+
 
                                             <div class="col-lg-6 col-sm-12 ac-invoice-total">
                                                 <div class="table">
@@ -337,11 +350,11 @@
                                         @if (Model.Id == Guid.Empty)
                                         {
 
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
                                         }
                                         else
                                         {
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="validateAndInsertPurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                         }
                                     </div>
                                 </div>
@@ -351,6 +364,8 @@
                     <!--end col-->
                 </div>
             </div>
+
+            </form>
         </div>
     </div>
 </div>
@@ -362,33 +377,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-10 col-sm-10 ">
-                            <label class="form-lable">Select Site</label>
-                            <select class="form-control form-control" id="txtPoSiteName" required>
-                                <option selected value="">--Select Site--</option>
-                            </select>
+                <form id="ShippingAddressForm">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10 col-sm-10 ">
+                                <label class="form-lable">Select Site</label>
+                                <select class="form-control form-control" id="txtPoSiteName" name="txtPoSiteName" required>
+                                    <option selected value="">--Select Site--</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-9 col-sm-9">
-                            <label class="form-lable">Address</label>
-                            <textarea class="form-control" id="txtmdAddress" style="height:90px;" required></textarea>
-                            <span id="spnSiteAddress" style="color:red;"></span>
+                        <div class="row mt-2">
+                            <div class="col-9 col-sm-9">
+                                <label class="form-lable">Address</label>
+                                <textarea class="form-control" id="txtmdAddress" style="height:90px;" ></textarea>
+                                <span id="spnSiteAddress" style="color:red;"></span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <label class="form-lable">Qty</label>
+                                <input class="form-control" id="txtmdqty" name="txtmdqty" value="" required />
+                                <span id="spnShippingQuantity" style="color:red;"></span>
+                            </div>
                         </div>
-                        <div class="col-3 col-sm-3">
-                            <label class="form-lable">Qty</label>
-                            <input class="form-control" id="txtmdqty" value="" required />
-                            <span id="spnShippingQuantity" style="color:red;"></span>
-                        </div>
-                    </div>
 
-                </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-address" onclick="AddShippingAddress()">Add</button>
+                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
                 <span id="spnaddressbutton" style="color:red;"></span>
                 @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
             </div>
@@ -418,8 +435,7 @@
 </div>
 <!--end row-->
 @section Scripts {
-   @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
-    <script src="~/moduls/purchaserequestscript.js"></script>
+    <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }
 <script type="text/javascript">
     _editCompanyselectedValue = "@Model.ToCompanyId";

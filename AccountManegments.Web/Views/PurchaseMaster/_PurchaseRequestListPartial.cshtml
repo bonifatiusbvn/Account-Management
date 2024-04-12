@@ -10,45 +10,7 @@
 @foreach (var item in Model)
 {
 
-    @* <div class="row ac-card" id="purchaseRequestCard_@item.Pid" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
-        <div class="card  border mb-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-5" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="widget-icon-2 bg-light-primary text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="mb-0 text-primary">@item.Item </h5>
-                                <p class="mb-1">@item.UnitName</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-md-3 col-xl-3">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 text-primary">@item.Quantity</h6>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-1">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input font-22" type="checkbox" id="flexSwitchCheckChecked_@item.Pid" @if (item.IsApproved ?? false)
-                            {
-                                <text>checked</text>
-                            } onclick="PurchaseRequestIsApproved('@item.Pid')">
-                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.Pid"></label>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3 col-md-3 col-xl-3 text-center ac-m-btn">
 
-                        <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> *@
     <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
         <td>@item.Item</td>
         <td>@item.UnitName</td>
@@ -63,17 +25,21 @@
                 <span class="badge bg-light-warning text-warning w-100">Pending</span>
             }
         </td>
-        <td>
-            @if (_userSession.UserRole == 3)
-            {
-                <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-        </td>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
+                {
+                    <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
+
+            </td>
+        }
     </tr>
+
 }
+
