@@ -92,9 +92,7 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <h5 class="card-header">Item Inward Details</h5>
-                            <div class="card-body" style="height:650px;overflow-y: auto;">
-
-
+                            <div class="card-body" style="height:650px;overflow-y: auto;">                                                             
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-12">
                                         <label class="form-label">Item Name</label>
@@ -169,7 +167,8 @@
                                     <option value="">--Select Item--</option>
                                     </select> *@
                                     <input type="hidden" id="txtItemName">
-                                    <input type="hidden" id="txtItemInWordid">
+                                    <input type="hidden" id="txtItemInWordid"> 
+                                    <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
                                     <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
                                     <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
                                     <span id="spnItemName" class="text-danger"></span>
@@ -200,6 +199,13 @@
                                     <label class="form-label">Date</label>
                                     <input type="date" id="txtIteminwordDate" class="form-control" required max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                                     <span id="spnDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-6" id="siteSection" style="display: none;">
+                                    <label class="form-label">Site</label>
+                                    <select class="form-control" id="siteNameList" required>
+                                        <option selected disabled value="">--Select--</option>
+                                    </select>
+                                    <span id="spnInWardSiteName" class="text-danger"></span>
                                 </div>
                                 <div class="container">
                                     <div id="MultipleImageContainer">
@@ -237,7 +243,8 @@
 </div>
 
 @section Scripts {
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <script src="~/moduls/iteminwordscript.js"></script>
 }
 

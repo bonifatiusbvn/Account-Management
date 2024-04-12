@@ -16,6 +16,7 @@ checkAndDisableAddButton();
 GetAllUnitType();
 GetAllItemDetailsList();
 updateTotals();
+toggleSiteDetails();
 
 function AllPurchaseRequestListTable() {
     var searchText = $('#txtPurchaseRequestSearch').val();
@@ -49,6 +50,14 @@ function filterPurchaseRequestTable() {
     });
 }
 
+function toggleSiteDetails() {
+    var roleuserId = $('#RoleIdinPR').val();
+    if (roleuserId == 3) {
+        document.getElementById("siteDetails").style.display = "block";
+    } else {
+        document.getElementById("siteDetails").style.display = "none";
+    }
+}
 function GetSiteDetails() {
 
     $.ajax({
@@ -108,12 +117,20 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
-
+    debugger
+    var siteName = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteName = $("#txtPoSiteName").val();
+    }
+    else {
+        siteName = $("#SiteIdinPR").val();
+    }
     var objData = {
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtPoSiteName').val(),
+        SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
     }
@@ -158,12 +175,13 @@ function ClearPurchaseRequestTextBox() {
 }
 
 function validateAndCreatePurchaseRequest() {
-
+    debugger
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("searchItemname").value.trim();
     var SiteId = document.getElementById("txtPoSiteName").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
+    var UserRoleId = $('#RoleIdinPR').val();
 
     var isValid = true;
 
@@ -182,10 +200,10 @@ function validateAndCreatePurchaseRequest() {
     }
 
 
-    if (SiteId === "") {
+    if (SiteId === "" && UserRoleId == 3) {
         document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
-    } else if (SiteId === "--Select SiteName--") {
+    } else if (SiteId === "--Select SiteName--" && UserRoleId == 3) {
         document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
     }
@@ -215,7 +233,7 @@ function resetErrorsMessages() {
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
-
+    debugger
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
@@ -246,13 +264,20 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-
+    var siteName = null;
+    var RoleUserId = $('#userRoleId').val();
+    if (RoleUserId == 3) {
+        siteName = $("#txtPoSiteName").val();
+    }
+    else {
+        siteName = $("#SiteIdinPR").val();
+    }
     var objData = {
         Pid: $('#PurchaseRequestId').val(),
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
         Item: $('#txtItemName').val(),
-        SiteId: $('#txtPoSiteName').val(),
+        SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
         CreatedBy: $('#txtcreatedby').val(),
@@ -604,96 +629,163 @@ $(document).ready(function () {
     $("#orderdate").val(today);
 
 });
+function clearShippingAddressErrorMssage() {
+    $("#spnshipping").text("");
+}
+function clearItemErrorMessage() {
+    $("#spnitembutton").text("");
+}
+
+$("#AddShippingBtn").on("click", function () {
+    clearShippingAddressErrorMssage();
+});
+$(document).on("click", "#addItemButton", function () {
+    clearItemErrorMessage();
+});
+$.validator.addMethod("validMobileNo", function (value, element) {
+    return isValidPhoneNo(value);
+}, "Enter a valid 10-digit Mobile No");
+$(document).ready(function () {
+    $("#CreatePOForm").validate({
+        rules: {
+            txtSuppliername: "required",
+            companybillingaddressDetails: "required",
+            txtcompanyname: "required",
+            txtDeliverySchedule: "required",
+            txtContectPerson: "required",
+            txtMobileNo: {
+                required: true,
+                validMobileNo: true
+            },
+        },
+        messages: {
+            txtSuppliername: "Select Supplier",
+            companybillingaddressDetails: "Enter Billing Address",
+            txtcompanyname: "Select Company Name",
+            txtDeliverySchedule: "Please Enter PO Delivery Schedule",
+            txtContectPerson: "Enter Contact Person Name",
+            txtMobileNo: {
+                required: "Enter Mobile No",
+                validMobileNo: "Enter a valid 10-digit Mobile No"
+            },
+        }
+    });
+});
+
+
+
 
 function InsertMultiplePurchaseOrderDetails() {
 
-    var orderDetails = [];
-    var AddressDetails = [];
-    $(".product").each(function () {
-        var orderRow = $(this);
-        var objData = {
+    if ($("#CreatePOForm").valid()) {
 
-            Item: orderRow.find("#txtItemName").text(),
-            ItemId: orderRow.find("#txtItemId").val(),
-            UnitTypeId: orderRow.find("#UnitTypeId").val(),
-            Quantity: orderRow.find("#txtproductquantity").val(),
-            TotalPrice: orderRow.find("#txtproductamount").val(),
-            Price: orderRow.find("#txtproductamount").val(),
-            Gst: orderRow.find("#txtgstAmount").val(),
-            ItemTotal: orderRow.find("#txtproducttotalamount").val(),
-            Hsncode: orderRow.find("#txtHSNcode").val(),
-
-        };
-        orderDetails.push(objData);
-    });
-
-    $(".ShippingAddress").each(function () {
-        var shippingAddress = $(this);
-        var addressData = {
-            ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-            ShippingAddress: shippingAddress.find("#shippingaddress").text(),
-        };
-        AddressDetails.push(addressData);
-    });
-
-    var PORequest = {
-        SiteId: $("#siteid").val(),
-        Poid: $("#txtPoId").val(),
-        Date: $("#orderdate").val(),
-        FromSupplierId: $("#txtSuppliername").val(),
-        ToCompanyId: $("#txtcompanyname").val(),
-        TotalAmount: $("#cart-total").val(),
-        TotalGstamount: $("#totalgst").val(),
-        BillingAddress: $("#txtbillingAddress").val(),
-        DeliveryShedule: $("#txtDeliverySchedule").val(),
-        ContactName: $("#txtContectPerson").val(),
-        ContactNumber: $("#txtMobileNo").val(),
-        CreatedBy: $("#createdbyid").val(),
-        UnitTypeId: $("#UnitTypeId").val(),
-        ItemOrderlist: orderDetails,
-        ShippingAddressList: AddressDetails,
-    }
-
-    var form_data = new FormData();
-    form_data.append("PODETAILS", JSON.stringify(PORequest));
-
-    $.ajax({
-        url: '/PurchaseMaster/InsertMultiplePurchaseOrderDetails',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            if (Result.message == "Purchase Order Inserted Successfully") {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
-                });
-            } else {
-                Swal.fire({
-                    title: "There Is Some Prolem in Your Request!",
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
+        if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+            var orderDetails = [];
+            var AddressDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    Item: orderRow.find("#txtItemName").text(),
+                    ItemId: orderRow.find("#txtItemId").val(),
+                    UnitTypeId: orderRow.find("#UnitTypeId").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    TotalPrice: orderRow.find("#txtproductamount").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gst: orderRow.find("#txtgstAmount").val(),
+                    ItemTotal: orderRow.find("#txtproducttotalamount").val(),
+                    Hsncode: orderRow.find("#txtHSNcode").val(),
+                };
+                orderDetails.push(objData);
             });
+
+            $(".ShippingAddress").each(function () {
+                var shippingAddress = $(this);
+                var addressData = {
+                    ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
+                    ShippingAddress: shippingAddress.find("#shippingaddress").text(),
+                };
+                AddressDetails.push(addressData);
+            });
+
+            var PORequest = {
+                SiteId: $("#siteid").val(),
+                Poid: $("#txtPoId").val(),
+                Date: $("#orderdate").val(),
+                FromSupplierId: $("#txtSuppliername").val(),
+                ToCompanyId: $("#txtcompanyname").val(),
+                TotalAmount: $("#cart-total").val(),
+                TotalGstamount: $("#totalgst").val(),
+                BillingAddress: $("#companybillingaddressDetails").val(),
+                DeliveryShedule: $("#txtDeliverySchedule").val(),
+                ContactName: $("#txtContectPerson").val(),
+                ContactNumber: $("#txtMobileNo").val(),
+                CreatedBy: $("#createdbyid").val(),
+                UnitTypeId: $("#UnitTypeId").val(),
+                ItemOrderlist: orderDetails,
+                ShippingAddressList: AddressDetails,
+            }
+
+            var form_data = new FormData();
+            form_data.append("PODETAILS", JSON.stringify(PORequest));
+
+            $.ajax({
+                url: '/PurchaseMaster/InsertMultiplePurchaseOrderDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    if (Result.message == "Purchase Order Inserted Successfully") {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "There Is Some Problem in Your Request!",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
+        } else {
+            if ($('#addNewlink tr').length == 0) {
+                $("#spnitembutton").text("Please Select Product!");
+            } else {
+                $("#spnitembutton").text("");
+            }
+            if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+                $("#spnshipping").text("Please Select Shipping Address!");
+            } else {
+                $("#spnshipping").text("");
+            }
         }
-    });
+    } else {
+        Swal.fire({
+            title: "Kindly Fill All Data Fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
+
 
 function checkAndDisableAddButton() {
     if ($('#addNewlink tr').length > 1) {
@@ -732,16 +824,12 @@ var totalQuantity = 0;
 
 function AddShippingAddress() {
 
+    if ($("#ShippingAddressForm").valid()) {
+
     var quantity = $("#txtmdqty").val();
     var address = $("#txtmdAddress").val();
     var ItemQuantity = $("#TotalProductQuantity").text();
     var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
-
-    if (quantity <= 0 || isNaN(quantity) || address.trim() === "") {
-        document.getElementById("spnShippingQuantity").innerText = "Please Enter Quantity!";
-        document.getElementById("spnSiteAddress").innerText = "Please Select Site!";
-        return;
-    }
 
     if (ItemQuantity === "") {
         document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
@@ -810,9 +898,29 @@ function AddShippingAddress() {
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK"
         });
+        }
+    } else {
+        Swal.fire({
+            title: "Kindly Fill All Data Fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
     }
 }
-
+$(document).ready(function () {
+    $("#ShippingAddressForm").validate({
+        rules: {
+            txtPoSiteName: "required",
+            txtmdqty: "required",
+        },
+        messages: {
+            txtPoSiteName: "Select Site",
+            txtmdqty: "Enter Quantity",
+            
+        }
+    });
+});
 
 $(document).ready(function () {
     
@@ -851,7 +959,7 @@ $(document).ready(function () {
 });
 
 function getCompanyDetails(CompanyId) {
-    debugger
+    
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
@@ -871,7 +979,8 @@ function getCompanyDetails(CompanyId) {
 
 
 function UpdateMultiplePurchaseOrderDetails() {
-
+    if ($("#CreatePOForm").valid()) {
+        if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
     var AddressDetails = [];
 
     $(".ShippingAddress").each(function () {
@@ -892,7 +1001,7 @@ function UpdateMultiplePurchaseOrderDetails() {
         ToCompanyId: $("#txtcompanyname").val(),
         TotalAmount: $("#cart-total").val(),
         TotalGstamount: $("#totalgst").val(),
-        BillingAddress: $("#txtbillingAddress").val(),
+        BillingAddress: $("#companybillingaddressDetails").val(),
         DeliveryShedule: $("#txtDeliverySchedule").val(),
         ContactName: $("#txtContectPerson").val(),
         ContactNumber: $("#txtMobileNo").val(),
@@ -938,6 +1047,21 @@ function UpdateMultiplePurchaseOrderDetails() {
             });
         }
     });
+        } else {
+            if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+                $("#spnshipping").text("Please Select Shipping Address!");
+            } else {
+                $("#spnshipping").text("");
+            }
+        }
+    } else {
+        Swal.fire({
+            title: "Kindly Fill All Data Fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 function deleteItemDetails(POId) {
@@ -992,81 +1116,7 @@ function deleteItemDetails(POId) {
     });
 }
 
-function validateAndInsertPurchaseOrder() {debugger
 
-    var deliveryschedule = document.getElementById("txtDeliverySchedule").value.trim();
-    var contactPerson = document.getElementById("txtContectPerson").value.trim();
-    var MobileNo = document.getElementById("txtMobileNo").value.trim();
-    var supplierName = document.getElementById("txtSuppliername").value.trim();
-    var companyName = document.getElementById("companybillingaddressDetails").value.trim();
-
-    var isValid = true;
-
-    if (deliveryschedule === "") {
-        document.getElementById("spnDeliverySchedule").innerText = "Enter Delievery Schedule";
-        isValid = false;
-    } else {
-        document.getElementById("spnDeliverySchedule").innerText = "";
-    }
-
-    if (contactPerson === "") {
-        document.getElementById("spnContectPerson").innerText = "Enter ContectPerson Name";
-        isValid = false;
-    } else {
-        document.getElementById("spnContectPerson").innerText = "";
-    }
-
-    if (MobileNo === "") {
-        document.getElementById("spnMobileNo").innerText = "Enter Mobile Number";
-        isValid = false;
-    } else if (!isValidPhoneNo(MobileNo)) {
-        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
-        isValid = false;
-    }else {
-        document.getElementById("spnMobileNo").innerText = "";
-    }
-
-    if ($('#addNewlink tr').length == 0) {
-        document.getElementById("spnitembutton").innerText = "Please Select Product!";
-        isValid = false;
-    } else {
-        document.getElementById("spnitembutton").innerText = "";
-    }
-
-    if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {debugger
-        document.getElementById("spnshipping").innerText = "Please Select Shipping Address!";
-        isValid = false;
-    } else {
-        document.getElementById("spnshipping").innerText = "";
-    }
-
-    if (supplierName === "") {
-        document.getElementById("spnsuppliername").innerText = "Please Select Supplier!";
-        isValid = false;
-    } else {
-        document.getElementById("spnsuppliername").innerText = "";
-    }
-
-    if (companyName === "") {
-        document.getElementById("spnbillingaddress").innerText = "Please Enter Billing Address!";
-        isValid = false;
-    }
-
-    if (isValid) {debugger
-        if ($("#RefPOid").val() == '') {
-            InsertMultiplePurchaseOrderDetails();
-        }
-        else {
-            UpdateMultiplePurchaseOrderDetails();
-        }
-    }
-}
-
-function isValidPhoneNo(phoneNo) {
-
-    var phoneNoPattern = /^\d{10}$/;
-    return phoneNoPattern.test(phoneNo);
-}
 function PopulateUnitTypeDropdown(itemId) {
 
     $.ajax({
