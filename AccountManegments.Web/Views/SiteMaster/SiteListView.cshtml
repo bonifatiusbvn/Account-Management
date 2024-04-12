@@ -19,7 +19,10 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
+            }
         </form>
     </div>
 </div>
@@ -48,24 +51,26 @@
                                                     </div>
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="SiteSearchBy" onchange="SitefilterTable()">
-                                                            <option selected="selected">All</option>
-                                                            <option>SiteName</option>
-                                                            <option>ContactPersonName</option>
+                                                            <option selected="selected">
+                                                                All
+                                                            </option>
+                                                            <option> SiteName </option>
+                                                            <option> ContactPersonName </option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="SiteDataSortBy" onchange="sortSiteTable()">
-                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="AscendingCreatedOn">First Created</option>
-                                                            <option value="AscendingSitename">Sitename (A-Z)</option>
-                                                            <option value="DescendingSitename">Sitename (Z-A)</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn"> First Created</option>
+                                                            <option value="AscendingSitename">Sitename(A - Z) </option>
+                                                            <option value="DescendingSitename"> Sitename(Z - A) </option>
                                                         </select>
                                                     </div>
-                                                </div><!--end row-->
+                                                </div>
+                                                <!--end row-->
 
                                             </div>
-
                                         </div>
 
                                     </div>
@@ -84,7 +89,7 @@
                                                         {
                                                             <th>Action</th>
                                                         }
-                                                     </tr>
+                                                    </tr>
                                                 </thead>
                                                 <tbody id="Sitetbody">
                                                 </tbody>

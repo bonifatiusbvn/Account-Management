@@ -16,9 +16,11 @@ using Aspose.Pdf.Operators;
 using System.Text;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class PurchaseMasterController : Controller
     {
         public PurchaseMasterController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
@@ -255,7 +257,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message , postuser.data});
+                    return Ok(new { postuser.message, postuser.data });
                 }
                 else
                 {
