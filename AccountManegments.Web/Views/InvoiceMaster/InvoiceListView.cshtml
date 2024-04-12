@@ -17,7 +17,10 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <a type="button" class="btn btn-primary" asp-action="CreateInvoice" asp-controller="InvoiceMaster"><i class="lni lni-circle-plus"></i>Create Invoice</a>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Invoice" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" asp-action="CreateInvoice" asp-controller="InvoiceMaster"><i class="lni lni-circle-plus"></i>Create Invoice</button>
+            }
         </form>
     </div>
 </div>

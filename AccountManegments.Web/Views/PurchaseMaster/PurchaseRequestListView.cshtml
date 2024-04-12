@@ -6,8 +6,6 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 <!-- CSS -->
-
-
 @* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -24,7 +22,10 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="ms-auto position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearPurchaseRequestTextBox()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" onclick="ClearPurchaseRequestTextBox()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
+            }
         </form>
     </div>
 </div>
@@ -144,7 +145,7 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit"  id="CreatePurchaseRequest">
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreatePurchaseRequest">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white">Purchase Request</h5>
 
@@ -173,8 +174,8 @@
 
                                     <input type="hidden" id="txtItemName">
 
-                                   @*  <select class="form-control" id="searchItemname">
-                                        <option selected disabled value="">select Item</option>
+                                    @*  <select class="form-control" id="searchItemname">
+                                    <option selected disabled value="">select Item</option>
                                     </select>
                                     <input type="hidden" id="txtItemName"> *@
                                     <span id="spnItemName" class="text-danger"></span>
@@ -235,9 +236,9 @@
 
 @section Scripts {
 
-   @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
-    
-   
+    @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
+
+
     <script src="~/moduls/purchaserequestscript.js"></script>
-   
+
 }

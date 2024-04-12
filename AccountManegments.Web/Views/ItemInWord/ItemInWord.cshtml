@@ -17,18 +17,21 @@
                     <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Item Inward Details</li>
-            </ol>   
+            </ol>
         </nav>
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item InWord" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
+            }
         </form>
     </div>
 </div>
 <div class="">
     <div class="">
-        <div class=" radius-10 w-100">           
+        <div class=" radius-10 w-100">
             <div class="my-3 border-bottom"></div>
             <div class="">
                 <div class="row">
@@ -70,7 +73,10 @@
                                                         <th>Item Name</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
-                                                        <th>Action</th>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item InWord" && (a.Edit == true || a.Delete == true)))
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="itemInWordtbody">
@@ -103,7 +109,7 @@
                                     <div class="col-12">
                                         <label class="form-label">Quantity</label>
                                         <input type="text" class="form-control" id="dspQuantity" readonly>
-                                    </div>                                 
+                                    </div>
                                     <div class="col-6">
                                         <label class="form-label">IsApproved</label>
                                         <div class="form-check form-switch mb-3">
@@ -158,7 +164,7 @@
                                     <input type="hidden" id="searchItemnameid">
                                     @* <label class="form-label">Item</label>
                                     <select class="form-control" id="txtItemId">
-                                        <option value="">--Select Item--</option>
+                                    <option value="">--Select Item--</option>
                                     </select> *@
                                     <input type="hidden" id="txtItemName">
                                     <input type="hidden" id="txtItemInWordid"> 
@@ -209,21 +215,21 @@
                                                 <input type="text" id="txtDocumentName" class="form-control" hidden>
                                                 <input type="file" id="txtDocument" class="form-control" onchange="showpictures()" multiple>
                                                 <span id="spnDocument" class="text-danger"></span>
-                                            </div>                              
+                                            </div>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
 
                                 <div id="dvDisplayImages" class="col-lg-12">
                                     <div class="row" id="addNewImage">
 
-                                       @*  <table class="table table-sm table-nowrap align-middle mb-0">
-                                            <tbody id="addNewImage"></tbody>
+                                        @*  <table class="table table-sm table-nowrap align-middle mb-0">
+                                        <tbody id="addNewImage"></tbody>
                                         </table> *@
                                     </div>
                                 </div>
                                 <!--end row-->
-                               
+
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItemInWord()" id="btnitemInWord"></button>
                                 </div>
@@ -237,8 +243,7 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <script src="~/moduls/iteminwordscript.js" asp-append-version="true"></script>
+
+    <script src="~/moduls/iteminwordscript.js"></script>
 }
 

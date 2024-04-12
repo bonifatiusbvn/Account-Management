@@ -20,7 +20,10 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
+            }
         </form>
     </div>
 </div>
@@ -82,7 +85,10 @@
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
                                                         <th>Active</th>
-                                                        <th>Action</th>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="Usertbody">
@@ -228,4 +234,4 @@
 
     <script src="~/moduls/authenticationscript.js"></script>
     <script src="~/moduls/masterlistscript.js"></script>
-    }
+}

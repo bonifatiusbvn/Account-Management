@@ -308,6 +308,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                            GroupName = s.FormGroup,
                                                                            Controller = s.Controller,
                                                                            Action = s.Action,
+                                                                           Add = u.IsAddAllow,
                                                                            View = u.IsViewAllow,
                                                                            Edit = u.IsEditAllow,
                                                                            Delete = u.IsDeleteAllow,
