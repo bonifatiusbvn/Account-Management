@@ -6,8 +6,8 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 <!-- CSS -->
-<link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-<link href="~/assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+
+
 @* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -144,7 +144,7 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreatePurchaseRequest">
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit"  id="CreatePurchaseRequest">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white">Purchase Request</h5>
 
@@ -165,8 +165,8 @@
                                 <div class="col-12">
                                     <label for="searchItemname" class="form-label">Product Names</label>
 
-                                    <select id="searchItemname" class="single-select">
-                                        <option selected disabled value="">select Item</option>
+                                    <select id="searchItemname" class="single-select form-select">
+                                        <option selected value="">select Item</option>
                                     </select>
 
                                     <input type="hidden" id="txtItemName">
@@ -225,8 +225,10 @@
 </div>
 
 @section Scripts {
+
    @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
-    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
-    <script src="~/assets/js/form-select2.js"></script>
+    
+   
     <script src="~/moduls/purchaserequestscript.js"></script>
+   
 }

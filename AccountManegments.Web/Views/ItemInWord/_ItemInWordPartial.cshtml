@@ -25,16 +25,16 @@
             }
         </td>
         <td>
-            @if (_userSession.UserRole == 3)
-            {
+            @* @if (_userSession.UserRole == 3)
+            { *@
                 <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" onclick="DeleteItemInWord('@item.InwordId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-            else
+            @* } *@
+            @* else
             {
                 <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
+            } *@
         </td>
     </tr>
 }

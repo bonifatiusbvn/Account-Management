@@ -16,10 +16,7 @@ function GetItemDetailsList() {
                 $('#searchItemName').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
 
-            $('#searchItemName').select2({
-                placeholder: "Select Product Name",
-                allowClear: true
-            });
+            
         }
     });
 }

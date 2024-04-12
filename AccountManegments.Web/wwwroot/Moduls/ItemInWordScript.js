@@ -90,7 +90,7 @@ function SelectItemInWordDetails(InwordId, element) {
                     response.documentLists.forEach(function (document) {
                         var imageURL = "/Content/InWordDocument/" + document.documentName;
                         var imageElement = $('<img>').attr('src', imageURL).addClass('document-image').css({
-                            'height': '100px', 'width': '100px'
+                            'height': '250px', 'width': '250px'
                         });
                         $('.holder').append(imageElement);
                     });
@@ -127,8 +127,11 @@ function GetItemDetails() {
                 $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
             $('#txtItemId').select2({
-                placeholder: "Select Product Name",
-                allowClear: true
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreateItemInWord")
             });
         }
     });
@@ -284,7 +287,7 @@ function EditItemInWordDetails(InwordId) {
                 var documentNames = "";
                 $.each(response.documentLists, function (index, document) {
                     documentNames += document.documentName + ";";
-                    var newRow = "<tr class='DocumentName' id='itemInWordId_" + document.id + "'><td><div id='showimages'><span onclick='CancelImage()' class='close btn-sm btn-outline-danger' style='margin-left:125px;'>&times;</span><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;'></div></td></tr>";
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName' id='itemInWordId_" + document.id + "'><div><div id='showimages'><div onclick='CancelImage()' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage'></div></div></div>";
                     $("#addNewImage").append(newRow);
                 });
                 $("#txtDocumentName").val(documentNames);
@@ -451,7 +454,7 @@ function ItemInWordIsApproved(InwordId) {
 var additionalFiles = [];
 function CancelImage() {
     $(document).on('click', '.close', function () {
-        var row = $(this).closest('tr');
+        var row = $(this).closest('div.DocumentName');
         var documentName = row.find('img').attr('src').split('/').pop();
         row.remove();
         var currentDocumentNames = $("#txtDocumentName").val().split(';');
@@ -462,8 +465,7 @@ function CancelImage() {
     });
 }
 
-function removenewaddImage()
-{
+function removenewaddImage() {
     $(document).on('click', '.cross', function () {
         debugger
         var row = $(this).closest('tr');
@@ -482,8 +484,8 @@ function showpictures() {
             let reader = new FileReader();
             reader.onload = (function (fileName) {
                 return function (event) {
-                    var documentName = fileName; 
-                    var newRow = "<tr class='DocumentName'><td><div><span onclick='removenewaddImage()' class='cross btn-sm btn-outline-danger' style='margin-left:125px;'>&times;</span><img src='" + event.target.result + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;' data-document='" + documentName + "'></div></td></tr>";
+                    var documentName = fileName;
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div><div onclick='removenewaddImage()' class='cross btn-sm img-remove'><div class='font-22'><i class='lni lni-close' ></i></div></div><img src='" + event.target.result + "' class='displayImage' style='height: 150px; width: 150px; border: solid black;' data-document='" + documentName + "'></div></div></tr>";
                     $("#addNewImage").append(newRow);
                 };
             })(file.name);

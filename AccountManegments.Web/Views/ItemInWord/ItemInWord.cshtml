@@ -6,7 +6,7 @@
     ViewData["Title"] = "ItemInWord";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Item Inward</div>
@@ -85,9 +85,10 @@
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body" style="height:650px">
-                                <h5 class="mb-0 mt-4">Item Inward Details</h5>
-                                <hr>
+                            <h5 class="card-header">Item Inward Details</h5>
+                            <div class="card-body" style="height:650px;overflow-y: auto;">
+                               
+                                
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-12">
                                         <label class="form-label">Item Name</label>
@@ -139,7 +140,7 @@
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItemInWord">
+    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreateItemInWord">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white">Create Item Inward</h5>
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -152,7 +153,7 @@
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <div class="col-12">
                                     <label for="txtItemId" class="form-label ">Product Names</label>
-                                    <select id="txtItemId" class="form-control select2">
+                                    <select id="txtItemId" class="single-select form-select">
                                         <option selected disabled value="">select Item</option>
                                     </select>
 
@@ -207,11 +208,12 @@
                                     </div>
                                 </div>  
 
-                                <div id="dvDisplayImages" class="col-lg-6">
-                                    <div class="row">
-                                        <table class="table table-sm table-nowrap align-middle mb-0">
+                                <div id="dvDisplayImages" class="col-lg-12">
+                                    <div class="row" id="addNewImage">
+
+                                       @*  <table class="table table-sm table-nowrap align-middle mb-0">
                                             <tbody id="addNewImage"></tbody>
-                                        </table>
+                                        </table> *@
                                     </div>
                                 </div>
                                 <!--end row-->
@@ -229,7 +231,7 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+   
     <script src="~/moduls/iteminwordscript.js"></script>
 }
 

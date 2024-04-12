@@ -6,7 +6,7 @@
     ViewData["Title"] = "CreatePurchaseOrder";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+@* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
 <style>
     .disabled {
         opacity: 0.5;
@@ -221,10 +221,12 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th colspan="2">Total</th>
-
+                                                    <th></th>
+                                                    <th></th>
                                                     <th id="TotalProductQuantity"></th>
                                                     <th></th>
                                                     <th id="TotalProductPrice"></th>
+                                                    <th></th>
                                                     <th></th>
                                                     <th id="TotalProductGST"></th>
                                                     <th id="TotalProductAmount"></th>
@@ -416,7 +418,7 @@
 </div>
 <!--end row-->
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+   @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
     <script src="~/moduls/purchaserequestscript.js"></script>
 }
 <script type="text/javascript">

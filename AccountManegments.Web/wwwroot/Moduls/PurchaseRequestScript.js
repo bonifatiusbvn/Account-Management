@@ -148,6 +148,13 @@ function ClearPurchaseRequestTextBox() {
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
     offcanvas.show();
+    $('#searchItemname').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
 }
 
 function validateAndCreatePurchaseRequest() {
@@ -492,10 +499,7 @@ function GetItemDetails() {
             $.each(result, function (i, data) {
                 $('#Itemnamesearch').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-            $('#searchItemname').select2({
-                placeholder: "Select Product Name",
-                allowClear: true
-            });
+            
         }
     });
 }
@@ -811,7 +815,7 @@ function AddShippingAddress() {
 
 
 $(document).ready(function () {
-
+    
     $('#txtSuppliername').change(function () {
         getSupplierDetails($(this).val());
     });

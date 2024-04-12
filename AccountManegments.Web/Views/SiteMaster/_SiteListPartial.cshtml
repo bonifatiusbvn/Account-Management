@@ -68,21 +68,36 @@
             }
             else
             {
-                <input class="form-check-input" type="checkbox" disabled id="flexSwitchCheckChecked_@item.SiteId" @if (item.IsActive)
+                @if (item.IsActive)
                 {
-                    <text>checked</text>
-                }/>
+                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                }
+                @*  <input class="form-check-input" type="checkbox" disabled id="flexSwitchCheckChecked_@item.SiteId" @if (item.IsActive)
+        {
+        <text>checked</text>
+        }/> *@
             }
         </td>
-        @if (_userSession.UserRole == 3)
+
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true || a.Delete == true)))
         {
             <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true)))
+                {
+                    <a class="btn text-primary" onclick="DisplaySiteDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeleteSite('@item.SiteId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
 
-                <a class="btn text-primary" onclick="DisplaySiteDetails('@item.SiteId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="DeleteSite('@item.SiteId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-
-            
-        </td>
+            </td>
         }
+
+
     </tr>
 }
