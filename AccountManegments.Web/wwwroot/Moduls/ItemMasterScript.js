@@ -109,53 +109,65 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function CreateItem() {
-    var objData = {
-        ItemName: $('#txtItemName').val(),
-        UnitType: $('#txtUnitType').val(),
-        PricePerUnit: $('#txtPricePerUnit').val(),
-        IsWithGst: $('#txtIsWithGst').prop('checked'),
-        Gstamount: $('#txtGstAmount').val(),
-        Gstper: $('#txtGstPerUnit').val(),
-        Hsncode: $('#txtHSNCode').val(),
-    };
 
-    $.ajax({
-        url: '/ItemMaster/CreateItem',
-        type: 'POST',
-        data: objData,
-        dataType: 'json',
-        success: function (result) {
-            if (result.code == 200) {
+    if ($("#userForm").valid())
+    {
+        var objData = {
+            ItemName: $('#txtItemName').val(),
+            UnitType: $('#txtUnitType').val(),
+            PricePerUnit: $('#txtPricePerUnit').val(),
+            IsWithGst: $('#txtIsWithGst').prop('checked'),
+            Gstamount: $('#txtGstAmount').val(),
+            Gstper: $('#txtGstPerUnit').val(),
+            Hsncode: $('#txtHSNCode').val(),
+        };
+
+        $.ajax({
+            url: '/ItemMaster/CreateItem',
+            type: 'POST',
+            data: objData,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    });
+                } else {
+                    Swal.fire({
+                        title: result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
                 Swal.fire({
-                    title: result.message,
-                    icon: 'success',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemMaster/ItemListView';
-                });
-            } else {
-                Swal.fire({
-                    title: result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemMaster/ItemListView';
                 });
             }
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            });
-        }
-    });
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 function EditItemDetails(ItemId) {
@@ -221,60 +233,83 @@ function UpdateItemDetails() {
     })
 
 }
-function validateAndCreateItem() {
+//function validateAndCreateItem() {
 
-    resetErrorMessages();
+//    resetErrorMessages();
 
-    var ItemName = document.getElementById("txtItemName").value.trim();
-    var UnitType = document.getElementById("txtUnitType").value.trim();
-    var PricePerUnit = document.getElementById("txtPricePerUnit").value.trim();
-    var GstAmount = document.getElementById("txtGstAmount").value.trim();
-    var GstPerUnit = document.getElementById("txtGstPerUnit").value.trim();
+//    var ItemName = document.getElementById("txtItemName").value.trim();
+//    var UnitType = document.getElementById("txtUnitType").value.trim();
+//    var PricePerUnit = document.getElementById("txtPricePerUnit").value.trim();
+//    var GstAmount = document.getElementById("txtGstAmount").value.trim();
+//    var GstPerUnit = document.getElementById("txtGstPerUnit").value.trim();
 
-    var isValid = true;
-
-
-    if (ItemName === "") {
-        document.getElementById("spnItemName").innerText = "Item Name is required.";
-        isValid = false;
-    }
+//    var isValid = true;
 
 
-    if (UnitType === "") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    }
+//    if (ItemName === "") {
+//        document.getElementById("spnItemName").innerText = "Item Name is required.";
+//        isValid = false;
+//    }
 
-    if (PricePerUnit === "") {
-        document.getElementById("spnPricePerUnit").innerText = "PricePer Unit is required.";
-        isValid = false;
-    } else if (!isValidPriceInput(PricePerUnit)) {
-        document.getElementById("spnPricePerUnit").innerText = "Please Enter Valid Price!";
-        isValid = false;
-    }
 
-    if (GstAmount === "") {
-        document.getElementById("spnGstAmount").innerText = "Gst Amount is required.";
-        isValid = false;
-    } else if (!isValidGSTInput(GstAmount)) {
-        document.getElementById("spnGstAmount").innerText = "Please Enter Valid GST!";
-        isValid = false;
-    }
+//    if (UnitType === "") {
+//        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
+//        isValid = false;
+//    }
 
-    if (GstPerUnit === "") {
-        document.getElementById("spnGstPerUnit").innerText = "GstPer Unit is required.";
-        isValid = false;
-    }
+//    if (PricePerUnit === "") {
+//        document.getElementById("spnPricePerUnit").innerText = "PricePer Unit is required.";
+//        isValid = false;
+//    } else if (!isValidPriceInput(PricePerUnit)) {
+//        document.getElementById("spnPricePerUnit").innerText = "Please Enter Valid Price!";
+//        isValid = false;
+//    }
 
-    if (isValid) {
-        if ($("#txtItemid").val() == '') {
-            CreateItem();
+//    if (GstAmount === "") {
+//        document.getElementById("spnGstAmount").innerText = "Gst Amount is required.";
+//        isValid = false;
+//    } else if (!isValidGSTInput(GstAmount)) {
+//        document.getElementById("spnGstAmount").innerText = "Please Enter Valid GST!";
+//        isValid = false;
+//    }
+
+//    if (GstPerUnit === "") {
+//        document.getElementById("spnGstPerUnit").innerText = "GstPer Unit is required.";
+//        isValid = false;
+//    }
+
+//    if (isValid) {debugger
+//        if ($("#txtItemid").val() == '') {
+//            CreateItem();
+//        }
+//        else {
+//            UpdateItemDetails()
+//        }
+//    }
+//}
+$(document).ready(function () {
+
+    $("#userForm").validate({
+        rules: {
+            txtItemName: "required",
+            txtUnitType: "required",
+            txtPricePerUnit: "required",
+            txtIsWithGst: "required",
+            txtGstAmount: "required",
+            txtGstPerUnit: "required",
+            txtHSNCode: "required",
+        },
+        messages: {
+            txtItemName: "Please Enter ItemName",
+            txtUnitType: "Please Enter UnitType",
+            txtPricePerUnit: "Please Enter PricePerUnit",
+            txtIsWithGst: "Please Enter IsWithGst",
+            txtGstAmount: "Please Enter GstAmount",
+            txtGstPerUnit: "Please Enter GstPerUnit",
+            txtHSNCode: "Please Enter HSNCode",
         }
-        else {
-            UpdateItemDetails()
-        }
-    }
-}
+    })
+});
 
 function resetErrorMessages() {
     document.getElementById("spnItemName").innerText = "";

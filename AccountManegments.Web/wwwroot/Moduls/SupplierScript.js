@@ -2,39 +2,50 @@
 fn_getState('dropState', 1);
 function CreateSupplier() {
 
-    var objData = {
-        SupplierName: $('#txtSupplierName').val(),
-        Email: $('#txtEmail').val(),
-        Mobile: $('#txtPhoneNo').val(),
-        Gstno: $('#txtGST').val(),
-        BuildingName: $('#txtBuilding').val(),
-        Area: $('#txtArea').val(),
-        City: $('#txtcity').val(),
-        State: $('#txtstate').val(),
-        PinCode: $('#txtPinCode').val(),
-        BankName: $('#txtBank').val(),
-        AccountNo: $('#txtAccount').val(),
-        Iffccode: $('#txtIFFC').val(),
-        CreatedBy: $('#txtUserid').val(),
+    if ($("#SupplierForm").valid())
+    {
+        var objData = {
+            SupplierName: $('#txtSupplierName').val(),
+            Email: $('#txtEmail').val(),
+            Mobile: $('#txtPhoneNo').val(),
+            Gstno: $('#txtGST').val(),
+            BuildingName: $('#txtBuilding').val(),
+            Area: $('#txtArea').val(),
+            City: $('#txtcity').val(),
+            State: $('#txtstate').val(),
+            PinCode: $('#txtPinCode').val(),
+            BankName: $('#txtBank').val(),
+            AccountNo: $('#txtAccount').val(),
+            Iffccode: $('#txtIFFC').val(),
+            CreatedBy: $('#txtUserid').val(),
 
+        }
+        $.ajax({
+            url: '/Supplier/CreateSupplier',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Supplier/SupplierList';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/Supplier/CreateSupplier',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/Supplier/SupplierList';
-            });
-        },
-    })
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 
@@ -276,92 +287,127 @@ function DeleteSupplierDetails(SupplierId) {
         }
     });
 }
-function validateAndCreateSupplier() {
+//function validateAndCreateSupplier() {
 
 
-    resetErrorMessages();
+//    resetErrorMessages();
 
-    var supplierName = $('#txtSupplierName').val().trim();
-    var email = $('#txtEmail').val().trim();
-    var phoneNo = $('#txtPhoneNo').val().trim();
-    var GST = $('#txtGST').val().trim();
-    var building = $('#txtBuilding').val().trim();
-    var area = $('#txtArea').val().trim();
-    var pinCode = $('#txtPinCode').val().trim();
-    var bank = $('#txtBank').val().trim();
-    var account = $('#txtAccount').val().trim();
-    var IFFC = $('#txtIFFC').val().trim();
-
-
-    var isValid = true;
-
-    if (supplierName === "") {
-        document.getElementById("spnSupplier").innerText = "Supplier Name is required.";
-        isValid = false;
-    }
-
-    if (email === "") {
-        document.getElementById("spnEmail").innerText = "Email is required.";
-        isValid = false;
-    } else if (!isValidEmail(email)) {
-        document.getElementById("spnEmail").innerText = "Invalid Email format.";
-        isValid = false;
-    }
-
-    if (phoneNo === "") {
-        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
-        isValid = false;
-    } else if (!isValidPhoneNo(phoneNo)) {
-        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
-        isValid = false;
-    }
-
-    if (GST === "") {
-        document.getElementById("spnGST").innerText = "GST Number is required.";
-        isValid = false;
-    }
-
-    if (building === "") {
-        document.getElementById("spnBuilding").innerText = "Building Name is required.";
-        isValid = false;
-    }
-
-    if (area === "") {
-        document.getElementById("spnArea").innerText = "Area is required.";
-        isValid = false;
-    }
-
-    if (pinCode === "") {
-        document.getElementById("spnPinCode").innerText = "PinCode is required.";
-        isValid = false;
-    }
-
-    if (bank === "") {
-        document.getElementById("spnBank").innerText = "Bank Name is required.";
-        isValid = false;
-    }
-
-    if (account === "") {
-        document.getElementById("spnAccount").innerText = "Account Number is required.";
-        isValid = false;
-    }
-
-    if (IFFC === "") {
-        document.getElementById("spnIFFC").innerText = "IFFC Code is required.";
-        isValid = false;
-    }
+//    var supplierName = $('#txtSupplierName').val().trim();
+//    var email = $('#txtEmail').val().trim();
+//    var phoneNo = $('#txtPhoneNo').val().trim();
+//    var GST = $('#txtGST').val().trim();
+//    var building = $('#txtBuilding').val().trim();
+//    var area = $('#txtArea').val().trim();
+//    var pinCode = $('#txtPinCode').val().trim();
+//    var bank = $('#txtBank').val().trim();
+//    var account = $('#txtAccount').val().trim();
+//    var IFFC = $('#txtIFFC').val().trim();
 
 
-    if (isValid) {
-        if ($("#txtSupplierid").val() == '') {
-            CreateSupplier();
+//    var isValid = true;
+
+//    if (supplierName === "") {
+//        document.getElementById("spnSupplier").innerText = "Supplier Name is required.";
+//        isValid = false;
+//    }
+
+//    if (email === "") {
+//        document.getElementById("spnEmail").innerText = "Email is required.";
+//        isValid = false;
+//    } else if (!isValidEmail(email)) {
+//        document.getElementById("spnEmail").innerText = "Invalid Email format.";
+//        isValid = false;
+//    }
+
+//    if (phoneNo === "") {
+//        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
+//        isValid = false;
+//    } else if (!isValidPhoneNo(phoneNo)) {
+//        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
+//        isValid = false;
+//    }
+
+//    if (GST === "") {
+//        document.getElementById("spnGST").innerText = "GST Number is required.";
+//        isValid = false;
+//    }
+
+//    if (building === "") {
+//        document.getElementById("spnBuilding").innerText = "Building Name is required.";
+//        isValid = false;
+//    }
+
+//    if (area === "") {
+//        document.getElementById("spnArea").innerText = "Area is required.";
+//        isValid = false;
+//    }
+
+//    if (pinCode === "") {
+//        document.getElementById("spnPinCode").innerText = "PinCode is required.";
+//        isValid = false;
+//    }
+
+//    if (bank === "") {
+//        document.getElementById("spnBank").innerText = "Bank Name is required.";
+//        isValid = false;
+//    }
+
+//    if (account === "") {
+//        document.getElementById("spnAccount").innerText = "Account Number is required.";
+//        isValid = false;
+//    }
+
+//    if (IFFC === "") {
+//        document.getElementById("spnIFFC").innerText = "IFFC Code is required.";
+//        isValid = false;
+//    }
+
+
+//    if (isValid) {
+//        if ($("#txtSupplierid").val() == '') {
+//            CreateSupplier();
+//        }
+//        else {
+//            UpdateSupplierDetails()
+//        }
+//    }
+
+//}
+$(document).ready(function () {
+
+    $("#SupplierForm").validate({
+        rules: {
+            txtSupplierName: "required",
+            txtPhoneNo: "required",
+            txtEmail: "required",
+            txtGST: "required",
+            txtBuilding: "required",
+            txtArea: "required",
+            txtPinCode: "required",
+            ddlCity: "required",
+            dropState: "required",
+            ddlCountry: "required",
+            txtBank: "required",
+            txtAccount: "required",
+            txtIFFC: "required",
+        },
+        messages: {
+            txtSupplierName: "Please Enter SupplierName",
+            txtPhoneNo: "Please Enter PhoneNo",
+            txtEmail: "Please Enter Email",
+            txtGST: "Please Enter GST",
+            txtBuilding: "Please Enter Building",
+            txtArea: "Please Enter Area",
+            txtPinCode: "Please Enter PinCode",
+            ddlCity: "Please Enter City",
+            dropState: "Please Enter State",
+            ddlCountry: "Please Enter Country",
+            txtBank: "Please Enter Bank",
+            txtAccount: "Please Enter Account",
+            txtIFFC: "Please Enter IFFC",
         }
-        else {
-            UpdateSupplierDetails()
-        }
-    }
-
-}
+    })
+});
 
 function resetErrorMessages() {
     document.getElementById("spnSupplier").innerText = "";

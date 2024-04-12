@@ -146,7 +146,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreateItemInWord">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item Inward</h5>
+            <h5 class="m-0 me-2 text-white">Create Item Inword</h5>
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
@@ -175,24 +175,24 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control" id="txtUnitType">
+                                    <select class="form-control" id="txtUnitType" name="txtUnitType">
                                         <option selected disabled value="">--Select Unit Type--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" required>
+                                    <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" required>
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Receiver Name</label>
-                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" required>
+                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName" required>
                                     <span id="spnReceiverName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Vehicle Number</label>
-                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" required>
+                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber" required>
                                     <span id="spnVehicleNumber" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
@@ -213,7 +213,7 @@
                                             <div class="col-12">
                                                 <label>Document</label>
                                                 <input type="text" id="txtDocumentName" class="form-control" hidden>
-                                                <input type="file" id="txtDocument" class="form-control" onchange="showpictures()" multiple>
+                                                <input type="file" id="txtDocument" name="txtDocument" class="form-control" onchange="showpictures()" multiple>
                                                 <span id="spnDocument" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -231,7 +231,7 @@
                                 <!--end row-->
 
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItemInWord()" id="btnitemInWord"></button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="AddItemInWordDetails()" id="btnitemInWord">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -241,6 +241,18 @@
         </div>
     </div>
 </div>
+
+<style>
+    #txtUnitType-error, #txtQuantity-error, #txtReceiverName-error,
+    #txtVehicleNumber-error, #txtDocument-error 
+    {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+</style>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

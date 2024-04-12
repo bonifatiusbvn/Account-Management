@@ -53,36 +53,48 @@ function sortCompanyTable() {
 }
 function AddCompany() {
 
-    var objData = {
-        CompanyName: $('#txtCompanyName').val(),
-        Gstno: $('#txtGstNo').val(),
-        PanNo: $('#txtPanNo').val(),
-        Address: $('#txtAddress').val(),
-        Area: $('#txtArea').val(),
-        CityId: $('#ddlCity').val(),
-        StateId: $('#dropState').val(),
-        Country: $('#ddlCountry').val(),
-        Pincode: $('#txtPincode').val(),
+    if ($("#companyForm").valid())
+    {
+        var objData = {
+            CompanyName: $('#txtCompanyName').val(),
+            Gstno: $('#txtGstNo').val(),
+            PanNo: $('#txtPanNo').val(),
+            Address: $('#txtAddress').val(),
+            Area: $('#txtArea').val(),
+            CityId: $('#ddlCity').val(),
+            StateId: $('#dropState').val(),
+            Country: $('#ddlCountry').val(),
+            Pincode: $('#txtPincode').val(),
 
+        }
+
+        $.ajax({
+            url: '/Company/AddCompany',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Company/CreateCompany';
+                });
+            },
+
+        })
     }
-
-    $.ajax({
-        url: '/Company/AddCompany',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/Company/CreateCompany';
-            });
-        },
-    })
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 function ClearTextBox() {
     resetErrorMessages();
@@ -251,84 +263,111 @@ function DeleteCompanyDetails(CompanyId) {
         }
     });
 }
-function validateAndCreateCompany() {
+//function validateAndCreateCompany() {
 
-    resetErrorMessages();
+//    resetErrorMessages();
 
-    var companyName = document.getElementById("txtCompanyName").value.trim();
-    var gstno = document.getElementById("txtGstNo").value.trim();
-    var panNo = document.getElementById("txtPanNo").value.trim();
-    var address = document.getElementById("txtAddress").value.trim();
-    var area = document.getElementById("txtArea").value.trim();
-    var cityId = document.getElementById("ddlCity").value.trim();
-    var stateId = document.getElementById("dropState").value.trim();
-    var country = document.getElementById("ddlCountry").value.trim();
-    var pincode = document.getElementById("txtPincode").value.trim();
-
-
-    var isValid = true;
+//    var companyName = document.getElementById("txtCompanyName").value.trim();
+//    var gstno = document.getElementById("txtGstNo").value.trim();
+//    var panNo = document.getElementById("txtPanNo").value.trim();
+//    var address = document.getElementById("txtAddress").value.trim();
+//    var area = document.getElementById("txtArea").value.trim();
+//    var cityId = document.getElementById("ddlCity").value.trim();
+//    var stateId = document.getElementById("dropState").value.trim();
+//    var country = document.getElementById("ddlCountry").value.trim();
+//    var pincode = document.getElementById("txtPincode").value.trim();
 
 
-    if (companyName === "") {
-        document.getElementById("spnCompanyName").innerText = "Company Name is required.";
-        isValid = false;
-    }
+//    var isValid = true;
 
 
-    if (gstno === "") {
-        document.getElementById("spnGstNo").innerText = "Gst No is required.";
-        isValid = false;
-    }
+//    if (companyName === "") {
+//        document.getElementById("spnCompanyName").innerText = "Company Name is required.";
+//        isValid = false;
+//    }
 
 
-    if (panNo === "") {
-        document.getElementById("spnPanNo").innerText = "Pan No is required.";
-        isValid = false;
-    }
+//    if (gstno === "") {
+//        document.getElementById("spnGstNo").innerText = "Gst No is required.";
+//        isValid = false;
+//    }
 
 
-    if (address === "") {
-        document.getElementById("spnAddress").innerText = "Address is required.";
-        isValid = false;
-    }
-
-    if (area === "") {
-        document.getElementById("spnArea").innerText = "Area is required.";
-        isValid = false;
-    }
-
-    if (cityId === "") {
-        document.getElementById("spnCityId").innerText = "CityId is required.";
-        isValid = false;
-    }
-
-    if (stateId === "") {
-        document.getElementById("spnStateId").innerText = "StateId is required.";
-        isValid = false;
-    }
-
-    if (country === "") {
-        document.getElementById("spnCountry").innerText = "Country is required.";
-        isValid = false;
-    }
-
-    if (pincode === "") {
-        document.getElementById("spnPincode").innerText = "Pincode is required.";
-        isValid = false;
-    }
+//    if (panNo === "") {
+//        document.getElementById("spnPanNo").innerText = "Pan No is required.";
+//        isValid = false;
+//    }
 
 
+//    if (address === "") {
+//        document.getElementById("spnAddress").innerText = "Address is required.";
+//        isValid = false;
+//    }
 
-    if (isValid) {
-        if ($("#txtCompanyid").val() == '') {
-            AddCompany();
+//    if (area === "") {
+//        document.getElementById("spnArea").innerText = "Area is required.";
+//        isValid = false;
+//    }
+
+//    if (cityId === "") {
+//        document.getElementById("spnCityId").innerText = "CityId is required.";
+//        isValid = false;
+//    }
+
+//    if (stateId === "") {
+//        document.getElementById("spnStateId").innerText = "StateId is required.";
+//        isValid = false;
+//    }
+
+//    if (country === "") {
+//        document.getElementById("spnCountry").innerText = "Country is required.";
+//        isValid = false;
+//    }
+
+//    if (pincode === "") {
+//        document.getElementById("spnPincode").innerText = "Pincode is required.";
+//        isValid = false;
+//    }
+
+
+
+//    if (isValid) {
+//        if ($("#txtCompanyid").val() == '') {
+//            AddCompany();
+//        }
+//        else {
+//            UpdateCompany()
+//        }
+//    }
+//}
+
+$(document).ready(function () {
+
+    $("#companyForm").validate({
+        rules: {
+            txtCompanyName: "required",
+            txtGstNo: "required",
+            txtPanNo: "required",
+            txtAddress: "required",
+            txtArea: "required",
+            txtPincode: "required",
+            ddlCity: "required",
+            dropState: "required",
+            ddlCountry: "required",
+        },
+        messages: {
+            txtCompanyName: "Please Enter CompanyName",
+            txtGstNo: "Please Enter GstNo",
+            txtPanNo: "Please Enter PanNo",
+            txtAddress: "Please Enter Address",
+            txtArea: "Please Enter Area",
+            txtPincode: "Please Enter Pincode",
+            ddlCity: "Please Enter City",
+            dropState: "Please Enter State",
+            ddlCountry: "Please Enter Country",
         }
-        else {
-            UpdateCompany()
-        }
-    }
-}
-
+    })
+});
 function resetErrorMessages() {
     document.getElementById("spnCompanyName").innerText = "";
     document.getElementById("spnGstNo").innerText = "";

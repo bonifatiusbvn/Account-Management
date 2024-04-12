@@ -91,85 +91,115 @@ $(document).ready(function () {
 
 
 function InsertPayOutDetails() {
+    if ($("#PayOutInvoiceForm").valid() && $("#PayOutForm").valid())
+    {
+        var objData = {
+            InvoiceNo: "PayOut",
+            SiteId: $("#txtSiteId").val(),
+            SupplierId: $("#txtSuppliername").val(),
+            CompanyId: $("#txtcompanyname").val(),
+            TotalAmount: $("#txtpayoutamount").val(),
+            TotalGstamount: $("#txtpayoutamount").val(),
+            PaymentStatus: $("#paymenttype").val(),
+            Description: $("#txtdescription").val(),
+            CreatedBy: $("#txtUserId").val(),
+        };
 
-    var objData = {
-        InvoiceNo: "PayOut",
-        SiteId: $("#txtSiteId").val(),
-        SupplierId: $("#txtSuppliername").val(),
-        CompanyId: $("#txtcompanyname").val(),
-        TotalAmount: $("#txtpayoutamount").val(),
-        TotalGstamount: $("#txtpayoutamount").val(),
-        PaymentStatus: $("#paymenttype").val(),
-        Description: $("#txtdescription").val(),
-        CreatedBy: $("#txtUserId").val(),
-    };
+        var form_data = new FormData();
+        form_data.append("PAYOUTDETAILS", JSON.stringify(objData));
+        $.ajax({
+            url: '/InvoiceMaster/InsertPayOutDetails',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/InvoiceMaster/PayOutInvoice';
+                });
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                });
+            }
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
 
-    var form_data = new FormData();
-    form_data.append("PAYOUTDETAILS", JSON.stringify(objData));
-    $.ajax({
-        url: '/InvoiceMaster/InsertPayOutDetails',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (result) {
-            Swal.fire({
-                title: result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/InvoiceMaster/PayOutInvoice';
-            });
+//function validateAndInsertPayOutDetails() {
+
+//    var payout = document.getElementById('txtpayoutamount').value.trim();
+//    /*var pendingamount = document.getElementById('txtpendingamount').value.trim();*/
+//    var company = document.getElementById('txtcompanyname').value.trim();
+//    var supplier = document.getElementById('txtSuppliername').value.trim();
+
+//    var isValid = true;
+
+//    if (payout === "") {
+//        document.getElementById("spnpayout").innerText = "Please Enter value for PayOut amount!!";
+//        isValid = false;
+//    }
+
+
+//    if (company === "") {
+//        document.getElementById("spncompany").innerText = "Please Select Company!";
+//        isValid = false;
+//    }
+
+//    if (supplier === "") {
+//        document.getElementById("spnsupplier").innerText = "Please Select Supplier!";
+//        isValid = false;
+//    }
+//    //if (isNaN(pendingamount) || pendingamount === 0) {
+//    //    document.getElementById("spnpendingamount").innerText = "Please Enter a valid value for Pending amount!";
+//    //    isValid = false;
+//    //}
+
+//    //if (pendingamount > payout) {
+//    //    document.getElementById("spnpayout").innerText = "Entered amount cannot exceed pending amount.";
+//    //    isValid = false;
+//    //}
+
+//    if (isValid) {
+//        InsertPayOutDetails();
+//    }
+//}
+$(document).ready(function () {
+    debugger
+    $("#PayOutInvoiceForm").validate({
+        rules: {
+            txtpayoutamount: "required",
         },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
+        messages: {
+            txtpayoutamount: "Please Enter Payoutamount",
         }
-    });
-}
+    })
+    $("#PayOutForm").validate({
+        rules: {
+            txtSuppliername: "required",
+        },
+        messages: {
+            txtSuppliername: "Please Enter Suppliername",
+        }
+    })
 
-function validateAndInsertPayOutDetails() {
-
-    var payout = document.getElementById('txtpayoutamount').value.trim();
-    /*var pendingamount = document.getElementById('txtpendingamount').value.trim();*/
-    var company = document.getElementById('txtcompanyname').value.trim();
-    var supplier = document.getElementById('txtSuppliername').value.trim();
-
-    var isValid = true;
-
-    if (payout === "") {
-        document.getElementById("spnpayout").innerText = "Please Enter value for PayOut amount!!";
-        isValid = false;
-    }
-
-
-    if (company === "") {
-        document.getElementById("spncompany").innerText = "Please Select Company!";
-        isValid = false;
-    }
-
-    if (supplier === "") {
-        document.getElementById("spnsupplier").innerText = "Please Select Supplier!";
-        isValid = false;
-    }
-    //if (isNaN(pendingamount) || pendingamount === 0) {
-    //    document.getElementById("spnpendingamount").innerText = "Please Enter a valid value for Pending amount!";
-    //    isValid = false;
-    //}
-
-    //if (pendingamount > payout) {
-    //    document.getElementById("spnpayout").innerText = "Entered amount cannot exceed pending amount.";
-    //    isValid = false;
-    //}
-
-    if (isValid) {
-        InsertPayOutDetails();
-    }
-}
+});

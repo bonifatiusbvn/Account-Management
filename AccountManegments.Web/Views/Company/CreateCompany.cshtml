@@ -171,38 +171,38 @@
                             <form class="row g-3" id="companyForm">
                                 <div class="col-12">
                                     <label class="form-label">Company Name</label>
-                                    <input type="text" class="form-control" placeholder="Company Name" id="txtCompanyName" required>
+                                    <input type="text" class="form-control" placeholder="Company Name" id="txtCompanyName" name="txtCompanyName" required>
                                     <input type="hidden" id="txtCompanyid" />
                                     <span id="spnCompanyName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Gst No</label>
-                                    <input type="text" class="form-control" placeholder="Gst No" id="txtGstNo" required>
+                                    <input type="text" class="form-control" placeholder="Gst No" id="txtGstNo" name="txtGstNo" required>
                                     <span id="spnGstNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Pan No</label>
-                                    <input type="text" class="form-control" placeholder="Pan No" id="txtPanNo" required>
+                                    <input type="text" class="form-control" placeholder="Pan No" id="txtPanNo" name="txtPanNo" required>
                                     <span id="spnPanNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Address</label>
-                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" required></textarea>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress" required></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Area</label>
-                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" required>
+                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea" required>
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Pincode</label>
-                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" required>
+                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode" required>
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" class="form-control">
+                                    <select id="ddlCity" name="ddlCity" class="form-control">
                                         <option value="0">--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">State</label>
-                                    <select id="dropState" class="form-control" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                    <select id="dropState" name="dropState" class="form-control" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
                                         <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
@@ -218,14 +218,14 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" class="form-control" onchange="fn_getState('dropState',null,this)">
+                                    <select id="ddlCountry" name="ddlCountry" class="form-control" onchange="fn_getState('dropState',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <input type="hidden" id="txtcountry" value="" />
                                     <span id="spnCountry" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="AddCompany()" id="btncompany">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -237,7 +237,22 @@
 
     </div>
 </div>
+
+<style>
+    #txtCompanyName-error, #txtGstNo-error, #txtPanNo-error, #txtAddress-error,
+    #txtArea-error, #txtPincode-error, #ddlCity-error, #dropState-error,
+    #ddlCountry-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+</style>
+
 @section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/moduls/masterlistscript.js"></script>
     <script src="~/moduls/companyscript.js"></script>
 }

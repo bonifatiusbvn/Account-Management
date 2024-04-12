@@ -146,43 +146,43 @@
                             <form class="row g-3" id="SupplierForm">
                                 <div class="col-md-12">
                                     <label class="form-label">Supplier Name</label>
-                                    <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" required>
+                                    <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" name="txtSupplierName" required>
                                     <input type="hidden" id="txtSupplierid" required>
                                     <span id="spnSupplier" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" required>
+                                    <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo" required>
                                     <span id="spnPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Email</label>
-                                    <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" required>
+                                    <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" name="txtEmail" required>
                                     <span id="spnEmail" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">GST Number</label>
-                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" required>
+                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" name="txtGST" required>
                                     <span id="spnGST" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Building Name</label>
-                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" required>
+                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" name="txtBuilding" required>
                                     <span id="spnBuilding" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Area</label>
-                                    <textarea type="text" class="form-control" rows="3" placeholder="Area" id="txtArea" required style="height: 75px;"></textarea>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Area" id="txtArea" name="txtArea" required style="height: 75px;"></textarea>
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">PinCode</label>
-                                    <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" required>
+                                    <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" name="txtPinCode" required>
                                     <span id="spnPinCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" class="form-control bg-transparent">
+                                    <select id="ddlCity" name="ddlCity" class="form-control bg-transparent">
                                         <option value="0">--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">State</label>
-                                    <select id="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                    <select id="dropState" name="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
                                         <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
+                                    <select id="ddlCountry" name="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <span class="text-danger"></span>
@@ -208,21 +208,21 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Bank Name</label>
-                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" required>
+                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" name="txtBank" required>
                                     <span id="spnBank" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Account Number</label>
-                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" required>
+                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" name="txtAccount" required>
                                     <span id="spnAccount" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">IFFC Code</label>
-                                    <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" required>
+                                    <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" name="txtIFFC" required>
                                     <span id="spnIFFC" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnsupplier">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateSupplier()" id="btnsupplier">Submit</button>
                                 </div>
                             </form>
 
@@ -234,7 +234,19 @@
         </div>
 
     </div>
+</div>
+<style>
+    #txtSupplierName-error, #txtPhoneNo-error, #txtEmail-error, #txtGST-error,
+    #txtBuilding-error, #txtArea-error, #txtPinCode-error, #ddlCity-error,
+    #dropState-error, #ddlCountry-error, #txtBank-error, #txtAccount-error,
+    #txtIFFC-error {
+        color: red;
+    }
 
+    label.failed {
+        color: red;
+    }
+</style>
 
     @section Scripts {
         <script src="~/moduls/MasterListScript.js" asp-append-version="true"></script>

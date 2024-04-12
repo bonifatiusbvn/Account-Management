@@ -178,35 +178,46 @@ function GetSiteList() {
 
 function AddItemInWordDetails() {
 
-    var formData = new FormData();
-    formData.append("UnitTypeId", $("#txtUnitType").val());
-    formData.append("ItemId", $("#txtItemId").val());
-    formData.append("Item", $("#txtItemName").val());
-    formData.append("Quantity", $("#txtQuantity").val());
-    formData.append("SiteId", $("#txtSiteid").val());
-    formData.append("DocumentName", $("#txtDocument")[0].files[0]);
-    formData.append("CreatedBy", $("#txtCreatedBy").val());
-    formData.append("VehicleNumber", $("#txtVehicleNumber").val());
-    formData.append("ReceiverName", $("#txtReceiverName").val());
-    $.ajax({
-        url: '/ItemInWord/AddItemInWordDetails',
-        type: 'post',
-        data: formData,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
+    if ($("#itemInWordForm").valid())
+    {
+        var formData = new FormData();
+        formData.append("UnitTypeId", $("#txtUnitType").val());
+        formData.append("ItemId", $("#txtItemId").val());
+        formData.append("Item", $("#txtItemName").val());
+        formData.append("Quantity", $("#txtQuantity").val());
+        formData.append("SiteId", $("#txtSiteid").val());
+        formData.append("DocumentName", $("#txtDocument")[0].files[0]);
+        formData.append("CreatedBy", $("#txtCreatedBy").val());
+        formData.append("VehicleNumber", $("#txtVehicleNumber").val());
+        formData.append("ReceiverName", $("#txtReceiverName").val());
+        $.ajax({
+            url: '/ItemInWord/AddItemInWordDetails',
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
 
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/ItemInWord/ItemInWord';
-            });
-        },
-    })
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemInWord/ItemInWord';
+                });
+            },
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 function ClearItemInWordTextBox() {
     resetErrorsMessages();
@@ -237,58 +248,59 @@ function validateAndCreateItemInWord() {
     var SiteName = document.getElementById("siteNameList").value.trim();
     var roleUserId = $('#userRoleId').val();
 
-    var isValid = true;
 
-    if (UnitTypeId === "") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    } else if (UnitTypeId === "--Select Unit Type--") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    }
+//    if (ItemName === "") {
+//        document.getElementById("spnItemName").innerText = "Item is required.";
+//        isValid = false;
+//    }
 
 
-    if (ItemName === "") {
-        document.getElementById("spnItemName").innerText = "Item is required.";
-        isValid = false;
-    }
+//    if (Quantity === "") {
+//        document.getElementById("spnQuantity").innerText = "Quantity is required.";
+//        isValid = false;
+//    }
 
 
-    if (Quantity === "") {
-        document.getElementById("spnQuantity").innerText = "Quantity is required.";
-        isValid = false;
-    }
+//    if (VehicleNumber === "") {
+//        document.getElementById("spnVehicleNumber").innerText = "Vehicle Number is required.";
+//        isValid = false;
+//    }
 
 
-    if (VehicleNumber === "") {
-        document.getElementById("spnVehicleNumber").innerText = "Vehicle Number is required.";
-        isValid = false;
-    }
+//    if (ReceiverName === "") {
+//        document.getElementById("spnReceiverName").innerText = "Receiver Name is required.";
+//        isValid = false;
+//    }
 
+//    if (isValid) {
+//        if ($("#txtItemInWordid").val() == '') {
+//            InsertMultipleItemInWordDetails();
+//        }
+//        else {
+//            UpdateMultipleItemInWordDetails();
+//        }
+//    }
+//}
 
-    if (ReceiverName === "") {
-        document.getElementById("spnReceiverName").innerText = "Receiver Name is required.";
-        isValid = false;
-    }
+$(document).ready(function () {
 
-
-    if (SiteName === "" && roleUserId == 3) {
-        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
-        isValid = false;
-    } else if (SiteName === "--Select Unit Type--" && roleUserId == 3) {
-        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
-        isValid = false;
-    }
-
-    if (isValid) {
-        if ($("#txtItemInWordid").val() == '') {
-            InsertMultipleItemInWordDetails();
+    $("#itemInWordForm").validate({
+        rules: {
+            txtUnitType: "required",
+            txtQuantity: "required",
+            txtReceiverName: "required",
+            txtVehicleNumber: "required",
+            txtDocument: "required",
+        },
+        messages: {
+            txtUnitType: "Please Enter UnitType",
+            txtQuantity: "Please Enter Quantity",
+            txtReceiverName: "Please Enter ReceiverName",
+            txtVehicleNumber: "Please Enter VehicleNumber",
+            txtDocument: "Please Enter Document",
         }
-        else {
-            UpdateMultipleItemInWordDetails();
-        }
-    }
-}
+    })
+});
 function resetErrorsMessages() {
     document.getElementById("spnUnitType").innerText = "";
     document.getElementById("spnItemName").innerText = "";
