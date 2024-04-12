@@ -9,27 +9,39 @@
         <td>@item.ItemName</td>
         <td>@item.PricePerUnit</td>
         <td>
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @if (item.IsApproved ?? false)
+            @if (_userSession.UserRole == 3)
             {
-                <text>checked</text>
-            } onclick="ItemIsApproved('@item.ItemId')">
-            @* @if (item.IsApproved == true)
-            {
-                <span class="badge bg-light-success text-success w-100">Approved</span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="ItemIsApproved('@item.ItemId')">
+                    <label class="form-check-label" for="flexSwitchCheckChecked_@item.ItemId">Approve</label>
+                </div>
             }
             else
             {
-                <span class="badge bg-light-warning text-warning w-100">Pending</span>
-            } *@
+                @if (item.IsApproved.HasValue && item.IsApproved.Value)
+                {
+                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                }
+            }
         </td>
-        @if (_userSession.UserRole == 3)
-        {
-        <td>
-            
-                <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
 
-        </td>
+
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true || a.Delete == true)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true)))
+                {
+                    <a class="btn text-primary" onclick="EditItemDetails('@item.ItemId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
+            </td>
         }
     </tr>
 }

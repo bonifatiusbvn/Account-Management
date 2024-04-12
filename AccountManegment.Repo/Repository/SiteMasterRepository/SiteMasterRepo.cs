@@ -308,7 +308,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
         {
             try
             {
-                IEnumerable<SiteMasterModel> SiteName = Context.Sites.Where(e => e.IsActive == false).ToList().Select(a => new SiteMasterModel
+                IEnumerable<SiteMasterModel> SiteName = Context.Sites.Where(e => e.IsActive == true).ToList().Select(a => new SiteMasterModel
                 {
                     SiteId = a.SiteId,
                     SiteName = a.SiteName,

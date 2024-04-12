@@ -42,7 +42,7 @@ function ClearUserTextBox() {
 }
 
 
-function EditRoleWiseFormDetails(RoleId,element) {
+function EditRoleWiseFormDetails(RoleId, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -57,10 +57,10 @@ function EditRoleWiseFormDetails(RoleId,element) {
         contentType: false,
         complete: function (Result) {
 
-            $('#dveditRolePermissionForm').html(Result.responseText);         
+            $('#dveditRolePermissionForm').html(Result.responseText);
         },
         Error: function () {
-    
+
             Swal.fire({
                 title: "Can't get data!",
                 icon: 'warning',
@@ -96,7 +96,7 @@ function UpdateRolewiseFormPermission() {
         type: 'post',
         data: form_data,
         processData: false,
-        contentType: false, 
+        contentType: false,
         dataType: 'json',
         success: function (Result) {
             if (Result.code == 200) {
@@ -149,7 +149,7 @@ function CreateRolewiseFormPermission() {
         type: 'post',
         data: form_data,
         processData: false,
-        contentType: false, 
+        contentType: false,
         dataType: 'json',
         success: function (Result) {
             Swal.fire({

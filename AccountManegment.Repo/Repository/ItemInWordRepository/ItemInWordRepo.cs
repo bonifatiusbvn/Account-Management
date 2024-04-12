@@ -338,6 +338,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.ReceiverName = UpdateInWordDetails.ReceiverName;
                     ItemInWordData.VehicleNumber = UpdateInWordDetails.VehicleNumber;
                     ItemInWordData.Date = UpdateInWordDetails.Date;
+                    ItemInWordData.SiteId = UpdateInWordDetails.SiteId;
 
                     Context.ItemInwords.Update(ItemInWordData);
                 }

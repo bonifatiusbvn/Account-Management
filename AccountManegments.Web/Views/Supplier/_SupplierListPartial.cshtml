@@ -6,66 +6,48 @@
 *@
 @foreach (var item in Model)
 {
-    @* <div class="row ac-card" id="userCard_@item.SupplierId" onclick="SelectSupplierDetails('@item.SupplierId', this)">
-        <div class="card  border mb-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-5">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="widget-icon-2 bg-light-primary text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0 text-primary">@item.SupplierName </h4>
-                                <p class="mb-1">@item.Email</p>
-                                <p class="mb-1">@item.Mobile</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5 col-md-5 col-xl-3">
-                        <div class="flex-grow-1">
-                            <p class="mb-0 text-primary">@item.Gstno</p>
-                            <h6 class="mb-2"></h6>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-1">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input font-22" type="checkbox" id="flexSwitchCheckChecked_@item.SupplierId" @if (item.IsApproved)
-                            {
-                                <text>checked</text>
-                            } onclick="UserActiveDecative('@item.SupplierId')">
-                            <label class="form-check-label" for="flexSwitchCheckChecked_@item.SupplierId"></label>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-2 col-md-2 col-xl-3  ac-m-btn font-22">
-                        <a class="btn text-primary" onclick="DisplaySupplierDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                        <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierDetails('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> *@
+
     <tr id="userCard_@item.SupplierId" class="" onclick="GetSupplierInvoiceDetailsById('@item.SupplierId', this)">
         <td><a class="text-primary">@item.SupplierName</td>
         <td>@item.Gstno</td>
         <td>
-            @if (item.IsApproved == true)
+            @if (_userSession.UserRole == 3)
             {
-                <span class="badge bg-light-success text-success w-100">Approved</span>
+                @if (item.IsApproved == true)
+                {
+                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                }
             }
+
             else
             {
-                <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                @if (item.IsApproved)
+                {
+                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                }
             }
         </td>
-        @if (_userSession.UserRole == 3)
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Edit == true || a.Delete == true)))
         {
-        <td>
-            
-                <a class="btn text-primary" onclick="DisplaySupplierDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierDetails('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Edit == true)))
+                {
 
-        </td>
+                    <a class="btn text-primary" onclick="DisplaySupplierDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierDetails('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
+            </td>
         }
     </tr>
 }

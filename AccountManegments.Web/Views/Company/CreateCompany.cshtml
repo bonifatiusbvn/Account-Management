@@ -19,13 +19,16 @@
     </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            <button type="button" class="btn btn-primary" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Company</button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company" && (a.Add == true)))
+            {
+                <button type="button" class="btn btn-primary" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Company</button>
+            }
         </form>
     </div>
 </div>
 <div class="">
     <div class="">
-        <div class=" radius-10 w-100">            
+        <div class=" radius-10 w-100">
             <div class="my-3 border-bottom"></div>
             <div class="">
 
@@ -79,7 +82,7 @@
                                                         <th>Company Name</th>
                                                         <th>Gst No</th>
                                                         <th>Pan No</th>
-                                                        @if (_userSession.UserRole == 3)
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>
                                                         }

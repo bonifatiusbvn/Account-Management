@@ -291,6 +291,7 @@ namespace AccountManegments.Web.Controllers
                     Date = UpdateDetails.Date,
                     DocumentName= UpdateDetails.DocumentName,
                     DocumentLists = documentList,
+                    SiteId = UpdateDetails.SiteId,
 
                 };
 
