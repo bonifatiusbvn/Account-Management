@@ -4,8 +4,7 @@ GetUnitType();
 GetSiteList();
 toggleSiteList();
 
-function toggleSiteList() {
-    debugger
+function toggleSiteList() {    
     var roleuserId = $('#userRoleId').val();
     if (roleuserId == 3) {
         document.getElementById("siteSection").style.display = "block";
@@ -169,8 +168,7 @@ function GetSiteList() {
 
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
-        success: function (result) {
-            debugger
+        success: function (result) {          
             $.each(result, function (i, data) {
                 $('#siteNameList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')              
             });
@@ -230,7 +228,6 @@ function ClearItemInWordTextBox() {
     offcanvas.show();
 }
 function validateAndCreateItemInWord() {
-    debugger
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("txtItemId").value.trim();
@@ -308,7 +305,7 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+        
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
@@ -533,7 +530,6 @@ function showpictures() {
 }
 
 function InsertMultipleItemInWordDetails() {
-    debugger
     var siteId = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
@@ -603,7 +599,6 @@ function InsertMultipleItemInWordDetails() {
 }
 
 function UpdateMultipleItemInWordDetails() {
-    debugger
     var siteId = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
