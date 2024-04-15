@@ -52,7 +52,7 @@
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="SupplierSearchBy" onchange="filterSupplierTable()">
                                                             <option selected="selected">All</option>
-                                                            <option>Supplier Name</option>
+                                                            <option>SupplierName</option>
                                                         </select>
                                                     </div>
 
@@ -146,38 +146,38 @@
                             <form class="row g-3" id="SupplierForm">
                                 <div class="col-md-12">
                                     <label class="form-label">Supplier Name</label>
-                                    <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" name="txtSupplierName" required>
+                                    <input type="text" class="form-control" placeholder="Supplier Name" id="txtSupplierName" name="txtSupplierName">
                                     <input type="hidden" id="txtSupplierid" required>
                                     <span id="spnSupplier" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo" required>
+                                    <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo">
                                     <span id="spnPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Email</label>
-                                    <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" name="txtEmail" required>
+                                    <input type="text" class="form-control" placeholder="Email Address" id="txtEmail" name="txtEmail">
                                     <span id="spnEmail" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">GST Number</label>
-                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" name="txtGST" required>
+                                    <input type="text" class="form-control" placeholder="GST Number" id="txtGST" name="txtGST">
                                     <span id="spnGST" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Building Name</label>
-                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" name="txtBuilding" required>
+                                    <input type="text" class="form-control" placeholder="Building Name" id="txtBuilding" name="txtBuilding">
                                     <span id="spnBuilding" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Area</label>
-                                    <textarea type="text" class="form-control" rows="3" placeholder="Area" id="txtArea" name="txtArea" required style="height: 75px;"></textarea>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Area" id="txtArea" name="txtArea" style="height: 75px;"></textarea>
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">PinCode</label>
-                                    <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" name="txtPinCode" required>
+                                    <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" name="txtPinCode">
                                     <span id="spnPinCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
@@ -208,21 +208,21 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Bank Name</label>
-                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" name="txtBank" required>
+                                    <input type="text" class="form-control" placeholder="Bank Name" id="txtBank" name="txtBank">
                                     <span id="spnBank" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Account Number</label>
-                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" name="txtAccount" required>
+                                    <input type="text" class="form-control" placeholder="Account Number" id="txtAccount" name="txtAccount">
                                     <span id="spnAccount" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">IFFC Code</label>
-                                    <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" name="txtIFFC" required>
+                                    <input type="text" class="form-control" placeholder="IFFC Code" id="txtIFFC" name="txtIFFC">
                                     <span id="spnIFFC" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateSupplier()" id="btnsupplier">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSupplier()" id="btnsupplier">Submit</button>
                                 </div>
                             </form>
 

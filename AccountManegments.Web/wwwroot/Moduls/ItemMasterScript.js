@@ -92,7 +92,7 @@ function GetAllUnitType() {
     });
 }
 function ClearTextBox() {
-    resetErrorMessages();
+    resetItemForm();
     $('#txtItemName').val('');
     $('#txtUnitType').val('');
     $('#txtPricePerUnit').val('');
@@ -107,10 +107,17 @@ function ClearTextBox() {
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
     offcanvas.show();
+    $('#txtUnitType').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreateItem")
+    });
 }
 function CreateItem() {
 
-    if ($("#userForm").valid())
+    if ($("#ItemMsterForm").valid())
     {
         var objData = {
             ItemName: $('#txtItemName').val(),
@@ -193,8 +200,15 @@ function EditItemDetails(ItemId) {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
-            resetErrorMessages()
+            resetItemForm()
             offcanvas.show();
+            $('#txtUnitType').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreateItem")
+            });
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -202,132 +216,79 @@ function EditItemDetails(ItemId) {
     });
 }
 function UpdateItemDetails() {
+    if ($("#ItemMsterForm").valid()) {
+        var objData = {
+            ItemId: $('#txtItemid').val(),
+            ItemName: $('#txtItemName').val(),
+            UnitType: $('#txtUnitType').val(),
+            PricePerUnit: $('#txtPricePerUnit').val(),
+            Gstamount: $('#txtGstAmount').val(),
+            IsWithGst: $('#txtIsWithGst').prop('checked'),
+            Gstper: $('#txtGstPerUnit').val(),
+            Hsncode: $('#txtHSNCode').val(),
+            IsApproved: $('#txtIsApproved').val(),
+        }
+        $.ajax({
+            url: '/ItemMaster/UpdateItemDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-    var objData = {
-        ItemId: $('#txtItemid').val(),
-        ItemName: $('#txtItemName').val(),
-        UnitType: $('#txtUnitType').val(),
-        PricePerUnit: $('#txtPricePerUnit').val(),
-        Gstamount: $('#txtGstAmount').val(),
-        IsWithGst: $('#txtIsWithGst').prop('checked'),
-        Gstper: $('#txtGstPerUnit').val(),
-        Hsncode: $('#txtHSNCode').val(),
-        IsApproved: $('#txtIsApproved').val(),
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ItemMaster/ItemListView';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/ItemMaster/UpdateItemDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/ItemMaster/ItemListView';
-            });
-        },
-    })
-
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
-//function validateAndCreateItem() {
+var ItemForm;
+function validateAndCreateItem() {
 
-//    resetErrorMessages();
-
-//    var ItemName = document.getElementById("txtItemName").value.trim();
-//    var UnitType = document.getElementById("txtUnitType").value.trim();
-//    var PricePerUnit = document.getElementById("txtPricePerUnit").value.trim();
-//    var GstAmount = document.getElementById("txtGstAmount").value.trim();
-//    var GstPerUnit = document.getElementById("txtGstPerUnit").value.trim();
-
-//    var isValid = true;
-
-
-//    if (ItemName === "") {
-//        document.getElementById("spnItemName").innerText = "Item Name is required.";
-//        isValid = false;
-//    }
-
-
-//    if (UnitType === "") {
-//        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-//        isValid = false;
-//    }
-
-//    if (PricePerUnit === "") {
-//        document.getElementById("spnPricePerUnit").innerText = "PricePer Unit is required.";
-//        isValid = false;
-//    } else if (!isValidPriceInput(PricePerUnit)) {
-//        document.getElementById("spnPricePerUnit").innerText = "Please Enter Valid Price!";
-//        isValid = false;
-//    }
-
-//    if (GstAmount === "") {
-//        document.getElementById("spnGstAmount").innerText = "Gst Amount is required.";
-//        isValid = false;
-//    } else if (!isValidGSTInput(GstAmount)) {
-//        document.getElementById("spnGstAmount").innerText = "Please Enter Valid GST!";
-//        isValid = false;
-//    }
-
-//    if (GstPerUnit === "") {
-//        document.getElementById("spnGstPerUnit").innerText = "GstPer Unit is required.";
-//        isValid = false;
-//    }
-
-//    if (isValid) {debugger
-//        if ($("#txtItemid").val() == '') {
-//            CreateItem();
-//        }
-//        else {
-//            UpdateItemDetails()
-//        }
-//    }
-//}
-$(document).ready(function () {
-
-    $("#userForm").validate({
+    ItemForm=$("#ItemMsterForm").validate({
         rules: {
             txtItemName: "required",
             txtUnitType: "required",
             txtPricePerUnit: "required",
-            txtIsWithGst: "required",
             txtGstAmount: "required",
             txtGstPerUnit: "required",
-            txtHSNCode: "required",
         },
         messages: {
             txtItemName: "Please Enter ItemName",
             txtUnitType: "Please Enter UnitType",
             txtPricePerUnit: "Please Enter PricePerUnit",
-            txtIsWithGst: "Please Enter IsWithGst",
             txtGstAmount: "Please Enter GstAmount",
             txtGstPerUnit: "Please Enter GstPerUnit",
-            txtHSNCode: "Please Enter HSNCode",
         }
-    })
-});
+    })   
+    var isValid = true;
 
-function resetErrorMessages() {
-    document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnUnitType").innerText = "";
-    document.getElementById("spnPricePerUnit").innerText = "";
-    document.getElementById("spnGstAmount").innerText = "";
-    document.getElementById("spnGstPerUnit").innerText = "";
-    document.getElementById("spnHSNCode").innerText = "";
+    if (isValid) {
+        if ($("#txtItemid").val() == '') {
+            CreateItem();
+        }
+        else {
+            UpdateItemDetails()
+        }
+    }
 }
-function isValidPriceInput(PricePerUnit) {
-
-    var numberPattern = /^[0-9]+$/;
-    return numberPattern.test(PricePerUnit);
-}
-function isValidGSTInput(GstAmount) {
-
-    var numberPattern = /^\d+(\.\d+)?$/;
-    return numberPattern.test(GstAmount);
+function resetItemForm() {
+    if (ItemForm) {
+        ItemForm.resetForm();
+    }
 }
 
 

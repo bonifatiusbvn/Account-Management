@@ -122,7 +122,7 @@ function CreatePurchaseRequest() {
     var objData = {
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
-        Item: $('#searchItemname').val(),
+        Item: $('#txtItemName').val(),
         SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
@@ -165,6 +165,13 @@ function ClearPurchaseRequestTextBox() {
         allowClear: Boolean($(this).data('allow-clear')),
         dropdownParent: $("#CreatePurchaseRequest")
     });
+    $('#txtUnitType').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
 }
 
 function validateAndCreatePurchaseRequest() {
@@ -172,10 +179,8 @@ function validateAndCreatePurchaseRequest() {
     resetErrorsMessages();
     var UnitTypeId = document.getElementById("txtUnitType").value.trim();
     var ItemName = document.getElementById("searchItemname").value.trim();
-    var SiteId = document.getElementById("txtPoSiteName").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
     var UserRoleId = $('#RoleIdinPR').val();
-    debugger
     var isValid = true;
 
     if (UnitTypeId === "") {
@@ -189,15 +194,6 @@ function validateAndCreatePurchaseRequest() {
 
     if (ItemName === "") {
         document.getElementById("spnItemName").innerText = "Item is required.";
-        isValid = false;
-    }
-
-
-    if (SiteId === "" && UserRoleId == 3) {
-        document.getElementById("spnSiteName").innerText = "Site is required.";
-        isValid = false;
-    } else if (SiteId === "--Select SiteName--" && UserRoleId == 3) {
-        document.getElementById("spnSiteName").innerText = "Site is required.";
         isValid = false;
     }
 
@@ -221,7 +217,6 @@ function validateAndCreatePurchaseRequest() {
 function resetErrorsMessages() {
     document.getElementById("spnUnitType").innerText = "";
     document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnSiteName").innerText = "";
     document.getElementById("spnQuantity").innerText = "";
 }
 
@@ -249,6 +244,20 @@ function EditPurchaseRequestDetails(PurchaseId) {
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
             resetErrorsMessages()
             offcanvas.show();
+            $('#searchItemname').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
+            $('#txtUnitType').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -635,9 +644,6 @@ $("#AddShippingBtn").on("click", function () {
 $(document).on("click", "#addItemButton", function () {
     clearItemErrorMessage();
 });
-$.validator.addMethod("validMobileNo", function (value, element) {
-    return isValidPhoneNo(value);
-}, "Enter a valid 10-digit Mobile No");
 $(document).ready(function () {
 
     $("#CreatePOForm").validate({
@@ -650,7 +656,9 @@ $(document).ready(function () {
             txtContectPerson: "required",
             txtMobileNo: {
                 required: true,
-                validMobileNo: true
+                digits: true,
+                minlength: 10,
+                maxlength: 10
             },
         },
         messages: {
@@ -660,8 +668,10 @@ $(document).ready(function () {
             txtDeliverySchedule: "Please Enter PO Delivery Schedule",
             txtContectPerson: "Enter Contact Person Name",
             txtMobileNo: {
-                required: "Enter Mobile No",
-                validMobileNo: "Enter a valid 10-digit Mobile No"
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
             },
         }
     });

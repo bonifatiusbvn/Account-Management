@@ -50,7 +50,8 @@ function CreateSupplier() {
 
 
 function ClearSupplierTextBox() {
-    $('#dspSupplierId').val('');
+    resetSupplierForm();
+    $('#txtSupplierid').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
     $('#txtPhoneNo').val('');
@@ -65,9 +66,8 @@ function ClearSupplierTextBox() {
     $('#txtIFFC').val('');
     $('#ddlCountry').val('');
 
-
     var button = document.getElementById("btnsupplier");
-    if ($('#dspSupplierId').val() == '') {
+    if ($('#txtSupplierid').val() == '') {
         button.textContent = "Create";
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
@@ -102,6 +102,7 @@ function DisplaySupplierDetails(SupplierId) {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
+            resetSupplierForm();
             offcanvas.show();
         },
         error: function (xhr, status, error) {
@@ -202,41 +203,49 @@ function sortSupplierTable() {
 
 
 function UpdateSupplierDetails() {
+    if ($("#SupplierForm").valid()) {
+        var objData = {
+            SupplierId: $('#txtSupplierid').val(),
+            SupplierName: $('#txtSupplierName').val(),
+            Email: $('#txtEmail').val(),
+            Mobile: $('#txtPhoneNo').val(),
+            Gstno: $('#txtGST').val(),
+            BuildingName: $('#txtBuilding').val(),
+            Area: $('#txtArea').val(),
+            City: $('#txtcity').val(),
+            State: $('#txtstate').val(),
+            PinCode: $('#txtPinCode').val(),
+            BankName: $('#txtBank').val(),
+            AccountNo: $('#txtAccount').val(),
+            Iffccode: $('#txtIFFC').val(),
+            UpdatedBy: $('#txtUserid').val(),
+        }
+        $.ajax({
+            url: '/Supplier/UpdateSupplierDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-    var objData = {
-        SupplierId: $('#txtSupplierid').val(),
-        SupplierName: $('#txtSupplierName').val(),
-        Email: $('#txtEmail').val(),
-        Mobile: $('#txtPhoneNo').val(),
-        Gstno: $('#txtGST').val(),
-        BuildingName: $('#txtBuilding').val(),
-        Area: $('#txtArea').val(),
-        City: $('#txtCity').val(),
-        State: $('#txtState').val(),
-        PinCode: $('#txtPinCode').val(),
-        BankName: $('#txtBank').val(),
-        AccountNo: $('#txtAccount').val(),
-        Iffccode: $('#txtIFFC').val(),
-        UpdatedBy: $('#txtUserid').val(),
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Supplier/SupplierList';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/Supplier/UpdateSupplierDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/Supplier/SupplierList';
-            });
-        },
-    })
-
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 function DeleteSupplierDetails(SupplierId) {
     Swal.fire({
@@ -287,103 +296,30 @@ function DeleteSupplierDetails(SupplierId) {
         }
     });
 }
-//function validateAndCreateSupplier() {
-
-
-//    resetErrorMessages();
-
-//    var supplierName = $('#txtSupplierName').val().trim();
-//    var email = $('#txtEmail').val().trim();
-//    var phoneNo = $('#txtPhoneNo').val().trim();
-//    var GST = $('#txtGST').val().trim();
-//    var building = $('#txtBuilding').val().trim();
-//    var area = $('#txtArea').val().trim();
-//    var pinCode = $('#txtPinCode').val().trim();
-//    var bank = $('#txtBank').val().trim();
-//    var account = $('#txtAccount').val().trim();
-//    var IFFC = $('#txtIFFC').val().trim();
-
-
-//    var isValid = true;
-
-//    if (supplierName === "") {
-//        document.getElementById("spnSupplier").innerText = "Supplier Name is required.";
-//        isValid = false;
-//    }
-
-//    if (email === "") {
-//        document.getElementById("spnEmail").innerText = "Email is required.";
-//        isValid = false;
-//    } else if (!isValidEmail(email)) {
-//        document.getElementById("spnEmail").innerText = "Invalid Email format.";
-//        isValid = false;
-//    }
-
-//    if (phoneNo === "") {
-//        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
-//        isValid = false;
-//    } else if (!isValidPhoneNo(phoneNo)) {
-//        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
-//        isValid = false;
-//    }
-
-//    if (GST === "") {
-//        document.getElementById("spnGST").innerText = "GST Number is required.";
-//        isValid = false;
-//    }
-
-//    if (building === "") {
-//        document.getElementById("spnBuilding").innerText = "Building Name is required.";
-//        isValid = false;
-//    }
-
-//    if (area === "") {
-//        document.getElementById("spnArea").innerText = "Area is required.";
-//        isValid = false;
-//    }
-
-//    if (pinCode === "") {
-//        document.getElementById("spnPinCode").innerText = "PinCode is required.";
-//        isValid = false;
-//    }
-
-//    if (bank === "") {
-//        document.getElementById("spnBank").innerText = "Bank Name is required.";
-//        isValid = false;
-//    }
-
-//    if (account === "") {
-//        document.getElementById("spnAccount").innerText = "Account Number is required.";
-//        isValid = false;
-//    }
-
-//    if (IFFC === "") {
-//        document.getElementById("spnIFFC").innerText = "IFFC Code is required.";
-//        isValid = false;
-//    }
-
-
-//    if (isValid) {
-//        if ($("#txtSupplierid").val() == '') {
-//            CreateSupplier();
-//        }
-//        else {
-//            UpdateSupplierDetails()
-//        }
-//    }
-
-//}
-$(document).ready(function () {
-
-    $("#SupplierForm").validate({
+var SupplierForm;
+function validateAndCreateSupplier() {
+   SupplierForm= $("#SupplierForm").validate({
         rules: {
             txtSupplierName: "required",
-            txtPhoneNo: "required",
-            txtEmail: "required",
+            txtPhoneNo: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            txtEmail: {
+                required: true,
+                email: true
+            },
             txtGST: "required",
             txtBuilding: "required",
             txtArea: "required",
-            txtPinCode: "required",
+            txtPinCode: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6
+            },
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required",
@@ -393,12 +329,25 @@ $(document).ready(function () {
         },
         messages: {
             txtSupplierName: "Please Enter SupplierName",
-            txtPhoneNo: "Please Enter PhoneNo",
-            txtEmail: "Please Enter Email",
+            txtPhoneNo: {
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
+            },
+            txtEmail: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
             txtGST: "Please Enter GST",
             txtBuilding: "Please Enter Building",
             txtArea: "Please Enter Area",
-            txtPinCode: "Please Enter PinCode",
+            txtPinCode: {
+                required: "Please Enter Pin Code",
+                digits: "Pin code must contain only digits",
+                minlength: "Pin code must be 6 digits long",
+                maxlength: "Pin code must be 6 digits long"
+            },
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country",
@@ -406,32 +355,25 @@ $(document).ready(function () {
             txtAccount: "Please Enter Account",
             txtIFFC: "Please Enter IFFC",
         }
-    })
-});
+    });
+    var isValid = true;
 
-function resetErrorMessages() {
-    document.getElementById("spnSupplier").innerText = "";
-    document.getElementById("spnEmail").innerText = "";
-    document.getElementById("spnPhoneNo").innerText = "";
-    document.getElementById("spnGST").innerText = "";
-    document.getElementById("spnBuilding").innerText = "";
-    document.getElementById("spnArea").innerText = "";
-    document.getElementById("spnPinCode").innerText = "";
-    document.getElementById("spnBank").innerText = "";
-    document.getElementById("spnAccount").innerText = "";
-    document.getElementById("spnIFFC").innerText = "";
+
+    if (isValid) {
+        if ($("#txtSupplierid").val() == '') {
+            CreateSupplier();
+        }
+        else {
+            UpdateSupplierDetails()
+        }
+    }
 }
 
-function isValidEmail(email) {
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
+function resetSupplierForm() {
+    if (SupplierForm) {
+        SupplierForm.resetForm();
+    }
 }
-
-function isValidPhoneNo(phoneNo) {
-    var phoneNoPattern = /^\d{10}$/;
-    return phoneNoPattern.test(phoneNo);
-}
-
 
 function UserActiveDecative(UserId) {
 

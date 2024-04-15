@@ -1,54 +1,59 @@
 ﻿AllUserTable();
 GetSiteDetails();
 function CreateUser() {
+    if ($("#userForm").valid()) {
+        var objData = {
+            FirstName: $('#txtFirstName').val(),
+            LastName: $('#txtLastName').val(),
+            UserName: $('#txtUserName').val(),
+            Password: $('#txtPassword').val(),
+            Role: $('#txtrole').val(),
+            Email: $('#txtEmail').val(),
+            PhoneNo: $('#txtPhoneNo').val(),
+            SiteId: $('#txtuserSiteName').val(),
+        }
+        $.ajax({
+            url: '/User/CreateUser',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-
-    var objData = {
-        FirstName: $('#txtFirstName').val(),
-        LastName: $('#txtLastName').val(),
-        UserName: $('#txtUserName').val(),
-        Password: $('#txtPassword').val(),
-        Role: $('#txtrole').val(),
-        Email: $('#txtEmail').val(),
-        PhoneNo: $('#txtPhoneNo').val(),
-        SiteId: $('#txtuserSiteName').val(),
-
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/User/UserListView';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/User/CreateUser',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/User/UserListView';
-            });
-        },
-    })
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 function GetSiteDetails() {
 
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-
+            $('#ddlSiteName').empty();
             $.each(result, function (i, data) {
-
-                $('#txtuserSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
-                $('#txtSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+                $('#ddlSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
             });
         }
     });
 }
 
 function ClearUserTextBox() {
-    resetErrorMessages();
+    resetUserForm();
     $('#txtUserid').val('');
     $('#txtFirstName').val('');
     $('#txtLastName').val('');
@@ -89,6 +94,7 @@ function DisplayUserDetails(UserId) {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
+            resetUserForm()
             offcanvas.show();
         },
         error: function (xhr, status, error) {
@@ -184,98 +190,85 @@ function sortTable() {
 
 
 function UpdateUserDetails() {
+    if ($("#userForm").valid()) {
+        var objData = {
+            Id: $('#txtUserid').val(),
+            FirstName: $('#txtFirstName').val(),
+            LastName: $('#txtLastName').val(),
+            UserName: $('#txtUserName').val(),
+            Password: $('#txtPassword').val(),
+            Role: $('#ddlUserRole').val(),
+            Email: $('#txtEmail').val(),
+            PhoneNo: $('#txtPhoneNo').val(),
+            SiteId: $('#txtuserSiteName').val(),
+        }
+        $.ajax({
+            url: '/User/UpdateUserDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-    var objData = {
-        Id: $('#txtUserid').val(),
-        FirstName: $('#txtFirstName').val(),
-        LastName: $('#txtLastName').val(),
-        UserName: $('#txtUserName').val(),
-        Password: $('#txtPassword').val(),
-        Role: $('#ddlUserRole').val(),
-        Email: $('#txtEmail').val(),
-        PhoneNo: $('#txtPhoneNo').val(),
-        SiteId: $('#txtuserSiteName').val(),
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/User/UserListView';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/User/UpdateUserDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/User/UserListView';
-            });
-        },
-    })
-
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
+var UserForm;
 function validateAndCreateUser() {
 
-    resetErrorMessages();
-
-    var firstName = document.getElementById("txtFirstName").value.trim();
-    var lastName = document.getElementById("txtLastName").value.trim();
-    var userName = document.getElementById("txtUserName").value.trim();
-    var password = document.getElementById("txtPassword").value.trim();
-    var email = document.getElementById("txtEmail").value.trim();
-    var phoneNo = document.getElementById("txtPhoneNo").value.trim();
-    var SiteName = document.getElementById("txtuserSiteName").value.trim();
-
-
+    UserForm=$("#userForm").validate({
+        rules: {
+            txtFirstName: "required",
+            txtLastName: "required",
+            txtUserName: "required",
+            txtPassword: "required",
+            txtEmail: {
+                required: true,
+                email: true
+            },
+            txtPhoneNo: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            ddlUserRole: "required",
+        },
+        messages: {
+            txtFirstName: "FirstName is Required!",
+            txtLastName: "Lastname is Required!",
+            txtUserName: "Username is Required!",
+            txtPassword: "Password is Required!",
+            txtEmail: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
+            txtPhoneNo: {
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
+            },
+            ddlUserRole: "Select User Role!",
+        }
+    })
     var isValid = true;
-
-
-    if (firstName === "") {
-        document.getElementById("spnFirstName").innerText = "First Name is required.";
-        isValid = false;
-    }
-
-
-    if (lastName === "") {
-        document.getElementById("spnLastName").innerText = "Last Name is required.";
-        isValid = false;
-    }
-
-
-    if (userName === "") {
-        document.getElementById("spnUserName").innerText = "User Name is required.";
-        isValid = false;
-    }
-
-
-    if (password === "") {
-        document.getElementById("spnPassword").innerText = "Password is required.";
-        isValid = false;
-    }
-
-
-    if (email === "") {
-        document.getElementById("spnEmail").innerText = "Email is required.";
-        isValid = false;
-    } else if (!isValidEmail(email)) {
-        document.getElementById("spnEmail").innerText = "Invalid Email format.";
-        isValid = false;
-    }
-
-
-    if (phoneNo === "") {
-        document.getElementById("spnPhoneNo").innerText = "Phone Number is required.";
-        isValid = false;
-    } else if (!isValidPhoneNo(phoneNo)) {
-        document.getElementById("spnPhoneNo").innerText = "Invalid Phone Number format.";
-        isValid = false;
-    }
-
-    if (SiteName === "") {
-        document.getElementById("spnSiteName").innerText = "Site Name is required.";
-        isValid = false;
-    }
 
     if (isValid) {
         if ($("#txtUserid").val() == '') {
@@ -286,30 +279,10 @@ function validateAndCreateUser() {
         }
     }
 }
-
-
-function resetErrorMessages() {
-    document.getElementById("spnFirstName").innerText = "";
-    document.getElementById("spnLastName").innerText = "";
-    document.getElementById("spnUserName").innerText = "";
-    document.getElementById("spnPassword").innerText = "";
-    document.getElementById("spnEmail").innerText = "";
-    document.getElementById("spnPhoneNo").innerText = "";
-    document.getElementById("spnSiteName").innerText = "";
-}
-
-
-function isValidEmail(email) {
-
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-}
-
-
-function isValidPhoneNo(phoneNo) {
-
-    var phoneNoPattern = /^\d{10}$/;
-    return phoneNoPattern.test(phoneNo);
+function resetUserForm() {
+    if (UserForm) {
+        UserForm.resetForm();
+    }
 }
 
 function UserActiveDecative(UserId) {

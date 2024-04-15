@@ -168,48 +168,48 @@
                 <div class="p-4">
                     <div class="card">
                         <div class="card-body">
-                            <form class="row g-3" id="userForm">
+                            <form class="row g-3" id="ItemMsterForm">
                                 <div class="col-12">
                                     <label class="form-label">Item Name</label>
-                                    <input type="text" class="form-control form-control" placeholder="Item Name" id="txtItemName" name="txtItemName" required>
+                                    <input type="text" class="form-control form-control" placeholder="Item Name" id="txtItemName" name="txtItemName">
                                     <input type="hidden" id="txtItemid">
                                     <span id="spnItemName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control form-control" id="txtUnitType" name="txtUnitType" required>
-                                        <option selected disabled value="">--Select--</option>
+                                    <select class="single-select form-select" id="txtUnitType" name="txtUnitType">
+                                        <option selected value="">--Select--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
                                 <div class="col-8">
                                     <label class="form-label">Price</label>
-                                    <input type="text" class="form-control form-control" placeholder="Price Per Unit" id="txtPricePerUnit" name="txtPricePerUnit" required>
+                                    <input type="number" class="form-control form-control" placeholder="Price Per Unit" id="txtPricePerUnit" name="txtPricePerUnit">
                                     <span id="spnPricePerUnit" class="text-danger"></span>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">IsWithGST</label>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input font-22" id="txtIsWithGst" name="txtIsWithGst" type="checkbox" style="margin-left:-35px;">
+                                        <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox" style="margin-left:-35px;">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">GST Amount</label>
-                                    <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount" required>
+                                    <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount">
                                     <span id="spnGstAmount" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">GST%</label>
-                                    <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit" required>
+                                    <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit">
                                     <span id="spnGstPerUnit" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">HSN Code</label>
-                                    <input type="text" class="form-control form-control" placeholder="HSN Code" id="txtHSNCode" name="txtHSNCode" required>
+                                    <input type="text" class="form-control form-control" placeholder="HSN Code" id="txtHSNCode">
                                     <span id="spnHSNCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateItem()" id="btnitem">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItem()" id="btnitem"></button>
                                 </div>
                             </form>
                         </div>
@@ -248,8 +248,8 @@
     </div><!-- /.modal -->
 </div>
 <style>
-    #txtItemName-error, #txtUnitType-error, #txtPricePerUnit-error, #txtIsWithGst-error,
-    #txtGstAmount-error, #txtGstPerUnit-error, #txtHSNCode-error 
+    #txtItemName-error, #txtUnitType-error, #txtPricePerUnit-error,
+    #txtGstAmount-error, #txtGstPerUnit-error
     {
         color: red;
     }

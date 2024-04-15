@@ -162,18 +162,18 @@
                             <form class="row g-3" id="siteForm">
                                 <div class="col-12">
                                     <label class="form-label">Site Name</label>
-                                    <input type="text" class="form-control" placeholder="Site Name" id="txtsiteName" name="txtsiteName" required>
+                                    <input type="text" class="form-control" placeholder="Site Name" id="txtsiteName" name="txtsiteName">
                                     <input type="hidden" id="txtSiteid">
                                     <span id="spnSiteName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Contact Name</label>
-                                    <input type="text" class="form-control" placeholder="Contact Person Name" id="txtContectPersonName" name="txtContectPersonName" required>
+                                    <input type="text" class="form-control" placeholder="Contact Person Name" id="txtContectPersonName" name="txtContectPersonName">
                                     <span id="spnContectPersonName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Contact Phone No.</label>
-                                    <input type="text" class="form-control" placeholder="Contact Person Phone No." id="txtContectPersonPhoneNo" name="txtContectPersonPhoneNo" required>
+                                    <input type="text" class="form-control" placeholder="Contact Person Phone No." id="txtContectPersonPhoneNo" name="txtContectPersonPhoneNo">
                                     <span id="spnContectPersonPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
@@ -181,22 +181,22 @@
                                     <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
                                     <label for="hideShippingAddress"><b>Is Your Address is same as Shipping Address?</b></label>
 
-                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" required></textarea>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Area</label>
-                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea" required>
+                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea">
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Pincode</label>
-                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode" required>
+                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode">
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" name="ddlCountry" class="form-control" onchange="fn_getState('stateDropdown',null,this)" required>
+                                    <select id="ddlCountry" name="ddlCountry" class="form-control" onchange="fn_getState('stateDropdown',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteCountry" value="" />
@@ -204,7 +204,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">State</label>
-                                    <select id="stateDropdown" name="stateDropdown" class="form-control" onchange="fn_getcitiesbystateId('ddlCity', null, this)" required>
+                                    <select id="stateDropdown" name="stateDropdown" class="form-control" onchange="fn_getcitiesbystateId('ddlCity', null, this)">
                                         <option>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteState" value="" />
@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-control" required>
+                                    <select id="ddlCity" name="ddlCity" class="form-control">
                                         <option>--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteCity" value="" />
@@ -224,23 +224,23 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Shipping Address</label>
-                                        <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" name="txtShippingAddress" required></textarea>
+                                        <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" name="txtShippingAddress"></textarea>
                                         <span id="spnShippingAddress" class="text-danger"></span>
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Shipping Area</label>
-                                        <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" name="txtShippingArea" required>
+                                        <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" name="txtShippingArea">
                                         <span id="spnShippingArea" class="text-danger"></span>
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label">Shipping Pincode</label>
-                                            <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" name="txtShippingPincode" required>
+                                            <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" name="txtShippingPincode">
                                             <span id="spnShippingPincode" class="text-danger"></span>
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">Shipping City</label>
-                                            <select id="ShippingCity" name="ShippingCity" class="form-control" required>
+                                            <select id="ShippingCity" name="ShippingCity" class="form-control">
                                                 <option>--Select City--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingCity" value="" />
@@ -250,7 +250,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label"> Shipping State</label>
-                                            <select id="ShippingState" name="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)" required>
+                                            <select id="ShippingState" name="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
                                                 <option>--Select State--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingState" value="" />
@@ -258,7 +258,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label"> Shipping Country</label>
-                                            <select id="shippingCountry" name="shippingCountry" class="form-control" onchange="fn_getShippingState('ShippingState', null, this)" required>
+                                            <select id="shippingCountry" name="shippingCountry" class="form-control" onchange="fn_getShippingState('ShippingState', null, this)">
                                                 <option value=" ">--Select Country--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingCountry" value="" />
@@ -267,7 +267,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="CreateSite()" id="btnSite">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite"></button>
                                 </div>
                             </form>
                         </div>
@@ -281,7 +281,7 @@
 </div>
 
 <style>
-    #txtsiteName-error, #txtContectPersonName-error, #txtContectPersonPhoneNo-error, #hideShippingAddress-error,
+    #txtsiteName-error, #txtContectPersonName-error, #txtContectPersonPhoneNo-error, #txtAddress-error,
     #txtArea-error, #txtPincode-error, #ddlCountry-error, #stateDropdown-error, #ddlCity-error,
     #txtShippingAddress-error, #txtShippingArea-error, #txtShippingPincode-error, #ShippingCity-error,
     #ShippingState-error, #shippingCountry-error {
@@ -294,10 +294,8 @@
 </style>
 
 @section Scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/moduls/masterlistscript.js"></script>
-    <script src="~/moduls/sitemasterscript.js"></script>
+    <script src="~/moduls/masterlistscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/sitemasterscript.js" asp-append-version="true"></script>
 
 }
 

@@ -171,33 +171,33 @@
                             <form class="row g-3" id="companyForm">
                                 <div class="col-12">
                                     <label class="form-label">Company Name</label>
-                                    <input type="text" class="form-control" placeholder="Company Name" id="txtCompanyName" name="txtCompanyName" required>
+                                    <input type="text" class="form-control" placeholder="Company Name" id="txtCompanyName" name="txtCompanyName">
                                     <input type="hidden" id="txtCompanyid" />
                                     <span id="spnCompanyName" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Gst No</label>
-                                    <input type="text" class="form-control" placeholder="Gst No" id="txtGstNo" name="txtGstNo" required>
+                                    <input type="text" class="form-control" placeholder="Gst No" id="txtGstNo" name="txtGstNo">
                                     <span id="spnGstNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Pan No</label>
-                                    <input type="text" class="form-control" placeholder="Pan No" id="txtPanNo" name="txtPanNo" required>
+                                    <input type="text" class="form-control" placeholder="Pan No" id="txtPanNo" name="txtPanNo">
                                     <span id="spnPanNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Address</label>
-                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress" required></textarea>
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Area</label>
-                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea" required>
+                                    <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea">
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Pincode</label>
-                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode" required>
+                                    <input type="text" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode">
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
@@ -225,7 +225,7 @@
                                     <span id="spnCountry" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="AddCompany()" id="btncompany">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateCompany()" id="btncompany">Submit</button>
                                 </div>
                             </form>
                         </div>

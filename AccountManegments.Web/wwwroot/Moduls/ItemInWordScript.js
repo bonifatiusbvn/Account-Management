@@ -160,6 +160,13 @@ function GetUnitType() {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
+            $('#txtUnitType').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreateItemInWord")
+            });
         }
     });
 }

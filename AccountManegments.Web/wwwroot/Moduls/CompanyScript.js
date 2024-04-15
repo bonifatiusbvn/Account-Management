@@ -97,7 +97,7 @@ function AddCompany() {
     }
 }
 function ClearTextBox() {
-    resetErrorMessages();
+    resetCompanyForm();
     $('#txtCompanyid').val('');
     $('#txtCompanyName').val('');
     $('#txtGstNo').val('');
@@ -142,8 +142,8 @@ function GetCompnaytById(CompanyId) {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createCompany'));
+            resetCompanyForm();
             offcanvas.show();
-            resetErrorMessages();
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -182,37 +182,45 @@ function SelectCompanyDetails(CompanyId, element) {
     });
 }
 function UpdateCompany() {
+    if ($("#companyForm").valid()) {
+        var objData = {
+            CompanyId: $('#txtCompanyid').val(),
+            CompanyName: $('#txtCompanyName').val(),
+            Gstno: $('#txtGstNo').val(),
+            PanNo: $('#txtPanNo').val(),
+            Address: $('#txtAddress').val(),
+            Area: $('#txtArea').val(),
+            CityId: $('#ddlCity').val(),
+            StateId: $('#dropState').val(),
+            Country: $('#ddlCountry').val(),
+            Pincode: $('#txtPincode').val(),
+        }
+        $.ajax({
+            url: '/Company/UpdateCompany',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-    var objData = {
-        CompanyId: $('#txtCompanyid').val(),
-        CompanyName: $('#txtCompanyName').val(),
-        Gstno: $('#txtGstNo').val(),
-        PanNo: $('#txtPanNo').val(),
-        Address: $('#txtAddress').val(),
-        Area: $('#txtArea').val(),
-        CityId: $('#ddlCity').val(),
-        StateId: $('#dropState').val(),
-        Country: $('#ddlCountry').val(),
-        Pincode: $('#txtPincode').val(),
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Company/CreateCompany';
+                });
+            },
+        })
     }
-    $.ajax({
-        url: '/Company/UpdateCompany',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/Company/CreateCompany';
-            });
-        },
-    })
-
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 function DeleteCompanyDetails(CompanyId) {
     Swal.fire({
@@ -263,87 +271,10 @@ function DeleteCompanyDetails(CompanyId) {
         }
     });
 }
-//function validateAndCreateCompany() {
 
-//    resetErrorMessages();
-
-//    var companyName = document.getElementById("txtCompanyName").value.trim();
-//    var gstno = document.getElementById("txtGstNo").value.trim();
-//    var panNo = document.getElementById("txtPanNo").value.trim();
-//    var address = document.getElementById("txtAddress").value.trim();
-//    var area = document.getElementById("txtArea").value.trim();
-//    var cityId = document.getElementById("ddlCity").value.trim();
-//    var stateId = document.getElementById("dropState").value.trim();
-//    var country = document.getElementById("ddlCountry").value.trim();
-//    var pincode = document.getElementById("txtPincode").value.trim();
-
-
-//    var isValid = true;
-
-
-//    if (companyName === "") {
-//        document.getElementById("spnCompanyName").innerText = "Company Name is required.";
-//        isValid = false;
-//    }
-
-
-//    if (gstno === "") {
-//        document.getElementById("spnGstNo").innerText = "Gst No is required.";
-//        isValid = false;
-//    }
-
-
-//    if (panNo === "") {
-//        document.getElementById("spnPanNo").innerText = "Pan No is required.";
-//        isValid = false;
-//    }
-
-
-//    if (address === "") {
-//        document.getElementById("spnAddress").innerText = "Address is required.";
-//        isValid = false;
-//    }
-
-//    if (area === "") {
-//        document.getElementById("spnArea").innerText = "Area is required.";
-//        isValid = false;
-//    }
-
-//    if (cityId === "") {
-//        document.getElementById("spnCityId").innerText = "CityId is required.";
-//        isValid = false;
-//    }
-
-//    if (stateId === "") {
-//        document.getElementById("spnStateId").innerText = "StateId is required.";
-//        isValid = false;
-//    }
-
-//    if (country === "") {
-//        document.getElementById("spnCountry").innerText = "Country is required.";
-//        isValid = false;
-//    }
-
-//    if (pincode === "") {
-//        document.getElementById("spnPincode").innerText = "Pincode is required.";
-//        isValid = false;
-//    }
-
-
-
-//    if (isValid) {
-//        if ($("#txtCompanyid").val() == '') {
-//            AddCompany();
-//        }
-//        else {
-//            UpdateCompany()
-//        }
-//    }
-//}
-
-$(document).ready(function () {
-
-    $("#companyForm").validate({
+var CompanyForm;
+function validateAndCreateCompany() {
+   CompanyForm= $("#companyForm").validate({
         rules: {
             txtCompanyName: "required",
             txtGstNo: "required",
@@ -367,17 +298,21 @@ $(document).ready(function () {
             ddlCountry: "Please Enter Country",
         }
     })
-});
-function resetErrorMessages() {
-    document.getElementById("spnCompanyName").innerText = "";
-    document.getElementById("spnGstNo").innerText = "";
-    document.getElementById("spnPanNo").innerText = "";
-    document.getElementById("spnAddress").innerText = "";
-    document.getElementById("spnArea").innerText = "";
-    document.getElementById("spnCityId").innerText = "";
-    document.getElementById("spnStateId").innerText = "";
-    document.getElementById("spnCountry").innerText = "";
-    document.getElementById("spnPincode").innerText = "";
+    var isValid = true;
+
+    if (isValid) {
+        if ($("#txtCompanyid").val() == '') {
+            AddCompany();
+        }
+        else {
+            UpdateCompany()
+        }
+    }
+}
+function resetCompanyForm() {
+    if (CompanyForm) {
+        CompanyForm.resetForm();
+    }
 }
 
 

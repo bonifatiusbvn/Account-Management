@@ -98,7 +98,7 @@ namespace AccountManegments.Web.Controllers
         [FormPermissionAttribute("Supplier-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSupplierDetails(SupplierModel UpdateSupplier)
-        {
+         {
             try
             {
 
