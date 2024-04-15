@@ -1,5 +1,5 @@
 ﻿@model AccountManagement.DBContext.Models.ViewModels.UserModels.LoginRequest
-
+@inject Microsoft.Extensions.Configuration.IConfiguration _Configuration
 <!doctype html>
 <html lang="en" class="light-theme">
 
@@ -18,7 +18,7 @@
     <link href="~/assets/css/icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
-    <title>Dashkote - Bootstrap5 Admin Template</title>
+    <title>Login - @_Configuration.GetSection("ProjectName")?.Value</title>
 </head>
 
 <body class="bg-white">
@@ -33,7 +33,7 @@
                             <div class="card-body">
                                 <div class="text-center">
                                     <h6>Welcome To</h6>
-                                    <h2>D. M.Infra</h2>
+                                    <h2>@_Configuration.GetSection("ProjectName")?.Value</h2>
                                     <p>Sign In to your account</p>
                                 </div>
                                 <form class="form-body row g-3" asp-action="UserLogin" asp-controller="Authentication" method="post">

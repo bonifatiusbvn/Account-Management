@@ -122,7 +122,7 @@ function CreatePurchaseRequest() {
     var objData = {
         UnitTypeId: $('#txtUnitType').val(),
         ItemId: $('#searchItemname').val(),
-        Item: $('#txtItemName').val(),
+        Item: $('#searchItemname').val(),
         SiteId: siteName,
         Quantity: $('#txtQuantity').val(),
         PrNo: $('#prNo').val(),
@@ -175,7 +175,7 @@ function validateAndCreatePurchaseRequest() {
     var SiteId = document.getElementById("txtPoSiteName").value.trim();
     var Quantity = document.getElementById("txtQuantity").value.trim();
     var UserRoleId = $('#RoleIdinPR').val();
-
+    debugger
     var isValid = true;
 
     if (UnitTypeId === "") {
@@ -1159,14 +1159,14 @@ function isData() {
     })
 }
 
-document.querySelector("#profile-img-file-input").addEventListener("change", function () {
-    var e = document.querySelector(".user-profile-image"),
-        t = document.querySelector(".profile-img-file-input").files[0],
-        n = new FileReader;
-    n.addEventListener("load", function () {
-        e.src = n.result
-    }, !1), t && n.readAsDataURL(t)
-}), isData();
+//document.querySelector("#profile-img-file-input").addEventListener("change", function () {
+//    var e = document.querySelector(".user-profile-image"),
+//        t = document.querySelector(".profile-img-file-input").files[0],
+//        n = new FileReader;
+//    n.addEventListener("load", function () {
+//        e.src = n.result
+//    }, !1), t && n.readAsDataURL(t)
+//}), isData();
 
 
 var count = 0;
@@ -1362,163 +1362,163 @@ var value, invoices_list = localStorage.getItem("invoices-list"),
     options = localStorage.getItem("option"),
     invoice_no = localStorage.getItem("invoice_no"),
     invoices = JSON.parse(invoices_list);
-if (null === localStorage.getItem("invoice_no") && null === localStorage.getItem("option") ? (viewobj = "", value = "#VL" + Math.floor(11111111 + 99999999 * Math.random()), document.getElementById("invoicenoInput").value = value) : viewobj = invoices.find(e => e.invoice_no === invoice_no), "" != viewobj && "edit-invoice" == options) {
-    document.getElementById("registrationNumber").value = viewobj.company_details.legal_registration_no, document.getElementById("companyEmail").value = viewobj.company_details.email, document.getElementById("companyWebsite").value = viewobj.company_details.website, new Cleave("#compnayContactno", {
-        prefix: viewobj.company_details.contact_no,
-        delimiters: ["(", ")", "-"],
-        blocks: [0, 3, 3, 4]
-    }), document.getElementById("companyAddress").value = viewobj.company_details.address, document.getElementById("companyaddpostalcode").value = viewobj.company_details.zip_code;
-    for (var preview = document.querySelectorAll(".user-profile-image"), paroducts_list = ("" !== viewobj.img && (preview.src = viewobj.img), document.getElementById("invoicenoInput").value = "#VAL" + viewobj.invoice_no, document.getElementById("invoicenoInput").setAttribute("readonly", !0), document.getElementById("date-field").value = viewobj.date, document.getElementById("choices-payment-status").value = viewobj.status, document.getElementById("totalamountInput").value = "$" + viewobj.order_summary.total_amount, document.getElementById("billingName").value = viewobj.billing_address.full_name, document.getElementById("billingAddress").value = viewobj.billing_address.address, new Cleave("#billingPhoneno", {
-        prefix: viewobj.company_details.contact_no,
-        delimiters: ["(", ")", "-"],
-        blocks: [0, 3, 3, 4]
-    }), document.getElementById("billingTaxno").value = viewobj.billing_address.tax, document.getElementById("shippingName").value = viewobj.shipping_address.full_name, document.getElementById("shippingAddress").value = viewobj.shipping_address.address, new Cleave("#shippingPhoneno", {
-        prefix: viewobj.company_details.contact_no,
-        delimiters: ["(", ")", "-"],
-        blocks: [0, 3, 3, 4]
-    }), document.getElementById("shippingTaxno").value = viewobj.billing_address.tax, viewobj.prducts), counter = 1; counter++, 1 < paroducts_list.length && document.getElementById("add-item").click(), paroducts_list.length - 1 >= counter;);
-    var counter_1 = 1,
-        cleave = (setTimeout(() => {
-            Array.from(paroducts_list).forEach(function (e) {
-                document.getElementById("productName-" + counter_1).value = e.product_name, document.getElementById("productDetails-" + counter_1).value = e.product_details, document.getElementById("productRate-" + counter_1).value = e.rates, document.getElementById("product-qty-" + counter_1).value = e.quantity, document.getElementById("productPrice-" + counter_1).value = "$" + e.rates * e.quantity, counter_1++
-            })
-        }, 300), document.getElementById("cart-subtotal").value = viewobj.order_summary.sub_total, document.getElementById("cart-tax").value = viewobj.order_summary.estimated_tex, document.getElementById("cart-discount").value = "$" + viewobj.order_summary.discount, document.getElementById("cart-shipping").value = "$" + viewobj.order_summary.shipping_charge, document.getElementById("cart-total").value = "$" + viewobj.order_summary.total_amount, document.getElementById("choices-payment-type").value = viewobj.payment_details.payment_method, document.getElementById("cardholderName").value = viewobj.payment_details.card_holder_name, new Cleave("#cardNumber", {
-            prefix: viewobj.payment_details.card_number,
-            delimiter: " ",
-            blocks: [4, 4, 4, 4],
-            uppercase: !0
-        }));
-    document.getElementById("amountTotalPay").value = "$" + viewobj.order_summary.total_amount, document.getElementById("exampleFormControlTextarea1").value = viewobj.notes
-}
-document.addEventListener("DOMContentLoaded", function () {
-    var T = document.getElementById("invoice_form");
-    document.getElementsByClassName("needs-validation");
-    T.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var t = document.getElementById("invoicenoInput").value.slice(4),
-            e = document.getElementById("companyEmail").value,
-            n = document.getElementById("date-field").value,
-            o = document.getElementById("totalamountInput").value.slice(1),
-            a = document.getElementById("choices-payment-status").value,
-            l = document.getElementById("billingName").value,
-            i = document.getElementById("billingAddress").value,
-            c = document.getElementById("billingPhoneno").value.replace(/[^0-9]/g, ""),
-            d = document.getElementById("billingTaxno").value,
-            r = document.getElementById("shippingName").value,
-            u = document.getElementById("shippingAddress").value,
-            m = document.getElementById("shippingPhoneno").value.replace(/[^0-9]/g, ""),
-            s = document.getElementById("shippingTaxno").value,
-            p = document.getElementById("choices-payment-type").value,
-            v = document.getElementById("cardholderName").value,
-            g = document.getElementById("cardNumber").value.replace(/[^0-9]/g, ""),
-            y = document.getElementById("amountTotalPay").value.slice(1),
-            E = document.getElementById("registrationNumber").value.replace(/[^0-9]/g, ""),
-            b = document.getElementById("companyEmail").value,
-            I = document.getElementById("companyWebsite").value,
-            h = document.getElementById("compnayContactno").value.replace(/[^0-9]/g, ""),
-            _ = document.getElementById("companyAddress").value,
-            B = document.getElementById("companyaddpostalcode").value,
-            f = document.getElementById("cart-subtotal").value.slice(1),
-            x = document.getElementById("cart-tax").value.slice(1),
-            w = document.getElementById("cart-discount").value.slice(1),
-            S = document.getElementById("cart-shipping").value.slice(1),
-            j = document.getElementById("cart-total").value.slice(1),
-            q = document.getElementById("exampleFormControlTextarea1").value,
-            A = document.getElementsByClassName("product"),
-            N = 1,
-            C = [];
-        Array.from(A).forEach(e => {
-            var t = e.querySelector("#txtproductName-" + N).value,
-                n = e.querySelector("#txtproductDescription-" + N).value,
-                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
-                p = parseInt(e.querySelector("#txtgst-" + N).value),
-                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
-                a = parseInt(e.querySelector("#product-qty-" + N).value),
-                e = e.querySelector("#productPrice-" + N).value.split("$"),
-                t = {
-                    productName: t,
-                    productShortDescription: n,
-                    perUnitPrice: o,
-                    gst: p,
-                    perUnitWithGstprice: q,
-                    quantity: a,
-                    totalAmount: parseInt(e[1])
-                };
-            C.push(t), N++
-        }), !1 === T.checkValidity() ? T.classList.add("was-validated") : ("edit-invoice" == options && invoice_no == t ? (objIndex = invoices.findIndex(e => e.invoice_no == t), invoices[objIndex].invoice_no = t, invoices[objIndex].customer = l, invoices[objIndex].img = "", invoices[objIndex].email = e, invoices[objIndex].date = n, invoices[objIndex].invoice_amount = o, invoices[objIndex].status = a, invoices[objIndex].billing_address = {
-            full_name: l,
-            address: i,
-            phone: c,
-            tax: d
-        }, invoices[objIndex].shipping_address = {
-            full_name: r,
-            address: u,
-            phone: m,
-            tax: s
-        }, invoices[objIndex].payment_details = {
-            payment_method: p,
-            card_holder_name: v,
-            card_number: g,
-            total_amount: y
-        }, invoices[objIndex].company_details = {
-            legal_registration_no: E,
-            email: b,
-            website: I,
-            contact_no: h,
-            address: _,
-            zip_code: B
-        }, invoices[objIndex].order_summary = {
-            sub_total: f,
-            estimated_tex: x,
-            discount: w,
-            shipping_charge: S,
-            total_amount: j
-        }, invoices[objIndex].prducts = C, invoices[objIndex].notes = q, localStorage.removeItem("invoices-list"), localStorage.removeItem("option"), localStorage.removeItem("invoice_no"), localStorage.setItem("invoices-list", JSON.stringify(invoices))) : localStorage.setItem("new_data_object", JSON.stringify({
-            invoice_no: t,
-            customer: l,
-            img: "",
-            email: e,
-            date: n,
-            invoice_amount: o,
-            status: a,
-            billing_address: {
-                full_name: l,
-                address: i,
-                phone: c,
-                tax: d
-            },
-            shipping_address: {
-                full_name: r,
-                address: u,
-                phone: m,
-                tax: s
-            },
-            payment_details: {
-                payment_method: p,
-                card_holder_name: v,
-                card_number: g,
-                total_amount: y
-            },
-            company_details: {
-                legal_registration_no: E,
-                email: b,
-                website: I,
-                contact_no: h,
-                address: _,
-                zip_code: B
-            },
-            order_summary: {
-                sub_total: f,
-                estimated_tex: x,
-                discount: w,
-                shipping_charge: S,
-                total_amount: j
-            },
-            prducts: C,
-            notes: q
-        })), window.location.href = "apps-invoices-list.html")
-    })
-});
+//if (null === localStorage.getItem("invoice_no") && null === localStorage.getItem("option") ? (viewobj = "", value = "#VL" + Math.floor(11111111 + 99999999 * Math.random()), document.getElementById("invoicenoInput").value = value) : viewobj = invoices.find(e => e.invoice_no === invoice_no), "" != viewobj && "edit-invoice" == options) {
+//    document.getElementById("registrationNumber").value = viewobj.company_details.legal_registration_no, document.getElementById("companyEmail").value = viewobj.company_details.email, document.getElementById("companyWebsite").value = viewobj.company_details.website, new Cleave("#compnayContactno", {
+//        prefix: viewobj.company_details.contact_no,
+//        delimiters: ["(", ")", "-"],
+//        blocks: [0, 3, 3, 4]
+//    }), document.getElementById("companyAddress").value = viewobj.company_details.address, document.getElementById("companyaddpostalcode").value = viewobj.company_details.zip_code;
+//    for (var preview = document.querySelectorAll(".user-profile-image"), paroducts_list = ("" !== viewobj.img && (preview.src = viewobj.img), document.getElementById("invoicenoInput").value = "#VAL" + viewobj.invoice_no, document.getElementById("invoicenoInput").setAttribute("readonly", !0), document.getElementById("date-field").value = viewobj.date, document.getElementById("choices-payment-status").value = viewobj.status, document.getElementById("totalamountInput").value = "$" + viewobj.order_summary.total_amount, document.getElementById("billingName").value = viewobj.billing_address.full_name, document.getElementById("billingAddress").value = viewobj.billing_address.address, new Cleave("#billingPhoneno", {
+//        prefix: viewobj.company_details.contact_no,
+//        delimiters: ["(", ")", "-"],
+//        blocks: [0, 3, 3, 4]
+//    }), document.getElementById("billingTaxno").value = viewobj.billing_address.tax, document.getElementById("shippingName").value = viewobj.shipping_address.full_name, document.getElementById("shippingAddress").value = viewobj.shipping_address.address, new Cleave("#shippingPhoneno", {
+//        prefix: viewobj.company_details.contact_no,
+//        delimiters: ["(", ")", "-"],
+//        blocks: [0, 3, 3, 4]
+//    }), document.getElementById("shippingTaxno").value = viewobj.billing_address.tax, viewobj.prducts), counter = 1; counter++, 1 < paroducts_list.length && document.getElementById("add-item").click(), paroducts_list.length - 1 >= counter;);
+//    var counter_1 = 1,
+//        cleave = (setTimeout(() => {
+//            Array.from(paroducts_list).forEach(function (e) {
+//                document.getElementById("productName-" + counter_1).value = e.product_name, document.getElementById("productDetails-" + counter_1).value = e.product_details, document.getElementById("productRate-" + counter_1).value = e.rates, document.getElementById("product-qty-" + counter_1).value = e.quantity, document.getElementById("productPrice-" + counter_1).value = "$" + e.rates * e.quantity, counter_1++
+//            })
+//        }, 300), document.getElementById("cart-subtotal").value = viewobj.order_summary.sub_total, document.getElementById("cart-tax").value = viewobj.order_summary.estimated_tex, document.getElementById("cart-discount").value = "$" + viewobj.order_summary.discount, document.getElementById("cart-shipping").value = "$" + viewobj.order_summary.shipping_charge, document.getElementById("cart-total").value = "$" + viewobj.order_summary.total_amount, document.getElementById("choices-payment-type").value = viewobj.payment_details.payment_method, document.getElementById("cardholderName").value = viewobj.payment_details.card_holder_name, new Cleave("#cardNumber", {
+//            prefix: viewobj.payment_details.card_number,
+//            delimiter: " ",
+//            blocks: [4, 4, 4, 4],
+//            uppercase: !0
+//        }));
+//    document.getElementById("amountTotalPay").value = "$" + viewobj.order_summary.total_amount, document.getElementById("exampleFormControlTextarea1").value = viewobj.notes
+//}
+//document.addEventListener("DOMContentLoaded", function () {
+//    var T = document.getElementById("invoice_form");
+//    document.getElementsByClassName("needs-validation");
+//    T.addEventListener("submit", function (e) {
+//        e.preventDefault();
+//        var t = document.getElementById("invoicenoInput").value.slice(4),
+//            e = document.getElementById("companyEmail").value,
+//            n = document.getElementById("date-field").value,
+//            o = document.getElementById("totalamountInput").value.slice(1),
+//            a = document.getElementById("choices-payment-status").value,
+//            l = document.getElementById("billingName").value,
+//            i = document.getElementById("billingAddress").value,
+//            c = document.getElementById("billingPhoneno").value.replace(/[^0-9]/g, ""),
+//            d = document.getElementById("billingTaxno").value,
+//            r = document.getElementById("shippingName").value,
+//            u = document.getElementById("shippingAddress").value,
+//            m = document.getElementById("shippingPhoneno").value.replace(/[^0-9]/g, ""),
+//            s = document.getElementById("shippingTaxno").value,
+//            p = document.getElementById("choices-payment-type").value,
+//            v = document.getElementById("cardholderName").value,
+//            g = document.getElementById("cardNumber").value.replace(/[^0-9]/g, ""),
+//            y = document.getElementById("amountTotalPay").value.slice(1),
+//            E = document.getElementById("registrationNumber").value.replace(/[^0-9]/g, ""),
+//            b = document.getElementById("companyEmail").value,
+//            I = document.getElementById("companyWebsite").value,
+//            h = document.getElementById("compnayContactno").value.replace(/[^0-9]/g, ""),
+//            _ = document.getElementById("companyAddress").value,
+//            B = document.getElementById("companyaddpostalcode").value,
+//            f = document.getElementById("cart-subtotal").value.slice(1),
+//            x = document.getElementById("cart-tax").value.slice(1),
+//            w = document.getElementById("cart-discount").value.slice(1),
+//            S = document.getElementById("cart-shipping").value.slice(1),
+//            j = document.getElementById("cart-total").value.slice(1),
+//            q = document.getElementById("exampleFormControlTextarea1").value,
+//            A = document.getElementsByClassName("product"),
+//            N = 1,
+//            C = [];
+//        Array.from(A).forEach(e => {
+//            var t = e.querySelector("#txtproductName-" + N).value,
+//                n = e.querySelector("#txtproductDescription-" + N).value,
+//                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
+//                p = parseInt(e.querySelector("#txtgst-" + N).value),
+//                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
+//                a = parseInt(e.querySelector("#product-qty-" + N).value),
+//                e = e.querySelector("#productPrice-" + N).value.split("$"),
+//                t = {
+//                    productName: t,
+//                    productShortDescription: n,
+//                    perUnitPrice: o,
+//                    gst: p,
+//                    perUnitWithGstprice: q,
+//                    quantity: a,
+//                    totalAmount: parseInt(e[1])
+//                };
+//            C.push(t), N++
+//        }), !1 === T.checkValidity() ? T.classList.add("was-validated") : ("edit-invoice" == options && invoice_no == t ? (objIndex = invoices.findIndex(e => e.invoice_no == t), invoices[objIndex].invoice_no = t, invoices[objIndex].customer = l, invoices[objIndex].img = "", invoices[objIndex].email = e, invoices[objIndex].date = n, invoices[objIndex].invoice_amount = o, invoices[objIndex].status = a, invoices[objIndex].billing_address = {
+//            full_name: l,
+//            address: i,
+//            phone: c,
+//            tax: d
+//        }, invoices[objIndex].shipping_address = {
+//            full_name: r,
+//            address: u,
+//            phone: m,
+//            tax: s
+//        }, invoices[objIndex].payment_details = {
+//            payment_method: p,
+//            card_holder_name: v,
+//            card_number: g,
+//            total_amount: y
+//        }, invoices[objIndex].company_details = {
+//            legal_registration_no: E,
+//            email: b,
+//            website: I,
+//            contact_no: h,
+//            address: _,
+//            zip_code: B
+//        }, invoices[objIndex].order_summary = {
+//            sub_total: f,
+//            estimated_tex: x,
+//            discount: w,
+//            shipping_charge: S,
+//            total_amount: j
+//        }, invoices[objIndex].prducts = C, invoices[objIndex].notes = q, localStorage.removeItem("invoices-list"), localStorage.removeItem("option"), localStorage.removeItem("invoice_no"), localStorage.setItem("invoices-list", JSON.stringify(invoices))) : localStorage.setItem("new_data_object", JSON.stringify({
+//            invoice_no: t,
+//            customer: l,
+//            img: "",
+//            email: e,
+//            date: n,
+//            invoice_amount: o,
+//            status: a,
+//            billing_address: {
+//                full_name: l,
+//                address: i,
+//                phone: c,
+//                tax: d
+//            },
+//            shipping_address: {
+//                full_name: r,
+//                address: u,
+//                phone: m,
+//                tax: s
+//            },
+//            payment_details: {
+//                payment_method: p,
+//                card_holder_name: v,
+//                card_number: g,
+//                total_amount: y
+//            },
+//            company_details: {
+//                legal_registration_no: E,
+//                email: b,
+//                website: I,
+//                contact_no: h,
+//                address: _,
+//                zip_code: B
+//            },
+//            order_summary: {
+//                sub_total: f,
+//                estimated_tex: x,
+//                discount: w,
+//                shipping_charge: S,
+//                total_amount: j
+//            },
+//            prducts: C,
+//            notes: q
+//        })), window.location.href = "apps-invoices-list.html")
+//    })
+//});
 
 
 function GetPOList() {

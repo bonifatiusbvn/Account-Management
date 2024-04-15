@@ -37,12 +37,12 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                if (SiteId != null)
+                if (SiteId == null)
                 {
-                    UserSession.SiteId = SiteId.ToString();
+                    SiteId = Guid.Parse(UserSession.SiteId);
                 }
-                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
-                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+                
+                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
@@ -92,11 +92,11 @@ namespace AccountManegments.Web.Controllers
                 var postuser = await APIServices.PostAsync(ItemInword, "ItemInWord/AddItemInWordDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { Massage = postuser.message, Code = postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.code });
+                    return Ok(new { Massage = "Something wrong!", Code = postuser.code }); ;
                 }
             }
             catch (Exception ex)
@@ -140,6 +140,7 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     ItemInWordDetails = JsonConvert.DeserializeObject<ItemInWordMasterView>(res.data.ToString());
+                   
                 }
                 return new JsonResult(ItemInWordDetails);
             }

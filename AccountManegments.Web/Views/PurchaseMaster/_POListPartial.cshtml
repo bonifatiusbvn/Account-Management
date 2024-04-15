@@ -11,7 +11,8 @@
         <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                
             {
                 <a class="btn text-primary" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>

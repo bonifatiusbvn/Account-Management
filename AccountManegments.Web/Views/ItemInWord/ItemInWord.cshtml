@@ -157,10 +157,10 @@
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <div class="col-12">
                                     <label for="txtItemId" class="form-label ">Product Names</label>
-                                    <select id="txtItemId" class="single-select form-select">
+                                    <select id="txtItemId" name="txtItemId" class="single-select form-select" required>
                                         <option selected disabled value="">select Item</option>
                                     </select>
-
+                                    <span id="spnItemId" class="text-danger"></span>
                                     <input type="hidden" id="searchItemnameid">
                                     @* <label class="form-label">Item</label>
                                     <select class="form-control" id="txtItemId">
@@ -231,7 +231,7 @@
                                 <!--end row-->
 
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="AddItemInWordDetails()" id="btnitemInWord">Submit</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateItemInWord()" id="btnitemInWord">Submit</button>
                                 </div>
                             </form>
                         </div>

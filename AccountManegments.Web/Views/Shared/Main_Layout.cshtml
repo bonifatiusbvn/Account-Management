@@ -1,7 +1,7 @@
 ﻿@using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
-
+@inject Microsoft.Extensions.Configuration.IConfiguration _Configuration
 <!doctype html>
 <html lang="en" class="light-theme">
 
@@ -44,7 +44,7 @@
     @*  <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
-    <title>@ViewData["Title"] - D. M. Infra</title>
+    <title>@ViewData["Title"] - @_Configuration.GetSection("ProjectName")?.Value </title>
 </head>
 
 <body>
@@ -54,11 +54,11 @@
         <!--start sidebar -->
         <aside class="sidebar-wrapper" data-simplebar="true">
             <div class="sidebar-header">
-                <div>
+                @* <div>
                     <img src="~/assets/images/logo-icon-2.png" class="logo-icon" alt="logo icon">
-                </div>
+                </div> *@
                 <div>
-                    <h4 class="logo-text">D. M. Infra</h4>
+                    <h4 class="logo-text">@_Configuration.GetSection("ProjectName")?.Value </h4>
                 </div>
                 <div class="toggle-icon ms-auto">
                     <ion-icon name="menu-sharp"></ion-icon>
@@ -84,7 +84,7 @@
                         }
 
                     }
-                    @if (group == "Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    @if (group == "Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group && e.View == true) > 0)
                     {
                         <li>
                             <a class="has-arrow">
@@ -112,7 +112,7 @@
                             </ul>
                         </li>
                     }
-                    @if (group == "Users Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    @if (group == "Users Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group && e.View == true) > 0)
                     {
                         <li>
 
