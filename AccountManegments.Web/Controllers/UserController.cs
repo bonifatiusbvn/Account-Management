@@ -32,7 +32,7 @@ namespace AccountManegments.Web.Controllers
             _userSession = userSession;
         }
 
-
+        [FormPermissionAttribute("User List-View")]
         public IActionResult UserListView()
         {
             return View();
@@ -65,7 +65,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("User List-View")]
         public async Task<JsonResult> DisplayUserDetails(Guid UserId)
         {
             try
@@ -84,7 +84,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("User List-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserViewModel CreatUser)
         {
@@ -120,13 +120,13 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
         {
             try
             {
-                
+
                 ApiResponseModel postUser = await APIServices.PostAsync(UpdateUser, "Authentication/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
@@ -142,7 +142,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UserActiveDecative(Guid UserId)
         {
@@ -166,6 +166,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("User List-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteUserDetails(Guid UserId)
         {
@@ -206,13 +207,13 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("User Permission-View")]
         [HttpGet]
         public IActionResult RolewisePermission()
         {
             return View();
         }
-
+        [FormPermissionAttribute("User Permission-Edit")]
         public async Task<IActionResult> RolewisePermissionListAction()
         {
             try
@@ -237,7 +238,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("User Permission-Edit")]
         [HttpPost]
         public async Task<IActionResult> InsertMultipleRolewiseFormPermission()
         {
@@ -283,6 +284,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("User Permission-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
         {
@@ -294,17 +296,17 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleRolewiseFormPermission");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }     
+        }
     }
 }

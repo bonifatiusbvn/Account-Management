@@ -107,47 +107,57 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
             console.error(xhr.responseText);
         }
     });
+
 }
 
 function CreatePurchaseRequest() {
+    if ($("#purchaseRequestForm").valid()) {
+        var siteName = null;
+        var RoleUserId = $('#userRoleId').val();
+        if (RoleUserId == 3) {
+            siteName = $("#txtPoSiteName").val();
+        }
+        else {
+            siteName = $("#SiteIdinPR").val();
+        }
+        var objData = {
+            UnitTypeId: $('#txtUnitType').val(),
+            ItemId: $('#searchItemname').val(),
+            Item: $('#txtItemName').val(),
+            SiteId: siteName,
+            Quantity: $('#txtQuantity').val(),
+            PrNo: $('#prNo').val(),
+        }
+        $.ajax({
+            url: '/PurchaseMaster/CreatePurchaseRequest',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-    var siteName = null;
-    var RoleUserId = $('#userRoleId').val();
-    if (RoleUserId == 3) {
-        siteName = $("#txtPoSiteName").val();
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/PurchaseMaster/PurchaseRequestListView';
+                });
+            },
+        })
     }
     else {
-        siteName = $("#SiteIdinPR").val();
+        Swal.fire({
+            title: "Kindly fill all details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
     }
-    var objData = {
-        UnitTypeId: $('#txtUnitType').val(),
-        ItemId: $('#searchItemname').val(),
-        Item: $('#txtItemName').val(),
-        SiteId: siteName,
-        Quantity: $('#txtQuantity').val(),
-        PrNo: $('#prNo').val(),
-    }
-    $.ajax({
-        url: '/PurchaseMaster/CreatePurchaseRequest',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/PurchaseMaster/PurchaseRequestListView';
-            });
-        },
-    })
 }
 
 function ClearPurchaseRequestTextBox() {
-    resetErrorsMessages();
+    resetPRForm();
     $('#txtItemName').val('');
     $('#txtUnitType').val('');
     $('#txtQuantity').val('');
@@ -173,35 +183,21 @@ function ClearPurchaseRequestTextBox() {
         dropdownParent: $("#CreatePurchaseRequest")
     });
 }
-
+var PRForm;
 function validateAndCreatePurchaseRequest() {
-
-    resetErrorsMessages();
-    var UnitTypeId = document.getElementById("txtUnitType").value.trim();
-    var ItemName = document.getElementById("searchItemname").value.trim();
-    var Quantity = document.getElementById("txtQuantity").value.trim();
-    var UserRoleId = $('#RoleIdinPR').val();
+    PRForm = $("#purchaseRequestForm").validate({
+        rules: {
+            searchItemname: "required",
+            txtUnitType: "required",
+            txtQuantity: "required",
+        },
+        messages: {
+            searchItemname: "Select Item!",
+            txtUnitType: "Select UnitType!",
+            txtQuantity: "Enter Quantity",
+        }
+    });
     var isValid = true;
-
-    if (UnitTypeId === "") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    } else if (UnitTypeId === "--Select Unit Type--") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    }
-
-
-    if (ItemName === "") {
-        document.getElementById("spnItemName").innerText = "Item is required.";
-        isValid = false;
-    }
-
-
-    if (Quantity === "") {
-        document.getElementById("spnQuantity").innerText = "Quantity is required.";
-        isValid = false;
-    }
 
 
     if (isValid) {
@@ -214,10 +210,10 @@ function validateAndCreatePurchaseRequest() {
     }
 }
 
-function resetErrorsMessages() {
-    document.getElementById("spnUnitType").innerText = "";
-    document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnQuantity").innerText = "";
+function resetPRForm() {
+    if (PRForm) {
+        PRForm.resetForm();
+    }
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
@@ -242,7 +238,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-            resetErrorsMessages()
+            resetPRForm()
             offcanvas.show();
             $('#searchItemname').select2({
                 theme: 'bootstrap4',
@@ -266,43 +262,52 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-    var siteName = null;
-    var RoleUserId = $('#userRoleId').val();
-    if (RoleUserId == 3) {
-        siteName = $("#txtPoSiteName").val();
+    if ($("#purchaseRequestForm").valid()) {
+        var siteName = null;
+        var RoleUserId = $('#userRoleId').val();
+        if (RoleUserId == 3) {
+            siteName = $("#txtPoSiteName").val();
+        }
+        else {
+            siteName = $("#SiteIdinPR").val();
+        }
+        var objData = {
+            Pid: $('#PurchaseRequestId').val(),
+            UnitTypeId: $('#txtUnitType').val(),
+            ItemId: $('#searchItemname').val(),
+            Item: $('#txtItemName').val(),
+            SiteId: siteName,
+            Quantity: $('#txtQuantity').val(),
+            PrNo: $('#prNo').val(),
+            CreatedBy: $('#txtcreatedby').val(),
+        }
+
+        $.ajax({
+            url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/PurchaseMaster/PurchaseRequestListView';
+                });
+            },
+        })
     }
     else {
-        siteName = $("#SiteIdinPR").val();
+        Swal.fire({
+            title: "Kindly fill all details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
     }
-    var objData = {
-        Pid: $('#PurchaseRequestId').val(),
-        UnitTypeId: $('#txtUnitType').val(),
-        ItemId: $('#searchItemname').val(),
-        Item: $('#txtItemName').val(),
-        SiteId: siteName,
-        Quantity: $('#txtQuantity').val(),
-        PrNo: $('#prNo').val(),
-        CreatedBy: $('#txtcreatedby').val(),
-    }
-
-    $.ajax({
-        url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/PurchaseMaster/PurchaseRequestListView';
-            });
-        },
-    })
-
 }
 
 function DeletePurchaseRequest(PurchaseId) {
@@ -382,7 +387,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
-                success: function (Result) {
+                success: function (Result) {debugger
 
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
@@ -518,7 +523,6 @@ function GetItemDetails() {
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
 
-            $('#searchItemname').empty();
 
             $.each(result, function (i, data) {
                 $('#searchItemname').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');

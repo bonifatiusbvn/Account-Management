@@ -27,7 +27,7 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
-
+        [FormPermissionAttribute("Supplier-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateSupplier(SupplierModel Supplier)
         {
@@ -50,6 +50,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Supplier-View")]
         public async Task<IActionResult> SupplierListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -77,6 +78,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Supplier-View")]
         public async Task<JsonResult> DisplaySupplier(Guid SupplierId)
         {
             try
@@ -98,7 +100,7 @@ namespace AccountManegments.Web.Controllers
         [FormPermissionAttribute("Supplier-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSupplierDetails(SupplierModel UpdateSupplier)
-         {
+        {
             try
             {
 
@@ -132,6 +134,29 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ActiveDeactiveSupplier(Guid SupplierId)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierMaster/ActiveDeactiveSupplier?SupplierId=" + SupplierId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

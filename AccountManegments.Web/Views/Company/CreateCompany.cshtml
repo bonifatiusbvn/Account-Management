@@ -59,7 +59,7 @@
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlSortBy" onchange="sortCompanyTable()">
-                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
                                                             <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingCompanyName">CompanyName(a-z)</option>
                                                             <option value="DescendingCompanyName">CompanyName(z-a)</option>
@@ -202,7 +202,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-control">
+                                    <select id="ddlCity" name="ddlCity" class="form-select">
                                         <option value="0">--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">State</label>
-                                    <select id="dropState" name="dropState" class="form-control" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                    <select id="dropState" name="dropState" class="form-select" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
                                         <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
@@ -218,7 +218,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" name="ddlCountry" class="form-control" onchange="fn_getState('dropState',null,this)">
+                                    <select id="ddlCountry" name="ddlCountry" class="form-select" onchange="fn_getState('dropState',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <input type="hidden" id="txtcountry" value="" />

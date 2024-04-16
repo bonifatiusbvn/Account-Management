@@ -89,7 +89,7 @@ function AddCompany() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -215,7 +215,7 @@ function UpdateCompany() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

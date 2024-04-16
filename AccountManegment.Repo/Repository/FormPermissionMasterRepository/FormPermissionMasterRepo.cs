@@ -42,7 +42,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                 Context.SaveChanges();
 
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Rolewise Permission Inserted Successfully!";
+                response.message = "Rolewise permission inserted successfully!";
             }
             catch (Exception ex)
             {
@@ -94,6 +94,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                                                               join u in Context.Users on a.CreatedBy equals u.Id
                                                                               join f in Context.Forms on a.FormId equals f.FormId
                                                                               where f.IsActive == true
+                                                                              orderby f.OrderId ascending
                                                                               select new RolewiseFormPermissionModel
                                                                               {
                                                                                   Id = a.Id,
@@ -135,7 +136,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                 Context.RolewiseFormPermissions.Update(formPermissionData);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Rolewise Form Permission Updated Successfully!";
+                model.message = "RolewiseForm permission successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -167,7 +168,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = 200;
-                response.message = "Rolewise Permission Created successfully!";
+                response.message = "Rolewise permission successfully created..!";
             }
             catch (Exception ex)
             {
@@ -183,7 +184,8 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             var data = await (from e in Context.RolewiseFormPermissions.Where(x => x.RoleId == RoleId)
                               join r in Context.UserRoles on e.RoleId equals r.RoleId
                               join f in Context.Forms on e.FormId equals f.FormId
-                              where f.IsActive == true
+                              where f.IsActive == true && f.FormName != "Dashboard"
+                              orderby f.OrderId ascending
                               select new RolewiseFormPermissionModel
                               {
                                   Id = e.Id,
@@ -198,6 +200,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                   CreatedBy = e.CreatedBy,
                                   CreatedOn = e.CreatedOn,
                               }).ToListAsync();
+
 
             if (data.Count != 0)
             {
@@ -238,7 +241,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = 200;
-                response.message = "Rolewise Permissions updated successfully!";
+                response.message = "Rolewise permissions successfully updated..!";
             }
             catch (Exception ex)
             {

@@ -50,8 +50,8 @@ $(document).ready(function () {
 
                 if (result.totalPurchase == 0) {
                     Swal.fire({
-                        title: 'Warning',
-                        text: 'No Data Found',
+                        title: 'No data found for selected supplier',
+                        text: 'No data found',
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',

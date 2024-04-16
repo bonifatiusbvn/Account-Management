@@ -53,19 +53,17 @@
                                                         <select class="form-select" id="ddlSearchBy" onchange="filterTable()">
                                                             <option selected="selected">All</option>
                                                             <option>UserName</option>
-                                                            <option>Email</option>
-                                                            <option>Phone</option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingUserName">UserName(a-z)</option>
                                                             <option value="DescendingUserName">UserName(z-a)</option>
-                                                            <option value="AscendingEmail">Email-Asc </option>
-                                                            <option value="DescendingEmail">Email-Asc</option>
+                                                            <option value="AscendingFirstName">Name-Asc </option>
+                                                            <option value="DescendingFirstName">Name-Asc</option>
                                                         </select>
                                                     </div>
                                                 </div><!--end row-->
@@ -179,26 +177,27 @@
                                         <label class="form-label">User Name</label>
                                         <input type="text" class="form-control" placeholder="User Name" id="txtUserName" name="txtUserName">
                                     </div>
-                                    @if(_userSession.UserRole == 3)
+                                    @if (_userSession.UserRole == 3)
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-control" id="ddlSiteName">
+                                            <select class="form-select" id="ddlSiteName">
                                                 <option selected disabled value="">--Select--</option>
                                             </select>
                                         </div>
                                     }
-                                    else{
+                                    else
+                                    {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-control" id="ddlSiteName">
-                                                <option selected disabled value="">--Select--</option>
+                                            <select class="form-select" id="ddlSiteName" disabled>
+                                                <option selected disabled value="@UserSession.SiteId">@UserSession.SiteName</option>
                                             </select>
                                         </div>
                                     }
                                     <div class="col-12">
                                         <label class="form-label">Role</label>
-                                        <select class="form-control" id="ddlUserRole" name="ddlUserRole">
+                                        <select class="form-select" id="ddlUserRole" name="ddlUserRole">
                                             <option value="">--Select--</option>
                                         </select>
                                         <input type="hidden" id="txtrole">
@@ -210,7 +209,7 @@
 
                                     <div class="col-12">
                                         <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" placeholder="Email" id="txtEmail" required>
+                                        <input type="text" class="form-control" placeholder="Email" id="txtEmail" name="txtEmail">
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Phone Number</label>
@@ -230,7 +229,7 @@
 </div>
 <style>
     #txtFirstName-error, #txtLastName-error, #txtUserName-error, #txtPassword-error,
-    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error{
+    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error {
         color: red;
     }
 

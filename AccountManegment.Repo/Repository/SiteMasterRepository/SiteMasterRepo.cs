@@ -49,7 +49,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "SiteDetails Successfully Inserted";
+                response.message = "Site is successfully created";
                 Context.Sites.Add(SiteMaster);
                 Context.SaveChanges();
             }
@@ -242,7 +242,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 Context.Sites.Update(SiteMaster);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "SiteDetails Updated Successfully!";
+                model.message = "SiteDetails successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -265,7 +265,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = Getsitedata;
-                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "Is Deactive Succesfully";
+                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "is succesfully deactive ";
                 }
 
                 else
@@ -275,7 +275,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = Getsitedata;
-                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "Is Active Succesfully";
+                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "is succesfully active ";
                 }
 
 
@@ -292,7 +292,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 if (SiteId != null)
                 {
                     Context.Sites.Remove(siteDetails);
-                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is Removed Successfully!";
+                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is successfully removed..!";
                     response.code = 200;
                 }
                 Context.SaveChanges();

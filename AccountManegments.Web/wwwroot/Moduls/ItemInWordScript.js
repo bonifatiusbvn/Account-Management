@@ -135,13 +135,6 @@ function GetItemDetails() {
             $.each(result, function (i, data) {
                 $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-            $('#txtItemId').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreateItemInWord")
-            });
         }
     });
 }
@@ -160,13 +153,7 @@ function GetUnitType() {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
-            $('#txtUnitType').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreateItemInWord")
-            });
+            
         }
     });
 }
@@ -233,7 +220,7 @@ function AddItemInWordDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -259,6 +246,20 @@ function ClearItemInWordTextBox() {
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
     offcanvas.show();
+    $('#txtItemId').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreateItemInWord")
+    });
+    $('#txtUnitType').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreateItemInWord")
+    });
 }
 function validateAndCreateItemInWord() {
     resetErrorsMessages();
@@ -361,7 +362,7 @@ function EditItemInWordDetails(InwordId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {
+        success: function (response) {debugger
 
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
@@ -393,6 +394,20 @@ function EditItemInWordDetails(InwordId) {
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
             resetErrorsMessages();
             offcanvas.show();
+            $('#txtItemId').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreateItemInWord")
+            });
+            $('#txtUnitType').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreateItemInWord")
+            });
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);

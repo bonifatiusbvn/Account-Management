@@ -55,7 +55,7 @@
         <aside class="sidebar-wrapper" data-simplebar="true">
             <div class="sidebar-header">
                 @* <div>
-                    <img src="~/assets/images/logo-icon-2.png" class="logo-icon" alt="logo icon">
+                <img src="~/assets/images/logo-icon-2.png" class="logo-icon" alt="logo icon">
                 </div> *@
                 <div>
                     <h4 class="logo-text">@_Configuration.GetSection("ProjectName")?.Value </h4>
@@ -217,7 +217,8 @@
                     @if (group == "Payment Out" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                        {@if (item.View)
+                        {
+                            @if (item.View)
                             {
                                 <li>
                                     <a asp-action="@item.Action" asp-controller="@item.Controller">
@@ -234,6 +235,7 @@
                 }
             </ul>
 
+
             <!--end navigation-->
         </aside>
         <!--end sidebar -->
@@ -244,7 +246,7 @@
                 @if (_userSession.UserRole == 3 && UserSession.SiteId == null)
                 {
                     <div class="col-3">
-                        <select class="form-control form-control-lg" id="drplaySiteName">
+                        <select class="form-select form-control-lg" id="drplaySiteName">
                             <option value="">All Site</option>
                         </select>
                     </div>
@@ -289,7 +291,7 @@
                                             <img src="~/assets/images/avatars/06.png" alt="" class="rounded-circle" width="54" height="54">
                                             <div class="">
                                                 <h6 class="mb-0 dropdown-user-name">@_userSession.FullName</h6>
-                                                <small class="mb-0 dropdown-user-designation text-secondary">UI Developer</small>
+
                                             </div>
                                         </div>
                                     </a>

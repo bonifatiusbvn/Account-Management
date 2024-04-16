@@ -196,7 +196,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" name="ddlCountry" class="form-control" onchange="fn_getState('stateDropdown',null,this)">
+                                    <select id="ddlCountry" name="ddlCountry" class="form-select" onchange="fn_getState('stateDropdown',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteCountry" value="" />
@@ -204,7 +204,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">State</label>
-                                    <select id="stateDropdown" name="stateDropdown" class="form-control" onchange="fn_getcitiesbystateId('ddlCity', null, this)">
+                                    <select id="stateDropdown" name="stateDropdown" class="form-select" onchange="fn_getcitiesbystateId('ddlCity', null, this)">
                                         <option>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteState" value="" />
@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-control">
+                                    <select id="ddlCity" name="ddlCity" class="form-select">
                                         <option>--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtSiteCity" value="" />
@@ -240,7 +240,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">Shipping City</label>
-                                            <select id="ShippingCity" name="ShippingCity" class="form-control">
+                                            <select id="ShippingCity" name="ShippingCity" class="form-select">
                                                 <option>--Select City--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingCity" value="" />
@@ -250,7 +250,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="form-label"> Shipping State</label>
-                                            <select id="ShippingState" name="ShippingState" class="form-control" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
+                                            <select id="ShippingState" name="ShippingState" class="form-select" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
                                                 <option>--Select State--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingState" value="" />
@@ -258,7 +258,7 @@
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label"> Shipping Country</label>
-                                            <select id="shippingCountry" name="shippingCountry" class="form-control" onchange="fn_getShippingState('ShippingState', null, this)">
+                                            <select id="shippingCountry" name="shippingCountry" class="form-select" onchange="fn_getShippingState('ShippingState', null, this)">
                                                 <option value=" ">--Select Country--</option>
                                             </select>
                                             <input type="hidden" id="txtShippingCountry" value="" />

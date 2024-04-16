@@ -43,7 +43,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedOn = DateTime.Now,
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "Purchase Order Inserted Successfully";
+                responseModel.message = "PurchaseOrder successfully created..!";
                 Context.PurchaseOrders.Add(PurchaseOrder);
                 Context.SaveChanges();
             }
@@ -131,7 +131,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 Context.SaveChanges();
 
                 response.code = 200;
-                response.message = "Purchase Order Details are deleted successfully";
+                response.message = "PurchaseOrder details are successfully deleted..!";
             }
             else
             {
@@ -199,7 +199,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          ItemAmount = a.ItemTotal,
                                                          Gstamount = a.Gst,
                                                          UnitType = a.UnitTypeId,
-                                                         UnitTypeName=c.UnitName,
+                                                         UnitTypeName = c.UnitName,
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = b.Gstper,
                                                          Hsncode = b.Hsncode,
@@ -208,7 +208,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
                                                             select new PODeliveryAddressModel
                                                             {
-                                                                Aid=a.Aid,
+                                                                Aid = a.Aid,
                                                                 Poid = a.Poid,
                                                                 Quantity = a.Quantity,
                                                                 UnitTypeId = a.UnitTypeId,
@@ -262,7 +262,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder = PurchaseOrder.Where(u =>
                         u.SupplierName.ToLower().Contains(searchText) ||
                         u.TotalGstamount.ToString().Contains(searchText) ||
-                        u.TotalAmount.ToString().Contains(searchText)
+                        u.TotalAmount.ToString().Contains(searchText) ||
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.Poid.ToLower().Contains(searchText)
                     );
                 }
 
@@ -355,7 +357,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedOn = DateTime.Now,
                 };
                 Context.PurchaseOrders.Add(PurchaseOrder);
-                
+
                 foreach (var item in PurchaseOrderDetails.ItemOrderlist)
                 {
                     var PurchaseOrderDetail = new PurchaseOrderDetail()
@@ -382,15 +384,15 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Poid = PurchaseOrder.Id,
                         Address = item.ShippingAddress,
                         IsDeleted = false,
-                        UnitTypeId= PurchaseOrderDetails.UnitTypeId,
-                        Quantity=item.ShippingQuantity,
+                        UnitTypeId = PurchaseOrderDetails.UnitTypeId,
+                        Quantity = item.ShippingQuantity,
                     };
                     Context.PodeliveryAddresses.Add(PurchaseAddress);
                 }
 
-                    await Context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Purchase Order Inserted Successfully";
+                response.message = "PurchaseOrder successfully inserted..!";
                 response.data = PurchaseOrder.Id;
             }
             catch (Exception ex)
@@ -467,7 +469,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Purchase Order Updated Successfully";
+                response.message = "PurchaseOrder successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -499,7 +501,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "Purchase Order Updated Successfully";
+                responseModel.message = "PurchaseOrder successfully updated..!";
                 Context.PurchaseOrders.Update(PurchaseOrder);
                 Context.SaveChanges();
             }

@@ -43,7 +43,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Deactive Succesfully";
                 }
 
                 else
@@ -53,7 +53,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Active Succesfully";
                 }
 
 
@@ -178,6 +178,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        RoleName = r.Role,
                                                        SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
+                                                       CreatedOn=e.CreatedOn,
                                                    });
 
 
@@ -227,29 +228,17 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             else if (sortOrder == "descending")
                                 userList = userList.OrderByDescending(u => u.UserName);
                             break;
-                        case "role":
+                        case "firstname":
                             if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.RoleName);
+                                userList = userList.OrderBy(u => u.FirstName);
                             else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.RoleName);
+                                userList = userList.OrderByDescending(u => u.FirstName);
                             break;
-                        case "active":
+                        case "createdon":
                             if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.IsActive);
+                                userList = userList.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.IsActive);
-                            break;
-                        case "email":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.Email);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.Email);
-                            break;
-                        case "phone":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.PhoneNo);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.PhoneNo);
+                                userList = userList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
 
@@ -320,19 +309,19 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         }
                         else
                         {
-                            response.Message = "Your Password Is Wrong";
+                            response.Message = "Your password is wrong";
                         }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your Deactive Contact Your Admin";
+                        response.Message = "Your deactive contact your admin";
                         return response;
                     }
                 }
                 else
                 {
-                    response.Message = "User Not Exist";
+                    response.Message = "User not exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Data = null;
                 }
@@ -367,7 +356,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 Context.SaveChanges();
 
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Permissions Given Successfully";
+                response.message = "Permissions given successfully";
 
             }
             catch (Exception ex)
@@ -401,7 +390,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                 }
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = "User Data Updated Successfully";
+                response.Message = "User data updated successfully";
                 return response;
 
             }

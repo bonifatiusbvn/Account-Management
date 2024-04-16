@@ -20,18 +20,18 @@
     <div class="col-12 col-lg-4 col-xl-4 d-flex">
         <div class="card radius-10 w-100">
             <form id="frmdrpdashbord">
-
-                <select class="form-control form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
-                    @if (_userSession.UserRole == 3)
-                    {
+                @if (_userSession.UserRole == 3)
+                {
+                    <select class="form-select form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
                         <option value="null" selected>All Site</option>
-
-                    }
-                    else
-                    {
-                        <option value="@UserSession.SiteId" selected>@UserSession.SiteName</option>
-                    }
-                </select>
+                    </select>
+                }
+                else
+                {
+                    <select class="form-select form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()" disabled>
+                        <option value="@UserSession.SiteId" selected disabled>@UserSession.SiteName</option>
+                    </select>
+                }
             </form>
         </div>
 
@@ -41,7 +41,7 @@
         <div class="card radius-10 w-100">
             <form id="cmplistdashbord">
 
-                <select class="form-control form-control-lg" id="CompanyNameList">
+                <select class="form-select form-control-lg" id="CompanyNameList">
                     @if (_userSession.UserRole != 3)
                     {
                         <option selected disabled value="">Select Company</option>

@@ -21,7 +21,7 @@ namespace AccountManegments.Web.Controllers
             APIServices = aPIServices;
         }
 
-        [FormPermissionAttribute("Invoice-Add")]
+        [FormPermissionAttribute("Invoice List-Add")]
         public async Task<IActionResult> CreateInvoice()
         {
             try
@@ -43,13 +43,13 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
-        [FormPermissionAttribute("Invoice-View")]
+        [FormPermissionAttribute("Invoice List-View")]
         public IActionResult SupplierInvoiceListView()
         {
             return View();
         }
 
-
+        [FormPermissionAttribute("Invoice List-View")]
         public async Task<IActionResult> SupplierInvoiceListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -78,7 +78,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("Invoice-Delete")]
+        [FormPermissionAttribute("Invoice List-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSupplierInvoice(Guid InvoiceId)
         {
@@ -103,13 +103,13 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("Payment Out-View")]
         public IActionResult PayOutInvoice()
         {
             return View();
         }
 
-
+        [FormPermissionAttribute("Payment Out-View")]
         [HttpGet]
         public async Task<IActionResult> GetInvoiceDetails(Guid CompanyId, Guid SupplierId)
         {
@@ -126,7 +126,7 @@ namespace AccountManegments.Web.Controllers
                         return new JsonResult("Failed to deserialize API response");
                     }
 
-                    
+
                     return new JsonResult(tupleResult);
 
                 }
@@ -166,8 +166,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("Invoice-Add")]
-
+        [FormPermissionAttribute("Invoice List-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultipleSupplierItemDetails()
         {
@@ -194,7 +193,7 @@ namespace AccountManegments.Web.Controllers
 
 
 
-
+        [FormPermissionAttribute("Payment Out-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertPayOutDetails()
         {
@@ -218,12 +217,12 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("Invoice List-View")]
         public IActionResult InvoiceListView()
         {
             return View();
         }
-
+        [FormPermissionAttribute("Invoice List-View")]
         public async Task<IActionResult> InvoiceListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -250,6 +249,8 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
+        [FormPermissionAttribute("Invoice List-View")]
         public async Task<IActionResult> DisplayInvoiceDetails(Guid Id)
         {
             try
@@ -322,6 +323,7 @@ namespace AccountManegments.Web.Controllers
             return words;
         }
 
+        [FormPermissionAttribute("Invoice List-View")]
         [HttpGet]
         public async Task<IActionResult> GetSupplierInvoiceDetailsById(Guid SupplierId)
         {

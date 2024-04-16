@@ -46,7 +46,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item In Word Successfully Inserted";
+                response.message = "Item Inward successfully created..!";
                 Context.ItemInwords.Add(itemInword);
                 Context.SaveChanges();
             }
@@ -70,7 +70,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordDetails;
-                    response.message = "Item In Word Deleted Successfully!";
+                    response.message = "Item inward successfully deleted !";
                 }
                 Context.SaveChanges();
             }
@@ -225,7 +225,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordData;
-                    response.message = "Item InWord Is UnApproved!";
+                    response.message = "Item inward is Successfully unapproved..!";
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordData;
-                    response.message = "Item In Word Is Approved Successfully";
+                    response.message = "Item inward is successfully approved..!";
                 }
             }
             return response;
@@ -262,7 +262,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 Context.ItemInwords.Update(ItemInWordData);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Item In Word Details Updated Successfully!";
+                model.message = "Item inward details Successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -306,12 +306,12 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item In Word Successfully Inserted";
+                response.message = "Item inward successfully inserted..!";
             }
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating Item InWord: " + ex.Message;
+                response.message = "Error creating Item inward: " + ex.Message;
             }
             return response;
         }
@@ -325,7 +325,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 if (ItemInWordData == null)
                 {
                     response.code = (int)HttpStatusCode.NotFound;
-                    response.message = $"Item InWord with ID {UpdateInWordDetails.InwordId} not found";
+                    response.message = $"Item inward with ID {UpdateInWordDetails.InwordId} not found";
                     return response;
                 }
                 else
@@ -367,7 +367,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 }
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item InWord Updated Successfully";
+                response.message = "Item inward successfully updated..!";
             }
             catch (Exception ex)
             {
