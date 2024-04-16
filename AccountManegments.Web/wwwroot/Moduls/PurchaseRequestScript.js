@@ -6,7 +6,7 @@ var TotalPending = '';
 
 
 AllPurchaseRequestListTable();
-GetSiteDetails();
+GetSiteDetail();
 GetCompanyName();
 GetItemDetails();
 GetSupplierDetails();
@@ -49,19 +49,35 @@ function filterPurchaseRequestTable() {
         }
     });
 }
-
-
-function GetSiteDetails() {
-
+function GetSiteDetail() {
+    debugger
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
-            });
+            if (result.length > 0) {    
+
+                $.each(result, function (i, data) {
+                    debugger
+                    $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+                });
+            }
         }
     });
 }
+
+//function GetSiteDetails() {
+
+//    $.ajax({
+//        url: '/SiteMaster/GetSiteNameList',
+//        success: function (result) {
+//            if (result.length > 0) {
+//                $.each(result, function (i, data) {
+//                    $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+//                });
+//            }
+//        }
+//    });
+//}
 function sortPurchaseRequestTable() {
     var sortBy = $('#PurchaseRequestSortBy').val();
     $.ajax({

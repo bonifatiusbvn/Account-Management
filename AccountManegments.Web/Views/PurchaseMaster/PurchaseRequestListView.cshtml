@@ -7,7 +7,15 @@
 }
 <!-- CSS -->
 @* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
+<style>
+    #txtUnitType-error, #searchItemname-error, #txtQuantity-error {
+        color: red;
+    }
 
+    label.failed {
+        color: red;
+    }
+</style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Purchase Request</div>
     <div class="ps-3 flex-grow-1">
@@ -188,13 +196,26 @@
                                     <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
-                                <div class="col-12" id="siteDetails" style="display: none;">
-                                    <label class="form-label">Site</label>
-                                    <select class="form-select form-control" id="txtPoSiteName" required>
-                                        <option selected value="">--Select Site--</option>
-                                    </select>
-                                    <span id="spnSiteName" class="text-danger"></span>
-                                </div>
+                                @if (_userSession.UserRole == 3)
+                                {
+                                    <div class="col-12" id="siteDetails">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
+                                        </select>
+                                        <span id="spnSiteName" class="text-danger"></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12" id="siteDetails">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-select form-control" id="txtPoSiteName" disabled>
+                                            <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
+                                        </select>
+                                        <span id="spnSiteName" class="text-danger"></span>
+                                    </div>
+                                }
+
 
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
@@ -209,20 +230,8 @@
 
     </div>
 </div>
-<style>
-    #txtUnitType-error, #searchItemname-error, #txtQuantity-error {
-        color: red;
-    }
 
-    label.failed {
-        color: red;
-    }
-</style>
 @section Scripts {
 
-    @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
-
-
     <script src="~/moduls/purchaserequestscript.js"></script>
-
 }
