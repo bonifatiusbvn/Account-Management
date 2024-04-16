@@ -169,60 +169,32 @@
                                     <input type="hidden" id="SiteIdinPR" value="@UserSession.SiteId" />
                                 </div>
                                 <div class="col-12">
-                                    <label for="searchItemname" class="form-label">Product Names</label>
-
-                                    <select id="searchItemname" class="single-select form-select">
-                                        <option selected value="">select Item</option>
+                                    <label class="form-label">Product Names</label>
+                                    <select id="searchItemname" name="searchItemname" class="single-select form-select">
+                                        <option selected value="">--Select Item--</option>
                                     </select>
-
-                                    <input type="hidden" id="txtItemName">
-
-                                    @*  <select class="form-control" id="searchItemname">
-                                    <option selected disabled value="">select Item</option>
-                                    </select>
-                                    <input type="hidden" id="txtItemName"> *@
-                                    <span id="spnItemName" class="text-danger"></span>
+                                    <input type="hidden" id="txtItemName" name="txtItemName">
                                 </div>
 
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-control" id="txtUnitType">
+                                    <select class="form-control" id="txtUnitType" name="txtUnitType">
                                         <option selected disabled value="">--Select Unit Type--</option>
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control form-control" placeholder="Quantity" id="txtQuantity" required>
+                                    <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                                 <div class="col-12" id="siteDetails" style="display: none;">
                                     <label class="form-label">Site</label>
-                                    <select class="form-control form-control" id="txtPoSiteName" required>
+                                    <select class="form-control form-control" id="txtPoSiteName">
                                         <option selected value="">--Select Site--</option>
                                     </select>
                                     <span id="spnSiteName" class="text-danger"></span>
                                 </div>
-                                @*@if (_userSession.UserRole == 3)
-                                {
-                                    <div class="col-12">
-                                        <label class="form-label">Site</label>
-                                        <select class="form-control form-control" id="txtPoSiteName" required>
-                                            <option selected value="">--Select Site--</option>
-                                        </select>
-                                        <span id="spnSiteName" class="text-danger"></span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-12">
-                                        <label class="form-label">Site</label>
-                                        <select class="form-control form-control" id="txtPoSiteName" disabled>
-                                            <option selected value="">@UserSession.SiteName</option>
-                                        </select>
-                                        <span id="spnSiteName" class="text-danger"></span>
-                                    </div>
-                                }*@
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
                                 </div>
@@ -236,7 +208,15 @@
 
     </div>
 </div>
+<style>
+    #txtUnitType-error, #searchItemname-error, #txtQuantity-error {
+        color: red;
+    }
 
+    label.failed {
+        color: red;
+    }
+</style>
 @section Scripts {
 
     @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> *@
