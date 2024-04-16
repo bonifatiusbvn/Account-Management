@@ -179,7 +179,7 @@
                                         <label class="form-label">User Name</label>
                                         <input type="text" class="form-control" placeholder="User Name" id="txtUserName" name="txtUserName">
                                     </div>
-                                    @if(_userSession.UserRole == 3)
+                                    @if (_userSession.UserRole == 3)
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
@@ -188,11 +188,12 @@
                                             </select>
                                         </div>
                                     }
-                                    else{
+                                    else
+                                    {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-control" id="ddlSiteName">
-                                                <option selected disabled value="">--Select--</option>
+                                            <select class="form-control" id="ddlSiteName" disabled>
+                                                <option selected disabled value="@UserSession.SiteId">@UserSession.SiteName</option>
                                             </select>
                                         </div>
                                     }
@@ -230,7 +231,7 @@
 </div>
 <style>
     #txtFirstName-error, #txtLastName-error, #txtUserName-error, #txtPassword-error,
-    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error{
+    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error {
         color: red;
     }
 

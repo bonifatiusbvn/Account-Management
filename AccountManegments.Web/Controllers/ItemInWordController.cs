@@ -28,10 +28,13 @@ namespace AccountManegments.Web.Controllers
         public APIServices APIServices { get; }
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
+
+        [FormPermissionAttribute("Item Inward-View")]
         public IActionResult ItemInWord()
         {
             return View();
         }
+        [FormPermissionAttribute("Item Inward-View")]
         [HttpGet]
         public async Task<IActionResult> ItemInWordListAction(string? searchText, string? searchBy, string? sortBy, Guid? SiteId)
         {
@@ -41,7 +44,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     SiteId = Guid.Parse(UserSession.SiteId);
                 }
-                
+
                 string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
@@ -63,6 +66,8 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
+        [FormPermissionAttribute("Item Inward-Add")]
         [HttpPost]
         public async Task<IActionResult> AddItemInWordDetails(ItemInWordRequestModel ItemInWordDetails)
         {
@@ -109,6 +114,7 @@ namespace AccountManegments.Web.Controllers
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
         }
+        [FormPermissionAttribute("Item Inward-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteItemInWord(Guid InwordId)
         {
@@ -129,7 +135,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
+        [FormPermissionAttribute("Item Inward-View")]
         [HttpGet]
         public async Task<JsonResult> DisplayItemInWordDetails(Guid InwordId)
         {
@@ -140,7 +146,7 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     ItemInWordDetails = JsonConvert.DeserializeObject<ItemInWordMasterView>(res.data.ToString());
-                   
+
                 }
                 return new JsonResult(ItemInWordDetails);
             }
@@ -149,6 +155,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Item Inward-Edit")]
         [HttpPost]
         public async Task<IActionResult> ItemInWordIsApproved(Guid InwordId)
         {
@@ -172,6 +179,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Item Inward-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateItemInWordDetails()
         {
@@ -194,6 +202,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Item Inward-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultipleItemInWordDetail(List<IFormFile> DocDetails)
         {
@@ -255,6 +264,7 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+        [FormPermissionAttribute("Item Inward-Edit")]
         public async Task<IActionResult> UpdatetMultipleItemInWordDetails(List<IFormFile> DocDetails)
         {
             try

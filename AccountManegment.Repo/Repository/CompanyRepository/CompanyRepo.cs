@@ -49,7 +49,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
 
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Company Successfully Inserted";
+                response.message = "Company successfully created..!";
                 Context.Companies.Add(company);
                 Context.SaveChanges();
             }
@@ -73,7 +73,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                 Context.Companies.Update(company);
                 Context.SaveChanges();
                 response.code = 200;
-                response.message = "Company is Deleted Successfully";
+                response.message = "Company is successfully deleted..!";
             }
             return response;
         }
@@ -235,7 +235,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                 Context.Companies.Update(company);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Company Updated Successfully!";
+                model.message = "Company successfully updated..!";
             }
             catch (Exception ex)
             {

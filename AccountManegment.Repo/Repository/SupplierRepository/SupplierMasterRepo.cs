@@ -55,7 +55,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     IsDelete = false,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier Successfully Added";
+                response.message = "Supplier successfully created..!";
                 Context.SupplierMasters.Add(SupplierMaster);
                 Context.SaveChanges();
             }
@@ -79,7 +79,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 Context.SupplierMasters.Update(Userdata);
                 Context.SaveChanges();
                 response.code = 200;
-                response.message = "Supplier is Deleted Successfully";
+                response.message = "Supplier is successfully deleted..!";
             }
             return response;
         }
@@ -245,7 +245,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     Context.SaveChanges();
                 }
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier Data Updated Successfully";
+                response.message = "Supplier details successfully updated..!";
                 return response;
 
             }

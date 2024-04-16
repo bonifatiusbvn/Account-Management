@@ -58,7 +58,7 @@ namespace AccountManegments.Web.Controllers
             }
             return View();
         }
-
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
         {
             try
@@ -89,6 +89,7 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public async Task<JsonResult> DisplayPurchaseRequestDetails(Guid PurchaseId)
         {
             try

@@ -100,7 +100,6 @@ function ClearTextBox() {
     $('#txtGstAmount').val('');
     $('#txtGstPerUnit').val('');
     $('#txtHSNCode').val('');
-    $('#txtIsApproved').val('');
     var button = document.getElementById("btnitem");
     if ($('#txtItemid').val() == '') {
         button.textContent = "Create";
@@ -117,8 +116,7 @@ function ClearTextBox() {
 }
 function CreateItem() {
 
-    if ($("#ItemMsterForm").valid())
-    {
+    if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemName: $('#txtItemName').val(),
             UnitType: $('#txtUnitType').val(),
@@ -258,7 +256,7 @@ function UpdateItemDetails() {
 var ItemForm;
 function validateAndCreateItem() {
 
-    ItemForm=$("#ItemMsterForm").validate({
+    ItemForm = $("#ItemMsterForm").validate({
         rules: {
             txtItemName: "required",
             txtUnitType: "required",
@@ -273,7 +271,7 @@ function validateAndCreateItem() {
             txtGstAmount: "Please Enter GstAmount",
             txtGstPerUnit: "Please Enter GstPerUnit",
         }
-    })   
+    })
     var isValid = true;
 
     if (isValid) {

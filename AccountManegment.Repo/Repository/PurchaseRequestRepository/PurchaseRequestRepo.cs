@@ -60,7 +60,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     }
                     else
                     {
-                        throw new Exception("Purchase Request Id does not have the expected format.");
+                        throw new Exception("PurchaseRequest Id does not have the expected format.");
                     }
                 }
                 return PurchaseRequestId;
@@ -91,7 +91,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Purchase Request Successfully Inserted";
+                response.message = "PurchaseRequest successfully created..!";
                 Context.PurchaseRequests.Add(purchaseRequest);
                 Context.SaveChanges();
             }
@@ -111,7 +111,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 if (PurchaseId != null)
                 {
                     Context.PurchaseRequests.Remove(purchaseDetails);
-                    response.message = "Purchase Request" + " " + purchaseDetails.Item + " " + " item is Removed Successfully!";
+                    response.message = "PurchaseRequest" + " " + purchaseDetails.Item + " " + " item is successfully removed..!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -259,7 +259,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 Context.PurchaseRequests.Update(PurchaseRequestData);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Purchase Request Details Updated Successfully!";
+                model.message = "PurchaseRequest details successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -283,7 +283,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = purchaseRequestData;
-                    response.message = "Purchase Request Is UnApproved!";
+                    response.message = "PurchaseRequest is successfully unapproved!";
                 }
 
                 else
@@ -293,7 +293,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = purchaseRequestData;
-                    response.message = "Purchase Request Is Approved Successfully";
+                    response.message = "PurchaseRequest is successfully approved..!";
                 }
             }
             return response;
