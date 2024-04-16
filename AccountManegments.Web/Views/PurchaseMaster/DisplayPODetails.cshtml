@@ -18,20 +18,6 @@
     decimal? totalGst = 0;
 }
 
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Purchase Order</div>
-    <div class="ps-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0 align-items-center">
-                <li class="breadcrumb-item">
-                    <a href="javascript:void();"><ion-icon name="home-outline"></ion-icon></a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Purchase Order Details</li>
-            </ol>
-        </nav>
-    </div>
-</div>
-<!-- end page title -->
 
 <div class="row justify-content-center" id="displayPODetail">
     <div class="col-xxl-9">
@@ -50,7 +36,7 @@
                             <p class="text-muted"><b>@firstItem.CompanyName</b></p>
                             <p class="text-muted">@firstItem.BillingAddress</p>
                         </div>
-                        <div class="flex-grow-1 col-4">
+                        <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Purchase Order Id</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
@@ -59,10 +45,8 @@
                                 <label class="form-label">Mode/Terms of Payment</label>
                                 <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
                             </div>
-                                <label class="form-label">Buyer's Ref./Order No.</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
                         </div>
-                        <div class="flex-grow-1 col-2">
+                        <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dated</label>
                                 <p><span class="text-muted fw-normal">@firstItem.Date?.ToString("dd/MM/yyyy")</span></p>
@@ -71,23 +55,30 @@
                                 <label class="form-label">Mode/Terms of Payment</label>
                                 <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
                             </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dispatched through</label>
-                                <p class="text-muted"><b>@firstItem.SupplierName</b></p>
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body" id="cardbody2" style="margin-top:-33px;">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
-                                <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
-                                <br />
-                                <p class="text-muted">GSTIN:- </p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                            <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
+                            <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
+                            <p class="text-muted">GSTIN:- </p>
+                        </div>
+                        <div class="flex-grow-1 col-3 border">
+                            <label class="form-label">Buyer's Ref./Order No.</label>
+                            <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                        </div>
+                        <div class="flex-grow-1 col-3 border">
+                                <label class="form-label">Dispatched through</label>
+                                <p class="text-muted"><b>@firstItem.SupplierName</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="cardbody3" style="margin-top:-33px;">
+                    <div class="d-flex">
+                        <div class="flex-grow-1 col-6 border">
+                            <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
                                 <p class="text-muted text-uppercase"><b>@firstItem.SiteName</b></p>
                                 @{
@@ -102,14 +93,11 @@
                         </div>
                         <div class="flex-grow-1 col-6 border"> 
                                 <label class="form-label">Terms of Delivery</label>
-                                <p class="text-muted"><b>2-3 Weeks</b></p>
-                                <p class="text-muted"><b>P & F-Inclusive</b></p>
-                                <p class="text-muted"><b>Freight-Extra at actual</b></p>
-                                <p class="text-muted"><b>Note : Test Certificate required with material</b></p>
+                                <p class="text-muted"><b>@firstItem.DeliveryShedule</b></p>
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody3" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
                     <div class="table-responsive">
                         <table class="table table-border text-center table-nowrap align-middle mb-0">
                             <thead>

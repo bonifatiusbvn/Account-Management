@@ -152,13 +152,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id)
         {
 
             SupplierInvoiceMasterView supplierList = new SupplierInvoiceMasterView();
             try
             {
-                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
+                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
                                 join d in Context.Sites on a.SiteId equals d.SiteId
@@ -171,7 +171,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
-                                    InvoiceId = a.InvoiceNo,
+                                    InvoiceNo = a.InvoiceNo,
                                     SiteId = a.SiteId,
                                     SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
@@ -196,15 +196,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyGstNo = c.Gstno,
                                     CompanyPincode = c.Pincode,
                                     CompanyPanNo = c.PanNo,
+                                    ShippingAddress = a.ShippingAddress,
                                     Date = a.Date,
                                     Description = a.Description,
-                                    TotalAmount = a.TotalAmount,
+                                    TotalAmountInvoice = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
                                     PaymentStatus = a.PaymentStatus,
                                     IsPayOut = a.IsPayOut,
                                     Roundoff = a.Roundoff,
-                                }).First();
+                                }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                                      select new POItemDetailsModel
@@ -212,6 +213,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          ItemName = a.Item,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
+                                                         TotalAmount = a.TotalAmount,
                                                          UnitType = a.UnitTypeId,
                                                          UnitTypeName = b.UnitName,
                                                          PricePerUnit = a.Price,
@@ -375,18 +377,21 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierInvoice = new SupplierInvoice()
                 {
                     Id = Guid.NewGuid(),
-                    InvoiceNo = SupplierItemDetails.InvoiceId,
+                    InvoiceNo = SupplierItemDetails.InvoiceNo,
                     SiteId = SupplierItemDetails.SiteId,
                     SupplierId = SupplierItemDetails.SupplierId,
                     CompanyId = SupplierItemDetails.CompanyId,
                     Description = SupplierItemDetails.Description,
                     TotalDiscount = SupplierItemDetails.TotalDiscount,
                     TotalGstamount = SupplierItemDetails.TotalGstamount,
-                    TotalAmount = SupplierItemDetails.TotalAmount,
+                    TotalAmount = SupplierItemDetails.TotalAmountInvoice,
                     PaymentStatus = SupplierItemDetails.PaymentStatus,
                     Roundoff = SupplierItemDetails.Roundoff,
+                    ContactName = SupplierItemDetails.ContactName,
+                    ContactNumber = SupplierItemDetails.ContactNumber,
+                    ShippingAddress = SupplierItemDetails.ShippingAddress,
                     IsPayOut = PayOut,
-                    Date = DateTime.Now,
+                    Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -401,19 +406,21 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
                         Price = item.PricePerUnit,
+                        DiscountAmount = item.DiscountAmount,
                         DiscountPer = item.DiscountPer,
                         Gst = item.Gstamount,
                         Gstper = item.GstPercentage,
-                        TotalAmount = SupplierItemDetails.TotalAmount,
+                        TotalAmount = item.TotalAmount,
                         CreatedBy = SupplierItemDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
+                        Date = supplierInvoice.Date,
                     };
                     Context.SupplierInvoiceDetails.Add(supplierInvoiceDetail);
                 }
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier order inserted successfully..!";
+                response.message = "Supplier order inserted successfully.";
             }
             catch (Exception ex)
             {

@@ -4,25 +4,20 @@
     ViewData["Title"] = "UserListView";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
+<style>
+    .fixed-button {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Users</div>
-    <div class="ps-3 flex-grow-1">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0 align-items-center">
-                <li class="breadcrumb-item">
-                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">User Details</li>
-            </ol>
-
-        </nav>
-    </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Add == true)))
             {
-                <button type="button" class="btn btn-primary" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
+                <button type="button" class="btn btn-primary fixed-button" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
             }
         </form>
     </div>
@@ -204,7 +199,20 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Password</label>
-                                        <input type="password" class="form-control" placeholder="Password" id="txtPassword" name="txtPassword">
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" placeholder="Password"  id="txtPassword">
+                                            <span class="input-group-text">
+                                                <button class="btn btn-link" type="button" id="passwordToggle" style="height:21px;width:21px; display: flex; justify-content: center; align-items: center;">
+                                                    <div id="openEye">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                    </div>
+                                                    <div class="d-none" id="closeEye">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                                    </div>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span id="spnPassword" class="text-danger"></span>
                                     </div>
 
                                     <div class="col-12">
@@ -242,3 +250,26 @@
     <script src="~/moduls/authenticationscript.js" asp-append-version="true"></script>
     <script src="~/moduls/masterlistscript.js" asp-append-version="true"></script>
 }
+<script src="~/assets/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#passwordToggle').click(function () {
+            debugger
+            var passwordInput = $('#txtPassword');
+            var openIcon = $('#openEye');
+            var closeIcon = $('#closeEye');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                openIcon.addClass('d-none');
+                closeIcon.removeClass('d-none');
+            }
+            else {
+                debugger
+                passwordInput.attr('type', 'password');
+                openIcon.removeClass('d-none');
+                closeIcon.addClass('d-none');
+            }
+        });
+    });
+</script>

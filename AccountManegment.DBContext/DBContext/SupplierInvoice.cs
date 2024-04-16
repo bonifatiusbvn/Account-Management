@@ -34,6 +34,7 @@ public partial class SupplierInvoice
     public string? ContactName { get; set; }
 
     public string? ContactNumber { get; set; }
+    public string? ShippingAddress { get; set; }
 
     public string? ShippingAddress { get; set; }
 

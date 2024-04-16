@@ -36,8 +36,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     Quantity = SupplierInvoiceDetails.Quantity,
                     Price = SupplierInvoiceDetails.Price,
                     DiscountPer = SupplierInvoiceDetails.DiscountPer,
-                    DiscountAmount = SupplierInvoiceDetails.Discount,
-                    Gst = SupplierInvoiceDetails.Gstamount,
+                    DiscountAmount = SupplierInvoiceDetails.DiscountAmount,
+                    Gst = SupplierInvoiceDetails.Gst,
                     Gstper = SupplierInvoiceDetails.Gstper,
                     CreatedBy = SupplierInvoiceDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -90,12 +90,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Item = a.Item,
                                     RefInvoiceId = a.RefInvoiceId,
                                     UnitTypeId = a.UnitTypeId,
-                                    UnitTypeName = c.UnitName,
+                                    UnitName = c.UnitName,
                                     Gstper = a.Gstper,
-                                    Gstamount = a.Gst,
+                                    Gst = a.Gst,
                                     Quantity = a.Quantity,
                                     Price = a.Price,
-                                    Discount = a.DiscountAmount,
+                                    DiscountAmount = a.DiscountAmount,
                                     DiscountPer = a.DiscountPer,
 
 
@@ -121,12 +121,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         Item = a.Item,
                                         RefInvoiceId = a.RefInvoiceId,
                                         UnitTypeId = a.UnitTypeId,
-                                        UnitTypeName = c.UnitName,
+                                        UnitName = c.UnitName,
                                         Gstper = a.Gstper,
-                                        Gstamount = a.Gst,
+                                        Gst = a.Gst,
                                         Quantity = a.Quantity,
                                         Price = a.Price,
-                                        Discount = a.DiscountAmount,
+                                        DiscountAmount = a.DiscountAmount,
                                         DiscountPer = a.DiscountPer,
                                         CreatedOn = a.CreatedOn,
                                     });
@@ -135,7 +135,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     searchText = searchText.ToLower();
                     supplierList = supplierList.Where(u =>
-                        u.UnitTypeName.ToLower().Contains(searchText)
+                        u.UnitName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -145,7 +145,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     switch (searchBy.ToLower())
                     {
                         case "unittypename":
-                            supplierList = supplierList.Where(u => u.UnitTypeName.ToLower().Contains(searchText));
+                            supplierList = supplierList.Where(u => u.UnitName.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -205,7 +205,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     supplierInvoiceDetail.UnitTypeId = SupplierInvoiceDetails.UnitTypeId;
                     supplierInvoiceDetail.Quantity = SupplierInvoiceDetails.Quantity;
                     supplierInvoiceDetail.Price = SupplierInvoiceDetails.Price;
-                    supplierInvoiceDetail.Gst = SupplierInvoiceDetails.Gstamount;
+                    supplierInvoiceDetail.Gst = SupplierInvoiceDetails.Gst;
                     supplierInvoiceDetail.Gstper = SupplierInvoiceDetails.Gstper;
                 }
                 Context.SupplierInvoiceDetails.Update(supplierInvoiceDetail);

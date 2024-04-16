@@ -485,6 +485,18 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('input', '#txtdiscountamount', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+    $(document).on('keydown', '#txtdiscountamount', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
     });
