@@ -60,12 +60,12 @@
 
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlSortBy" onchange="sortTable()">
-                                                            <option value="AscendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="DescendingCreatedOn" selected="selected">First Created</option>
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingUserName">UserName(a-z)</option>
                                                             <option value="DescendingUserName">UserName(z-a)</option>
-                                                            <option value="AscendingEmail">Email-Asc </option>
-                                                            <option value="DescendingEmail">Email-Asc</option>
+                                                            <option value="AscendingFirstName">Name-Asc </option>
+                                                            <option value="DescendingFirstName">Name-Asc</option>
                                                         </select>
                                                     </div>
                                                 </div><!--end row-->
@@ -184,7 +184,7 @@
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
                                             <select class="form-control" id="ddlSiteName">
-                                                <option selected disabled value="">--Select--</option>
+                                                <option value="null" selected>All Site</option>
                                             </select>
                                         </div>
                                     }
@@ -192,7 +192,7 @@
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
                                             <select class="form-control" id="ddlSiteName">
-                                                <option selected disabled value="">--Select--</option>
+                                                <option value="@UserSession.SiteId" selected>@UserSession.SiteName</option>
                                             </select>
                                         </div>
                                     }

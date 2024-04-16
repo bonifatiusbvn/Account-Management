@@ -382,7 +382,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
-                success: function (Result) {
+                success: function (Result) {debugger
 
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",

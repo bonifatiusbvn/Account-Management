@@ -178,6 +178,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        RoleName = r.Role,
                                                        SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
+                                                       CreatedOn=e.CreatedOn,
                                                    });
 
 
@@ -227,29 +228,17 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             else if (sortOrder == "descending")
                                 userList = userList.OrderByDescending(u => u.UserName);
                             break;
-                        case "role":
+                        case "firstname":
                             if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.RoleName);
+                                userList = userList.OrderBy(u => u.FirstName);
                             else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.RoleName);
+                                userList = userList.OrderByDescending(u => u.FirstName);
                             break;
-                        case "active":
+                        case "createdon":
                             if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.IsActive);
+                                userList = userList.OrderBy(u => u.CreatedOn);
                             else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.IsActive);
-                            break;
-                        case "email":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.Email);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.Email);
-                            break;
-                        case "phone":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.PhoneNo);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.PhoneNo);
+                                userList = userList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
 

@@ -24,9 +24,33 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
 
         public DbaccManegmentContext Context { get; }
 
-        public Task<ApiResponseModel> ActiveDeactiveSupplier(Guid UserId)
+        public async Task<ApiResponseModel> ActiveDeactiveSupplier(Guid SupplierId)
         {
-            throw new NotImplementedException();
+            ApiResponseModel response = new ApiResponseModel();
+            var Getsupplierdata = Context.SupplierMasters.Where(a => a.SupplierId == SupplierId).FirstOrDefault();
+
+            if (Getsupplierdata != null)
+            {
+                if (Getsupplierdata.IsApproved == true)
+                {
+                    Getsupplierdata.IsApproved = false;
+                    Context.SupplierMasters.Update(Getsupplierdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = Getsupplierdata;
+                    response.message = "Supplier Is Deactive Succesfully";
+                }
+                else
+                {
+                    Getsupplierdata.IsApproved = true;
+                    Context.SupplierMasters.Update(Getsupplierdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = Getsupplierdata;
+                    response.message = "Supplier Is Active Succesfully";
+                }
+            }
+            return response;
         }
 
         public async Task<ApiResponseModel> CreateSupplier(SupplierModel Supplier)
@@ -230,6 +254,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 {
                     Userdata.SupplierId = UpdateSupplier.SupplierId;
                     Userdata.SupplierName = UpdateSupplier.SupplierName;
+                    Userdata.Gstno = UpdateSupplier.Gstno;
                     Userdata.Area = UpdateSupplier.Area;
                     Userdata.BuildingName = UpdateSupplier.BuildingName;
                     Userdata.PinCode = UpdateSupplier.PinCode;

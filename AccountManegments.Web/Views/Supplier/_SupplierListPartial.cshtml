@@ -13,14 +13,11 @@
         <td>
             @if (_userSession.UserRole == 3)
             {
-                @if (item.IsApproved == true)
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.SupplierId" @if (item.IsApproved)
                 {
-                    <span class="badge bg-light-success text-success w-100">Approved</span>
-                }
-                else
-                {
-                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
-                }
+                    <text>checked</text>
+                } onclick="SupplierActiveDecative('@item.SupplierId')">
+
             }
 
             else

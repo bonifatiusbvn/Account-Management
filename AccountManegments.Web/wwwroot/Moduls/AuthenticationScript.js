@@ -40,13 +40,16 @@ function CreateUser() {
     }
 }
 function GetSiteDetails() {
-
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             $('#ddlSiteName').empty();
+
+            $('#ddlSiteName').append('<option value="null" selected>All Site</option>');
             $.each(result, function (i, data) {
-                $('#ddlSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+
+                $('#ddlSiteName').append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
+
             });
         }
     });

@@ -260,7 +260,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     searchText = searchText.ToLower();
                     supplierList = supplierList.Where(u =>
                         u.SiteName.ToLower().Contains(searchText) ||
-                        u.CompanyName.ToLower().Contains(searchText)
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.SupplierName.ToLower().Contains(searchText) ||
+                        u.TotalAmount.ToString().Contains(searchText)
                     );
                 }
 
