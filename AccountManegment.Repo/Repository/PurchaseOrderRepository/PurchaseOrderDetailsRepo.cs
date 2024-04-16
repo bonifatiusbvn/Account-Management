@@ -39,7 +39,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedOn = DateTime.Now,
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "Purchase Order Details Inserted Successfully";
+                responseModel.message = "PurchaseOrder details successfully inserted..!";
                 Context.PurchaseOrderDetails.Add(PurchaseOrder);
                 Context.SaveChanges();
             }
@@ -65,14 +65,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  select new PurchaseOrderDetailsModel
                                  {
                                      Id = a.Id,
-                                     Poid=a.PorefId,
-                                     Item=a.Item,
-                                     UnitTypeId=a.UnitTypeId,
-                                     UnitTypeName=b.UnitName,
-                                     Quantity=a.Quantity,
-                                     Price=a.Price,
-                                     Discount=a.Discount,
-                                     Gst=a.Gst,
+                                     Poid = a.PorefId,
+                                     Item = a.Item,
+                                     UnitTypeId = a.UnitTypeId,
+                                     UnitTypeName = b.UnitName,
+                                     Quantity = a.Quantity,
+                                     Price = a.Price,
+                                     Discount = a.Discount,
+                                     Gst = a.Gst,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
@@ -88,22 +88,22 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         {
             try
             {
-               var PurchaseOrder = (from a in Context.PurchaseOrderDetails
-                                 join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-                                 select new PurchaseOrderDetailsModel
-                                 {
-                                     Id = a.Id,
-                                     Poid = a.PorefId,
-                                     Item = a.Item,
-                                     UnitTypeId = a.UnitTypeId,
-                                     UnitTypeName = b.UnitName,
-                                     Quantity = a.Quantity,
-                                     Price = a.Price,
-                                     Discount = a.Discount,
-                                     Gst = a.Gst,
-                                     CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn,
-                                 });
+                var PurchaseOrder = (from a in Context.PurchaseOrderDetails
+                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                     select new PurchaseOrderDetailsModel
+                                     {
+                                         Id = a.Id,
+                                         Poid = a.PorefId,
+                                         Item = a.Item,
+                                         UnitTypeId = a.UnitTypeId,
+                                         UnitTypeName = b.UnitName,
+                                         Quantity = a.Quantity,
+                                         Price = a.Price,
+                                         Discount = a.Discount,
+                                         Gst = a.Gst,
+                                         CreatedBy = a.CreatedBy,
+                                         CreatedOn = a.CreatedOn,
+                                     });
                 return PurchaseOrder;
             }
             catch (Exception)
@@ -133,7 +133,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "Purchase Order Details Updated Successfully";
+                responseModel.message = "PurchaseOrder details Successfully updated..!";
                 Context.PurchaseOrderDetails.Update(PurchaseOrder);
                 Context.SaveChanges();
             }

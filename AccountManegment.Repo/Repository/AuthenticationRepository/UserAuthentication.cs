@@ -43,7 +43,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Deactive Succesfully";
                 }
 
                 else
@@ -53,7 +53,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Active Succesfully";
                 }
 
 
@@ -309,19 +309,19 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         }
                         else
                         {
-                            response.Message = "Your Password Is Wrong";
+                            response.Message = "Your password is wrong";
                         }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your Deactive Contact Your Admin";
+                        response.Message = "Your deactive contact your admin";
                         return response;
                     }
                 }
                 else
                 {
-                    response.Message = "User Not Exist";
+                    response.Message = "User not exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Data = null;
                 }
@@ -356,7 +356,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 Context.SaveChanges();
 
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Permissions Given Successfully";
+                response.message = "Permissions given successfully";
 
             }
             catch (Exception ex)
@@ -390,7 +390,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
                 }
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = "User Data Updated Successfully";
+                response.Message = "User data updated successfully";
                 return response;
 
             }

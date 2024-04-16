@@ -50,7 +50,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier Invoice Successfully Inserted";
+                response.message = "Supplier invoice successfully created..!";
                 Context.SupplierInvoices.Add(SupplierInvoice);
                 Context.SaveChanges();
             }
@@ -70,7 +70,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "SupplierInvoice" + " " + SupplierInvoice.Id + "is Removed Successfully!";
+                    response.message = "SupplierInvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -348,7 +348,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 Context.SupplierInvoices.Update(supplierInvoice);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Supplier Invoice Updated Successfully!";
+                model.message = "Supplier invoice updated successfully!";
             }
             catch (Exception ex)
             {
@@ -413,7 +413,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier Order Inserted Successfully";
+                response.message = "Supplier order inserted successfully..!";
             }
             catch (Exception ex)
             {

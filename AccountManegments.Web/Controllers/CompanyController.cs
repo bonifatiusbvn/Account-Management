@@ -34,6 +34,8 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllCompanyDetails(string searchText, string searchBy, string sortBy)
         {

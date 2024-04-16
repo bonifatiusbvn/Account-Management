@@ -38,6 +38,7 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+        [FormPermissionAttribute("PurchaseMaster-View")]
         public async Task<IActionResult> ItemListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -106,7 +107,7 @@ namespace AccountManegments.Web.Controllers
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(item, "ItemMaster/AddItemDetails");
-                if (postUser!= null)
+                if (postUser != null)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
@@ -226,7 +227,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        //[FormPermissionAttribute("Item-Add")]
+        [FormPermissionAttribute("Item-Add")]
         [HttpPost]
         public async Task<IActionResult> ImportExcelFile(IFormFile FormFile)
         {
@@ -318,7 +319,7 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     ViewBag.Message = postUser.message;
-                    ViewBag.Code = postUser.code;                   
+                    ViewBag.Code = postUser.code;
                 }
             }
             catch (Exception ex)
@@ -327,7 +328,7 @@ namespace AccountManegments.Web.Controllers
             }
             return View("ItemListView");
         }
-
+        [FormPermissionAttribute("PurchaseMaster-View")]
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailsById()
         {
@@ -349,6 +350,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("PurchaseMaster-View")]
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailsListById()
         {

@@ -33,7 +33,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     if (existingItem != null)
                     {
                         response.code = 403;
-                        response.message = "ItemDetails Already Inserted";
+                        response.message = "Item already exist";
                     }
                     else
                     {
@@ -48,12 +48,12 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             Gstper = ItemDetails.Gstper,
                             Hsncode = ItemDetails.Hsncode,
                             IsDeleted = ItemDetails.IsDeleted,
-                            IsApproved = ItemDetails.IsApproved,
+                            IsApproved = true,
                             CreatedBy = ItemDetails.CreatedBy,
                             CreatedOn = DateTime.Now,
                         };
                         response.code = (int)HttpStatusCode.OK;
-                        response.message = "ItemDetails Successfully Inserted";
+                        response.message = "Item successfully inserted..!";
                         Context.ItemMasters.Add(ItemMaster);
                         Context.SaveChanges();
                     }
@@ -86,7 +86,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 Context.SaveChanges();
                 response.code = 200;
                 response.data = GetItemdata;
-                response.message = "Item is Deleted Successfully";
+                response.message = "Item is successfully deleted..!";
             }
             return response;
         }
@@ -262,7 +262,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = ItemData;
-                    response.message = "Item Is UnApproved!";
+                    response.message = "Item is Successfully unapproved!";
                 }
 
                 else
@@ -272,7 +272,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = ItemData;
-                    response.message = "Item Is Approved Successfully";
+                    response.message = "Item is successfully approved ";
                 }
             }
             return response;
@@ -298,7 +298,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 Context.ItemMasters.Update(ItemMaster);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "ItemDetails Updated Successfully!";
+                model.message = "ItemDetails successfully updated..!";
             }
             catch (Exception ex)
             {
@@ -318,7 +318,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     if (existingItem != null)
                     {
                         response.code = 400;
-                        response.message = "Item is Already Inserted";
+                        response.message = "Item is already exist";
                     }
                     else
                     {
@@ -340,7 +340,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                         Context.ItemMasters.Add(itemMaster);
                         await Context.SaveChangesAsync();
                         response.code = (int)HttpStatusCode.OK;
-                        response.message = "Item Details Successfully Inserted";
+                        response.message = "Items Details Successfully Inserted..!";
                     }
                 }
             }
@@ -388,22 +388,22 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             try
             {
                 var ItemList = new List<POItemDetailsModel>();
-                var data =await (from a in Context.ItemMasters.Where(x => x.ItemId == ItemId)
-                            join b in Context.UnitMasters on a.UnitType equals b.UnitId
-                            select new POItemDetailsModel
-                            {
-                                ItemId = a.ItemId,
-                                ItemName = a.ItemName,
-                                UnitType = a.UnitType,
-                                UnitTypeName = b.UnitName,
-                                PricePerUnit = a.PricePerUnit,
-                                Gstamount = a.Gstamount,
-                                GstPercentage = a.Gstper,
-                                Hsncode = a.Hsncode,
-                            }).ToListAsync();
-                if(data != null)
+                var data = await (from a in Context.ItemMasters.Where(x => x.ItemId == ItemId)
+                                  join b in Context.UnitMasters on a.UnitType equals b.UnitId
+                                  select new POItemDetailsModel
+                                  {
+                                      ItemId = a.ItemId,
+                                      ItemName = a.ItemName,
+                                      UnitType = a.UnitType,
+                                      UnitTypeName = b.UnitName,
+                                      PricePerUnit = a.PricePerUnit,
+                                      Gstamount = a.Gstamount,
+                                      GstPercentage = a.Gstper,
+                                      Hsncode = a.Hsncode,
+                                  }).ToListAsync();
+                if (data != null)
                 {
-                    foreach(var item in data)
+                    foreach (var item in data)
                     {
                         ItemList.Add(new POItemDetailsModel()
                         {
