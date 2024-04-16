@@ -262,7 +262,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder = PurchaseOrder.Where(u =>
                         u.SupplierName.ToLower().Contains(searchText) ||
                         u.TotalGstamount.ToString().Contains(searchText) ||
-                        u.TotalAmount.ToString().Contains(searchText)
+                        u.TotalAmount.ToString().Contains(searchText) ||
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.Poid.ToLower().Contains(searchText)
                     );
                 }
 

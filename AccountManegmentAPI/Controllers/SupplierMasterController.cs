@@ -91,6 +91,31 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+        [HttpPost]
+        [Route("ActiveDeactiveSupplier")]
+        public async Task<IActionResult> ActiveDeactiveSupplier(Guid SupplierId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var updateUser = await _Supplier.ActiveDeactiveSupplier(SupplierId);
+            try
+            {
+                if (updateUser != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = updateUser.message;
+                }
+                else
+                {
+                    responseModel.message = updateUser.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
         [HttpGet]
         [Route("GetSupplierNameList")]
         public async Task<IActionResult> GetSupplierNameList()

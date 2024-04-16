@@ -375,9 +375,9 @@ function resetSupplierForm() {
     }
 }
 
-function UserActiveDecative(UserId) {
+function SupplierActiveDecative(SupplierId) {
 
-    var isChecked = $('#flexSwitchCheckChecked_' + UserId).is(':checked');
+    var isChecked = $('#flexSwitchCheckChecked_' + SupplierId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
 
     Swal.fire({
@@ -394,10 +394,10 @@ function UserActiveDecative(UserId) {
     }).then((result) => {
         if (result.isConfirmed) {
             var formData = new FormData();
-            formData.append("UserId", UserId);
+            formData.append("SupplierId", SupplierId);
 
             $.ajax({
-                url: '/User/UserActiveDecative?UserId=' + UserId,
+                url: '/Supplier/ActiveDeactiveSupplier?SupplierId=' + SupplierId,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
@@ -409,7 +409,7 @@ function UserActiveDecative(UserId) {
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
                         buttonsStyling: false
                     }).then(function () {
-                        window.location = '/User/UserListView';
+                        window.location = '/Supplier/SupplierList';
                     });
                 }
             });
@@ -419,7 +419,7 @@ function UserActiveDecative(UserId) {
                 'User Have No Changes.!!😊',
                 'error'
             ).then(function () {
-                window.location = '/User/UserListView';
+                window.location = '/Supplier/SupplierList';
             });;
         }
     });
