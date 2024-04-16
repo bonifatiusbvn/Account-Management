@@ -41,7 +41,7 @@
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="txtSuppliername" class="form-label">Supplier Name</label>
 
-                                                                <select class="form-control" id="txtSuppliername">
+                                                                <select class="form-select" id="txtSuppliername">
                                                                     <option selected disabled value="">Select Supplier</option>
                                                                 </select>
 
@@ -91,7 +91,7 @@
                                                             </div>
                                                             <div class="col-5 col-lg-5">
                                                                 <label for="txtPoId" class="form-label">Order No</label>
-                                                                <input type="text" class="form-control" id="txtPoId"/>
+                                                                <input type="text" class="form-control" id="txtPoId" />
                                                             </div>
                                                             <div class="col-3 col-lg-3">
                                                                 <label for="orderdate" class="form-label">Order Date</label>
@@ -298,7 +298,7 @@
                     <div class="row">
                         <div class="col-10 col-sm-10 ">
                             <label class="form-lable">Select Site</label>
-                            <select class="form-control form-control" id="txtPoSiteName" required>
+                            <select class="form-select form-control" id="txtPoSiteName" required>
                                 <option selected value="">--Select Site--</option>
                             </select>
                         </div>
@@ -350,11 +350,11 @@
 </div>
 <!--end row-->
 @section Scripts {
-  
+
     <script src="~/moduls/purchaserequestscript.js"></script>
 }
 <script type="text/javascript">
-   
+
 
     function fn_OpenShippingModal() {
         $('#txtmdAddress').val('');
@@ -366,7 +366,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

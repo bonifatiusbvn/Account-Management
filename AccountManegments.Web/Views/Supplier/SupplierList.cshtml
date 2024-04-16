@@ -182,7 +182,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-control bg-transparent">
+                                    <select id="ddlCity" name="ddlCity" class="form-select bg-transparent">
                                         <option value="0">--Select City--</option>
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">State</label>
-                                    <select id="dropState" name="dropState" class="form-control bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
+                                    <select id="dropState" name="dropState" class="form-select bg-transparent" onclick="fn_getcitiesbystateId('ddlCity',null,this)">
                                         <option value="0" selected>--Select State--</option>
                                     </select>
                                     <input type="hidden" id="txtstate" value="" />
@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Country</label>
-                                    <select id="ddlCountry" name="ddlCountry" class="form-control bg-transparent" onchange="fn_getState('dropState',null,this)">
+                                    <select id="ddlCountry" name="ddlCountry" class="form-select bg-transparent" onchange="fn_getState('dropState',null,this)">
                                         <option>--Select Country--</option>
                                     </select>
                                     <span class="text-danger"></span>
@@ -248,7 +248,7 @@
     }
 </style>
 
-    @section Scripts {
-        <script src="~/moduls/MasterListScript.js" asp-append-version="true"></script>
-        <script src="~/moduls/SupplierScript.js" asp-append-version="true"></script>
-    }
+@section Scripts {
+    <script src="~/moduls/MasterListScript.js" asp-append-version="true"></script>
+    <script src="~/moduls/SupplierScript.js" asp-append-version="true"></script>
+}

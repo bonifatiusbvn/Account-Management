@@ -1,6 +1,7 @@
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +19,17 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
-            options.LoginPath = "/Authentication/Login";
-            options.LogoutPath = "/Authentication/Logout";
+
+
             options.Cookie.HttpOnly = true;
-            //options.Cookie.Name = "localhost:7204";
-            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.IsEssential = true;
             options.SlidingExpiration = true;
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(8);
+            options.LoginPath = "/Authentication/UserLogin";
+            options.LogoutPath = "/Authentication/Logout";
+            options.AccessDeniedPath = "/Home/UnAuthorised";
+
         });
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -40,12 +45,9 @@ builder.Services.AddSession(option =>
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
