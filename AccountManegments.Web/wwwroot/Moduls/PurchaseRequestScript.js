@@ -54,8 +54,7 @@ function GetSiteDetail() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-            if (result.length > 0) {    
-
+            if (result.length > 0) {
                 $.each(result, function (i, data) {
                     debugger
                     $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
@@ -177,7 +176,7 @@ function ClearPurchaseRequestTextBox() {
     $('#txtItemName').val('');
     $('#txtUnitType').val('');
     $('#txtQuantity').val('');
-    $('#txtPoSiteName').val('');
+
     var button = document.getElementById("btnpurchaseRequest");
     if ($('#PurchaseRequestId').val() == '') {
         button.textContent = "Create";
@@ -403,7 +402,8 @@ function PurchaseRequestIsApproved(PurchaseId) {
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
-                success: function (Result) {debugger
+                success: function (Result) {
+
 
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
