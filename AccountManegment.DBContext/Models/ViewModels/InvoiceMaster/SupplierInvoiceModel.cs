@@ -34,6 +34,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public bool? IsPayOut { get; set; }
 
+        public string? ContactName { get; set; }
+
+        public string? ContactNumber { get; set; }
+
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

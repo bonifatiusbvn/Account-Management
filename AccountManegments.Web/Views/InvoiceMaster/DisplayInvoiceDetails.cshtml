@@ -50,7 +50,7 @@
                         <div class="flex-grow-1 col-4">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Invoice No</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.InvoiceId</b></p>
+                                <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note</label>
@@ -137,6 +137,7 @@
                         <tbody id="products-list">
                             @{
                                 int index = 1;
+                                decimal subtotal = 0;
                             }
                             @foreach (var item in Model.ItemList)
                             {
@@ -147,11 +148,12 @@
                                         <p class="text-muted mb-0" id="txtdescription">@firstItem.Description</p>
                                     </td>
                                     <td class="border" id="txtHSN">7216</td>
-                                    <td class="border" id="txtquantity">@item.Quantity @item.UnitTypeName</td>
+                                    <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.UnitTypeName</td>
-                                    <td class="text-end border" id="txttotal">@item.PricePerUnit</td>
+                                    <td class="text-end border" id="txttotal">@item.TotalAmount</td>
                                 </tr>
                                 index++;
+                                subtotal += item.TotalAmount ?? 0;
                             }
                             <tr>
                                 <td class="border"></td>
@@ -159,7 +161,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border-top">@firstItem.TotalAmount</td>
+                                <td class="border-top">@subtotal</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -191,7 +193,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="text-end border">₹@firstItem.TotalAmount</td>
+                                <td class="text-end border">₹@firstItem.TotalAmountInvoice</td>
                             </tr>
                         </tbody>
                     </table><!--end table-->

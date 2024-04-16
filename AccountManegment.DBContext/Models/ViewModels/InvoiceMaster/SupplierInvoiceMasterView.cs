@@ -12,7 +12,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
     {
         public int InvoiceDetailsId { get; set; }
         public Guid? RefInvoiceId { get; set; }
-        public decimal TotalAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -24,7 +24,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? UnitTypeName { get; set; }
 
         public Guid Id { get; set; }
-        public string? InvoiceId { get; set; }
+
+        public string? InvoiceNo { get; set; }
 
         public Guid? SiteId { get; set; }
 
@@ -36,6 +37,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? Description { get; set; }
 
+        public decimal TotalAmountInvoice { get; set; }
+
         public decimal TotalGstamount { get; set; }
 
         public decimal? TotalDiscount { get; set; }
@@ -46,9 +49,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public bool? IsPayOut { get; set; }
 
+        public string? ContactName { get; set; }
+
+        public string? ContactNumber { get; set; }
+
         public string? SiteName { get; set; }
 
         public string? SupplierName { get; set; }
+
+        public string? CompanyName { get; set; }
 
         public string? SupplierGstNo { get; set; }
 
@@ -58,9 +67,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? SupplierArea { get; set; }
 
-        public string? SupplierState { get; set; } 
+        public string? SupplierState { get; set; }
 
-        public int? SupplierStateId { get; set; } 
+        public int? SupplierStateId { get; set; }
 
         public string? SupplierCity { get; set; }
 
@@ -73,8 +82,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SupplierAccountNo { get; set; }
 
         public string? SupplierIFSCCode { get; set; }
-
-        public string? CompanyName { get; set; }
 
         public string? CompanyAddress { get; set; }
 

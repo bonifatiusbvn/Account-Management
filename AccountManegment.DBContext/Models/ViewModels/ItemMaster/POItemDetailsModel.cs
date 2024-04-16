@@ -21,5 +21,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public decimal ItemAmount { get; set; }
         public string? UnitTypeName { get; set; }
         public int RowNumber { get; set; }
+        public decimal? TotalAmount { get; set; }
+        public decimal? DiscountAmount { get; set; }
     }
 }

@@ -370,5 +370,49 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemInInvoiceById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<ItemMasterModel>(ItemId.ToString());
+                ItemMasterModel Items = new ItemMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
+                    Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/InvoiceMaster/_DisplayItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayItemListInInvoiceById()
+        {
+            try
+            {
+                string ItemId = HttpContext.Request.Form["ITEMID"];
+                var GetItem = JsonConvert.DeserializeObject<POItemDetailsModel>(ItemId.ToString());
+                List<POItemDetailsModel> Items = new List<POItemDetailsModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsListById?ItemId=" + GetItem.ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    //Items.RowNumber = Items.RowNumber;
+                }
+                return PartialView("~/Views/InvoiceMaster/_DisplayItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

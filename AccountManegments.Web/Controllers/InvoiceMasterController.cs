@@ -30,7 +30,7 @@ namespace AccountManegments.Web.Controllers
 
                 if (Response.code == 200)
                 {
-                    ViewData["SupplierInvoiceNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                    ViewBag.SupplierInvoiceNo = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
                 }
 
 
@@ -178,11 +178,11 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
             }
             catch (Exception ex)
@@ -334,6 +334,28 @@ namespace AccountManegments.Web.Controllers
                     SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
                 }
                 return PartialView("~/Views/InvoiceMaster/_GetInvoiceDetailsPartial.cshtml", SupplierDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GetAllItemDetailList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ItemMaster/GetAllItemDetailsList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ItemMasterModel> Items = JsonConvert.DeserializeObject<List<ItemMasterModel>>(response.data.ToString());
+                    return PartialView("~/Views/InvoiceMaster/_DisplayAllItemPartial.cshtml", Items);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                }
             }
             catch (Exception ex)
             {

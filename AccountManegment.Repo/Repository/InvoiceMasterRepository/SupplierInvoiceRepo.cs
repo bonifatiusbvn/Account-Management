@@ -171,7 +171,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
-                                    InvoiceId = a.InvoiceNo,
+                                    InvoiceNo = a.InvoiceNo,
                                     SiteId = a.SiteId,
                                     SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
@@ -198,7 +198,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyPanNo = c.PanNo,
                                     Date = a.Date,
                                     Description = a.Description,
-                                    TotalAmount = a.TotalAmount,
+                                    TotalAmountInvoice = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
                                     PaymentStatus = a.PaymentStatus,
@@ -212,6 +212,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          ItemName = a.Item,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
+                                                         TotalAmount = a.TotalAmount,
                                                          UnitType = a.UnitTypeId,
                                                          UnitTypeName = b.UnitName,
                                                          PricePerUnit = a.Price,
@@ -373,18 +374,20 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierInvoice = new SupplierInvoice()
                 {
                     Id = Guid.NewGuid(),
-                    InvoiceNo = SupplierItemDetails.InvoiceId,
+                    InvoiceNo = SupplierItemDetails.InvoiceNo,
                     SiteId = SupplierItemDetails.SiteId,
                     SupplierId = SupplierItemDetails.SupplierId,
                     CompanyId = SupplierItemDetails.CompanyId,
                     Description = SupplierItemDetails.Description,
                     TotalDiscount = SupplierItemDetails.TotalDiscount,
                     TotalGstamount = SupplierItemDetails.TotalGstamount,
-                    TotalAmount = SupplierItemDetails.TotalAmount,
+                    TotalAmount = SupplierItemDetails.TotalAmountInvoice,
                     PaymentStatus = SupplierItemDetails.PaymentStatus,
                     Roundoff = SupplierItemDetails.Roundoff,
+                    ContactName =   SupplierItemDetails.ContactName,
+                    ContactNumber  = SupplierItemDetails.ContactNumber,
                     IsPayOut = PayOut,
-                    Date = DateTime.Now,
+                    Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -399,10 +402,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
                         Price = item.PricePerUnit,
+                        DiscountAmount = item.DiscountAmount,
                         DiscountPer = item.DiscountPer,
                         Gst = item.Gstamount,
                         Gstper = item.GstPercentage,
-                        TotalAmount = SupplierItemDetails.TotalAmount,
+                        TotalAmount = item.TotalAmount,
                         CreatedBy = SupplierItemDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
@@ -411,7 +415,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier Order Inserted Successfully";
+                response.message = "Invoice Generated Successfully";
             }
             catch (Exception ex)
             {
