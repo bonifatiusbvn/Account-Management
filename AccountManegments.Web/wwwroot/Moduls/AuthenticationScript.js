@@ -55,6 +55,7 @@ function GetSiteDetails() {
     });
 }
 
+
 function ClearUserTextBox() {
     resetUserForm();
     $('#txtUserid').val('');
