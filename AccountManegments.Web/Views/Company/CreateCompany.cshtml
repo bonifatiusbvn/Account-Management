@@ -4,28 +4,27 @@
     ViewData["Title"] = "CreateCompany";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
+<style>
+    .fixed-button {
+        position: fixed;
+        top: 80px; 
+        right: 20px; 
+        z-index: 1000; 
+    }
+</style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Company</div>
-    <div class="ps-3 flex-grow-1">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0 align-items-center">
-                <li class="breadcrumb-item">
-                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Company Details</li>
-            </ol>
-        </nav>
-    </div>
     <div class="d-flex align-items-center">
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company" && (a.Add == true)))
             {
-                <button type="button" class="btn btn-primary" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Company</button>
+                <div style="margin-left: auto;">
+                    <button type="button" class="btn btn-primary fixed-button" onclick="ClearTextBox()"><i class="lni lni-circle-plus"></i>Add Company</button>
+                </div>
             }
         </form>
     </div>
 </div>
+
 <div class="">
     <div class="">
         <div class=" radius-10 w-100">

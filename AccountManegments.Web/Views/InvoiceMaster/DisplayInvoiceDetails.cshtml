@@ -15,28 +15,13 @@
     decimal? totalGst = 0;
 }
 
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Invoice List</div>
-    <div class="ps-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0 align-items-center">
-                <li class="breadcrumb-item">
-                    <a href="javascript:;"><ion-icon name="home-outline"></ion-icon></a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Invoice List Details</li>
-            </ol>
-        </nav>
-    </div>
-</div>
-<!-- end page title -->
-
 <div class="row justify-content-center" id="displayInvoiceDetail">
     <div class="col-xxl-9">
         <div class="card border">
             <div class="row">
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
-                        <div class="flex-grow-1 col-5 border">
+                        <div class="flex-grow-1 col-6 border">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <span class="text-muted"><b>@firstItem.SupplierName</b></span> <br />
                                 <span class="text-muted">@firstItem.SupplierBuildingName,@firstItem.SupplierArea,@firstItem.SupplierCity,@firstItem.SupplierState - @firstItem.SupplierPincode</span><br />
@@ -48,7 +33,7 @@
                             <span class="text-muted">@firstItem.ShippingAddress</span><br />
                             <span class="text-muted">GSTIN:- </span>
                         </div>
-                        <div class="flex-grow-1 col-4">
+                        <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Invoice No</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
@@ -73,7 +58,6 @@
                                 <label class="form-label">Dispatched Through</label>
                                 <p class="text-muted text-uppercase"><b>Tempo</b></p>
                             </div>
-
                             <label class="form-label">Bill of Landing/LR-RR No.</label>
                             <p class="text-muted text-uppercase"><b></b></p>
                         </div>
@@ -111,13 +95,13 @@
                 </div>
                 <div class="card-body" id="cardbody2" style="margin-top:-33px;">
                     <div class="d-flex">
-                        <div class="flex-grow-1 col-5 border">
+                        <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
                             <span class="text-muted text-uppercase">@firstItem.CompanyAddress,@firstItem.CompanyArea,@firstItem.CompanyCityName,@firstItem.CompanyStateName,@firstItem.CompanyCountryName,@firstItem.CompanyPincode</span><br />
                             <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.CompanyGstNo</b></p>
                         </div>
-                        <div class="flex-grow-1 col-7 border">
+                        <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
                             <p class="text-muted"><b>Dispatched from Rakhial,Ahemdabad</b></p>
                         </div>
