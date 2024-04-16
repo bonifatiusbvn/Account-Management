@@ -181,8 +181,8 @@
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-control" id="ddlSiteName">
-                                                <option value="null" selected>All Site</option>
+                                            <select class="form-select" id="ddlSiteName">
+                                                <option selected disabled value="">--Select--</option>
                                             </select>
                                         </div>
                                     }
@@ -190,14 +190,14 @@
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-control" id="ddlSiteName" disabled>
+                                            <select class="form-select" id="ddlSiteName" disabled>
                                                 <option selected disabled value="@UserSession.SiteId">@UserSession.SiteName</option>
                                             </select>
                                         </div>
                                     }
                                     <div class="col-12">
                                         <label class="form-label">Role</label>
-                                        <select class="form-control" id="ddlUserRole" name="ddlUserRole">
+                                        <select class="form-select" id="ddlUserRole" name="ddlUserRole">
                                             <option value="">--Select--</option>
                                         </select>
                                         <input type="hidden" id="txtrole">

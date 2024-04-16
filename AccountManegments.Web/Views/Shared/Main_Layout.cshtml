@@ -246,7 +246,7 @@
                 @if (_userSession.UserRole == 3 && UserSession.SiteId == null)
                 {
                     <div class="col-3">
-                        <select class="form-control form-control-lg" id="drplaySiteName">
+                        <select class="form-select form-control-lg" id="drplaySiteName">
                             <option value="">All Site</option>
                         </select>
                     </div>
@@ -291,7 +291,7 @@
                                             <img src="~/assets/images/avatars/06.png" alt="" class="rounded-circle" width="54" height="54">
                                             <div class="">
                                                 <h6 class="mb-0 dropdown-user-name">@_userSession.FullName</h6>
-                                                <small class="mb-0 dropdown-user-designation text-secondary">UI Developer</small>
+
                                             </div>
                                         </div>
                                     </a>
@@ -329,26 +329,8 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center">
-                                            <div class="">
-                                                <ion-icon name="wallet-outline"></ion-icon>
-                                            </div>
-                                            <div class="ms-3"><span>Earnings</span></div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center">
-                                            <div class="">
-                                                <ion-icon name="cloud-download-outline"></ion-icon>
-                                            </div>
-                                            <div class="ms-3"><span>Downloads</span></div>
-                                        </div>
-                                    </a>
-                                </li>
+
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

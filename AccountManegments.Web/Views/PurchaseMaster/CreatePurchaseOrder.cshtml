@@ -14,13 +14,11 @@
     }
 
     #txtSuppliername-error, #companybillingaddressDetails-error, #txtcompanyname-error,
-    #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error
-    {
+    #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error {
         color: red;
     }
 
-    #txtPoSiteName-error, #txtmdqty-error
-    {
+    #txtPoSiteName-error, #txtmdqty-error {
         color: red;
     }
 </style>
@@ -43,12 +41,12 @@
     <div class="col-lg-12">
         <div class="" id="invoiceList">
             <form id="CreatePOForm">
-            <div class="">
-                <div>
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-12">
-                            <div class="">
-                                
+                <div class="">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xxl-12">
+                                <div class="">
+
                                     <div class=" border-bottom border-bottom-dashed">
                                         <div class="row">
                                             <div class="col-6 col-lg-6">
@@ -60,13 +58,13 @@
                                                                 <label for="txtSuppliername" class="form-label ">Supplier Name</label>
                                                                 @if (Model.SupplierName != null)
                                                                 {
-                                                                    <select class="form-control" id="txtSuppliername" name="txtSuppliername">
+                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
                                                                         <option selected value="@Model.FromSupplierId">@Model.SupplierName</option>
                                                                     </select>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <select class="form-control" id="txtSuppliername" name="txtSuppliername">
+                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
                                                                         <option selected value="">--Select Supplier--</option>
                                                                     </select>
                                                                 }
@@ -77,7 +75,7 @@
 
                                                                 <label for="" class="form-label ">Mobile No</label>
 
-                                                                <input type="text" id="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" readonly/>
+                                                                <input type="text" id="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" readonly />
                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -85,7 +83,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label for="" class="form-label ">Address</label>
-                                                                <input type="text" id="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" readonly/>
+                                                                <input type="text" id="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" readonly />
                                                                 <span id="spnsuppliername" class="text-danger"></span>
 
                                                             </div>
@@ -93,7 +91,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" readonly/>
+                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" readonly />
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -152,7 +150,7 @@
                                                             <div class="col-6 col-lg-6">
 
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" readonly/>
+                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" readonly />
                                                                 <span id="spnGstNo" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -164,91 +162,91 @@
 
                                     </div>
                                     <!--end row-->
-                              
-                            </div>
-
-                            <!---- Product Details ---->
-                            <div class="row">
-                            </div>
-                            <div class="card">
-                                <div class="row p-3">
-
-                                    <h5 class="card-header">
-                                        Purchase Details
-                                        @if (Model.ItemList != null)
-                                        {
-                                            <a class="disabled">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
-                                        }
-                                        <span id="spnitembutton" class="text-danger"></span>
-                                    </h5>
 
                                 </div>
 
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive" style="height:350px">
-                                        <table class="table align-middle mb-0">
-                                            <thead class="table-secondary">
-                                                <tr class="text-uppercase">
-                                                    <th>#</th>
-                                                    <th>Product Details</th>
-                                                    <th>HSN Code</th>
-                                                    <th>Quantity</th>
-                                                    <th>Qty Type</th>
-                                                    <th>Price</th>
-                                                    <th>GST (%)</th>
-                                                    <th>GST Amt (₹)</th>
-                                                    <th>Amount (₹)</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
+                                <!---- Product Details ---->
+                                <div class="row">
+                                </div>
+                                <div class="card">
+                                    <div class="row p-3">
 
+                                        <h5 class="card-header">
+                                            Purchase Details
                                             @if (Model.ItemList != null)
                                             {
-                                                <tbody id="addNewlink" class="disabled">
-                                                    @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
-                                                </tbody>
+                                                <a class="disabled">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
                                             }
                                             else
                                             {
-                                                <tbody id="addNewlink">
-                                                </tbody>
+                                                <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
                                             }
-
-
-
-                                        </table>
+                                            <span id="spnitembutton" class="text-danger"></span>
+                                        </h5>
 
                                     </div>
-                                    <div class="card-footer">
-                                        <table class="table align-middle mb-0">
-                                            <thead class="table align-middle mb-0">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th colspan="2">Total</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th id="TotalProductQuantity"></th>
-                                                    <th></th>
-                                                    <th id="TotalProductPrice"></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th id="TotalProductGST"></th>
-                                                    <th id="TotalProductAmount"></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class=" card">
-                                        <div class="row card-body">
+
+                                    <div class="card-body pt-0">
+                                        <div class="table-responsive" style="height:350px">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr class="text-uppercase">
+                                                        <th>#</th>
+                                                        <th>Product Details</th>
+                                                        <th>HSN Code</th>
+                                                        <th>Quantity</th>
+                                                        <th>Qty Type</th>
+                                                        <th>Price</th>
+                                                        <th>GST (%)</th>
+                                                        <th>GST Amt (₹)</th>
+                                                        <th>Amount (₹)</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                @if (Model.ItemList != null)
+                                                {
+                                                    <tbody id="addNewlink" class="disabled">
+                                                        @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
+                                                    </tbody>
+                                                }
+                                                else
+                                                {
+                                                    <tbody id="addNewlink">
+                                                    </tbody>
+                                                }
+
+
+
+                                            </table>
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table align-middle mb-0">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th colspan="2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductQuantity"></th>
+                                                        <th></th>
+                                                        <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductGST"></th>
+                                                        <th id="TotalProductAmount"></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class=" card">
+                                            <div class="row card-body">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
@@ -280,90 +278,89 @@
                                                 </div>
 
 
-                                            <div class="col-lg-6 col-sm-12 ac-invoice-total">
-                                                <div class="table">
-                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th scope="row">Sub Total</th>
-                                                                <td style="width:150px;">
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Total GST</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Discount <small class="text-muted"></small></th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="border-top border-top-dashed">
-                                                                <th scope="row">Total Amount</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                    <div class="table">
+                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th scope="row">Sub Total</th>
+                                                                    <td style="width:150px;">
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Total GST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Discount <small class="text-muted"></small></th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="border-top border-top-dashed">
+                                                                    <th scope="row">Total Amount</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <div class="card">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="card">
 
-                                        <h5 class="card-header">
-                                            Shipping Addresses
-                                            <a class="font-22" onclick="fn_OpenShippingModal()">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
-                                            <span id="spnshipping" style="color:red;"></span>
-                                        </h5>
-                                        <div class="card-body Address" id="dvshippingAdd">
-                                            @if (Model.AddressList != null)
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
+                                                <span id="spnshipping" style="color:red;"></span>
+                                            </h5>
+                                            <div class="card-body Address" id="dvshippingAdd">
+                                                @if (Model.AddressList != null)
+                                                {
+                                                    @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="dvshipping" class="col-lg-6">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            @if (Model.Id == Guid.Empty)
                                             {
-                                                @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
                                             }
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="dvshipping" class="col-lg-6">
-                                <div class="row">
-                                   
-                                </div>
-                            </div>
-                            <!--end row-->
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                        @if (Model.Id == Guid.Empty)
-                                        {
-
-                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
-                                        }
-                                        else
-                                        {
-                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+                        <!--end col-->
                     </div>
-                    <!--end col-->
                 </div>
-            </div>
 
             </form>
         </div>
@@ -382,7 +379,7 @@
                         <div class="row">
                             <div class="col-10 col-sm-10 ">
                                 <label class="form-lable">Select Site</label>
-                                <select class="form-control form-control" id="txtPoSiteName" name="txtPoSiteName" required>
+                                <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName" required>
                                     <option selected value="">--Select Site--</option>
                                 </select>
                             </div>
@@ -390,7 +387,7 @@
                         <div class="row mt-2">
                             <div class="col-9 col-sm-9">
                                 <label class="form-lable">Address</label>
-                                <textarea class="form-control" id="txtmdAddress" style="height:90px;" ></textarea>
+                                <textarea class="form-control" id="txtmdAddress" style="height:90px;"></textarea>
                                 <span id="spnSiteAddress" style="color:red;"></span>
                             </div>
                             <div class="col-3 col-sm-3">
@@ -452,7 +449,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
