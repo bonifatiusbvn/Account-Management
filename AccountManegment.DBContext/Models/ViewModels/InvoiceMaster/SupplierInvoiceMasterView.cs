@@ -52,6 +52,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? ContactName { get; set; }
 
         public string? ContactNumber { get; set; }
+        public string? ShippingAddress { get; set; }
 
         public string? SiteName { get; set; }
 

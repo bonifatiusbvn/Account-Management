@@ -152,13 +152,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid InvoiceId)
+        public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id)
         {
 
             SupplierInvoiceMasterView supplierList = new SupplierInvoiceMasterView();
             try
             {
-                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
+                supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
                                 join d in Context.Sites on a.SiteId equals d.SiteId
@@ -196,6 +196,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyGstNo = c.Gstno,
                                     CompanyPincode = c.Pincode,
                                     CompanyPanNo = c.PanNo,
+                                    ShippingAddress = a.ShippingAddress,
                                     Date = a.Date,
                                     Description = a.Description,
                                     TotalAmountInvoice = a.TotalAmount,
@@ -204,7 +205,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     PaymentStatus = a.PaymentStatus,
                                     IsPayOut = a.IsPayOut,
                                     Roundoff = a.Roundoff,
-                                }).First();
+                                }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                                      select new POItemDetailsModel
@@ -386,6 +387,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     Roundoff = SupplierItemDetails.Roundoff,
                     ContactName =   SupplierItemDetails.ContactName,
                     ContactNumber  = SupplierItemDetails.ContactNumber,
+                    ShippingAddress  = SupplierItemDetails.ShippingAddress,
                     IsPayOut = PayOut,
                     Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
@@ -409,6 +411,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         TotalAmount = item.TotalAmount,
                         CreatedBy = SupplierItemDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
+                        Date = supplierInvoice.Date,
                     };
                     Context.SupplierInvoiceDetails.Add(supplierInvoiceDetail);
                 }

@@ -1,7 +1,7 @@
 ﻿AllSupplierInvoiceListTable()
 InvoiceListTable();
 GetItemDetailsList()
-GetSiteDetails();
+GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
 function SerchItemDetailsById(Id) {
@@ -36,6 +36,38 @@ function SerchItemDetailsById(Id) {
         }
     });
 }
+function GetSiteDetail() {
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textInvoiceSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+            });
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('#textInvoiceSiteName').change(function () {
+        var Site = $(this).val();
+        $('#textInvoiceSiteName').val(Site);
+        $.ajax({
+            url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
+            type: 'GET',
+            success: function (result) {
+                
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching company details:", error);
+            }
+        });
+    });
+    $(document).on('click', '#removeAddress', function () {
+        $(this).closest('tr').remove();
+        $('.add-addresses').prop('disabled', false);
+    });
+});
 
 function GetItemDetailsList() {
 
@@ -48,7 +80,7 @@ function GetItemDetailsList() {
 }
 
 function GetCompanyDetail() {
-    debugger
+
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
@@ -60,16 +92,16 @@ function GetCompanyDetail() {
 }
 
 $(document).ready(function () {
-    debugger
+
     $('#textCompanyName').change(function () {
-        debugger
+     
         getCompanyDetail($(this).val());
     });
 });
 
 
 function GetSupplierDetail() {
-    debugger
+
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
         success: function (result) {
@@ -81,9 +113,7 @@ function GetSupplierDetail() {
 }
 
 $(document).ready(function () {
-    debugger
     $('#textSupplierName').change(function () {
-        debugger
         getSupplierDetail($(this).val());
     });
 });
@@ -102,7 +132,6 @@ $(document).ready(function () {
 });
 
 function searchItemDetailById() {
-    debugger
     var GetItemId = {
         ItemId: $('#searchItemName').val(),
 
@@ -241,10 +270,50 @@ function DeleteSupplierInvoice(InvoiceId) {
     });
 }
 
+$(document).ready(function () {
+    $("#shippingAddressForm").validate({
+        rules: {
+            textInvoiceSiteName: "required",
+        },
+        messages: {
+            textInvoiceSiteName: "Select Site",
+        }
+    });
+});
+$.validator.addMethod("validMobileNo", function (value, element) {
+    return isValidPhoneNo(value);
+}, "Enter a valid 10-digit Mobile No");
+
+$(document).ready(function () {
+    $("#CreateInvoiceForm").validate({
+
+        rules: {
+            textSupplierName: "required",
+            textCompanyName: "required",
+            paymentStatus: "required",
+            textContactPerson: "required",
+            textContactNo: {
+                required: true,
+                validMobileNo: true
+            },
+        },
+        messages: {
+            textSupplierName: "Select Supplier Name",
+            textCompanyName: "Select Company Name",
+            paymentStatus: "Select Payment Status",
+            textContactPerson: "Enter Contact Person Name",
+            textContactNo: {
+                required: "Enter Mobile No",
+                validMobileNo: "Enter a valid 10-digit Mobile No"
+            },
+        }
+    });
+});
+
 function InsertMultipleSupplierItem() {
-    debugger
+
     if ($("#CreateInvoiceForm").valid()) {
-        debugger
+
         var ItemDetails = [];
         $(".product").each(function () {
             var orderRow = $(this);
@@ -254,15 +323,22 @@ function InsertMultipleSupplierItem() {
                 UnitType: orderRow.find("#UnitTypeId").val(),
                 DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                 Quantity: orderRow.find("#txtproductquantity").val(),
-                Price: orderRow.find("#txtproductamount").val(),
-                Gst: orderRow.find("#txtgstAmount").val(),
-                GstPer: orderRow.find("#txtgst").val(),
+                PricePerUnit: orderRow.find("#txtproductamount").val(),
+                GSTamount: orderRow.find("#txtgstAmount").val(),
+                GSTPercentage: orderRow.find("#txtgst").val(),
                 TotalAmount: orderRow.find("#txtproducttotalamount").val(),
             };
             ItemDetails.push(objData);
         });
+        var sitevalue = $("#textInvoiceSiteName").val();
+        var siteid = null;
+        if (sitevalue != "") {
+            siteid = sitevalue;
+        } else {
+            siteid = $("#siteid").val();
+        }
         var InvoiceDetails = {
-            SiteId: $("#siteid").val(),
+            SiteId: siteid,
             InvoiceNo: $("#textInvoiceId").val(),
             Date: $("#textOrderDate").val(),
             SupplierId: $("#textSupplierName").val(),
@@ -274,6 +350,7 @@ function InsertMultipleSupplierItem() {
             ContactNumber: $("#textContactNo").val(),
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
+            ShippingAddress: $("#textmdAddress").val(),
             ItemList: ItemDetails,
         }
 
@@ -287,7 +364,7 @@ function InsertMultipleSupplierItem() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                debugger
+           
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -319,7 +396,7 @@ function InsertMultipleSupplierItem() {
         });
     }
     else {
-        debugger
+       
         Swal.fire({
             title: "Kindly Fill All Data Fields",
             icon: 'warning',
@@ -410,7 +487,7 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 
 var count = 0;
-function AddNewRow(Result) {debugger
+function AddNewRow(Result) {
 
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
@@ -462,7 +539,6 @@ function bindEventListeners() {
 
 
     document.querySelectorAll(".plus").forEach(function (btn) {
-        debugger
         btn.addEventListener("click", function (event) {
             updateProductQuantity(event.target.closest("tr"), 1);
             updateTotals();
@@ -487,9 +563,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount() {
-    debugger
     $(".product").each(function () {
-        debugger
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
         var discountprice = parseFloat(row.find("#txtdiscountamount").val());
@@ -518,18 +592,9 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-
-    var quantityInput = parseInt(row.find(".product-quantity").val());
-    var newQuantity = quantityInput + increment;
-    if (newQuantity >= 0) {
-        row.find(".product-quantity").val(newQuantity);
-        updateProductTotalAmount(row);
-        updateTotals();
-    }
-}
+   
 
 function updateDiscount(row) {
-    debugger
     var discountPrice = parseFloat(row.find("#txtdiscountamount").val());
 
     if (isNaN(discountPrice)) {
@@ -544,7 +609,6 @@ function updateDiscount(row) {
 
 
 function updateTotals() {
-
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
@@ -575,16 +639,6 @@ function removeItem(btn) {
     updateRowNumbers();
     updateTotals();
 }
-
-
-
-var taxRate = .125,
-    shippingRate = 65,
-    discountRate = .15,
-    gst = 18;
-
-
-
 
 
 var taxRate = .125,
@@ -869,35 +923,7 @@ function printInvoiceDiv() {
     document.body.innerHTML = originalContents;
 }
 
-$(document).ready(function () {
-    debugger
-    $("#CreateInvoiceForm").validate({
-
-        rules: {
-            textSupplierName: "required",
-            textCompanyName: "required",
-    /*        textPaymentStatus: "required",*/
-            textContactPerson: "required",
-            textContactNo: {
-                required: true,
-                validMobileNo: true
-            },
-        },
-        messages: {
-            textSupplierName: "Select Supplier",
-            textCompanyName: "Select Company Name",
-/*            textPaymentStatus: "Please Enter PO Delivery Schedule",*/
-            textContactPerson: "Enter Contact Person Name",
-            textContactNo: {
-                required: "Enter Mobile No",
-                validMobileNo: "Enter a valid 10-digit Mobile No"
-            },
-        }
-    });
-});
-
 function getSupplierDetail(SupplierId) {
-    debugger
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
@@ -917,14 +943,14 @@ function getSupplierDetail(SupplierId) {
 }
 
 function getCompanyDetail(CompanyId) {
-    debugger
+
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+       
             if (response) {
                 $('#textCompanyGstNo').val(response.gstno);
                 $('#textCompanyBillingAddress').val(response.fullAddress);
@@ -936,7 +962,7 @@ function getCompanyDetail(CompanyId) {
 }
 
 $(document).on("click", "#addItemButton", function () {
-    debugger
+   
     clearItemErrorMessages();
 });
 
@@ -944,9 +970,42 @@ function clearItemErrorMessages() {
     $("#spnitembutton").text("");
 }
 
+function addShippingAddress() {
+    if ($("#shippingAddressForm").valid()) {
+        var address = $("#textmdAddress").val();
 
+        if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
+            Swal.fire({
+                title: "Only one address allowed!",
+                text: "You can only add one shipping address.",
+                icon: "warning",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
 
+        var newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
+            '<div class="col-2 col-sm-2">' +
+            '<label id="lblshprownum1">1</label>' +
+            '</div>' +
+            '<div class="col-5 col-sm-5">' +
+            '<p class="shippingaddress">' + address + '</p>' +
+            '</div>' +
+            '</div>';
 
-
-
+        $('#dvShippingAddress').append(newRow);
+        updateProductTotalAmount();
+        updateTotals();
+        updateRowNumbers();
+        $('#mdShippingAdd').modal('toggle');
+    } else {
+        Swal.fire({
+            title: "Kindly Fill All Data Fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+}
 

@@ -7,6 +7,12 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+<style>
+    #paymentStatus-error, #textContactNo-error, #textContactPerson-error, #textSupplierName-error, #textCompanyName-error
+    {
+        color : red;
+    }
+</style>
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="breadcrumb-title pe-3">Invoice</div>
@@ -24,12 +30,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="" id="invoiceSupplierList">
-            <div class="">
-                <div>
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-12">
-                            <div class="">
-                                <form id="CreateInvoiceForm">
+            <form id="CreateInvoiceForm">
+                <div class="">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xxl-12">
+                                <div class="">
                                     <div class="border-bottom border-bottom-dashed">
                                         <div class="row">
                                             <div class="col-6 col-lg-6">
@@ -45,8 +51,8 @@
                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                             </div>
                                                             <div class="col-6 col-lg-6">
-                                                                <label for="textSuppliermobile" class="form-label">Mobile No</label>
-                                                                <input type="text" id="textSuppliermobile" value="" class="form-control" placeholder="Mobile No" />
+                                                                <label for="textSupplierMobile" class="form-label">Mobile No</label>
+                                                                <input type="text" id="textSupplierMobile" value="" class="form-control" placeholder="Mobile No" />
                                                                 <span id="spnSupplierMobile" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -76,7 +82,7 @@
                                                                 </div>
                                                                 <div class="ms-auto">
 
-                                                                    <select class="form-select" id="textCompanyName" name="textcompanyname">
+                                                                    <select class="form-select" id="textCompanyName" name="textCompanyName">
                                                                         <option selected disabled value="">Select Company</option>
                                                                     </select>
 
@@ -112,193 +118,183 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-
-                            </div>
-
-
-
-                            <!---- Product Details ---->
-                            <div class="row">
-                            </div>
-                            <div class="card">
-                                <div class="row p-3">
-
-                                    <h5 class="card-header">
-                                        Purchase Details
-
-                                        <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                            <i class="lni lni-circle-plus"></i>
-                                        </a>
-                                    </h5>
                                 </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive" style="height:350px">
-                                        <table class="table align-middle mb-0">
-                                            <thead class="table-secondary">
-                                                <tr class="text-uppercase">
-                                                    <th>#</th>
-                                                    <th>Product Details</th>
-                                                    <th>HSN Code</th>
-                                                    <th>Quantity</th>
-                                                    <th>Qty Type</th>
-                                                    <th>Price</th>
-                                                    <th>Discount</th>
-                                                    <th>GST (%)</th>
-                                                    <th>GST Amt (₹)</th>
-                                                    <th>Amount (₹)</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="addnewproductlink">
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-                                    <div class="card-footer">
-                                        <table class="table align-middle mb-0">
-                                            <thead class="table align-middle mb-0">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th colspan="2">Total</th>
-
-                                                    <th>10</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class=" card">
-                                        <div class="row card-body">
-                                            <div class="col-lg-6 col-sm-12 ">
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-sm-12">
-                                                        <div class="input-group mb-2">
-                                                            <label class="input-group-text">Payment Status</label>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" style="margin-left:2px;" type="radio" name="paymentStatus" id="cashRadio" value="cash">
-                                                                <label class="form-check-label" for="cashRadio">Cash</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" style="margin-left:2px;" type="radio" name="paymentStatus" id="unpaidRadio" value="unpaid">
-                                                                <label class="form-check-label" for="unpaidRadio">Unpaid</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" style="margin-left:2px;" type="radio" name="paymentStatus" id="paidRadio" value="paid">
-                                                                <label class="form-check-label" for="paidRadio">Paid</label>
-                                                            </div>
-                                                        </div>
-                                                        <span id="spnPaymentStatus" class="text-danger"></span>
-                                                    </div>
-                                                    <div class="col-lg-12 col-sm-12 mt-2 ">
-                                                        <div class="mb-2">
-                                                            <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="textContactPerson">Contect Person</label>
-                                                                <input type="text" id="textContactPerson" class="form-control" placeholder="Contect Person Name">
-                                                            </div>
-                                                            <span id="spnContectPerson" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-sm-12 mt-2">
-                                                        <div class="mb-2">
-                                                            <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="textContactNo">Mobile No</label>
-                                                                <input type="text" id="textContactNo" class="form-control" placeholder="Mobile No">
-                                                            </div>
-                                                            <span id="spnMobileNo" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6 col-sm-12 ac-invoice-total">
-                                                <div class="table">
-                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th scope="row">Sub Total</th>
-                                                                <td style="width:150px;">
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Total GST</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" />
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row">Discount <small class="text-muted"></small></th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" />
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="border-top border-top-dashed">
-                                                                <th scope="row">Total Amount</th>
-                                                                <td>
-                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <!---- Product Details ---->
+                                <div class="row">
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <div class="card">
+                                <div class="card">
+                                    <div class="row p-3">
 
                                         <h5 class="card-header">
-                                            Shipping Addresses
-                                            <a class="font-22" onclick="fn_OpenShippingModal()">
+                                            Purchase Details
+
+                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
                                                 <i class="lni lni-circle-plus"></i>
                                             </a>
                                         </h5>
+                                    </div>
 
+                                    <div class="card-body pt-0">
+                                        <div class="table-responsive" style="height:350px">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr class="text-uppercase">
+                                                        <th>#</th>
+                                                        <th>Product Details</th>
+                                                        <th>HSN Code</th>
+                                                        <th>Quantity</th>
+                                                        <th>Qty Type</th>
+                                                        <th>Price</th>
+                                                        <th>Discount</th>
+                                                        <th>GST (%)</th>
+                                                        <th>GST Amt (₹)</th>
+                                                        <th>Amount (₹)</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="addnewproductlink">
+                                                </tbody>
 
-                                        <div class="card-body Address" id="dvShippingAdd">
-                                            @if (Model.AddressList != null)
-                                            {
-                                                @Html.Partial("_EditShippingAddressPartial", Model.AddressList)
-                                            }
+                                            </table>
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table align-middle mb-0">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th colspan="2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductQuantity"></th>
+                                                        <th></th>
+                                                        <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductGST"></th>
+                                                        <th id="TotalProductAmount"></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class=" card">
+                                            <div class="row card-body">
+                                                <div class="col-lg-6 col-sm-12 ">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12">
+                                                            <div class="input-group mb-2">
+                                                                <label class="input-group-text">Payment Status</label>     
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" value="unpaid" name="paymentStatus" checked>
+                                                                    <label class="form-check-label" for="unpaidRadio">Unpaid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" value="paid" name="paymentStatus">
+                                                                    <label class="form-check-label" for="paidRadio">Paid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" value="cash" name="paymentStatus">
+                                                                    <label class="form-check-label" for="cashRadio">Cash</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2 ">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textContactPerson">Contect Person</label>
+                                                                    <input type="text" id="textContactPerson" class="form-control" placeholder="Contect Person Name" name="textContactPerson">
+                                                                </div>
+                                                                <span id="spnContectPerson" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textContactNo">Mobile No</label>
+                                                                    <input type="text" id="textContactNo" class="form-control" placeholder="Mobile No" name="textContactNo">
+                                                                </div>
+                                                                <span id="spnMobileNo" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                    <div class="table">
+                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th scope="row">Sub Total</th>
+                                                                    <td style="width:150px;">
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Total GST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Discount <small class="text-muted"></small></th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="border-top border-top-dashed">
+                                                                    <th scope="row">Total Amount</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
+                                                <span id="spnshipping" style="color:red;"></span>
+                                            </h5>
+                                            <div class="card-body Address" id="dvShippingAddress">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="dvShipping" class="col-lg-6">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SaveInvoiceOButton" onclick="InsertMultipleSupplierItem()"><i class="ri-printer-line align-bottom me-1"></i>Create Invoice</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div id="dvshipping" class="col-lg-6">
-                                <div class="row">
-                                </div>
-                            </div>
-                            <!--end row-->
-                            .<div class="card">
-                                <div class="card-body">
-                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-
-                                        <button type="button" class="btn btn-lg btn-primary px-5" id="SaveInvoiceOButton" onclick="InsertMultipleSupplierItem()"><i class="ri-printer-line align-bottom me-1"></i>Create Invoice</button>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                    <!--end col-->
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+
 <div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -307,29 +303,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-10 col-sm-10 ">
-                            <label class="form-lable">Select Site</label>
-                            <select class="form-control form-control" id="txtPoSiteName" required>
-                                <option selected value="">--Select Site--</option>
-                            </select>
+                <form id="shippingAddressForm">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10 col-sm-10 ">
+                                <label class="form-label">Select Site</label>
+                                <select class="form-control form-control" id="textInvoiceSiteName">
+                                    <option selected value="">--Select Site--</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-9 col-sm-9">
-                            <label class="form-lable">Address</label>
-                            <textarea class="form-control" id="txtmdAddress" style="height:90px;" required></textarea>
-                            <span id="spnSiteAddress" style="color:red;"></span>
+                        <div class="row mt-2">
+                            <div class="col-10 col-sm-10">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" id="textmdAddress" style="height:90px;"></textarea>
+                                <span id="spnSiteAddress" style="color:red;"></span>
+                            </div>
                         </div>
-                        <div class="col-3 col-sm-3">
-                            <label class="form-lable">Qty</label>
-                            <input class="form-control" id="txtmdqty" value="" required />
-                            <span id="spnShippingQuantity" style="color:red;"></span>
-                        </div>
-                    </div>
 
-                </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -340,6 +333,8 @@
         </div>
     </div>
 </div>
+
+
 <div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -359,32 +354,28 @@
     </div>
 </div>
 <!--end col-->
-</div>
-<!--end row-->
-
-
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }
 <script type="text/javascript">
-   
+
 
     function fn_OpenShippingModal() {
-        $('#txtmdAddress').val('');
-        $('#txtmdqty').val('');
+        $('#textmdAddress').val('');
+        $('#textmdQty').val('');
         $('#mdShippingAdd').modal('show');
     }
 
     function fn_mdAddAddress() {
-        var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
-        if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
+        var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
+        if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
-            $('#dvshippingAdd').append(html);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
+            $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');
-            $('#txtmdAddress').focus();
+            $('#textmdAddress').focus();
         }
 
     }

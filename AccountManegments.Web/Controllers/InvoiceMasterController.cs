@@ -259,7 +259,7 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
-                    var number = order.TotalAmount;
+                    var number = order.TotalAmountInvoice;
                     var totalAmountInWords = NumberToWords((int)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
                     var gstamt = order.TotalGstamount;
