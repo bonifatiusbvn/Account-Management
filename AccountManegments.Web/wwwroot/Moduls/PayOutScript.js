@@ -48,39 +48,29 @@ $(document).ready(function () {
             type: 'GET',
             success: function (result) {
 
-                if (result.totalPurchase == 0) {
-                    Swal.fire({
-                        title: 'No data found for selected supplier',
-                        text: 'No data found',
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
-                } else {
-                    $("#invoicedetails").html(result);
-                    $("#txttotalpendingamount").html('₹' + result.totalPending);
-                    $("#pendingamount").html('₹' + result.totalPending);
-                    $("#txttotalcreditamount").html('₹' + result.totalCreadit);
-                    $("#totalAmount").html('₹' + result.totalOutstanding);
-                    $("#txttotalpurchase").html('₹' + result.totalPurchase);
-                    var totalpendingAmount = result.totalPending;
-                    $('#txtpayoutamount').on('input', function () {
-                        var enteredAmount = parseFloat($(this).val());
+                $("#invoicedetails").html(result);
+                $("#txttotalpendingamount").html('₹' + result.totalPending);
+                $("#pendingamount").html('₹' + result.totalPending);
+                $("#txttotalcreditamount").html('₹' + result.totalCreadit);
+                $("#totalAmount").html('₹' + result.totalOutstanding);
+                $("#txttotalpurchase").html('₹' + result.totalPurchase);
+                var totalpendingAmount = result.totalPending;
+                $('#txtpayoutamount').on('input', function () {
+                    var enteredAmount = parseFloat($(this).val());
 
-                        if (!isNaN(enteredAmount)) {
-                            var pendingAmount = totalpendingAmount - enteredAmount;
+                    if (!isNaN(enteredAmount)) {
+                        var pendingAmount = totalpendingAmount - enteredAmount;
 
-                            if (enteredAmount > totalpendingAmount) {
-                                $('#spnpayout').text('Entered amount cannot exceed pending amount.');
-                            } else {
-                                $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                            }
+                        if (enteredAmount > totalpendingAmount) {
+                            $('#spnpayout').text('Entered amount cannot exceed pending amount.');
                         } else {
-                            $('#spnpayout').text('');
-                            $('#txtpendingamount').val('');
+                            $('#txtpendingamount').val(pendingAmount.toFixed(2));
                         }
-                    });
-                }
+                    } else {
+                        $('#spnpayout').text('');
+                        $('#txtpendingamount').val('');
+                    }
+                });
             },
         });
     });
@@ -99,7 +89,7 @@ function InsertPayOutDetails() {
         CompanyId: $("#txtcompanyname").val(),
         TotalAmount: $("#txtpayoutamount").val(),
         TotalGstamount: $("#txtpayoutamount").val(),
-        PaymentStatus: $("#paymenttype").val(),
+        PaymentStatus: $("input[name='paymenttype']:checked").val(),
         Description: $("#txtdescription").val(),
         CreatedBy: $("#txtUserId").val(),
     };
@@ -138,7 +128,6 @@ function InsertPayOutDetails() {
 function validateAndInsertPayOutDetails() {
 
     var payout = document.getElementById('txtpayoutamount').value.trim();
-    /*var pendingamount = document.getElementById('txtpendingamount').value.trim();*/
     var company = document.getElementById('txtcompanyname').value.trim();
     var supplier = document.getElementById('txtSuppliername').value.trim();
 
@@ -159,15 +148,6 @@ function validateAndInsertPayOutDetails() {
         document.getElementById("spnsupplier").innerText = "Please Select Supplier!";
         isValid = false;
     }
-    //if (isNaN(pendingamount) || pendingamount === 0) {
-    //    document.getElementById("spnpendingamount").innerText = "Please Enter a valid value for Pending amount!";
-    //    isValid = false;
-    //}
-
-    //if (pendingamount > payout) {
-    //    document.getElementById("spnpayout").innerText = "Entered amount cannot exceed pending amount.";
-    //    isValid = false;
-    //}
 
     if (isValid) {
         InsertPayOutDetails();

@@ -51,7 +51,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier invoice successfully created..!";
+                response.message = "Payment Out successfully.";
                 Context.SupplierInvoices.Add(SupplierInvoice);
                 Context.SaveChanges();
             }
