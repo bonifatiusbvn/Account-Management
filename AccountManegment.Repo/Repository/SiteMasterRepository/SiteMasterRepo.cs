@@ -49,7 +49,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Site is successfully created";
+                response.message = "Site is successfully created.";
                 Context.Sites.Add(SiteMaster);
                 Context.SaveChanges();
             }
@@ -242,7 +242,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 Context.Sites.Update(SiteMaster);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "SiteDetails successfully updated..!";
+                model.message = "Site details successfully updated.";
             }
             catch (Exception ex)
             {
@@ -292,7 +292,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 if (SiteId != null)
                 {
                     Context.Sites.Remove(siteDetails);
-                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is successfully removed..!";
+                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is successfully removed.";
                     response.code = 200;
                 }
                 Context.SaveChanges();

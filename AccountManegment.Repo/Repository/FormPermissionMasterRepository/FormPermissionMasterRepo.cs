@@ -42,7 +42,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                 Context.SaveChanges();
 
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Rolewise permission inserted successfully!";
+                response.message = "Rolewise permission inserted successfully.";
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                 Context.RolewiseFormPermissions.Update(formPermissionData);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "RolewiseForm permission successfully updated..!";
+                model.message = "Rolewiseform permission successfully updated.";
             }
             catch (Exception ex)
             {
@@ -168,7 +168,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = 200;
-                response.message = "Rolewise permission successfully created..!";
+                response.message = "Rolewise permission successfully created.";
             }
             catch (Exception ex)
             {
@@ -241,7 +241,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = 200;
-                response.message = "Rolewise permissions successfully updated..!";
+                response.message = "Rolewise permissions successfully updated.";
             }
             catch (Exception ex)
             {
