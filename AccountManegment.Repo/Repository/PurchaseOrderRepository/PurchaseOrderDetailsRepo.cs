@@ -39,7 +39,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedOn = DateTime.Now,
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "PurchaseOrder details successfully inserted..!";
+                responseModel.message = "Purchase order details successfully inserted.";
                 Context.PurchaseOrderDetails.Add(PurchaseOrder);
                 Context.SaveChanges();
             }
@@ -133,7 +133,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "PurchaseOrder details Successfully updated..!";
+                responseModel.message = "Purchase order details successfully updated.";
                 Context.PurchaseOrderDetails.Update(PurchaseOrder);
                 Context.SaveChanges();
             }

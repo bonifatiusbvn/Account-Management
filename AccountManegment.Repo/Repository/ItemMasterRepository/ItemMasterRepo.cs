@@ -53,7 +53,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             CreatedOn = DateTime.Now,
                         };
                         response.code = (int)HttpStatusCode.OK;
-                        response.message = "Item successfully inserted..!";
+                        response.message = "Item successfully inserted.";
                         Context.ItemMasters.Add(ItemMaster);
                         Context.SaveChanges();
                     }
@@ -86,7 +86,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 Context.SaveChanges();
                 response.code = 200;
                 response.data = GetItemdata;
-                response.message = "Item is successfully deleted..!";
+                response.message = "Item is successfully deleted.";
             }
             return response;
         }
@@ -262,7 +262,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = ItemData;
-                    response.message = "Item is Successfully unapproved!";
+                    response.message = "Item is successfully unapproved.";
                 }
 
                 else
@@ -298,7 +298,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 Context.ItemMasters.Update(ItemMaster);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "ItemDetails successfully updated..!";
+                model.message = "Item details successfully updated.";
             }
             catch (Exception ex)
             {
@@ -318,7 +318,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     if (existingItem != null)
                     {
                         response.code = 400;
-                        response.message = "Item is already exist";
+                        response.message = "Item is already exist.";
                     }
                     else
                     {
@@ -340,7 +340,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                         Context.ItemMasters.Add(itemMaster);
                         await Context.SaveChangesAsync();
                         response.code = (int)HttpStatusCode.OK;
-                        response.message = "Items Details Successfully Inserted..!";
+                        response.message = "Items details successfully inserted.";
                     }
                 }
             }
