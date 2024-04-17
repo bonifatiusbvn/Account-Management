@@ -1308,7 +1308,7 @@ function updateTotals() {
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal);
     $("#TotalProductGST").html(totalGst.toFixed(2));
-    $("#TotalProductAmount").html(totalAmount);
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();
