@@ -431,3 +431,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+function downloadFile() {
+
+    var fileUrl = '/uploadexcelfile/itemmasterdetails.xlsx';
+
+    var link = document.createElement('a');
+
+    link.href = fileUrl;
+
+    link.setAttribute('download', '');
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+}
