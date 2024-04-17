@@ -51,7 +51,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Payment Out successfully.";
+                response.message = "Payment out successfully.";
                 Context.SupplierInvoices.Add(SupplierInvoice);
                 Context.SaveChanges();
             }
@@ -71,7 +71,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "SupplierInvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
+                    response.message = "Supplierinvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
                     response.code = 200;
                 }
                 Context.SaveChanges();
@@ -340,7 +340,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var supplierInvoice =await Context.SupplierInvoices.FindAsync(SupplierInvoiceDetail.Id);
+                var supplierInvoice = await Context.SupplierInvoices.FindAsync(SupplierInvoiceDetail.Id);
 
                 if (supplierInvoice == null)
                 {
@@ -366,7 +366,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 Context.SupplierInvoices.Update(supplierInvoice);
                 Context.SaveChanges();
                 response.code = 200;
-                response.message = "Invoice Updated Successfully!";
+                response.message = "Invoice updated successfully.";
             }
             catch (Exception ex)
             {

@@ -122,7 +122,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 Context.SaveChanges();
                 response.Code = 200;
                 response.Data = GetUserdata;
-                response.Message = "User is Deleted Successfully";
+                response.Message = "User is deleted successfully";
             }
             return response;
         }
@@ -178,7 +178,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        RoleName = r.Role,
                                                        SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
-                                                       CreatedOn=e.CreatedOn,
+                                                       CreatedOn = e.CreatedOn,
                                                    });
 
 

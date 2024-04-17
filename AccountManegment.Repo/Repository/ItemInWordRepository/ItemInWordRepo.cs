@@ -46,7 +46,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item Inward successfully created..!";
+                response.message = "Item inward successfully created.";
                 Context.ItemInwords.Add(itemInword);
                 Context.SaveChanges();
             }
@@ -70,7 +70,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordDetails;
-                    response.message = "Item inward successfully deleted !";
+                    response.message = "Item inward successfully deleted.";
                 }
                 Context.SaveChanges();
             }
@@ -225,7 +225,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordData;
-                    response.message = "Item inward is Successfully unapproved..!";
+                    response.message = "Item inward is Successfully unapproved.";
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordData;
-                    response.message = "Item inward is successfully approved..!";
+                    response.message = "Item inward is successfully approved.";
                 }
             }
             return response;
@@ -262,7 +262,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 Context.ItemInwords.Update(ItemInWordData);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Item inward details Successfully updated..!";
+                model.message = "Item inward details successfully updated.";
             }
             catch (Exception ex)
             {
@@ -306,7 +306,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item inward successfully inserted..!";
+                response.message = "Item inward successfully inserted.";
             }
             catch (Exception ex)
             {
@@ -367,7 +367,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 }
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Item inward successfully updated..!";
+                response.message = "Item inward successfully updated.";
             }
             catch (Exception ex)
             {
