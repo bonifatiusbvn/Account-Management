@@ -37,7 +37,7 @@ namespace AccountManegments.Web.Controllers
         public UserSession UserSession { get; }
 
 
-        [FormPermissionAttribute("PurchaseMaster-View")]
+        [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListView()
         {
             try
@@ -58,7 +58,7 @@ namespace AccountManegments.Web.Controllers
             }
             return View();
         }
-        [FormPermissionAttribute("PurchaseMaster-View")]
+        [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
         {
             try
@@ -89,7 +89,7 @@ namespace AccountManegments.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-        [FormPermissionAttribute("PurchaseMaster-View")]
+        [FormPermissionAttribute("Purchase Request-View")]
         public async Task<JsonResult> DisplayPurchaseRequestDetails(Guid PurchaseId)
         {
             try
@@ -109,7 +109,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("PurchaseMaster-Add")]
+        [FormPermissionAttribute("Purchase Request-Add")]
         [HttpPost]
         public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PurchaseRequestDetails)
         {
@@ -144,7 +144,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("PurchaseMaster-Edit")]
+        [FormPermissionAttribute("Purchase Request-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel updatePurchaseRequest)
         {
@@ -166,7 +166,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-Delete")]
+        [FormPermissionAttribute("Purchase Request-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseRequest(Guid PurchaseId)
         {
@@ -188,7 +188,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-Edit")]
+        [FormPermissionAttribute("Purchase Request-Edit")]
         [HttpPost]
         public async Task<IActionResult> PurchaseRequestIsApproved(Guid PurchaseId)
         {
@@ -213,7 +213,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("Purchase Orders-Edit")]
         public async Task<IActionResult> CreatePurchaseOrder(Guid? id)
         {
             try
@@ -246,7 +246,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-Add")]
+        [FormPermissionAttribute("Purchase Orders-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultiplePurchaseOrderDetails()
         {
@@ -271,7 +271,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-View")]
+        [FormPermissionAttribute("Purchase Orders-View")]
         public IActionResult PurchaseOrderList()
         {
             return View();
@@ -317,7 +317,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-Edit")]
+        [FormPermissionAttribute("Purchase Orders-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails()
         {
@@ -341,7 +341,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-Delete")]
+        [FormPermissionAttribute("Purchase Orders-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseOrderDetails(Guid POId)
         {
@@ -363,7 +363,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("PurchaseMaster-View")]
+        [FormPermissionAttribute("Purchase Orders-View")]
         public async Task<IActionResult> POListView()
         {
             return View();
