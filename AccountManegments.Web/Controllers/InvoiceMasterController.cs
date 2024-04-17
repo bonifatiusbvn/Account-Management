@@ -22,25 +22,36 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Invoice List-Add")]
-        public async Task<IActionResult> CreateInvoice()
+        public async Task<IActionResult> CreateInvoice(Guid? Id)
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "SupplierInvoice/CheckSupplierInvoiceNo");
-
-                if (Response.code == 200)
+                SupplierInvoiceMasterView invoiceDetails = new SupplierInvoiceMasterView();
+                if (Id != null)
                 {
-                    ViewBag.SupplierInvoiceNo = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                    ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
+                    if (response.code == 200)
+                    {
+                        invoiceDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                    }
+                    ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
                 }
+                else
+                {
+                    ApiResponseModel Response = await APIServices.GetAsync("", "SupplierInvoice/CheckSupplierInvoiceNo");
 
-
+                    if (Response.code == 200)
+                    {
+                        ViewBag.SupplierInvoiceNo = Response.data;
+                    }
+                }
+                return View(invoiceDetails);
             }
             catch (Exception ex)
             {
                 throw ex;
 
             }
-            return View();
         }
 
         [FormPermissionAttribute("Invoice List-View")]
@@ -177,11 +188,11 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -190,6 +201,28 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateSupplierInvoice()
+        {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["UpdateSupplierItems"];
+                var UpdateDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "SupplierInvoice/UpdateSupplierInvoice");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
@@ -363,6 +396,21 @@ namespace AccountManegments.Web.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditInvoiceDetails(string Id)
+        {
+            try
+            {
+
+                return RedirectToAction("CreateInvoice", new { id = Id });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

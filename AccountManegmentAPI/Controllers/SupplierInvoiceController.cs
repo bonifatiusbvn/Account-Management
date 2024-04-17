@@ -53,7 +53,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdateSupplierInvoice")]
-        public async Task<IActionResult> UpdateSupplierInvoice(SupplierInvoiceModel supplierInvoice)
+        public async Task<IActionResult> UpdateSupplierInvoice(SupplierInvoiceMasterView supplierInvoice)
         {
             ApiResponseModel response = new ApiResponseModel();
             var SupplierDetails = await SupplierInvoice.UpdateSupplierInvoice(supplierInvoice);
@@ -61,6 +61,11 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = SupplierDetails.code;
                 response.message = SupplierDetails.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
             }
             return StatusCode(response.code, response);
         }
