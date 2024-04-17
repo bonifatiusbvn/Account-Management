@@ -13,6 +13,7 @@
         z-index: 1000;
     }
 </style>
+<input type="hidden" id="txtUserid" value="@_userSession.UserId" />
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
         <form class="position-relative">
@@ -148,7 +149,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo">
+                                    <input type="number" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo">
                                     <span id="spnPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
@@ -173,7 +174,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">PinCode</label>
-                                    <input type="text" class="form-control" placeholder="PinCode" id="txtPinCode" name="txtPinCode">
+                                    <input type="number" class="form-control" placeholder="PinCode" id="txtPinCode" name="txtPinCode">
                                     <span id="spnPinCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
