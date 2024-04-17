@@ -155,7 +155,7 @@
                             }
                         }
                     }
-                    @if (group == "Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    @if (group == "Purchase  Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {
@@ -296,7 +296,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -324,7 +324,7 @@
             <!-- start page content-->
             <div class="page-content">
                 <div>
-                    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">  
+                    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
                         <div class="ps-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0 align-items-center">

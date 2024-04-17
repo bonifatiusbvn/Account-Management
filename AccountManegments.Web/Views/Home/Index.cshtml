@@ -25,11 +25,12 @@
                     <select class="form-select form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()">
                         <option value="null" selected>All Site</option>
                     </select>
+                    <input type="hidden" id="txtsiteid" />
                 }
                 else
                 {
                     <select class="form-select form-control-lg" id="drpSiteName" onchange="fn_ChangeSite()" disabled>
-                        <option value="@UserSession.SiteId" selected disabled>@UserSession.SiteName</option>
+                        <option value="@UserSession.SiteId">@UserSession.SiteName</option>
                     </select>
                 }
             </form>
@@ -40,13 +41,21 @@
     <div class="col-12 col-lg-4 col-xl-4 d-flex">
         <div class="card radius-10 w-100">
             <form id="cmplistdashbord">
+                @if (_userSession.UserRole != 3)
+                {
+                    <select class="form-select form-control-lg" id="CompanyNameList">
+                        <option selected value="">Select Company</option>
+                    </select>
 
-                <select class="form-select form-control-lg" id="CompanyNameList">
-                    @if (_userSession.UserRole != 3)
-                    {
-                        <option selected disabled value="">Select Company</option>
-                    }
-                </select>
+                }
+
+                else
+                {
+                    <select class="form-select form-control-lg" id="CompanyNameList" disabled>
+                        <option selected value="">Select Company</option>
+                    </select>
+
+                }
             </form>
         </div>
     </div>
@@ -135,35 +144,42 @@
     <script type="text/javascript">
         var role = "@_userSession.UserRole";
         $(function () {
-            fn_fillsiteDropDown('#drpSiteName')
-            $('#drpSiteName').val("@UserSession.SiteId")
-            fn_ChangeSite();
+            debugger
+            fn_fillsiteDropDown('#drpSiteName');
+            if (role == 3) {
+                fn_ChangeSite(null);
+            }
+            else {
+
+                fn_ChangeSite("@UserSession.SiteId");
+            }
+
             GetCompanyList();
         });
 
-
         function fn_fillsiteDropDown(drpid) {
-
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 success: function (result) {
                     $.each(result, function (i, data) {
-
-                        $(drpid).append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
-
+                        $(drpid).append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                     });
-
                 }
             });
         }
 
-        function fn_ChangeSite() {
+        $('#drpSiteName').change(function () {
+            debugger
+            var Text = $("#drpSiteName Option:Selected").text();
+            var selectedSiteId = $(this).val();
+            fn_ChangeSite(selectedSiteId)
+        });
 
-            var selectedSiteId = $('#drpSiteName').val();
-            var SiteName = $('#drpSiteName').text()
+
+        function fn_ChangeSite(selectedSiteId) {
+            debugger
             var searchText = "";
             var searchBy = "";
-
             $.ajax({
                 url: '/Home/PurchaseRequestList',
                 type: 'GET',
@@ -171,18 +187,19 @@
                     searchText: searchText,
                     searchBy: searchBy,
                     SiteId: selectedSiteId,
-
                 },
                 success: function (result) {
-
+                    debugger
                     $("#tbPndingApproval").html(result);
                     $('#drplaySiteName').val($('#drpSiteName option:selected').text());
                 },
                 error: function (xhr, status, error) {
-                    // Handle error if needed
+
                 }
             });
+
         }
+
 
 
         function GetCompanyList() {
