@@ -64,19 +64,6 @@ function GetSiteDetail() {
     });
 }
 
-//function GetSiteDetails() {
-
-//    $.ajax({
-//        url: '/SiteMaster/GetSiteNameList',
-//        success: function (result) {
-//            if (result.length > 0) {
-//                $.each(result, function (i, data) {
-//                    $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
-//                });
-//            }
-//        }
-//    });
-//}
 function sortPurchaseRequestTable() {
     var sortBy = $('#PurchaseRequestSortBy').val();
     $.ajax({
