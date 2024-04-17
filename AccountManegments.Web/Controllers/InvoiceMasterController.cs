@@ -21,7 +21,7 @@ namespace AccountManegments.Web.Controllers
             APIServices = aPIServices;
         }
 
-        [FormPermissionAttribute("Invoice List-Add")]
+        [FormPermissionAttribute("Purchase  Invoice-Add")]
         public async Task<IActionResult> CreateInvoice()
         {
             try
@@ -43,13 +43,13 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         public IActionResult SupplierInvoiceListView()
         {
             return View();
         }
 
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         public async Task<IActionResult> SupplierInvoiceListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -78,7 +78,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("Invoice List-Delete")]
+        [FormPermissionAttribute("Purchase  Invoice-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSupplierInvoice(Guid InvoiceId)
         {
@@ -166,7 +166,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("Invoice List-Add")]
+        [FormPermissionAttribute("Purchase  Invoice-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultipleSupplierItemDetails()
         {
@@ -177,11 +177,11 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -217,12 +217,12 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         public IActionResult InvoiceListView()
         {
             return View();
         }
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         public async Task<IActionResult> InvoiceListAction(string searchText, string searchBy, string sortBy)
         {
             try
@@ -250,7 +250,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         public async Task<IActionResult> DisplayInvoiceDetails(Guid Id)
         {
             try
@@ -323,7 +323,7 @@ namespace AccountManegments.Web.Controllers
             return words;
         }
 
-        [FormPermissionAttribute("Invoice List-View")]
+        [FormPermissionAttribute("Purchase  Invoice-View")]
         [HttpGet]
         public async Task<IActionResult> GetSupplierInvoiceDetailsById(Guid SupplierId)
         {
