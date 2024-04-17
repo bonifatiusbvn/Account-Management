@@ -236,7 +236,7 @@ function UpdateUserDetails() {
 var UserForm;
 function validateAndCreateUser() {
 
-    UserForm=$("#userForm").validate({
+    UserForm = $("#userForm").validate({
         rules: {
             txtFirstName: "required",
             txtLastName: "required",
@@ -439,12 +439,18 @@ $(document).on("click", ".minus", function () {
     updateProductQuantity($(this).closest(".product"), -1);
     return
 });
+function preventEmptyValue(input) {
+    // Check if the input value is empty
+    if (input.value === "") {
+        // If empty, set the value to 1
+        input.value = 1;
+    }
+}
 
 
 $(document).ready(function () {
 
     bindEventListeners();
-
 
     $(document).on('input', '.product-quantity', function () {
         var row = $(this).closest('.product');
