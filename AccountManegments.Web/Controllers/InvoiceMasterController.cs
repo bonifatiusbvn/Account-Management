@@ -91,12 +91,12 @@ namespace AccountManegments.Web.Controllers
 
         [FormPermissionAttribute("Purchase  Invoice-Delete")]
         [HttpPost]
-        public async Task<IActionResult> DeleteSupplierInvoice(Guid InvoiceId)
+        public async Task<IActionResult> DeleteSupplierInvoice(Guid Id)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/DeleteSupplierInvoice?InvoiceId=" + InvoiceId);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/DeleteSupplierInvoice?Id=" + Id);
                 if (postuser.code == 200)
                 {
 

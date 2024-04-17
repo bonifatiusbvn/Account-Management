@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 #nullable disable
@@ -68,11 +69,19 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var SupplierInvoice = Context.SupplierInvoices.Where(a => a.Id == Id).FirstOrDefault();
+                var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b=>b.RefInvoiceId == Id).ToList();
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
                     response.message = "Supplierinvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
                     response.code = 200;
+                }
+                if(InvoiceItemList != null)
+                {
+                   foreach (var item in InvoiceItemList)
+                   {
+                        Context.SupplierInvoiceDetails.Remove(item);
+                   }
                 }
                 Context.SaveChanges();
             }

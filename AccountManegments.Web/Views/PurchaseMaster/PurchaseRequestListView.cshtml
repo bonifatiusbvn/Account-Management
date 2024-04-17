@@ -181,7 +181,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Quantity</label>
-                                    <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
+                                    <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" value="1" min="1" oninput="preventEmptyValue(this)">
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                                 @if (_userSession.UserRole == 3)

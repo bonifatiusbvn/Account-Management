@@ -218,7 +218,7 @@ function SupplierInvoicesortTable() {
     });
 }
 
-function DeleteSupplierInvoice(InvoiceId) {
+function DeleteSupplierInvoice(Id) {
 
     Swal.fire({
         title: "Are you sure want to Delete This?",
@@ -234,7 +234,7 @@ function DeleteSupplierInvoice(InvoiceId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/InvoiceMaster/DeleteSupplierInvoiceDetails?InvoiceId=' + InvoiceId,
+                url: '/InvoiceMaster/DeleteSupplierInvoice?Id=' + Id,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
