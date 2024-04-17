@@ -281,7 +281,12 @@ function validateAndCreateCompany() {
             txtPanNo: "required",
             txtAddress: "required",
             txtArea: "required",
-            txtPincode: "required",
+            txtPincode: {
+               required: true,
+               digits: true,
+               minlength: 6,
+               maxlength: 6
+            },
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required",
@@ -292,7 +297,12 @@ function validateAndCreateCompany() {
             txtPanNo: "Please Enter PanNo",
             txtAddress: "Please Enter Address",
             txtArea: "Please Enter Area",
-            txtPincode: "Please Enter Pincode",
+            txtPincode: {
+                required: "Please Enter Pin Code",
+                digits: "Pin code must contain only digits",
+                minlength: "Pin code must be 6 digits long",
+                maxlength: "Pin code must be 6 digits long"
+            },
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country",
