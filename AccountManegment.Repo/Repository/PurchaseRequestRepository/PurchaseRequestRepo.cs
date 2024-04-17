@@ -161,7 +161,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 var PurchaseRequestList = from a in Context.PurchaseRequests
                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                           join c in Context.Sites on a.SiteId equals c.SiteId
-                                          where siteId == null || a.SiteId == siteId
+                                          where (siteId == null || a.SiteId == siteId) && c.IsActive == true
                                           select new PurchaseRequestModel
                                           {
                                               Pid = a.Pid,
@@ -177,6 +177,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                               CreatedOn = a.CreatedOn,
                                               IsApproved = a.IsApproved
                                           };
+
 
                 if (!string.IsNullOrEmpty(searchText))
                 {

@@ -45,7 +45,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     List<PurchaseRequestModel> GetSiteList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(res.data.ToString());
 
-                    return PartialView("~/Views/Home/_DashbordPurchaseRequestList.cshtml", GetSiteList.Where(a => a.IsApproved == false));
+                    return PartialView("~/Views/Home/_DashbordPurchaseRequestList.cshtml", GetSiteList);
                 }
                 else
                 {
