@@ -139,10 +139,18 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label>PaymentStatus</label>
-                                        <select class="form-select" id="paymenttype">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" style="margin-left:2px;" type="radio" id="Cash" value="Online" name="paymenttype" checked>
+                                            <label class="form-check-label" for="Online">Online</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" style="margin-left:2px;" type="radio" id="Cheque" value="Cheque" name="paymenttype">
+                                            <label class="form-check-label" for="Cheque">Cheque</label>
+                                        </div>
+                                        @* <select class="form-select" id="paymenttype">
                                             <option value="Cash">Cash</option>
                                             <option value="Cheque">Cheque</option>
-                                        </select>
+                                        </select> *@
                                         <input type="hidden" class="text-muted text-uppercase fw-semibold" id="paymenttypeid">
                                     </div>
                                 </div><!-- end col -->

@@ -317,7 +317,7 @@ function ItemIsApproved(ItemId) {
                 dataType: 'json',
                 success: function (Result) {
                     Swal.fire({
-                        title: isChecked ? "Active!" : "DeActive!",
+                        title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,
                         icon: "success",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -391,7 +391,7 @@ function deleteItemDetails(ItemId) {
     });
 }
 
-// Define the function
+
 function WithGSTSelected() {
     var isWithGstCheckbox = document.getElementById('txtIsWithGst');
     var gstAmountInput = document.getElementById('txtGstAmount');
@@ -400,12 +400,16 @@ function WithGSTSelected() {
 
 
     if (isWithGstCheckbox.checked) {
+        gstAmountInput.disabled = true;
         var price = parseFloat(priceInput.value);
         var gstPercentage = parseFloat(gstPercentageInput.value);
-        gstAmountInput.disabled = true;
+
         if (!isNaN(price) && !isNaN(gstPercentage)) {
-            var gstAmount = (gstPercentage / 100) * price;
+            var totalAmount = 100 + gstPercentage;
+            var baseAmount = price - (price * gstPercentage / totalAmount);
+            var gstAmount = price - baseAmount;
             gstAmountInput.value = gstAmount.toFixed(2);
+            priceInput.value = baseAmount.toFixed(2);
 
         } else {
             gstAmountInput.value = "";

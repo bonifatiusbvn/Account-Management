@@ -1032,7 +1032,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 contentType: false,
                 processData: false,
                 success: function (Result) {
-                    if (Result.message == "Purchase Order Updated Successfully") {
+                    if (Result.message != null) {
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
