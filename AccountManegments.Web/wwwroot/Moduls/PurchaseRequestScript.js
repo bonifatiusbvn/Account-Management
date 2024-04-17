@@ -790,7 +790,7 @@ function InsertMultiplePurchaseOrderDetails() {
         }
     } else {
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -913,7 +913,7 @@ function AddShippingAddress() {
         }
     } else {
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -1070,7 +1070,7 @@ function UpdateMultiplePurchaseOrderDetails() {
         }
     } else {
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

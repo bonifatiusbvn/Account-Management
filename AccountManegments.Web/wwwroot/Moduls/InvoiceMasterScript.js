@@ -55,7 +55,7 @@ $(document).ready(function () {
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
-                
+
                 $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             },
             error: function (xhr, status, error) {
@@ -94,7 +94,7 @@ function GetCompanyDetail() {
 $(document).ready(function () {
 
     $('#textCompanyName').change(function () {
-     
+
         getCompanyDetail($(this).val());
     });
 });
@@ -366,7 +366,7 @@ function InsertMultipleSupplierItem() {
             contentType: false,
             processData: false,
             success: function (Result) {
-           
+
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -398,17 +398,16 @@ function InsertMultipleSupplierItem() {
         });
     }
     else {
-       
+
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
         })
     }
 }
-function UpdateInvoiceDetails()
-{
+function UpdateInvoiceDetails() {
     debugger
     if ($("#CreateInvoiceForm").valid()) {
         var sitevalue = $("#textInvoiceSiteName").val();
@@ -423,7 +422,7 @@ function UpdateInvoiceDetails()
         var Address = null;
         if (shippingAdd != "") {
             Address = shippingAdd;
-        }else{
+        } else {
             Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
         }
 
@@ -442,7 +441,7 @@ function UpdateInvoiceDetails()
             ContactNumber: $("#textContactNo").val(),
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
-            ShippingAddress: Address ,
+            ShippingAddress: Address,
         }
 
         var form_data = new FormData();
@@ -489,7 +488,7 @@ function UpdateInvoiceDetails()
     else {
 
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -642,7 +641,7 @@ function bindEventListeners() {
             updateProductQuantity(event.target.closest("tr"), -1);
             updateTotals();
         });
-    });   
+    });
 }
 
 function updateProductTotalAmount() {
@@ -675,7 +674,7 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-   
+
 
 function updateDiscount(row) {
     var discountPrice = parseFloat(row.find("#txtdiscountamount").val());
@@ -1031,7 +1030,7 @@ function getCompanyDetail(CompanyId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-       
+
             if (response) {
                 $('#textCompanyGstNo').val(response.gstno);
                 $('#textCompanyBillingAddress').val(response.fullAddress);
@@ -1043,7 +1042,7 @@ function getCompanyDetail(CompanyId) {
 }
 
 $(document).on("click", "#addItemButton", function () {
-   
+
     clearItemErrorMessages();
 });
 
@@ -1082,7 +1081,7 @@ function addShippingAddress() {
         $('#mdShippingAdd').modal('toggle');
     } else {
         Swal.fire({
-            title: "Kindly Fill All Data Fields",
+            title: "Kindly fill all data fields",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
