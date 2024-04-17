@@ -36,8 +36,6 @@ public partial class SupplierInvoice
     public string? ContactNumber { get; set; }
     public string? ShippingAddress { get; set; }
 
-    public string? ShippingAddress { get; set; }
-
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
