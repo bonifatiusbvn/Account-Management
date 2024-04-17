@@ -13,7 +13,7 @@
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
         <form class="position-relative">
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Order List" && (a.Add == true)))
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Add == true)))
             {
                 <a type="button" class="btn btn-primary fixed-button" asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster"><i class="lni lni-circle-plus"></i>PurchaseOrder</a>
             }

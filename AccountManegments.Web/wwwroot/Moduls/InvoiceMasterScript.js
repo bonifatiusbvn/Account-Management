@@ -715,7 +715,7 @@ function updateTotals() {
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal);
     $("#TotalProductGST").html(totalGst.toFixed(2));
-    $("#TotalProductAmount").html(totalAmount);
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();
@@ -728,8 +728,6 @@ var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
-
-
 
 function recalculateCart() {
     var t = 0,
