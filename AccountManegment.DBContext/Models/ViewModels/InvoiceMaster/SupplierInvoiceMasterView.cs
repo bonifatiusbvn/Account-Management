@@ -63,6 +63,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SupplierGstNo { get; set; }
 
         public string? SupplierEmail { get; set; }
+        public string? SupplierMobileNo { get; set; }
 
         public string? SupplierBuildingName { get; set; }
 
@@ -104,6 +105,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public string? CompanyPincode { get; set; }
         public string? CompanyPanNo { get; set; }
+        public string? SupplierFullAddress { get; set; }
+        public string? CompanyFullAddress { get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
     }

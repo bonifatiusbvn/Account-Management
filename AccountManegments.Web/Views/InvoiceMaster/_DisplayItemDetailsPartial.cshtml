@@ -16,11 +16,11 @@
             <div class="">
                 @if (item.Quantity == 0)
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1">
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" min="1" oninput="preventEmptyValue(this)">
                 }
                 else
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity">
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)">
                 }
             </div>
         </td>
@@ -32,13 +32,13 @@
             </div>
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
+            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
             <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0">
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="4" />
+            <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="4" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
             <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" readonly />

@@ -43,7 +43,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     CreatedOn = DateTime.Now,
                 };
                 responseModel.code = (int)HttpStatusCode.OK;
-                responseModel.message = "PurchaseOrder successfully created..!";
+                responseModel.message = "PurchaseOrder successfully created.";
                 Context.PurchaseOrders.Add(PurchaseOrder);
                 Context.SaveChanges();
             }
@@ -131,7 +131,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 Context.SaveChanges();
 
                 response.code = 200;
-                response.message = "PurchaseOrder details are successfully deleted..!";
+                response.message = "PurchaseOrder details are successfully deleted.";
             }
             else
             {
@@ -392,7 +392,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "PurchaseOrder successfully inserted..!";
+                response.message = "PurchaseOrder successfully inserted.";
                 response.data = PurchaseOrder.Id;
             }
             catch (Exception ex)
@@ -469,7 +469,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "PurchaseOrder successfully updated..!";
+                response.message = "Purchaseorder successfully updated.";
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
+﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceMasterView
 @using AccountManegments.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
@@ -8,9 +8,13 @@
 }
 
 <style>
-    #paymentStatus-error, #textContactNo-error, #textContactPerson-error, #textSupplierName-error, #textCompanyName-error
-    {
-        color : red;
+    #paymentStatus-error, #textContactNo-error, #textContactPerson-error, #textSupplierName-error, #textCompanyName-error, #txtgst-error {
+        color: red;
+    }
+
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
     }
 </style>
 
@@ -31,28 +35,36 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6">
-                                                                <label for="txtSuppliername" class="form-label">Supplier Name</label>
-
-                                                                <select class="form-select" id="txtSuppliername">
-                                                                    <option selected disabled value="">Select Supplier</option>
-                                                                </select>
+                                                                <label for="textSupplierName" class="form-label">Supplier Name</label>
+                                                                @if (Model.SupplierName != null)
+                                                                {
+                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName" disabled>
+                                                                        <option selected value="@Model.SupplierId">@Model.SupplierName</option>
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName">
+                                                                        <option selected disabled value="">Select Supplier</option>
+                                                                    </select>
+                                                                }
                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textSupplierMobile" class="form-label">Mobile No</label>
-                                                                <input type="text" id="textSupplierMobile" value="" class="form-control" placeholder="Mobile No" />
+                                                                <input type="text" id="textSupplierMobile" value="@Model.SupplierMobileNo" class="form-control" placeholder="Mobile No" />
                                                                 <span id="spnSupplierMobile" class="text-danger"></span>
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textSupplierAddress" class="form-label">Address</label>
-                                                                <input type="text" id="textSupplierAddress" value="" class="form-control" placeholder="Address" />
+                                                                <input type="text" id="textSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" />
                                                                 <span id="spnSupplierAddress" class="text-danger"></span>
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textSupplierGST" class="form-label">GST NO</label>
-                                                                <input type="text" id="textSupplierGST" value="" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="textSupplierGST" value="@Model.SupplierGstNo" class="form-control" placeholder="GST No" />
                                                                 <span id="spnSupplierGST" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -69,14 +81,22 @@
                                                                     <label for="textCompanyName" class="form-label">Company Name</label>
                                                                 </div>
                                                                 <div class="ms-auto">
-
-                                                                    <select class="form-select" id="textCompanyName" name="textCompanyName">
-                                                                        <option selected disabled value="">Select Company</option>
-                                                                    </select>
-
+                                                                    @if (Model.CompanyName != null)
+                                                                    {
+                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName" disabled>
+                                                                            <option selected value="@Model.CompanyId">@Model.CompanyName</option>
+                                                                        </select>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName">
+                                                                            <option selected disabled value="">Select Company</option>
+                                                                        </select>
+                                                                    }
                                                                     <span id="spnCompanyName" class="text-danger"></span>
                                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                                     <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
+                                                                    <input type="hidden" class="form-control" id="textSupplierInvoiceId" value="@Model.Id">
 
                                                                 </div>
                                                             </div>
@@ -86,18 +106,18 @@
                                                             </div>
                                                             <div class="col-3 col-lg-3">
                                                                 <label for="textOrderDate" class="form-label">Order Date</label>
-                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date">
+                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date" value="@Model.Date?.ToString("dd/MM/yyyy")">
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textcompanybillingaddress" class="form-label">Billing Address</label>
-                                                                <input type="text" id="textCompanyBillingAddress" value="" class="form-control" placeholder="Billing Address" />
+                                                                <input type="text" id="textCompanyBillingAddress" value="@Model.CompanyFullAddress" class="form-control" placeholder="Billing Address" />
                                                                 <span id="spnBillingAddress" class="text-danger"></span>
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textCompanyGstNo" class="form-label">GST NO</label>
-                                                                <input type="text" id="textCompanyGstNo" value="" class="form-control" placeholder="GST No" />
+                                                                <input type="text" id="textCompanyGstNo" value="@Model.CompanyGstNo" class="form-control" placeholder="GST No" />
                                                                 <span id="spnCompanyGST" class="text-danger"></span>
                                                             </div>
                                                         </div>
@@ -115,10 +135,18 @@
 
                                         <h5 class="card-header">
                                             Purchase Details
-
-                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
+                                            @if (Model.ItemList != null)
+                                            {
+                                                <a class="disabled">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
+                                            }
                                         </h5>
                                     </div>
 
@@ -140,9 +168,17 @@
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="addnewproductlink">
-                                                </tbody>
-
+                                                @if (Model.ItemList != null)
+                                                {
+                                                    <tbody id="addnewproductlink" class="disabled">
+                                                        @Html.Partial("_DisplayItemDetailsPartial", Model.ItemList)
+                                                    </tbody>
+                                                }
+                                                else
+                                                {
+                                                    <tbody id="addnewproductlink">
+                                                    </tbody>
+                                                }
                                             </table>
 
                                         </div>
@@ -172,26 +208,46 @@
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
                                                             <div class="input-group mb-2">
-                                                                <label class="input-group-text">Payment Status</label>     
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" value="unpaid" name="paymentStatus" checked>
-                                                                    <label class="form-check-label" for="unpaidRadio">Unpaid</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" value="paid" name="paymentStatus">
-                                                                    <label class="form-check-label" for="paidRadio">Paid</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" value="cash" name="paymentStatus">
-                                                                    <label class="form-check-label" for="cashRadio">Cash</label>
-                                                                </div>
+                                                                <label class="input-group-text">Payment Status</label>
+
+                                                                @if (Model.PaymentStatus != null)
+                                                                {
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" name="paymentStatus" value="unpaid" @(Model.PaymentStatus == "unpaid" ? "checked" : "")>
+                                                                        <label class="form-check-label" for="unpaidRadio">Unpaid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" name="paymentStatus" value="paid" @(Model.PaymentStatus == "paid" ? "checked" : "")>
+                                                                        <label class="form-check-label" for="paidRadio">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" name="paymentStatus" value="cash" @(Model.PaymentStatus == "cash" ? "checked" : "")>
+                                                                        <label class="form-check-label" for="cashRadio">Cash</label>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" value="unpaid" name="paymentStatus" checked>
+                                                                        <label class="form-check-label" for="unpaidRadio">Unpaid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" value="paid" name="paymentStatus">
+                                                                        <label class="form-check-label" for="paidRadio">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" value="cash" name="paymentStatus">
+                                                                        <label class="form-check-label" for="cashRadio">Cash</label>
+                                                                    </div>
+                                                                }
+
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2 ">
                                                             <div class="mb-2">
                                                                 <div class="input-group mb-3">
                                                                     <label class="input-group-text" for="textContactPerson">Contect Person</label>
-                                                                    <input type="text" id="textContactPerson" class="form-control" placeholder="Contect Person Name" name="textContactPerson">
+                                                                    <input type="text" id="textContactPerson" class="form-control" placeholder="Contect Person Name" name="textContactPerson" value="@Model.ContactName">
                                                                 </div>
                                                                 <span id="spnContectPerson" class="text-danger"></span>
                                                             </div>
@@ -200,7 +256,7 @@
                                                             <div class="mb-2">
                                                                 <div class="input-group mb-3">
                                                                     <label class="input-group-text" for="textContactNo">Mobile No</label>
-                                                                    <input type="text" id="textContactNo" class="form-control" placeholder="Mobile No" name="textContactNo">
+                                                                    <input type="text" id="textContactNo" class="form-control" placeholder="Mobile No" name="textContactNo" value="@Model.ContactNumber">
                                                                 </div>
                                                                 <span id="spnMobileNo" class="text-danger"></span>
                                                             </div>
@@ -221,19 +277,19 @@
                                                                 <tr>
                                                                     <th scope="row">Total GST</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" />
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Discount <small class="text-muted"></small></th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" />
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" />
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">
                                                                     <th scope="row">Total Amount</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" />
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmountInvoice" />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -255,6 +311,10 @@
                                                 <span id="spnshipping" style="color:red;"></span>
                                             </h5>
                                             <div class="card-body Address" id="dvShippingAddress">
+                                                @if (!string.IsNullOrEmpty(Model.ShippingAddress))
+                                                {
+                                                    @Html.Partial("_EditShippingAddressPartial", Model.ShippingAddress)
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -268,8 +328,14 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SaveInvoiceOButton" onclick="InsertMultipleSupplierItem()"><i class="ri-printer-line align-bottom me-1"></i>Create Invoice</button>
+                                            @if (Model.Id == Guid.Empty)
+                                            {
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SaveInvoiceOButton" onclick="InsertMultipleSupplierItem()"><i class="ri-printer-line align-bottom me-1"></i>Create Invoice</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdateInvoiceOButton" onclick="UpdateInvoiceDetails()"><i class="ri-printer-line align-bottom me-1"></i>Update Invoice</button>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +425,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');

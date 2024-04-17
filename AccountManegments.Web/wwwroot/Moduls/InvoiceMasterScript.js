@@ -280,9 +280,7 @@ $(document).ready(function () {
         }
     });
 });
-$.validator.addMethod("validMobileNo", function (value, element) {
-    return isValidPhoneNo(value);
-}, "Enter a valid 10-digit Mobile No");
+
 
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
@@ -294,8 +292,10 @@ $(document).ready(function () {
             textContactPerson: "required",
             textContactNo: {
                 required: true,
-                validMobileNo: true
-            },
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            }
         },
         messages: {
             textSupplierName: "Select Supplier Name",
@@ -303,8 +303,10 @@ $(document).ready(function () {
             paymentStatus: "Select Payment Status",
             textContactPerson: "Enter Contact Person Name",
             textContactNo: {
-                required: "Enter Mobile No",
-                validMobileNo: "Enter a valid 10-digit Mobile No"
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
             },
         }
     });
@@ -397,6 +399,95 @@ function InsertMultipleSupplierItem() {
     }
     else {
        
+        Swal.fire({
+            title: "Kindly Fill All Data Fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+function UpdateInvoiceDetails()
+{
+    debugger
+    if ($("#CreateInvoiceForm").valid()) {
+        var sitevalue = $("#textInvoiceSiteName").val();
+        var siteid = null;
+        if (sitevalue != "") {
+            siteid = sitevalue;
+        } else {
+            siteid = $("#siteid").val();
+        }
+
+        var shippingAdd = $("#textmdAddress").val();
+        var Address = null;
+        if (shippingAdd != "") {
+            Address = shippingAdd;
+        }else{
+            Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
+        }
+
+
+        var InvoiceDetails = {
+            Id: $('#textSupplierInvoiceId').val(),
+            SiteId: siteid,
+            InvoiceNo: $("#textInvoiceId").val(),
+            Date: $("#textOrderDate").val(),
+            SupplierId: $("#textSupplierName").val(),
+            CompanyId: $("#textCompanyName").val(),
+            TotalAmountInvoice: $("#cart-total").val(),
+            TotalGstamount: $("#totalgst").val(),
+            PaymentStatus: $("input[name='paymentStatus']:checked").val(),
+            ContactName: $("#textContactPerson").val(),
+            ContactNumber: $("#textContactNo").val(),
+            CreatedBy: $("#createdbyid").val(),
+            UnitTypeId: $("#UnitTypeId").val(),
+            ShippingAddress: Address ,
+        }
+
+        var form_data = new FormData();
+        form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
+        $.ajax({
+            url: '/InvoiceMaster/UpdateSupplierInvoice',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/InvoiceMaster/SupplierInvoiceListView';
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                });
+            }
+        });
+    }
+    else {
+
         Swal.fire({
             title: "Kindly Fill All Data Fields",
             icon: 'warning',
@@ -551,15 +642,7 @@ function bindEventListeners() {
             updateProductQuantity(event.target.closest("tr"), -1);
             updateTotals();
         });
-    });
-
-    document.querySelectorAll("#txtdiscountamount").forEach(function (discountInput) {
-        e.addEventListener("click", function (event) {
-            var row = discountInput.closest(".product");
-            updateDiscount(row);
-        });
-    });
-
+    });   
 }
 
 function updateProductTotalAmount() {
@@ -632,7 +715,7 @@ function updateTotals() {
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal);
     $("#TotalProductGST").html(totalGst.toFixed(2));
-    $("#TotalProductAmount").html(totalAmount);
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();
@@ -645,8 +728,6 @@ var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
-
-
 
 function recalculateCart() {
     var t = 0,

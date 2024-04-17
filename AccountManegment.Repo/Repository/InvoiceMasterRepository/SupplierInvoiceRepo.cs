@@ -6,6 +6,7 @@ using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier invoice successfully created..!";
+                response.message = "Payment Out successfully.";
                 Context.SupplierInvoices.Add(SupplierInvoice);
                 Context.SaveChanges();
             }
@@ -167,7 +168,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 join g in Context.Countries on c.Country equals g.CountryId
                                 join supCity in Context.Cities on b.City equals supCity.CityId
                                 join supState in Context.States on b.State equals supState.StatesId
-
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
@@ -197,6 +197,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyPincode = c.Pincode,
                                     CompanyPanNo = c.PanNo,
                                     ShippingAddress = a.ShippingAddress,
+                                    SupplierMobileNo = b.Mobile,
                                     Date = a.Date,
                                     Description = a.Description,
                                     TotalAmountInvoice = a.TotalAmount,
@@ -205,6 +206,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     PaymentStatus = a.PaymentStatus,
                                     IsPayOut = a.IsPayOut,
                                     Roundoff = a.Roundoff,
+                                    ContactName = a.ContactName,
+                                    ContactNumber = a.ContactNumber,
+                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName + "-" + c.Pincode,
+                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName + "-" + b.PinCode,
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
@@ -238,6 +243,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                     join c in Context.Companies on a.CompanyId equals c.CompanyId
                                     join d in Context.Sites on a.SiteId equals d.SiteId
+                                    where a.InvoiceNo != "PayOut"
                                     select new SupplierInvoiceModel
                                     {
                                         Id = a.Id,
@@ -329,34 +335,44 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetail)
+        public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceMasterView SupplierInvoiceDetail)
         {
-            ApiResponseModel model = new ApiResponseModel();
-            var supplierInvoice = Context.SupplierInvoices.Where(e => e.Id == SupplierInvoiceDetail.Id).FirstOrDefault();
+            ApiResponseModel response = new ApiResponseModel();
             try
             {
-                if (supplierInvoice != null)
+                var supplierInvoice =await Context.SupplierInvoices.FindAsync(SupplierInvoiceDetail.Id);
+
+                if (supplierInvoice == null)
                 {
-                    supplierInvoice.Id = SupplierInvoiceDetail.Id;
-                    supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
-                    supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
-                    supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
-                    supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmount;
-                    supplierInvoice.Description = SupplierInvoiceDetail.Description;
-                    supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
-                    supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
-                    supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
+                    response.code = (int)HttpStatusCode.NotFound;
+                    response.message = $"Invoice with ID {SupplierInvoiceDetail.Id} not found";
+                    return response;
                 }
+                supplierInvoice.Id = SupplierInvoiceDetail.Id;
+                supplierInvoice.InvoiceNo = SupplierInvoiceDetail.InvoiceNo;
+                supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
+                supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
+                supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
+                supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmountInvoice;
+                supplierInvoice.Description = SupplierInvoiceDetail.Description;
+                supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
+                supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
+                supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
+                supplierInvoice.PaymentStatus = SupplierInvoiceDetail.PaymentStatus;
+                supplierInvoice.ContactNumber = SupplierInvoiceDetail.ContactNumber;
+                supplierInvoice.ContactName = SupplierInvoiceDetail.ContactName;
+                supplierInvoice.ShippingAddress = SupplierInvoiceDetail.ShippingAddress;
+                supplierInvoice.Date = SupplierInvoiceDetail.Date;
                 Context.SupplierInvoices.Update(supplierInvoice);
                 Context.SaveChanges();
-                model.code = 200;
-                model.message = "Supplier invoice updated successfully!";
+                response.code = 200;
+                response.message = "Invoice Updated Successfully!";
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return model;
+            return response;
         }
 
         public async Task<ApiResponseModel> InsertMultipleSupplierItemDetails(SupplierInvoiceMasterView SupplierItemDetails)
