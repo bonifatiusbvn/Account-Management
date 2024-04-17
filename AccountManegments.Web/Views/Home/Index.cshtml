@@ -22,16 +22,16 @@
             <form id="frmdrpdashbord">
                 @if (_userSession.UserRole == 3)
                 {
-                        <select class="form-select form-control-lg" id="drpSiteName" >
-                            <option value="null" selected>All Site</option>
-                        </select>
-                        <input type="hidden" id="txtsiteid" />
+                            <select class="form-select form-control-lg" id="drpSiteName" >
+                                <option value="null" selected>All Site</option>
+                            </select>
+                            <input type="hidden" id="txtsiteid" />
                 }
                 else
                 {
-                        <select class="form-select form-control-lg" id="drpSiteName" disabled>
-                            <option value="@UserSession.SiteId">@UserSession.SiteName</option>
-                        </select>
+                            <select class="form-select form-control-lg" id="drpSiteName" disabled>
+                                <option value="@UserSession.SiteId">@UserSession.SiteName</option>
+                            </select>
                 }
             </form>
         </div>
@@ -132,83 +132,83 @@
     </div>
 </div>
 @section Scripts {
-        <script type="text/javascript">
-            var role = "@_userSession.UserRole";
-            $(function () {
-                debugger
-                fn_fillsiteDropDown('#drpSiteName');
-                if (role == 3) {
-                    fn_ChangeSite(null);
-                }
-                else {
-
-                    fn_ChangeSite("@UserSession.SiteId");
-                }
-
-                GetCompanyList();
-            });
-
-            function fn_fillsiteDropDown(drpid) {
-                $.ajax({
-                    url: '/SiteMaster/GetSiteNameList',
-                    success: function (result) {
-                        $.each(result, function (i, data) {
-                            $(drpid).append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
-                        });
+            <script type="text/javascript">
+                var role = "@_userSession.UserRole";
+                $(function () {
+                    debugger
+                    fn_fillsiteDropDown('#drpSiteName');
+                    if (role == 3) {
+                        fn_ChangeSite(null);
                     }
-                });
-            }
+                    else {
 
-            $('#drpSiteName').change(function () {
-                debugger
-                var Text = $("#drpSiteName Option:Selected").text();
-                var selectedSiteId = $(this).val();
-                fn_ChangeSite(selectedSiteId)
-            });
-
-
-            function fn_ChangeSite(selectedSiteId) {
-                debugger
-                var searchText = "";
-                var searchBy = "";
-                $.ajax({
-                    url: '/Home/PurchaseRequestList',
-                    type: 'GET',
-                    data: {
-                        searchText: searchText,
-                        searchBy: searchBy,
-                        SiteId: selectedSiteId,
-                    },
-                    success: function (result) {
-                        debugger
-                        $("#tbPndingApproval").html(result);
-                        $('#drplaySiteName').val($('#drpSiteName option:selected').text());
-                    },
-                    error: function (xhr, status, error) {
-
+                        fn_ChangeSite("@UserSession.SiteId");
                     }
+
+                    GetCompanyList();
                 });
 
-            }
-
-
-
-            function GetCompanyList() {
-
-                $('#CompanyNameList').empty();
-                $.ajax({
-                    url: '/Company/GetCompanyNameList',
-                    success: function (result) {
-                        if (result.length > 0) {
+                function fn_fillsiteDropDown(drpid) {
+                    $.ajax({
+                        url: '/SiteMaster/GetSiteNameList',
+                        success: function (result) {
                             $.each(result, function (i, data) {
-                                $('#CompanyNameList').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                                $(drpid).append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                             });
                         }
-                    },
-                    error: function (xhr, status, error) {
+                    });
+                }
 
-                    }
+                $('#drpSiteName').change(function () {
+                    debugger
+                    var Text = $("#drpSiteName Option:Selected").text();
+                    var selectedSiteId = $(this).val();
+                    fn_ChangeSite(selectedSiteId)
                 });
-            }
-        </script>
+
+
+                function fn_ChangeSite(selectedSiteId) {
+                    debugger
+                    var searchText = "";
+                    var searchBy = "";
+                    $.ajax({
+                        url: '/Home/PurchaseRequestList',
+                        type: 'GET',
+                        data: {
+                            searchText: searchText,
+                            searchBy: searchBy,
+                            SiteId: selectedSiteId,
+                        },
+                        success: function (result) {
+                            debugger
+                            $("#tbPndingApproval").html(result);
+                            $('#drplaySiteName').val($('#drpSiteName option:selected').text());
+                        },
+                        error: function (xhr, status, error) {
+
+                        }
+                    });
+
+                }
+
+
+
+                function GetCompanyList() {
+
+                    $('#CompanyNameList').empty();
+                    $.ajax({
+                        url: '/Company/GetCompanyNameList',
+                        success: function (result) {
+                            if (result.length > 0) {
+                                $.each(result, function (i, data) {
+                                    $('#CompanyNameList').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+
+                        }
+                    });
+                }
+            </script>
 }
