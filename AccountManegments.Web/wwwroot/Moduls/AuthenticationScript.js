@@ -440,9 +440,9 @@ $(document).on("click", ".minus", function () {
     return
 });
 function preventEmptyValue(input) {
-    // Check if the input value is empty
+
     if (input.value === "") {
-        // If empty, set the value to 1
+
         input.value = 1;
     }
 }
