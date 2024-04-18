@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "PurchaseOrderList";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -13,7 +12,7 @@
 </style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
-        <form class="position-relative">           
+        <form class="position-relative">
             <a type="button" class="btn btn-primary fixed-button" asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster"><i class="lni lni-circle-plus"></i>PurchaseOrder</a>
         </form>
     </div>
@@ -120,7 +119,7 @@
 
 
 @section Scripts {
-    <script src="~/moduls/purchaserequestscript.js"></script>
+    <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }
 
 

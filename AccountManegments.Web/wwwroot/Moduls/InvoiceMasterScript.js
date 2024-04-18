@@ -408,7 +408,7 @@ function InsertMultipleSupplierItem() {
     }
 }
 function UpdateInvoiceDetails() {
-    debugger
+
     if ($("#CreateInvoiceForm").valid()) {
         var sitevalue = $("#textInvoiceSiteName").val();
         var siteid = null;

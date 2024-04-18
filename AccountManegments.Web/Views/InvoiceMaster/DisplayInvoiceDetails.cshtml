@@ -63,7 +63,7 @@
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dated</label>
+                                <label class="form-label">Date</label>
                                 <p><span class="text-muted fw-normal">@firstItem.Date?.ToString("dd/MM/yyyy")</span></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -75,7 +75,7 @@
                                 <p class="text-muted"></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dated</label>
+                                <label class="form-label">Date</label>
                                 <p class="text-muted text-uppercase"><b></b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -113,10 +113,10 @@
                             <tr class="table-active">
                                 <th class="border" scope="col">SINo.</th>
                                 <th class="border" scope="col">Product Details</th>
-                                <th class="border" scope="col">HSN / SAC</th>
+                                <th class="border" scope="col">Price</th>
                                 <th class="border" scope="col">Quantity</th>
-                                <th class="border" scope="col">per</th>
-                                <th class="text-end border" text-end scope="col">Amount</th>
+                                <th class="border" scope="col">Unit</th>
+                                <th class="border" scope="col">Amount</th>
                             </tr>
                         </thead>
                         <tbody id="products-list">
@@ -126,39 +126,25 @@
                             }
                             @foreach (var item in Model.ItemList)
                             {
+                                subtotal = (item.Quantity * item.PricePerUnit);
                                 <tr class="product">
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.ItemName</span>
                                         <p class="text-muted mb-0" id="txtdescription">@firstItem.Description</p>
                                     </td>
-                                    <td class="border" id="txtHSN">7216</td>
+                                    <td class="border" id="txtHSN">@item.PricePerUnit</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.UnitTypeName</td>
-                                    <td class="text-end border" id="txttotal">@item.TotalAmount</td>
+                                    <td class="border" id="txttotal">₹@subtotal</td>
                                 </tr>
-                                index++;
-                                subtotal += item.TotalAmount ?? 0;
+                                index++;                                 
                             }
                             <tr>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border-top">@subtotal</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
-                                <td class="border">FREIGHT CHARGES</td>
-                                <td class="border">9967</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="border">IGST 18%</td>
+                                <td class="text-end border">FREIGHT CHARGES</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
@@ -166,7 +152,15 @@
                             </tr>
                             <tr>
                                 <td class="border"></td>
-                                <td class="border">Round Off</td>
+                                <td class="text-end border">GST</td>
+                                <td class="border"></td>
+                                <td class="border"></td>
+                                <td class="border"></td>
+                                <td class="border">₹@firstItem.TotalGstamount</td>
+                            </tr>
+                            <tr>
+                                <td class="border"></td>
+                                <td class="text-end border">Round Off</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
@@ -174,11 +168,11 @@
                             </tr>
                             <tr>
                                 <td class="border"></td>
-                                <td class="border">Total</td>
+                                <td class="text-end border">Total</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="text-end border">₹@firstItem.TotalAmountInvoice</td>
+                                <td class="border">₹@firstItem.TotalAmountInvoice</td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -194,16 +188,9 @@
                                 <th class="border col-4">HSN / SAC</th>
                                 <th class="border col-2">Taxable value</th>
                                 <th class="border col-2">
-                                    <div class="d-flex border-bottom">
-                                        <div class="flex-grow-1 col-5">
-                                            <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                                <label class="form-label">IGST</label>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="d-flex">
                                         <div class="flex-grow-1 col-5">
-                                            <label class="form-label">Rate</label>
+                                            <label class="form-label">GST%</label>
                                         </div>
                                         <div class="flex-grow-1 col-7">
                                             <label class="form-label">Amount</label>
@@ -214,27 +201,31 @@
                             </tr>
                         </thead>
                         <tbody id="products-list">
+                            @{
+                                decimal subTotal = 0;
+                            }
                             @foreach (var item in Model.ItemList)
                             {
+                                subTotal = (item.Quantity * item.PricePerUnit);
                                 <tr>
-                                    <td class="border" id="txtHSN">7216</td>
-                                    <td class="border" id="txtTaxablevalue"></td>
+                                    <td class="border" id="txtHSN">@item.Hsncode</td>
+                                    <td class="border" id="txtTaxablevalue">₹@subTotal</td>
                                     <td class="border" id="txtgstpercentage">
                                         <div class="d-flex">
                                             <div class="flex-grow-1 col-5">
                                                 <label class="form-label">@item.GstPercentage%</label>
                                             </div>
                                             <div class="flex-grow-1 col-7">
-                                                <label class="form-label">@item.Gstamount</label>
+                                                <label class="form-label">₹@item.Gstamount</label>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-end border" id="txtgsttotal">@item.Gstamount</td>
+                                    <td class="border" id="txtgsttotal">₹@item.Gstamount</td>
                                 </tr>
                                 index++;
                             }
                             <tr>
-                                <td class="text-end border">Total</td>
+                                <td class="border">Total</td>
                                 <td class="border"></td>
                                 <td class="border">
                                     <div class="d-flex">
@@ -242,11 +233,11 @@
                                             <label class="form-label"></label>
                                         </div>
                                         <div class="flex-grow-1 col-7">
-                                            <label class="form-label">@firstItem.TotalGstamount</label>
+                                            <label class="form-label"></label>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="border">@firstItem.TotalGstamount</td>
+                                <td class="border">₹@firstItem.TotalGstamount</td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -285,5 +276,5 @@
 </div>
 
 @section Scripts {
-    <script src="~/moduls/invoicemasterscript.js"></script>
+    <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
 }
