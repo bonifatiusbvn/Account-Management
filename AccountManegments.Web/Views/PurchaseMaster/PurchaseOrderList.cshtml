@@ -68,7 +68,10 @@
                                                         <th>Supplier Name</th>
                                                         <th>GST Amount</th>
                                                         <th>Total Amount</th>
-                                                        <th>Action</th>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="PurchaseOrdertbody">

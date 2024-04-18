@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -50,6 +51,32 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = "Failed to retrieve Purchase Request list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+
+        public async Task<IActionResult> GetSupplierPendingDetailsList(Guid CompanyId)
+        {
+            try
+            {
+
+                ApiResponseModel res = await APIServices.GetAsync("", "SupplierInvoiceDetails/GetSupplierPendingDetailsList?CompanyId=" + CompanyId);
+
+                if (res.code == 200)
+                {
+                    List<SupplierPendingDetailsModel> GetPendingList = JsonConvert.DeserializeObject<List<SupplierPendingDetailsModel>>(res.data.ToString());
+
+                    return PartialView("~/Views/Home/_DashboardPaymentPartial.cshtml", GetPendingList.Where(e => e.TotalPending != 0));
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Pending Invoice list." });
                 }
             }
             catch (Exception ex)

@@ -10,19 +10,19 @@
         <td>@item.CompanyName</td>
         <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
-        <td>
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
-                
-            {
-                <a class="btn text-primary" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-        </td>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
+                {
+                    <a class="btn text-primary" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
+            </td>
+        }
     </tr>
 }
 

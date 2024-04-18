@@ -17,5 +17,6 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         Task<SupplierInvoiceDetailsModel> GetSupplierInvoiceDetailsById(int InvoiceDetailsId);
         Task<ApiResponseModel> UpdateSupplierInvoiceDetails(SupplierInvoiceDetailsModel SupplierInvoiceDetails);
         Task<ApiResponseModel> DeleteSupplierInvoiceDetails(int InvoiceDetailsId);
+        Task<IEnumerable<SupplierPendingDetailsModel>> GetSupplierPendingDetailsList(Guid CompanyId);
     }
 }

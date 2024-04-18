@@ -12,16 +12,17 @@
         z-index: 1000;
     }
 </style>
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <form class="position-relative">
+<div class="btn-group">
+    <div class="ms-auto">
+        <div class="btn-group">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Add == true)))
             {
-                <button type="button" class="btn btn-primary fixed-button" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
+                <button type="button" class="btn btn-primary" onclick="ClearUserTextBox()"><i class="lni lni-circle-plus"></i>User</button>
             }
-        </form>
+        </div>
     </div>
 </div>
+
 <div class="">
     <div class="">
         <div class=" radius-10 w-100">
@@ -31,10 +32,7 @@
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
                             <div class="card-body">
-
-
                                 <div class="row w-100 ac-view-list card radius-10 w-100">
-
                                     <div class="row ">
                                         <div class="col-12">
                                             <div class="card-body">

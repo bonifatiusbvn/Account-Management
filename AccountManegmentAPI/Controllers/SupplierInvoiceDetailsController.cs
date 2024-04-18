@@ -17,7 +17,7 @@ namespace AccountManagement.API.Controllers
         }
 
         public ISupplierInvoiceDetailsService SupplierInvoiceDetails { get; }
-        
+
         [HttpPost]
         [Route("GetSupplierInvoiceDetailsList")]
         public async Task<IActionResult> GetSupplierInvoiceDetailsList(string? searchText, string? searchBy, string? sortBy)
@@ -89,6 +89,14 @@ namespace AccountManagement.API.Controllers
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.code, responseModel);
+        }
+
+        [HttpGet]
+        [Route("GetSupplierPendingDetailsList")]
+        public async Task<IActionResult> GetSupplierPendingDetailsList(Guid CompanyId)
+        {
+            IEnumerable<SupplierPendingDetailsModel> supplierDetails = await SupplierInvoiceDetails.GetSupplierPendingDetailsList(CompanyId);
+            return Ok(new { code = 200, data = supplierDetails.ToList() });
         }
     }
 }

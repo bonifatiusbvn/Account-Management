@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.InvoiceMaster
 {
-    public class SupplierInvoiceDetailsService:ISupplierInvoiceDetailsService
+    public class SupplierInvoiceDetailsService : ISupplierInvoiceDetailsService
     {
         public SupplierInvoiceDetailsService(ISupplierInvoiceDetails supplierinvoiceDetails)
         {
@@ -37,6 +37,11 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         public async Task<IEnumerable<SupplierInvoiceDetailsModel>> GetSupplierInvoiceDetailsList(string? searchText, string? searchBy, string? sortBy)
         {
             return await supplierInvoiceDetails.GetSupplierInvoiceDetailsList(searchText, searchBy, sortBy);
+        }
+
+        public async Task<IEnumerable<SupplierPendingDetailsModel>> GetSupplierPendingDetailsList(Guid CompanyId)
+        {
+            return await supplierInvoiceDetails.GetSupplierPendingDetailsList(CompanyId);
         }
 
         public async Task<ApiResponseModel> UpdateSupplierInvoiceDetails(SupplierInvoiceDetailsModel SupplierInvoiceDetails)
