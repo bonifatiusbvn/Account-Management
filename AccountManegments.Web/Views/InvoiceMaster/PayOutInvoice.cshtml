@@ -148,8 +148,8 @@
                                             <label class="form-check-label" for="Cheque">Cheque</label>
                                         </div>
                                         @* <select class="form-select" id="paymenttype">
-                                            <option value="Cash">Cash</option>
-                                            <option value="Cheque">Cheque</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Cheque">Cheque</option>
                                         </select> *@
                                         <input type="hidden" class="text-muted text-uppercase fw-semibold" id="paymenttypeid">
                                     </div>
@@ -187,5 +187,5 @@
 </div>
 <!--end card-->
 @section Scripts {
-    <script src="~/moduls/payoutscript.js"></script>
+    <script src="~/moduls/payoutscript.js" asp-append-version="true"></script>
 }

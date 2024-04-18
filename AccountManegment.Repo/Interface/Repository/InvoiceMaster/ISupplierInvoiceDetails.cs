@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,6 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         Task<SupplierInvoiceDetailsModel> GetSupplierInvoiceDetailsById(int InvoiceDetailsId);
         Task<ApiResponseModel> UpdateSupplierInvoiceDetails(SupplierInvoiceDetailsModel SupplierInvoiceDetails);
         Task<ApiResponseModel> DeleteSupplierInvoiceDetails(int InvoiceDetailsId);
+        Task<IEnumerable<SupplierPendingDetailsModel>> GetSupplierPendingDetails(int InvoiceDetailsId);
     }
 }

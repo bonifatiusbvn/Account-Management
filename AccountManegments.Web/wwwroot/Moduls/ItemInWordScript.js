@@ -153,7 +153,7 @@ function GetUnitType() {
             $.each(result, function (i, data) {
                 $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
             });
-            
+
         }
     });
 }
@@ -171,9 +171,9 @@ function GetSiteList() {
 }
 
 function AddItemInWordDetails() {
-    
+
     if ($("#itemInWordForm").valid()) {
-        
+
         var formData = new FormData();
         formData.append("UnitTypeId", $("#txtUnitType").val());
         formData.append("ItemId", $("#txtItemId").val());
@@ -185,7 +185,7 @@ function AddItemInWordDetails() {
         formData.append("VehicleNumber", $("#txtVehicleNumber").val());
         formData.append("ReceiverName", $("#txtReceiverName").val());
 
-        
+
         $.ajax({
             url: '/ItemInWord/AddItemInWordDetails',
             type: 'post',
@@ -194,17 +194,17 @@ function AddItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-            
+
 
                 if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemInWord/ItemInWord';
-                });
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    });
                 } else {
                     Swal.fire({
                         title: 'Something wrong',
@@ -334,7 +334,7 @@ $(document).ready(function () {
             txtReceiverName: "required",
             txtVehicleNumber: "required",
             txtDocument: "required",
-            txtItemId:"required"
+            txtItemId: "required"
         },
         messages: {
             txtUnitType: "Please Enter UnitType",
@@ -362,7 +362,7 @@ function EditItemInWordDetails(InwordId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
 
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);

@@ -34,7 +34,7 @@
                                                         <input class="form-control" id="txtSiteSearch" onkeyup="RolefilterTable()" placeholder="Search" hidden>
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteSearchBy" onchange="RolefilterTable()"  hidden>
+                                                        <select class="form-select" id="SiteSearchBy" onchange="RolefilterTable()" hidden>
                                                             <option selected="selected">All</option>
                                                             <option>Role</option>
                                                         </select>
@@ -156,8 +156,8 @@
 
 
 @section Scripts {
-    <script src="~/moduls/rolewiseformpermissionscript.js"></script>
-        }
+    <script src="~/moduls/rolewiseformpermissionscript.js" asp-append-version="true"></script>
+}
 
 
 
