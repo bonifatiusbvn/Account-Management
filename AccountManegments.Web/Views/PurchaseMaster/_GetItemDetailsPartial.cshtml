@@ -16,17 +16,17 @@
             <div class="">
                 @if (item.Quantity == 0)
                 {
-                    <input type="number" class="product-quantity form-control" id="txtproductquantity" value="1" min="1" oninput="preventEmptyValue(this)">
+                    <input type="number" class="form-control" id="txtproductquantity" value="1" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
                 }
                 else
                 {
-                    <input type="number" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)">
+                    <input type="number" class="form-control" id="txtproductquantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
                 }
             </div>
         </td>
         <td class="text-start">
-            <div class="">
-                <select class="form-select" id="txtPOUnitType_@item.ItemId">
+            <div class="position-relative">
+                <select class="form-select" id="txtPOUnitType_@item.ItemId" style="width: 151px;">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
 
