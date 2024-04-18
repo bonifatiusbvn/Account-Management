@@ -10,17 +10,19 @@
         <td>@item.SupplierName</td>
         <td>@item.CompanyName</td>
         <td>@item.TotalAmount</td>
-        <td>
-            @if (_userSession.UserRole == 3)
-            {
-                <a class="btn text-primary" onclick="EditSupplierInvoice('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierInvoice('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-        </td>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true)))
+                {
+                    <a class="btn text-primary" onclick="EditSupplierInvoice('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Delete == true)))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierInvoice('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                }
+
+            </td>
+        }
     </tr>
 }

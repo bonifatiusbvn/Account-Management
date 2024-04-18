@@ -91,38 +91,11 @@
                     <table class="table align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Company</th>
+                                <th>Supplier</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody id="dashpaymentinfo">
-                            <tr>
-                                <td>D. M. Infra</td>
-                                <td class="alert-danger">
-
-                                    <i class="lni lni-rupee"></i>
-                                    2500000.00
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>D. M. Infra</td>
-                                <td class="alert-danger">
-
-                                    <i class="lni lni-rupee"></i>
-                                    2500000.00
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>D. M. Infra</td>
-                                <td class="alert-danger">
-
-                                    <i class="lni lni-rupee"></i>
-                                    2500000.00
-                                </td>
-
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -165,6 +138,12 @@
             fn_ChangeSite(selectedSiteId)
         });
 
+        $('#CompanyNameList').change(function () {
+            debugger
+            var Text = $("#CompanyNameList Option:Selected").text();
+            var CompanyId = $(this).val();
+            fn_ChangeCompany(CompanyId)
+        });
 
         function fn_ChangeSite(selectedSiteId) {
 
@@ -208,6 +187,27 @@
             });
         }
 
+
+        function fn_ChangeCompany(CompanyId) {
+
+            debugger
+            $.ajax({
+                url: '/Home/GetSupplierPendingDetailsList',
+                type: 'GET',
+                data: {
+                    CompanyId: CompanyId,
+                },
+                success: function (result) {
+
+                    $("#dashpaymentinfo").html(result);
+
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+
+        }
 
     </script>
 }

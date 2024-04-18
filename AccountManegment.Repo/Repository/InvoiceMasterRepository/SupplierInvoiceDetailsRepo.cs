@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -190,6 +191,44 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<SupplierPendingDetailsModel>> GetSupplierPendingDetailsList(Guid CompanyId)
+        {
+            var unpaidQuery = await (from si in Context.SupplierInvoices
+                                     where si.CompanyId == CompanyId
+                                           && si.PaymentStatus == "Unpaid"
+                                     group si by si.SupplierId into g
+                                     select new
+                                     {
+                                         SupplierId = g.Key,
+                                         UnpaidSum = g.Sum(si => si.TotalAmount)
+                                     }).ToListAsync();
+
+            var paidQuery = await (from si in Context.SupplierInvoices
+                                   where si.CompanyId == CompanyId
+                                         && (si.PaymentStatus == "Online" || si.PaymentStatus == "Cheque")
+                                   group si by si.SupplierId into g
+                                   select new
+                                   {
+                                       SupplierId = g.Key,
+                                       PaidSum = g.Sum(si => si.TotalAmount)
+                                   }).ToListAsync();
+
+            var result = (from sm in Context.SupplierMasters.AsEnumerable()
+                          join u in unpaidQuery on sm.SupplierId equals u.SupplierId into gjUnpaid
+                          from u in gjUnpaid.DefaultIfEmpty()
+                          join p in paidQuery on sm.SupplierId equals p.SupplierId into gjPaid
+                          from p in gjPaid.DefaultIfEmpty()
+                          select new SupplierPendingDetailsModel
+                          {
+                              SupplierName = sm.SupplierName,
+                              TotalPending = (u != null ? u.UnpaidSum : 0) - (p != null ? p.PaidSum : 0)
+                          }).ToList();
+
+            return result;
+        }
+
+
 
         public async Task<ApiResponseModel> UpdateSupplierInvoiceDetails(SupplierInvoiceDetailsModel SupplierInvoiceDetails)
         {
