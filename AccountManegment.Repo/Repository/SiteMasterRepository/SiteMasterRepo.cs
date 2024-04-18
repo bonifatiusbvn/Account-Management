@@ -254,34 +254,40 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
         {
             ApiResponseModel response = new ApiResponseModel();
             var Getsitedata = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
+            var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true);
 
             if (Getsitedata != null)
             {
-
-                if (Getsitedata.IsActive == true)
+                if (activeUsersCount == 0)
                 {
-                    Getsitedata.IsActive = false;
-                    Context.Sites.Update(Getsitedata);
-                    Context.SaveChanges();
-                    response.code = 200;
-                    response.data = Getsitedata;
-                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "is succesfully deactive ";
+                    if (Getsitedata.IsActive)
+                    {
+                        Getsitedata.IsActive = false;
+                        Context.Sites.Update(Getsitedata);
+                        await Context.SaveChangesAsync();
+                        response.code = 200;
+                        response.data = Getsitedata;
+                        response.message = "Site " + Getsitedata.SiteName + " is successfully deactivated.";
+                    }
+                    else
+                    {
+                        Getsitedata.IsActive = true;
+                        Context.Sites.Update(Getsitedata);
+                        await Context.SaveChangesAsync();
+                        response.code = 200;
+                        response.data = Getsitedata;
+                        response.message = "Site " + Getsitedata.SiteName + " is successfully activated.";
+                    }
                 }
-
                 else
                 {
-                    Getsitedata.IsActive = true;
-                    Context.Sites.Update(Getsitedata);
-                    Context.SaveChanges();
-                    response.code = 200;
-                    response.data = Getsitedata;
-                    response.message = "Site" + " " + Getsitedata.SiteName + " " + "is succesfully active ";
+                    response.message = "This site has active users so it can't deactive.";
+                    response.code = 400;
                 }
-
-
             }
             return response;
         }
+
 
         public async Task<ApiResponseModel> DeleteSite(Guid SiteId)
         {

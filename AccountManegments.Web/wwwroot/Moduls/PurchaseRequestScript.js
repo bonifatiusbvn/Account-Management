@@ -50,13 +50,11 @@ function filterPurchaseRequestTable() {
     });
 }
 function GetSiteDetail() {
-    debugger
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             if (result.length > 0) {
                 $.each(result, function (i, data) {
-                    debugger
                     $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
                 });
             }
@@ -832,7 +830,6 @@ $(document).ready(function () {
     });
 });
 
-var totalQuantity = 0;
 
 function AddShippingAddress() {
 
@@ -843,7 +840,13 @@ function AddShippingAddress() {
         var ItemQuantity = $("#TotalProductQuantity").text();
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
 
-        if (ItemQuantity === "") {
+        var totalQuantity = 0;
+
+        $('#dvshippingAdd .row.ac-invoice-shippingadd').each(function () {
+            totalQuantity += parseInt($(this).find('#shippingquantity').text().trim());
+        });
+
+        if (ItemQuantity == 0) {
             document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
             return;
         }
@@ -853,7 +856,7 @@ function AddShippingAddress() {
             return;
         }
         checkAndDisableAddButton();
-        totalQuantity += parseInt(quantity);
+        totalQuantity += quantity;
 
         var isDuplicate = false;
 
@@ -1039,7 +1042,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(function () {
-                            window.location = '/PurchaseMaster/POListView';
+                            window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
                         });
                     }
                     else {
@@ -1078,7 +1081,7 @@ function UpdateMultiplePurchaseOrderDetails() {
     }
 }
 
-function deleteItemDetails(POId) {
+function DeletePODetails(POId) {
 
     Swal.fire({
         title: "Are you sure want to Delete This?",

@@ -378,15 +378,28 @@ function ActiveDecativeSite(SiteId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: isChecked ? "Active!" : "DeActive!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/SiteMaster/SiteListView';
-                    });
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: isChecked ? "Active!" : "DeActive!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/SiteMaster/SiteListView';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: isChecked ? "Active!" : "DeActive!",
+                            text: Result.message,
+                            icon: "warning",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/SiteMaster/SiteListView';
+                        });
+                    }
+                    
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {

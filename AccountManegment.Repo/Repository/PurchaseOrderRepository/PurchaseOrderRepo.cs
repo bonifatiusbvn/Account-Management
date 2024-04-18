@@ -453,6 +453,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                             Address = address.ShippingAddress,
                             Quantity = address.ShippingQuantity,
                             UnitTypeId = PurchaseOrderDetails.UnitTypeId,
+                            IsDeleted = false,
                         };
 
                         Context.PodeliveryAddresses.Add(newDeliveryAddress);
@@ -470,6 +471,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase order successfully updated.";
+                response.data = PurchaseOrderDetails.Id;
             }
             catch (Exception ex)
             {

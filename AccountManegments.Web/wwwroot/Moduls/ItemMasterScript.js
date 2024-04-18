@@ -398,11 +398,10 @@ function WithGSTSelected() {
     var gstPercentageInput = document.getElementById('txtGstPerUnit');
     var priceInput = document.getElementById('txtPricePerUnit');
 
+    var price = parseFloat(priceInput.value);
+    var gstPercentage = parseFloat(gstPercentageInput.value);
 
     if (isWithGstCheckbox.checked) {
-        gstAmountInput.disabled = true;
-        var price = parseFloat(priceInput.value);
-        var gstPercentage = parseFloat(gstPercentageInput.value);
 
         if (!isNaN(price) && !isNaN(gstPercentage)) {
             var totalAmount = 100 + gstPercentage;
@@ -410,10 +409,16 @@ function WithGSTSelected() {
             var gstAmount = price - baseAmount;
             gstAmountInput.value = gstAmount.toFixed(2);
             priceInput.value = baseAmount.toFixed(2);
-
         } else {
             gstAmountInput.value = "";
-            gstAmountInput.disabled = true;
+        }
+    } else {
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var Amount = (gstPercentage / 100) * price;
+            gstAmountInput.value = Amount.toFixed(2);
+        } else {
+            gstAmountInput.value = "";
         }
     }
 }
@@ -421,6 +426,14 @@ function WithGSTSelected() {
 document.getElementById('txtGstPerUnit').addEventListener('input', function () {
     WithGSTSelected();
 });
+document.getElementById('txtPricePerUnit').addEventListener('input', function () {
+    WithGSTSelected();
+});
+document.getElementById('txtIsWithGst').addEventListener('change', function () {
+    WithGSTSelected();
+});
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
 

@@ -107,36 +107,36 @@
                                 <div class="row g-3 ac-detail d-none">
                                     <div class="col-6">
                                         <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="dspFirstName">
-                                        <input type="hidden" class="form-control" id="dspUserid">
+                                        <input type="text" class="form-control" id="dspFirstName" readonly>
+                                        <input type="hidden" class="form-control" id="dspUserid" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="dspLastName">
+                                        <input type="text" class="form-control" id="dspLastName" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="dspUserName">
+                                        <input type="text" class="form-control" id="dspUserName" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Site</label>
-                                        <input type="text" class="form-control" id="dspSiteName">
+                                        <input type="text" class="form-control" id="dspSiteName" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Password</label>
-                                        <input type="text" class="form-control" id="dspPassword">
+                                        <input type="text" class="form-control" id="dspPassword" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="dspEmail">
+                                        <input type="text" class="form-control" id="dspEmail" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="dspPhoneNo">
+                                        <input type="text" class="form-control" id="dspPhoneNo" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Role</label>
-                                        <input type="text" class="form-control" id="dspRole">
+                                        <input type="text" class="form-control" id="dspRole" readonly>
                                     </div>
 
                                 </div>
@@ -160,7 +160,7 @@
                                 <form class="row g-3" id="userForm">
                                     <div class="col-12">
                                         <label class="form-label">First Name</label>
-                                        <input type="text" class="form-control" placeholder="First Name" id="txtFirstName" name="txtFirstName">
+                                        <input type="text" class="form-control" placeholder="First Name" id="txtFirstName" name="txtFirstName" >
                                         <input type="hidden" id="txtUserid">
                                         <input type="hidden" id="txtUserRole" value="@_userSession.UserRole">
                                     </div>
@@ -176,8 +176,8 @@
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-select" id="ddlSiteName">
-                                                <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
+                                            <select class="form-select" id="ddlSiteName" name="ddlSiteName">
+                                                <option selected value="">All Site</option>
                                             </select>
                                         </div>
                                     }
@@ -185,7 +185,7 @@
                                     {
                                         <div class="col-12">
                                             <label class="form-label">Site</label>
-                                            <select class="form-select" id="txtSiteName" disabled>
+                                            <select class="form-select" id="ddlSiteName" name="ddlSiteName" disabled>
                                                 <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
                                             </select>
                                         </div>
@@ -200,7 +200,7 @@
                                     <div class="col-12">
                                         <label class="form-label">Password</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" placeholder="Password"  id="txtPassword">
+                                            <input type="password" class="form-control" placeholder="Password" id="txtPassword" name="txtPassword">
                                             <span class="input-group-text">
                                                 <button class="btn btn-link" type="button" id="passwordToggle" style="height:21px;width:21px; display: flex; justify-content: center; align-items: center;">
                                                     <div id="openEye">
@@ -212,7 +212,6 @@
                                                 </button>
                                             </span>
                                         </div>
-                                        <span id="spnPassword" class="text-danger"></span>
                                     </div>
 
                                     <div class="col-12">
@@ -237,7 +236,7 @@
 </div>
 <style>
     #txtFirstName-error, #txtLastName-error, #txtUserName-error, #txtPassword-error,
-    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error {
+    #txtEmail-error, #txtPhoneNo-error, #ddlUserRole-error, #ddlSiteName-error {
         color: red;
     }
 

@@ -73,16 +73,16 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (siteName != null)
+                if (responseModel.code==200)
                 {
 
-                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.code = siteName.code;
                     responseModel.message = siteName.message;
                 }
                 else
                 {
                     responseModel.message = siteName.message;
-                    responseModel.code = (int)HttpStatusCode.NotFound;
+                    responseModel.code = siteName.code;
                 }
             }
             catch (Exception ex)

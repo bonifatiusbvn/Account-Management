@@ -386,6 +386,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Userdata.RoleId = UpdateUser.Role;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
+                    Userdata.SiteId = UpdateUser.SiteId;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();
                 }

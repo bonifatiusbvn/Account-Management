@@ -10,7 +10,7 @@ function CreateUser() {
             Role: $('#txtrole').val(),
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
-            SiteId: $('#txtuserSiteName').val(),
+            SiteId: $('#ddlSiteName').val(),
         }
         $.ajax({
             url: '/User/CreateUser',
@@ -45,7 +45,7 @@ function GetSiteDetails() {
         success: function (result) {
             $('#ddlSiteName').empty();
 
-            $('#ddlSiteName').append('<option value="null" selected>All Site</option>');
+            $('#ddlSiteName').append('<option value="" selected>All Site</option>');
             $.each(result, function (i, data) {
 
                 $('#ddlSiteName').append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
@@ -67,7 +67,7 @@ function ClearUserTextBox() {
     $('#txtrole').val('');
     $('#txtPhoneNo').val('');
     $('#ddlUserRole').val('');
-    $('#txtuserSiteName').val('');
+    $('#ddlSiteName').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
         button.textContent = "Create";
@@ -91,7 +91,7 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
-            $('#txtuserSiteName').val(response.siteId);
+            $('#ddlSiteName').val(response.siteId);
             $('#ddlUserRole').val(response.roleId);
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
@@ -204,7 +204,7 @@ function UpdateUserDetails() {
             Role: $('#ddlUserRole').val(),
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
-            SiteId: $('#txtuserSiteName').val(),
+            SiteId: $('#ddlSiteName').val(),
         }
         $.ajax({
             url: '/User/UpdateUserDetails',
@@ -235,46 +235,86 @@ function UpdateUserDetails() {
 }
 var UserForm;
 function validateAndCreateUser() {
+    if ($('#ddlUserRole').val() == 3) {
+        UserForm = $("#userForm").validate({
+            rules: {
+                txtFirstName: "required",
+                txtLastName: "required",
+                txtUserName: "required",
+                txtPassword: "required",
+                txtEmail: {
+                    required: true,
+                    email: true
+                },
+                txtPhoneNo: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                ddlUserRole: "required",
+            },
+            messages: {
+                txtFirstName: "FirstName is Required!",
+                txtLastName: "Lastname is Required!",
+                txtUserName: "Username is Required!",
+                txtPassword: "Password is Required!",
+                txtEmail: {
+                    required: "Please Enter Email",
+                    email: "Please enter a valid email address"
+                },
+                txtPhoneNo: {
+                    required: "Please Enter Phone Number",
+                    digits: "Please enter a valid 10-digit phone number",
+                    minlength: "Phone number must be 10 digits long",
+                    maxlength: "Phone number must be 10 digits long"
+                },
+                ddlUserRole: "Select User Role!",
+            }
+        })
+    }
+    else {
+        UserForm = $("#userForm").validate({
+            rules: {
+                txtFirstName: "required",
+                txtLastName: "required",
+                txtUserName: "required",
+                txtPassword: "required",
+                txtEmail: {
+                    required: true,
+                    email: true
+                },
+                txtPhoneNo: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                ddlUserRole: "required",
+                ddlSiteName: "required",
+            },
+            messages: {
+                txtFirstName: "FirstName is Required!",
+                txtLastName: "Lastname is Required!",
+                txtUserName: "Username is Required!",
+                txtPassword: "Password is Required!",
+                txtEmail: {
+                    required: "Please Enter Email",
+                    email: "Please enter a valid email address"
+                },
+                txtPhoneNo: {
+                    required: "Please Enter Phone Number",
+                    digits: "Please enter a valid 10-digit phone number",
+                    minlength: "Phone number must be 10 digits long",
+                    maxlength: "Phone number must be 10 digits long"
+                },
+                ddlUserRole: "Select User Role!",
+                ddlSiteName: "Select Site!",
+            }
+        })
+    }
 
-    UserForm = $("#userForm").validate({
-        rules: {
-            txtFirstName: "required",
-            txtLastName: "required",
-            txtUserName: "required",
-            txtPassword: "required",
-            txtEmail: {
-                required: true,
-                email: true
-            },
-            txtPhoneNo: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10
-            },
-            ddlUserRole: "required",
-        },
-        messages: {
-            txtFirstName: "FirstName is Required!",
-            txtLastName: "Lastname is Required!",
-            txtUserName: "Username is Required!",
-            txtPassword: "Password is Required!",
-            txtEmail: {
-                required: "Please Enter Email",
-                email: "Please enter a valid email address"
-            },
-            txtPhoneNo: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
-            },
-            ddlUserRole: "Select User Role!",
-        }
-    })
-    var isValid = true;
-
-    if (isValid) {
+    if ($("#userForm").valid()) {
         if ($("#txtUserid").val() == '') {
             CreateUser();
         }

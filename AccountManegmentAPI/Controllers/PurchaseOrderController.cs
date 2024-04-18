@@ -97,6 +97,7 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
+                response.data=PurchaseOrdermaster.data;
             }
             else
             {
