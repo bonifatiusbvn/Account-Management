@@ -64,7 +64,6 @@ function ClearSupplierTextBox() {
     $('#txtBank').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
-    $('#ddlCountry').val('');
 
     var button = document.getElementById("btnsupplier");
     if ($('#txtSupplierid').val() == '') {

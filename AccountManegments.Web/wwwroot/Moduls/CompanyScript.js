@@ -106,7 +106,6 @@ function ClearTextBox() {
     $('#txtArea').val('');
     $('#ddlCity').val('');
     $('#dropState').val('');
-    $('#ddlCountry').val('');
     $('#txtPincode').val('');
     var button = document.getElementById("btncompany");
     if ($('#txtCompanyid').val() == '') {

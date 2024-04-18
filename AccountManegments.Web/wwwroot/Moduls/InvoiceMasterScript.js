@@ -289,25 +289,11 @@ $(document).ready(function () {
             textSupplierName: "required",
             textCompanyName: "required",
             paymentStatus: "required",
-            textContactPerson: "required",
-            textContactNo: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10
-            }
         },
         messages: {
             textSupplierName: "Select Supplier Name",
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
-            textContactPerson: "Enter Contact Person Name",
-            textContactNo: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
-            },
         }
     });
 });
@@ -348,8 +334,7 @@ function InsertMultipleSupplierItem() {
             TotalAmountInvoice: $("#cart-total").val(),
             TotalGstamount: $("#totalgst").val(),
             PaymentStatus: $("input[name='paymentStatus']:checked").val(),
-            ContactName: $("#textContactPerson").val(),
-            ContactNumber: $("#textContactNo").val(),
+            Description: $("#textDescription").val(),
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
             ShippingAddress: $("#textmdAddress").val(),
@@ -408,15 +393,7 @@ function InsertMultipleSupplierItem() {
     }
 }
 function UpdateInvoiceDetails() {
-
     if ($("#CreateInvoiceForm").valid()) {
-        var sitevalue = $("#textInvoiceSiteName").val();
-        var siteid = null;
-        if (sitevalue != "") {
-            siteid = sitevalue;
-        } else {
-            siteid = $("#siteid").val();
-        }
 
         var shippingAdd = $("#textmdAddress").val();
         var Address = null;
@@ -426,6 +403,13 @@ function UpdateInvoiceDetails() {
             Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
         }
 
+        var sitevalue = $("#textInvoiceSiteName").val();
+        var siteid = null;
+        if (sitevalue != "") {
+            siteid = sitevalue;
+        } else {
+            siteid = document.getElementById("textSiteName").getAttribute("value");
+        }
 
         var InvoiceDetails = {
             Id: $('#textSupplierInvoiceId').val(),
@@ -437,10 +421,9 @@ function UpdateInvoiceDetails() {
             TotalAmountInvoice: $("#cart-total").val(),
             TotalGstamount: $("#totalgst").val(),
             PaymentStatus: $("input[name='paymentStatus']:checked").val(),
-            ContactName: $("#textContactPerson").val(),
-            ContactNumber: $("#textContactNo").val(),
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
+            Description: $("#textDescription").val(),
             ShippingAddress: Address,
         }
 
@@ -704,7 +687,7 @@ function updateTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount += totalSubtotal + totalGst;
+        totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
     });
 
@@ -1053,6 +1036,7 @@ function clearItemErrorMessages() {
 function addShippingAddress() {
     if ($("#shippingAddressForm").valid()) {
         var address = $("#textmdAddress").val();
+        var sitename = $("#textInvoiceSiteName").val();
 
         if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
             Swal.fire({

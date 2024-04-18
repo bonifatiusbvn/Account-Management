@@ -1,7 +1,7 @@
 ﻿@inject UserSession _userSession
 @inject IHttpContextAccessor Accessor;
 @{
-    ViewData["Title"] = "SupplierList";
+    ViewData["Title"] = "Supplier Master";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -178,11 +178,10 @@
                                     <span id="spnPinCode" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">City</label>
-                                    <select id="ddlCity" name="ddlCity" class="form-select bg-transparent">
-                                        <option value="0">--Select City--</option>
+                                    <label class="form-label">Country</label>
+                                    <select id="ddlCountry" name="ddlCountry" class="form-select bg-transparent" onchange="fn_getState('dropState',null,this)">
+                                        <option>--Select Country--</option>
                                     </select>
-                                    <input type="hidden" id="txtcity" value="" />
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
@@ -194,10 +193,11 @@
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Country</label>
-                                    <select id="ddlCountry" name="ddlCountry" class="form-select bg-transparent" onchange="fn_getState('dropState',null,this)">
-                                        <option>--Select Country--</option>
+                                    <label class="form-label">City</label>
+                                    <select id="ddlCity" name="ddlCity" class="form-select bg-transparent">
+                                        <option value="0">--Select City--</option>
                                     </select>
+                                    <input type="hidden" id="txtcity" value="" />
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="col-12">

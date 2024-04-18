@@ -405,7 +405,9 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
-                    response.data = order;
+                    var number = order.TotalAmount;
+                    var totalAmountInWords = NumberToWords(number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
                 }
                 return View(order);
             }
@@ -414,6 +416,78 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        public static string NumberToWords(decimal inputNumber)
+        {
+            int inputNo = (int)Math.Floor(inputNumber);
+            decimal fraction = inputNumber - inputNo;
+
+            if (inputNo == 0)
+                return "Zero";
+
+            int[] numbers = new int[4];
+            int first = 0;
+            int u, h, t;
+            StringBuilder sb = new StringBuilder();
+
+            if (inputNo < 0)
+            {
+                sb.Append("Minus ");
+                inputNo = -inputNo;
+            }
+
+            string[] words0 = {"", "One ", "Two ", "Three ", "Four ",
+        "Five ", "Six ", "Seven ", "Eight ", "Nine "};
+            string[] words1 = {"Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ",
+        "Fifteen ", "Sixteen ", "Seventeen ", "Eighteen ", "Nineteen "};
+            string[] words2 = {"Twenty ", "Thirty ", "Forty ", "Fifty ", "Sixty ",
+        "Seventy ", "Eighty ", "Ninety "};
+            string[] words3 = { "Thousand ", "Lakh ", "Crore " };
+
+            numbers[0] = inputNo % 1000;
+            numbers[1] = inputNo / 1000;
+            numbers[2] = inputNo / 100000;
+            numbers[1] = numbers[1] - 100 * numbers[2]; 
+            numbers[3] = inputNo / 10000000; 
+            numbers[2] = numbers[2] - 100 * numbers[3]; 
+            for (int i = 3; i > 0; i--)
+            {
+                if (numbers[i] != 0)
+                {
+                    first = i;
+                    break;
+                }
+            }
+            for (int i = first; i >= 0; i--)
+            {
+                if (numbers[i] == 0) continue;
+                u = numbers[i] % 10;
+                t = numbers[i] / 10;
+                h = numbers[i] / 100; 
+                t = t - 10 * h;
+                if (h > 0) sb.Append(words0[h] + "Hundred ");
+                if (u > 0 || t > 0)
+                {
+                    if (h > 0 || i == 0) sb.Append("");
+                    if (t == 0)
+                        sb.Append(words0[u]);
+                    else if (t == 1)
+                        sb.Append(words1[u]);
+                    else
+                        sb.Append(words2[t - 2] + words0[u]);
+                }
+                if (i != 0) sb.Append(words3[i - 1]);
+            }
+            if (fraction > 0)
+            {
+                sb.Append("and ");
+                int fractionInt = (int)Math.Round(fraction * 100);
+                sb.Append(NumberToWords(fractionInt) + " "+"Paisa ");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
 
         public async Task<IActionResult> ExportToPdf(Guid POId)
         {
