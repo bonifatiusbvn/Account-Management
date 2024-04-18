@@ -244,11 +244,9 @@ function ClearSiteTextBox() {
     $('#txtArea').val('');
     $('#ddlCity').val('');
     $('#stateDropdown').val('');
-    $("#ddlCountry").val('');
     $('#txtPincode').val('');
     $('#ShippingCity').val('');
     $('#ShippingState').val('');
-    $('#shippingCountry').val('');
     $('#txtShippingAddress').val('');
     $('#txtShippingArea').val('');
     $('#txtShippingPincode').val('');

@@ -185,6 +185,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
                                     SupplierName = b.SupplierName,
+                                    Description = a.Description,
                                     SupplierArea = b.Area,
                                     SupplierAccountNo = b.AccountNo,
                                     SupplierBankName = b.BankName,
@@ -208,7 +209,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     ShippingAddress = a.ShippingAddress,
                                     SupplierMobileNo = b.Mobile,
                                     Date = a.Date,
-                                    Description = a.Description,
                                     TotalAmountInvoice = a.TotalAmount,
                                     TotalDiscount = a.TotalDiscount,
                                     TotalGstamount = a.TotalGstamount,
@@ -363,13 +363,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
                 supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
                 supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmountInvoice;
-                supplierInvoice.Description = SupplierInvoiceDetail.Description;
                 supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
+                supplierInvoice.Description = SupplierInvoiceDetail.Description;
                 supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
                 supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
                 supplierInvoice.PaymentStatus = SupplierInvoiceDetail.PaymentStatus;
-                supplierInvoice.ContactNumber = SupplierInvoiceDetail.ContactNumber;
-                supplierInvoice.ContactName = SupplierInvoiceDetail.ContactName;
                 supplierInvoice.ShippingAddress = SupplierInvoiceDetail.ShippingAddress;
                 supplierInvoice.Date = SupplierInvoiceDetail.Date;
                 Context.SupplierInvoices.Update(supplierInvoice);
@@ -412,8 +410,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalAmount = SupplierItemDetails.TotalAmountInvoice,
                     PaymentStatus = SupplierItemDetails.PaymentStatus,
                     Roundoff = SupplierItemDetails.Roundoff,
-                    ContactName = SupplierItemDetails.ContactName,
-                    ContactNumber = SupplierItemDetails.ContactNumber,
                     ShippingAddress = SupplierItemDetails.ShippingAddress,
                     IsPayOut = PayOut,
                     Date = SupplierItemDetails.Date,

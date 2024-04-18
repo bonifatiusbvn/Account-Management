@@ -1298,7 +1298,7 @@ function updateTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount += totalSubtotal + totalGst;
+        totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
     });
 

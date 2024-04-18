@@ -1,6 +1,6 @@
 ﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceMasterView
 @{
-    ViewData["Title"] = "DisplayInvoiceDetails";
+    ViewData["Title"] = "Purchase Invoice";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -131,7 +131,6 @@
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.ItemName</span>
-                                        <p class="text-muted mb-0" id="txtdescription">@firstItem.Description</p>
                                     </td>
                                     <td class="border" id="txtHSN">@item.PricePerUnit</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
@@ -242,21 +241,18 @@
                         </tbody>
                     </table><!--end table-->
                     <span class="text-muted">Tax Amount (in words) : </span>
-                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span>
+                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6">
                             <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b>@firstItem.CompanyPanNo</b></span></p>
-                            <span class="text-muted"><u>Declaration</u></span><br />
-                            <span class="text-muted"> We declare that this invoice shoes the actual price of the goods described and </span><br />
-                            <span class="text-muted">that all particular are true and correct.</span><br />
-                            <span class="text-muted">1. Goods once sold will not be taken back</span><br />
-                            <span class="text-muted">2.Intrest &commat; 24% will ne charged on payment remaining unpaid after due date.</span><br />
+                            <span class="text-muted"><u>Description</u></span><br />
+                            <span class="text-muted">@firstItem.Description</span><br />
                         </div>
                         <div class="flex-grow-1 col-6">
                             <span class="form-label">Company's Bank Details</span><br />
                             <span class="text-muted"> Bank Name :  <span><b>@firstItem.SupplierBankName</b></span></span> <br />
                             <span class="text-muted"> A/c No :  <span><b>@firstItem.SupplierAccountNo</b></span></span> <br />
-                            <p class="text-muted">Branch & IFS Code  :  <span><b>@firstItem.SupplierIFSCCode</b></span></p>
+                            <p class="text-muted">Branch & IFS Code  :       <span><b>@firstItem.SupplierIFSCCode</b></span></p>
                             <div class="border border-box text-end p-1" style="border: solid black">
                                 <p class="text-muted"><b>@firstItem.SupplierName</b></p>
                                 <br />

@@ -1,7 +1,7 @@
 ﻿@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
-    ViewData["Title"] = "SiteListView";
+    ViewData["Title"] = "Site Master";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 <style>
@@ -180,7 +180,7 @@
                                     <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-6">
                                     <label class="form-label">Area</label>
                                     <input type="text" class="form-control" placeholder="Area" id="txtArea" name="txtArea">
                                     <span id="spnArea" class="text-danger"></span>
@@ -190,7 +190,7 @@
                                     <input type="number" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode">
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">Country</label>
                                     <select id="ddlCountry" name="ddlCountry" class="form-select" onchange="fn_getState('stateDropdown',null,this)">
                                         <option>--Select Country--</option>
@@ -198,7 +198,7 @@
                                     <input type="hidden" id="txtSiteCountry" value="" />
                                     <span id="spnCountry" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">State</label>
                                     <select id="stateDropdown" name="stateDropdown" class="form-select" onchange="fn_getcitiesbystateId('ddlCity', null, this)">
                                         <option>--Select State--</option>
@@ -206,7 +206,7 @@
                                     <input type="hidden" id="txtSiteState" value="" />
                                     <span id="spnState" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label class="form-label">City</label>
                                     <select id="ddlCity" name="ddlCity" class="form-select">
                                         <option>--Select City--</option>
@@ -223,28 +223,28 @@
                                         <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" name="txtShippingAddress"></textarea>
                                         <span id="spnShippingAddress" class="text-danger"></span>
                                     </div>
-                                    <div class="col-12">
-                                        <label class="form-label">Shipping Area</label>
-                                        <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" name="txtShippingArea">
-                                        <span id="spnShippingArea" class="text-danger"></span>
-                                    </div>
                                     <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label">Shipping Area</label>
+                                            <input type="text" class="form-control" placeholder="Shipping Area" id="txtShippingArea" name="txtShippingArea">
+                                            <span id="spnShippingArea" class="text-danger"></span>
+                                        </div>
                                         <div class="col-6">
                                             <label class="form-label">Shipping Pincode</label>
                                             <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" name="txtShippingPincode">
                                             <span id="spnShippingPincode" class="text-danger"></span>
                                         </div>
-                                        <div class="col-6">
-                                            <label class="form-label">Shipping City</label>
-                                            <select id="ShippingCity" name="ShippingCity" class="form-select">
-                                                <option>--Select City--</option>
-                                            </select>
-                                            <input type="hidden" id="txtShippingCity" value="" />
-                                            <span id="spnShippingCity" class="text-danger"></span>
-                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-4">
+                                            <label class="form-label"> Shipping Country</label>
+                                            <select id="shippingCountry" name="shippingCountry" class="form-select" onchange="fn_getShippingState('ShippingState', null, this)">
+                                                <option value=" ">--Select Country--</option>
+                                            </select>
+                                            <input type="hidden" id="txtShippingCountry" value="" />
+                                            <span id="spnShippingCountry" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-4">
                                             <label class="form-label"> Shipping State</label>
                                             <select id="ShippingState" name="ShippingState" class="form-select" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
                                                 <option>--Select State--</option>
@@ -252,13 +252,13 @@
                                             <input type="hidden" id="txtShippingState" value="" />
                                             <span id="spnShippingState" class="text-danger"></span>
                                         </div>
-                                        <div class="col-6">
-                                            <label class="form-label"> Shipping Country</label>
-                                            <select id="shippingCountry" name="shippingCountry" class="form-select" onchange="fn_getShippingState('ShippingState', null, this)">
-                                                <option value=" ">--Select Country--</option>
+                                        <div class="col-4">
+                                            <label class="form-label">Shipping City</label>
+                                            <select id="ShippingCity" name="ShippingCity" class="form-select">
+                                                <option>--Select City--</option>
                                             </select>
-                                            <input type="hidden" id="txtShippingCountry" value="" />
-                                            <span id="spnShippingCountry" class="text-danger"></span>
+                                            <input type="hidden" id="txtShippingCity" value="" />
+                                            <span id="spnShippingCity" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>

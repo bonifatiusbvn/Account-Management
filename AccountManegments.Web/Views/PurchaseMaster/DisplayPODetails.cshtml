@@ -2,7 +2,7 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
-    ViewData["Title"] = "DisplayPODetails";
+    ViewData["Title"] = "Purchase Order";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -94,94 +94,128 @@
                         <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
                             <p class="text-muted"><b>@firstItem.DeliveryShedule</b></p>
+                            <div class="d-flex">
+                                <div class="flex-grow-1 col-3">
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                        <label class="form-label">Contact Name</label>
+                                        <p><span class="text-muted"><b>@firstItem.ContactName</b></span></p>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 col-3">
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                        <label class="form-label">Contact Number</label>
+                                        <p><span class="text-muted"><b>@firstItem.ContactNumber</b></span></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
-                    <div class="table-responsive">
-                        <table class="table table-border text-center table-nowrap align-middle mb-0">
-                            <thead>
-                                <tr class="table-active">
-                                    <th class="border" scope="col">SRr.No.</th>
-                                    <th class="border" scope="col">Product Details</th>
-                                    @*   <th class="border" scope="col">HSN / SAC</th>*@
-                                    <th class="border" scope="col">Quantity</th>
-                                    <th class="border" scope="col">Rate</th>
-                                    <th class="border" scope="col">GST</th>
-                                    <th class="border" scope="col">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody id="products-list">
-                                @{
-                                    int index = 1;
-                                    decimal subtotal = 0;
-                                }
-                                @foreach (var item in Model.ItemList)
-                                {
-                                    <tr class="product">
-                                        <td class="border">@index</td>
-                                        <td class="text-start border">
-                                            <span class="fw-medium" id="txtproductname">@item.ItemName</span>
-                                            <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
-                                            <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
-                                        </td>
-                                        @*<td class="border" id="txtHSN"></td>*@
-                                        <td class="border" id="txtquantity">@item.Quantity</td>
-                                        <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
-                                        <td class="border" id="txtgstpercentage">@item.GstPercentage%</td>
+            </div>
+            <div class="card-body" id="cardbody4" style="margin-top:-33px;">
+                <table class="table table-border text-center table-nowrap align-middle mb-0">
+                    <thead>
+                        <tr class="table-active">
+                            <th class="border" scope="col">SRr.No.</th>
+                            <th class="border" scope="col">Product Details</th>
+                            @*   <th class="border" scope="col">HSN / SAC</th>*@
+                            <th class="border" scope="col">Quantity</th>
+                            <th class="border" scope="col">Rate</th>
+                            <th class="border" scope="col">GST</th>
+                            <th class="border" scope="col">GSTAmount</th>
+                            <th class="border" scope="col">Amount</th>
+                            <th class="border" scope="col">AmountwithGST</th>
 
-                                    </tr>
-                                    subtotal = (item.Quantity * item.PricePerUnit);
-                                    index++;
-                                }
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    @*<td class="border"></td>*@
-                                    <td class="border"></td>
-                                    <td class="border">Sub Total</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹@subtotal</td>
-                                </tr>
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    @*<td class="border"></td>*@
-                                    <td class="border"></td>
-                                    <td class="border">Gst</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹@Model.TotalGstamount</td>
-                                </tr>
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    @*<td class="border"></td>*@
-                                    <td class="border"></td>
-                                    <td class="border">Round Off</td>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                </tr>
-                                <tr>
-                                    <td class="border"></td>
-                                    <td class="border"></td>
-                                    @*<td class="border"></td>*@
-                                    <td class="border"></td>
-                                    <td class="border">Total</td>
-                                    <td class="border"></td>
-                                    <td class="border">₹@firstItem.TotalAmount</td>
-                                </tr>
-                            </tbody>
-                        </table><!--end table-->
-                    </div>
-                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                        @*  <a class="btn btn-primary" asp-action="ExportToPdf" asp-controller="PurchaseMaster" asp-route-POId="@firstItem.Id"><i class="ri-download-2-line align-bottom me-1"></i> Download </a>*@
-                        <a class="btn btn-primary" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
-                    </div>
-                </div>
+                        </tr>
+                    </thead>
+                    <tbody id="products-list">
+                        @{
+                            int index = 1;
+                            decimal? subtotal = 0;
+                            decimal? withgst = 0;
+                            decimal? subgst = 0;
+                            decimal? totalprice = 0;
+                        }
+                        @foreach (var item in Model.ItemList)
+                        {
+                            withgst = (item.Quantity * item.PricePerUnit + item.Gstamount);
+                            totalprice = (item.Quantity * item.PricePerUnit);
+                            <tr class="product">
+                                <td class="border">@index</td>
+                                <td class="text-start border">
+                                    <span class="fw-medium" id="txtproductname">@item.ItemName</span>
+                                    <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
+                                    <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
+                                </td>
+                                @*<td class="border" id="txtHSN"></td>*@
+                                <td class="border" id="txtquantity">@item.Quantity</td>
+                                <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
+                                <td class="border" id="txtgstpercentage">@item.GstPercentage%</td>
+                                <td class="border" id="txtgstpercentage">₹@item.Gstamount</td>
+                                <td class="border" id="txtTotalAmount">₹@totalprice</td>
+                                <td class="border" id="txtTotalAmount">₹@withgst</td>
+                            </tr>
+                            subtotal += @totalprice;
+                            subgst += @item.Gstamount;
+                            index++;
+                        }
+                        <tr style="height: 34px;">
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            @*<td class="border"></td>*@
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                        </tr>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">Sub Total</td>
+                            @*<td class="border"></td>*@
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">₹@subgst</td>
+                            <td class="border">₹@subtotal</td>
+                            <td class="border"></td>
+                        </tr>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">Round Off</td>
+                            @*<td class="border"></td>*@
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                        </tr>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">Total</td>
+                            @*<td class="border"></td>*@
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">₹@firstItem.TotalAmount</td>
+                        </tr>
+                    </tbody>
+                </table><!--end table-->
+                <span class="text-muted"><b>In words: </b></span>
+                <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span>
+            </div>
+            <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                @*  <a class="btn btn-primary" asp-action="ExportToPdf" asp-controller="PurchaseMaster" asp-route-POId="@firstItem.Id"><i class="ri-download-2-line align-bottom me-1"></i> Download </a>*@
+                <a class="btn btn-primary" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js"></script>
