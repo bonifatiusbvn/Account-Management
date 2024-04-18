@@ -57,14 +57,14 @@ function sortSiteTable() {
 }
 
 function DisplaySiteDetails(SiteId) {
-  
+
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
- 
+
             $('#txtSiteid').val(response.siteId);
             $('#txtsiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
@@ -82,15 +82,15 @@ function DisplaySiteDetails(SiteId) {
             $('#txtShippingCountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
 
-    
+
             setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
 
-            if (response.address == response.shippingAddress ) {
-                $('#hideShippingAddress').prop('checked', true); 
-                $('#shippingAddressFields').hide(); 
+            if (response.address == response.shippingAddress) {
+                $('#hideShippingAddress').prop('checked', true);
+                $('#shippingAddressFields').hide();
             } else {
-                $('#hideShippingAddress').prop('checked', false); 
-                $('#shippingAddressFields').show(); 
+                $('#hideShippingAddress').prop('checked', false);
+                $('#shippingAddressFields').show();
             }
 
             var button = document.getElementById("btnSite");
@@ -138,8 +138,7 @@ function SelectSiteDetails(SiteId, element) {
 }
 
 function CreateSite() {
-    if ($("#siteForm").valid())
-    {
+    if ($("#siteForm").valid()) {
         var objData = {
             SiteName: $('#txtsiteName').val(),
             ContectPersonName: $('#txtContectPersonName').val(),
@@ -244,7 +243,6 @@ function ClearSiteTextBox() {
     $('#txtArea').val('');
     $('#ddlCity').val('');
     $('#stateDropdown').val('');
-    $("#ddlCountry").val('');
     $('#txtPincode').val('');
     $('#ShippingCity').val('');
     $('#ShippingState').val('');
@@ -261,8 +259,8 @@ function ClearSiteTextBox() {
 }
 var sForm;
 function validateAndCreateSite() {
-    debugger
-    sForm= $("#siteForm").validate({
+
+    sForm = $("#siteForm").validate({
 
         rules: {
 
@@ -342,7 +340,7 @@ function validateAndCreateSite() {
 }
 function resetSiteForm() {
     if (sForm) {
-        sForm.resetForm(); 
+        sForm.resetForm();
     }
 }
 function isValidPhoneNo(ContectPersonPhoneNo) {
@@ -371,7 +369,7 @@ function ActiveDecativeSite(SiteId) {
         if (result.isConfirmed) {
             var formData = new FormData();
             formData.append("SiteId", SiteId);
-           
+
             $.ajax({
                 url: '/SiteMaster/ActiveDeactiveSite?SiteId=' + SiteId,
                 type: 'Post',
@@ -401,8 +399,7 @@ function ActiveDecativeSite(SiteId) {
     });
 }
 
-function DeleteSite(SiteId)
-{
+function DeleteSite(SiteId) {
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -465,7 +462,7 @@ $(document).ready(function () {
     });
 
     $('#ShippingCity').change(function () {
-    
+
         var Text = $("#shippingCity Option:Selected").text();
         var txtShippingcity = $(this).val();
         $("#txtShippingCity").val(txtShippingcity);
@@ -479,13 +476,13 @@ function fn_getShippingState(drpShippingstate, countryId, that) {
         var cid = $(that).val();
     }
 
-  
+
     $('#' + drpShippingstate).empty();
     $('#' + drpShippingstate).append('<Option >--Select State--</Option>');
     $.ajax({
         url: '/Authentication/GetState?StateId=' + cid,
         success: function (result) {
-        
+
             $.each(result, function (i, data) {
                 $('#' + drpShippingstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
             });
@@ -494,7 +491,7 @@ function fn_getShippingState(drpShippingstate, countryId, that) {
 }
 
 function fn_getShippingcitiesbystateId(drpShippingcity, stateid, that) {
-   
+
     var sid = stateid;
     if (sid == undefined || sid == null) {
         var sid = $(that).val();

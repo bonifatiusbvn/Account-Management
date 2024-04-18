@@ -42,5 +42,13 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? UnitName { get; set; }
     }
 
-    
+    public class SupplierPendingDetailsModel
+    {
+        public string? SupplierName { get; set; }
+        public decimal? TotalPending { get; set; }
+
+    }
+
+
+
 }

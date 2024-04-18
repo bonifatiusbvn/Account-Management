@@ -29,12 +29,12 @@ namespace AccountManegments.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public UserSession UserSession { get; }
 
-        [FormPermissionAttribute("Item Inward-View")]
+        [FormPermissionAttribute("Inward Challan-View")]
         public IActionResult ItemInWord()
         {
             return View();
         }
-        [FormPermissionAttribute("Item Inward-View")]
+        [FormPermissionAttribute("Inward Challan-View")]
         [HttpGet]
         public async Task<IActionResult> ItemInWordListAction(string? searchText, string? searchBy, string? sortBy, Guid? SiteId)
         {
@@ -67,7 +67,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Item Inward-Add")]
+        [FormPermissionAttribute("Inward Challan-Add")]
         [HttpPost]
         public async Task<IActionResult> AddItemInWordDetails(ItemInWordRequestModel ItemInWordDetails)
         {
@@ -114,7 +114,7 @@ namespace AccountManegments.Web.Controllers
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
         }
-        [FormPermissionAttribute("Item Inward-Delete")]
+        [FormPermissionAttribute("Inward Challan-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteItemInWord(Guid InwordId)
         {
@@ -135,7 +135,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Item Inward-View")]
+        [FormPermissionAttribute("Inward Challan-View")]
         [HttpGet]
         public async Task<JsonResult> DisplayItemInWordDetails(Guid InwordId)
         {
@@ -155,7 +155,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Item Inward-Edit")]
+        [FormPermissionAttribute("Inward Challan-Edit")]
         [HttpPost]
         public async Task<IActionResult> ItemInWordIsApproved(Guid InwordId)
         {
@@ -179,7 +179,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Item Inward-Edit")]
+        [FormPermissionAttribute("Inward Challan-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateItemInWordDetails()
         {
@@ -202,7 +202,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Item Inward-Add")]
+        [FormPermissionAttribute("Inward Challan-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultipleItemInWordDetail(List<IFormFile> DocDetails)
         {
@@ -264,7 +264,7 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-        [FormPermissionAttribute("Item Inward-Edit")]
+        [FormPermissionAttribute("Inward Challan-Edit")]
         public async Task<IActionResult> UpdatetMultipleItemInWordDetails(List<IFormFile> DocDetails)
         {
             try

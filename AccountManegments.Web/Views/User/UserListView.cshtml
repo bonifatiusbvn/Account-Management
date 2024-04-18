@@ -200,7 +200,7 @@
                                     <div class="col-12">
                                         <label class="form-label">Password</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" placeholder="Password"  id="txtPassword">
+                                            <input type="password" class="form-control" placeholder="Password" id="txtPassword">
                                             <span class="input-group-text">
                                                 <button class="btn btn-link" type="button" id="passwordToggle" style="height:21px;width:21px; display: flex; justify-content: center; align-items: center;">
                                                     <div id="openEye">
@@ -254,7 +254,7 @@
 <script>
     $(document).ready(function () {
         $('#passwordToggle').click(function () {
-            debugger
+
             var passwordInput = $('#txtPassword');
             var openIcon = $('#openEye');
             var closeIcon = $('#closeEye');
@@ -265,7 +265,7 @@
                 closeIcon.removeClass('d-none');
             }
             else {
-                debugger
+
                 passwordInput.attr('type', 'password');
                 openIcon.removeClass('d-none');
                 closeIcon.addClass('d-none');

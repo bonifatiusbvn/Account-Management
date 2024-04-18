@@ -50,13 +50,13 @@ function filterPurchaseRequestTable() {
     });
 }
 function GetSiteDetail() {
-    debugger
+
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             if (result.length > 0) {
                 $.each(result, function (i, data) {
-                    debugger
+
                     $('#txtPoSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
                 });
             }
