@@ -1,7 +1,7 @@
 ﻿AllRolewiseFormUserTable();
 
 function showFormGroupList() {
-
+    siteloadershow();
     $.ajax({
         url: '/User/GetFormGroupList',
         type: 'Post',
@@ -9,7 +9,7 @@ function showFormGroupList() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-
+            siteloaderhide();
             $('#dvrolePermissionForm').html(Result.responseText);
         },
         Error: function () {
@@ -43,6 +43,7 @@ function ClearUserTextBox() {
 
 
 function EditRoleWiseFormDetails(RoleId, element) {
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -56,7 +57,7 @@ function EditRoleWiseFormDetails(RoleId, element) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-
+            siteloaderhide();
             $('#dveditRolePermissionForm').html(Result.responseText);
         },
         Error: function () {
@@ -72,6 +73,7 @@ function EditRoleWiseFormDetails(RoleId, element) {
 }
 
 function UpdateRolewiseFormPermission() {
+
     var formPermissions = [];
     $(".forms").each(function () {
 
@@ -99,6 +101,7 @@ function UpdateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
+            siteloaderhide();
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
@@ -114,9 +117,7 @@ function UpdateRolewiseFormPermission() {
                     icon: 'warning',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/User/RolewisePermission';
-                });
+                })
             }
         },
         error: function (xhr, status, error) {
@@ -126,6 +127,7 @@ function UpdateRolewiseFormPermission() {
 }
 
 function CreateRolewiseFormPermission() {
+    siteloadershow();
     var formPermissions = [];
     $(".forms").each(function () {
         var rolewiseformRow = $(this);
@@ -152,6 +154,7 @@ function CreateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
+            siteloaderhide();
             Swal.fire({
                 title: Result.message,
                 icon: 'success',

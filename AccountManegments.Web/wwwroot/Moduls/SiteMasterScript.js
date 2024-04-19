@@ -19,7 +19,7 @@ function AllSiteListTable() {
 }
 
 function SitefilterTable() {
-
+    siteloadershow();
     var searchText = $('#txtSiteSearch').val();
     var searchBy = $('#SiteSearchBy').val();
 
@@ -31,6 +31,7 @@ function SitefilterTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Sitetbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -40,6 +41,7 @@ function SitefilterTable() {
 }
 
 function sortSiteTable() {
+    siteloadershow();
     var sortBy = $('#SiteDataSortBy').val();
     $.ajax({
         url: '/SiteMaster/SiteListAction',
@@ -48,6 +50,7 @@ function sortSiteTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Sitetbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -57,14 +60,14 @@ function sortSiteTable() {
 }
 
 function DisplaySiteDetails(SiteId) {
-
+    siteloadershow();
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtSiteid').val(response.siteId);
             $('#txtsiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
@@ -108,7 +111,7 @@ function DisplaySiteDetails(SiteId) {
 }
 
 function SelectSiteDetails(SiteId, element) {
-
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -118,7 +121,7 @@ function SelectSiteDetails(SiteId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             if (response) {
                 $('#dspSiteid').val(SiteId);
                 $('#dspSiteName').val(response.siteName);
@@ -138,6 +141,7 @@ function SelectSiteDetails(SiteId, element) {
 }
 
 function CreateSite() {
+    siteloadershow();
     if ($("#siteForm").valid()) {
         var objData = {
             SiteName: $('#txtsiteName').val(),
@@ -162,7 +166,7 @@ function CreateSite() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -185,6 +189,7 @@ function CreateSite() {
 }
 
 function UpdateSiteDetails() {
+    siteloadershow();
     if ($("#siteForm").valid()) {
 
         var objData = {
@@ -211,7 +216,7 @@ function UpdateSiteDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -396,7 +401,7 @@ function ActiveDecativeSite(SiteId) {
                             window.location = '/SiteMaster/SiteListView';
                         });
                     }
-                    
+
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -404,9 +409,7 @@ function ActiveDecativeSite(SiteId) {
                 'Cancelled',
                 'Site Have No Changes.!!😊',
                 'error'
-            ).then(function () {
-                window.location = '/SiteMaster/SiteListView';
-            });
+            );
         }
     });
 }

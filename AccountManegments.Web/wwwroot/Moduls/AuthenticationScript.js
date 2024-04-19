@@ -1,6 +1,7 @@
 ﻿AllUserTable();
 GetSiteDetails();
 function CreateUser() {
+    siteloadershow();
     if ($("#userForm").valid()) {
         var objData = {
             FirstName: $('#txtFirstName').val(),
@@ -18,7 +19,7 @@ function CreateUser() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -77,13 +78,14 @@ function ClearUserTextBox() {
 }
 
 function DisplayUserDetails(UserId) {
+    siteloadershow();
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtUserid').val(response.id);
             $('#txtFirstName').val(response.firstName);
             $('#txtLastName').val(response.lastName);
@@ -108,7 +110,7 @@ function DisplayUserDetails(UserId) {
 }
 
 function SelectUserDetails(UserId, element) {
-
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -118,6 +120,7 @@ function SelectUserDetails(UserId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            siteloaderhide();
             if (response) {
                 $('#dspUserid').val(UserId);
                 $('#dspFirstName').val(response.firstName);
@@ -145,8 +148,6 @@ function AllUserTable() {
 
     $.get("/User/UserListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
-
             $("#Usertbody").html(result);
         })
         .fail(function (error) {
@@ -155,7 +156,7 @@ function AllUserTable() {
 }
 
 function filterTable() {
-
+    siteloadershow();
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
 
@@ -167,6 +168,7 @@ function filterTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Usertbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -176,6 +178,7 @@ function filterTable() {
 }
 
 function sortTable() {
+    siteloadershow();
     var sortBy = $('#ddlSortBy').val();
     $.ajax({
         url: '/User/UserListAction',
@@ -184,6 +187,7 @@ function sortTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Usertbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -194,6 +198,7 @@ function sortTable() {
 
 
 function UpdateUserDetails() {
+    siteloadershow();
     if ($("#userForm").valid()) {
         var objData = {
             Id: $('#txtUserid').val(),
@@ -212,7 +217,7 @@ function UpdateUserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -356,6 +361,7 @@ function UserActiveDecative(UserId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
+
                     Swal.fire({
                         title: isChecked ? "Active!" : "DeActive!",
                         text: Result.message,
@@ -368,6 +374,7 @@ function UserActiveDecative(UserId) {
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
+
             Swal.fire(
                 'Cancelled',
                 'User Have No Changes.!!😊',
@@ -417,7 +424,7 @@ function logout() {
         });
 }
 function deleteUserDetails(UserId) {
-
+    siteloadershow();
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -436,7 +443,7 @@ function deleteUserDetails(UserId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',

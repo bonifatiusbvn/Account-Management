@@ -41,13 +41,14 @@ $(document).ready(function () {
 
 
     $('#txtSuppliername').change(function () {
+        siteloadershow();
         var CompanyId = $('#txtcompanyname').val();
         var SupplierId = $(this).val();
         $.ajax({
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
             type: 'GET',
             success: function (result) {
-
+                siteloaderhide();
                 $("#invoicedetails").html(result);
                 $("#txttotalpendingamount").html('₹' + result.totalPending);
                 $("#pendingamount").html('₹' + result.totalPending);
@@ -81,7 +82,7 @@ $(document).ready(function () {
 
 
 function InsertPayOutDetails() {
-
+    siteloadershow();
     var objData = {
         InvoiceNo: "PayOut",
         SiteId: $("#txtSiteId").val(),
@@ -104,6 +105,7 @@ function InsertPayOutDetails() {
         contentType: false,
         processData: false,
         success: function (result) {
+            siteloaderhide();
             Swal.fire({
                 title: result.message,
                 icon: 'success',

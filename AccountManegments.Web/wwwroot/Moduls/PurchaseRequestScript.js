@@ -19,18 +19,20 @@ updateTotals();
 
 
 function AllPurchaseRequestListTable() {
+
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
     $.get("/PurchaseMaster/PurchaseRequestListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
+
             $("#purchaseRequesttbody").html(result);
         })
 
 }
 
 function filterPurchaseRequestTable() {
-
+    siteloadershow();
     var searchText = $('#txtPurchaseRequestSearch').val();
     var searchBy = $('#PurchaseRequestSearchBy').val();
 
@@ -42,6 +44,7 @@ function filterPurchaseRequestTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -63,6 +66,7 @@ function GetSiteDetail() {
 }
 
 function sortPurchaseRequestTable() {
+    siteloadershow();
     var sortBy = $('#PurchaseRequestSortBy').val();
     $.ajax({
         url: '/PurchaseMaster/PurchaseRequestListAction',
@@ -71,6 +75,7 @@ function sortPurchaseRequestTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -80,7 +85,7 @@ function sortPurchaseRequestTable() {
 }
 
 function SelectPurchaseRequestDetails(PurchaseId, element) {
-
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -90,7 +95,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             if (response) {
                 $('#dspPrNo').val(response.prNo);
                 $('#dspPId').val(PurchaseId);
@@ -111,6 +116,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
+    siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
@@ -134,7 +140,7 @@ function CreatePurchaseRequest() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -217,14 +223,14 @@ function resetPRForm() {
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
-
+    siteloadershow();
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#PurchaseRequestId').val(response.pid);
             $('#prNo').val(response.prNo);
             $('#searchItemname').val(response.itemId);
@@ -262,6 +268,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
+    siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
@@ -288,7 +295,7 @@ function UpdatePurchaseRequestDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -345,8 +352,6 @@ function DeletePurchaseRequest(PurchaseId) {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/PurchaseMaster/PurchaseRequestView';
                     })
                 }
             })
@@ -406,9 +411,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
                 'Cancelled',
                 'Purchase Request Have No Changes.!!😊',
                 'error'
-            ).then(function () {
-                window.location = '/PurchaseMaster/PurchaseRequestListView';
-            });;
+            );
         }
     });
 }
@@ -425,12 +428,13 @@ function GetAllUnitType() {
     });
 }
 function GetPurchaseOrderList() {
-
+    siteloadershow();
     var searchText = $('#txtPurchaseOrderSearch').val();
     var searchBy = $('#ddlPurchaseOrderSearchBy').val();
 
     $.get("/PurchaseMaster/PurchaseOrderListView", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
+            siteloaderhide();
             $("#PurchaseOrdertbody").html(result);
         })
         .fail(function (error) {
@@ -438,7 +442,7 @@ function GetPurchaseOrderList() {
         });
 }
 function filterPurchaseOrderTable() {
-
+    siteloadershow();
     var searchText = $('#txtPurchaseOrderSearch').val();
     var searchBy = $('#ddlPurchaseOrderSearchBy').val();
 
@@ -450,6 +454,7 @@ function filterPurchaseOrderTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -459,6 +464,7 @@ function filterPurchaseOrderTable() {
 }
 
 function sortPurchaseOrderTable() {
+    siteloadershow();
     var sortBy = $('#ddlPurchaseOrderSortBy').val();
     $.ajax({
         url: '/PurchaseMaster/PurchaseOrderListView',
@@ -467,6 +473,7 @@ function sortPurchaseOrderTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -476,14 +483,14 @@ function sortPurchaseOrderTable() {
 }
 
 function EditPurchaseOrderDetails(Id) {
-
+    siteloadershow();
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseOrderDetails?Id=' + Id,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         success: function (response) {
 
-
+            siteloaderhide();
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
             $('#txtbillingAddress').val(response.billingAddress);
@@ -504,6 +511,7 @@ function EditPurchaseOrderDetails(Id) {
 }
 
 function GetCompanyName() {
+
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
@@ -559,12 +567,14 @@ function GetSupplierDetails() {
 }
 $(document).ready(function () {
     $('#txtcompanyname').change(function () {
+        siteloadershow();
         var Company = $(this).val();
         $('#txtcompany').val(Company);
         $.ajax({
             url: '/Company/GetCompnaytById/?CompanyId=' + Company,
             type: 'GET',
             success: function (result) {
+                siteloaderhide();
                 $('#companybillingaddressDetails').empty().append(
                     '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
                     '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
@@ -591,6 +601,7 @@ $(document).ready(function () {
 });
 
 function SerchItemDetailsById(Id) {
+    siteloadershow();
     var Item = {
         ItemId: Id,
     }
@@ -607,6 +618,7 @@ function SerchItemDetailsById(Id) {
         processData: false,
         contentType: false,
         complete: function (Result) {
+            siteloaderhide();
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -686,7 +698,7 @@ $(document).ready(function () {
 
 
 function InsertMultiplePurchaseOrderDetails() {
-
+    siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
         if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
@@ -746,6 +758,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 contentType: false,
                 processData: false,
                 success: function (Result) {
+                    siteloaderhide();
                     if (Result.message != null) {
                         Swal.fire({
                             title: Result.message,
@@ -811,12 +824,14 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
+        siteloadershow();
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
         $.ajax({
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
+                siteloaderhide();
                 $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             },
             error: function (xhr, status, error) {
@@ -832,7 +847,7 @@ $(document).ready(function () {
 
 
 function AddShippingAddress() {
-
+    siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
 
         var quantity = $("#txtmdqty").val();
@@ -868,7 +883,7 @@ function AddShippingAddress() {
                 return false;
             }
         });
-
+        siteloaderhide();
         if (!isDuplicate) {
 
             var newRow = '';
@@ -946,7 +961,7 @@ $(document).ready(function () {
 });
 
 function getSupplierDetails(SupplierId) {
-
+    siteloadershow();
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
@@ -955,6 +970,7 @@ function getSupplierDetails(SupplierId) {
         success: function (response) {
 
             if (response) {
+                siteloaderhide();
                 $('#txtSuppliermobile').val(response.mobile);
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
@@ -976,7 +992,7 @@ $(document).ready(function () {
 });
 
 function getCompanyDetails(CompanyId) {
-
+    siteloadershow();
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
@@ -984,6 +1000,7 @@ function getCompanyDetails(CompanyId) {
         dataType: 'json',
         success: function (response) {
             if (response) {
+                siteloaderhide();
                 $('#txtCompanyGstNo').val(response.gstno);
                 $('#companybillingaddressDetails').val(response.fullAddress);
             } else {
@@ -996,6 +1013,7 @@ function getCompanyDetails(CompanyId) {
 
 
 function UpdateMultiplePurchaseOrderDetails() {
+    siteloadershow();
     if ($("#CreatePOForm").valid()) {
         if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
             var AddressDetails = [];
@@ -1035,6 +1053,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 contentType: false,
                 processData: false,
                 success: function (Result) {
+                    siteloaderhide();
                     if (Result.message != null) {
                         Swal.fire({
                             title: Result.message,
@@ -1117,8 +1136,6 @@ function DeletePODetails(POId) {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/PurchaseMaster/POListView';
                     })
                 }
             })
@@ -1158,10 +1175,7 @@ function otherPayment() {
 Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
     e.value = paymentSign + "0.00"
 });
-//var isPaymentEl = document.getElementById("choices-payment-currency"),
-//    choices = new Choices(isPaymentEl, {
-//        searchEnabled: !1
-//    });
+
 
 function isData() {
     var e = document.getElementsByClassName("plus"),
@@ -1179,14 +1193,7 @@ function isData() {
     })
 }
 
-//document.querySelector("#profile-img-file-input").addEventListener("change", function () {
-//    var e = document.querySelector(".user-profile-image"),
-//        t = document.querySelector(".profile-img-file-input").files[0],
-//        n = new FileReader;
-//    n.addEventListener("load", function () {
-//        e.src = n.result
-//    }, !1), t && n.readAsDataURL(t)
-//}), isData();
+
 
 
 var count = 0;
@@ -1382,172 +1389,16 @@ var value, invoices_list = localStorage.getItem("invoices-list"),
     options = localStorage.getItem("option"),
     invoice_no = localStorage.getItem("invoice_no"),
     invoices = JSON.parse(invoices_list);
-//if (null === localStorage.getItem("invoice_no") && null === localStorage.getItem("option") ? (viewobj = "", value = "#VL" + Math.floor(11111111 + 99999999 * Math.random()), document.getElementById("invoicenoInput").value = value) : viewobj = invoices.find(e => e.invoice_no === invoice_no), "" != viewobj && "edit-invoice" == options) {
-//    document.getElementById("registrationNumber").value = viewobj.company_details.legal_registration_no, document.getElementById("companyEmail").value = viewobj.company_details.email, document.getElementById("companyWebsite").value = viewobj.company_details.website, new Cleave("#compnayContactno", {
-//        prefix: viewobj.company_details.contact_no,
-//        delimiters: ["(", ")", "-"],
-//        blocks: [0, 3, 3, 4]
-//    }), document.getElementById("companyAddress").value = viewobj.company_details.address, document.getElementById("companyaddpostalcode").value = viewobj.company_details.zip_code;
-//    for (var preview = document.querySelectorAll(".user-profile-image"), paroducts_list = ("" !== viewobj.img && (preview.src = viewobj.img), document.getElementById("invoicenoInput").value = "#VAL" + viewobj.invoice_no, document.getElementById("invoicenoInput").setAttribute("readonly", !0), document.getElementById("date-field").value = viewobj.date, document.getElementById("choices-payment-status").value = viewobj.status, document.getElementById("totalamountInput").value = "$" + viewobj.order_summary.total_amount, document.getElementById("billingName").value = viewobj.billing_address.full_name, document.getElementById("billingAddress").value = viewobj.billing_address.address, new Cleave("#billingPhoneno", {
-//        prefix: viewobj.company_details.contact_no,
-//        delimiters: ["(", ")", "-"],
-//        blocks: [0, 3, 3, 4]
-//    }), document.getElementById("billingTaxno").value = viewobj.billing_address.tax, document.getElementById("shippingName").value = viewobj.shipping_address.full_name, document.getElementById("shippingAddress").value = viewobj.shipping_address.address, new Cleave("#shippingPhoneno", {
-//        prefix: viewobj.company_details.contact_no,
-//        delimiters: ["(", ")", "-"],
-//        blocks: [0, 3, 3, 4]
-//    }), document.getElementById("shippingTaxno").value = viewobj.billing_address.tax, viewobj.prducts), counter = 1; counter++, 1 < paroducts_list.length && document.getElementById("add-item").click(), paroducts_list.length - 1 >= counter;);
-//    var counter_1 = 1,
-//        cleave = (setTimeout(() => {
-//            Array.from(paroducts_list).forEach(function (e) {
-//                document.getElementById("productName-" + counter_1).value = e.product_name, document.getElementById("productDetails-" + counter_1).value = e.product_details, document.getElementById("productRate-" + counter_1).value = e.rates, document.getElementById("product-qty-" + counter_1).value = e.quantity, document.getElementById("productPrice-" + counter_1).value = "$" + e.rates * e.quantity, counter_1++
-//            })
-//        }, 300), document.getElementById("cart-subtotal").value = viewobj.order_summary.sub_total, document.getElementById("cart-tax").value = viewobj.order_summary.estimated_tex, document.getElementById("cart-discount").value = "$" + viewobj.order_summary.discount, document.getElementById("cart-shipping").value = "$" + viewobj.order_summary.shipping_charge, document.getElementById("cart-total").value = "$" + viewobj.order_summary.total_amount, document.getElementById("choices-payment-type").value = viewobj.payment_details.payment_method, document.getElementById("cardholderName").value = viewobj.payment_details.card_holder_name, new Cleave("#cardNumber", {
-//            prefix: viewobj.payment_details.card_number,
-//            delimiter: " ",
-//            blocks: [4, 4, 4, 4],
-//            uppercase: !0
-//        }));
-//    document.getElementById("amountTotalPay").value = "$" + viewobj.order_summary.total_amount, document.getElementById("exampleFormControlTextarea1").value = viewobj.notes
-//}
-//document.addEventListener("DOMContentLoaded", function () {
-//    var T = document.getElementById("invoice_form");
-//    document.getElementsByClassName("needs-validation");
-//    T.addEventListener("submit", function (e) {
-//        e.preventDefault();
-//        var t = document.getElementById("invoicenoInput").value.slice(4),
-//            e = document.getElementById("companyEmail").value,
-//            n = document.getElementById("date-field").value,
-//            o = document.getElementById("totalamountInput").value.slice(1),
-//            a = document.getElementById("choices-payment-status").value,
-//            l = document.getElementById("billingName").value,
-//            i = document.getElementById("billingAddress").value,
-//            c = document.getElementById("billingPhoneno").value.replace(/[^0-9]/g, ""),
-//            d = document.getElementById("billingTaxno").value,
-//            r = document.getElementById("shippingName").value,
-//            u = document.getElementById("shippingAddress").value,
-//            m = document.getElementById("shippingPhoneno").value.replace(/[^0-9]/g, ""),
-//            s = document.getElementById("shippingTaxno").value,
-//            p = document.getElementById("choices-payment-type").value,
-//            v = document.getElementById("cardholderName").value,
-//            g = document.getElementById("cardNumber").value.replace(/[^0-9]/g, ""),
-//            y = document.getElementById("amountTotalPay").value.slice(1),
-//            E = document.getElementById("registrationNumber").value.replace(/[^0-9]/g, ""),
-//            b = document.getElementById("companyEmail").value,
-//            I = document.getElementById("companyWebsite").value,
-//            h = document.getElementById("compnayContactno").value.replace(/[^0-9]/g, ""),
-//            _ = document.getElementById("companyAddress").value,
-//            B = document.getElementById("companyaddpostalcode").value,
-//            f = document.getElementById("cart-subtotal").value.slice(1),
-//            x = document.getElementById("cart-tax").value.slice(1),
-//            w = document.getElementById("cart-discount").value.slice(1),
-//            S = document.getElementById("cart-shipping").value.slice(1),
-//            j = document.getElementById("cart-total").value.slice(1),
-//            q = document.getElementById("exampleFormControlTextarea1").value,
-//            A = document.getElementsByClassName("product"),
-//            N = 1,
-//            C = [];
-//        Array.from(A).forEach(e => {
-//            var t = e.querySelector("#txtproductName-" + N).value,
-//                n = e.querySelector("#txtproductDescription-" + N).value,
-//                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
-//                p = parseInt(e.querySelector("#txtgst-" + N).value),
-//                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
-//                a = parseInt(e.querySelector("#product-qty-" + N).value),
-//                e = e.querySelector("#productPrice-" + N).value.split("$"),
-//                t = {
-//                    productName: t,
-//                    productShortDescription: n,
-//                    perUnitPrice: o,
-//                    gst: p,
-//                    perUnitWithGstprice: q,
-//                    quantity: a,
-//                    totalAmount: parseInt(e[1])
-//                };
-//            C.push(t), N++
-//        }), !1 === T.checkValidity() ? T.classList.add("was-validated") : ("edit-invoice" == options && invoice_no == t ? (objIndex = invoices.findIndex(e => e.invoice_no == t), invoices[objIndex].invoice_no = t, invoices[objIndex].customer = l, invoices[objIndex].img = "", invoices[objIndex].email = e, invoices[objIndex].date = n, invoices[objIndex].invoice_amount = o, invoices[objIndex].status = a, invoices[objIndex].billing_address = {
-//            full_name: l,
-//            address: i,
-//            phone: c,
-//            tax: d
-//        }, invoices[objIndex].shipping_address = {
-//            full_name: r,
-//            address: u,
-//            phone: m,
-//            tax: s
-//        }, invoices[objIndex].payment_details = {
-//            payment_method: p,
-//            card_holder_name: v,
-//            card_number: g,
-//            total_amount: y
-//        }, invoices[objIndex].company_details = {
-//            legal_registration_no: E,
-//            email: b,
-//            website: I,
-//            contact_no: h,
-//            address: _,
-//            zip_code: B
-//        }, invoices[objIndex].order_summary = {
-//            sub_total: f,
-//            estimated_tex: x,
-//            discount: w,
-//            shipping_charge: S,
-//            total_amount: j
-//        }, invoices[objIndex].prducts = C, invoices[objIndex].notes = q, localStorage.removeItem("invoices-list"), localStorage.removeItem("option"), localStorage.removeItem("invoice_no"), localStorage.setItem("invoices-list", JSON.stringify(invoices))) : localStorage.setItem("new_data_object", JSON.stringify({
-//            invoice_no: t,
-//            customer: l,
-//            img: "",
-//            email: e,
-//            date: n,
-//            invoice_amount: o,
-//            status: a,
-//            billing_address: {
-//                full_name: l,
-//                address: i,
-//                phone: c,
-//                tax: d
-//            },
-//            shipping_address: {
-//                full_name: r,
-//                address: u,
-//                phone: m,
-//                tax: s
-//            },
-//            payment_details: {
-//                payment_method: p,
-//                card_holder_name: v,
-//                card_number: g,
-//                total_amount: y
-//            },
-//            company_details: {
-//                legal_registration_no: E,
-//                email: b,
-//                website: I,
-//                contact_no: h,
-//                address: _,
-//                zip_code: B
-//            },
-//            order_summary: {
-//                sub_total: f,
-//                estimated_tex: x,
-//                discount: w,
-//                shipping_charge: S,
-//                total_amount: j
-//            },
-//            prducts: C,
-//            notes: q
-//        })), window.location.href = "apps-invoices-list.html")
-//    })
-//});
 
 
 function GetPOList() {
+    siteloadershow();
     var searchText = $('#txtPOSearch').val();
     var searchBy = $('#ddlPOSearchBy').val();
 
     $.get("/PurchaseMaster/POListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
+            siteloaderhide();
 
             $("#PurchaseOrderListbody").html(result);
         })
@@ -1557,19 +1408,19 @@ function GetPOList() {
 }
 
 function GetAllItemDetailsList() {
-
+    siteloadershow();
     var searchText = $('#mdProductSearch').val();
 
     $.get("/PurchaseMaster/GetAllItemDetailsList", { searchText: searchText })
         .done(function (result) {
 
-
+            siteloaderhide();
             $("#mdlistofItem").html(result);
         })
 }
 
 function filterallItemTable() {
-
+    siteloadershow();
     var searchText = $('#mdProductSearch').val();
 
     $.ajax({
@@ -1579,6 +1430,7 @@ function filterallItemTable() {
             searchText: searchText,
         },
         success: function (result) {
+            siteloaderhide();
             $("#mdlistofItem").html(result);
         },
 
@@ -1586,7 +1438,7 @@ function filterallItemTable() {
 }
 
 function filterPOTable() {
-
+    siteloadershow();
     var searchText = $('#txtPOSearch').val();
     var searchBy = $('#ddlPOSearchBy').val();
 
@@ -1598,6 +1450,7 @@ function filterPOTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -1606,6 +1459,7 @@ function filterPOTable() {
     });
 }
 function sortPOTable() {
+    siteloadershow();
     var sortBy = $('#ddlPOSortBy').val();
     $.ajax({
         url: '/PurchaseMaster/POListAction',
@@ -1614,6 +1468,7 @@ function sortPOTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {

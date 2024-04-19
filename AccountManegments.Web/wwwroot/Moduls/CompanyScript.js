@@ -7,6 +7,7 @@ function AllCompanyTable() {
 
     $.get("/Company/GetAllCompanyDetails", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
+
             $("#Companytbody").html(result);
         })
         .fail(function (error) {
@@ -15,7 +16,7 @@ function AllCompanyTable() {
 }
 
 function filterCompanyTable() {
-
+    siteloadershow();
     var searchText = $('#txtSearch').val();
     var searchBy = $('#ddlSearchBy').val();
 
@@ -27,6 +28,7 @@ function filterCompanyTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Companytbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -36,6 +38,7 @@ function filterCompanyTable() {
 }
 
 function sortCompanyTable() {
+    siteloadershow();
     var sortBy = $('#ddlSortBy').val();
     $.ajax({
         url: '/Company/GetAllCompanyDetails',
@@ -44,6 +47,7 @@ function sortCompanyTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Companytbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -52,9 +56,8 @@ function sortCompanyTable() {
     });
 }
 function AddCompany() {
-
-    if ($("#companyForm").valid())
-    {
+    siteloadershow();
+    if ($("#companyForm").valid()) {
         var objData = {
             CompanyName: $('#txtCompanyName').val(),
             Gstno: $('#txtGstNo').val(),
@@ -74,7 +77,7 @@ function AddCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -115,14 +118,14 @@ function ClearTextBox() {
     offcanvas.show();
 }
 function GetCompnaytById(CompanyId) {
-
+    siteloadershow();
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtCompanyid').val(response.companyId);
             $('#txtCompanyName').val(response.companyName);
             $('#txtGstNo').val(response.gstno);
@@ -150,7 +153,7 @@ function GetCompnaytById(CompanyId) {
     });
 }
 function SelectCompanyDetails(CompanyId, element) {
-
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -160,6 +163,7 @@ function SelectCompanyDetails(CompanyId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            siteloaderhide();
             if (response) {
                 $('#dspCompanyid').val(response.companyId);
                 $('#dspCompanyName').val(response.companyName);
@@ -181,6 +185,7 @@ function SelectCompanyDetails(CompanyId, element) {
     });
 }
 function UpdateCompany() {
+    siteloadershow();
     if ($("#companyForm").valid()) {
         var objData = {
             CompanyId: $('#txtCompanyid').val(),
@@ -200,7 +205,7 @@ function UpdateCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -273,7 +278,7 @@ function DeleteCompanyDetails(CompanyId) {
 
 var CompanyForm;
 function validateAndCreateCompany() {
-   CompanyForm= $("#companyForm").validate({
+    CompanyForm = $("#companyForm").validate({
         rules: {
             txtCompanyName: "required",
             txtGstNo: "required",
@@ -281,10 +286,10 @@ function validateAndCreateCompany() {
             txtAddress: "required",
             txtArea: "required",
             txtPincode: {
-               required: true,
-               digits: true,
-               minlength: 6,
-               maxlength: 6
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6
             },
             ddlCity: "required",
             dropState: "required",

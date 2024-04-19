@@ -1,9 +1,8 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
-
-    if ($("#SupplierForm").valid())
-    {
+    siteloadershow();
+    if ($("#SupplierForm").valid()) {
         var objData = {
             SupplierName: $('#txtSupplierName').val(),
             Email: $('#txtEmail').val(),
@@ -26,7 +25,7 @@ function CreateSupplier() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -73,14 +72,14 @@ function ClearSupplierTextBox() {
     offcanvas.show();
 }
 function DisplaySupplierDetails(SupplierId) {
-
+    siteloadershow();
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);
@@ -111,7 +110,7 @@ function DisplaySupplierDetails(SupplierId) {
 }
 
 function SelectSupplierDetails(SupplierId, element) {
-
+    siteloadershow();
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -121,7 +120,7 @@ function SelectSupplierDetails(SupplierId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             if (response) {
                 $('#dspSupplierId').val(response.supplierId);
                 $('#dspSupplierName').val(response.supplierName);
@@ -163,7 +162,7 @@ function AllUserTable() {
 }
 
 function filterSupplierTable() {
-
+    siteloadershow();
     var searchText = $('#txtSupplierSearch').val();
     var searchBy = $('#SupplierSearchBy').val();
 
@@ -175,6 +174,7 @@ function filterSupplierTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Supplierbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -184,6 +184,7 @@ function filterSupplierTable() {
 }
 
 function sortSupplierTable() {
+    siteloadershow();
     var sortBy = $('#SupplierSortBy').val();
     $.ajax({
         url: '/Supplier/SupplierListAction',
@@ -192,6 +193,7 @@ function sortSupplierTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Supplierbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -202,6 +204,7 @@ function sortSupplierTable() {
 
 
 function UpdateSupplierDetails() {
+    siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
             SupplierId: $('#txtSupplierid').val(),
@@ -225,7 +228,7 @@ function UpdateSupplierDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -280,8 +283,6 @@ function DeleteSupplierDetails(SupplierId) {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/Supplier/SupplierList';
                     })
                 }
             })
@@ -297,7 +298,7 @@ function DeleteSupplierDetails(SupplierId) {
 }
 var SupplierForm;
 function validateAndCreateSupplier() {
-   SupplierForm= $("#SupplierForm").validate({
+    SupplierForm = $("#SupplierForm").validate({
         rules: {
             txtSupplierName: "required",
             txtPhoneNo: {
@@ -417,20 +418,19 @@ function SupplierActiveDecative(SupplierId) {
                 'Cancelled',
                 'User Have No Changes.!!😊',
                 'error'
-            ).then(function () {
-                window.location = '/Supplier/SupplierList';
-            });;
+            );
         }
     });
 }
 function GetSupplierInvoiceDetailsById(SupplierId, element) {
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
 
     $.get("/InvoiceMaster/GetSupplierInvoiceDetailsById", { SupplierId: SupplierId })
         .done(function (result) {
-
+            siteloaderhide();
             $("#supplierinvoicedetails").html(result);
         })
 }

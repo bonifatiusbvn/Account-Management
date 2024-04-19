@@ -19,10 +19,10 @@
     <link href="~/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
     <link href="~/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
     <link href="~/assets/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
-
+    <link href="~/css/loading-spinner.css" rel="stylesheet" />
 
     <!-- CSS Files -->
-
+    <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/assets/css/bootstrap-extended.css" rel="stylesheet">
     <link href="~/assets/css/style.css" rel="stylesheet">
@@ -41,8 +41,7 @@
 
     <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
     <link href="~/assets/css/style.css" rel="stylesheet" />
-    @*  <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
 
     <title>@ViewData["Title"] - @_Configuration.GetSection("ProjectName")?.Value </title>
 </head>
@@ -242,19 +241,7 @@
         <!--start top header-->
         <header class="top-header">
             <nav class="navbar navbar-expand gap-3">
-
-                @if (_userSession.UserRole == 3 && UserSession.SiteId == null)
-                {
-                    <div class="col-3">
-                        <select class="form-select form-control-lg" id="drplaySiteName">
-                            <option value="">All Site</option>
-                        </select>
-                    </div>
-                }
-                else
-                {
-                    <h5 id="laySiteName">@UserSession.SiteName</h5>
-                }
+                <h5 id="laySiteName"></h5>
                 <div class="mobile-menu-button">
                     <ion-icon name="menu-sharp"></ion-icon>
                 </div>
@@ -341,6 +328,7 @@
                 <!--start breadcrumb-->
                 <!--end breadcrumb-->
                 <div>
+                    <partial name="_Loader" />
                     @RenderBody()
                 </div>
             </div>
@@ -444,7 +432,7 @@
     <script src="~/assets/plugins/chartjs/chart.min.js"></script>
     <script src="~/assets/js/index.js"></script>
     <!-- Main JS-->
-
+    <script src="~/moduls/site.js"></script>
     <script src="~/assets/js/main.js"></script>
     <!--end wrapper-->
     <!-- listjs init -->

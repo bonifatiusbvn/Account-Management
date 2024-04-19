@@ -5,6 +5,7 @@ GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
 function SerchItemDetailsById(Id) {
+    siteloadershow();
     var Item = {
         ItemId: Id,
     }
@@ -21,6 +22,7 @@ function SerchItemDetailsById(Id) {
         processData: false,
         contentType: false,
         complete: function (Result) {
+            siteloaderhide();
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -132,6 +134,7 @@ $(document).ready(function () {
 });
 
 function searchItemDetailById() {
+    siteloadershow();
     var GetItemId = {
         ItemId: $('#searchItemName').val(),
 
@@ -148,6 +151,7 @@ function searchItemDetailById() {
         processData: false,
         contentType: false,
         complete: function (Result) {
+            siteloaderhide();
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -181,7 +185,7 @@ function AllSupplierInvoiceListTable() {
 }
 
 function filterSupplierInvoiceTable() {
-
+    siteloadershow();
     var searchText = $('#txtSupplierInvoiceSearch').val();
     var searchBy = $('#SupplierInvoiceSearchBy').val();
 
@@ -193,6 +197,7 @@ function filterSupplierInvoiceTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#SupplierInvoicebody").html(result);
         },
         error: function (xhr, status, error) {
@@ -202,6 +207,7 @@ function filterSupplierInvoiceTable() {
 }
 
 function SupplierInvoicesortTable() {
+    siteloadershow();
     var sortBy = $('#SortBySupplierInvoice').val();
     $.ajax({
         url: '/InvoiceMaster/SupplierInvoiceListAction',
@@ -210,6 +216,7 @@ function SupplierInvoicesortTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#SupplierInvoicebody").html(result);
         },
         error: function (xhr, status, error) {
@@ -299,7 +306,7 @@ $(document).ready(function () {
 });
 
 function InsertMultipleSupplierItem() {
-
+    siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 
         var ItemDetails = [];
@@ -351,7 +358,7 @@ function InsertMultipleSupplierItem() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
+                siteloaderhide();
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -393,6 +400,7 @@ function InsertMultipleSupplierItem() {
     }
 }
 function UpdateInvoiceDetails() {
+    siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 
         var shippingAdd = $("#textmdAddress").val();
@@ -437,7 +445,7 @@ function UpdateInvoiceDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
+                siteloaderhide();
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -479,30 +487,7 @@ function UpdateInvoiceDetails() {
     }
 }
 
-//function validateAndInsertInvoice() {
 
-//    var companyname = document.getElementById("txtCompanyName").value.trim();
-//    var suppliername = document.getElementById("txtSupplierName").value.trim();
-//    var productname = document.getElementById("searchItemName").value.trim();
-
-//    var isValid = true;
-
-//    if (companyname === "") {
-//        document.getElementById("spnCompanyName").innerText = "Please Select Company!";
-//        isValid = false;
-//    }
-//    if (suppliername === "") {
-//        document.getElementById("spnSupplierName").innerText = "Please Select Supplier!";
-//        isValid = false;
-//    }
-//    if (productname === "") {
-//        document.getElementById("spnsearchItemName").innerText = "Please Select Product!";
-//        isValid = false;
-//    }
-//    if (isValid) {
-//        InsertMultipleSupplierItem();
-//    }
-//}
 
 function UnitTypeDropdown(itemId) {
 
@@ -940,7 +925,7 @@ function InvoiceListTable() {
 }
 
 function filterInvoiceTable() {
-
+    siteloadershow();
     var searchText = $('#txtInvoiceSearch').val();
     var searchBy = $('#InvoiceSearchBy').val();
 
@@ -952,6 +937,7 @@ function filterInvoiceTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Invoicetbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -961,6 +947,7 @@ function filterInvoiceTable() {
 }
 
 function InvoiceSortTable() {
+    siteloadershow();
     var sortBy = $('#SortByInvoice').val();
     $.ajax({
         url: '/InvoiceMaster/InvoiceListAction',
@@ -969,6 +956,7 @@ function InvoiceSortTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#Invoicetbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -987,13 +975,14 @@ function printInvoiceDiv() {
 }
 
 function getSupplierDetail(SupplierId) {
+    siteloadershow();
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             if (response) {
                 $('#textSupplierMobile').val(response.mobile);
                 $('#textSupplierGST').val(response.gstno);
@@ -1006,14 +995,14 @@ function getSupplierDetail(SupplierId) {
 }
 
 function getCompanyDetail(CompanyId) {
-
+    siteloadershow();
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             if (response) {
                 $('#textCompanyGstNo').val(response.gstno);
                 $('#textCompanyBillingAddress').val(response.fullAddress);
@@ -1034,6 +1023,7 @@ function clearItemErrorMessages() {
 }
 
 function addShippingAddress() {
+    siteloadershow();
     if ($("#shippingAddressForm").valid()) {
         var address = $("#textmdAddress").val();
         var sitename = $("#textInvoiceSiteName").val();
@@ -1063,6 +1053,7 @@ function addShippingAddress() {
         updateTotals();
         updateRowNumbers();
         $('#mdShippingAdd').modal('toggle');
+        siteloaderhide();
     } else {
         Swal.fire({
             title: "Kindly fill all data fields",

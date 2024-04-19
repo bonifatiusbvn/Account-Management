@@ -14,11 +14,13 @@ function toggleSiteList() {
 }
 
 function AllItemInWordListTable() {
+
     var searchText = $('#txtItemInWordSearch').val();
     var searchBy = $('#ItemInWordSearchBy').val();
 
     $.get("/ItemInWord/ItemInWordListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
+
             $("#itemInWordtbody").html(result);
         })
         .fail(function (error) {
@@ -27,7 +29,7 @@ function AllItemInWordListTable() {
 }
 
 function filterItemInWordTable() {
-
+    siteloadershow();
     var searchText = $('#txtItemInWordSearch').val();
     var searchBy = $('#ItemInWordSearchBy').val();
 
@@ -39,6 +41,7 @@ function filterItemInWordTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -49,6 +52,7 @@ function filterItemInWordTable() {
 
 
 function sortItemInWordTable() {
+    siteloadershow();
     var sortBy = $('#ItemInWordSortBy').val();
     $.ajax({
         url: '/ItemInWord/ItemInWordListAction',
@@ -57,6 +61,7 @@ function sortItemInWordTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -66,6 +71,7 @@ function sortItemInWordTable() {
 }
 
 function SelectItemInWordDetails(InwordId, element) {
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -75,6 +81,7 @@ function SelectItemInWordDetails(InwordId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            siteloaderhide();
             if (response) {
                 $('#dspInwordId').val(response.inwordId);
                 $('#dspSiteId').val(response.siteName);
@@ -114,16 +121,7 @@ function SelectItemInWordDetails(InwordId, element) {
         }
     });
 }
-//function GetItemDetails() {
-//    $.ajax({
-//        url: '/ItemMaster/GetItemNameList',
-//        success: function (result) {
-//            $.each(result, function (i, data) {
-//                $('#txtItemId').append('<Option value=' + data.itemId + '>' + data.itemName + '</Option>')
-//            });
-//        }
-//    });
-//}
+
 function GetItemDetails() {
 
     $.ajax({
@@ -171,7 +169,7 @@ function GetSiteList() {
 }
 
 function AddItemInWordDetails() {
-
+    siteloadershow();
     if ($("#itemInWordForm").valid()) {
 
         var formData = new FormData();
@@ -195,7 +193,7 @@ function AddItemInWordDetails() {
             processData: false,
             success: function (Result) {
 
-
+                siteloaderhide();
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -356,6 +354,7 @@ function resetErrorsMessages() {
     document.getElementById("spnInWardSiteName").innerText = "";
 }
 function EditItemInWordDetails(InwordId) {
+    siteloadershow();
     $('#addNewImage').empty();
     $.ajax({
         url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
@@ -363,7 +362,7 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
@@ -416,6 +415,7 @@ function EditItemInWordDetails(InwordId) {
 }
 
 function UpdateItemInWordDetails() {
+    siteloadershow();
     var documentFile = $("#txtDocument")[0].files[0];
     var documentName = null;
     if (documentFile == undefined) {
@@ -445,7 +445,7 @@ function UpdateItemInWordDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
-
+            siteloaderhide();
             Swal.fire({
                 title: Result.message,
                 icon: 'success',
@@ -458,6 +458,7 @@ function UpdateItemInWordDetails() {
     })
 }
 function DeleteItemInWord(InwordId) {
+
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -508,7 +509,7 @@ function DeleteItemInWord(InwordId) {
     });
 }
 function ItemInWordIsApproved(InwordId) {
-
+    siteloadershow();
     var isChecked = $('#flexSwitchCheckChecked_' + InwordId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Approve this Item In Word?" : "Are you sure want to UnApprove this Item In Word?";
 
@@ -534,7 +535,7 @@ function ItemInWordIsApproved(InwordId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,
@@ -560,25 +561,30 @@ function ItemInWordIsApproved(InwordId) {
 
 var additionalFiles = [];
 function CancelImage(documentName) {
+    siteloadershow();
     $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
 
     var currentDocumentNames = $("#txtDocumentName").val().split(';');
     var updatedDocumentNames = currentDocumentNames.filter(function (name) {
         return name !== documentName;
     });
+    siteloaderhide();
     $("#txtDocumentName").val(updatedDocumentNames.join(';'));
 }
 function removenewaddImage() {
+    siteloadershow();
     $(document).on('click', '.img-remove', function () {
         var row = $(this).closest('.DocumentName');
         var documentName = row.find('img').data('document');
         row.remove();
+        siteloaderhide();
         additionalFiles = additionalFiles.filter(function (item) {
             return item.name !== documentName;
         });
     });
 }
 function showpictures() {
+    siteloadershow();
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
         if ($("#addNewImage .DocumentName").length + files.length > 5) {
@@ -597,11 +603,13 @@ function showpictures() {
             })(file.name);
             reader.readAsDataURL(file);
             additionalFiles.push(file);
+            siteloaderhide();
         }
     }
 }
 
 function InsertMultipleItemInWordDetails() {
+    siteloadershow();
     var siteId = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
@@ -637,6 +645,7 @@ function InsertMultipleItemInWordDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
+            siteloaderhide();
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
@@ -671,6 +680,7 @@ function InsertMultipleItemInWordDetails() {
 }
 
 function UpdateMultipleItemInWordDetails() {
+    siteloadershow();
     var siteId = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
@@ -710,6 +720,7 @@ function UpdateMultipleItemInWordDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
+            siteloaderhide();
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,

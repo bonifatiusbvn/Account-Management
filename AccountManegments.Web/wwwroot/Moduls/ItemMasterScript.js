@@ -7,6 +7,7 @@ function AllItemTable() {
 
     $.get("/ItemMaster/ItemListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
+
             $("#itemtbody").html(result);
         })
         .fail(function (error) {
@@ -14,7 +15,7 @@ function AllItemTable() {
         });
 }
 function filterItemTable() {
-
+    siteloadershow();
     var searchText = $('#txtItemSearch').val();
     var searchBy = $('#ddlItemSearchBy').val();
 
@@ -26,6 +27,7 @@ function filterItemTable() {
             searchBy: searchBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#itemtbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -35,6 +37,7 @@ function filterItemTable() {
 }
 
 function sortItemTable() {
+    siteloadershow();
     var sortBy = $('#ddlItemSortBy').val();
     $.ajax({
         url: '/ItemMaster/ItemListAction',
@@ -43,6 +46,7 @@ function sortItemTable() {
             sortBy: sortBy
         },
         success: function (result) {
+            siteloaderhide();
             $("#itemtbody").html(result);
         },
         error: function (xhr, status, error) {
@@ -51,7 +55,7 @@ function sortItemTable() {
     });
 }
 function DisplayItemDetails(ItemId, element) {
-
+    siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -61,6 +65,7 @@ function DisplayItemDetails(ItemId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            siteloaderhide();
             if (response) {
                 $('#dspItemId').val(response.itemId);
                 $('#dspItemName').val(response.itemName);
@@ -115,7 +120,7 @@ function ClearTextBox() {
     });
 }
 function CreateItem() {
-
+    siteloadershow();
     if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemName: $('#txtItemName').val(),
@@ -133,6 +138,7 @@ function CreateItem() {
             data: objData,
             dataType: 'json',
             success: function (result) {
+                siteloaderhide();
                 if (result.code == 200) {
                     Swal.fire({
                         title: result.message,
@@ -148,9 +154,7 @@ function CreateItem() {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ItemMaster/ItemListView';
-                    });
+                    })
                 }
             },
             error: function (xhr, status, error) {
@@ -176,14 +180,14 @@ function CreateItem() {
 }
 
 function EditItemDetails(ItemId) {
-
+    siteloadershow();
     $.ajax({
         url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            siteloaderhide();
             $('#txtItemid').val(response.itemId);
             $('#txtItemName').val(response.itemName);
             $('#txtUnitType').val(response.unitType);
@@ -214,6 +218,7 @@ function EditItemDetails(ItemId) {
     });
 }
 function UpdateItemDetails() {
+    siteloadershow();
     if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemId: $('#txtItemid').val(),
@@ -232,7 +237,7 @@ function UpdateItemDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -332,9 +337,7 @@ function ItemIsApproved(ItemId) {
                 'Cancelled',
                 'Item Have No Changes.!!😊',
                 'error'
-            ).then(function () {
-                window.location = '/ItemMaster/ItemListView';
-            });
+            )
         }
     });
 }
@@ -375,8 +378,6 @@ function deleteItemDetails(ItemId) {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/ItemMaster/ItemListView';
                     })
                 }
             })
@@ -445,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 function downloadFile() {
-
+    siteloadershow();
     var fileUrl = '/uploadexcelfile/itemmasterdetails.xlsx';
 
     var link = document.createElement('a');
@@ -459,4 +460,5 @@ function downloadFile() {
     link.click();
 
     document.body.removeChild(link);
+    siteloaderhide();
 }
