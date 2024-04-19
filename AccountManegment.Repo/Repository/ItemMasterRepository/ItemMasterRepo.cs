@@ -310,47 +310,83 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         public async Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList)
         {
             ApiResponseModel response = new ApiResponseModel();
+            List<ItemMaster> itemsToAdd = new List<ItemMaster>();
+            HashSet<string> itemNames = new HashSet<string>();
             try
             {
                 foreach (var itemDetails in itemDetailsList)
                 {
-                    var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == itemDetails.ItemName);
+                    var unitType = await Context.UnitMasters.FirstOrDefaultAsync(x => x.UnitName == itemDetails.UnitTypeName);
+                    if (unitType == null)
+                    {
+                        int index = itemDetailsList.IndexOf(itemDetails) + 1;
+                        string itemName = itemDetails.ItemName;
+                        response.code = 400;
+                        response.message = $": {itemName} at row {index} does not match any data type.";
+                        return response;
+                    }
+
+                    var existingItem = await Context.ItemMasters.FirstOrDefaultAsync(x => x.ItemName == itemDetails.ItemName);
                     if (existingItem != null)
                     {
                         response.code = 400;
-                        response.message = "Item is already exist.";
+                        response.message = $": {itemDetails.ItemName} is already exist.";
+                        return response;
+                    }
+
+                    if (itemNames.Contains(itemDetails.ItemName))
+                    {
+                        response.code = 400;
+                        response.message = $": {itemDetails.ItemName} is duplicated in the data.";
+                        return response;
                     }
                     else
                     {
-                        var itemMaster = new ItemMaster()
-                        {
-                            ItemId = Guid.NewGuid(),
-                            ItemName = itemDetails.ItemName,
-                            UnitType = itemDetails.UnitType,
-                            PricePerUnit = itemDetails.PricePerUnit,
-                            IsWithGst = itemDetails.IsWithGst,
-                            Gstamount = itemDetails.Gstamount,
-                            Gstper = itemDetails.Gstper,
-                            Hsncode = itemDetails.Hsncode,
-                            IsDeleted = itemDetails.IsDeleted,
-                            IsApproved = itemDetails.IsApproved,
-                            CreatedBy = itemDetails.CreatedBy,
-                            CreatedOn = DateTime.Now,
-                        };
-                        Context.ItemMasters.Add(itemMaster);
-                        await Context.SaveChangesAsync();
-                        response.code = (int)HttpStatusCode.OK;
-                        response.message = "Items details successfully inserted.";
+                        itemNames.Add(itemDetails.ItemName);
                     }
+
+                    var itemMaster = new ItemMaster()
+                    {
+                        ItemId = Guid.NewGuid(),
+                        ItemName = itemDetails.ItemName,
+                        UnitType = unitType.UnitId,
+                        PricePerUnit = itemDetails.PricePerUnit,
+                        IsWithGst = false,
+                        Gstamount = itemDetails.Gstamount,
+                        Gstper = itemDetails.Gstper,
+                        Hsncode = itemDetails.Hsncode,
+                        IsDeleted = false,
+                        IsApproved = false,
+                        CreatedBy = itemDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    itemsToAdd.Add(itemMaster);
+                }
+
+                if (itemsToAdd.Any())
+                {
+                    Context.ItemMasters.AddRange(itemsToAdd);
+                    await Context.SaveChangesAsync();
+
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Items details successfully inserted";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = ": Failed to insert item details";
                 }
             }
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "An error occurred while processing the request";
+                response.message = ": An error occurred while processing the request";
             }
             return response;
         }
+
+
 
         public async Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText)
         {

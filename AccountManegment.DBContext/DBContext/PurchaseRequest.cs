@@ -21,6 +21,8 @@ public partial class PurchaseRequest
 
     public bool? IsApproved { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

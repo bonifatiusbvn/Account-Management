@@ -259,14 +259,11 @@ namespace AccountManegments.Web.Controllers
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("ItemName", typeof(string));
-                dt.Columns.Add("UnitType", typeof(int));
+                dt.Columns.Add("UnitType", typeof(string));
                 dt.Columns.Add("PricePerUnit", typeof(decimal));
-                dt.Columns.Add("IsWithGST", typeof(bool));
                 dt.Columns.Add("GSTAmount", typeof(decimal));
                 dt.Columns.Add("GSTPer", typeof(decimal));
                 dt.Columns.Add("HSNCode", typeof(string));
-                dt.Columns.Add("IsApproved", typeof(bool));
-                dt.Columns.Add("IsDeleted", typeof(bool));
 
                 excelConString = string.Format(excelConString, filepath);
                 using (OleDbConnection conExcel = new OleDbConnection(excelConString))
@@ -278,7 +275,20 @@ namespace AccountManegments.Web.Controllers
                             cmdExcel.Connection = conExcel;
                             conExcel.Open();
                             DataTable dtExcelSchema = conExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                            string sheetName = dtExcelSchema.Rows[0]["Table_Name"].ToString();
+                            string sheetName = "";
+                            foreach (DataRow row in dtExcelSchema.Rows)
+                            {
+                                string tableName = row["TABLE_NAME"].ToString();
+                                if (tableName != "DD")
+                                {
+                                    sheetName = tableName;
+                                    break;
+                                }
+                            }
+                            if (string.IsNullOrEmpty(sheetName))
+                            {
+                                throw new Exception("No valid sheet found in the Excel file.");
+                            }
                             cmdExcel.CommandText = "SELECT * FROM [" + sheetName + "]";
                             odaExcel.SelectCommand = cmdExcel;
                             odaExcel.Fill(dt);
@@ -291,24 +301,31 @@ namespace AccountManegments.Web.Controllers
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    var item = new ItemMasterModel
+                    try
                     {
-                        ItemName = row["ItemName"].ToString(),
-                        UnitType = Convert.ToInt32(row["UnitType"]),
-                        PricePerUnit = Convert.ToDecimal(row["PricePerUnit"]),
-                        IsWithGst = Convert.ToBoolean(row["IsWithGST"]),
-                        Gstamount = Convert.ToDecimal(row["GSTAmount"]),
-                        Gstper = Convert.ToDecimal(row["GSTPer"]),
-                        Hsncode = row["HSNCode"].ToString(),
-                        IsApproved = Convert.ToBoolean(row["IsApproved"]),
-                        IsDeleted = Convert.ToBoolean(row["IsDeleted"]),
-                        CreatedBy = _userSession.UserId,
-                        CreatedOn = DateTime.Now,
-                        UpdatedBy = _userSession.UserId,
-                        UpdatedOn = DateTime.Now
-                    };
+                        var item = new ItemMasterModel
+                        {
+                            ItemName = row["ItemName"].ToString(),
+                            UnitTypeName = row["UnitType"].ToString(),
+                            PricePerUnit =Convert.ToDecimal(row["PricePerUnit"]),
+                            Gstamount = Convert.ToDecimal(row["GSTAmount"]),
+                            Gstper = Convert.ToDecimal(row["GSTPer"]),
+                            Hsncode = row["HSNCode"].ToString(),
+                            CreatedBy = _userSession.UserId,
+                            CreatedOn = DateTime.Now,
+                            IsWithGst = false,
+                        };
 
-                    items.Add(item);
+                        items.Add(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error processing row: {ex.Message}");
+                        foreach (DataColumn column in dt.Columns)
+                        {
+                            Console.WriteLine($"{column.ColumnName}: {row[column]}");
+                        }
+                    }
                 }
 
                 ApiResponseModel postUser = await APIServices.PostAsync(items, "ItemMaster/InsertItemDetailsFromExcel");

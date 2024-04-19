@@ -87,6 +87,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
                     IsApproved = PurchaseRequestDetails.IsApproved,
+                    IsDeleted=false,
                     CreatedBy = PurchaseRequestDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -108,13 +109,15 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
             try
             {
                 var purchaseDetails = Context.PurchaseRequests.Where(a => a.Pid == PurchaseId).FirstOrDefault();
-                if (PurchaseId != null)
+                if (purchaseDetails != null)
                 {
-                    Context.PurchaseRequests.Remove(purchaseDetails);
-                    response.message = "Purchase request" + " " + purchaseDetails.Item + " " + " item is successfully removed.";
+                    purchaseDetails.IsDeleted = true;
+                    Context.PurchaseRequests.Update(purchaseDetails);
+                    Context.SaveChanges();
                     response.code = 200;
+                    response.data = purchaseDetails;
+                    response.message = "Purchaserequest is deleted successfully";
                 }
-                Context.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -161,7 +164,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 var PurchaseRequestList = from a in Context.PurchaseRequests
                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                           join c in Context.Sites on a.SiteId equals c.SiteId
-                                          where (siteId == null || a.SiteId == siteId) && c.IsActive == true
+                                          where (siteId == null || a.SiteId == siteId) && c.IsActive == true &&
+                                          a.IsDeleted == false
                                           select new PurchaseRequestModel
                                           {
                                               Pid = a.Pid,

@@ -22,6 +22,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
         public string PrNo { get; set; } = null!;
 
         public bool? IsApproved { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid CreatedBy { get; set; }
 

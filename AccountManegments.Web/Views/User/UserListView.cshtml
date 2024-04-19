@@ -75,6 +75,10 @@
                                                     <tr>
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
+                                                        @if(_userSession.UserRole == 3)
+                                                        {
+                                                            <th>Site</th>
+                                                        }
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
                                                         {
