@@ -153,6 +153,7 @@ function CreatePurchaseRequest() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -308,6 +309,7 @@ function UpdatePurchaseRequestDetails() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -800,6 +802,7 @@ function InsertMultiplePurchaseOrderDetails() {
             }
         }
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',
@@ -930,6 +933,7 @@ function AddShippingAddress() {
             });
         }
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',
@@ -1091,6 +1095,7 @@ function UpdateMultiplePurchaseOrderDetails() {
             }
         }
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',

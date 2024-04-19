@@ -32,6 +32,7 @@ function CreateUser() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -230,6 +231,7 @@ function UpdateUserDetails() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -379,7 +381,7 @@ function UserActiveDecative(UserId) {
                             buttonsStyling: false
                         });
                     }
-                    
+
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {

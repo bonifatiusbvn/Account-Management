@@ -217,6 +217,7 @@ function AddItemInWordDetails() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',

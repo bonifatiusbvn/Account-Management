@@ -91,6 +91,7 @@ function AddCompany() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -218,6 +219,7 @@ function UpdateCompany() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',

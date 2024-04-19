@@ -71,13 +71,13 @@
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table align-middle mb-0">
-                                                <thead class="table-light">
+                                                <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
-                                                        @if(_userSession.UserRole == 3)
+                                                        @if (_userSession.UserRole == 3)
                                                         {
-                                                            <th>Site</th>
+                                                            <th>Site Name</th>
                                                         }
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))

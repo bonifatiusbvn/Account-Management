@@ -38,6 +38,7 @@ function CreateSupplier() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -241,6 +242,7 @@ function UpdateSupplierDetails() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',

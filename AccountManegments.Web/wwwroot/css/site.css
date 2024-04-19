@@ -67,3 +67,7 @@ body {
     -webkit-animation: spin .8s linear infinite;
     animation: spin .8s linear infinite;
 }
+
+.white-text {
+    color: white; /* Set the text color to white */
+}

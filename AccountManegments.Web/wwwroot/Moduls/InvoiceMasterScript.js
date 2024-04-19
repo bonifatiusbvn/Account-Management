@@ -390,7 +390,7 @@ function InsertMultipleSupplierItem() {
         });
     }
     else {
-
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',
@@ -477,7 +477,7 @@ function UpdateInvoiceDetails() {
         });
     }
     else {
-
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',
@@ -1055,6 +1055,7 @@ function addShippingAddress() {
         $('#mdShippingAdd').modal('toggle');
         siteloaderhide();
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',

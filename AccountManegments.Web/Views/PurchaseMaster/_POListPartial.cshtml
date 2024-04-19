@@ -5,7 +5,7 @@
 @foreach (var item in Model)
 {
     <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
-        <td><a class="text-primary" href="/PurchaseMaster/DisplayPODetails?POId=@item.Id">@item.Poid</a></td>
+        <td><a class="text-primary" href="/PurchaseMaster/DisplayPODetails?POId=@item.Id"><h6 class="product-name mb-2">@item.Poid</h6></a></td>
         <td>@item.SupplierName</td>
         <td>@item.CompanyName</td>
         <td>@item.TotalGstamount</td>

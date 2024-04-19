@@ -170,6 +170,7 @@ function CreateItem() {
         });
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
@@ -250,6 +251,7 @@ function UpdateItemDetails() {
         })
     }
     else {
+        siteloaderhide();
         Swal.fire({
             title: "Kindly fill all details",
             icon: 'warning',
