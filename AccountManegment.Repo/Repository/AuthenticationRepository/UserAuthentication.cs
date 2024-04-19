@@ -32,31 +32,41 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         {
             UserResponceModel response = new UserResponceModel();
             var GetUserdta = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
+            var GetSite = Context.Sites.FirstOrDefault(e => e.SiteId == GetUserdta.SiteId && e.IsDeleted == false);
 
-            if (GetUserdta != null)
+            if (GetUserdta != null && GetSite != null)
             {
-
-                if (GetUserdta.IsActive == true)
+                if (GetSite.IsActive)
                 {
-                    GetUserdta.IsActive = false;
-                    Context.Users.Update(GetUserdta);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Deactive Succesfully";
+                    if (GetUserdta.IsActive)
+                    {
+                        GetUserdta.IsActive = false;
+                        Context.Users.Update(GetUserdta);
+                        await Context.SaveChangesAsync();
+                        response.Code = 200;
+                        response.Data = GetUserdta;
+                        response.Message = "User" + " " + GetUserdta.UserName + " " + "is deactive succesfully";
+                    }
+                    else
+                    {
+                        GetUserdta.IsActive = true;
+                        Context.Users.Update(GetUserdta);
+                        await Context.SaveChangesAsync();
+                        response.Code = 200;
+                        response.Data = GetUserdta;
+                        response.Message = "User" + " " + GetUserdta.UserName + " " + "is active succesfully";
+                    }
                 }
-
                 else
                 {
-                    GetUserdta.IsActive = true;
-                    Context.Users.Update(GetUserdta);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "is Active Succesfully";
+                    response.Message = "This user's site is inactive.";
+                    response.Code = 400;
                 }
-
-
+            }
+            else
+            {
+                response.Message = "This user's site is deleted.";
+                response.Code = 400;
             }
             return response;
         }
@@ -114,15 +124,30 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         {
             UserResponceModel response = new UserResponceModel();
             var GetUserdata = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
+            var Activesite = Context.Sites.Where(a => a.SiteId == GetUserdata.SiteId && a.IsActive == false).FirstOrDefault();
 
-            if (GetUserdata != null)
+            if (GetUserdata != null && GetUserdata.IsActive == false)
             {
-                GetUserdata.IsDeleted = true;
-                Context.Users.Update(GetUserdata);
-                Context.SaveChanges();
-                response.Code = 200;
-                response.Data = GetUserdata;
-                response.Message = "User is deleted successfully";
+                if(Activesite != null)
+                {
+                    GetUserdata.IsDeleted = true;
+                    Context.Users.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "User is deleted successfully";
+                }
+                else
+                {
+                    response.Message = "This user's site is active so user can't delete.";
+                    response.Code = 400;
+                }
+                
+            }
+            else
+            {
+                response.Message = "Active user can't delete.";
+                response.Code = 400;
             }
             return response;
         }

@@ -101,17 +101,15 @@ namespace AccountManagement.API.Controllers
             var userName = await Authentication.ActiveDeactiveUsers(UserId);
             try
             {
-
-                if (userName != null)
+                if (responseModel.Code==200)
                 {
-
-                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Code = userName.Code;
                     responseModel.Message = userName.Message;
                 }
                 else
                 {
                     responseModel.Message = userName.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = userName.Code;
                 }
             }
             catch (Exception ex)
@@ -129,15 +127,15 @@ namespace AccountManagement.API.Controllers
             var User = await Authentication.DeleteUserDetails(UserId);
             try
             {
-                if (User != null)
+                if (responseModel.Code==200)
                 {
-                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Code = User.Code;
                     responseModel.Message = User.Message;
                 }
                 else
                 {
                     responseModel.Message = User.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = User.Code;
                 }
             }
             catch (Exception ex)

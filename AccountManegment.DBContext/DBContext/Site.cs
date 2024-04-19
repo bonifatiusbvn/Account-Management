@@ -39,6 +39,8 @@ public partial class Site
 
     public string? ShippingPincode { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

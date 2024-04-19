@@ -148,8 +148,6 @@ function CreateItem() {
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ItemMaster/ItemListView';
                     });
                 }
             },
@@ -293,7 +291,7 @@ function resetItemForm() {
 function ItemIsApproved(ItemId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Approve this Item?" : "Are you sure want to UnApprove this Item?";
+    var confirmationMessage = isChecked ? "Are you sure want to approve this Item?" : "Are you sure want to unapprove this Item?";
 
     Swal.fire({
         title: confirmationMessage,
@@ -342,7 +340,7 @@ function ItemIsApproved(ItemId) {
 function deleteItemDetails(ItemId) {
 
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to Delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -384,7 +382,7 @@ function deleteItemDetails(ItemId) {
 
             Swal.fire(
                 'Cancelled',
-                'Item Have No Changes.!!😊',
+                'Item have no changes.!!😊',
                 'error'
             );
         }

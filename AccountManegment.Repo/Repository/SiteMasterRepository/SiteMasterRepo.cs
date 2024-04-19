@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
+using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     ShippingStateId = SiteDetails.ShippingStateId,
                     ShippingCountry = SiteDetails.ShippingCountry,
                     ShippingPincode = SiteDetails.ShippingPincode,
+                    IsDeleted = false,
                     CreatedBy = SiteDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -121,6 +123,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 join e in Context.Countries on a.ShippingCountry equals e.CountryId
                                 join f in Context.States on a.ShippingStateId equals f.StatesId
                                 join g in Context.Cities on a.ShippingCityId equals g.CityId
+                                where a.IsDeleted==false
                                 select new SiteMasterModel
                                 {
                                     SiteId = a.SiteId,
@@ -295,19 +298,50 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var siteDetails = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
-                if (SiteId != null)
+                var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true && e.IsDeleted == false);
+                var Purchaserequest=Context.PurchaseRequests.Where(b=>b.SiteId==SiteId).ToList();
+                var inwardchallan=Context.ItemInwords.Where(c=>c.SiteId==SiteId).ToList();
+
+                if (siteDetails != null && siteDetails.IsActive == false)
                 {
-                    Context.Sites.Remove(siteDetails);
-                    response.message = "Site" + " " + siteDetails.SiteName + " " + "is successfully removed.";
-                    response.code = 200;
+                    if(activeUsersCount == 0)
+                    {
+                        siteDetails.IsDeleted = true;
+                        Context.Sites.Update(siteDetails);
+                        foreach (var request in Purchaserequest)
+                        {
+                            request.IsDeleted = true;
+                            Context.PurchaseRequests.Update(request);
+                        }
+
+                        foreach (var challan in inwardchallan)
+                        {
+                            challan.IsDeleted = true;
+                            Context.ItemInwords.Update(challan);
+                        }
+                        Context.SaveChanges();
+                        response.code = 200;
+                        response.data = siteDetails;
+                        response.message = "Site is deleted successfully";
+                    }
+                    else
+                    {
+                        response.message = "This site has active users so it can't delete.";
+                        response.code = 400;
+                    }
+
                 }
-                Context.SaveChanges();
+                else
+                {
+                    response.message = "Active site can't delete.";
+                    response.code = 400;
+                }
+                return response;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return response;
         }
 
         public async Task<IEnumerable<SiteMasterModel>> GetSiteNameList()

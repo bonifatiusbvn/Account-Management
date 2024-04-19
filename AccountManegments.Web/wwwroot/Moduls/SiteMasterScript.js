@@ -387,13 +387,10 @@ function ActiveDecativeSite(SiteId) {
                         });
                     } else {
                         Swal.fire({
-                            title: isChecked ? "Active!" : "DeActive!",
-                            text: Result.message,
+                            title: Result.message,
                             icon: "warning",
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
                             buttonsStyling: false
-                        }).then(function () {
-                            window.location = '/SiteMaster/SiteListView';
                         });
                     }
                     
@@ -413,8 +410,7 @@ function ActiveDecativeSite(SiteId) {
 
 function DeleteSite(SiteId) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
-        text: "You won't be able to revert this!",
+        title: "If you want to delete this site,delete all data related this site!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, Delete it!",
@@ -430,15 +426,24 @@ function DeleteSite(SiteId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/SiteMaster/SiteListView';
-                    })
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/SiteMaster/SiteListView';
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    }
                 },
                 error: function () {
                     Swal.fire({

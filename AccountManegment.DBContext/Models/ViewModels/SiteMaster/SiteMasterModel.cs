@@ -42,6 +42,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public int ShippingCountry { get; set; }
 
         public string? ShippingPincode { get; set; }
+        public bool? IsDeleted { get; set; }
         [Required]
         public Guid CreatedBy { get; set; }
         [Required]

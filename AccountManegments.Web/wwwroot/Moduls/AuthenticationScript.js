@@ -332,14 +332,14 @@ function resetUserForm() {
 function UserActiveDecative(UserId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + UserId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
+    var confirmationMessage = isChecked ? "Are you sure want to active this user?" : "Are you sure want to deactive this user?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -356,21 +356,31 @@ function UserActiveDecative(UserId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: isChecked ? "Active!" : "DeActive!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/User/UserListView';
-                    });
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: isChecked ? "Active!" : "Deactive!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/User/UserListView';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: "warning",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        });
+                    }
+                    
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
                 'Cancelled',
-                'User Have No Changes.!!😊',
+                'User have no changes.!!😊',
                 'error'
             ).then(function () {
                 window.location = '/User/UserListView';
@@ -436,15 +446,24 @@ function deleteUserDetails(UserId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/User/UserListView';
-                    })
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/User/UserListView';
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    }
                 },
                 error: function () {
                     Swal.fire({
