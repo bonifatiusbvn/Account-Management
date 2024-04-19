@@ -208,10 +208,15 @@
                 <span class="text-muted"><b>In words: </b></span>
                 <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span>
             </div>
-            <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                @*  <a class="btn btn-primary" asp-action="ExportToPdf" asp-controller="PurchaseMaster" asp-route-POId="@firstItem.Id"><i class="ri-download-2-line align-bottom me-1"></i> Download </a>*@
-                <a class="btn btn-primary" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
+            <div class="card d-print-none">
+                <div class="card-body">
+                    <div class="d-lg-flex align-items-center gap-3">
+                        <a class="btn btn-primary btn-ecomm" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
+                        @* <a href="javascript:;" class="btn btn-white btn-ecomm"><i class="bx bx-refresh"></i> Update Cart</a> *@
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
