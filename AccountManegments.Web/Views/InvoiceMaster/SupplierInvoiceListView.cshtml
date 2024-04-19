@@ -72,9 +72,10 @@
                                             <table class="table align-middle mb-0">
                                                 <thead class="table-light">
                                                     <tr>
-                                                        <th>SiteName</th>
+                                                        <th>InvoiceNo</th>
                                                         <th>Supplier</th>
                                                         <th>Company</th>
+                                                        <th>GST Amount</th>
                                                         <th>Total Amount</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                                         {

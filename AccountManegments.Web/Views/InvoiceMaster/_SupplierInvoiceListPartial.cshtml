@@ -7,9 +7,10 @@
 @foreach (var item in Model)
 {
     <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
-        <td><a class="text-primary" href="/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id">@item.SiteName</a></td>
+        <td><a class="text-primary" href="/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id">@item.InvoiceNo</a></td>
         <td>@item.SupplierName</td>
         <td>@item.CompanyName</td>
+        <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
         {
