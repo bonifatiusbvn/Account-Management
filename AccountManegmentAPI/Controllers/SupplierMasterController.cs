@@ -123,5 +123,25 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SupplierModel> SupplierName = await _Supplier.GetSupplierNameList();
             return Ok(new { code = 200, data = SupplierName.ToList() });
         }
+
+        [HttpPost]
+        [Route("ImportSupplierListFromExcel")]
+        public async Task<IActionResult> ImportSupplierListFromExcel(List<SupplierModel> supplierList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var addSupplierList = await _Supplier.ImportSupplierListFromExcel(supplierList);
+            if (addSupplierList.code == 200)
+            {
+                response.code = (int)HttpStatusCode.OK;
+                response.message = addSupplierList.message;
+
+            }
+            else
+            {
+                response.code = addSupplierList.code;
+                response.message = addSupplierList.message;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

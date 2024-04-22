@@ -436,3 +436,31 @@ function GetSupplierInvoiceDetailsById(SupplierId, element) {
             $("#supplierinvoicedetails").html(result);
         })
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    var closeButton = document.getElementById("ErrorCloseButton");
+    if (closeButton) {
+        closeButton.addEventListener("click", function () {
+            window.location = '/Supplier/SupplierList';
+        });
+    }
+});
+
+function downloadSampleFile() {
+    siteloadershow();
+    var fileUrl = '/uploadexcelfile/SuplierMasterDetails.xlsx';
+
+    var link = document.createElement('a');
+
+    link.href = fileUrl;
+
+    link.setAttribute('download', '');
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+    siteloaderhide();
+}
