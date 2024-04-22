@@ -1029,6 +1029,7 @@ function addShippingAddress() {
         var sitename = $("#textInvoiceSiteName").val();
 
         if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
+            siteloaderhide();
             Swal.fire({
                 title: "Only one address allowed!",
                 text: "You can only add one shipping address.",
