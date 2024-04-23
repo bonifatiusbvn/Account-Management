@@ -53,14 +53,22 @@ namespace AccountManegments.Web.Models
                 return userroleid != null ? int.Parse(userroleid.Value) : 0;
             }
         }
+
+        public string RoleName
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "RoleName", true) == 0)?.Value;
+            }
+        }
         public static string SiteName
         {
             get
             {
-                if (string.IsNullOrEmpty(StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value))
+                if (StaticHttpContext.Session.GetString("SiteName") == null)
                     return null;
                 else
-                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteName", true) == 0)?.Value;
+                    return StaticHttpContext.Session.GetString("SiteName");
 
             }
             set
@@ -72,10 +80,10 @@ namespace AccountManegments.Web.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value))
+                if (StaticHttpContext.Session.GetString("SiteId") == null)
                     return null;
                 else
-                    return StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "SiteId", true) == 0)?.Value;
+                    return StaticHttpContext.Session.GetString("SiteId");
 
             }
             set
