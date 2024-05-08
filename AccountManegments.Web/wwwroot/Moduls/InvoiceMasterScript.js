@@ -296,11 +296,13 @@ $(document).ready(function () {
             textSupplierName: "required",
             textCompanyName: "required",
             paymentStatus: "required",
+            textSupplierInvoiceNo:"required",
         },
         messages: {
             textSupplierName: "Select Supplier Name",
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
+            textSupplierInvoiceNo:"Enter Supplier Invoice No",
         }
     });
 });
@@ -345,6 +347,7 @@ function InsertMultipleSupplierItem() {
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
             ShippingAddress: $("#textmdAddress").val(),
+            SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
             ItemList: ItemDetails,
         }
 
@@ -432,6 +435,7 @@ function UpdateInvoiceDetails() {
             CreatedBy: $("#createdbyid").val(),
             UnitTypeId: $("#UnitTypeId").val(),
             Description: $("#textDescription").val(),
+            SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
             ShippingAddress: Address,
         }
 

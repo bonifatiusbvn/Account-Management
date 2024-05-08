@@ -18,6 +18,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public Guid CompanyId { get; set; }
 
+        public string? SupplierInvoiceNo { get; set; }
+
         public DateTime? Date { get; set; }
 
         public string? Description { get; set; }

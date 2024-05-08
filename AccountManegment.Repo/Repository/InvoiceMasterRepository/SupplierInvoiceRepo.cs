@@ -141,6 +141,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                   Description = a.Description,
                                                   Roundoff = a.Roundoff,
                                                   IsPayOut = a.IsPayOut,
+                                                  SupplierInvoiceNo = a.SupplierInvoiceNo,
                                                   PaymentStatus = a.PaymentStatus
                                               }).ToListAsync();
 
@@ -199,6 +200,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyId = a.CompanyId,
                                     CompanyName = c.CompanyName,
                                     CompanyAddress = c.Address,
+                                    SupplierInvoiceNo = a.SupplierInvoiceNo,
                                     CompanyArea = c.Area,
                                     CompanyCityName = e.CityName,
                                     CompanyCountryName = g.CountryName,
@@ -270,6 +272,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         SiteName = d.SiteName,
                                         SupplierName = b.SupplierName,
                                         CreatedOn = a.CreatedOn,
+                                        SupplierInvoiceNo = a.SupplierInvoiceNo,
                                     });
 
                 if (!string.IsNullOrEmpty(searchText))
@@ -362,6 +365,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
                 supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
                 supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
+                supplierInvoice.SupplierInvoiceNo = SupplierInvoiceDetail.SupplierInvoiceNo;
                 supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmountInvoice;
                 supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
                 supplierInvoice.Description = SupplierInvoiceDetail.Description;
@@ -404,6 +408,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SiteId = SupplierItemDetails.SiteId,
                     SupplierId = SupplierItemDetails.SupplierId,
                     CompanyId = SupplierItemDetails.CompanyId,
+                    SupplierInvoiceNo = SupplierItemDetails.SupplierInvoiceNo,
                     Description = SupplierItemDetails.Description,
                     TotalDiscount = SupplierItemDetails.TotalDiscount,
                     TotalGstamount = SupplierItemDetails.TotalGstamount,
@@ -512,6 +517,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                             Description = a.Description,
                                             Roundoff = a.Roundoff,
                                             IsPayOut = a.IsPayOut,
+                                            SupplierInvoiceNo = a.SupplierInvoiceNo,
                                             PaymentStatus = a.PaymentStatus
                                         });
                 return (supplierInvoices);
