@@ -243,7 +243,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     FormFile.CopyTo(stream);
                 }
-                var filename = FormFile.FileName;
+                var filename = Guid.NewGuid + "_" + FormFile.FileName;
                 string extension = Path.GetExtension(filename);
                 string excelConString = string.Empty;
                 switch (extension)
@@ -380,6 +380,11 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    var qty = GetItem.Quantity;
+                    foreach (var item in Items)
+                    {
+                        item.Quantity = qty;
+                    }
                     //Items.RowNumber = Items.RowNumber;
                 }
                 return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
@@ -424,6 +429,11 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    var qty = GetItem.Quantity;
+                    foreach (var item in Items)
+                    {
+                        item.Quantity = qty;
+                    }
                     //Items.RowNumber = Items.RowNumber;
                 }
                 return PartialView("~/Views/InvoiceMaster/_DisplayItemDetailsPartial.cshtml", Items);

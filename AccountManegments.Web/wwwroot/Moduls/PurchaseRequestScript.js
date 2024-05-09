@@ -602,10 +602,12 @@ $(document).ready(function () {
     });
 });
 
-function SerchItemDetailsById(Id) {
+function SerchItemDetailsById(Id, inputField) {
     siteloadershow();
+    var qty = $(inputField).closest('.ac-item').find('.product-quantity').val();
     var Item = {
         ItemId: Id,
+        Quantity: qty,
     }
 
     var form_data = new FormData();

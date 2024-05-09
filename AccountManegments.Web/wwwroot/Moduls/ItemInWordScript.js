@@ -590,7 +590,8 @@ function showpictures() {
     if (files.length > 0) {
         if ($("#addNewImage .DocumentName").length + files.length > 5) {
             toastr.error("You can only add a maximum of 5 images.");
-            return;
+            siteloaderhide();
+            return;    
         }
         for (var i = 0; i < files.length; i++) {
             const file = files[i];

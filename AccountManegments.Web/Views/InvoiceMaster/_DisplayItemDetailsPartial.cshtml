@@ -16,11 +16,11 @@
             <div class="">
                 @if (item.Quantity == 0)
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
+                    <input type="number" class="product-quantity form-control" id="txtproductquantity" value="" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
                 }
                 else
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
+                    <input type="number" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
                 }
             </div>
         </td>

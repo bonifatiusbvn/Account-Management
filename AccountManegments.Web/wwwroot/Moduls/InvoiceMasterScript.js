@@ -4,10 +4,31 @@ GetItemDetailsList()
 GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
-function SerchItemDetailsById(Id) {
+
+function filterallItemTable() {
     siteloadershow();
+    var searchText = $('#mdProductSearch').val();
+
+    $.ajax({
+        url: '/PurchaseMaster/GetAllItemDetailsList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#mdlistofItem").html(result);
+        },
+
+    });
+}
+
+function SerchItemDetailsById(Id, inputField) {
+    siteloadershow();
+    var qty = $(inputField).closest('.ac-item').find('.product-quantity').val();
     var Item = {
         ItemId: Id,
+        Quantity: qty,
     }
 
     var form_data = new FormData();
@@ -133,40 +154,6 @@ $(document).ready(function () {
     $("#textOrderDate").prop("disabled", true);
 });
 
-function searchItemDetailById() {
-    siteloadershow();
-    var GetItemId = {
-        ItemId: $('#searchItemName').val(),
-
-    }
-    var form_data = new FormData();
-    form_data.append("ITEMID", JSON.stringify(GetItemId));
-
-
-    $.ajax({
-        url: '/InvoiceMaster/DisplayItemDetailById',
-        type: 'Post',
-        datatype: 'json',
-        data: form_data,
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            siteloaderhide();
-            if (Result.statusText === "success") {
-                AddNewRow(Result.responseText);
-            }
-            else {
-                var GetItemId = $('#searchItemName').val();
-                if (GetItemId === "Select Product Name" || GetItemId === null) {
-                    $('#searchvalidationMessage').text('Please select ProductName!!');
-                }
-                else {
-                    $('#searchvalidationMessage').text('');
-                }
-            }
-        }
-    });
-}
 
 function AllSupplierInvoiceListTable() {
 
@@ -546,7 +533,6 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
     UnitTypeDropdown(itemId);

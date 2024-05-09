@@ -236,6 +236,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                      join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                      join d in Context.Sites on a.SiteId equals d.SiteId
+                                     orderby a.CreatedOn descending
                                      where a.IsDeleted == false
                                      select new PurchaseOrderView
                                      {

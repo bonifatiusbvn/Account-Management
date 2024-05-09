@@ -158,7 +158,7 @@
                                     <div class="row p-3">
 
                                         <h5 class="card-header">
-                                            Purchase Details
+                                            Add Product
                                             @if (Model.ItemList != null)
                                             {
                                                 <a class="disabled">
@@ -306,25 +306,25 @@
                                     </div>
                                 </div>
 
-                            <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <div class="card">
-                                        <h5 class="card-header">
-                                            Shipping Addresses
-                                            <a class="font-22" onclick="fn_OpenShippingModal()">
-                                                <i class="lni lni-circle-plus"></i>
-                                            </a>
-                                            <span id="spnshipping" style="color:red;"></span>
-                                        </h5>
-                                        <div class="card-body Address" id="dvshippingAdd">
-                                            @if (Model.AddressList != null)
-                                            {
-                                                @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                            }
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                    <i class="lni lni-circle-plus"></i>
+                                                </a>
+                                                <span id="spnshipping" style="color:red;"></span>
+                                            </h5>
+                                            <div class="card-body Address" id="dvshippingAdd">
+                                                @if (Model.AddressList != null)
+                                                {
+                                                    @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                                 <div id="dvshipping" class="col-lg-6">
                                     <div class="row">
@@ -399,8 +399,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -439,7 +439,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

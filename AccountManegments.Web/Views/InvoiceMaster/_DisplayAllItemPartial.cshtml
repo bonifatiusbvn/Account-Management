@@ -3,15 +3,18 @@
 @foreach (var item in Model)
 {
     <div class="row ac-item border-2 text-sm-center p-2">
-        <div class="col-5 col-sm-5 order1">
+        <div class="col-6 col-sm-6 order1">
             <p id="ptimeName">@item.ItemName</p>
         </div>
-        <div class="col-3 col-sm-3 order2">
+        <div class="col-2 col-sm-2 order2">
             <p id="pQtyType">@item.PricePerUnit</p>
         </div>
-        <div class="col-4 col-sm-4 font-22 order3">
+        <div class="col-2 col-sm-2 order2">
+            <input type="number" class="product-quantity form-control" id="inputproductquantity" value="1" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
+        </div>
+        <div class="col-2 col-sm-2 font-22 order3">
             <div class="font-22">
-                <a id="addItemButton" class="" onclick="SerchItemDetailsById('@item.ItemId')" style=""><i class="lni lni-circle-plus"></i></a>
+                <a id="addItemButton" class="" onclick="SerchItemDetailsById('@item.ItemId',this)" style=""><i class="lni lni-circle-plus"></i></a>
             </div>
         </div>
     </div>

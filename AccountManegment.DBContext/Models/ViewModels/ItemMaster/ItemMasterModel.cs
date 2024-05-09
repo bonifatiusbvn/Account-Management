@@ -40,5 +40,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
 
         public string? UnitTypeName { get; set; }
         public int RowNumber { get; set; }
+        public int Quantity { get; set; }
     }
 }

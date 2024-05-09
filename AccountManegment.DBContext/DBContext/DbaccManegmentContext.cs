@@ -41,6 +41,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Site> Sites { get; set; }
 
+    public virtual DbSet<SiteDeliveryAddress> SiteDeliveryAddresses { get; set; }
+
     public virtual DbSet<State> States { get; set; }
 
     public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
@@ -55,9 +57,7 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -111,6 +111,8 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<Form>(entity =>
         {
+            entity.HasKey(e => e.FormId).HasName("PK_Form_1");
+
             entity.ToTable("Form");
 
             entity.Property(e => e.Action).HasMaxLength(50);
@@ -286,7 +288,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.HasOne(d => d.Form).WithMany(p => p.RolewiseFormPermissions)
                 .HasForeignKey(d => d.FormId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RolewiseFormPermission_UserRole");
+                .HasConstraintName("FK_RolewiseFormPermission_Form");
         });
 
         modelBuilder.Entity<Site>(entity =>
@@ -305,6 +307,19 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ShippingPincode).HasMaxLength(10);
             entity.Property(e => e.SiteName).HasMaxLength(250);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<SiteDeliveryAddress>(entity =>
+        {
+            entity.ToTable("SiteDeliveryAddress");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Address).HasMaxLength(500);
+
+            entity.HasOne(d => d.Site).WithMany(p => p.SiteDeliveryAddresses)
+                .HasForeignKey(d => d.SiteId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SiteDeliveryAddress_Site");
         });
 
         modelBuilder.Entity<State>(entity =>
@@ -336,6 +351,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGstamount)
