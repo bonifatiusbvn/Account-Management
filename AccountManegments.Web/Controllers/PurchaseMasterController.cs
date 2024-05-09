@@ -447,9 +447,9 @@ namespace AccountManegments.Web.Controllers
             numbers[0] = inputNo % 1000;
             numbers[1] = inputNo / 1000;
             numbers[2] = inputNo / 100000;
-            numbers[1] = numbers[1] - 100 * numbers[2]; 
-            numbers[3] = inputNo / 10000000; 
-            numbers[2] = numbers[2] - 100 * numbers[3]; 
+            numbers[1] = numbers[1] - 100 * numbers[2];
+            numbers[3] = inputNo / 10000000;
+            numbers[2] = numbers[2] - 100 * numbers[3];
             for (int i = 3; i > 0; i--)
             {
                 if (numbers[i] != 0)
@@ -463,7 +463,7 @@ namespace AccountManegments.Web.Controllers
                 if (numbers[i] == 0) continue;
                 u = numbers[i] % 10;
                 t = numbers[i] / 10;
-                h = numbers[i] / 100; 
+                h = numbers[i] / 100;
                 t = t - 10 * h;
                 if (h > 0) sb.Append(words0[h] + "Hundred ");
                 if (u > 0 || t > 0)
@@ -482,7 +482,7 @@ namespace AccountManegments.Web.Controllers
             {
                 sb.Append("and ");
                 int fractionInt = (int)Math.Round(fraction * 100);
-                sb.Append(NumberToWords(fractionInt) + " "+"Paisa ");
+                sb.Append(NumberToWords(fractionInt) + " " + "Paisa ");
             }
 
             return sb.ToString().TrimEnd();
