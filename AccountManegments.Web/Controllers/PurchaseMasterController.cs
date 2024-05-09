@@ -252,7 +252,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
                 var InsertDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
