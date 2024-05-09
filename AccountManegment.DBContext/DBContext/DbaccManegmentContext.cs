@@ -41,8 +41,6 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Site> Sites { get; set; }
 
-    public virtual DbSet<SiteDeliveryAddress> SiteDeliveryAddresses { get; set; }
-
     public virtual DbSet<State> States { get; set; }
 
     public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
@@ -57,7 +55,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -308,19 +307,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ShippingPincode).HasMaxLength(10);
             entity.Property(e => e.SiteName).HasMaxLength(250);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<SiteDeliveryAddress>(entity =>
-        {
-            entity.ToTable("SiteDeliveryAddress");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Address).HasMaxLength(500);
-
-            entity.HasOne(d => d.Site).WithMany(p => p.SiteDeliveryAddresses)
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SiteDeliveryAddress_Site");
         });
 
         modelBuilder.Entity<State>(entity =>

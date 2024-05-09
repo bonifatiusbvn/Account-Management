@@ -26,4 +26,6 @@ public partial class RolewiseFormPermission
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual Form Form { get; set; } = null!;
 }
