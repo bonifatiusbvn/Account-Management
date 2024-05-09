@@ -57,7 +57,6 @@ public partial class DbaccManegmentContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -165,10 +164,10 @@ public partial class DbaccManegmentContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTPer");
             entity.Property(e => e.Hsncode)
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .HasColumnName("HSNCode");
             entity.Property(e => e.IsWithGst).HasColumnName("IsWithGST");
-            entity.Property(e => e.ItemName).HasMaxLength(50);
+            entity.Property(e => e.ItemName).HasMaxLength(100);
             entity.Property(e => e.PricePerUnit).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 

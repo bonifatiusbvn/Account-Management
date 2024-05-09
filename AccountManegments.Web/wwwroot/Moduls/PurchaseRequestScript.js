@@ -120,12 +120,9 @@ function CreatePurchaseRequest() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
-            siteName = $("#txtPoSiteName").val();
-        }
-        else {
-            siteName = $("#SiteIdinPR").val();
-        }
+
+        siteName = $("#txtPoSiteName").val();
+
         var objData = {
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
@@ -273,12 +270,8 @@ function UpdatePurchaseRequestDetails() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
-            siteName = $("#txtPoSiteName").val();
-        }
-        else {
-            siteName = $("#SiteIdinPR").val();
-        }
+        siteName = $("#txtPoSiteName").val();
+
         var objData = {
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
@@ -833,19 +826,16 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-        siteloadershow();
+        debugger
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
         $.ajax({
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
-                siteloaderhide();
                 $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             },
-            error: function (xhr, status, error) {
-                console.error("Error fetching company details:", error);
-            }
+
         });
     });
     $(document).on('click', '#removeAddress', function () {
