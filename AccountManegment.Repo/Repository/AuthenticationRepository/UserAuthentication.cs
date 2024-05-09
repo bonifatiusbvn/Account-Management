@@ -128,7 +128,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
             if (GetUserdata != null && GetUserdata.IsActive == false)
             {
-                if(Activesite != null)
+                if (Activesite != null)
                 {
                     GetUserdata.IsDeleted = true;
                     Context.Users.Update(GetUserdata);
@@ -142,7 +142,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     response.Message = "This user's site is active so user can't delete.";
                     response.Code = 400;
                 }
-                
+
             }
             else
             {
@@ -287,11 +287,13 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                 var tblUser = await (from u in Context.Users
                                      join s in Context.Sites on u.SiteId equals s.SiteId
+                                     join r in Context.UserRoles on u.RoleId equals r.RoleId
                                      where u.UserName == Loginrequest.UserName
                                      select new
                                      {
                                          User = u,
-                                         SiteName = s.SiteName
+                                         SiteName = s.SiteName,
+                                         Role = r.Role,
                                      }).FirstOrDefaultAsync();
 
                 if (tblUser != null)
@@ -305,6 +307,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             userModel.UserName = tblUser.User.UserName;
                             userModel.Id = tblUser.User.Id;
                             userModel.RoleId = tblUser.User.RoleId;
+                            userModel.RoleName = tblUser.Role;
                             userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
                             userModel.FirstName = tblUser.User.FirstName;
                             userModel.SiteName = tblUser.SiteName;

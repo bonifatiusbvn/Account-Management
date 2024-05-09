@@ -34,9 +34,10 @@ namespace AccountManegments.Web.Controllers
             {
 
                 UserSession.SiteId = SiteId.ToString();
-                //UserSession.SiteName = SiteId == null ? "All Site" : SiteName.ToString();
+                UserSession.SiteName = SiteId == null ? "All Site" : SiteName.ToString();
 
-                //Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                string siteName = string.IsNullOrEmpty(UserSession.SiteName) ? null : new(UserSession.SiteName);
 
                 string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
 

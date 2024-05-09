@@ -133,7 +133,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     var data = JsonConvert.SerializeObject(responsemodel.data);
                     userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
-                    
+
                     var claims = new List<Claim>()
             {
                 new Claim("UserId", userlogin.Data.Id.ToString()),
@@ -142,6 +142,7 @@ namespace AccountManegments.Web.Controllers
                 new Claim("SiteName", userlogin.Data.SiteName),
                 new Claim("SiteId", userlogin.Data.SiteId.ToString()),
                 new Claim("UserRole", userlogin.Data.RoleId.ToString()),
+                new Claim("RoleName", userlogin.Data.RoleName),
                 //new Claim("FormPermisionData", JsonConvert.SerializeObject(data.FromPermissionData)),
             };
 
