@@ -673,7 +673,11 @@ $(document).ready(function () {
             txtSuppliername: "required",
             companybillingaddressDetails: "required",
             txtcompanyname: "required",
-            txtDeliverySchedule: "required",
+            txtDeliverySchedule: {
+                required: function (element) {
+                    return !($("#txtDeliverySchedule").val() || $("input[name='txtDeliverySchedule']:checked").length > 0);
+                }
+            }, 
             txtContectPerson: "required",
             txtMobileNo: {
                 required: true,
@@ -742,7 +746,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 ? $("input[name='txtDeliverySchedule']:checked").val() : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 CreatedBy: $("#createdbyid").val(),
@@ -1034,7 +1038,6 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
-
             var PORequest = {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#siteid").val(),
@@ -1494,3 +1497,24 @@ function printDiv() {
     document.body.innerHTML = originalContents;
 }
 
+function toggleDate() {
+    const dateInput = document.getElementById('txtDeliverySchedule');
+    const radioImmediate = document.getElementById('txtImmediate');
+
+    if (dateInput.value) {
+        radioImmediate.disabled = true;
+    } else {
+        radioImmediate.disabled = false;
+    }
+}
+
+function toggleRadio() {
+    const dateInput = document.getElementById('txtDeliverySchedule');
+    const radioImmediate = document.getElementById('txtImmediate');
+
+    if (radioImmediate.checked) {
+        dateInput.disabled = true;
+    } else {
+        dateInput.disabled = false;
+    }
+}

@@ -246,12 +246,19 @@
                                             <div class="row card-body">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
-                                                        <div class="col-lg-12 col-sm-12">
+                                                        <div class="col-lg-6 col-sm-6">
                                                             <div class="input-group mb-3">
                                                                 <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
-                                                                <input type="text" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule">
+                                                                <input type="date" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" onchange="toggleDate()">
                                                             </div>
-                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-6 col-sm-6">
+                                                            <div class="input-group mb-3">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input"  type="radio" id="txtImmediate" name="txtDeliverySchedule" value="Immediate" onchange="toggleRadio()" @(Model.DeliveryShedule == "Immediate" ? "checked" : "")>
+                                                                    <label class="form-check-label" style="font-size:16px;" for="txtImmediate"><b>Immediate</b></label>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-2">
@@ -438,7 +445,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
