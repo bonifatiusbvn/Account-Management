@@ -10,17 +10,17 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
     {
         public Guid SupplierId { get; set; }
 
-        public string SupplierName { get; set; }
+        public string SupplierName { get; set; } = null!;
 
-        public string Mobile { get; set; }
+        public string Mobile { get; set; } = null!;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         public string? Gstno { get; set; }
 
         public string? BuildingName { get; set; }
 
-        public string Area { get; set; }
+        public string Area { get; set; } = null!;
 
         public int State { get; set; }
         public string? StateName { get; set; }
@@ -28,7 +28,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public int City { get; set; }
         public string? CityName { get; set; }
 
-        public string PinCode { get; set; }
+        public string PinCode { get; set; } = null!;
 
         public string? BankName { get; set; }
 
@@ -37,6 +37,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public string? Iffccode { get; set; }
 
         public bool IsApproved { get; set; }
+
         public bool? IsDelete { get; set; }
 
         public Guid CreatedBy { get; set; }

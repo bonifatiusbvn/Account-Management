@@ -279,5 +279,100 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 throw ex;
             }
         }
+        public async Task<ApiResponseModel> ImportSupplierListFromExcel(List<SupplierModel> supplierList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            List<SupplierMaster> suppliersToAdd = new List<SupplierMaster>();
+            HashSet<string> supplierNames = new HashSet<string>();
+            try
+            {
+                foreach (var supplierDetails in supplierList)
+                {
+                    var stateId = await Context.States.FirstOrDefaultAsync(x => x.StatesName == supplierDetails.StateName);
+                    var cityId = await Context.Cities.FirstOrDefaultAsync(x => x.CityName == supplierDetails.CityName);
+                    if (stateId != null)
+                    {
+                        if (cityId == null)
+                        {
+                            int index = supplierList.IndexOf(supplierDetails) + 1;
+                            string cityName = supplierDetails.CityName;
+                            response.code = 400;
+                            response.message = $": {cityName} at row {index} does not match any data type.";
+                            return response;
+                        }
+                    }
+                    else
+                    {
+                        int index = supplierList.IndexOf(supplierDetails) + 1;
+                        string stateName = supplierDetails.StateName;
+                        response.code = 400;
+                        response.message = $": {stateName} at row {index} does not match any data type.";
+                        return response;
+                    }
+
+                    var existingSupplier = await Context.SupplierMasters.FirstOrDefaultAsync(x => x.SupplierName == supplierDetails.SupplierName);
+                    if (existingSupplier != null)
+                    {
+                        response.code = 400;
+                        response.message = $": {supplierDetails.SupplierName} is already exist.";
+                        return response;
+                    }
+
+                    if (supplierNames.Contains(supplierDetails.SupplierName))
+                    {
+                        response.code = 400;
+                        response.message = $": {supplierDetails.SupplierName} is duplicated in the data.";
+                        return response;
+                    }
+                    else
+                    {
+                        supplierNames.Add(supplierDetails.SupplierName);
+                    }
+
+                    var supplierMaster = new SupplierMaster()
+                    {
+                        SupplierId = Guid.NewGuid(),
+                        SupplierName = supplierDetails.SupplierName,
+                        Mobile = supplierDetails.Mobile,
+                        Email = supplierDetails.Email,
+                        Gstno = supplierDetails.Gstno,
+                        BuildingName = supplierDetails.BuildingName,
+                        Area = supplierDetails.Area,
+                        City = cityId.CityId,
+                        State = stateId.StatesId,
+                        PinCode = supplierDetails.PinCode,
+                        BankName = supplierDetails.BankName,
+                        AccountNo = supplierDetails.AccountNo,
+                        Iffccode = supplierDetails.Iffccode,
+                        CreatedBy = supplierDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                        IsApproved = true,
+                        IsDelete = false,
+                    };
+
+                    suppliersToAdd.Add(supplierMaster);
+                }
+
+                if (suppliersToAdd.Any())
+                {
+                    Context.SupplierMasters.AddRange(suppliersToAdd);
+                    await Context.SaveChangesAsync();
+
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Items details successfully inserted";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = ": Failed to insert item details";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = ": An error occurred while processing the request";
+            }
+            return response;
+        }
     }
 }

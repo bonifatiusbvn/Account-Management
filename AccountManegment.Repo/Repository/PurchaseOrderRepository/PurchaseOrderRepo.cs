@@ -269,6 +269,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     );
                 }
 
+
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
                 {
                     searchText = searchText.ToLower();
@@ -289,7 +290,13 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     }
                 }
 
-                if (!string.IsNullOrEmpty(sortBy))
+
+                if (string.IsNullOrEmpty(sortBy))
+                {
+
+                    PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);

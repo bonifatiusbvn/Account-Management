@@ -8,19 +8,28 @@ using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Data.OleDb;
+using System.Data;
 using System.Globalization;
 using System.Reflection;
+using NuGet.ContentModel;
 
 namespace AccountManegments.Web.Controllers
 {
     [Authorize]
     public class SupplierController : Controller
     {
+        public WebAPI WebAPI { get; }
         public APIServices APIServices { get; }
+        public IWebHostEnvironment Environment { get; }
+        public UserSession _userSession { get; }
 
-        public SupplierController(APIServices aPIServices)
+        public SupplierController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession, IConfiguration configuration)
         {
+            WebAPI = webAPI;
             APIServices = aPIServices;
+            Environment = environment;
+            _userSession = userSession;
         }
         [FormPermissionAttribute("Supplier-View")]
         public IActionResult SupplierList()
@@ -246,6 +255,141 @@ namespace AccountManegments.Web.Controllers
             dt.Columns.Remove("UpdatedBy");
             dt.Columns.Remove("UpdatedOn");
             return dt;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportSupplierListFromExcel(IFormFile FormFile)
+        {
+            try
+            {
+                var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UploadExcelFile");
+                if (!Directory.Exists(MainPath))
+                {
+                    Directory.CreateDirectory(MainPath);
+                }
+                var filepath = Path.Combine(MainPath, FormFile.FileName);
+                using (FileStream stream = new FileStream(filepath, FileMode.Create))
+                {
+                    FormFile.CopyTo(stream);
+                }
+                var filename = FormFile.FileName;
+                string extension = Path.GetExtension(filename);
+                string excelConString = string.Empty;
+                switch (extension)
+                {
+                    case ".xls":
+                        excelConString = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
+                        break;
+
+                    case ".xlsx":
+                        excelConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR = YES'";
+                        break;
+                }
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("SupplierName", typeof(string));
+                dt.Columns.Add("Mobile", typeof(string));
+                dt.Columns.Add("Email", typeof(string));
+                dt.Columns.Add("GSTNo", typeof(string));
+                dt.Columns.Add("BuildingName", typeof(string));
+                dt.Columns.Add("Area", typeof(string));
+                dt.Columns.Add("State", typeof(string));
+                dt.Columns.Add("City", typeof(string));
+                dt.Columns.Add("Pincode", typeof(string));
+                dt.Columns.Add("BankName", typeof(string));
+                dt.Columns.Add("AccountNo", typeof(string));
+                dt.Columns.Add("IFFCCode", typeof(string));
+
+                excelConString = string.Format(excelConString, filepath);
+                using (OleDbConnection conExcel = new OleDbConnection(excelConString))
+                {
+                    using (OleDbCommand cmdExcel = new OleDbCommand())
+                    {
+                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                        {
+                            cmdExcel.Connection = conExcel;
+                            conExcel.Open();
+                            DataTable dtExcelSchema = conExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            string sheetName = "";
+                            foreach (DataRow row in dtExcelSchema.Rows)
+                            {
+                                string tableName = row["TABLE_NAME"].ToString();
+                                if (tableName != "StateNames" && tableName != "ANDAMAN___NICOBAR" && tableName != "ARUNACHAL_PRADESH" && tableName != "ASSAM" && tableName != "JHARKHAND" && tableName != "JAMMU___KASHMIR" && tableName != "HIMACHAL_PRADESH" 
+                                    && tableName != "HARYANA" && tableName != "GUJRAT" && tableName != "GOA" && tableName != "DELHI" && tableName != "DAMAN___DIU" && tableName != "CHATTISGARH" && tableName != "BIHAR" && tableName != "ANDHRA_PRADESH")
+                                {
+                                    sheetName = tableName;
+                                    break;
+                                }
+                            }
+                            if (string.IsNullOrEmpty(sheetName))
+                            {
+                                throw new Exception("No valid sheet found in the Excel file.");
+                            }
+                            cmdExcel.CommandText = "SELECT * FROM [" + sheetName + "]";
+                            odaExcel.SelectCommand = cmdExcel;
+                            odaExcel.Fill(dt);
+                            conExcel.Close();
+                        }
+                    }
+                }
+
+                var supplierList = new List<SupplierModel>();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (string.IsNullOrWhiteSpace(row[0].ToString()))
+                    {
+                        break;
+                    }
+                    try
+                    {
+                        var supplier= new SupplierModel
+                        {
+                            SupplierName = row["SupplierName"].ToString(),
+                            Mobile = row["Mobile"].ToString(),
+                            Email = row["Email"].ToString(),
+                            Gstno = row["GSTNo"].ToString(),
+                            BuildingName = row["BuildingName"].ToString(),
+                            Area = row["Area"].ToString(),
+                            StateName = row["State"].ToString(),
+                            CityName = row["City"].ToString(),
+                            PinCode = row["Pincode"].ToString(),
+                            BankName = row["BankName"].ToString(),
+                            AccountNo = row["AccountNo"].ToString(),
+                            Iffccode = row["IFFCCode"].ToString(),
+                            CreatedBy = _userSession.UserId,
+                            CreatedOn = DateTime.Now,
+                            IsApproved = true,
+                        };
+
+                        supplierList.Add(supplier);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error processing row: {ex.Message}");
+                        foreach (DataColumn column in dt.Columns)
+                        {
+                            Console.WriteLine($"{column.ColumnName}: {row[column]}");
+                        }
+                    }
+                }
+
+                ApiResponseModel postUser = await APIServices.PostAsync(supplierList, "SupplierMaster/ImportSupplierListFromExcel");
+                if (postUser.code == 200)
+                {
+                    return RedirectToAction("SupplierList");
+                }
+                else
+                {
+                    ViewBag.Message = postUser.message;
+                    ViewBag.Code = postUser.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return View("SupplierList");
         }
     }
 }

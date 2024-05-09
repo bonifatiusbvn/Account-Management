@@ -54,5 +54,10 @@ namespace AccountManagement.Repository.Services.Supplier
         {
             return await Supplier.UpdateSupplierDetails(UpdateUser);
         }
+
+        public async Task<ApiResponseModel> ImportSupplierListFromExcel(List<SupplierModel> supplierList)
+        {
+            return await Supplier.ImportSupplierListFromExcel(supplierList);
+        }
     }
 }

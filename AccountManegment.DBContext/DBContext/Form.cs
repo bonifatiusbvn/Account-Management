@@ -18,6 +18,4 @@ public partial class Form
     public string? Action { get; set; }
 
     public bool IsActive { get; set; }
-
-    public virtual ICollection<RolewiseFormPermission> RolewiseFormPermissions { get; set; } = new List<RolewiseFormPermission>();
 }
