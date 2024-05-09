@@ -766,6 +766,7 @@ function InsertMultiplePurchaseOrderDetails() {
                             window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
                         });
                     } else {
+                        siteloaderhide();
                         Swal.fire({
                             title: "There Is Some Problem in Your Request!",
                             icon: 'warning',
@@ -775,6 +776,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     }
                 },
                 error: function (xhr, status, error) {
+                    siteloaderhide();
                     Swal.fire({
                         title: 'Error',
                         text: 'An error occurred while processing your request.',
@@ -785,12 +787,14 @@ function InsertMultiplePurchaseOrderDetails() {
                 }
             });
         } else {
+            siteloaderhide();
             if ($('#addNewlink tr').length == 0) {
                 $("#spnitembutton").text("Please Select Product!");
             } else {
                 $("#spnitembutton").text("");
             }
             if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+                siteloaderhide();
                 $("#spnshipping").text("Please Select Shipping Address!");
             } else {
                 $("#spnshipping").text("");
@@ -1082,9 +1086,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                 }
             });
         } else {
+            siteloaderhide();
             if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
+                siteloaderhide();
                 $("#spnshipping").text("Please Select Shipping Address!");
             } else {
+                siteloaderhide();
                 $("#spnshipping").text("");
             }
         }
