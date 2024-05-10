@@ -51,7 +51,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return NotFound(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -314,7 +314,7 @@ namespace AccountManegments.Web.Controllers
                             foreach (DataRow row in dtExcelSchema.Rows)
                             {
                                 string tableName = row["TABLE_NAME"].ToString();
-                                if (tableName != "StateNames" && tableName != "ANDAMAN___NICOBAR" && tableName != "ARUNACHAL_PRADESH" && tableName != "ASSAM" && tableName != "JHARKHAND" && tableName != "JAMMU___KASHMIR" && tableName != "HIMACHAL_PRADESH" 
+                                if (tableName != "StateNames" && tableName != "ANDAMAN___NICOBAR" && tableName != "ARUNACHAL_PRADESH" && tableName != "ASSAM" && tableName != "JHARKHAND" && tableName != "JAMMU___KASHMIR" && tableName != "HIMACHAL_PRADESH"
                                     && tableName != "HARYANA" && tableName != "GUJRAT" && tableName != "GOA" && tableName != "DELHI" && tableName != "DAMAN___DIU" && tableName != "CHATTISGARH" && tableName != "BIHAR" && tableName != "ANDHRA_PRADESH")
                                 {
                                     sheetName = tableName;
@@ -343,7 +343,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     try
                     {
-                        var supplier= new SupplierModel
+                        var supplier = new SupplierModel
                         {
                             SupplierName = row["SupplierName"].ToString(),
                             Mobile = row["Mobile"].ToString(),
