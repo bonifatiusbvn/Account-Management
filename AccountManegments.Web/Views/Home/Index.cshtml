@@ -129,7 +129,7 @@
             siteloadershow();
             var SiteText = $("#drpSiteName Option:Selected").text();
             var selectedSiteId = $(this).val();
-
+            $('#txtsiteName').html(SiteText)
             fn_ChangeSite(selectedSiteId, SiteText)
         });
 
