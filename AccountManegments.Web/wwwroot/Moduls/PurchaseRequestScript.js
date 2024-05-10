@@ -643,6 +643,7 @@ $(document).ready(function () {
 
     today = yyyy + '-' + mm + '-' + dd;
     $("#orderdate").val(today);
+    $("#txtDeliverySchedule").val(today);
 
 });
 function clearShippingAddressErrorMssage() {
@@ -698,7 +699,7 @@ $(document).ready(function () {
 
 
 
-function InsertMultiplePurchaseOrderDetails() {
+function InsertMultiplePurchaseOrderDetails() {debugger
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
@@ -739,7 +740,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 ? $("input[name='txtDeliverySchedule']:checked").val() : $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 CreatedBy: $("#createdbyid").val(),
@@ -747,7 +748,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
-
+            debugger
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -1494,24 +1495,14 @@ function printDiv() {
     document.body.innerHTML = originalContents;
 }
 
-function toggleDate() {
-    const dateInput = document.getElementById('txtDeliverySchedule');
-    const radioImmediate = document.getElementById('txtImmediate');
-
-    if (dateInput.value) {
-        radioImmediate.disabled = true;
-    } else {
-        radioImmediate.disabled = false;
-    }
-}
-
 function toggleRadio() {
     const dateInput = document.getElementById('txtDeliverySchedule');
     const radioImmediate = document.getElementById('txtImmediate');
+    const radioDate = document.getElementById('txtradiodate');
 
     if (radioImmediate.checked) {
         dateInput.disabled = true;
-    } else {
+    } else if (radioDate.checked) {
         dateInput.disabled = false;
     }
 }
