@@ -15,18 +15,18 @@ function toggleSiteList() {
 
 function AllItemInWordListTable() {
 
-        var searchText = $('#txtItemInWordSearch').val();
-        var searchBy = $('#ItemInWordSearchBy').val();
+    var searchText = $('#txtItemInWordSearch').val();
+    var searchBy = $('#ItemInWordSearchBy').val();
 
-        $.get("/ItemInWord/ItemInWordListAction", { searchBy: searchBy, searchText: searchText })
-            .done(function (result) {
+    $.get("/ItemInWord/ItemInWordListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
 
-                $("#itemInWordtbody").html(result);
-            })
-            .fail(function (error) {
-                siteloaderhide();
-                console.error(error);
-            }); 
+            $("#itemInWordtbody").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+            console.error(error);
+        });
 }
 
 function filterItemInWordTable() {
@@ -187,7 +187,7 @@ function AddItemInWordDetails() {
         formData.append("VehicleNumber", $("#txtVehicleNumber").val());
         formData.append("ReceiverName", $("#txtReceiverName").val());
 
-        
+
         $.ajax({
             url: '/ItemInWord/AddItemInWordDetails',
             type: 'post',
@@ -273,7 +273,7 @@ function ClearItemInWordTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreateItemInWord")
         });
-    }    
+    }
 }
 
 var ItemInwordForm;
@@ -295,7 +295,7 @@ function validateAndCreateItemInWord() {
             txtDocument: "Enter Document",
             txtItemId: "select item"
         }
-   })
+    })
     var isValid = true;
 
     if (isValid) {
@@ -640,6 +640,16 @@ function InsertMultipleItemInWordDetails() {
                     confirmButtonText: 'OK',
                 });
             }
+        });
+    }
+    else {
+        siteloaderhide();
+        Swal.fire({
+            title: 'Warning',
+            text: 'Kindly fill all details.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
         });
     }
 }
