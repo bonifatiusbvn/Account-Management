@@ -47,7 +47,7 @@ function GetSiteDetails() {
         success: function (result) {
             $('#ddlSiteName').empty();
 
-            $('#ddlSiteName').append('<option value="" selected>All Site</option>');
+           /* $('#ddlSiteName').append('<option value="" selected>All Site</option>');*/
             $.each(result, function (i, data) {
 
                 $('#ddlSiteName').append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
