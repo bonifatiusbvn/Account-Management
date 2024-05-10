@@ -14,6 +14,7 @@ function AllSiteListTable() {
             $("#Sitetbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -35,7 +36,7 @@ function SitefilterTable() {
             $("#Sitetbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -54,7 +55,7 @@ function sortSiteTable() {
             $("#Sitetbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -105,6 +106,7 @@ function DisplaySiteDetails(SiteId) {
             offcanvas.show();
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -131,6 +133,7 @@ function SelectSiteDetails(SiteId, element) {
                 $('#dspCity').val(response.cityName);
                 $('#dspPincode').val(response.pincode);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },

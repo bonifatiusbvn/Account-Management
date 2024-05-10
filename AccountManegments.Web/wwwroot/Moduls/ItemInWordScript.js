@@ -24,6 +24,7 @@ function AllItemInWordListTable() {
             $("#itemInWordtbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -45,7 +46,7 @@ function filterItemInWordTable() {
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -65,7 +66,7 @@ function sortItemInWordTable() {
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -101,6 +102,7 @@ function SelectItemInWordDetails(InwordId, element) {
                         'width': '250px'
                     });;
                 } else {
+                    siteloaderhide();
                     $('#dspDocumentName').empty();
                     $('.holder').empty();
                     response.documentLists.forEach(function (document) {
@@ -113,10 +115,12 @@ function SelectItemInWordDetails(InwordId, element) {
                 }
 
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -204,6 +208,7 @@ function AddItemInWordDetails() {
                         window.location = '/ItemInWord/ItemInWord';
                     });
                 } else {
+                    siteloaderhide();
                     Swal.fire({
                         title: 'Something wrong',
                         icon: 'error',
@@ -212,6 +217,7 @@ function AddItemInWordDetails() {
                 }
             },
             error: function (e) {
+                siteloaderhide();
                 console.log(e)
             }
         })
@@ -410,6 +416,7 @@ function EditItemInWordDetails(InwordId) {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -510,7 +517,7 @@ function DeleteItemInWord(InwordId) {
     });
 }
 function ItemInWordIsApproved(InwordId) {
-    siteloadershow();
+
     var isChecked = $('#flexSwitchCheckChecked_' + InwordId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Approve this Item In Word?" : "Are you sure want to UnApprove this Item In Word?";
 
@@ -536,7 +543,6 @@ function ItemInWordIsApproved(InwordId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                    siteloaderhide();
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,
@@ -549,6 +555,7 @@ function ItemInWordIsApproved(InwordId) {
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
+
             Swal.fire(
                 'Cancelled',
                 'Item In Word Have No Changes.!!😊',
@@ -562,36 +569,35 @@ function ItemInWordIsApproved(InwordId) {
 
 var additionalFiles = [];
 function CancelImage(documentName) {
-    siteloadershow();
+
     $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
 
     var currentDocumentNames = $("#txtDocumentName").val().split(';');
     var updatedDocumentNames = currentDocumentNames.filter(function (name) {
         return name !== documentName;
     });
-    siteloaderhide();
+
     $("#txtDocumentName").val(updatedDocumentNames.join(';'));
 }
 function removenewaddImage() {
-    siteloadershow();
+
     $(document).on('click', '.img-remove', function () {
         var row = $(this).closest('.DocumentName');
         var documentName = row.find('img').data('document');
         row.remove();
-        siteloaderhide();
+
         additionalFiles = additionalFiles.filter(function (item) {
             return item.name !== documentName;
         });
     });
 }
 function showpictures() {
-    siteloadershow();
+
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
         if ($("#addNewImage .DocumentName").length + files.length > 5) {
             toastr.error("You can only add a maximum of 5 images.");
-            siteloaderhide();
-            return;    
+            return;
         }
         for (var i = 0; i < files.length; i++) {
             const file = files[i];
@@ -605,7 +611,6 @@ function showpictures() {
             })(file.name);
             reader.readAsDataURL(file);
             additionalFiles.push(file);
-            siteloaderhide();
         }
     }
 }
@@ -659,6 +664,7 @@ function InsertMultipleItemInWordDetails() {
                 });
             }
             else {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -670,6 +676,7 @@ function InsertMultipleItemInWordDetails() {
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred while processing your request.',
@@ -733,6 +740,7 @@ function UpdateMultipleItemInWordDetails() {
                     window.location = '/ItemInWord/ItemInWord';
                 });
             } else {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -744,6 +752,7 @@ function UpdateMultipleItemInWordDetails() {
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred while processing your request.',
