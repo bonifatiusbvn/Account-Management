@@ -15,7 +15,7 @@
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Add == true)))
             {
-                <a type="button" class="btn btn-primary fixed-button" asp-action="CreateInvoice" asp-controller="InvoiceMaster"><i class="lni lni-circle-plus"></i>Create Invoice</a>
+                <button type="button" class="btn btn-primary fixed-button" onclick="clearInvoicetextbox()"><i class="lni lni-circle-plus"></i>Create Invoice</button>
             }
         </form>
     </div>
@@ -108,6 +108,7 @@
                                         <label class="form-label">Supplier Name</label>
                                         <input type="text" class="form-control" id="dspSupplierName" readonly>
                                         <input type="hidden" class="form-control" id="dspSupplierId" readonly>
+                                        <input type="hidden" id="inputsiteId" value="@UserSession.SiteId" />
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Email</label>

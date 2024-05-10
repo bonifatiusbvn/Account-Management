@@ -122,7 +122,6 @@ function CreatePurchaseRequest() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-
         siteName = $("#txtPoSiteName").val();
 
         var objData = {
@@ -163,31 +162,42 @@ function CreatePurchaseRequest() {
 }
 
 function ClearPurchaseRequestTextBox() {
-    resetPRForm();
-    $('#txtItemName').val('');
-    $('#txtUnitType').val('');
-    $('#txtQuantity').val('');
-
-    var button = document.getElementById("btnpurchaseRequest");
-    if ($('#PurchaseRequestId').val() == '') {
-        button.textContent = "Create";
+    debugger
+    if ($("#textsiteId").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
     }
-    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-    offcanvas.show();
-    $('#searchItemname').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
-    $('#txtUnitType').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
+    else {
+        resetPRForm();
+        $('#txtItemName').val('');
+        $('#txtUnitType').val('');
+        $('#txtQuantity').val('');
+
+        var button = document.getElementById("btnpurchaseRequest");
+        if ($('#PurchaseRequestId').val() == '') {
+            button.textContent = "Create";
+        }
+        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
+        offcanvas.show();
+        $('#searchItemname').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
+        $('#txtUnitType').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
+    }   
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -412,6 +422,20 @@ function PurchaseRequestIsApproved(PurchaseId) {
             );
         }
     });
+}
+
+function clearPOtextbox() {
+    if ($("#inputSiteId").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
+    }
 }
 function GetAllUnitType() {
 
