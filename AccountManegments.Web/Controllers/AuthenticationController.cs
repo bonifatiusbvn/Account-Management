@@ -13,6 +13,7 @@ using AccountManagement.DBContext.Models.ViewModels;
 using AccountManagement.API;
 using AccountManagement.DBContext.Models.ViewModels.FormMaster;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -139,12 +140,19 @@ namespace AccountManegments.Web.Controllers
                 new Claim("UserId", userlogin.Data.Id.ToString()),
                 new Claim("FullName", userlogin.Data.FullName),
                 new Claim("UserName", userlogin.Data.UserName),
-                new Claim("SiteName", userlogin.Data.SiteName),
-                new Claim("SiteId", userlogin.Data.SiteId.ToString()),
                 new Claim("UserRole", userlogin.Data.RoleId.ToString()),
                 new Claim("RoleName", userlogin.Data.RoleName),
-                //new Claim("FormPermisionData", JsonConvert.SerializeObject(data.FromPermissionData)),
             };
+
+                    if (userlogin.Data.SiteId != null)
+                    {
+                        claims.Add(new Claim("SiteId", userlogin.Data.SiteId.ToString()));
+                    }
+
+                    if (!string.IsNullOrEmpty(userlogin.Data.SiteName))
+                    {
+                        claims.Add(new Claim("SiteName", userlogin.Data.SiteName));
+                    }
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -156,8 +164,6 @@ namespace AccountManegments.Web.Controllers
                         Response.Cookies.Append("UserName", (login.UserName), cookie);
                         Response.Cookies.Append("Password", (login.Password), cookie);
                         ViewBag.chkRememberMe = true;
-
-
                     }
                     else
                     {
@@ -165,9 +171,11 @@ namespace AccountManegments.Web.Controllers
                         Response.Cookies.Delete("Password");
                         ViewBag.chkRememberMe = false;
                     }
-                    UserSession.SiteId = userlogin.Data.SiteId.ToString();
-                    UserSession.SiteName = userlogin.Data.SiteName;
+
+                    UserSession.SiteId = userlogin.Data.SiteId?.ToString() ?? "";  
+                    UserSession.SiteName = userlogin.Data.SiteName ?? "";
                     UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                     return RedirectToAction("Index", "Home");
                 }
@@ -178,6 +186,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
 
 
 
