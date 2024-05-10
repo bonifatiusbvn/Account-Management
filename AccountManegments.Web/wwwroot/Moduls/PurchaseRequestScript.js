@@ -48,7 +48,7 @@ function filterPurchaseRequestTable() {
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -79,7 +79,7 @@ function sortPurchaseRequestTable() {
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -105,10 +105,12 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
                 $('#dspSiteName').val(response.siteName);
                 $('#dspIsApproved').prop('checked', response.isApproved);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -260,6 +262,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -433,6 +436,7 @@ function GetPurchaseOrderList() {
             $("#PurchaseOrdertbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -453,7 +457,7 @@ function filterPurchaseOrderTable() {
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -472,7 +476,7 @@ function sortPurchaseOrderTable() {
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -500,6 +504,7 @@ function EditPurchaseOrderDetails(Id) {
             window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -625,6 +630,7 @@ function SerchItemDetailsById(Id, inputField) {
                     $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
+                    siteloaderhide();
                     $('#searchvalidationMessage').text('');
                 }
             }
@@ -671,7 +677,7 @@ $(document).ready(function () {
                 required: function (element) {
                     return !($("#txtDeliverySchedule").val() || $("input[name='txtDeliverySchedule']:checked").length > 0);
                 }
-            }, 
+            },
             txtContectPerson: "required",
             txtMobileNo: {
                 required: true,
@@ -927,6 +933,7 @@ function AddShippingAddress() {
             updateTotals();
             updateRowNumbers();
         } else {
+            siteloaderhide();
             Swal.fire({
                 title: "Address already added!",
                 text: "The selected address is already added.",
@@ -982,6 +989,7 @@ function getSupplierDetails(SupplierId) {
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -1011,6 +1019,7 @@ function getCompanyDetails(CompanyId) {
                 $('#txtCompanyGstNo').val(response.gstno);
                 $('#companybillingaddressDetails').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -1071,6 +1080,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                         });
                     }
                     else {
+                        siteloaderhide();
                         Swal.fire({
                             title: "There Is Some Prolem in Your Request!",
                             icon: 'warning',
@@ -1080,6 +1090,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     }
                 },
                 error: function (xhr, status, error) {
+                    siteloaderhide();
                     Swal.fire({
                         title: 'Error',
                         text: 'An error occurred while processing your request.',
@@ -1231,6 +1242,7 @@ function AddNewRow(Result) {
         updateTotals();
         updateRowNumbers();
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Product already added!",
             text: "The selected product is already added.",
@@ -1413,6 +1425,7 @@ function GetPOList() {
             $("#PurchaseOrderListbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -1464,7 +1477,7 @@ function filterPOTable() {
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -1482,7 +1495,7 @@ function sortPOTable() {
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }

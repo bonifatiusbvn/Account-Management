@@ -446,12 +446,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier order inserted successfully.";
+                response.message = "Invoice inserted successfully.";
             }
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating orders: " + ex.Message;
+                response.message = "Error creating invoice: " + ex.Message;
             }
             return response;
         }

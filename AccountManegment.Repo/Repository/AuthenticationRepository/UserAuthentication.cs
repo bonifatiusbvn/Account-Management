@@ -279,87 +279,134 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
         }
 
-        public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
+        public async Task<LoginResponseModel> LoginUser(LoginRequest loginRequest)
         {
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-
                 var tblUser = await (from u in Context.Users
-                                     join s in Context.Sites on u.SiteId equals s.SiteId
                                      join r in Context.UserRoles on u.RoleId equals r.RoleId
-                                     where u.UserName == Loginrequest.UserName
+                                     where u.UserName == loginRequest.UserName
                                      select new
                                      {
                                          User = u,
-                                         SiteName = s.SiteName,
                                          Role = r.Role,
                                      }).FirstOrDefaultAsync();
 
                 if (tblUser != null)
                 {
-                    if (tblUser.User.IsActive == true)
+                    if (tblUser.User.IsActive)
                     {
-
-                        if (tblUser.User.Password == Loginrequest.Password)
+                        if (tblUser.User.SiteId != null)
                         {
-                            LoginView userModel = new LoginView();
-                            userModel.UserName = tblUser.User.UserName;
-                            userModel.Id = tblUser.User.Id;
-                            userModel.RoleId = tblUser.User.RoleId;
-                            userModel.RoleName = tblUser.Role;
-                            userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
-                            userModel.FirstName = tblUser.User.FirstName;
-                            userModel.SiteName = tblUser.SiteName;
-                            userModel.SiteId = tblUser.User.SiteId;
-                            response.Data = userModel;
-                            response.Code = (int)HttpStatusCode.OK;
+                            var userData = await (from u in Context.Users
+                                                  join s in Context.Sites on u.SiteId equals s.SiteId
+                                                  where u.UserName == loginRequest.UserName
+                                                  select new
+                                                  {
+                                                      User = u,
+                                                      SiteName = s.SiteName,
+                                                  }).FirstOrDefaultAsync();
 
-                            List<FromPermission> FromPermissionData = (from u in Context.RolewiseFormPermissions
-                                                                       join s in Context.Forms on u.FormId equals s.FormId
-                                                                       where u.RoleId == userModel.RoleId && s.IsActive == true
-                                                                       orderby s.OrderId ascending
-                                                                       select new FromPermission
-                                                                       {
-                                                                           FormName = s.FormName,
-                                                                           GroupName = s.FormGroup,
-                                                                           Controller = s.Controller,
-                                                                           Action = s.Action,
-                                                                           Add = u.IsAddAllow,
-                                                                           View = u.IsViewAllow,
-                                                                           Edit = u.IsEditAllow,
-                                                                           Delete = u.IsDeleteAllow,
+                            if (tblUser.User.Password == loginRequest.Password)
+                            {
+                                LoginView userModel = new LoginView();
+                                userModel.UserName = tblUser.User.UserName;
+                                userModel.Id = tblUser.User.Id;
+                                userModel.RoleId = tblUser.User.RoleId;
+                                userModel.RoleName = tblUser.Role;
+                                userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
+                                userModel.FirstName = tblUser.User.FirstName;
+                                userModel.SiteName = userData.SiteName;
+                                userModel.SiteId = tblUser.User.SiteId;
+                                response.Data = userModel;
+                                response.Code = (int)HttpStatusCode.OK;
 
-                                                                       }).ToList();
+                                List<FromPermission> fromPermissionData = await (from rp in Context.RolewiseFormPermissions
+                                                                                 join f in Context.Forms on rp.FormId equals f.FormId
+                                                                                 where rp.RoleId == userModel.RoleId && f.IsActive
+                                                                                 orderby f.OrderId ascending
+                                                                                 select new FromPermission
+                                                                                 {
+                                                                                     FormName = f.FormName,
+                                                                                     GroupName = f.FormGroup,
+                                                                                     Controller = f.Controller,
+                                                                                     Action = f.Action,
+                                                                                     Add = rp.IsAddAllow,
+                                                                                     View = rp.IsViewAllow,
+                                                                                     Edit = rp.IsEditAllow,
+                                                                                     Delete = rp.IsDeleteAllow,
+                                                                                 }).ToListAsync();
 
-
-                            userModel.FromPermissionData = FromPermissionData;
+                                userModel.FromPermissionData = fromPermissionData;
+                            }
+                            else
+                            {
+                                response.Message = "Your password is incorrect";
+                            }
                         }
                         else
                         {
-                            response.Message = "Your password is wrong";
+                            if (tblUser.User.Password == loginRequest.Password)
+                            {
+                                LoginView userModel = new LoginView();
+                                userModel.UserName = tblUser.User.UserName;
+                                userModel.Id = tblUser.User.Id;
+                                userModel.RoleId = tblUser.User.RoleId;
+                                userModel.RoleName = tblUser.Role;
+                                userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
+                                userModel.FirstName = tblUser.User.FirstName;
+                                userModel.SiteId = tblUser.User.SiteId;
+                                response.Data = userModel;
+                                response.Code = (int)HttpStatusCode.OK;
+
+                                List<FromPermission> fromPermissionData = await (from rp in Context.RolewiseFormPermissions
+                                                                                 join f in Context.Forms on rp.FormId equals f.FormId
+                                                                                 where rp.RoleId == userModel.RoleId && f.IsActive
+                                                                                 orderby f.OrderId ascending
+                                                                                 select new FromPermission
+                                                                                 {
+                                                                                     FormName = f.FormName,
+                                                                                     GroupName = f.FormGroup,
+                                                                                     Controller = f.Controller,
+                                                                                     Action = f.Action,
+                                                                                     Add = rp.IsAddAllow,
+                                                                                     View = rp.IsViewAllow,
+                                                                                     Edit = rp.IsEditAllow,
+                                                                                     Delete = rp.IsDeleteAllow,
+                                                                                 }).ToListAsync();
+
+                                userModel.FromPermissionData = fromPermissionData;
+                            }
+                            else
+                            {
+                                response.Message = "Your password is incorrect";
+                            }
                         }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your deactive contact your admin";
+                        response.Message = "Your account is inactive. Please contact your administrator.";
                         return response;
                     }
                 }
                 else
                 {
-                    response.Message = "User not exist";
+                    response.Message = "User does not exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Data = null;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Message = "An error occurred while processing your request.";
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
+
             return response;
         }
+
 
         public async Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission)
         {

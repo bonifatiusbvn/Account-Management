@@ -258,6 +258,8 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     Userdata.Area = UpdateSupplier.Area;
                     Userdata.BuildingName = UpdateSupplier.BuildingName;
                     Userdata.PinCode = UpdateSupplier.PinCode;
+                    Userdata.City = UpdateSupplier.City;
+                    Userdata.State = UpdateSupplier.State;
                     Userdata.Email = UpdateSupplier.Email;
                     Userdata.Mobile = UpdateSupplier.Mobile;
                     Userdata.BankName = UpdateSupplier.BankName;

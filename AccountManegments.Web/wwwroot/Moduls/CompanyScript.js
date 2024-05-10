@@ -177,10 +177,12 @@ function SelectCompanyDetails(CompanyId, element) {
                 $('#dspCountry').val(response.countryName);
                 $('#dspPincode').val(response.pincode);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });

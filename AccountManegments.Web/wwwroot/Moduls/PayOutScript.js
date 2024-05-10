@@ -116,6 +116,7 @@ function InsertPayOutDetails() {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred while processing your request.',
