@@ -99,8 +99,7 @@
 @section Scripts {
     <script type="text/javascript">
         var role = "@_userSession.UserRole";
-        debugger
-        $('#laySiteName').html("@UserSession.SiteName");
+
         $(function () {
 
             fn_fillsiteDropDown('#drpSiteName');
@@ -130,7 +129,7 @@
             siteloadershow();
             var SiteText = $("#drpSiteName Option:Selected").text();
             var selectedSiteId = $(this).val();
-            $('#laySiteName').html(SiteText);
+
             fn_ChangeSite(selectedSiteId, SiteText)
         });
 
@@ -155,7 +154,7 @@
                     SiteName: SiteText,
                 },
                 success: function (result) {
-                    debugger
+
                     siteloaderhide();
                     $("#tbPndingApproval").html(result);
 

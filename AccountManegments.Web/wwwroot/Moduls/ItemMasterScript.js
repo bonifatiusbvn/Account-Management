@@ -11,6 +11,7 @@ function AllItemTable() {
             $("#itemtbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -31,7 +32,7 @@ function filterItemTable() {
             $("#itemtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -50,7 +51,7 @@ function sortItemTable() {
             $("#itemtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -77,10 +78,12 @@ function DisplayItemDetails(ItemId, element) {
                 $('#dspHsnCode').val(response.hsncode);
                 $('#dspIsApproved').val(response.isApproved);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -149,6 +152,7 @@ function CreateItem() {
                         window.location = '/ItemMaster/ItemListView';
                     });
                 } else {
+                    siteloaderhide();
                     Swal.fire({
                         title: result.message,
                         icon: 'warning',
@@ -158,6 +162,7 @@ function CreateItem() {
                 }
             },
             error: function (xhr, status, error) {
+                siteloaderhide();
                 console.error(xhr.responseText);
                 Swal.fire({
                     title: 'Error',
@@ -214,6 +219,7 @@ function EditItemDetails(ItemId) {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
