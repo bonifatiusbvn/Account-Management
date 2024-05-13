@@ -6,6 +6,7 @@ using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
 using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
 using AccountManagement.Repository.Services.ItemInWord;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

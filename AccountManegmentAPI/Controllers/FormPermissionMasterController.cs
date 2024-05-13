@@ -7,6 +7,7 @@ using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Repository.FormPermissionMaster;
 using AccountManagement.Repository.Interface.Repository.MasterList;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -17,7 +18,7 @@ namespace AccountManagement.API.Controllers
     [ApiController]
     public class FormPermissionMasterController : ControllerBase
     {
-        public FormPermissionMasterController(IFormPermissionMaster rolewisePermissionMaster,IFormMaster formMaster)
+        public FormPermissionMasterController(IFormPermissionMaster rolewisePermissionMaster, IFormMaster formMaster)
         {
             RolewisePermissionMaster = rolewisePermissionMaster;
             FormMaster = formMaster;

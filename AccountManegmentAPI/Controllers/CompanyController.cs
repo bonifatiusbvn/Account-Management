@@ -2,12 +2,14 @@
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Services.CompanyService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase

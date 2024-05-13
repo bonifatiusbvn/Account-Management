@@ -162,7 +162,7 @@ function CreatePurchaseRequest() {
 }
 
 function ClearPurchaseRequestTextBox() {
-    debugger
+
     if ($("#textsiteId").val() == "") {
         Swal.fire({
             title: "Kindly select site on dashboard.",
@@ -197,7 +197,7 @@ function ClearPurchaseRequestTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreatePurchaseRequest")
         });
-    }   
+    }
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -729,7 +729,7 @@ $(document).ready(function () {
 
 
 
-function InsertMultiplePurchaseOrderDetails() {debugger
+function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
@@ -778,7 +778,7 @@ function InsertMultiplePurchaseOrderDetails() {debugger
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
-            debugger
+
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -861,7 +861,7 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-        debugger
+
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
         $.ajax({
