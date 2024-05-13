@@ -50,13 +50,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Site list." });
+                    return BadRequest(new { Message = "Failed to retrieve Site list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -112,7 +112,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -133,7 +133,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -201,7 +201,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

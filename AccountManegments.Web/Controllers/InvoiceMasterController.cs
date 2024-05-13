@@ -78,13 +78,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Supplier Invoice list." });
+                    return BadRequest(new { Message = "Failed to retrieve Supplier Invoice list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -105,7 +105,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace AccountManegments.Web.Controllers
 
                     if (tupleResult == null)
                     {
-                        return new JsonResult("Failed to deserialize API response");
+                        return BadRequest("Failed to deserialize API response");
                     }
 
 
@@ -192,7 +192,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -215,7 +215,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -242,7 +242,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -273,13 +273,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Invoice list." });
+                    return BadRequest(new { Message = "Failed to retrieve Invoice list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -389,7 +389,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Order list" });
                 }
             }
             catch (Exception ex)

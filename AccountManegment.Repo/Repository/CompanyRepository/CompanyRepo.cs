@@ -55,8 +55,8 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             }
             catch (Exception)
             {
-
-                throw;
+                response.code = 400;
+                response.message = "Error in creating company.";
             }
             return response;
         }
@@ -74,6 +74,11 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                 Context.SaveChanges();
                 response.code = 200;
                 response.message = "Company is successfully deleted.";
+            }
+            else
+            {
+                response.code = 400;
+                response.message = "Error in deleting company.";
             }
             return response;
         }
@@ -239,7 +244,8 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.code = 400;
+                model.message = "Error updating company.";
             }
             return model;
         }

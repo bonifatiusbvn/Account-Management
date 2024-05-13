@@ -25,7 +25,7 @@ function AllItemInWordListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -47,6 +47,7 @@ function filterItemInWordTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -67,6 +68,7 @@ function sortItemInWordTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -116,12 +118,12 @@ function SelectItemInWordDetails(InwordId, element) {
 
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -199,6 +201,7 @@ function AddItemInWordDetails() {
 
                 siteloaderhide();
                 if (Result.code == 200) {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -209,16 +212,12 @@ function AddItemInWordDetails() {
                     });
                 } else {
                     siteloaderhide();
-                    Swal.fire({
-                        title: 'Something wrong',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    })
+                    toastr.error("Something gone wrong");
                 }
             },
             error: function (e) {
                 siteloaderhide();
-                console.log(e)
+                toastr.error(e);
             }
         })
     }
@@ -371,7 +370,7 @@ function EditItemInWordDetails(InwordId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -439,7 +438,7 @@ function DeleteItemInWord(InwordId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -450,14 +449,8 @@ function DeleteItemInWord(InwordId) {
                     })
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete ItemInWord!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete ItemInWord!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -497,6 +490,7 @@ function ItemInWordIsApproved(InwordId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
+                    siteloaderhide();
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,
@@ -609,6 +603,7 @@ function InsertMultipleItemInWordDetails() {
             success: function (Result) {
                 siteloaderhide();
                 if (Result.code == 200) {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -620,25 +615,13 @@ function InsertMultipleItemInWordDetails() {
                 }
                 else {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    });
+                    toastr.error(Result.message);
+                    window.location = '/ItemInWord/ItemInWord';
                 }
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+                toastr.error('An error occurred while processing your request.');
             }
         });
     }
@@ -697,6 +680,7 @@ function UpdateMultipleItemInWordDetails() {
         success: function (Result) {
             siteloaderhide();
             if (Result.code == 200) {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -707,25 +691,13 @@ function UpdateMultipleItemInWordDetails() {
                 });
             } else {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemInWord/ItemInWord';
-                });
+                toastr.error(Result.message);
+                window.location = '/ItemInWord/ItemInWord';
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
+            toastr.error('An error occurred while processing your request.');
         }
     });
 }

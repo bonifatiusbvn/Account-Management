@@ -51,13 +51,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Request list." });
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Request list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -77,13 +77,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Pending Invoice list." });
+                    return BadRequest(new { Message = "Failed to retrieve Pending Invoice list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 

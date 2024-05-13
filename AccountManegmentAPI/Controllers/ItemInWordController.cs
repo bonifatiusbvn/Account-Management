@@ -73,21 +73,18 @@ namespace AccountManagement.API.Controllers
         public async Task<IActionResult> DeleteItemInWord(Guid InwordId)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-
             var itemInWord = await ItemInWord.DeleteItemInWord(InwordId);
             try
             {
-
-                if (itemInWord != null)
+                if (responseModel.code == 200)
                 {
-
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = itemInWord.message;
                 }
                 else
                 {
                     responseModel.message = itemInWord.message;
-                    responseModel.code = (int)HttpStatusCode.NotFound;
+                    responseModel.code = itemInWord.code;
                 }
             }
             catch (Exception ex)
@@ -136,8 +133,8 @@ namespace AccountManagement.API.Controllers
             }
             else
             {
-                response.code = (int)HttpStatusCode.NotFound;
-                response.message = "There Is Some Problem In Your Inserting!";
+                response.code = itemInword.code;
+                response.message = itemInword.message;
             }
             return StatusCode(response.code, response);
         }
@@ -155,8 +152,8 @@ namespace AccountManagement.API.Controllers
             }
             else
             {
-                response.code = (int)HttpStatusCode.NotFound;
-                response.message = "There Is Some Problem In Your Updating Details!";
+                response.code = itemInword.code;
+                response.message = itemInword.message;
             }
             return StatusCode(response.code, response);
         }

@@ -34,7 +34,7 @@ namespace AccountManagement.API.Controllers
                 else
                 {
                     response.message = result.Result.message;
-                    response.code = (int)HttpStatusCode.NotFound;
+                    response.code = result.Result.code;
                 }
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace AccountManagement.API.Controllers
                 else
                 {
                     responseModel.message = company.message;
-                    responseModel.code = (int)HttpStatusCode.NotFound;
+                    responseModel.code = company.code;
                 }
             }
             catch (Exception ex)

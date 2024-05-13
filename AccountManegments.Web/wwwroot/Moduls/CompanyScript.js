@@ -11,7 +11,8 @@ function AllCompanyTable() {
             $("#Companytbody").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            siteloaderhide();
+            toastr.error(error);
         });
 }
 
@@ -32,7 +33,8 @@ function filterCompanyTable() {
             $("#Companytbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -51,7 +53,8 @@ function sortCompanyTable() {
             $("#Companytbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -78,26 +81,29 @@ function AddCompany() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/Company/CreateCompany';
-                });
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Company/CreateCompany';
+                    });
+                }
+                else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
+
             },
 
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");      
     }
 }
 function ClearTextBox() {
@@ -149,7 +155,8 @@ function GetCompnaytById(CompanyId) {
             offcanvas.show();
         },
         error: function (xhr, status, error) {
-            console.error(xhr.responseText);
+            siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -178,12 +185,12 @@ function SelectCompanyDetails(CompanyId, element) {
                 $('#dspPincode').val(response.pincode);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -209,14 +216,22 @@ function UpdateCompany() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/Company/CreateCompany';
-                });
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Company/CreateCompany';
+                    });
+                }
+                else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
+
             },
         })
     }
@@ -249,24 +264,26 @@ function DeleteCompanyDetails(CompanyId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/Company/CreateCompany';
-                    })
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Company/CreateCompany';
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete Company!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/Company/CreateCompany';
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete Company!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {

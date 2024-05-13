@@ -12,7 +12,7 @@ function AllItemTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 function filterItemTable() {
@@ -33,6 +33,7 @@ function filterItemTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -52,6 +53,7 @@ function sortItemTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -79,12 +81,12 @@ function DisplayItemDetails(ItemId, element) {
                 $('#dspIsApproved').val(response.isApproved);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -143,6 +145,7 @@ function CreateItem() {
             success: function (result) {
                 siteloaderhide();
                 if (result.code == 200) {
+                    siteloaderhide();
                     Swal.fire({
                         title: result.message,
                         icon: 'success',
@@ -153,24 +156,12 @@ function CreateItem() {
                     });
                 } else {
                     siteloaderhide();
-                    Swal.fire({
-                        title: result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
+                    toastr.error(result.message);
                 }
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
-                console.error(xhr.responseText);
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
+                toastr.error('An error occurred while processing your request.');
             }
         });
     }
@@ -220,7 +211,7 @@ function EditItemDetails(ItemId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -245,14 +236,20 @@ function UpdateItemDetails() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemMaster/ItemListView';
-                });
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    });
+                } else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
             },
         })
     }
@@ -329,15 +326,21 @@ function ItemIsApproved(ItemId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: isChecked ? "Approved!" : "UnApproved!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/ItemMaster/ItemListView';
-                    });
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: isChecked ? "Approved!" : "UnApproved!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/ItemMaster/ItemListView';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -370,23 +373,25 @@ function deleteItemDetails(ItemId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ItemMaster/ItemListView';
-                    })
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/ItemMaster/ItemListView';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message); 
+                    }
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete Item!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete Item!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {

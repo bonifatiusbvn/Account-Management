@@ -12,7 +12,7 @@ function CreateUser() {
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#ddlSiteName').val(),
-        }
+        };
         $.ajax({
             url: '/User/CreateUser',
             type: 'post',
@@ -20,16 +20,22 @@ function CreateUser() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/User/UserListView';
-                });
-            },
-        })
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/User/UserListView';
+                    });
+                } else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
+            }
+        });
     }
     else {
         siteloaderhide();
@@ -47,7 +53,7 @@ function GetSiteDetails() {
         success: function (result) {
             $('#ddlSiteName').empty();
 
-           /* $('#ddlSiteName').append('<option value="" selected>All Site</option>');*/
+            /* $('#ddlSiteName').append('<option value="" selected>All Site</option>');*/
             $.each(result, function (i, data) {
 
                 $('#ddlSiteName').append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
@@ -106,7 +112,7 @@ function DisplayUserDetails(UserId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -135,12 +141,12 @@ function SelectUserDetails(UserId, element) {
                 $('#dspSiteName').val(response.siteName);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -155,7 +161,7 @@ function AllUserTable() {
             $("#Usertbody").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -177,7 +183,7 @@ function filterTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -197,6 +203,7 @@ function sortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -223,14 +230,21 @@ function UpdateUserDetails() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/User/UserListView';
-                });
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/User/UserListView';
+                    });
+                }       
+                else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
             },
         })
     }
@@ -367,7 +381,9 @@ function UserActiveDecative(UserId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
+                    siteloaderhide();
                     if (Result.code == 200) {
+                        siteloaderhide();
                         Swal.fire({
                             title: isChecked ? "Active!" : "Deactive!",
                             text: Result.message,
@@ -378,12 +394,8 @@ function UserActiveDecative(UserId) {
                             window.location = '/User/UserListView';
                         });
                     } else {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: "warning",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
+                        siteloaderhide();
+                        toastr.error(Result.message); 
                     }
 
                 }
@@ -435,7 +447,7 @@ function logout() {
         })
         .catch(error => {
             siteloaderhide();
-            console.error('Error:', error);
+            toastr.error('Error:', error);
 
         });
 }
@@ -459,7 +471,9 @@ function deleteUserDetails(UserId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
+                    siteloaderhide();
                     if (Result.code == 200) {
+                        siteloaderhide();
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -470,27 +484,17 @@ function deleteUserDetails(UserId) {
                         })
                     }
                     else {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
+                        siteloaderhide();
+                        toastr.error(Result.message);
                     }
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete User!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/User/UserListView';
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete User!");                    
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-
+            siteloaderhide();
             Swal.fire(
                 'Cancelled',
                 'User Have No Changes.!!😊',

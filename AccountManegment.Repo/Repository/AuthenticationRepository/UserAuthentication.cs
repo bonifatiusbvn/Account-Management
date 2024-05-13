@@ -112,7 +112,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
             catch (Exception ex)
             {
-
                 response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "An error occurred while creating the user";
             }
@@ -240,7 +239,11 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     }
                 }
 
-                if (!string.IsNullOrEmpty(sortBy))
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    userList = userList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);
@@ -438,7 +441,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             {
 
                 response.code = (int)HttpStatusCode.InternalServerError;
-                response.message = "An error occurred while creating the user";
+                response.message = "An error occurred while creating the permissions to user";
             }
 
             return response;
@@ -446,9 +449,9 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
         {
+            UserResponceModel response = new UserResponceModel();
             try
             {
-                UserResponceModel response = new UserResponceModel();
                 var Userdata = await Context.Users.FirstOrDefaultAsync(a => a.Id == UpdateUser.Id);
                 if (Userdata != null)
                 {
@@ -464,18 +467,21 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.SiteId = UpdateUser.SiteId;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = "User data updated successfully";
                 }
-                response.Code = (int)HttpStatusCode.OK;
-                response.Message = "User data updated successfully";
-                return response;
-
+                else
+                {
+                    response.Code = 400;
+                    response.Message = "Error in updated user data";
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 500;
+                response.Message = "An error occurred while updating user data:" + ex;
             }
+            return response;
         }
-
-
     }
 }

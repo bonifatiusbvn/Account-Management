@@ -53,13 +53,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Item In Word list." });
+                    return BadRequest(new { Message = "Failed to retrieve Item In Word list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -97,7 +97,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { Massage = "Something wrong!", Code = postuser.code }); ;
+                    return BadRequest(new { Massage = "Something wrong!", Code = postuser.code }); ;
                 }
             }
             catch (Exception ex)
@@ -123,7 +123,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -167,7 +167,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -190,7 +190,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -248,11 +248,11 @@ namespace AccountManegments.Web.Controllers
 
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return Ok(new { Message = postuser.message, Code = postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return BadRequest(new { Message = postuser.message, Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -308,11 +308,11 @@ namespace AccountManegments.Web.Controllers
 
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return Ok(new { Message = postuser.message, Code = postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return BadRequest(new { Message = postuser.message, Code = postuser.code });
                 }
             }
             catch (Exception ex)

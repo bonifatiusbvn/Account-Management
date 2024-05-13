@@ -43,12 +43,17 @@ namespace AccountManagement.API.Controllers
         {
             ApiResponseModel response = new ApiResponseModel();
             var itemmaster = await ItemMaster.AddItemDetails(ItemDetails);
-            if (itemmaster != null)
+            if (response.code == 200)
             {
                 response.code = itemmaster.code;
                 response.message = itemmaster.message;
             }
-           
+            else
+            {
+                response.code = itemmaster.code;
+                response.message = itemmaster.message;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpPost]
@@ -58,6 +63,11 @@ namespace AccountManagement.API.Controllers
             ApiResponseModel response = new ApiResponseModel();
             var itemmaster = await ItemMaster.UpdateItemDetails(ItemDetails);
             if (itemmaster.code == 200)
+            {
+                response.code = itemmaster.code;
+                response.message = itemmaster.message;
+            }
+            else
             {
                 response.code = itemmaster.code;
                 response.message = itemmaster.message;
