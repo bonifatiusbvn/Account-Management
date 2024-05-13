@@ -3,12 +3,15 @@ using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Services.InvoiceMaster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class SupplierInvoiceController : ControllerBase
@@ -47,6 +50,10 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = SupplierDetails.code;
                 response.message = SupplierDetails.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
             }
             return StatusCode(response.code, response);
         }

@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.SiteMaster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -60,6 +61,10 @@ namespace AccountManagement.API.Controllers
                 response.code = sitemaster.code;
                 response.message = sitemaster.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
             return StatusCode(response.code, response);
         }
 
@@ -73,7 +78,7 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (responseModel.code==200)
+                if (responseModel.code == 200)
                 {
 
                     responseModel.code = siteName.code;
@@ -102,7 +107,7 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (responseModel.code==200)
+                if (responseModel.code == 200)
                 {
                     responseModel.code = siteId.code;
                     responseModel.message = siteId.message;

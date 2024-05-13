@@ -164,7 +164,7 @@ function CreatePurchaseRequest() {
 }
 
 function ClearPurchaseRequestTextBox() {
-    debugger
+
     if ($("#textsiteId").val() == "") {
         Swal.fire({
             title: "Kindly select site on dashboard.",
@@ -199,7 +199,7 @@ function ClearPurchaseRequestTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreatePurchaseRequest")
         });
-    }   
+    }
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -729,7 +729,7 @@ $(document).ready(function () {
 
 
 
-function InsertMultiplePurchaseOrderDetails() {debugger
+function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
@@ -778,7 +778,7 @@ function InsertMultiplePurchaseOrderDetails() {debugger
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
-            debugger
+
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -850,7 +850,7 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-        debugger
+
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
         $.ajax({
@@ -997,7 +997,6 @@ function getSupplierDetails(SupplierId) {
         success: function (response) {
 
             if (response) {
-                siteloaderhide();
                 $('#txtSuppliermobile').val(response.mobile);
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
@@ -1065,7 +1064,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),

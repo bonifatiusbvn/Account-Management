@@ -2,12 +2,15 @@
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class PurchaseRequestController : ControllerBase
@@ -46,6 +49,11 @@ namespace AccountManagement.API.Controllers
                 response.code = purchaseRequest.code;
                 response.message = purchaseRequest.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
 
@@ -60,6 +68,11 @@ namespace AccountManagement.API.Controllers
                 response.code = updatepurchaseRequest.code;
                 response.message = updatepurchaseRequest.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
 

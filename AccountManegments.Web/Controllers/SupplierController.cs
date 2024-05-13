@@ -87,7 +87,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Supplier-View")]
         public async Task<JsonResult> DisplaySupplier(Guid SupplierId)
         {
             try

@@ -44,6 +44,7 @@ using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Repository.ItemInWordRepository;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
 using AccountManagement.Repository.Services.ItemInWord;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,24 +88,44 @@ builder.Services.AddScoped<IiteminwordService,ItemInWordService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "Account API", Version = "v2", Description = "Account" });
 
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                     {
+                         new OpenApiSecurityScheme
+                         {
+                           Reference = new OpenApiReference
+                           {
+                             Type = ReferenceType.SecurityScheme,
+                             Id = "Bearer"
+                           }
+                          },
+                          new string[] { }
+                     }
+                });
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
+
+
+app.UseSwagger();
+app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "Account"));
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.MapControllers();
-
 app.Run();

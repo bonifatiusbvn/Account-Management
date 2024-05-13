@@ -411,6 +411,7 @@ function ActiveDecativeSite(SiteId) {
                 'Site Have No Changes.!!😊',
                 'error'
             );
+            AllSiteListTable();
         }
     });
 }
@@ -462,6 +463,7 @@ function DeleteSite(SiteId) {
                 'Site Have No Changes.!!😊',
                 'error'
             );
+            AllSiteListTable();
         }
     });
 }
@@ -519,10 +521,8 @@ function fn_getShippingcitiesbystateId(drpShippingcity, stateid, that) {
     $.ajax({
         url: '/Authentication/GetCity?CityId=' + sid,
         success: function (result) {
-
             $.each(result, function (i, data) {
                 $('#' + drpShippingcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
             });
         }
     });

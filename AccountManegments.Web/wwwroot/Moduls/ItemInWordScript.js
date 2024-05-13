@@ -283,7 +283,6 @@ function validateAndCreateItemInWord() {
             txtQuantity: "required",
             txtReceiverName: "required",
             txtVehicleNumber: "required",
-            txtDocument: "required",
             txtItemId: "required"
         },
         messages: {
@@ -291,7 +290,6 @@ function validateAndCreateItemInWord() {
             txtQuantity: "Enter Quantity",
             txtReceiverName: "Enter ReceiverName",
             txtVehicleNumber: "Enter VehicleNumber",
-            txtDocument: "Enter Document",
             txtItemId: "select item"
         }
     })
@@ -585,7 +583,7 @@ function InsertMultipleItemInWordDetails() {
             ReceiverName: $("#txtReceiverName").val(),
             Date: $("#txtIteminwordDate").val(),
         };
-
+        debugger
         var form_data = new FormData();
         form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 
@@ -639,6 +637,7 @@ function InsertMultipleItemInWordDetails() {
 
 function UpdateMultipleItemInWordDetails() {
     siteloadershow();
+    if ($("#itemInWordForm").valid()) {
     var siteId = null;
     var RoleUserId = $('#userRoleId').val();
     if (RoleUserId == 3) {
@@ -700,10 +699,15 @@ function UpdateMultipleItemInWordDetails() {
             toastr.error('An error occurred while processing your request.');
         }
     });
+    }
+    else {
+        siteloaderhide();
+        Swal.fire({
+            title: 'Warning',
+            text: 'Kindly fill all details.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
 }
-
-
-
-
-
-

@@ -2,12 +2,15 @@
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Services.PurchaseOrderService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class PurchaseOrderController : ControllerBase
@@ -22,7 +25,7 @@ namespace AccountManagement.API.Controllers
         [Route("GetPurchaseOrderList")]
         public async Task<IActionResult> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<PurchaseOrderView> PurchaseOrderList = await PurchaseOrder.GetPurchaseOrderList(searchText,searchBy,sortBy);
+            IEnumerable<PurchaseOrderView> PurchaseOrderList = await PurchaseOrder.GetPurchaseOrderList(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = PurchaseOrderList.ToList() });
         }
 
@@ -45,6 +48,11 @@ namespace AccountManagement.API.Controllers
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpPost]
@@ -58,6 +66,11 @@ namespace AccountManagement.API.Controllers
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpGet]
@@ -97,7 +110,7 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
-                response.data=PurchaseOrdermaster.data;
+                response.data = PurchaseOrdermaster.data;
             }
             else
             {
@@ -130,6 +143,6 @@ namespace AccountManagement.API.Controllers
                 response.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(response.code, response);
-        }    
+        }
     }
 }
