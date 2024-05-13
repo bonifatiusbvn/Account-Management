@@ -70,7 +70,7 @@ function DisplaySiteDetails(SiteId) {
         success: function (response) {
             siteloaderhide();
             $('#txtSiteid').val(response.siteId);
-            $('#txtsiteName').val(response.siteName);
+            $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
             $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
@@ -147,7 +147,7 @@ function CreateSite() {
     siteloadershow();
     if ($("#siteForm").valid()) {
         var objData = {
-            SiteName: $('#txtsiteName').val(),
+            SiteName: $('#txtSiteName').val(),
             ContectPersonName: $('#txtContectPersonName').val(),
             ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
             Address: $('#txtAddress').val(),
@@ -198,7 +198,7 @@ function UpdateSiteDetails() {
 
         var objData = {
             SiteId: $('#txtSiteid').val(),
-            SiteName: $('#txtsiteName').val(),
+            SiteName: $('#txtSiteName').val(),
             ContectPersonName: $('#txtContectPersonName').val(),
             ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
             Address: $('#txtAddress').val(),
@@ -246,7 +246,7 @@ function UpdateSiteDetails() {
 function ClearSiteTextBox() {
     resetSiteForm();
     $('#txtSiteid').val('');
-    $('#txtsiteName').val('');
+    $('#txtSiteName').val('');
     $('#txtContectPersonName').val('');
     $('#txtContectPersonPhoneNo').val('');
     $('#txtAddress').val('');
@@ -273,7 +273,7 @@ function validateAndCreateSite() {
 
         rules: {
 
-            txtsiteName: "required",
+            txtSiteName: "required",
             txtContectPersonName: "required",
             txtContectPersonPhoneNo: {
                 required: true,
@@ -305,7 +305,7 @@ function validateAndCreateSite() {
             shippingCountry: "required",
         },
         messages: {
-            txtsiteName: "Please Enter siteName",
+            txtSiteName: "Please Enter siteName",
             txtContectPersonName: "Please Enter ContectPersonName",
             txtContectPersonPhoneNo: {
                 required: "Please Enter Phone Number",
@@ -402,6 +402,7 @@ function ActiveDecativeSite(SiteId) {
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
                             buttonsStyling: false
                         });
+                        AllSiteListTable();
                     }
 
                 }
@@ -412,6 +413,7 @@ function ActiveDecativeSite(SiteId) {
                 'Site Have No Changes.!!😊',
                 'error'
             );
+            AllSiteListTable();
         }
     });
 }
@@ -451,6 +453,7 @@ function DeleteSite(SiteId) {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         });
+                        AllSiteListTable();
                     }
                 },
                 error: function () {
@@ -471,6 +474,7 @@ function DeleteSite(SiteId) {
                 'Site Have No Changes.!!😊',
                 'error'
             );
+            AllSiteListTable();
         }
     });
 }
@@ -528,10 +532,8 @@ function fn_getShippingcitiesbystateId(drpShippingcity, stateid, that) {
     $.ajax({
         url: '/Authentication/GetCity?CityId=' + sid,
         success: function (result) {
-
             $.each(result, function (i, data) {
                 $('#' + drpShippingcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
             });
         }
     });

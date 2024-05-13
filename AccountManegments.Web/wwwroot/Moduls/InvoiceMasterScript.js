@@ -311,10 +311,18 @@ $(document).ready(function () {
     });
 });
 
+function clearItemErrorMessage() {
+    $("#spnitembutton").text("");
+}
+
+$(document).on("click", "#addItemButton", function () {
+    clearItemErrorMessage();
+});
+
 function InsertMultipleSupplierItem() {
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
-
+        if ($('#addnewproductlink tr').length >= 1) {
         var ItemDetails = [];
         $(".product").each(function () {
             var orderRow = $(this);
@@ -397,6 +405,14 @@ function InsertMultipleSupplierItem() {
                 });
             }
         });
+        } else {
+            siteloaderhide();
+            if ($('#addnewproductlink tr').length == 0) {
+                $("#spnitembutton").text("Please Select Product!");
+            } else {
+                $("#spnitembutton").text("");
+            }
+        }
     }
     else {
         siteloaderhide();
