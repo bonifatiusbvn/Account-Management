@@ -1076,7 +1076,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
