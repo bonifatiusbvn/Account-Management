@@ -24,6 +24,7 @@ function AllItemInWordListTable() {
             $("#itemInWordtbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -45,7 +46,7 @@ function filterItemInWordTable() {
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -65,7 +66,7 @@ function sortItemInWordTable() {
             $("#itemInWordtbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -101,6 +102,7 @@ function SelectItemInWordDetails(InwordId, element) {
                         'width': '250px'
                     });;
                 } else {
+                    siteloaderhide();
                     $('#dspDocumentName').empty();
                     $('.holder').empty();
                     response.documentLists.forEach(function (document) {
@@ -113,10 +115,12 @@ function SelectItemInWordDetails(InwordId, element) {
                 }
 
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -204,6 +208,7 @@ function AddItemInWordDetails() {
                         window.location = '/ItemInWord/ItemInWord';
                     });
                 } else {
+                    siteloaderhide();
                     Swal.fire({
                         title: 'Something wrong',
                         icon: 'error',
@@ -212,6 +217,7 @@ function AddItemInWordDetails() {
                 }
             },
             error: function (e) {
+                siteloaderhide();
                 console.log(e)
             }
         })
@@ -227,91 +233,70 @@ function AddItemInWordDetails() {
     }
 }
 function ClearItemInWordTextBox() {
-
-    resetErrorsMessages();
-    $('#txtItemName').val('');
-    $('#txtItemInWordid').val('');
-    $('#txtItemId').val('');
-    $('#txtUnitType').val('');
-    $('#txtQuantity').val('');
-    $('#txtDocument').val('');
-    $('#txtVehicleNumber').val('');
-    $('#txtReceiverName').val('');
-    $('#siteNameList').val('');
-    $('#addNewImage').empty();
-    var button = document.getElementById("btnitemInWord");
-    if ($('#txtItemInWordid').val() == '') {
-        button.textContent = "Create";
+    if ($("#txtSiteid").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
     }
-    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
-    offcanvas.show();
-    $('#txtItemId').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreateItemInWord")
-    });
-    $('#txtUnitType').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreateItemInWord")
-    });
+    else {
+        resetErrorsMessages();
+        $('#txtItemName').val('');
+        $('#txtItemInWordid').val('');
+        $('#txtItemId').val('');
+        $('#txtUnitType').val('');
+        $('#txtQuantity').val('');
+        $('#txtDocument').val('');
+        $('#txtVehicleNumber').val('');
+        $('#txtReceiverName').val('');
+        $('#siteNameList').val('');
+        $('#addNewImage').empty();
+        var button = document.getElementById("btnitemInWord");
+        if ($('#txtItemInWordid').val() == '') {
+            button.textContent = "Create";
+        }
+        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
+        offcanvas.show();
+        $('#txtItemId').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreateItemInWord")
+        });
+        $('#txtUnitType').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreateItemInWord")
+        });
+    }
 }
+
+var ItemInwordForm;
 function validateAndCreateItemInWord() {
-    resetErrorsMessages();
-    var UnitTypeId = document.getElementById("txtUnitType").value.trim();
-    var ItemName = document.getElementById("txtItemId").value.trim();
-    var Quantity = document.getElementById("txtQuantity").value.trim();
-    var VehicleNumber = document.getElementById("txtVehicleNumber").value.trim();
-    var ReceiverName = document.getElementById("txtReceiverName").value.trim();
-    var SiteName = document.getElementById("siteNameList").value.trim();
-    var roleUserId = $('#userRoleId').val();
-
+    ItemInwordForm = $("#itemInWordForm").validate({
+        rules: {
+            txtUnitType: "required",
+            txtQuantity: "required",
+            txtReceiverName: "required",
+            txtVehicleNumber: "required",
+            txtDocument: "required",
+            txtItemId: "required"
+        },
+        messages: {
+            txtUnitType: "Enter UnitType",
+            txtQuantity: "Enter Quantity",
+            txtReceiverName: "Enter ReceiverName",
+            txtVehicleNumber: "Enter VehicleNumber",
+            txtDocument: "Enter Document",
+            txtItemId: "select item"
+        }
+    })
     var isValid = true;
-
-    if (UnitTypeId === "") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    } else if (UnitTypeId === "--Select Unit Type--") {
-        document.getElementById("spnUnitType").innerText = "Unit Type is required.";
-        isValid = false;
-    }
-
-
-    if (ItemName === "") {
-        document.getElementById("spnItemName").innerText = "Item is required.";
-        isValid = false;
-    }
-
-
-    if (Quantity === "") {
-        document.getElementById("spnQuantity").innerText = "Quantity is required.";
-        isValid = false;
-    }
-
-
-    if (VehicleNumber === "") {
-        document.getElementById("spnVehicleNumber").innerText = "Vehicle Number is required.";
-        isValid = false;
-    }
-
-
-    if (ReceiverName === "") {
-        document.getElementById("spnReceiverName").innerText = "Receiver Name is required.";
-        isValid = false;
-    }
-
-
-    if (SiteName === "" && roleUserId == 3) {
-        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
-        isValid = false;
-    } else if (SiteName === "--Select Unit Type--" && roleUserId == 3) {
-        document.getElementById("spnInWardSiteName").innerText = "Site is required.";
-        isValid = false;
-    }
 
     if (isValid) {
         if ($("#txtItemInWordid").val() == '') {
@@ -324,35 +309,10 @@ function validateAndCreateItemInWord() {
 
 }
 
-$(document).ready(function () {
-
-    $("#itemInWordForm").validate({
-        rules: {
-            txtUnitType: "required",
-            txtQuantity: "required",
-            txtReceiverName: "required",
-            txtVehicleNumber: "required",
-            txtDocument: "required",
-            txtItemId: "required"
-        },
-        messages: {
-            txtUnitType: "Please Enter UnitType",
-            txtQuantity: "Please Enter Quantity",
-            txtReceiverName: "Please Enter ReceiverName",
-            txtVehicleNumber: "Please Enter VehicleNumber",
-            txtDocument: "Please Enter Document",
-            txtItemId: "Please select item",
-        }
-    })
-});
 function resetErrorsMessages() {
-    document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnUnitType").innerText = "";
-    document.getElementById("spnItemName").innerText = "";
-    document.getElementById("spnQuantity").innerText = "";
-    document.getElementById("spnVehicleNumber").innerText = "";
-    document.getElementById("spnReceiverName").innerText = "";
-    document.getElementById("spnInWardSiteName").innerText = "";
+    if (ItemInwordForm) {
+        ItemInwordForm.resetForm();
+    }
 }
 function EditItemInWordDetails(InwordId) {
     siteloadershow();
@@ -410,6 +370,7 @@ function EditItemInWordDetails(InwordId) {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -510,7 +471,7 @@ function DeleteItemInWord(InwordId) {
     });
 }
 function ItemInWordIsApproved(InwordId) {
-    siteloadershow();
+
     var isChecked = $('#flexSwitchCheckChecked_' + InwordId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to Approve this Item In Word?" : "Are you sure want to UnApprove this Item In Word?";
 
@@ -536,7 +497,6 @@ function ItemInWordIsApproved(InwordId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
-                    siteloaderhide();
                     Swal.fire({
                         title: isChecked ? "Approved!" : "UnApproved!",
                         text: Result.message,
@@ -549,6 +509,7 @@ function ItemInWordIsApproved(InwordId) {
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
+
             Swal.fire(
                 'Cancelled',
                 'Item In Word Have No Changes.!!😊',
@@ -562,36 +523,35 @@ function ItemInWordIsApproved(InwordId) {
 
 var additionalFiles = [];
 function CancelImage(documentName) {
-    siteloadershow();
+
     $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
 
     var currentDocumentNames = $("#txtDocumentName").val().split(';');
     var updatedDocumentNames = currentDocumentNames.filter(function (name) {
         return name !== documentName;
     });
-    siteloaderhide();
+
     $("#txtDocumentName").val(updatedDocumentNames.join(';'));
 }
 function removenewaddImage() {
-    siteloadershow();
+
     $(document).on('click', '.img-remove', function () {
         var row = $(this).closest('.DocumentName');
         var documentName = row.find('img').data('document');
         row.remove();
-        siteloaderhide();
+
         additionalFiles = additionalFiles.filter(function (item) {
             return item.name !== documentName;
         });
     });
 }
 function showpictures() {
-    siteloadershow();
+
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
         if ($("#addNewImage .DocumentName").length + files.length > 5) {
             toastr.error("You can only add a maximum of 5 images.");
-            siteloaderhide();
-            return;    
+            return;
         }
         for (var i = 0; i < files.length; i++) {
             const file = files[i];
@@ -605,80 +565,93 @@ function showpictures() {
             })(file.name);
             reader.readAsDataURL(file);
             additionalFiles.push(file);
-            siteloaderhide();
         }
     }
 }
 
 function InsertMultipleItemInWordDetails() {
     siteloadershow();
-    var siteId = null;
-    var RoleUserId = $('#userRoleId').val();
-    if (RoleUserId == 3) {
-        siteId = $("#siteNameList").val();
+    if ($("#itemInWordForm").valid()) {
+        var siteId = null;
+        var RoleUserId = $('#userRoleId').val();
+        if (RoleUserId == 3) {
+            siteId = $("#siteNameList").val();
+        }
+        else {
+            siteId = $("#txtSiteid").val();
+        }
+        var ItemInWordRequest = {
+            UnitTypeId: $("#txtUnitType").val(),
+            ItemId: $("#txtItemId").val(),
+            Item: $("#txtItemName").val(),
+            Quantity: $("#txtQuantity").val(),
+            SiteId: siteId,
+            CreatedBy: $("#txtCreatedBy").val(),
+            VehicleNumber: $("#txtVehicleNumber").val(),
+            ReceiverName: $("#txtReceiverName").val(),
+            Date: $("#txtIteminwordDate").val(),
+        };
+
+        var form_data = new FormData();
+        form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
+
+        for (var i = 0; i < additionalFiles.length; i++) {
+            form_data.append("DocDetails", additionalFiles[i]);
+        }
+
+        $.ajax({
+            url: '/ItemInWord/InsertMultipleItemInWordDetail',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    });
+                }
+                else {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                });
+            }
+        });
     }
     else {
-        siteId = $("#txtSiteid").val();
+        siteloaderhide();
+        Swal.fire({
+            title: 'Warning',
+            text: 'Kindly fill all details.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
     }
-    var ItemInWordRequest = {
-        UnitTypeId: $("#txtUnitType").val(),
-        ItemId: $("#txtItemId").val(),
-        Item: $("#txtItemName").val(),
-        Quantity: $("#txtQuantity").val(),
-        SiteId: siteId,
-        CreatedBy: $("#txtCreatedBy").val(),
-        VehicleNumber: $("#txtVehicleNumber").val(),
-        ReceiverName: $("#txtReceiverName").val(),
-        Date: $("#txtIteminwordDate").val(),
-    };
-
-    var form_data = new FormData();
-    form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
-
-    for (var i = 0; i < additionalFiles.length; i++) {
-        form_data.append("DocDetails", additionalFiles[i]);
-    }
-
-    $.ajax({
-        url: '/ItemInWord/InsertMultipleItemInWordDetail',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            siteloaderhide();
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemInWord/ItemInWord';
-                });
-            }
-            else {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemInWord/ItemInWord';
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
-        }
-    });
 }
 
 function UpdateMultipleItemInWordDetails() {
@@ -733,6 +706,7 @@ function UpdateMultipleItemInWordDetails() {
                     window.location = '/ItemInWord/ItemInWord';
                 });
             } else {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -744,6 +718,7 @@ function UpdateMultipleItemInWordDetails() {
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred while processing your request.',

@@ -13,6 +13,7 @@ function showFormGroupList() {
             $('#dvrolePermissionForm').html(Result.responseText);
         },
         Error: function () {
+            siteloaderhide();
             Swal.fire({
                 title: "Can't get data!",
                 icon: 'warning',
@@ -31,6 +32,7 @@ function AllRolewiseFormUserTable() {
             $("#UserRoletbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -61,7 +63,7 @@ function EditRoleWiseFormDetails(RoleId, element) {
             $('#dveditRolePermissionForm').html(Result.responseText);
         },
         Error: function () {
-
+            siteloaderhide();
             Swal.fire({
                 title: "Can't get data!",
                 icon: 'warning',
@@ -73,7 +75,7 @@ function EditRoleWiseFormDetails(RoleId, element) {
 }
 
 function UpdateRolewiseFormPermission() {
-
+    siteloadershow();
     var formPermissions = [];
     $(".forms").each(function () {
 
@@ -112,6 +114,7 @@ function UpdateRolewiseFormPermission() {
                     window.location = '/User/RolewisePermission';
                 });
             } else {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'warning',
@@ -121,6 +124,7 @@ function UpdateRolewiseFormPermission() {
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(error);
         }
     });
@@ -165,6 +169,7 @@ function CreateRolewiseFormPermission() {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(error);
         }
     });

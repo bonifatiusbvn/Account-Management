@@ -40,10 +40,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                if (SiteId == null)
-                {
-                    SiteId = Guid.Parse(UserSession.SiteId);
-                }
 
                 string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
 

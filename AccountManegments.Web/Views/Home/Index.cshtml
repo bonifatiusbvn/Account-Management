@@ -16,9 +16,8 @@
                 @if (_userSession.UserRole == 3)
                 {
                     <select class="form-select form-control-lg" id="drpSiteName">
-                        <option value="null" selected>All Site</option>
+                        <option value="">All Site</option>
                     </select>
-                    <input type="hidden" id="txtsiteid" />
                 }
                 else
                 {
@@ -99,28 +98,27 @@
 @section Scripts {
     <script type="text/javascript">
         var role = "@_userSession.UserRole";
-        debugger
-        $('#laySiteName').html("@UserSession.SiteName");
         $(function () {
+            fn_fillsiteDropDown();
+            //fn_fillsiteDropDown('#drpSiteName');
+            //if (role == 3) {
+            //    fn_ChangeSite(null);
+            //}
+            //else {
 
-            fn_fillsiteDropDown('#drpSiteName');
-            if (role == 3) {
-                fn_ChangeSite(null);
-            }
-            else {
-
-                fn_ChangeSite("@UserSession.SiteId");
-            }
+            //    fn_ChangeSite("@UserSession.SiteId");
+            //}
 
             GetCompanyList();
         });
 
-        function fn_fillsiteDropDown(drpid) {
+        function fn_fillsiteDropDown() {
+            debugger
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 success: function (result) {
                     $.each(result, function (i, data) {
-                        $(drpid).append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
+                        $('#drpSiteName').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                     });
                 }
             });
@@ -130,7 +128,7 @@
             siteloadershow();
             var SiteText = $("#drpSiteName Option:Selected").text();
             var selectedSiteId = $(this).val();
-            $('#laySiteName').html(SiteText);
+            $('#txtsiteName').html(SiteText)
             fn_ChangeSite(selectedSiteId, SiteText)
         });
 
@@ -155,7 +153,7 @@
                     SiteName: SiteText,
                 },
                 success: function (result) {
-                    debugger
+
                     siteloaderhide();
                     $("#tbPndingApproval").html(result);
 

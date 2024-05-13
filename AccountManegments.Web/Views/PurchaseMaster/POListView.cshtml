@@ -15,7 +15,7 @@
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Add == true)))
             {
-                <a type="button" class="btn btn-primary fixed-button" asp-action="CreatePurchaseOrder" asp-controller="PurchaseMaster"><i class="lni lni-circle-plus"></i>PurchaseOrder</a>
+                <button type="button" class="btn btn-primary fixed-button" onclick="clearPOtextbox()"><i class="lni lni-circle-plus"></i>PurchaseOrder</button>
             }
         </form>
     </div>
@@ -45,6 +45,7 @@
                                                             <option selected="selected">All</option>
                                                             <option>SupplierName</option>
                                                         </select>
+                                                        <input type="hidden" id="inputSiteId" value="@UserSession.SiteId" />
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">

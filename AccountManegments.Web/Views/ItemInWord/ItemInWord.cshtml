@@ -3,7 +3,7 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
-    ViewData["Title"] = "InWard Challan";
+    ViewData["Title"] = "Inward Challan";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -152,22 +152,16 @@
                         <div class="card-body">
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <div class="col-12">
-                                    <label for="txtItemId" class="form-label ">Product Names</label>
-                                    <select id="txtItemId" name="txtItemId" class="single-select form-select" required>
+                                    <label class="form-label" for="txtItemId">Product Names</label>
+                                    <select id="txtItemId" name="txtItemId" class="form-select">
                                         <option selected disabled value="">select Item</option>
                                     </select>
-                                    <span id="spnItemId" class="text-danger"></span>
                                     <input type="hidden" id="searchItemnameid">
-                                    @* <label class="form-label">Item</label>
-                                    <select class="form-control" id="txtItemId">
-                                    <option value="">--Select Item--</option>
-                                    </select> *@
                                     <input type="hidden" id="txtItemName">
                                     <input type="hidden" id="txtItemInWordid">
                                     <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
                                     <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
                                     <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
-                                    <span id="spnItemName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
@@ -178,27 +172,27 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" required>
+                                    <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Receiver Name</label>
-                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName" required>
+                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName" >
                                     <span id="spnReceiverName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Vehicle Number</label>
-                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber" required>
+                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber" >
                                     <span id="spnVehicleNumber" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Date</label>
-                                    <input type="date" id="txtIteminwordDate" class="form-control" required max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                    <input type="date" id="txtIteminwordDate" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                                     <span id="spnDate" class="text-danger"></span>
                                 </div>
                                 <div class="col-6" id="siteSection" style="display: none;">
                                     <label class="form-label">Site</label>
-                                    <select class="form-select" id="siteNameList" required>
+                                    <select class="form-select" id="siteNameList">
                                         <option selected disabled value="">--Select--</option>
                                     </select>
                                     <span id="spnInWardSiteName" class="text-danger"></span>
@@ -239,6 +233,7 @@
 </div>
 
 <style>
+    #txtItemId-error,
     #txtUnitType-error, #txtQuantity-error, #txtReceiverName-error,
     #txtVehicleNumber-error, #txtDocument-error {
         color: red;
@@ -252,6 +247,7 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <script src="~/moduls/iteminwordscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/iteminwordscript.js" asp-append-version="true"></script>  
 }
+
 

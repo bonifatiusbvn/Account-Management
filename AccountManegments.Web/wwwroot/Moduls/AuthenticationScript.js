@@ -47,7 +47,7 @@ function GetSiteDetails() {
         success: function (result) {
             $('#ddlSiteName').empty();
 
-            $('#ddlSiteName').append('<option value="" selected>All Site</option>');
+           /* $('#ddlSiteName').append('<option value="" selected>All Site</option>');*/
             $.each(result, function (i, data) {
 
                 $('#ddlSiteName').append('<option value=' + data.siteId + '>' + data.siteName + '</Option>')
@@ -105,6 +105,7 @@ function DisplayUserDetails(UserId) {
             offcanvas.show();
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -133,10 +134,12 @@ function SelectUserDetails(UserId, element) {
                 $('#dspRole').val(response.roleName);
                 $('#dspSiteName').val(response.siteName);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -173,6 +176,7 @@ function filterTable() {
             $("#Usertbody").html(result);
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
 
         }
     });
@@ -192,7 +196,7 @@ function sortTable() {
             $("#Usertbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -430,6 +434,7 @@ function logout() {
             window.location.href = '/Authentication/UserLogin';
         })
         .catch(error => {
+            siteloaderhide();
             console.error('Error:', error);
 
         });

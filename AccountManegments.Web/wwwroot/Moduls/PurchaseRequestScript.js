@@ -48,7 +48,7 @@ function filterPurchaseRequestTable() {
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -79,7 +79,7 @@ function sortPurchaseRequestTable() {
             $("#purchaseRequesttbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -105,10 +105,12 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
                 $('#dspSiteName').val(response.siteName);
                 $('#dspIsApproved').prop('checked', response.isApproved);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -120,7 +122,6 @@ function CreatePurchaseRequest() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-
         siteName = $("#txtPoSiteName").val();
 
         var objData = {
@@ -161,31 +162,42 @@ function CreatePurchaseRequest() {
 }
 
 function ClearPurchaseRequestTextBox() {
-    resetPRForm();
-    $('#txtItemName').val('');
-    $('#txtUnitType').val('');
-    $('#txtQuantity').val('');
-
-    var button = document.getElementById("btnpurchaseRequest");
-    if ($('#PurchaseRequestId').val() == '') {
-        button.textContent = "Create";
+    debugger
+    if ($("#textsiteId").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
     }
-    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-    offcanvas.show();
-    $('#searchItemname').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
-    $('#txtUnitType').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
+    else {
+        resetPRForm();
+        $('#txtItemName').val('');
+        $('#txtUnitType').val('');
+        $('#txtQuantity').val('');
+
+        var button = document.getElementById("btnpurchaseRequest");
+        if ($('#PurchaseRequestId').val() == '') {
+            button.textContent = "Create";
+        }
+        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
+        offcanvas.show();
+        $('#searchItemname').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
+        $('#txtUnitType').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
+    }   
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -260,6 +272,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
             });
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -410,6 +423,20 @@ function PurchaseRequestIsApproved(PurchaseId) {
         }
     });
 }
+
+function clearPOtextbox() {
+    if ($("#inputSiteId").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
+    }
+}
 function GetAllUnitType() {
 
     $.ajax({
@@ -433,6 +460,7 @@ function GetPurchaseOrderList() {
             $("#PurchaseOrdertbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -453,7 +481,7 @@ function filterPurchaseOrderTable() {
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -472,7 +500,7 @@ function sortPurchaseOrderTable() {
             $("#PurchaseOrdertbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -500,6 +528,7 @@ function EditPurchaseOrderDetails(Id) {
             window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             console.error(xhr.responseText);
         }
     });
@@ -625,6 +654,7 @@ function SerchItemDetailsById(Id, inputField) {
                     $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
+                    siteloaderhide();
                     $('#searchvalidationMessage').text('');
                 }
             }
@@ -643,6 +673,7 @@ $(document).ready(function () {
 
     today = yyyy + '-' + mm + '-' + dd;
     $("#orderdate").val(today);
+    $("#txtDeliverySchedule").val(today);
 
 });
 function clearShippingAddressErrorMssage() {
@@ -670,7 +701,7 @@ $(document).ready(function () {
                 required: function (element) {
                     return !($("#txtDeliverySchedule").val() || $("input[name='txtDeliverySchedule']:checked").length > 0);
                 }
-            }, 
+            },
             txtContectPerson: "required",
             txtMobileNo: {
                 required: true,
@@ -698,7 +729,7 @@ $(document).ready(function () {
 
 
 
-function InsertMultiplePurchaseOrderDetails() {
+function InsertMultiplePurchaseOrderDetails() {debugger
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
@@ -739,7 +770,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 ? $("input[name='txtDeliverySchedule']:checked").val() : $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 CreatedBy: $("#createdbyid").val(),
@@ -747,7 +778,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
-
+            debugger
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -926,6 +957,7 @@ function AddShippingAddress() {
             updateTotals();
             updateRowNumbers();
         } else {
+            siteloaderhide();
             Swal.fire({
                 title: "Address already added!",
                 text: "The selected address is already added.",
@@ -981,6 +1013,7 @@ function getSupplierDetails(SupplierId) {
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -1010,6 +1043,7 @@ function getCompanyDetails(CompanyId) {
                 $('#txtCompanyGstNo').val(response.gstno);
                 $('#companybillingaddressDetails').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -1070,6 +1104,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                         });
                     }
                     else {
+                        siteloaderhide();
                         Swal.fire({
                             title: "There Is Some Prolem in Your Request!",
                             icon: 'warning',
@@ -1079,6 +1114,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     }
                 },
                 error: function (xhr, status, error) {
+                    siteloaderhide();
                     Swal.fire({
                         title: 'Error',
                         text: 'An error occurred while processing your request.',
@@ -1230,6 +1266,7 @@ function AddNewRow(Result) {
         updateTotals();
         updateRowNumbers();
     } else {
+        siteloaderhide();
         Swal.fire({
             title: "Product already added!",
             text: "The selected product is already added.",
@@ -1412,6 +1449,7 @@ function GetPOList() {
             $("#PurchaseOrderListbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -1463,7 +1501,7 @@ function filterPOTable() {
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -1481,7 +1519,7 @@ function sortPOTable() {
             $("#PurchaseOrderListbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -1494,24 +1532,14 @@ function printDiv() {
     document.body.innerHTML = originalContents;
 }
 
-function toggleDate() {
-    const dateInput = document.getElementById('txtDeliverySchedule');
-    const radioImmediate = document.getElementById('txtImmediate');
-
-    if (dateInput.value) {
-        radioImmediate.disabled = true;
-    } else {
-        radioImmediate.disabled = false;
-    }
-}
-
 function toggleRadio() {
     const dateInput = document.getElementById('txtDeliverySchedule');
     const radioImmediate = document.getElementById('txtImmediate');
+    const radioDate = document.getElementById('txtradiodate');
 
     if (radioImmediate.checked) {
         dateInput.disabled = true;
-    } else {
+    } else if (radioDate.checked) {
         dateInput.disabled = false;
     }
 }

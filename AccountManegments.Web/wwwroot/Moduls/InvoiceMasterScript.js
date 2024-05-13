@@ -5,6 +5,20 @@ GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
 
+function clearInvoicetextbox() {
+    if ($("#inputsiteId").val() == "") {
+        Swal.fire({
+            title: "Kindly select site on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location.href = '/InvoiceMaster/CreateInvoice';
+    }
+}
+
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -48,11 +62,13 @@ function SerchItemDetailsById(Id, inputField) {
                 AddNewRow(Result.responseText);
             }
             else {
+                siteloaderhide();
                 var GetItemId = $('#searchItemname').val();
                 if (GetItemId === "Select ProductName" || GetItemId === null) {
                     $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
+                    siteloaderhide();
                     $('#searchvalidationMessage').text('');
                 }
             }
@@ -167,6 +183,7 @@ function AllSupplierInvoiceListTable() {
             $("#SupplierInvoicebody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -188,7 +205,7 @@ function filterSupplierInvoiceTable() {
             $("#SupplierInvoicebody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -207,7 +224,7 @@ function SupplierInvoicesortTable() {
             $("#SupplierInvoicebody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -283,13 +300,13 @@ $(document).ready(function () {
             textSupplierName: "required",
             textCompanyName: "required",
             paymentStatus: "required",
-            textSupplierInvoiceNo:"required",
+            textSupplierInvoiceNo: "required",
         },
         messages: {
             textSupplierName: "Select Supplier Name",
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
-            textSupplierInvoiceNo:"Enter Supplier Invoice No",
+            textSupplierInvoiceNo: "Enter Supplier Invoice No",
         }
     });
 });
@@ -360,6 +377,7 @@ function InsertMultipleSupplierItem() {
                     });
                 }
                 else {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'warning',
@@ -369,6 +387,7 @@ function InsertMultipleSupplierItem() {
                 }
             },
             error: function (xhr, status, error) {
+                siteloaderhide();
                 Swal.fire({
                     title: 'Error',
                     text: 'An error occurred while processing your request.',
@@ -448,6 +467,7 @@ function UpdateInvoiceDetails() {
                     });
                 }
                 else {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'warning',
@@ -457,6 +477,7 @@ function UpdateInvoiceDetails() {
                 }
             },
             error: function (xhr, status, error) {
+                siteloaderhide();
                 Swal.fire({
                     title: 'Error',
                     text: 'An error occurred while processing your request.',
@@ -910,6 +931,7 @@ function InvoiceListTable() {
             $("#Invoicetbody").html(result);
         })
         .fail(function (error) {
+            siteloaderhide();
             console.error(error);
         });
 }
@@ -931,7 +953,7 @@ function filterInvoiceTable() {
             $("#Invoicetbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -950,7 +972,7 @@ function InvoiceSortTable() {
             $("#Invoicetbody").html(result);
         },
         error: function (xhr, status, error) {
-
+            siteloaderhide();
         }
     });
 }
@@ -978,6 +1000,7 @@ function getSupplierDetail(SupplierId) {
                 $('#textSupplierGST').val(response.gstno);
                 $('#textSupplierAddress').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -997,6 +1020,7 @@ function getCompanyDetail(CompanyId) {
                 $('#textCompanyGstNo').val(response.gstno);
                 $('#textCompanyBillingAddress').val(response.fullAddress);
             } else {
+                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
@@ -1047,6 +1071,7 @@ function addShippingAddress() {
         siteloaderhide();
     } else {
         siteloaderhide();
+
         Swal.fire({
             title: "Kindly fill all data fields",
             icon: 'warning',

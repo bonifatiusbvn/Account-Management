@@ -252,11 +252,19 @@
                                                                 <input type="date" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" onchange="toggleDate()">
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6 col-sm-6">
+                                                        <div class="col-lg-3 col-sm-6">
                                                             <div class="input-group mb-3">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input"  type="radio" id="txtImmediate" name="txtDeliverySchedule" value="Immediate" onchange="toggleRadio()" @(Model.DeliveryShedule == "Immediate" ? "checked" : "")>
+                                                                    <input class="form-check-input" type="radio" id="txtImmediate" name="txtDeliverySchedule" value="Immediate" onchange="toggleRadio()" @(Model.DeliveryShedule == "Immediate" ? "checked" : "")>
                                                                     <label class="form-check-label" style="font-size:16px;" for="txtImmediate"><b>Immediate</b></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-sm-6">
+                                                            <div class="input-group mb-3">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" id="txtradiodate" name="txtDeliverySchedule" value="Date" onchange="toggleRadio()" checked>
+                                                                    <label class="form-check-label" style="font-size:16px;" for="txtradiodate"><b>Date</b></label>
                                                                 </div>
                                                             </div>
                                                         </div>
