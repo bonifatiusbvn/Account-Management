@@ -999,21 +999,19 @@ $(document).ready(function () {
 });
 
 function getSupplierDetails(SupplierId) {
-    siteloadershow();
+    debugger
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
+            debugger
             if (response) {
-                siteloaderhide();
                 $('#txtSuppliermobile').val(response.mobile);
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
             } else {
-                siteloaderhide();
                 console.log('Empty response received.');
             }
         },
