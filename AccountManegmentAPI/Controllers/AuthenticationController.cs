@@ -62,7 +62,6 @@ namespace AccountManagement.API.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         [Route("GetAllUserList")]
         public async Task<IActionResult> GetAllUserList(string? searchText, string? searchBy, string? sortBy)

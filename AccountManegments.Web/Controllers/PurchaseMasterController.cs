@@ -256,7 +256,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.data });
+                    return Ok(new { postuser.message, postuser.data, postuser.code });
                 }
                 else
                 {
@@ -326,7 +326,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "PurchaseOrder/UpdateMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.data });
+                    return Ok(new { postuser.message, postuser.data, postuser.code });
                 }
                 else
                 {

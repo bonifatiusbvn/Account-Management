@@ -424,7 +424,7 @@ function UpdateInvoiceDetails() {
         if (sitevalue != "") {
             siteid = sitevalue;
         } else {
-            siteid = document.getElementById("textSiteName").getAttribute("value");
+            siteid = document.getElementById("siteid").getAttribute("value");
         }
 
         var InvoiceDetails = {
