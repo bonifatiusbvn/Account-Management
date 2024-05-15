@@ -31,6 +31,7 @@ namespace AccountManagement.API.Controllers
 
                 if (result != null && result.Data != null)
                 {
+                    var token = Authentication.GenerateToken(login);
                     loginresponsemodel.Code = (int)HttpStatusCode.OK;
                     loginresponsemodel.Data = result.Data;
                     loginresponsemodel.Message = result.Message;
@@ -47,8 +48,7 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
-        [HttpPost]
-        [Route("UserLogin")]
+        [HttpPost("UserLogin")]
         public async Task<IActionResult> UserLogin(LoginRequest login)
         {
             var user = await Authentication.AuthenticateUser(login);
@@ -62,9 +62,8 @@ namespace AccountManagement.API.Controllers
             }
         }
 
+        [HttpPost("GetAllUserList")]
         [Authorize]
-        [HttpPost]
-        [Route("GetAllUserList")]
         public async Task<IActionResult> GetAllUserList(string? searchText, string? searchBy, string? sortBy)
         {
             IEnumerable<LoginView> userList = await Authentication.GetUsersList(searchText, searchBy, sortBy);
@@ -73,6 +72,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetUserById")]
+        [Authorize]
+
         public async Task<IActionResult> GetEmployeeById(Guid UserId)
         {
             var userProfile = await Authentication.GetUserById(UserId);
@@ -81,6 +82,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("CreateUser")]
+        [Authorize]
+
         public async Task<IActionResult> CreateUser(UserViewModel UpdateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -100,6 +103,8 @@ namespace AccountManagement.API.Controllers
         }
         [HttpPost]
         [Route("UpdateUserDetails")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -120,6 +125,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]
+        [Authorize]
         public async Task<IActionResult> ActiveDeactiveUsers(Guid UserId)
         {
             UserResponceModel responseModel = new UserResponceModel();
@@ -127,7 +133,7 @@ namespace AccountManagement.API.Controllers
             var userName = await Authentication.ActiveDeactiveUsers(UserId);
             try
             {
-                if (responseModel.Code==200)
+                if (responseModel.Code == 200)
                 {
                     responseModel.Code = userName.Code;
                     responseModel.Message = userName.Message;
@@ -146,6 +152,8 @@ namespace AccountManagement.API.Controllers
         }
         [HttpPost]
         [Route("DeleteUserDetails")]
+        [Authorize]
+
         public async Task<IActionResult> DeleteUserDetails(Guid UserId)
         {
             UserResponceModel responseModel = new UserResponceModel();
@@ -153,7 +161,7 @@ namespace AccountManagement.API.Controllers
             var User = await Authentication.DeleteUserDetails(UserId);
             try
             {
-                if (responseModel.Code==200)
+                if (responseModel.Code == 200)
                 {
                     responseModel.Code = User.Code;
                     responseModel.Message = User.Message;

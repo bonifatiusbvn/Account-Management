@@ -5,6 +5,7 @@ using AccountManagement.Repository.Interface.Services.CompanyService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
@@ -20,8 +21,9 @@ namespace AccountManagement.API.Controllers
         {
             _companyService = companyService;
         }
-        [HttpPost]
-        [Route("AddCompany")]
+
+        [Authorize]
+        [HttpPost("AddCompany")]
         public async Task<IActionResult> AddCompany(CompanyModel AddCompany)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -45,22 +47,22 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        [HttpPost]
-        [Route("GetAllCompany")]
+        [Authorize]
+        [HttpPost("GetAllCompany")]
         public async Task<IActionResult> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
         {
             IEnumerable<CompanyModel> company = await _companyService.GetAllCompany(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = company.ToList() });
         }
-        [HttpGet]
-        [Route("GetCompnaytById")]
+        [Authorize]
+        [HttpGet("GetCompnaytById")]
         public async Task<IActionResult> GetCompnaytById(Guid Id)
         {
             var company = await _companyService.GetCompnaytById(Id);
             return Ok(new { code = 200, data = company });
         }
-        [HttpPost]
-        [Route("UpdateCompany")]
+        [Authorize]
+        [HttpPost("UpdateCompany")]
         public async Task<IActionResult> UpdateCompany(CompanyModel UpdateCompany)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -84,8 +86,8 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        [HttpPost]
-        [Route("DeleteCompanyDetails")]
+        [Authorize]
+        [HttpPost("DeleteCompanyDetails")]
         public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
@@ -109,12 +111,20 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
-        [HttpGet]
-        [Route("GetCompanyNameList")]
+        [HttpGet("GetCompanyNameList")]
+        [Authorize]
         public async Task<IActionResult> GetCompanyNameList()
         {
-            IEnumerable<CompanyModel> company = await _companyService.GetCompanyNameList();
-            return Ok(new { code = 200, data = company.ToList() });
+            var _bearerToken = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            if (!string.IsNullOrEmpty(_bearerToken))
+            {
+                IEnumerable<CompanyModel> company = await _companyService.GetCompanyNameList();
+                return Ok(new { code = 200, data = company.ToList() });
+            }
+            else
+            {
+                return BadRequest(new { Code = (int)HttpStatusCode.InternalServerError });
+            }
         }
     }
 }

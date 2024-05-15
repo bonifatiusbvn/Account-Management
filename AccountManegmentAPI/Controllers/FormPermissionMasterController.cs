@@ -29,6 +29,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("CreateRolewisePermission")]
+        [Authorize]
+
         public async Task<IActionResult> CreateRolewiseFormPermission(RolewiseFormPermissionModel formPermission)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -43,6 +45,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetRolewiseFormPermissionById")]
+        [Authorize]
+
         public async Task<IActionResult> GetRolewiseFormPermissionById(int permissionFormId)
         {
             var rolewiseFormPermission = await RolewisePermissionMaster.GetRolewiseFormPermissionById(permissionFormId);
@@ -51,6 +55,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetRolewiseFormPermissionList")]
+        [Authorize]
+
         public async Task<IActionResult> GetRolewiseFormPermissionList()
         {
             IEnumerable<RolewiseFormPermissionModel> rolewiseFormPermissionList = await RolewisePermissionMaster.GetRolewiseFormPermissionList();
@@ -59,6 +65,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdateRolewiseFormPermission")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateRolewiseFormPermission(RolewiseFormPermissionModel updateRolewiseFormPermission)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -73,6 +81,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetFormGroupList")]
+        [Authorize]
+
         public async Task<IActionResult> GetFormGroupList()
         {
             IEnumerable<FormMasterModel> formList = await FormMaster.GetFormGroupList();
@@ -81,6 +91,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("InsertMultipleRolewiseFormPermission")]
+        [Authorize]
+
         public async Task<IActionResult> InsertMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> RolewiseFormPermission)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -107,6 +119,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetRolewiseFormListById")]
+        [Authorize]
+
         public async Task<IActionResult> GetRolewiseFormListById(int RoleId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -127,6 +141,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdateMultipleRolewiseFormPermission")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> RolewiseFormPermission)
         {
             ApiResponseModel response = new ApiResponseModel();

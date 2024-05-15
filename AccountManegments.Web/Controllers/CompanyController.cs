@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Controllers
 {
-    [Authorize]
     public class CompanyController : Controller
     {
         public WebAPI WebAPI { get; }

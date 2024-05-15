@@ -14,6 +14,8 @@ namespace AccountManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class ItemMasterController : ControllerBase
     {
         public ItemMasterController(IItemMasterServices itemMaster)

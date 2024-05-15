@@ -87,12 +87,11 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
             else
             {
-                var role=Context.UserRoles.FirstOrDefault();
-                UserViewModel user = new UserViewModel()
+                var role = Context.UserRoles.FirstOrDefault();
+                LoginRequest user = new LoginRequest()
                 {
                     UserName = UserLogin.UserName,
                     Password = UserLogin.Password,
-                    RoleName=role.Role,
                 };
 
                 var Jtoken = GenerateToken(user);
@@ -180,14 +179,13 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             return response;
         }
 
-        public string GenerateToken(UserViewModel model)
+        public string GenerateToken(LoginRequest model)
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, model.UserName));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim("UserName", model.UserName));
             claims.Add(new Claim("Password", model.Password));
-            claims.Add(new Claim("RoleName", model.RoleName));
 
             var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
@@ -345,11 +343,10 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 if (tblUser != null)
                 {
                     // Generate token
-                    UserViewModel user = new UserViewModel()
+                    LoginRequest user = new LoginRequest()
                     {
                         UserName = tblUser.User.UserName,
                         Password = tblUser.User.Password,
-                        RoleName = tblUser.Role,
                     };
                     var authToken = GenerateToken(user);
 
@@ -378,7 +375,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 userModel.FirstName = tblUser.User.FirstName;
                                 userModel.SiteName = userData.SiteName;
                                 userModel.SiteId = tblUser.User.SiteId;
-                                userModel.Token= authToken;
+                                userModel.Token = authToken;
                                 response.Data = userModel;
                                 response.Code = (int)HttpStatusCode.OK;
 
@@ -400,7 +397,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                                 userModel.FromPermissionData = fromPermissionData;
 
-                                
+
                             }
                             else
                             {
@@ -419,7 +416,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
                                 userModel.FirstName = tblUser.User.FirstName;
                                 userModel.SiteId = tblUser.User.SiteId;
-                                userModel.Token = authToken;
                                 response.Data = userModel;
                                 response.Code = (int)HttpStatusCode.OK;
 

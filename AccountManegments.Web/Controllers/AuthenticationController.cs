@@ -147,7 +147,7 @@ namespace AccountManegments.Web.Controllers
                         new Claim("RoleName", userlogin.Data.RoleName),
                         new Claim("Token", userlogin.Data.Token),
                     };
-                   
+
                     if (userlogin.Data.SiteId != null)
                     {
                         claims.Add(new Claim("SiteId", userlogin.Data.SiteId.ToString()));
@@ -176,12 +176,12 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.chkRememberMe = false;
                     }
 
-                    UserSession.SiteId = userlogin.Data.SiteId?.ToString() ?? "";  
+                    UserSession.SiteId = userlogin.Data.SiteId?.ToString() ?? "";
                     UserSession.SiteName = userlogin.Data.SiteName ?? "";
                     UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                   
+
                     return RedirectToAction("Index", "Home");
                 }
                 return View();

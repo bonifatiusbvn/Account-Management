@@ -11,6 +11,8 @@ namespace AccountManagement.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class PurchaseOrderDetailsController : ControllerBase
     {
         public PurchaseOrderDetailsController(IPurchaseOrderDetailsServices purchaseOrder)

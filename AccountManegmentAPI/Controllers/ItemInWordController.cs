@@ -27,6 +27,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetItemInWordList")]
+        [Authorize]
+
         public async Task<IActionResult> GetItemInWordList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
         {
             IEnumerable<ItemInWordModel> ItemInWordList = await ItemInWord.GetItemInWordList(searchText, searchBy, sortBy, siteId);
@@ -35,6 +37,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetItemInWordtDetailsById")]
+        [Authorize]
+
         public async Task<IActionResult> GetItemInWordtDetailsById(Guid InwordId)
         {
             var ItemInWordDetails = await ItemInWord.GetItemInWordtDetailsById(InwordId);
@@ -43,6 +47,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("AddItemInWordDetails")]
+        [Authorize]
+
         public async Task<IActionResult> AddItemInWordDetails(ItemInWordModel ItemInWordDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -57,6 +63,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdateItemInWordDetails")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateItemInWordDetails(ItemInWordModel ItemInWordDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -71,6 +79,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("DeleteItemInWord")]
+        [Authorize]
+
         public async Task<IActionResult> DeleteItemInWord(Guid InwordId)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
@@ -97,6 +107,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("ItemInWordIsApproved")]
+        [Authorize]
+
         public async Task<IActionResult> ItemInWordIsApproved(Guid InwordId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -123,6 +135,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("InsertMultipleItemInWordDetails")]
+        [Authorize]
+
         public async Task<IActionResult> InsertMultipleItemInWordDetails(ItemInWordMasterView ItemInWordDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -142,6 +156,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdatetMultipleItemInWordDetails")]
+        [Authorize]
+
         public async Task<IActionResult> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails)
         {
             ApiResponseModel response = new ApiResponseModel();

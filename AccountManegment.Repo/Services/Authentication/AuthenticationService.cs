@@ -42,9 +42,9 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.DeleteUserDetails(UserId);
         }
 
-        public string GenerateToken(UserViewModel model)
+        public string GenerateToken(LoginRequest model)
         {
-            return Authentication.GenerateToken(model);     
+            return Authentication.GenerateToken(model);
         }
 
         public async Task<LoginView> GetUserById(Guid UserId)

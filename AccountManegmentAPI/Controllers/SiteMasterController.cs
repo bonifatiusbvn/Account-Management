@@ -13,6 +13,8 @@ namespace AccountManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class SiteMasterController : ControllerBase
     {
         public SiteMasterController(ISiteMasterServices siteMaster)

@@ -25,6 +25,6 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
 
         Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission);
         Task<string> AuthenticateUser(LoginRequest login);
-        string GenerateToken(UserViewModel model);
+        string GenerateToken(LoginRequest model);
     }
 }

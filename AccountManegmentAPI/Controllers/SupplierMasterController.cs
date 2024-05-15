@@ -16,6 +16,8 @@ namespace AccountManagement.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class SupplierMasterController : ControllerBase
     {
         public SupplierMasterController(ISupplierServices supplier)
