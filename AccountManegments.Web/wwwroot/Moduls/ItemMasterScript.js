@@ -144,9 +144,9 @@ function CreateItem() {
             dataType: 'json',
             success: function (result) {
                 siteloaderhide();
-                if (Result.code == 200) {
+                if (result.code == 200) {
                     siteloaderhide();
-                    toastr.success(Result.message); 
+                    toastr.success(result.message); 
                     setTimeout(function () {
                         window.location = '/ItemMaster/ItemListView';
                     }, 2000); 

@@ -105,16 +105,16 @@ function InsertPayOutDetails() {
         contentType: false,
         processData: false,
         success: function (result) {
-            if (Result.code == 200) {
+            if (result.code == 200) {
                 siteloaderhide();
-                toastr.success(Result.message);
+                toastr.success(result.message);
                 setTimeout(function () {
                     window.location = '/InvoiceMaster/PayOutInvoice';
                 }, 2000);
             }
             else {
                 siteloaderhide();
-                toastr.error(Result.message);
+                toastr.error(result.message);
             }
         },
         error: function (xhr, status, error) {
