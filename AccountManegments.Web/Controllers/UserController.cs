@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Data;
+using System.Net.Http.Headers;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -42,14 +43,13 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                    string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
-                string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                    ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
-
-                if (res.code == 200)
-                {
-                    List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
+                    if (res.code == 200)
+                    {
+                        List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
 
                     return PartialView("~/Views/User/_UserListPartial.cshtml", GetUserList);
                 }

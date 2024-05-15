@@ -45,6 +45,9 @@ using AccountManagement.Repository.Repository.ItemInWordRepository;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
 using AccountManagement.Repository.Services.ItemInWord;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +91,21 @@ builder.Services.AddScoped<IiteminwordService,ItemInWordService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v2", new OpenApiInfo { Title = "Account API", Version = "v2", Description = "Account" });
@@ -127,5 +145,7 @@ app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", 
 app.MapControllers();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.Run();

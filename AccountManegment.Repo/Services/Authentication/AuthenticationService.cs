@@ -27,6 +27,11 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.ActiveDeactiveUsers(UserId);
         }
 
+        public Task<string> AuthenticateUser(LoginRequest login)
+        {
+            return Authentication.AuthenticateUser(login);
+        }
+
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             return await Authentication.CreateUser(CreateUser);
@@ -35,6 +40,11 @@ namespace AccountManagement.Repository.Services.Authentication
         public async Task<UserResponceModel> DeleteUserDetails(Guid UserId)
         {
             return await Authentication.DeleteUserDetails(UserId);
+        }
+
+        public string GenerateToken(UserViewModel model)
+        {
+            return Authentication.GenerateToken(model);     
         }
 
         public async Task<LoginView> GetUserById(Guid UserId)

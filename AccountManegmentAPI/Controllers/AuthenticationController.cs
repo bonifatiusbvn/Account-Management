@@ -48,6 +48,22 @@ namespace AccountManagement.API.Controllers
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
         [HttpPost]
+        [Route("UserLogin")]
+        public async Task<IActionResult> UserLogin(LoginRequest login)
+        {
+            var user = await Authentication.AuthenticateUser(login);
+            if (user != null)
+            {
+                return Ok(new { Message = "Login Successfully", token = user });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
         [Route("GetAllUserList")]
         public async Task<IActionResult> GetAllUserList(string? searchText, string? searchBy, string? sortBy)
         {
