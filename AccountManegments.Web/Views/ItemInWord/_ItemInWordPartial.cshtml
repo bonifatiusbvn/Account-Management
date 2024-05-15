@@ -26,7 +26,10 @@
                 }
             }
         </td>
-
+        @if (UserSession.SiteId == "")
+        {
+            <td>@item.SiteName</td>
+        }
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true || a.Delete == true)))
         {
             <td>

@@ -69,6 +69,10 @@
                                                         <th>Item Name</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
+                                                        @if (UserSession.SiteId == "")
+                                                        {
+                                                            <th>SiteName</th>
+                                                        }
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>

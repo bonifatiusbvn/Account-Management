@@ -98,6 +98,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       {
                                           InwordId = a.InwordId,
                                           SiteId = a.SiteId,
+                                          SiteName=c.SiteName,
                                           ItemId = a.ItemId,
                                           Item = a.Item,
                                           UnitTypeId = a.UnitTypeId,

@@ -33,6 +33,10 @@
             }
             
         </td>
+        @if (UserSession.SiteId == "")
+        {
+            <td>@item.SiteName</td>
+        }
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
         {
             <td>
