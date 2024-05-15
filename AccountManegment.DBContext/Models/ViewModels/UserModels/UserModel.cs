@@ -30,6 +30,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public Guid? SiteId { get; set; }
         public bool? IsDeleted { get; set; }
         public List<FromPermission> FromPermissionData { get; set; }
+        public string? Token {  get; set; }
     }
     public class LoginResponseModel
     {
@@ -39,7 +40,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
 
         public LoginView Data { get; set; }
         
-
     }
 
 

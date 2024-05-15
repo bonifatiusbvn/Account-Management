@@ -108,6 +108,13 @@ namespace AccountManegments.Web.Models
             }
 
         }
+        public string Token
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "Token", true) == 0)?.Value;
+            }
+        }
 
     }
 

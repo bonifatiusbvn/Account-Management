@@ -27,6 +27,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public DateTime? CreatedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
+        public string? RoleName { get; set; }
 
     }
 }

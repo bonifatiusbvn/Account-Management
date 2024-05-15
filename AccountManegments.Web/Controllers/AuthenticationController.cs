@@ -14,6 +14,8 @@ using AccountManagement.API;
 using AccountManagement.DBContext.Models.ViewModels.FormMaster;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
+
 
 namespace AccountManegments.Web.Controllers
 {
@@ -135,15 +137,17 @@ namespace AccountManegments.Web.Controllers
                     var data = JsonConvert.SerializeObject(responsemodel.data);
                     userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
 
-                    var claims = new List<Claim>()
-            {
-                new Claim("UserId", userlogin.Data.Id.ToString()),
-                new Claim("FullName", userlogin.Data.FullName),
-                new Claim("UserName", userlogin.Data.UserName),
-                new Claim("UserRole", userlogin.Data.RoleId.ToString()),
-                new Claim("RoleName", userlogin.Data.RoleName),
-            };
 
+                    var claims = new List<Claim>()
+                    {
+                        new Claim("UserId", userlogin.Data.Id.ToString()),
+                        new Claim("FullName", userlogin.Data.FullName),
+                        new Claim("UserName", userlogin.Data.UserName),
+                        new Claim("UserRole", userlogin.Data.RoleId.ToString()),
+                        new Claim("RoleName", userlogin.Data.RoleName),
+                        new Claim("Token", userlogin.Data.Token),
+                    };
+                   
                     if (userlogin.Data.SiteId != null)
                     {
                         claims.Add(new Claim("SiteId", userlogin.Data.SiteId.ToString()));
@@ -177,6 +181,7 @@ namespace AccountManegments.Web.Controllers
                     UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                   
                     return RedirectToAction("Index", "Home");
                 }
                 return View();
@@ -186,9 +191,6 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> Logout()

@@ -7,12 +7,17 @@ using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManegments.Web.Models;
 using Azure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -21,12 +26,14 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 {
     public class UserAuthentication : IAuthentication
     {
-        public UserAuthentication(DbaccManegmentContext context)
+        public UserAuthentication(DbaccManegmentContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
         public DbaccManegmentContext Context { get; }
+        public IConfiguration Configuration { get; }
 
         public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
         {
@@ -69,6 +76,28 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 response.Code = 400;
             }
             return response;
+        }
+
+        public async Task<string> AuthenticateUser(LoginRequest login)
+        {
+            var UserLogin = await Context.Users.FirstOrDefaultAsync(l => l.UserName == login.UserName && l.Password == login.Password);
+            if (UserLogin == null)
+            {
+                return null;
+            }
+            else
+            {
+                var role=Context.UserRoles.FirstOrDefault();
+                UserViewModel user = new UserViewModel()
+                {
+                    UserName = UserLogin.UserName,
+                    Password = UserLogin.Password,
+                    RoleName=role.Role,
+                };
+
+                var Jtoken = GenerateToken(user);
+                return Jtoken;
+            }
         }
 
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
@@ -150,6 +179,22 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 response.Code = 400;
             }
             return response;
+        }
+
+        public string GenerateToken(UserViewModel model)
+        {
+            var claims = new List<Claim>();
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, model.UserName));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            claims.Add(new Claim("UserName", model.UserName));
+            claims.Add(new Claim("Password", model.Password));
+            claims.Add(new Claim("RoleName", model.RoleName));
+
+            var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"], Configuration["Jwt:Audience"], claims: claims.ToArray(),
+                expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public async Task<LoginView> GetUserById(Guid UserId)
@@ -293,8 +338,19 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                          Role = r.Role,
                                      }).FirstOrDefaultAsync();
 
+
                 if (tblUser != null)
                 {
+                    // Generate token
+                    UserViewModel user = new UserViewModel()
+                    {
+                        UserName = tblUser.User.UserName,
+                        Password = tblUser.User.Password,
+                        RoleName = tblUser.Role,
+                    };
+                    var authToken = GenerateToken(user);
+
+                    // Other login logic...
                     if (tblUser.User.IsActive)
                     {
                         if (tblUser.User.SiteId != null)
@@ -319,6 +375,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 userModel.FirstName = tblUser.User.FirstName;
                                 userModel.SiteName = userData.SiteName;
                                 userModel.SiteId = tblUser.User.SiteId;
+                                userModel.Token= authToken;
                                 response.Data = userModel;
                                 response.Code = (int)HttpStatusCode.OK;
 
@@ -339,6 +396,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                                  }).ToListAsync();
 
                                 userModel.FromPermissionData = fromPermissionData;
+
+                                
                             }
                             else
                             {
@@ -357,6 +416,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
                                 userModel.FirstName = tblUser.User.FirstName;
                                 userModel.SiteId = tblUser.User.SiteId;
+                                userModel.Token = authToken;
                                 response.Data = userModel;
                                 response.Code = (int)HttpStatusCode.OK;
 
@@ -375,8 +435,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                                      Edit = rp.IsEditAllow,
                                                                                      Delete = rp.IsDeleteAllow,
                                                                                  }).ToListAsync();
-
                                 userModel.FromPermissionData = fromPermissionData;
+
                             }
                             else
                             {
