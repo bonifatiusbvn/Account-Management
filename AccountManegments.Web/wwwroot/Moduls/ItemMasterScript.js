@@ -144,16 +144,12 @@ function CreateItem() {
             dataType: 'json',
             success: function (result) {
                 siteloaderhide();
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message); 
+                    setTimeout(function () {
                         window.location = '/ItemMaster/ItemListView';
-                    });
+                    }, 2000); 
                 } else {
                     siteloaderhide();
                     toastr.error(result.message);
@@ -167,12 +163,7 @@ function CreateItem() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");   
     }
 }
 
@@ -238,14 +229,10 @@ function UpdateItemDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/ItemMaster/ItemListView';
-                    });
+                    }, 2000);
                 } else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -255,12 +242,7 @@ function UpdateItemDetails() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");   
     }
 }
 var ItemForm;

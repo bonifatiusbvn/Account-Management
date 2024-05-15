@@ -96,17 +96,13 @@ function UpdateRolewiseFormPermission() {
             siteloaderhide();
             if (Result.code == 200) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/User/RolewisePermission';
-                });
+                }, 2000);
             } else {
                 siteloaderhide();
-                toastr.error(Result.message);    
+                toastr.error(Result.message);
             }
         },
         error: function (xhr, status, error) {
@@ -144,15 +140,13 @@ function CreateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
-            siteloaderhide();
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/User/RolewisePermission';
-            });
+            if (Result.code == 200) {
+                siteloaderhide();
+                toastr.success(Result.message);
+                setTimeout(function () {
+                    window.location = '/User/RolewisePermission';
+                }, 2000);
+            }
         },
         error: function (xhr, status, error) {
             siteloaderhide();

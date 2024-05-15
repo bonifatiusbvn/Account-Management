@@ -83,14 +83,10 @@ function AddCompany() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/Company/CreateCompany';
-                    });
+                    }, 2000);
                 }
                 else {
                     siteloaderhide();
@@ -103,7 +99,7 @@ function AddCompany() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");      
+        toastr.error("Kindly fill all details");
     }
 }
 function ClearTextBox() {
@@ -218,14 +214,10 @@ function UpdateCompany() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/Company/CreateCompany';
-                    });
+                    }, 2000);
                 }
                 else {
                     siteloaderhide();
@@ -237,12 +229,7 @@ function UpdateCompany() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 function DeleteCompanyDetails(CompanyId) {

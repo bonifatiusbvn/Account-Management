@@ -140,6 +140,7 @@ function SelectSiteDetails(SiteId, element) {
             }
         },
         error: function (xhr, status, error) {
+            siteloaderhide();
             toastr.error(xhr.responseText);
         }
     });
@@ -172,25 +173,16 @@ function CreateSite() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/SiteMaster/SiteListView';
-                });
+                }, 2000);
             },
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -223,25 +215,16 @@ function UpdateSiteDetails() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/SiteMaster/SiteListView';
-                });
-            },
+                }, 2000);
+            }
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -447,7 +430,7 @@ function DeleteSite(SiteId) {
                     }
                     else {
                         siteloaderhide();
-                        toastr.error(Result.message); 
+                        toastr.error(Result.message);
                     }
                 },
                 error: function () {

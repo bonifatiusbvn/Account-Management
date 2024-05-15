@@ -174,63 +174,6 @@ function GetSiteList() {
     });
 }
 
-function AddItemInWordDetails() {
-    siteloadershow();
-    if ($("#itemInWordForm").valid()) {
-
-        var formData = new FormData();
-        formData.append("UnitTypeId", $("#txtUnitType").val());
-        formData.append("ItemId", $("#txtItemId").val());
-        formData.append("Item", $("#txtItemName").val());
-        formData.append("Quantity", $("#txtQuantity").val());
-        formData.append("SiteId", $("#txtSiteid").val());
-        formData.append("DocumentName", $("#txtDocument")[0].files[0]);
-        formData.append("CreatedBy", $("#txtCreatedBy").val());
-        formData.append("VehicleNumber", $("#txtVehicleNumber").val());
-        formData.append("ReceiverName", $("#txtReceiverName").val());
-
-
-        $.ajax({
-            url: '/ItemInWord/AddItemInWordDetails',
-            type: 'post',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-
-                siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    });
-                } else {
-                    siteloaderhide();
-                    toastr.error("Something gone wrong");
-                }
-            },
-            error: function (e) {
-                siteloaderhide();
-                toastr.error(e);
-            }
-        })
-    }
-    else {
-        siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-}
 function ClearItemInWordTextBox() {
     if ($("#txtSiteid").val() == "") {
         Swal.fire({
@@ -373,49 +316,6 @@ function EditItemInWordDetails(InwordId) {
     });
 }
 
-function UpdateItemInWordDetails() {
-    siteloadershow();
-    var documentFile = $("#txtDocument")[0].files[0];
-    var documentName = null;
-    if (documentFile == undefined) {
-        documentName = $("#txtDocumentName").val();
-    }
-    else {
-        documentName = documentFile.name;
-    }
-    var objData = {
-        InwordId: $('#txtItemInWordid').val(),
-        UnitTypeId: $('#txtUnitType').val(),
-        ItemId: $('#txtItemId').val(),
-        Item: $('#txtItemName').val(),
-        Quantity: $('#txtQuantity').val(),
-        VehicleNumber: $("#txtVehicleNumber").val(),
-        ReceiverName: $("#txtReceiverName").val(),
-        DocumentName: documentName,
-    };
-    var form_data = new FormData();
-    form_data.append("ITEMINWORD", JSON.stringify(objData));
-
-    $.ajax({
-        url: '/ItemInWord/UpdateItemInWordDetails',
-        type: 'post',
-        data: form_data,
-        datatype: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            siteloaderhide();
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/ItemInWord/ItemInWord';
-            });
-        },
-    })
-}
 function DeleteItemInWord(InwordId) {
 
     Swal.fire({
@@ -602,14 +502,10 @@ function InsertMultipleItemInWordDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/ItemInWord/ItemInWord';
-                    });
+                    }, 2000);
                 }
                 else {
                     siteloaderhide();
@@ -625,89 +521,74 @@ function InsertMultipleItemInWordDetails() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: 'Warning',
-            text: 'Kindly fill all details.',
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
+        toastr.error("Kindly fill all details");
     }
 }
 
 function UpdateMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
-    var siteId = null;
-    var RoleUserId = $('#userRoleId').val();
-    if (RoleUserId == 3) {
-        siteId = $("#siteNameList").val();
-    }
-    else {
-        siteId = $("#txtSiteid").val();
-    }
-    var documentName = $("#txtDocumentName").val();
-    var UpdateItemInWord = {
-        InwordId: $('#txtItemInWordid').val(),
-        UnitTypeId: $("#txtUnitType").val(),
-        ItemId: $("#txtItemId").val(),
-        Item: $("#txtItemName").val(),
-        Quantity: $("#txtQuantity").val(),
-        VehicleNumber: $("#txtVehicleNumber").val(),
-        ReceiverName: $("#txtReceiverName").val(),
-        Date: $("#txtIteminwordDate").val(),
-        DocumentName: documentName,
-        SiteId: siteId,
-    };
-
-    var form_data = new FormData();
-    form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
-
-    if (additionalFiles.length > 0) {
-        for (var i = 0; i < additionalFiles.length; i++) {
-            form_data.append("DocDetails", additionalFiles[i]);
+        var siteId = null;
+        var RoleUserId = $('#userRoleId').val();
+        if (RoleUserId == 3) {
+            siteId = $("#siteNameList").val();
         }
-    }
+        else {
+            siteId = $("#txtSiteid").val();
+        }
+        var documentName = $("#txtDocumentName").val();
+        var UpdateItemInWord = {
+            InwordId: $('#txtItemInWordid').val(),
+            UnitTypeId: $("#txtUnitType").val(),
+            ItemId: $("#txtItemId").val(),
+            Item: $("#txtItemName").val(),
+            Quantity: $("#txtQuantity").val(),
+            VehicleNumber: $("#txtVehicleNumber").val(),
+            ReceiverName: $("#txtReceiverName").val(),
+            Date: $("#txtIteminwordDate").val(),
+            DocumentName: documentName,
+            SiteId: siteId,
+        };
 
-    $.ajax({
-        url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            siteloaderhide();
-            if (Result.code == 200) {
-                siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ItemInWord/ItemInWord';
-                });
-            } else {
-                siteloaderhide();
-                toastr.error(Result.message);
-                window.location = '/ItemInWord/ItemInWord';
+        var form_data = new FormData();
+        form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
+
+        if (additionalFiles.length > 0) {
+            for (var i = 0; i < additionalFiles.length; i++) {
+                form_data.append("DocDetails", additionalFiles[i]);
             }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            toastr.error('An error occurred while processing your request.');
         }
-    });
+
+        $.ajax({
+            url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    siteloaderhide();
+                    toastr.success(Result.message); 
+                    setTimeout(function () {
+                        window.location = '/ItemInWord/ItemInWord';
+                    }, 2000); 
+                }
+                else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                    window.location = '/ItemInWord/ItemInWord';
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: 'Warning',
-            text: 'Kindly fill all details.',
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
+        toastr.error("Kindly fill all details");
     }
 }

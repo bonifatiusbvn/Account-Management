@@ -105,15 +105,17 @@ function InsertPayOutDetails() {
         contentType: false,
         processData: false,
         success: function (result) {
-            siteloaderhide();
-            Swal.fire({
-                title: result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/InvoiceMaster/PayOutInvoice';
-            });
+            if (Result.code == 200) {
+                siteloaderhide();
+                toastr.success(Result.message);
+                setTimeout(function () {
+                    window.location = '/InvoiceMaster/PayOutInvoice';
+                }, 2000);
+            }
+            else {
+                siteloaderhide();
+                toastr.error(Result.message);
+            }
         },
         error: function (xhr, status, error) {
             siteloaderhide();

@@ -19,18 +19,16 @@ function CreateUser() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                debugger
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/User/UserListView';
-                    });
-                } else {
+                    }, 2000);
+                }
+                else {
                     siteloaderhide();
                     toastr.error(Result.message);
                 }
@@ -39,12 +37,7 @@ function CreateUser() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 function GetSiteDetails() {
@@ -232,15 +225,11 @@ function UpdateUserDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/User/UserListView';
-                    });
-                }       
+                    }, 2000);
+                }
                 else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -250,12 +239,7 @@ function UpdateUserDetails() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 var UserForm;
@@ -395,7 +379,7 @@ function UserActiveDecative(UserId) {
                         });
                     } else {
                         siteloaderhide();
-                        toastr.error(Result.message); 
+                        toastr.error(Result.message);
                     }
 
                 }
@@ -490,7 +474,7 @@ function deleteUserDetails(UserId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete User!");                    
+                    toastr.error("Can't Delete User!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {

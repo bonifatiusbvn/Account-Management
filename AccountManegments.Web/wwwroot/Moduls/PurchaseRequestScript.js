@@ -141,25 +141,16 @@ function CreatePurchaseRequest() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/PurchaseMaster/PurchaseRequestListView';
-                });
-            },
+                }, 2000);
+            }
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -305,25 +296,16 @@ function UpdatePurchaseRequestDetails() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/PurchaseMaster/PurchaseRequestListView';
-                });
+                }, 2000);
             },
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -358,7 +340,7 @@ function DeletePurchaseRequest(PurchaseId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete PurchaseRequest!");   
+                    toastr.error("Can't Delete PurchaseRequest!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -791,23 +773,21 @@ function InsertMultiplePurchaseOrderDetails() {
                 processData: false,
                 success: function (Result) {
                     siteloaderhide();
-                    if (Result.message != null) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        }).then(function () {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
                             window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
-                        });
-                    } else {
+                        }, 2000);
+                    }
+                    else {
                         siteloaderhide();
                         toastr.error("There Is Some Problem in Your Request!");
                     }
                 },
                 error: function (xhr, status, error) {
                     siteloaderhide();
-                    toastr.error('An error occurred while processing your request.'); 
+                    toastr.error('An error occurred while processing your request.');
                 }
             });
         } else {
@@ -826,12 +806,7 @@ function InsertMultiplePurchaseOrderDetails() {
         }
     } else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -957,12 +932,7 @@ function AddShippingAddress() {
         }
     } else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 $(document).ready(function () {
@@ -1081,15 +1051,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                 processData: false,
                 success: function (Result) {
                     siteloaderhide();
-                    if (Result.message != null) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        }).then(function () {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
                             window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
-                        });
+                        }, 2000);
                     }
                     else {
                         siteloaderhide();

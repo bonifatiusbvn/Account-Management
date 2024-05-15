@@ -372,15 +372,11 @@ function InsertMultipleSupplierItem() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/InvoiceMaster/CreateInvoice';
-                    });
-                }
+                    }, 2000);
+                }                      
                 else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -408,12 +404,7 @@ function InsertMultipleSupplierItem() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");   
     }
 }
 function UpdateInvoiceDetails() {
@@ -466,15 +457,11 @@ function UpdateInvoiceDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
                         window.location = '/InvoiceMaster/SupplierInvoiceListView';
-                    });
-                }
+                    }, 2000);
+                }        
                 else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -494,12 +481,7 @@ function UpdateInvoiceDetails() {
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");   
     }
 }
 

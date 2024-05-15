@@ -26,25 +26,16 @@ function CreateSupplier() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/Supplier/SupplierList';
-                });
+                }, 2000);
             },
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -236,25 +227,16 @@ function UpdateSupplierDetails() {
             datatype: 'json',
             success: function (Result) {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+                toastr.success(Result.message);
+                setTimeout(function () {
                     window.location = '/Supplier/SupplierList';
-                });
+                }, 2000);
             },
         })
     }
     else {
         siteloaderhide();
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill all details");
     }
 }
 function DeleteSupplierDetails(SupplierId) {
@@ -288,7 +270,7 @@ function DeleteSupplierDetails(SupplierId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete Supplier!");              
+                    toastr.error("Can't Delete Supplier!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
