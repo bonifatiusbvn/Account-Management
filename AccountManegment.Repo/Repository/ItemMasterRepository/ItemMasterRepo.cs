@@ -275,6 +275,11 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     response.message = "Item is successfully approved ";
                 }
             }
+            else
+            {
+                response.code = 400;
+                response.message = "Error,Item doesnot approved or unapproved ";
+            }
             return response;
         }
 
@@ -294,15 +299,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     ItemMaster.Gstamount = ItemDetails.Gstamount;
                     ItemMaster.Gstper = ItemDetails.Gstper;
                     ItemMaster.Hsncode = ItemDetails.Hsncode;
+
+
+                    Context.ItemMasters.Update(ItemMaster);
+                    Context.SaveChanges();
+                    model.code = 200;
+                    model.message = "Item details successfully updated.";
                 }
-                Context.ItemMasters.Update(ItemMaster);
-                Context.SaveChanges();
-                model.code = 200;
-                model.message = "Item details successfully updated.";
+                else
+                {
+                    model.code = 400;
+                    model.message = "Error updating item details.";
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.code = 500;
+                model.message = "Error updating item details:" + ex;
             }
             return model;
         }

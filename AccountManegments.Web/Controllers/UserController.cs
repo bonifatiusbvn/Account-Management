@@ -51,17 +51,17 @@ namespace AccountManegments.Web.Controllers
                     {
                         List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
 
-                        return PartialView("~/Views/User/_UserListPartial.cshtml", GetUserList);
-                    }
-                    else
-                    {
-                        return new JsonResult(new { Message = "Failed to retrieve user list." });
-                    }
+                    return PartialView("~/Views/User/_UserListPartial.cshtml", GetUserList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -112,7 +112,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -179,7 +179,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -200,7 +200,6 @@ namespace AccountManegments.Web.Controllers
                     Userrole = JsonConvert.DeserializeObject<List<UserRoleModel>>(response.data.ToString());
                 }
                 return new JsonResult(Userrole);
-
             }
             catch (Exception ex)
             {
@@ -228,13 +227,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve user role list." });
+                    return BadRequest(new { Message = "Failed to retrieve user role list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -254,7 +253,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return BadRequest(new { postuser.message });
                 }
             }
             catch (Exception ex)
@@ -276,7 +275,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { response.code });
+                    return BadRequest(new { response.code });
                 }
             }
             catch (Exception ex)
@@ -300,7 +299,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)

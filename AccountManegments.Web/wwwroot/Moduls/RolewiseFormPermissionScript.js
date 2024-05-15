@@ -14,12 +14,7 @@ function showFormGroupList() {
         },
         Error: function () {
             siteloaderhide();
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
+            toastr.error("Can't get data!");
         }
     })
 }
@@ -33,7 +28,7 @@ function AllRolewiseFormUserTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -64,12 +59,7 @@ function EditRoleWiseFormDetails(RoleId, element) {
         },
         Error: function () {
             siteloaderhide();
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
+            toastr.error("Can't get data!");
         }
     });
 }
@@ -105,6 +95,7 @@ function UpdateRolewiseFormPermission() {
         success: function (Result) {
             siteloaderhide();
             if (Result.code == 200) {
+                siteloaderhide();
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -115,17 +106,12 @@ function UpdateRolewiseFormPermission() {
                 });
             } else {
                 siteloaderhide();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                })
+                toastr.error(Result.message);    
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         }
     });
 }
@@ -170,7 +156,7 @@ function CreateRolewiseFormPermission() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         }
     });
 }

@@ -56,7 +56,6 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
 
             }
-            return View();
         }
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
@@ -80,13 +79,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Request list." });
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Request list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
         [FormPermissionAttribute("Purchase Request-View")]
@@ -136,7 +135,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -157,7 +156,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -179,7 +178,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -204,7 +203,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -261,7 +260,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return BadRequest(new { postuser.message });
                 }
             }
             catch (Exception ex)
@@ -292,13 +291,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve user list." });
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -331,7 +330,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return BadRequest(new { postuser.message });
                 }
             }
             catch (Exception ex)
@@ -353,7 +352,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -385,13 +384,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Order list" });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -733,7 +732,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Order list" });
                 }
             }
             catch (Exception ex)

@@ -72,6 +72,11 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     response.data = itemInWordDetails;
                     response.message = "Item inward successfully deleted.";
                 }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in deleting item inward.";
+                }
                 Context.SaveChanges();
             }
             catch (Exception ex)
@@ -88,8 +93,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 var ItemInWordList = (from a in Context.ItemInwords
                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                       join c in Context.Sites on a.SiteId equals c.SiteId
-                                      where (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId) &&
-                                      a.IsDeleted == false
+                                      where a.IsDeleted == false && (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId)
                                       select new ItemInWordModel
                                       {
                                           InwordId = a.InwordId,
@@ -310,8 +314,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             }
             catch (Exception ex)
             {
-                response.code = 500;
-                response.message = "Error creating Item inward: " + ex.Message;
+                response.code = 400;
+                response.message = "Error creating item inward: " + ex.Message;
             }
             return response;
         }
@@ -371,8 +375,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             }
             catch (Exception ex)
             {
-                response.code = 500;
-                response.message = "Error updating item InWord: " + ex.Message;
+                response.code = 400;
+                response.message = "Error updating item inward: " + ex.Message;
             }
             return response;
         }

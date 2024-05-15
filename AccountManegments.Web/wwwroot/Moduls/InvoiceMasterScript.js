@@ -98,7 +98,7 @@ $(document).ready(function () {
                 $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching company details:", error);
+                toastr.error("Error fetching company details:", error);
             }
         });
     });
@@ -184,7 +184,7 @@ function AllSupplierInvoiceListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -206,6 +206,7 @@ function filterSupplierInvoiceTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -225,6 +226,7 @@ function SupplierInvoicesortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -249,7 +251,7 @@ function DeleteSupplierInvoice(Id) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -260,14 +262,8 @@ function DeleteSupplierInvoice(Id) {
                     })
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete Site!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/InvoiceMaster/SupplierInvoiceListView';
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete Site!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -375,6 +371,7 @@ function InsertMultipleSupplierItem() {
             success: function (Result) {
                 siteloaderhide();
                 if (Result.code == 200) {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -386,12 +383,7 @@ function InsertMultipleSupplierItem() {
                 }
                 else {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
+                    toastr.error(Result.message);
                 }
             },
             error: function (xhr, status, error) {
@@ -473,6 +465,7 @@ function UpdateInvoiceDetails() {
             success: function (Result) {
                 siteloaderhide();
                 if (Result.code == 200) {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -484,12 +477,7 @@ function UpdateInvoiceDetails() {
                 }
                 else {
                     siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
+                    toastr.error(Result.message);
                 }
             },
             error: function (xhr, status, error) {
@@ -948,7 +936,7 @@ function InvoiceListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -970,6 +958,7 @@ function filterInvoiceTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -989,6 +978,7 @@ function InvoiceSortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -1017,7 +1007,7 @@ function getSupplierDetail(SupplierId) {
                 $('#textSupplierAddress').val(response.fullAddress);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
     });
@@ -1037,7 +1027,7 @@ function getCompanyDetail(CompanyId) {
                 $('#textCompanyBillingAddress').val(response.fullAddress);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
     });

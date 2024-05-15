@@ -91,6 +91,11 @@ namespace AccountManagement.API.Controllers
                 response.Message = updateUser.Message;
                 response.Icone = updateUser.Icone;
             }
+            else
+            {
+                response.Code = updateUser.Code;
+                response.Message = updateUser.Message;
+            }
             return StatusCode(response.Code, response);
         }
         [HttpPost]
@@ -104,6 +109,11 @@ namespace AccountManagement.API.Controllers
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = updateUser.Message;
                 response.Icone = updateUser.Icone;
+            }
+            else
+            {
+                response.Code = updateUser.Code;
+                response.Message = updateUser.Message;
             }
             return StatusCode(response.Code, response);
         }

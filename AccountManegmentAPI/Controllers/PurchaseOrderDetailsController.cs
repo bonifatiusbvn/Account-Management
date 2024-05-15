@@ -1,11 +1,14 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Services.PurchaseOrderService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class PurchaseOrderDetailsController : ControllerBase
@@ -43,6 +46,11 @@ namespace AccountManagement.API.Controllers
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpPost]
@@ -56,6 +64,11 @@ namespace AccountManagement.API.Controllers
                 response.code = PurchaseOrdermaster.code;
                 response.message = PurchaseOrdermaster.message;
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
 

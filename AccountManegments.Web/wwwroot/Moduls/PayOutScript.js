@@ -117,13 +117,7 @@ function InsertPayOutDetails() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
+            toastr.error('An error occurred while processing your request.'); 
         }
     });
 }

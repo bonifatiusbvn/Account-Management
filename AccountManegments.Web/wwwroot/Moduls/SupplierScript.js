@@ -73,14 +73,14 @@ function ClearSupplierTextBox() {
     offcanvas.show();
 }
 function DisplaySupplierDetails(SupplierId) {
-    siteloadershow();
+
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            siteloaderhide();
+
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);
@@ -106,13 +106,13 @@ function DisplaySupplierDetails(SupplierId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
 
 function SelectSupplierDetails(SupplierId, element) {
-    siteloadershow();
+
     $('.row.ac-card').removeClass('active');
     $(element).closest('.row.ac-card').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -122,7 +122,7 @@ function SelectSupplierDetails(SupplierId, element) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            siteloaderhide();
+
             if (response) {
                 $('#dspSupplierId').val(response.supplierId);
                 $('#dspSupplierName').val(response.supplierName);
@@ -139,12 +139,12 @@ function SelectSupplierDetails(SupplierId, element) {
                 $('#dspIffccode').val(response.iffccode);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -162,7 +162,7 @@ function AllUserTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -184,6 +184,7 @@ function filterSupplierTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -203,6 +204,7 @@ function sortSupplierTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -274,6 +276,7 @@ function DeleteSupplierDetails(SupplierId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -284,12 +287,8 @@ function DeleteSupplierDetails(SupplierId) {
                     })
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete Supplier!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete Supplier!");              
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -408,6 +407,7 @@ function SupplierActiveDecative(SupplierId) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
                 success: function (Result) {
+                    siteloaderhide();
                     Swal.fire({
                         title: isChecked ? "Active!" : "DeActive!",
                         text: Result.message,
@@ -420,6 +420,7 @@ function SupplierActiveDecative(SupplierId) {
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
+            siteloaderhide();
             Swal.fire(
                 'Cancelled',
                 'User Have No Changes.!!😊',
@@ -429,14 +430,14 @@ function SupplierActiveDecative(SupplierId) {
     });
 }
 function GetSupplierInvoiceDetailsById(SupplierId, element) {
-    siteloadershow();
+
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
 
     $.get("/InvoiceMaster/GetSupplierInvoiceDetailsById", { SupplierId: SupplierId })
         .done(function (result) {
-            siteloaderhide();
+
             $("#supplierinvoicedetails").html(result);
         })
 }

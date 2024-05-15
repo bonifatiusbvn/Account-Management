@@ -53,13 +53,13 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve user list." });
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
@@ -92,7 +92,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code });
+                    return BadRequest(new { Message = string.Format(response.message), Code = response.code });
                 }
             }
             catch (Exception ex)
@@ -125,12 +125,15 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel company = await APIServices.PostAsync(UpdateCompany, "Company/UpdateCompany");
-                if (company.code == 200)
+                ApiResponseModel response = await APIServices.PostAsync(UpdateCompany, "Company/UpdateCompany");
+                if (response.code == 200)
                 {
-                    return Ok(new { company.message });
+                    return Ok(new { Message = response.message, Code = response.code });
                 }
-                return View(UpdateCompany);
+                else
+                {
+                    return BadRequest(new { Message = response.message, Code = response.code });
+                }
             }
             catch (Exception ex)
             {
@@ -151,7 +154,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(company.message), Code = company.code });
+                    return BadRequest(new { Message = string.Format(company.message), Code = company.code });
                 }
             }
             catch (Exception ex)

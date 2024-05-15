@@ -49,6 +49,7 @@ function filterPurchaseRequestTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -80,6 +81,7 @@ function sortPurchaseRequestTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -106,12 +108,12 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
                 $('#dspIsApproved').prop('checked', response.isApproved);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 
@@ -162,7 +164,7 @@ function CreatePurchaseRequest() {
 }
 
 function ClearPurchaseRequestTextBox() {
-    debugger
+
     if ($("#textsiteId").val() == "") {
         Swal.fire({
             title: "Kindly select site on dashboard.",
@@ -197,7 +199,7 @@ function ClearPurchaseRequestTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreatePurchaseRequest")
         });
-    }   
+    }
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -273,7 +275,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -344,7 +346,7 @@ function DeletePurchaseRequest(PurchaseId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -355,12 +357,8 @@ function DeletePurchaseRequest(PurchaseId) {
                     })
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete PurchaseRequest!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete PurchaseRequest!");   
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -461,7 +459,7 @@ function GetPurchaseOrderList() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 function filterPurchaseOrderTable() {
@@ -482,6 +480,7 @@ function filterPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -501,6 +500,7 @@ function sortPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -529,7 +529,7 @@ function EditPurchaseOrderDetails(Id) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -729,7 +729,7 @@ $(document).ready(function () {
 
 
 
-function InsertMultiplePurchaseOrderDetails() {debugger
+function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
@@ -778,7 +778,7 @@ function InsertMultiplePurchaseOrderDetails() {debugger
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
-            debugger
+
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
@@ -802,23 +802,12 @@ function InsertMultiplePurchaseOrderDetails() {debugger
                         });
                     } else {
                         siteloaderhide();
-                        Swal.fire({
-                            title: "There Is Some Problem in Your Request!",
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
+                        toastr.error("There Is Some Problem in Your Request!");
                     }
                 },
                 error: function (xhr, status, error) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while processing your request.',
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error('An error occurred while processing your request.'); 
                 }
             });
         } else {
@@ -861,7 +850,7 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-        debugger
+
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
         $.ajax({
@@ -1008,13 +997,12 @@ function getSupplierDetails(SupplierId) {
         success: function (response) {
 
             if (response) {
-                siteloaderhide();
                 $('#txtSuppliermobile').val(response.mobile);
                 $('#txtSupplierGST').val(response.gstno);
                 $('#txtSupplierAddress').val(response.fullAddress);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
     });
@@ -1044,7 +1032,7 @@ function getCompanyDetails(CompanyId) {
                 $('#companybillingaddressDetails').val(response.fullAddress);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
     });
@@ -1105,23 +1093,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                     }
                     else {
                         siteloaderhide();
-                        Swal.fire({
-                            title: "There Is Some Prolem in Your Request!",
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
+                        toastr.error("There Is Some Prolem in Your Request!");
                     }
                 },
                 error: function (xhr, status, error) {
                     siteloaderhide();
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while processing your request.',
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error('An error occurred while processing your request.');
                 }
             });
         } else {
@@ -1165,7 +1142,7 @@ function DeletePODetails(POId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                    siteloaderhide();
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -1176,12 +1153,8 @@ function DeletePODetails(POId) {
                     })
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete PO!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete PO!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -1450,7 +1423,7 @@ function GetPOList() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -1502,6 +1475,7 @@ function filterPOTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -1520,6 +1494,7 @@ function sortPOTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(xhr.responseText);
         }
     });
 }

@@ -5,12 +5,15 @@ using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.SupplierService;
 using AccountManagement.Repository.Services.Company;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class SupplierMasterController : ControllerBase
@@ -34,6 +37,11 @@ namespace AccountManagement.API.Controllers
                 response.message = CreateSupplier.message;
 
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpPost]
@@ -64,6 +72,11 @@ namespace AccountManagement.API.Controllers
                 response.message = updateUser.message;
 
             }
+            else
+            {
+                response.code = (int)HttpStatusCode.BadRequest;
+            }
+
             return StatusCode(response.code, response);
         }
         [HttpPost]

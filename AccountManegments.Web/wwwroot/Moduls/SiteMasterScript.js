@@ -15,7 +15,7 @@ function AllSiteListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -37,6 +37,7 @@ function SitefilterTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -56,6 +57,7 @@ function sortSiteTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
+            toastr.error(error);
         }
     });
 }
@@ -107,7 +109,7 @@ function DisplaySiteDetails(SiteId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -134,11 +136,11 @@ function SelectSiteDetails(SiteId, element) {
                 $('#dspPincode').val(response.pincode);
             } else {
                 siteloaderhide();
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
         error: function (xhr, status, error) {
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -386,6 +388,7 @@ function ActiveDecativeSite(SiteId) {
                 dataType: 'json',
                 success: function (Result) {
                     if (Result.code == 200) {
+                        siteloaderhide();
                         Swal.fire({
                             title: isChecked ? "Active!" : "DeActive!",
                             text: Result.message,
@@ -396,13 +399,8 @@ function ActiveDecativeSite(SiteId) {
                             window.location = '/SiteMaster/SiteListView';
                         });
                     } else {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: "warning",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
-                        AllSiteListTable();
+                        siteloaderhide();
+                        toastr.error(Result.message);
                     }
 
                 }
@@ -437,6 +435,7 @@ function DeleteSite(SiteId) {
                 dataType: 'json',
                 success: function (Result) {
                     if (Result.code == 200) {
+                        siteloaderhide();
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -447,24 +446,14 @@ function DeleteSite(SiteId) {
                         })
                     }
                     else {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
-                        AllSiteListTable();
+                        siteloaderhide();
+                        toastr.error(Result.message); 
                     }
                 },
                 error: function () {
-                    Swal.fire({
-                        title: "Can't Delete Site!",
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/SiteMaster/SiteListView';
-                    })
+                    siteloaderhide();
+                    toastr.error("Can't Delete Site!");
+                    window.location = '/SiteMaster/SiteListView';
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
