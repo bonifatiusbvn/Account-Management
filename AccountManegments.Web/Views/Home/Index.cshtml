@@ -113,23 +113,30 @@
         });
 
         function fn_fillsiteDropDown() {
-
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 success: function (result) {
                     $.each(result, function (i, data) {
                         $('#drpSiteName').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                     });
+
+                    var selectedSiteId = sessionStorage.getItem('SelectedSiteId');
+
+                    if (selectedSiteId) {
+                        $('#drpSiteName').val(selectedSiteId);
+                    }
                 }
             });
         }
 
         $('#drpSiteName').change(function () {
             siteloadershow();
-            var SiteText = $("#drpSiteName Option:Selected").text();
+            var SiteText = $(this).find('option:selected').text();
             var selectedSiteId = $(this).val();
-            $('#txtsiteName').html(SiteText)
-            fn_ChangeSite(selectedSiteId, SiteText)
+            $('#txtsiteName').html(SiteText);
+            fn_ChangeSite(selectedSiteId, SiteText);
+
+            sessionStorage.setItem('SelectedSiteId', selectedSiteId);
         });
 
         $('#CompanyNameList').change(function () {
