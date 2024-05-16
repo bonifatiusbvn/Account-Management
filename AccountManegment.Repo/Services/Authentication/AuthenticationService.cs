@@ -27,11 +27,6 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.ActiveDeactiveUsers(UserId);
         }
 
-        public Task<string> AuthenticateUser(LoginRequest login)
-        {
-            return Authentication.AuthenticateUser(login);
-        }
-
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             return await Authentication.CreateUser(CreateUser);

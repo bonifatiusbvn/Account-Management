@@ -24,7 +24,6 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
         Task<UserResponceModel> DeleteUserDetails(Guid UserId);
 
         Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission);
-        Task<string> AuthenticateUser(LoginRequest login);
         string GenerateToken(LoginRequest model);
     }
 }

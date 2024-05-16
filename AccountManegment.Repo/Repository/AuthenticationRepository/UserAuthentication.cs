@@ -78,27 +78,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             return response;
         }
 
-        public async Task<string> AuthenticateUser(LoginRequest login)
-        {
-            var UserLogin = await Context.Users.FirstOrDefaultAsync(l => l.UserName == login.UserName && l.Password == login.Password);
-            if (UserLogin == null)
-            {
-                return null;
-            }
-            else
-            {
-                var role = Context.UserRoles.FirstOrDefault();
-                LoginRequest user = new LoginRequest()
-                {
-                    UserName = UserLogin.UserName,
-                    Password = UserLogin.Password,
-                };
-
-                var Jtoken = GenerateToken(user);
-                return Jtoken;
-            }
-        }
-
         public async Task<UserResponceModel> CreateUser(UserViewModel CreateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -416,6 +395,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 userModel.FullName = tblUser.User.FirstName + " " + tblUser.User.LastName;
                                 userModel.FirstName = tblUser.User.FirstName;
                                 userModel.SiteId = tblUser.User.SiteId;
+                                userModel.Token = authToken;
                                 response.Data = userModel;
                                 response.Code = (int)HttpStatusCode.OK;
 

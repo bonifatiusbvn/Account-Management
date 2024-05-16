@@ -184,12 +184,12 @@ namespace AccountManegments.Web.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                return View();
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = "InternalServer" });
+                ViewBag.LoginError = "Login failed.";
             }
+            return View();
         }
 
         [HttpPost]

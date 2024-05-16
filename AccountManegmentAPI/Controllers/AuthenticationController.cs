@@ -48,19 +48,6 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
-        [HttpPost("UserLogin")]
-        public async Task<IActionResult> UserLogin(LoginRequest login)
-        {
-            var user = await Authentication.AuthenticateUser(login);
-            if (user != null)
-            {
-                return Ok(new { Message = "Login Successfully", token = user });
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
 
         [HttpPost("GetAllUserList")]
         [Authorize]
