@@ -171,7 +171,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseRequest/DeletePurchaseRequest?PurchaseId=" + PurchaseId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseRequest/DeletePurchaseRequest?PurchaseId=" + PurchaseId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -194,7 +194,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseRequest/PurchaseRequestIsApproved?PurchaseId=" + PurchaseId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseRequest/PurchaseRequestIsApproved?PurchaseId=" + PurchaseId);
                 if (postuser.code == 200)
                 {
 
@@ -345,7 +345,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseOrder/DeletePurchaseOrderDetails?POId=" + POId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseOrder/DeletePurchaseOrderDetails?POId=" + POId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

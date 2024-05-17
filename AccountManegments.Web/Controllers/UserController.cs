@@ -149,7 +149,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
                 if (postuser.code == 200)
                 {
 
@@ -172,7 +172,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/DeleteUserDetails?UserId=" + UserId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Authentication/DeleteUserDetails?UserId=" + UserId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

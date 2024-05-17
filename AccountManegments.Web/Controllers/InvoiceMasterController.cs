@@ -96,7 +96,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/DeleteSupplierInvoice?Id=" + Id);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SupplierInvoice/DeleteSupplierInvoice?Id=" + Id);
                 if (postuser.code == 200)
                 {
 
@@ -126,7 +126,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
                 if (postuser.code == 200)
                 {
                     var jsonString = postuser.data.ToString();
@@ -363,7 +363,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
-                ApiResponseModel response = await APIServices.PostAsync(null, "SupplierInvoice/GetSupplierInvoiceDetailsById?SupplierId=" + SupplierId);
+                ApiResponseModel response = await APIServices.PostAsync("", "SupplierInvoice/GetSupplierInvoiceDetailsById?SupplierId=" + SupplierId);
                 if (response.code == 200)
                 {
                     SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
