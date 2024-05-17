@@ -43,13 +43,13 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                    string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
-                    ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
-                    if (res.code == 200)
-                    {
-                        List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
+                if (res.code == 200)
+                {
+                    List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
 
                     return PartialView("~/Views/User/_UserListPartial.cshtml", GetUserList);
                 }
@@ -167,7 +167,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
         [FormPermissionAttribute("User List-Delete")]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> DeleteUserDetails(Guid UserId)
         {
             try
