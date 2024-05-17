@@ -116,7 +116,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemInWord/DeleteItemInWord?InwordId=" + InwordId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ItemInWord/DeleteItemInWord?InwordId=" + InwordId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -158,7 +158,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemInWord/ItemInWordIsApproved?InwordId=" + InwordId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ItemInWord/ItemInWordIsApproved?InwordId=" + InwordId);
                 if (postuser.code == 200)
                 {
 

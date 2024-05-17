@@ -168,7 +168,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemMaster/ItemIsApproved?ItemId=" + ItemId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ItemMaster/ItemIsApproved?ItemId=" + ItemId);
                 if (postuser.code == 200)
                 {
 
@@ -192,7 +192,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "ItemMaster/DeleteItemDetails?ItemId=" + ItemId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ItemMaster/DeleteItemDetails?ItemId=" + ItemId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

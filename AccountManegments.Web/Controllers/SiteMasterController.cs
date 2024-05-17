@@ -149,7 +149,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SiteMaster/ActiveDeactiveSite?SiteId=" + SiteId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/ActiveDeactiveSite?SiteId=" + SiteId);
                 if (postuser.code == 200)
                 {
 
@@ -192,7 +192,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SiteMaster/DeleteSite?SiteId=" + SiteId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSite?SiteId=" + SiteId);
                 if (postuser.code == 200)
                 {
 

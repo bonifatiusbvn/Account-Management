@@ -140,7 +140,6 @@ namespace AccountManagement.API.Controllers
         [HttpPost]
         [Route("DeleteUserDetails")]
         [Authorize]
-
         public async Task<IActionResult> DeleteUserDetails(Guid UserId)
         {
             UserResponceModel responseModel = new UserResponceModel();

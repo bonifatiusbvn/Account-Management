@@ -146,7 +146,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel company = await APIServices.PostAsync(null, "Company/DeleteCompanyDetails?CompanyId=" + CompanyId);
+                ApiResponseModel company = await APIServices.PostAsync("", "Company/DeleteCompanyDetails?CompanyId=" + CompanyId);
                 if (company.code == 200)
                 {
                     return Ok(new { Message = string.Format(company.message), Code = company.code });
