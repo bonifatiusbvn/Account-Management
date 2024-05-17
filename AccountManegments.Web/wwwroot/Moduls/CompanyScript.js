@@ -234,11 +234,11 @@ function UpdateCompany() {
 }
 function DeleteCompanyDetails(CompanyId) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -270,14 +270,14 @@ function DeleteCompanyDetails(CompanyId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete Company!");
+                    toastr.error("Can't delete company!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'Company Have No Changes.!!😊',
+                'Company have no changes.!!😊',
                 'error'
             );
         }

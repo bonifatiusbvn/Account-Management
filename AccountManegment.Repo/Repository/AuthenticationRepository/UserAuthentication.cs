@@ -88,7 +88,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                 if (isEmailAlreadyExists)
                 {
-                    response.Message = "User with this UserName or email already exists";
+                    response.Message = "User with this username or email already exists";
                     response.Code = (int)HttpStatusCode.Conflict;
                 }
                 else
@@ -114,7 +114,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Context.SaveChanges();
 
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "User Created Successfully";
+                    response.Message = "User created successfully";
                 }
             }
             catch (Exception ex)

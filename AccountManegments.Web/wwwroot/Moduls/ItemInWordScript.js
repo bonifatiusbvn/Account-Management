@@ -319,11 +319,11 @@ function EditItemInWordDetails(InwordId) {
 function DeleteItemInWord(InwordId) {
 
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -348,14 +348,14 @@ function DeleteItemInWord(InwordId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete ItemInWord!");
+                    toastr.error("Can't delete iteminward!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'Item In Word Have No Changes.!!😊',
+                'Iteminward have no changes.!!😊',
                 'error'
             );
         }
@@ -364,14 +364,14 @@ function DeleteItemInWord(InwordId) {
 function ItemInWordIsApproved(InwordId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + InwordId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Approve this Item In Word?" : "Are you sure want to UnApprove this Item In Word?";
+    var confirmationMessage = isChecked ? "Are you sure want to approve this iteminward?" : "Are you sure want to unapprove this iteminward?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -390,7 +390,7 @@ function ItemInWordIsApproved(InwordId) {
                 success: function (Result) {
                     siteloaderhide();
                     Swal.fire({
-                        title: isChecked ? "Approved!" : "UnApproved!",
+                        title: isChecked ? "Approved!" : "Unapproved!",
                         text: Result.message,
                         icon: "success",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -404,7 +404,7 @@ function ItemInWordIsApproved(InwordId) {
 
             Swal.fire(
                 'Cancelled',
-                'Item In Word Have No Changes.!!😊',
+                'Iteminward have no changes.!!😊',
                 'error'
             ).then(function () {
                 window.location = '/ItemInWord/ItemInWord';

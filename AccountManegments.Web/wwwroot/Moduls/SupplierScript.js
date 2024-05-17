@@ -241,11 +241,11 @@ function UpdateSupplierDetails() {
 }
 function DeleteSupplierDetails(SupplierId) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -270,14 +270,14 @@ function DeleteSupplierDetails(SupplierId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete Supplier!");
+                    toastr.error("Can't delete supplier!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'Supplier Have No Changes.!!😊',
+                'Supplier have no changes.!!😊',
                 'error'
             );
         }
@@ -365,14 +365,14 @@ function resetSupplierForm() {
 function SupplierActiveDecative(SupplierId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + SupplierId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Active this User?" : "Are you sure want to DeActive this User?";
+    var confirmationMessage = isChecked ? "Are you sure want to active this user?" : "Are you sure want to deactive this user?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -391,7 +391,7 @@ function SupplierActiveDecative(SupplierId) {
                 success: function (Result) {
                     siteloaderhide();
                     Swal.fire({
-                        title: isChecked ? "Active!" : "DeActive!",
+                        title: isChecked ? "Active!" : "Deactive!",
                         text: Result.message,
                         icon: "success",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -405,7 +405,7 @@ function SupplierActiveDecative(SupplierId) {
             siteloaderhide();
             Swal.fire(
                 'Cancelled',
-                'User Have No Changes.!!😊',
+                'User have no changes.!!😊',
                 'error'
             );
         }

@@ -285,14 +285,14 @@ function resetItemForm() {
 function ItemIsApproved(ItemId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to approve this Item?" : "Are you sure want to unapprove this Item?";
+    var confirmationMessage = isChecked ? "Are you sure want to approve this item?" : "Are you sure want to unapprove this item?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -311,7 +311,7 @@ function ItemIsApproved(ItemId) {
                     if (Result.code == 200) {
                         siteloaderhide();
                         Swal.fire({
-                            title: isChecked ? "Approved!" : "UnApproved!",
+                            title: isChecked ? "Approved!" : "Unapproved!",
                             text: Result.message,
                             icon: "success",
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -328,7 +328,7 @@ function ItemIsApproved(ItemId) {
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
                 'Cancelled',
-                'Item Have No Changes.!!😊',
+                'Item have no changes.!!😊',
                 'error'
             )
         }
@@ -338,11 +338,11 @@ function ItemIsApproved(ItemId) {
 function deleteItemDetails(ItemId) {
 
     Swal.fire({
-        title: "Are you sure want to Delete this?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -373,7 +373,7 @@ function deleteItemDetails(ItemId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete Item!");
+                    toastr.error("Can't delete item!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {

@@ -61,7 +61,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 else
                 {
                     response.code = 400;
-                    response.message = "ItemDetails is null";
+                    response.message = "Itemdetails is null";
                 }
             }
             catch (Exception ex)

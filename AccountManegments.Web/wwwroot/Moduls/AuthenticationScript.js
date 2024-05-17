@@ -438,11 +438,11 @@ function logout() {
 function deleteUserDetails(UserId) {
     siteloadershow();
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -474,14 +474,14 @@ function deleteUserDetails(UserId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete User!");
+                    toastr.error("Can't delete user!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             siteloaderhide();
             Swal.fire(
                 'Cancelled',
-                'User Have No Changes.!!😊',
+                'User have no changes.!!😊',
                 'error'
             );
         }

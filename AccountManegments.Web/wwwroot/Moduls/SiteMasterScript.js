@@ -346,14 +346,14 @@ function isValidPhoneNo(ContectPersonPhoneNo) {
 function ActiveDecativeSite(SiteId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + SiteId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Active this Site?" : "Are you sure want to DeActive this Site?";
+    var confirmationMessage = isChecked ? "Are you sure want to active this site?" : "Are you sure want to deactive this site?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -373,7 +373,7 @@ function ActiveDecativeSite(SiteId) {
                     if (Result.code == 200) {
                         siteloaderhide();
                         Swal.fire({
-                            title: isChecked ? "Active!" : "DeActive!",
+                            title: isChecked ? "Active!" : "Deactive!",
                             text: Result.message,
                             icon: "success",
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -391,7 +391,7 @@ function ActiveDecativeSite(SiteId) {
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
                 'Cancelled',
-                'Site Have No Changes.!!😊',
+                'Site have no changes.!!😊',
                 'error'
             );
             AllSiteListTable();
@@ -404,7 +404,7 @@ function DeleteSite(SiteId) {
         title: "If you want to delete this site,delete all data related this site!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -435,7 +435,7 @@ function DeleteSite(SiteId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete Site!");
+                    toastr.error("Can't delete site!");
                     window.location = '/SiteMaster/SiteListView';
                 }
             })
@@ -443,7 +443,7 @@ function DeleteSite(SiteId) {
 
             Swal.fire(
                 'Cancelled',
-                'Site Have No Changes.!!😊',
+                'Site have no changes.!!😊',
                 'error'
             );
             AllSiteListTable();
