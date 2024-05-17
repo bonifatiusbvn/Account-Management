@@ -1,4 +1,6 @@
-﻿@{
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "Purchase Orders";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
@@ -70,6 +72,10 @@
                                                         <th>Company Name</th>
                                                         <th>GST Amount</th>
                                                         <th>Total Amount</th>
+                                                        @if (_userSession.UserRole == 3)
+                                                        {
+                                                            <th>Site Name</th>
+                                                        }
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>
