@@ -230,7 +230,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = itemInWordData;
-                    response.message = "Item inward is Successfully unapproved.";
+                    response.message = "Item inward is successfully unapproved.";
                 }
                 else
                 {

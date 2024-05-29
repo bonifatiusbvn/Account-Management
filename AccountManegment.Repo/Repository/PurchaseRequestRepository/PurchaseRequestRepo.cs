@@ -60,7 +60,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     }
                     else
                     {
-                        throw new Exception("PurchaseRequest Id does not have the expected format.");
+                        throw new Exception("Purchaserequest id does not have the expected format.");
                     }
                 }
                 return PurchaseRequestId;

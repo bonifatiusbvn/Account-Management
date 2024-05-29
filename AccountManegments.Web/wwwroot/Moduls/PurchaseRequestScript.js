@@ -311,11 +311,11 @@ function UpdatePurchaseRequestDetails() {
 
 function DeletePurchaseRequest(PurchaseId) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -340,14 +340,14 @@ function DeletePurchaseRequest(PurchaseId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete PurchaseRequest!");
+                    toastr.error("Can't delete Purchaserequest!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'Purchase Request Have No Changes.!!😊',
+                'Purchaserequest have no changes.!!😊',
                 'error'
             );
         }
@@ -357,14 +357,14 @@ function DeletePurchaseRequest(PurchaseId) {
 function PurchaseRequestIsApproved(PurchaseId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + PurchaseId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to Approve this Purchase Request?" : "Are you sure want to UnApprove this Purchase Request?";
+    var confirmationMessage = isChecked ? "Are you sure want to approve this purchaserequest?" : "Are you sure want to unapprove this purchaserequest?";
 
     Swal.fire({
         title: confirmationMessage,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
+        confirmButtonText: "Yes, enter it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -384,7 +384,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
 
 
                     Swal.fire({
-                        title: isChecked ? "Approved!" : "UnApproved!",
+                        title: isChecked ? "Approved!" : "Unapproved!",
                         text: Result.message,
                         icon: "success",
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -397,7 +397,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
                 'Cancelled',
-                'Purchase Request Have No Changes.!!😊',
+                'Purchaserequest have no changes.!!😊',
                 'error'
             );
         }
@@ -1060,7 +1060,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     }
                     else {
                         siteloaderhide();
-                        toastr.error("There Is Some Prolem in Your Request!");
+                        toastr.error("There is some prolem in your request!");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -1092,11 +1092,11 @@ function UpdateMultiplePurchaseOrderDetails() {
 function DeletePODetails(POId) {
 
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -1121,14 +1121,14 @@ function DeletePODetails(POId) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't Delete PO!");
+                    toastr.error("Can't delete purchaseorder!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'PO Have No Changes.!!😊',
+                'PO have no changes.!!😊',
                 'error'
             );
         }

@@ -92,7 +92,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     }
                     else
                     {
-                        throw new Exception("Purchase Order Id does not have the expected format.");
+                        throw new Exception("Purchase order id does not have the expected format.");
                     }
                 }
                 return PurchaseOrderId;
@@ -421,7 +421,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 if (PurchaseOrder == null)
                 {
                     response.code = (int)HttpStatusCode.NotFound;
-                    response.message = $"Purchase order with ID {PurchaseOrderDetails.Id} not found";
+                    response.message = $"Purchase order with id {PurchaseOrderDetails.Id} not found";
                     return response;
                 }
 

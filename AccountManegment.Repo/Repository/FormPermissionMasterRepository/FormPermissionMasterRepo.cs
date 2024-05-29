@@ -173,7 +173,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating Rolewise Permission";
+                response.message = "Error creating rolewise permission";
             }
             return response;
         }
@@ -234,7 +234,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                     else
                     {
                         response.code = 404;
-                        response.message = $"Permissions with RoleId {updatedPermission.RoleId} and FormId {updatedPermission.FormId} not found.";
+                        response.message = $"Permissions with roleid {updatedPermission.RoleId} and formid {updatedPermission.FormId} not found.";
                         return response;
                     }
                 }
@@ -246,7 +246,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             catch (Exception ex)
             {
                 response.code = 400;
-                response.message = "Error updating Rolewise Permissions";
+                response.message = "Error updating rolewise Permissions";
             }
             return response;
         }

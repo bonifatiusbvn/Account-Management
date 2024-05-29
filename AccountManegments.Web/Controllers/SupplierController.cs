@@ -134,7 +134,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postUser = await APIServices.PostAsync(null, "SupplierMaster/DeleteSupplierDetails?SupplierId=" + SupplierId);
+                ApiResponseModel postUser = await APIServices.PostAsync("", "SupplierMaster/DeleteSupplierDetails?SupplierId=" + SupplierId);
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
@@ -155,7 +155,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "SupplierMaster/ActiveDeactiveSupplier?SupplierId=" + SupplierId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SupplierMaster/ActiveDeactiveSupplier?SupplierId=" + SupplierId);
                 if (postuser.code == 200)
                 {
 

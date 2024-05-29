@@ -357,7 +357,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (supplierInvoice == null)
                 {
                     response.code = (int)HttpStatusCode.NotFound;
-                    response.message = $"Invoice with ID {SupplierInvoiceDetail.Id} not found";
+                    response.message = $"Invoice with id {SupplierInvoiceDetail.Id} not found";
                     return response;
                 }
                 supplierInvoice.Id = SupplierInvoiceDetail.Id;
@@ -482,7 +482,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     }
                     else
                     {
-                        throw new Exception("Supplier Invoice Id does not have the expected format.");
+                        throw new Exception("Supplier invoice id does not have the expected format.");
                     }
                 }
                 return supplierInvoiceId;
