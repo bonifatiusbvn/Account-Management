@@ -452,7 +452,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 else
                 {
                     response.code = 400;
-                    response.message = ": Failed to insert item details";
+                    response.message = ": Failed to insert supplier details";
                 }
             }
             catch (Exception ex)
