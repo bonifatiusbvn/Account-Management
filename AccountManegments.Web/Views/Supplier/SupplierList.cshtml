@@ -19,6 +19,17 @@
         right: 170px;
         z-index: 1000;
     }
+
+    #txtSupplierName-error, #txtPhoneNo-error, #txtEmail-error, #txtGST-error,
+    #txtBuilding-error, #txtArea-error, #txtPinCode-error, #ddlCity-error,
+    #dropState-error, #ddlCountry-error, #txtBank-error, #txtAccount-error,
+    #txtIFFC-error, #supplierExcelFile-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
 </style>
 <input type="hidden" id="txtUserid" value="@_userSession.UserId" />
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -28,7 +39,7 @@
             {
                 <button type="button" class="btn btn-success" onclick="downloadSampleFile()">Download File</button>
                 <button type="button" class="btn btn-primary fixed-button" onclick="ClearSupplierTextBox()"><i class="lni lni-circle-plus"></i>Supplier</button>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="btn btn-success px-5 fixedButton">Upload File</button>
+                <button type="button" onclick="SupplierFileUploadModel()" class="btn btn-success px-5 fixedButton">Upload File</button>
             }
         </form>
     </div>
@@ -240,10 +251,10 @@
             </div>
         </div>
     </div>
-    <div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
+    <div id="uploadFileModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form asp-action="ImportSupplierListFromExcel" asp-controller="Supplier" method="post" enctype="multipart/form-data">
+                <form id="uploadSupplierFile" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h5 class="modal-title" id="flipModalLabel">Upload Excel File</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -252,13 +263,13 @@
                         <div class="hstack gap-3 align-items-start">
                             <div class="flex-grow-1">
                                 <label>Upload Excel File :</label>
-                                <input type="file" name="FormFile" class="form-control" accept=".csv,.xls,.xlsx" />
+                                <input type="file" name="supplierExcelFile" id="supplierExcelFile" class="form-control" accept=".csv,.xls,.xlsx" />
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="button" onclick="UploadSupplierFile()" class="btn btn-primary">Upload</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -266,18 +277,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </div>
-<style>
-    #txtSupplierName-error, #txtPhoneNo-error, #txtEmail-error, #txtGST-error,
-    #txtBuilding-error, #txtArea-error, #txtPinCode-error, #ddlCity-error,
-    #dropState-error, #ddlCountry-error, #txtBank-error, #txtAccount-error,
-    #txtIFFC-error {
-        color: red;
-    }
 
-    label.failed {
-        color: red;
-    }
-</style>
 
 @section Scripts {
     <script src="~/moduls/MasterListScript.js" asp-append-version="true"></script>

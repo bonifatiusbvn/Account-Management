@@ -47,7 +47,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postUser = await APIServices.PostAsync(Supplier, "SupplierMaster/CreateSupplier");
                 if (postUser.code == 200)
                 {
-                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
                 else
                 {
@@ -373,15 +373,14 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
 
-                ApiResponseModel postUser = await APIServices.PostAsync(supplierList, "SupplierMaster/ImportSupplierListFromExcel");
-                if (postUser.code == 200)
+                ApiResponseModel postuser = await APIServices.PostAsync(supplierList, "SupplierMaster/ImportSupplierListFromExcel");
+                if (postuser.code == 200)
                 {
-                    return RedirectToAction("SupplierList");
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    ViewBag.Message = postUser.message;
-                    ViewBag.Code = postUser.code;
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

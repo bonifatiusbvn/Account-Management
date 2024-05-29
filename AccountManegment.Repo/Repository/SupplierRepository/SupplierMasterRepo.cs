@@ -5,11 +5,13 @@ using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.Supplier;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,43 +55,92 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             return response;
         }
 
-        public async Task<ApiResponseModel> CreateSupplier(SupplierModel Supplier)
+        public async Task<ApiResponseModel> CreateSupplier(SupplierModel supplier)
         {
             ApiResponseModel response = new ApiResponseModel();
+
             try
             {
-                var SupplierMaster = new SupplierMaster()
+                if (supplier == null)
                 {
-                    SupplierId = Guid.NewGuid(),
-                    SupplierName = Supplier.SupplierName,
-                    Mobile = Supplier.Mobile,
-                    Email = Supplier.Email,
-                    Gstno = Supplier.Gstno,
-                    BuildingName = Supplier.BuildingName,
-                    Area = Supplier.Area,
-                    City = Supplier.City,
-                    State = Supplier.State,
-                    PinCode = Supplier.PinCode,
-                    BankName = Supplier.BankName,
-                    AccountNo = Supplier.AccountNo,
-                    Iffccode = Supplier.Iffccode,
-                    CreatedBy = Supplier.CreatedBy,
-                    CreatedOn = DateTime.Now,
-                    IsApproved = true,
-                    IsDelete = false,
-                };
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "Supplier successfully created.";
-                Context.SupplierMasters.Add(SupplierMaster);
-                Context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return response;
+                    response.code = 400;
+                    response.message = "Supplier details are null.";
+                    return response;
+                }
 
+                var existingSupplier = Context.SupplierMasters.FirstOrDefault(x => x.SupplierName == supplier.SupplierName);
+                if (existingSupplier != null)
+                {
+                    if (existingSupplier.IsDelete == true)
+                    {
+                        existingSupplier.SupplierName = supplier.SupplierName;
+                        existingSupplier.Mobile = supplier.Mobile;
+                        existingSupplier.Email = supplier.Email;
+                        existingSupplier.Gstno = supplier.Gstno;
+                        existingSupplier.BuildingName = supplier.BuildingName;
+                        existingSupplier.Area = supplier.Area;
+                        existingSupplier.City = supplier.City;
+                        existingSupplier.State = supplier.State;
+                        existingSupplier.PinCode = supplier.PinCode;
+                        existingSupplier.BankName = supplier.BankName;
+                        existingSupplier.AccountNo = supplier.AccountNo;
+                        existingSupplier.Iffccode = supplier.Iffccode;
+                        existingSupplier.CreatedBy = supplier.CreatedBy;
+                        existingSupplier.CreatedOn = DateTime.Now;
+                        existingSupplier.IsApproved = true;
+                        existingSupplier.IsDelete = false;
+
+                        Context.SupplierMasters.Update(existingSupplier);
+                        await Context.SaveChangesAsync();
+                        response.code = (int)HttpStatusCode.OK;
+                        response.message = "Supplier successfully inserted.";
+
+                    }
+                    else
+                    {
+                        response.code = 400;
+                        response.message = "Supplier already exists.";
+                    }
+                }
+                else
+                {
+                    var supplierMaster = new SupplierMaster()
+                    {
+                        SupplierId = Guid.NewGuid(),
+                        SupplierName = supplier.SupplierName,
+                        Mobile = supplier.Mobile,
+                        Email = supplier.Email,
+                        Gstno = supplier.Gstno,
+                        BuildingName = supplier.BuildingName,
+                        Area = supplier.Area,
+                        City = supplier.City,
+                        State = supplier.State,
+                        PinCode = supplier.PinCode,
+                        BankName = supplier.BankName,
+                        AccountNo = supplier.AccountNo,
+                        Iffccode = supplier.Iffccode,
+                        CreatedBy = supplier.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                        IsApproved = true,
+                        IsDelete = false,
+                    };
+
+                    Context.SupplierMasters.Add(supplierMaster);
+                    await Context.SaveChangesAsync();
+
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Supplier successfully created.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "An error occurred while creating the supplier.";
+            }
+
+            return response;
         }
+
 
         public async Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId)
         {
@@ -285,6 +336,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
         {
             ApiResponseModel response = new ApiResponseModel();
             List<SupplierMaster> suppliersToAdd = new List<SupplierMaster>();
+            List<SupplierMaster> suppliersToUpdate = new List<SupplierMaster>();
             HashSet<string> supplierNames = new HashSet<string>();
             try
             {
@@ -315,53 +367,87 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     var existingSupplier = await Context.SupplierMasters.FirstOrDefaultAsync(x => x.SupplierName == supplierDetails.SupplierName);
                     if (existingSupplier != null)
                     {
-                        response.code = 400;
-                        response.message = $": {supplierDetails.SupplierName} is already exist.";
-                        return response;
-                    }
+                        if (existingSupplier.IsDelete == true)
+                        {
+                            existingSupplier.SupplierName = supplierDetails.SupplierName;
+                            existingSupplier.Mobile = supplierDetails.Mobile;
+                            existingSupplier.Email = supplierDetails.Email;
+                            existingSupplier.Gstno = supplierDetails.Gstno;
+                            existingSupplier.BuildingName = supplierDetails.BuildingName;
+                            existingSupplier.Area = supplierDetails.Area;
+                            existingSupplier.City = cityId.CityId;
+                            existingSupplier.State = stateId.StatesId;
+                            existingSupplier.PinCode = supplierDetails.PinCode;
+                            existingSupplier.BankName = supplierDetails.BankName;
+                            existingSupplier.AccountNo = supplierDetails.AccountNo;
+                            existingSupplier.Iffccode = supplierDetails.Iffccode;
+                            existingSupplier.CreatedBy = supplierDetails.CreatedBy;
+                            existingSupplier.CreatedOn = DateTime.Now;
+                            existingSupplier.IsApproved = true;
+                            existingSupplier.IsDelete = false;
 
-                    if (supplierNames.Contains(supplierDetails.SupplierName))
-                    {
-                        response.code = 400;
-                        response.message = $": {supplierDetails.SupplierName} is duplicated in the data.";
-                        return response;
+                            suppliersToUpdate.Add(existingSupplier);
+                        }
+                        else
+                        {
+                            response.code = 400;
+                            response.message = $": {supplierDetails.SupplierName} is already exist.";
+                            return response;
+                        }
+
                     }
                     else
                     {
-                        supplierNames.Add(supplierDetails.SupplierName);
+                        if (supplierNames.Contains(supplierDetails.SupplierName))
+                        {
+                            response.code = 400;
+                            response.message = $": {supplierDetails.SupplierName} is duplicated in the data.";
+                            return response;
+                        }
+                        else
+                        {
+                            supplierNames.Add(supplierDetails.SupplierName);
+                        }
+
+                        var supplierMaster = new SupplierMaster()
+                        {
+                            SupplierId = Guid.NewGuid(),
+                            SupplierName = supplierDetails.SupplierName,
+                            Mobile = supplierDetails.Mobile,
+                            Email = supplierDetails.Email,
+                            Gstno = supplierDetails.Gstno,
+                            BuildingName = supplierDetails.BuildingName,
+                            Area = supplierDetails.Area,
+                            City = cityId.CityId,
+                            State = stateId.StatesId,
+                            PinCode = supplierDetails.PinCode,
+                            BankName = supplierDetails.BankName,
+                            AccountNo = supplierDetails.AccountNo,
+                            Iffccode = supplierDetails.Iffccode,
+                            CreatedBy = supplierDetails.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                            IsApproved = true,
+                            IsDelete = false,
+                        };
+
+                        suppliersToAdd.Add(supplierMaster);
                     }
-
-                    var supplierMaster = new SupplierMaster()
-                    {
-                        SupplierId = Guid.NewGuid(),
-                        SupplierName = supplierDetails.SupplierName,
-                        Mobile = supplierDetails.Mobile,
-                        Email = supplierDetails.Email,
-                        Gstno = supplierDetails.Gstno,
-                        BuildingName = supplierDetails.BuildingName,
-                        Area = supplierDetails.Area,
-                        City = cityId.CityId,
-                        State = stateId.StatesId,
-                        PinCode = supplierDetails.PinCode,
-                        BankName = supplierDetails.BankName,
-                        AccountNo = supplierDetails.AccountNo,
-                        Iffccode = supplierDetails.Iffccode,
-                        CreatedBy = supplierDetails.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                        IsApproved = true,
-                        IsDelete = false,
-                    };
-
-                    suppliersToAdd.Add(supplierMaster);
                 }
 
-                if (suppliersToAdd.Any())
+                if (suppliersToAdd.Any() || suppliersToUpdate.Any())
                 {
-                    Context.SupplierMasters.AddRange(suppliersToAdd);
+                    if (suppliersToAdd.Any())
+                    {
+                        Context.SupplierMasters.AddRange(suppliersToAdd);
+                    }
+                    if(suppliersToUpdate.Any())
+                    {
+                        Context.SupplierMasters.UpdateRange(suppliersToAdd);
+                    }
+                    
                     await Context.SaveChangesAsync();
-
                     response.code = (int)HttpStatusCode.OK;
-                    response.message = "Items details successfully inserted";
+                    response.message = "Supplier details successfully inserted";
                 }
                 else
                 {

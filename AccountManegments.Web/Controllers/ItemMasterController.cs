@@ -328,22 +328,20 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
 
-                ApiResponseModel postUser = await APIServices.PostAsync(items, "ItemMaster/InsertItemDetailsFromExcel");
-                if (postUser.code == 200)
+                ApiResponseModel postuser = await APIServices.PostAsync(items, "ItemMaster/InsertItemDetailsFromExcel");
+                if (postuser.code == 200)
                 {
-                    return RedirectToAction("ItemListView");
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    ViewBag.Message = postUser.message;
-                    ViewBag.Code = postUser.code;
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw ex;
             }
-            return View("ItemListView");
         }
         [FormPermissionAttribute("PurchaseMaster-View")]
         [HttpPost]
