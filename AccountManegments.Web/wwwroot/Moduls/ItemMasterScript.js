@@ -143,13 +143,12 @@ function CreateItem() {
             data: objData,
             dataType: 'json',
             success: function (result) {
-                siteloaderhide();
                 if (result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(result.message); 
+                    toastr.success(result.message);
                     setTimeout(function () {
                         window.location = '/ItemMaster/ItemListView';
-                    }, 2000); 
+                    }, 2000);
+                    siteloaderhide();
                 } else {
                     siteloaderhide();
                     toastr.error(result.message);
@@ -163,7 +162,7 @@ function CreateItem() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 
@@ -242,7 +241,7 @@ function UpdateItemDetails() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 var ItemForm;
@@ -368,7 +367,7 @@ function deleteItemDetails(ItemId) {
                         });
                     } else {
                         siteloaderhide();
-                        toastr.error(Result.message); 
+                        toastr.error(Result.message);
                     }
                 },
                 error: function () {
@@ -460,7 +459,7 @@ function downloadFile() {
 
 var UploadExcelFile;
 $(document).ready(function () {
-  UploadExcelFile =  $("#uploadItemFile").validate({
+    UploadExcelFile = $("#uploadItemFile").validate({
         rules: {
             itemExcelFile: "required"
         },
