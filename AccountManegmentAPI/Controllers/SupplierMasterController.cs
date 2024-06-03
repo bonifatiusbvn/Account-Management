@@ -29,7 +29,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("CreateSupplier")]
-        public async Task<IActionResult> CreateUser(SupplierModel Supplier)
+        public async Task<IActionResult> CreateSupplier(SupplierModel Supplier)
         {
             ApiResponseModel response = new ApiResponseModel();
             var CreateSupplier = await _Supplier.CreateSupplier(Supplier);

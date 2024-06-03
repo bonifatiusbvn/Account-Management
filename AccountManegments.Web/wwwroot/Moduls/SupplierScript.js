@@ -25,6 +25,7 @@ function CreateSupplier() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                debugger
                 siteloaderhide();
                 if (Result.code == 200) {
                     toastr.success(Result.message);
@@ -38,6 +39,7 @@ function CreateSupplier() {
                 }
             },
             error: function (xhr, status, error) {
+                debugger
                 siteloaderhide();
                 toastr.error("An error occurred while creating Supplier");
             }
