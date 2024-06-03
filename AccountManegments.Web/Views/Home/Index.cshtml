@@ -98,6 +98,8 @@
 @section Scripts {
     <script type="text/javascript">
         var role = "@_userSession.UserRole";
+        var SiteId = "@UserSession.SiteId";
+        var SiteName = "@UserSession.SiteName";
         $(function () {
             fn_fillsiteDropDown();
             //fn_fillsiteDropDown('#drpSiteName');
@@ -110,6 +112,12 @@
             //}
 
             GetCompanyList();
+            if (role == 3) {
+                fn_ChangeSite(null, "All Site")
+            } else {
+                fn_ChangeSite(SiteId, SiteName)
+            }
+            
         });
 
         function fn_fillsiteDropDown() {
@@ -147,7 +155,6 @@
         });
 
         function fn_ChangeSite(selectedSiteId, SiteText) {
-
             var searchText = "";
             var searchBy = "";
             $.ajax({
