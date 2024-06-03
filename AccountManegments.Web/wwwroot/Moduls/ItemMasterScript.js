@@ -457,3 +457,65 @@ function downloadFile() {
     document.body.removeChild(link);
     siteloaderhide();
 }
+
+var UploadExcelFile;
+$(document).ready(function () {
+  UploadExcelFile =  $("#uploadItemFile").validate({
+        rules: {
+            itemExcelFile: "required"
+        },
+        messages: {
+            itemExcelFile: "Upload File"
+        }
+    })
+});
+
+function UploadItemFile() {
+    debugger;
+    if ($("#uploadItemFile").valid()) {
+        var formData = new FormData();
+        formData.append("FormFile", $("#itemExcelFile")[0].files[0]);
+
+        $.ajax({
+            url: '/ItemMaster/ImportExcelFile',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
+                        window.location = '/ItemMaster/ItemListView';
+                    }, 2000);
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error("An error occurred while uploading the file: " + error);
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.error("Kindly upload a file.");
+    }
+}
+
+function ResetButton() {
+    if (UploadExcelFile) {
+        UploadExcelFile.resetForm();
+    }
+}
+
+function clearExcelFileModel() {
+    ResetButton();
+    $("#itemExcelFile").val('');
+}
+function OpenFileUploadModel() {
+    clearExcelFileModel();
+    $("#uploadExcelFileModal").modal('show');
+}

@@ -25,12 +25,24 @@ function CreateSupplier() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                debugger
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/Supplier/SupplierList';
-                }, 2000);
+                if (Result.code == 200) {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
+                        window.location = '/Supplier/SupplierList';
+                    }, 2000);
+                }
+                else {
+                    siteloaderhide();
+                    toastr.error(Result.message);
+                }
             },
+            error: function (xhr, status, error) {
+                debugger
+                siteloaderhide();
+                toastr.error("An error occurred while creating Supplier");
+            }
         })
     }
     else {
@@ -450,4 +462,66 @@ function downloadSampleFile() {
 
     document.body.removeChild(link);
     siteloaderhide();
+}
+
+var UploadExcelFile;
+$(document).ready(function () {
+    UploadExcelFile = $("#uploadSupplierFile").validate({
+        rules: {
+            supplierExcelFile: "required"
+        },
+        messages: {
+            supplierExcelFile: "Upload File"
+        }
+    })
+});
+
+function UploadSupplierFile() {
+    if ($("#uploadSupplierFile").valid()) {
+        var formData = new FormData();
+        formData.append("FormFile", $("#supplierExcelFile")[0].files[0]);
+
+        $.ajax({
+            url: '/Supplier/ImportSupplierListFromExcel',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    toastr.success(Result.message);
+                    setTimeout(function () {
+                        window.location = '/Supplier/SupplierList';
+                    }, 2000);
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error("An error occurred while uploading the file: " + error);
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.error("Kindly upload a file.");
+    }
+}
+
+
+function ResetButton() {
+    if (UploadExcelFile) {
+        UploadExcelFile.resetForm();
+    }
+}
+
+function clearExcelFileModel() {
+    ResetButton();
+    $("#supplierExcelFile").val('');
+}
+function SupplierFileUploadModel() {
+    clearExcelFileModel();
+    $("#uploadFileModal").modal('show');
 }

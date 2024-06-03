@@ -32,8 +32,29 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     var existingItem = Context.ItemMasters.FirstOrDefault(x => x.ItemName == ItemDetails.ItemName);
                     if (existingItem != null)
                     {
-                        response.code = 403;
-                        response.message = "Item already exist";
+                        if (existingItem.IsDeleted == true)
+                        {
+                            existingItem.UnitType = ItemDetails.UnitType;
+                            existingItem.PricePerUnit = ItemDetails.PricePerUnit;
+                            existingItem.IsWithGst = ItemDetails.IsWithGst;
+                            existingItem.Gstamount = ItemDetails.Gstamount;
+                            existingItem.Gstper = ItemDetails.Gstper;
+                            existingItem.Hsncode = ItemDetails.Hsncode;
+                            existingItem.IsDeleted = ItemDetails.IsDeleted;
+                            existingItem.IsApproved = true;
+                            existingItem.CreatedBy = ItemDetails.CreatedBy;
+                            existingItem.CreatedOn = DateTime.Now;
+
+                            Context.ItemMasters.Update(existingItem);
+                            response.code = (int)HttpStatusCode.OK;
+                            response.message = "Item successfully inserted.";
+
+                        }
+                        else
+                        {
+                            response.code = 403;
+                            response.message = "Item already exist";
+                        }
                     }
                     else
                     {
@@ -324,6 +345,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         {
             ApiResponseModel response = new ApiResponseModel();
             List<ItemMaster> itemsToAdd = new List<ItemMaster>();
+            List<ItemMaster> itemsToUpdate = new List<ItemMaster>();
             HashSet<string> itemNames = new HashSet<string>();
             try
             {
@@ -342,46 +364,73 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                     var existingItem = await Context.ItemMasters.FirstOrDefaultAsync(x => x.ItemName == itemDetails.ItemName);
                     if (existingItem != null)
                     {
-                        response.code = 400;
-                        response.message = $": {itemDetails.ItemName} is already exist.";
-                        return response;
-                    }
+                        if (existingItem.IsDeleted == true)
+                        {
+                            existingItem.UnitType = unitType.UnitId;
+                            existingItem.PricePerUnit = itemDetails.PricePerUnit;
+                            existingItem.IsWithGst = false;
+                            existingItem.Gstamount = itemDetails.Gstamount;
+                            existingItem.Gstper = itemDetails.Gstper;
+                            existingItem.Hsncode = itemDetails.Hsncode;
+                            existingItem.IsDeleted = false;
+                            existingItem.IsApproved = false;
+                            existingItem.CreatedBy = itemDetails.CreatedBy;
+                            existingItem.CreatedOn = DateTime.Now;
 
-                    if (itemNames.Contains(itemDetails.ItemName))
-                    {
-                        response.code = 400;
-                        response.message = $": {itemDetails.ItemName} is duplicated in the data.";
-                        return response;
+                            itemsToUpdate.Add(existingItem);
+                        }
+                        else
+                        {
+                            response.code = 400;
+                            response.message = $": {itemDetails.ItemName} already exists.";
+                            return response;
+                        }
                     }
                     else
                     {
-                        itemNames.Add(itemDetails.ItemName);
+                        if (itemNames.Contains(itemDetails.ItemName))
+                        {
+                            response.code = 400;
+                            response.message = $": {itemDetails.ItemName} is duplicated in the data.";
+                            return response;
+                        }
+                        else
+                        {
+                            itemNames.Add(itemDetails.ItemName);
+                        }
+
+                        var itemMaster = new ItemMaster()
+                        {
+                            ItemId = Guid.NewGuid(),
+                            ItemName = itemDetails.ItemName,
+                            UnitType = unitType.UnitId,
+                            PricePerUnit = itemDetails.PricePerUnit,
+                            IsWithGst = false,
+                            Gstamount = itemDetails.Gstamount,
+                            Gstper = itemDetails.Gstper,
+                            Hsncode = itemDetails.Hsncode,
+                            IsDeleted = false,
+                            IsApproved = false,
+                            CreatedBy = itemDetails.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                        };
+
+                        itemsToAdd.Add(itemMaster);
                     }
-
-                    var itemMaster = new ItemMaster()
-                    {
-                        ItemId = Guid.NewGuid(),
-                        ItemName = itemDetails.ItemName,
-                        UnitType = unitType.UnitId,
-                        PricePerUnit = itemDetails.PricePerUnit,
-                        IsWithGst = false,
-                        Gstamount = itemDetails.Gstamount,
-                        Gstper = itemDetails.Gstper,
-                        Hsncode = itemDetails.Hsncode,
-                        IsDeleted = false,
-                        IsApproved = false,
-                        CreatedBy = itemDetails.CreatedBy,
-                        CreatedOn = DateTime.Now,
-                    };
-
-                    itemsToAdd.Add(itemMaster);
                 }
 
-                if (itemsToAdd.Any())
+                if (itemsToAdd.Any() || itemsToUpdate.Any())
                 {
-                    Context.ItemMasters.AddRange(itemsToAdd);
-                    await Context.SaveChangesAsync();
+                    if (itemsToAdd.Any())
+                    {
+                        Context.ItemMasters.AddRange(itemsToAdd);
+                    }
+                    if (itemsToUpdate.Any())
+                    {
+                        Context.ItemMasters.UpdateRange(itemsToUpdate);
+                    }
 
+                    await Context.SaveChangesAsync();
                     response.code = (int)HttpStatusCode.OK;
                     response.message = "Items details successfully inserted";
                 }
