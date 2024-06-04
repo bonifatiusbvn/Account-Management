@@ -19,16 +19,20 @@
     }
 </style>
 <input type="hidden" id="txtUserid" value="@_userSession.UserId" />
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="d-flex align-items-center">
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Add == true)))
-            {
-                <button type="button" class="btn btn-success" onclick="downloadSampleFile()">Download File</button>
-                <button type="button" class="btn btn-primary fixed-button" onclick="ClearSupplierTextBox()"><i class="lni lni-circle-plus"></i>Supplier</button>
-                <button type="button" onclick="SupplierFileUploadModel()" class="btn btn-success px-5 fixedButton">Upload File</button>
-            }
-    </div>
-</div>
+@section HeaderButton {
+
+    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Add == true)))
+    {
+        <div class="d-flex gap-2 ms-auto">
+            <button type="button" class="btn btn-primary" onclick="ClearSupplierTextBox()">
+                <i class="lni lni-circle-plus"></i> Supplier
+            </button>
+            <button type="button" class="btn btn-success" onclick="downloadSampleFile()">Download File</button>
+            <button type="button" class="btn btn-success" onclick="SupplierFileUploadModel()">Upload File</button>
+        </div>
+    }
+}
+
 
 <div class="">
     <div class="">
