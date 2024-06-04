@@ -165,7 +165,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             {
                 var ItemList = (from a in Context.ItemMasters
                                 join b in Context.UnitMasters on a.UnitType equals b.UnitId
-                                where a.IsDeleted == false || a.IsApproved == true
+                                where a.IsDeleted == false 
                                 select new ItemMasterModel
                                 {
                                     ItemId = a.ItemId,
