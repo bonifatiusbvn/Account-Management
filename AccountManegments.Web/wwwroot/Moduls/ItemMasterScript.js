@@ -491,7 +491,7 @@ $(document).ready(function () {
 });
 
 function UploadItemFile() {
-    debugger;
+
     if ($("#uploadItemFile").valid()) {
         var formData = new FormData();
         formData.append("FormFile", $("#itemExcelFile")[0].files[0]);
