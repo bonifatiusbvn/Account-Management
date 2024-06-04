@@ -127,6 +127,7 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = SupplierInvoicemaster.code;
                 response.message = SupplierInvoicemaster.message;
+                response.data = SupplierInvoicemaster.data;
             }
             else
             {

@@ -451,6 +451,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Invoice inserted successfully.";
+                response.data = supplierInvoice.Id;
             }
             catch (Exception ex)
             {
