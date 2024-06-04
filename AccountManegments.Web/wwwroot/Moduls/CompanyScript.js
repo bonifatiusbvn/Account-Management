@@ -316,7 +316,10 @@ function validateAndCreateCompany() {
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required",
-            txtInvoicePrefix: "required",
+            txtInvoicePrefix: {
+                required: true,
+                maxlength: 6,
+            }, 
         },
         messages: {
             txtCompanyName: "Please Enter CompanyName",
@@ -333,7 +336,10 @@ function validateAndCreateCompany() {
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country",
-            txtInvoicePrefix: "Please Enter Invoice Prefix",
+            txtInvoicePrefix: {
+                required: "Please Enter Invoice Prefix",
+                maxlength: "Invoice Prefix must be of 6 characters only"
+            }
         }
     })
     var isValid = true;
