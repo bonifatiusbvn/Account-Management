@@ -319,80 +319,80 @@ function InsertMultipleSupplierItem() {
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
-        var ItemDetails = [];
-        $(".product").each(function () {
-            var orderRow = $(this);
-            var objData = {
-                ItemName: orderRow.find("#txtItemName").text(),
-                ItemId: orderRow.find("#txtItemId").val(),
-                UnitType: orderRow.find("#UnitTypeId").val(),
-                DiscountAmount: orderRow.find("#txtdiscountamount").val(),
-                Quantity: orderRow.find("#txtproductquantity").val(),
-                PricePerUnit: orderRow.find("#txtproductamount").val(),
-                GSTamount: orderRow.find("#txtgstAmount").val(),
-                GSTPercentage: orderRow.find("#txtgst").val(),
-                TotalAmount: orderRow.find("#txtproducttotalamount").val(),
-            };
-            ItemDetails.push(objData);
-        });
-        var sitevalue = $("#textInvoiceSiteName").val();
-        var siteid = null;
-        if (sitevalue != "") {
-            siteid = sitevalue;
-        } else {
-            siteid = $("#siteid").val();
-        }
-        var InvoiceDetails = {
-            SiteId: siteid,
-            InvoiceNo: $("#textInvoiceId").val(),
-            Date: $("#textOrderDate").val(),
-            SupplierId: $("#textSupplierName").val(),
-            CompanyId: $("#textCompanyName").val(),
-            TotalAmountInvoice: $("#cart-total").val(),
-            TotalGstamount: $("#totalgst").val(),
-            PaymentStatus: $("input[name='paymentStatus']:checked").val(),
-            Description: $("#textDescription").val(),
-            CreatedBy: $("#createdbyid").val(),
-            UnitTypeId: $("#UnitTypeId").val(),
-            ShippingAddress: $("#textmdAddress").val(),
-            SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
-            ItemList: ItemDetails,
-        }
-
-        var form_data = new FormData();
-        form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
-        $.ajax({
-            url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/InvoiceMaster/CreateInvoice';
-                    }, 2000);
-                }                      
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+            var ItemDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    ItemName: orderRow.find("#txtItemName").text(),
+                    ItemId: orderRow.find("#txtItemId").val(),
+                    UnitType: orderRow.find("#UnitTypeId").val(),
+                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    PricePerUnit: orderRow.find("#txtproductamount").val(),
+                    GSTamount: orderRow.find("#txtgstAmount").val(),
+                    GSTPercentage: orderRow.find("#txtgst").val(),
+                    TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+                };
+                ItemDetails.push(objData);
+            });
+            var sitevalue = $("#textInvoiceSiteName").val();
+            var siteid = null;
+            if (sitevalue != "") {
+                siteid = sitevalue;
+            } else {
+                siteid = $("#siteid").val();
             }
-        });
+            var InvoiceDetails = {
+                SiteId: siteid,
+                InvoiceNo: $("#textInvoiceId").val(),
+                Date: $("#textOrderDate").val(),
+                SupplierId: $("#textSupplierName").val(),
+                CompanyId: $("#textCompanyName").val(),
+                TotalAmountInvoice: $("#cart-total").val(),
+                TotalGstamount: $("#totalgst").val(),
+                PaymentStatus: $("input[name='paymentStatus']:checked").val(),
+                Description: $("#textDescription").val(),
+                CreatedBy: $("#createdbyid").val(),
+                UnitTypeId: $("#UnitTypeId").val(),
+                ShippingAddress: $("#textmdAddress").val(),
+                SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
+                ItemList: ItemDetails,
+            }
+
+            var form_data = new FormData();
+            form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
+            $.ajax({
+                url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
+                            window.location = '/InvoiceMaster/CreateInvoice';
+                        }, 2000);
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
         } else {
             siteloaderhide();
             if ($('#addnewproductlink tr').length == 0) {
@@ -404,7 +404,7 @@ function InsertMultipleSupplierItem() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 function UpdateInvoiceDetails() {
@@ -461,7 +461,7 @@ function UpdateInvoiceDetails() {
                     setTimeout(function () {
                         window.location = '/InvoiceMaster/SupplierInvoiceListView';
                     }, 2000);
-                }        
+                }
                 else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -481,7 +481,7 @@ function UpdateInvoiceDetails() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 

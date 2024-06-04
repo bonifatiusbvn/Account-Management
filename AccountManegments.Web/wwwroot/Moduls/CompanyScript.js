@@ -80,18 +80,24 @@ function AddCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createCompany');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllCompanyTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Company/CreateCompany';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
 
             },
 
@@ -211,19 +217,24 @@ function UpdateCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Company/CreateCompany';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createCompany');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllCompanyTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
+                siteloaderhide();
             },
         })
     }

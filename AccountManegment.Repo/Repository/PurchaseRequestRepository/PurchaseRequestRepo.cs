@@ -81,13 +81,13 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 {
                     Pid = Guid.NewGuid(),
                     PrNo = PurchaseRequestDetails.PrNo,
-                    Item = PurchaseRequestDetails.Item,
                     ItemId = PurchaseRequestDetails.ItemId,
+                    ItemName = PurchaseRequestDetails.ItemName,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
                     IsApproved = PurchaseRequestDetails.IsApproved,
-                    IsDeleted=false,
+                    IsDeleted = false,
                     CreatedBy = PurchaseRequestDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -134,12 +134,13 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 purchaseRequestList = (from a in Context.PurchaseRequests.Where(x => x.Pid == PurchaseId)
                                        join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                        join c in Context.Sites on a.SiteId equals c.SiteId
+                                       join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                        select new PurchaseRequestModel
                                        {
                                            Pid = a.Pid,
                                            PrNo = a.PrNo,
-                                           Item = a.Item,
                                            ItemId = a.ItemId,
+                                           ItemName = i.ItemName,
                                            UnitTypeId = a.UnitTypeId,
                                            Quantity = a.Quantity,
                                            UnitName = b.UnitName,
@@ -164,12 +165,13 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 var PurchaseRequestList = from a in Context.PurchaseRequests
                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                           join c in Context.Sites on a.SiteId equals c.SiteId
+                                          join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                           where (siteId == null || a.SiteId == siteId) && c.IsActive == true &&
                                           a.IsDeleted == false
                                           select new PurchaseRequestModel
                                           {
                                               Pid = a.Pid,
-                                              Item = a.Item,
+                                              ItemName = i.ItemName,
                                               ItemId = a.ItemId,
                                               PrNo = a.PrNo,
                                               Quantity = a.Quantity,
@@ -187,7 +189,6 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 {
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
-                        u.Item.ToLower().Contains(searchText) ||
                         u.UnitName.ToLower().Contains(searchText) ||
                         u.Quantity.ToString().Contains(searchText)
                     );
@@ -202,7 +203,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                             PurchaseRequestList = PurchaseRequestList.Where(u => u.UnitName.ToLower().Contains(searchText));
                             break;
                         case "itemname":
-                            PurchaseRequestList = PurchaseRequestList.Where(u => u.Item.ToLower().Contains(searchText));
+                            PurchaseRequestList = PurchaseRequestList.Where(u => u.ItemName.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -218,12 +219,12 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+                    string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
                         case "item":
-                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.Item) : PurchaseRequestList.OrderByDescending(u => u.Item);
+                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.ItemName) : PurchaseRequestList.OrderByDescending(u => u.ItemName);
                             break;
                         case "createdon":
                             PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.CreatedOn) : PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
@@ -254,7 +255,6 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 {
                     PurchaseRequestData.Pid = PurchaseRequestDetails.Pid;
                     PurchaseRequestData.PrNo = PurchaseRequestDetails.PrNo;
-                    PurchaseRequestData.Item = PurchaseRequestDetails.Item;
                     PurchaseRequestData.ItemId = PurchaseRequestDetails.ItemId;
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;

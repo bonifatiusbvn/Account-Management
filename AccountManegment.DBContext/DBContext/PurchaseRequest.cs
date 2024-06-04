@@ -11,7 +11,7 @@ public partial class PurchaseRequest
 
     public Guid? ItemId { get; set; }
 
-    public string Item { get; set; } = null!;
+    public string? ItemName { get; set; }
 
     public int UnitTypeId { get; set; }
 
@@ -31,7 +31,7 @@ public partial class PurchaseRequest
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual ItemMaster? ItemNavigation { get; set; }
+    public virtual ItemMaster? Item { get; set; }
 
     public virtual Site Site { get; set; } = null!;
 

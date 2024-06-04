@@ -19,19 +19,24 @@ function CreateUser() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                debugger
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createUser');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/User/UserListView';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
             }
         });
     }
@@ -222,18 +227,24 @@ function UpdateUserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createUser');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/User/UserListView';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
             },
         })
     }

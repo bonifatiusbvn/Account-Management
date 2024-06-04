@@ -145,7 +145,7 @@ function GetItemDetails() {
 $(document).ready(function () {
     $('#txtItemId').change(function () {
         var Text = $("#txtItemId Option:Selected").text();
-        /*var txtItemName = $(this).val();*/
+
         $("#txtItemName").val(Text);
     });
 });
@@ -499,19 +499,24 @@ function InsertMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreateItemInWord');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemInWordListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                    window.location = '/ItemInWord/ItemInWord';
-                }
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
@@ -567,19 +572,24 @@ function UpdateMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreateItemInWord');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemInWordListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message); 
-                    setTimeout(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    }, 2000); 
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                    window.location = '/ItemInWord/ItemInWord';
-                }
             },
             error: function (xhr, status, error) {
                 siteloaderhide();

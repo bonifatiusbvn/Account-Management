@@ -126,6 +126,7 @@ function ClearTextBox() {
 }
 function CreateItem() {
     siteloadershow();
+
     if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemName: $('#txtItemName').val(),
@@ -144,27 +145,35 @@ function CreateItem() {
             dataType: 'json',
             success: function (result) {
                 if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreateItem');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemTable();
                     toastr.success(result.message);
-                    setTimeout(function () {
-                        window.location = '/ItemMaster/ItemListView';
-                    }, 2000);
-                    siteloaderhide();
                 } else {
-                    siteloaderhide();
                     toastr.error(result.message);
                 }
+                siteloaderhide();
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
                 toastr.error('An error occurred while processing your request.');
             }
         });
-    }
-    else {
+    } else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
 }
+
 
 function EditItemDetails(ItemId) {
     siteloadershow();
@@ -218,32 +227,44 @@ function UpdateItemDetails() {
             Gstper: $('#txtGstPerUnit').val(),
             Hsncode: $('#txtHSNCode').val(),
             IsApproved: $('#txtIsApproved').val(),
-        }
+        };
+
         $.ajax({
             url: '/ItemMaster/UpdateItemDetails',
             type: 'post',
             data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/ItemMaster/ItemListView';
-                    }, 2000);
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreateItem');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemTable();
+                    toastr.success(result.message);
                 } else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
+                    toastr.error(result.message);
                 }
+                siteloaderhide();
             },
-        })
-    }
-    else {
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
 }
+
+
 var ItemForm;
 function validateAndCreateItem() {
 

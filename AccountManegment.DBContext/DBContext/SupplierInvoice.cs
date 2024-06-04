@@ -48,6 +48,4 @@ public partial class SupplierInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public virtual Site? Site { get; set; }
-
-    public virtual ICollection<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; } = new List<SupplierInvoiceDetail>();
 }

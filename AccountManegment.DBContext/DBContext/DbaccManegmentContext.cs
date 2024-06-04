@@ -228,14 +228,14 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GST");
-            entity.Property(e => e.Item).HasMaxLength(100);
+            entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.ItemTotal).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.PorefId).HasColumnName("PORefId");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.PurchaseOrderDetails)
+            entity.HasOne(d => d.Item).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.ItemId)
                 .HasConstraintName("FK_PurchaseOrderDetails_ItemMaster");
 
@@ -260,12 +260,12 @@ public partial class DbaccManegmentContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("PId");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.PurchaseRequests)
+            entity.HasOne(d => d.Item).WithMany(p => p.PurchaseRequests)
                 .HasForeignKey(d => d.ItemId)
                 .HasConstraintName("FK_PurchaseRequest_ItemMaster");
 
@@ -367,20 +367,11 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gstper)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTPer");
-            entity.Property(e => e.Item).HasMaxLength(100);
+            entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.RefInvoice).WithMany(p => p.SupplierInvoiceDetails)
-                .HasForeignKey(d => d.RefInvoiceId)
-                .HasConstraintName("FK_SupplierInvoiceDetails_SupplierInvoice");
-
-            entity.HasOne(d => d.UnitType).WithMany(p => p.SupplierInvoiceDetails)
-                .HasForeignKey(d => d.UnitTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SupplierInvoiceDetails_UnitMaster");
         });
 
         modelBuilder.Entity<SupplierMaster>(entity =>
