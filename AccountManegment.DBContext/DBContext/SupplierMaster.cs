@@ -9,9 +9,9 @@ public partial class SupplierMaster
 
     public string SupplierName { get; set; } = null!;
 
-    public string Mobile { get; set; } = null!;
+    public string? Mobile { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
     public string? Gstno { get; set; }
 

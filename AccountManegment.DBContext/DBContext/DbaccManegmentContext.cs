@@ -55,8 +55,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -87,9 +87,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gstno)
                 .HasMaxLength(17)
                 .HasColumnName("GSTNo");
-            entity.Property(e => e.InvoicePef)
-                .HasMaxLength(50)
-                .IsFixedLength();
+            entity.Property(e => e.InvoicePef).HasMaxLength(6);
             entity.Property(e => e.PanNo).HasMaxLength(10);
             entity.Property(e => e.Pincode).HasMaxLength(10);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
