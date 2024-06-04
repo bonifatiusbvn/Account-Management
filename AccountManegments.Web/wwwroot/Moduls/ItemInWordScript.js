@@ -483,7 +483,7 @@ function InsertMultipleItemInWordDetails() {
             ReceiverName: $("#txtReceiverName").val(),
             Date: $("#txtIteminwordDate").val(),
         };
-        debugger
+
         var form_data = new FormData();
         form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 

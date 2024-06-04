@@ -320,45 +320,45 @@ function InsertMultipleSupplierItem() {
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
-        var ItemDetails = [];
-        $(".product").each(function () {
-            var orderRow = $(this);
-            var objData = {
-                ItemName: orderRow.find("#txtItemName").text(),
-                ItemId: orderRow.find("#txtItemId").val(),
-                UnitType: orderRow.find("#UnitTypeId").val(),
-                DiscountAmount: orderRow.find("#txtdiscountamount").val(),
-                Quantity: orderRow.find("#txtproductquantity").val(),
-                PricePerUnit: orderRow.find("#txtproductamount").val(),
-                GSTamount: orderRow.find("#txtgstAmount").val(),
-                GSTPercentage: orderRow.find("#txtgst").val(),
-                TotalAmount: orderRow.find("#txtproducttotalamount").val(),
-            };
-            ItemDetails.push(objData);
-        });
-        var sitevalue = $("#textInvoiceSiteName").val();
-        var siteid = null;
-        if (sitevalue != "") {
-            siteid = sitevalue;
-        } else {
-            siteid = $("#siteid").val();
-        }
-        var InvoiceDetails = {
-            SiteId: siteid,
-            InvoiceNo: $("#textInvoicePrefix").val(),
-            Date: $("#textOrderDate").val(),
-            SupplierId: $("#textSupplierName").val(),
-            CompanyId: $("#textCompanyName").val(),
-            TotalAmountInvoice: $("#cart-total").val(),
-            TotalGstamount: $("#totalgst").val(),
-            PaymentStatus: $("input[name='paymentStatus']:checked").val(),
-            Description: $("#textDescription").val(),
-            CreatedBy: $("#createdbyid").val(),
-            UnitTypeId: $("#UnitTypeId").val(),
-            ShippingAddress: $("#textmdAddress").val(),
-            SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
-            ItemList: ItemDetails,
-        }
+            var ItemDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    ItemName: orderRow.find("#txtItemName").text(),
+                    ItemId: orderRow.find("#txtItemId").val(),
+                    UnitType: orderRow.find("#UnitTypeId").val(),
+                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    PricePerUnit: orderRow.find("#txtproductamount").val(),
+                    GSTamount: orderRow.find("#txtgstAmount").val(),
+                    GSTPercentage: orderRow.find("#txtgst").val(),
+                    TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+                };
+                ItemDetails.push(objData);
+            });
+            var sitevalue = $("#textInvoiceSiteName").val();
+            var siteid = null;
+            if (sitevalue != "") {
+                siteid = sitevalue;
+            } else {
+                siteid = $("#siteid").val();
+            }
+            var InvoiceDetails = {
+                SiteId: siteid,
+                InvoiceNo: $("#textInvoicePrefix").val(),
+                Date: $("#textOrderDate").val(),
+                SupplierId: $("#textSupplierName").val(),
+                CompanyId: $("#textCompanyName").val(),
+                TotalAmountInvoice: $("#cart-total").val(),
+                TotalGstamount: $("#totalgst").val(),
+                PaymentStatus: $("input[name='paymentStatus']:checked").val(),
+                Description: $("#textDescription").val(),
+                CreatedBy: $("#createdbyid").val(),
+                UnitTypeId: $("#UnitTypeId").val(),
+                ShippingAddress: $("#textmdAddress").val(),
+                SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
+                ItemList: ItemDetails,
+            }
 
             var form_data = new FormData();
             form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
@@ -997,7 +997,7 @@ function getSupplierDetail(SupplierId) {
 }
 
 function getInvoiceNumber(CompanyId) {
-    debugger
+
     siteloadershow();
     $.ajax({
         url: '/InvoiceMaster/CheckSuppliersInvoiceNo?CompanyId=' + CompanyId,
@@ -1005,10 +1005,10 @@ function getInvoiceNumber(CompanyId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+
             siteloaderhide();
             if (response.code == 200) {
-                debugger
+
                 siteloaderhide();
                 $('#textInvoicePrefix').val(response.data);
             } else {
@@ -1029,7 +1029,7 @@ function getCompanyDetail(CompanyId) {
             siteloaderhide();
             if (response) {
                 $('#textCompanyGstNo').val(response.gstno);
-                $('#textCompanyBillingAddress').val(response.fullAddress);  
+                $('#textCompanyBillingAddress').val(response.fullAddress);
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');

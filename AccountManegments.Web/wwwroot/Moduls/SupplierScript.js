@@ -45,7 +45,7 @@ function CreateSupplier() {
                 siteloaderhide();
             },
             error: function (xhr, status, error) {
-                debugger
+
                 siteloaderhide();
                 toastr.error("An error occurred while creating Supplier");
             }
