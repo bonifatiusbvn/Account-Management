@@ -190,7 +190,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
                         u.UnitName.ToLower().Contains(searchText) ||
-                        u.Quantity.ToString().Contains(searchText)
+                        u.Quantity.ToString().Contains(searchText)||
+                        u.ItemName.ToLower().Contains(searchText)
                     );
                 }
 

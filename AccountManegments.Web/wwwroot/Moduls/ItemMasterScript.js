@@ -111,6 +111,7 @@ function ClearTextBox() {
     $('#txtGstAmount').val('');
     $('#txtGstPerUnit').val('');
     $('#txtHSNCode').val('');
+    $('#txtItemid').val('');
     var button = document.getElementById("btnitem");
     if ($('#txtItemid').val() == '') {
         button.textContent = "Create";
@@ -196,7 +197,7 @@ function EditItemDetails(ItemId) {
             $('#txtHSNCode').val(response.hsncode);
             $('#txtIsApproved').val(response.isApproved);
             var button = document.getElementById("btnitem");
-            if ($('#txtItemid').val() != '') {
+            if ($('#txtItemid').val() != '') {debugger
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
