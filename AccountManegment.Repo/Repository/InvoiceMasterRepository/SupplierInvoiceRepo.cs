@@ -70,19 +70,19 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var SupplierInvoice = Context.SupplierInvoices.Where(a => a.Id == Id).FirstOrDefault();
-                var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b=>b.RefInvoiceId == Id).ToList();
+                var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b => b.RefInvoiceId == Id).ToList();
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
                     response.message = "Supplierinvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
                     response.code = 200;
                 }
-                if(InvoiceItemList != null)
+                if (InvoiceItemList != null)
                 {
-                   foreach (var item in InvoiceItemList)
-                   {
+                    foreach (var item in InvoiceItemList)
+                    {
                         Context.SupplierInvoiceDetails.Remove(item);
-                   }
+                    }
                 }
                 Context.SaveChanges();
             }
@@ -227,7 +227,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                                      select new POItemDetailsModel
                                                      {
-                                                         ItemName = a.Item,
+                                                         ItemId = a.ItemId,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
@@ -429,7 +429,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     var supplierInvoiceDetail = new SupplierInvoiceDetail()
                     {
                         RefInvoiceId = supplierInvoice.Id,
-                        Item = item.ItemName,
+                        ItemId = item.ItemId,
+                        ItemName = item.ItemName,
                         UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
                         Price = item.PricePerUnit,

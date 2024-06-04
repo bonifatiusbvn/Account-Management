@@ -32,7 +32,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var SupplierInvoice = new SupplierInvoiceDetail()
                 {
                     RefInvoiceId = SupplierInvoiceDetails.RefInvoiceId,
-                    Item = SupplierInvoiceDetails.Item,
+                    ItemId = SupplierInvoiceDetails.ItemId,
+                    ItemName = SupplierInvoiceDetails.ItemName,
                     UnitTypeId = SupplierInvoiceDetails.UnitTypeId,
                     Quantity = SupplierInvoiceDetails.Quantity,
                     Price = SupplierInvoiceDetails.Price,
@@ -88,7 +89,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 select new SupplierInvoiceDetailsModel
                                 {
                                     InvoiceDetailsId = InvoiceDetailsId,
-                                    Item = a.Item,
+                                    ItemId = a.ItemId,
                                     RefInvoiceId = a.RefInvoiceId,
                                     UnitTypeId = a.UnitTypeId,
                                     UnitName = c.UnitName,
@@ -116,10 +117,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierList = (from a in Context.SupplierInvoiceDetails
                                     join b in Context.SupplierInvoices on a.RefInvoiceId equals b.Id
                                     join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
+                                    join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                     select new SupplierInvoiceDetailsModel
                                     {
                                         InvoiceDetailsId = a.InvoiceDetailsId,
-                                        Item = a.Item,
+                                        ItemId = a.ItemId,
+                                        ItemName = i.ItemName,
                                         RefInvoiceId = a.RefInvoiceId,
                                         UnitTypeId = a.UnitTypeId,
                                         UnitName = c.UnitName,
@@ -156,13 +159,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    // Default sorting by CreatedOn in descending order
+
                     supplierList = supplierList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+                    string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
@@ -240,7 +243,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     supplierInvoiceDetail.InvoiceDetailsId = SupplierInvoiceDetails.InvoiceDetailsId;
                     supplierInvoiceDetail.RefInvoiceId = SupplierInvoiceDetails.RefInvoiceId;
-                    supplierInvoiceDetail.Item = SupplierInvoiceDetails.Item;
+                    supplierInvoiceDetail.ItemId = SupplierInvoiceDetails.ItemId;
+                    supplierInvoiceDetail.ItemName = SupplierInvoiceDetails.ItemName;
                     supplierInvoiceDetail.UnitTypeId = SupplierInvoiceDetails.UnitTypeId;
                     supplierInvoiceDetail.Quantity = SupplierInvoiceDetails.Quantity;
                     supplierInvoiceDetail.Price = SupplierInvoiceDetails.Price;

@@ -25,18 +25,24 @@ function CreateSupplier() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                debugger
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSupplier');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                if (Result.code == 200) {
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Supplier/SupplierList';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
-                    toastr.error(Result.message);
-                }
             },
             error: function (xhr, status, error) {
                 debugger
@@ -238,11 +244,24 @@ function UpdateSupplierDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSupplier');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/Supplier/SupplierList';
-                }, 2000);
             },
         })
     }

@@ -172,11 +172,24 @@ function CreateSite() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSite');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllSiteListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                }, 2000);
             },
         })
     }
@@ -214,11 +227,24 @@ function UpdateSiteDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSite');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllSiteListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                }, 2000);
             }
         })
     }

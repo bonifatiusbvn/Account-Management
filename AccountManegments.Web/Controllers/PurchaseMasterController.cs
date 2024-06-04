@@ -118,7 +118,6 @@ namespace AccountManegments.Web.Controllers
                 var PurchaseRequest = new PurchaseRequestModel()
                 {
                     Pid = Guid.NewGuid(),
-                    Item = PurchaseRequestDetails.Item,
                     ItemId = PurchaseRequestDetails.ItemId,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     SiteId = PurchaseRequestDetails.SiteId,

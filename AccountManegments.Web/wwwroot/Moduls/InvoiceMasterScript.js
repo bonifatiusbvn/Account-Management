@@ -317,7 +317,6 @@ $(document).on("click", "#addItemButton", function () {
 });
 
 function InsertMultipleSupplierItem() {
-    debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -361,40 +360,40 @@ function InsertMultipleSupplierItem() {
             ItemList: ItemDetails,
         }
 
-        var form_data = new FormData();
-        form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
-        $.ajax({
-            url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
+            var form_data = new FormData();
+            form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
+            $.ajax({
+                url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
                     siteloaderhide();
-                    toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/InvoiceMaster/CreateInvoice';
-                    }, 2000);
-                }                      
-                else {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
+                            window.location = '/InvoiceMaster/CreateInvoice';
+                        }, 2000);
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function (xhr, status, error) {
                     siteloaderhide();
-                    toastr.error(Result.message);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
                 }
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
-            }
-        });
+            });
         } else {
             siteloaderhide();
             if ($('#addnewproductlink tr').length == 0) {
@@ -406,7 +405,7 @@ function InsertMultipleSupplierItem() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 function UpdateInvoiceDetails() {
@@ -463,7 +462,7 @@ function UpdateInvoiceDetails() {
                     setTimeout(function () {
                         window.location = '/InvoiceMaster/SupplierInvoiceListView';
                     }, 2000);
-                }        
+                }
                 else {
                     siteloaderhide();
                     toastr.error(Result.message);
@@ -483,7 +482,7 @@ function UpdateInvoiceDetails() {
     }
     else {
         siteloaderhide();
-        toastr.error("Kindly fill all details");   
+        toastr.error("Kindly fill all details");
     }
 }
 

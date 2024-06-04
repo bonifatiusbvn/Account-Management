@@ -11,7 +11,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
         public Guid Pid { get; set; }
 
         public Guid? ItemId { get; set; }
-        public string Item { get; set; } = null!;
+        public string? ItemName { get; set; }
 
         public int UnitTypeId { get; set; }
 

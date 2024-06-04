@@ -9,7 +9,9 @@ public partial class SupplierInvoiceDetail
 
     public Guid? RefInvoiceId { get; set; }
 
-    public string Item { get; set; } = null!;
+    public Guid? ItemId { get; set; }
+
+    public string? ItemName { get; set; }
 
     public int UnitTypeId { get; set; }
 
@@ -36,8 +38,4 @@ public partial class SupplierInvoiceDetail
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public virtual SupplierInvoice? RefInvoice { get; set; }
-
-    public virtual UnitMaster UnitType { get; set; } = null!;
 }

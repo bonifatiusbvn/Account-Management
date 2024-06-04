@@ -12,7 +12,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public Guid? RefInvoiceId { get; set; }
 
-        public string Item { get; set; } = null!;
+        public Guid? ItemId { get; set; }
+        public string ItemName { get; set; }
 
         public int UnitTypeId { get; set; }
 

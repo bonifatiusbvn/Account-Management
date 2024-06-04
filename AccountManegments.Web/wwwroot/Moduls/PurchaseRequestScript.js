@@ -140,11 +140,24 @@ function CreatePurchaseRequest() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreatePurchaseRequest');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllPurchaseRequestListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/PurchaseMaster/PurchaseRequestListView';
-                }, 2000);
             }
         })
     }
@@ -295,11 +308,24 @@ function UpdatePurchaseRequestDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (result.code == 200) {
+                    var offcanvasElement = document.getElementById('CreatePurchaseRequest');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllPurchaseRequestListTable();
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/PurchaseMaster/PurchaseRequestListView';
-                }, 2000);
             },
         })
     }
@@ -719,9 +745,10 @@ function InsertMultiplePurchaseOrderDetails() {
             var orderDetails = [];
             var AddressDetails = [];
             $(".product").each(function () {
+                debugger
                 var orderRow = $(this);
                 var objData = {
-                    Item: orderRow.find("#txtItemName").text(),
+                    ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
                     UnitTypeId: orderRow.find("#UnitTypeId").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),

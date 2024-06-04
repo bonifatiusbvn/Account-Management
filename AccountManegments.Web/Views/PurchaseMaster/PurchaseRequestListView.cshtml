@@ -89,7 +89,7 @@
                                                         <th>Unit</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
-                                                        @if(UserSession.SiteId=="")
+                                                        @if (UserSession.SiteId == "")
                                                         {
                                                             <th>SiteName</th>
                                                         }
@@ -210,7 +210,7 @@
                                 {
                                     <div class="col-12" id="siteDetails">
                                         <label class="form-label">Site</label>
-                                        <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
+                                        <select class="form-select" id="txtPoSiteName" name="txtPoSiteName" disabled>
                                             <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
                                         </select>
                                         <span id="spnSiteName" class="text-danger"></span>
