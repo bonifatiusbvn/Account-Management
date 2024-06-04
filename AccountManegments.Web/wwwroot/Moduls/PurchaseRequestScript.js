@@ -185,6 +185,7 @@ function ClearPurchaseRequestTextBox() {
         $('#txtItemName').val('');
         $('#txtUnitType').val('');
         $('#txtQuantity').val('');
+        $('#PurchaseRequestId').val('');
 
         var button = document.getElementById("btnpurchaseRequest");
         if ($('#PurchaseRequestId').val() == '') {
@@ -293,7 +294,12 @@ function UpdatePurchaseRequestDetails() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-        siteName = $("#txtPoSiteName").val();
+        if (RoleUserId == 3) {
+            siteName = $("#txtPoSiteName").val();
+        }
+        else {
+            siteName = $("#txtPRsiteid").val();
+        }
 
         var objData = {
             Pid: $('#PurchaseRequestId').val(),
@@ -305,6 +311,7 @@ function UpdatePurchaseRequestDetails() {
             PrNo: $('#prNo').val(),
             CreatedBy: $('#txtcreatedby').val(),
         }
+
 
         $.ajax({
             url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
