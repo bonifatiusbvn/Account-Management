@@ -9,6 +9,7 @@
 @* <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> *@
 <style>
 
+
     #searchItemname-error, #txtUnitType-error, #txtQuantity-error {
         color: red;
     }
@@ -83,7 +84,7 @@
                                                         <th>Unit</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
-                                                        @if(UserSession.SiteId=="")
+                                                        @if (UserSession.SiteId == "")
                                                         {
                                                             <th>SiteName</th>
                                                         }
@@ -153,7 +154,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreatePurchaseRequest">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Purchase Request</h5>
+            <h5 class="m-0 me-2 text-white" id="changeName"></h5>
 
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -200,17 +201,6 @@
                                         <span id="spnSiteName" class="text-danger"></span>
                                     </div>
                                 }
-                                else
-                                {
-                                    <div class="col-12" id="siteDetails">
-                                        <label class="form-label">Site</label>
-                                        <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
-                                            <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
-                                        </select>
-                                        <span id="spnSiteName" class="text-danger"></span>
-                                    </div>
-                                }
-
 
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>

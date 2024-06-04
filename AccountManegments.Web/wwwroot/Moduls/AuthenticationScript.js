@@ -19,19 +19,24 @@ function CreateUser() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                debugger
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('createUser');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/User/UserListView';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
                 }
+                siteloaderhide();
             }
         });
     }
@@ -59,6 +64,7 @@ function GetSiteDetails() {
 
 function ClearUserTextBox() {
     resetUserForm();
+    $('#changeName').html('Create User');
     $('#txtUserid').val('');
     $('#txtFirstName').val('');
     $('#txtLastName').val('');
@@ -86,6 +92,7 @@ function DisplayUserDetails(UserId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update User');
             $('#txtUserid').val(response.id);
             $('#txtFirstName').val(response.firstName);
             $('#txtLastName').val(response.lastName);
@@ -222,18 +229,24 @@ function UpdateUserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('createUser');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/User/UserListView';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
                 }
+                siteloaderhide();
             },
         })
     }

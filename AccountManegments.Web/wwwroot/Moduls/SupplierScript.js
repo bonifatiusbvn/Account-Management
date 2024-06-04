@@ -25,21 +25,27 @@ function CreateSupplier() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                debugger
-                siteloaderhide();
                 if (Result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSupplier');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Supplier/SupplierList';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
                 }
+                siteloaderhide();
             },
             error: function (xhr, status, error) {
-                debugger
+
                 siteloaderhide();
                 toastr.error("An error occurred while creating Supplier");
             }
@@ -54,6 +60,7 @@ function CreateSupplier() {
 
 function ClearSupplierTextBox() {
     resetSupplierForm();
+    $('#changeName').html('Create Supplier');
     $('#txtSupplierid').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
@@ -84,6 +91,7 @@ function DisplaySupplierDetails(SupplierId) {
         dataType: 'json',
         success: function (response) {
 
+            $('#changeName').html('Update Supplier');
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);
@@ -238,11 +246,24 @@ function UpdateSupplierDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (Result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSupplier');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllUserTable();
+                    toastr.success(Result.message);
+                } else {
+                    toastr.error(Result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/Supplier/SupplierList';
-                }, 2000);
             },
         })
     }

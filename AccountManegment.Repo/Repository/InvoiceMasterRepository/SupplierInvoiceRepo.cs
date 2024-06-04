@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
@@ -69,19 +70,19 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 var SupplierInvoice = Context.SupplierInvoices.Where(a => a.Id == Id).FirstOrDefault();
-                var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b=>b.RefInvoiceId == Id).ToList();
+                var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b => b.RefInvoiceId == Id).ToList();
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
                     response.message = "Supplierinvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
                     response.code = 200;
                 }
-                if(InvoiceItemList != null)
+                if (InvoiceItemList != null)
                 {
-                   foreach (var item in InvoiceItemList)
-                   {
+                    foreach (var item in InvoiceItemList)
+                    {
                         Context.SupplierInvoiceDetails.Remove(item);
-                   }
+                    }
                 }
                 Context.SaveChanges();
             }
@@ -224,9 +225,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                                      select new POItemDetailsModel
                                                      {
-                                                         ItemName = a.Item,
+                                                         ItemId = a.ItemId,
+                                                         ItemName = i.ItemName,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
@@ -428,7 +431,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     var supplierInvoiceDetail = new SupplierInvoiceDetail()
                     {
                         RefInvoiceId = supplierInvoice.Id,
-                        Item = item.ItemName,
+                        ItemId = item.ItemId,
+                        ItemName = item.ItemName,
                         UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
                         Price = item.PricePerUnit,
@@ -447,6 +451,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 await Context.SaveChangesAsync();
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Invoice inserted successfully.";
+                response.data = supplierInvoice.Id;
             }
             catch (Exception ex)
             {
@@ -456,44 +461,57 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public string CheckSupplierInvoiceNo()
+        public string CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
             try
             {
-                var lastInvoice = Context.SupplierInvoices
-                                         .OrderByDescending(e => e.CreatedOn).Where(a => a.InvoiceNo != "PayOut")
-                                         .FirstOrDefault();
-                var currentDate = DateTime.Now;
-                int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
-                int lastYear = currentYear - 1;
-
-                string supplierInvoiceId;
-                if (lastInvoice == null)
+                var CompanyDetails = Context.Companies.FirstOrDefault(e => e.CompanyId == CompanyId);
+                if (CompanyDetails == null)
                 {
-                    supplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
+                    throw new Exception("Company details not found.");
                 }
                 else
                 {
-                    string lastInvoiceNumber = lastInvoice.InvoiceNo.Substring(24);
-                    if (int.TryParse(lastInvoiceNumber, out int lastInvoiceNumberValue))
+                    var lastInvoice = Context.SupplierInvoices
+                        .Where(a => a.InvoiceNo != "PayOut" && a.CompanyId == CompanyId)
+                        .OrderByDescending(e => e.CreatedOn)
+                        .FirstOrDefault();
+
+                    var currentDate = DateTime.Now;
+                    int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
+                    int lastYear = currentYear - 1;
+
+                    string supplierInvoiceId;
+                    string trimmedInvoicePef = CompanyDetails.InvoicePef.Trim();
+                    if (lastInvoice == null)
                     {
-                        int newInvoiceNumberValue = lastInvoiceNumberValue + 1;
-                        supplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/" + newInvoiceNumberValue.ToString("D3");
+                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001"; ;
                     }
                     else
                     {
-                        throw new Exception("Supplier invoice id does not have the expected format.");
+                        string lastInvoiceNumber = lastInvoice.InvoiceNo.Substring(lastInvoice.InvoiceNo.LastIndexOf('/') + 1);
+                        Match match = Regex.Match(lastInvoiceNumber, @"\d+$");
+                        if (match.Success)
+                        {
+                            int lastInvoiceNumberValue = int.Parse(match.Value);
+                            int newInvoiceNumberValue = lastInvoiceNumberValue + 1;
+                            supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/{newInvoiceNumberValue:D3}";
+                        }
+                        else
+                        {
+                            throw new Exception("Supplier invoice id does not have the expected format.");
+                        }
                     }
+                    return supplierInvoiceId;
                 }
-                return supplierInvoiceId;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error generating supplier invoice number.", ex);
+                string error;
+                error = "Error generating supplier invoice number.";
+                return error;
             }
         }
-
-
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId)
         {
             try

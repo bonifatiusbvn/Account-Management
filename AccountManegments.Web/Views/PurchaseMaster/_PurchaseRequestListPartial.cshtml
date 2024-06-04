@@ -12,7 +12,7 @@
 
 
     <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
-        <td>@item.Item</td>
+        <td>@item.ItemName</td>
         <td>@item.UnitName</td>
         <td>@item.Quantity</td>
         <td>
@@ -31,7 +31,7 @@
                     <span class="badge bg-light-warning text-warning w-100">Pending</span>
                 }
             }
-            
+
         </td>
         @if (UserSession.SiteId == "")
         {

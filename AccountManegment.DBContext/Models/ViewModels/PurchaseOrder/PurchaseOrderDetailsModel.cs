@@ -12,7 +12,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public Guid Poid { get; set; }
 
-        public string Item { get; set; } = null!;
+        public Guid? ItemId { get; set; }
+        public string ItemName { get; set; }
+
 
         public int UnitTypeId { get; set; }
 

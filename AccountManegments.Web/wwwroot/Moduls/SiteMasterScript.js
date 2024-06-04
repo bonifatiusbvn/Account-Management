@@ -71,6 +71,7 @@ function DisplaySiteDetails(SiteId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Site');
             $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
@@ -172,11 +173,24 @@ function CreateSite() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (Result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSite');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllSiteListTable();
+                    toastr.success(Result.message);
+                } else {
+                    toastr.error(Result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                }, 2000);
             },
         })
     }
@@ -214,11 +228,24 @@ function UpdateSiteDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                if (Result.code == 200) {
+                    var offcanvasElement = document.getElementById('createSite');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllSiteListTable();
+                    toastr.success(Result.message);
+                } else {
+                    toastr.error(Result.message);
+                }
                 siteloaderhide();
-                toastr.success(Result.message);
-                setTimeout(function () {
-                    window.location = '/SiteMaster/SiteListView';
-                }, 2000);
             }
         })
     }
@@ -230,6 +257,7 @@ function UpdateSiteDetails() {
 
 function ClearSiteTextBox() {
     resetSiteForm();
+    $('#changeName').html('Create Site');
     $('#txtSiteid').val('');
     $('#txtSiteName').val('');
     $('#txtContectPersonName').val('');

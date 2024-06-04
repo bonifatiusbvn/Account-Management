@@ -71,27 +71,32 @@ function AddCompany() {
             StateId: $('#dropState').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
-
+            InvoicePef: $('#txtInvoicePrefix').val(),
         }
-
         $.ajax({
             url: '/Company/AddCompany',
             type: 'post',
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('createCompany');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllCompanyTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Company/CreateCompany';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
                 }
+                siteloaderhide();
 
             },
 
@@ -104,6 +109,7 @@ function AddCompany() {
 }
 function ClearTextBox() {
     resetCompanyForm();
+    $('#changeName').html('Create Company');
     $('#txtCompanyid').val('');
     $('#txtCompanyName').val('');
     $('#txtGstNo').val('');
@@ -113,6 +119,7 @@ function ClearTextBox() {
     $('#ddlCity').val('');
     $('#dropState').val('');
     $('#txtPincode').val('');
+    $('#txtInvoicePrefix').val('');
     var button = document.getElementById("btncompany");
     if ($('#txtCompanyid').val() == '') {
         button.textContent = "Create";
@@ -129,6 +136,7 @@ function GetCompnaytById(CompanyId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Compnay');
             $('#txtCompanyid').val(response.companyId);
             $('#txtCompanyName').val(response.companyName);
             $('#txtGstNo').val(response.gstno);
@@ -139,8 +147,9 @@ function GetCompnaytById(CompanyId) {
             $('#dropState').val(response.stateId);
             $('#txtCountry').val(response.countryId);
             $('#txtPincode').val(response.pincode);
+            $("#txtInvoicePrefix").val(response.invoicePef),
 
-            setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
+                setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
 
             var button = document.getElementById("btncompany");
             if ($('#txtCompanyid').val() != '') {
@@ -169,6 +178,7 @@ function SelectCompanyDetails(CompanyId, element) {
         success: function (response) {
             siteloaderhide();
             if (response) {
+
                 $('#dspCompanyid').val(response.companyId);
                 $('#dspCompanyName').val(response.companyName);
                 $('#dspGstNo').val(response.gstno);
@@ -179,6 +189,7 @@ function SelectCompanyDetails(CompanyId, element) {
                 $('#dspState').val(response.stateName);
                 $('#dspCountry').val(response.countryName);
                 $('#dspPincode').val(response.pincode);
+                $('#dspInvoicePrefix').val(response.invoicePef);
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -204,6 +215,7 @@ function UpdateCompany() {
             StateId: $('#dropState').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
+            InvoicePef: $("#txtInvoicePrefix").val(),
         }
         $.ajax({
             url: '/Company/UpdateCompany',
@@ -211,19 +223,24 @@ function UpdateCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('createCompany');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllCompanyTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/Company/CreateCompany';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
                 }
-
+                siteloaderhide();
             },
         })
     }
@@ -302,6 +319,10 @@ function validateAndCreateCompany() {
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required",
+            txtInvoicePrefix: {
+                required: true,
+                maxlength: 6,
+            }, 
         },
         messages: {
             txtCompanyName: "Please Enter CompanyName",
@@ -318,6 +339,10 @@ function validateAndCreateCompany() {
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country",
+            txtInvoicePrefix: {
+                required: "Please Enter Invoice Prefix",
+                maxlength: "Invoice Prefix must be of 6 characters only"
+            }
         }
     })
     var isValid = true;

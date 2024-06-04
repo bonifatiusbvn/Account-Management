@@ -145,7 +145,7 @@ function GetItemDetails() {
 $(document).ready(function () {
     $('#txtItemId').change(function () {
         var Text = $("#txtItemId Option:Selected").text();
-        /*var txtItemName = $(this).val();*/
+
         $("#txtItemName").val(Text);
     });
 });
@@ -185,6 +185,7 @@ function ClearItemInWordTextBox() {
     }
     else {
         resetErrorsMessages();
+        $('#changeName').html('Create Item InWord');
         $('#txtItemName').val('');
         $('#txtItemInWordid').val('');
         $('#txtItemId').val('');
@@ -264,6 +265,7 @@ function EditItemInWordDetails(InwordId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Item InWord');
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);
@@ -483,7 +485,7 @@ function InsertMultipleItemInWordDetails() {
             ReceiverName: $("#txtReceiverName").val(),
             Date: $("#txtIteminwordDate").val(),
         };
-        debugger
+
         var form_data = new FormData();
         form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 
@@ -499,19 +501,24 @@ function InsertMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('CreateItemInWord');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemInWordListTable();
                     toastr.success(Result.message);
-                    setTimeout(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    }, 2000);
-                }
-                else {
-                    siteloaderhide();
+                } else {
                     toastr.error(Result.message);
-                    window.location = '/ItemInWord/ItemInWord';
                 }
+                siteloaderhide();
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
@@ -567,19 +574,24 @@ function UpdateMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    siteloaderhide();
-                    toastr.success(Result.message); 
-                    setTimeout(function () {
-                        window.location = '/ItemInWord/ItemInWord';
-                    }, 2000); 
-                }
-                else {
-                    siteloaderhide();
+                    var offcanvasElement = document.getElementById('CreateItemInWord');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllItemInWordListTable();
+                    toastr.success(Result.message);
+                } else {
                     toastr.error(Result.message);
-                    window.location = '/ItemInWord/ItemInWord';
                 }
+                siteloaderhide();
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
