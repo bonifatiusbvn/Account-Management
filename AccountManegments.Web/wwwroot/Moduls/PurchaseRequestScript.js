@@ -101,7 +101,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
             if (response) {
                 $('#dspPrNo').val(response.prNo);
                 $('#dspPId').val(PurchaseId);
-                $('#dspItem').val(response.item);
+                $('#dspItem').val(response.itemName);
                 $('#dspUnitName').val(response.unitName);
                 $('#dspQuantity').val(response.quantity);
                 $('#dspSiteName').val(response.siteName);
@@ -140,7 +140,7 @@ function CreatePurchaseRequest() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreatePurchaseRequest');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -153,9 +153,9 @@ function CreatePurchaseRequest() {
                     }
 
                     AllPurchaseRequestListTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             }
@@ -308,7 +308,7 @@ function UpdatePurchaseRequestDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreatePurchaseRequest');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -321,9 +321,10 @@ function UpdatePurchaseRequestDetails() {
                     }
 
                     AllPurchaseRequestListTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
+                    siteloaderhide();
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             },
@@ -745,7 +746,6 @@ function InsertMultiplePurchaseOrderDetails() {
             var orderDetails = [];
             var AddressDetails = [];
             $(".product").each(function () {
-                debugger
                 var orderRow = $(this);
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
@@ -874,7 +874,6 @@ $(document).ready(function () {
 function AddShippingAddress() {
     siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
-
         var quantity = $("#txtmdqty").val();
         var address = $("#txtmdAddress").val();
         var ItemQuantity = $("#TotalProductQuantity").text();

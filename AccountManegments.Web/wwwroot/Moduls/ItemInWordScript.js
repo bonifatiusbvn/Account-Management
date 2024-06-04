@@ -499,7 +499,7 @@ function InsertMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreateItemInWord');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -512,9 +512,9 @@ function InsertMultipleItemInWordDetails() {
                     }
 
                     AllItemInWordListTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             },
@@ -572,7 +572,7 @@ function UpdateMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreateItemInWord');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -585,9 +585,9 @@ function UpdateMultipleItemInWordDetails() {
                     }
 
                     AllItemInWordListTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             },

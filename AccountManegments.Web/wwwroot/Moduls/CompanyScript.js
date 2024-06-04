@@ -79,7 +79,7 @@ function AddCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('createCompany');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -92,9 +92,9 @@ function AddCompany() {
                     }
 
                     AllCompanyTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
 
@@ -220,7 +220,7 @@ function UpdateCompany() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('createCompany');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -233,9 +233,9 @@ function UpdateCompany() {
                     }
 
                     AllCompanyTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             },

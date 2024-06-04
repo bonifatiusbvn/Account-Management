@@ -19,7 +19,7 @@ function CreateUser() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('createUser');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -32,9 +32,9 @@ function CreateUser() {
                     }
 
                     AllUserTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             }
@@ -227,7 +227,7 @@ function UpdateUserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                if (result.code == 200) {
+                if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('createUser');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -240,9 +240,9 @@ function UpdateUserDetails() {
                     }
 
                     AllUserTable();
-                    toastr.success(result.message);
+                    toastr.success(Result.message);
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(Result.message);
                 }
                 siteloaderhide();
             },

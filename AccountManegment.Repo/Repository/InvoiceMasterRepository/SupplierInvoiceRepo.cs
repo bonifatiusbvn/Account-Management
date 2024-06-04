@@ -225,9 +225,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                                      select new POItemDetailsModel
                                                      {
                                                          ItemId = a.ItemId,
+                                                         ItemName = i.ItemName,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
