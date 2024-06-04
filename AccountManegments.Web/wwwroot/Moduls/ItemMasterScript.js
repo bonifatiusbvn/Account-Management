@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 function downloadFile() {
     siteloadershow();
-    var fileUrl = '/uploadexcelfile/itemmasterdetails.xlsx';
+    var fileUrl = '/uploadexcelfile/ItemMastersDetails.xlsx';
 
     var link = document.createElement('a');
 
