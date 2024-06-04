@@ -137,12 +137,14 @@ namespace AccountManagement.API.Controllers
         }
 
         [HttpGet]
-        [Route("CheckSupplierInvoiceNo")]
-        public IActionResult CheckSupplierInvoiceNo()
+        [Route("CheckSuppliersInvoiceNo")]
+        public IActionResult CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
-            var checkInvoiceNo = SupplierInvoice.CheckSupplierInvoiceNo();
+
+            var checkInvoiceNo = SupplierInvoice.CheckSuppliersInvoiceNo(CompanyId);
             return Ok(new { code = 200, data = checkInvoiceNo });
         }
+
         [HttpPost]
         [Route("GetSupplierInvoiceDetailsById")]
         public async Task<IActionResult> GetSupplierInvoiceDetailsById(Guid SupplierId)

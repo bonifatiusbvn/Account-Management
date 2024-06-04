@@ -71,9 +71,8 @@ function AddCompany() {
             StateId: $('#dropState').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
-
+            InvoicePef : $('#txtInvoicePrefix').val(),
         }
-
         $.ajax({
             url: '/Company/AddCompany',
             type: 'post',
@@ -113,6 +112,7 @@ function ClearTextBox() {
     $('#ddlCity').val('');
     $('#dropState').val('');
     $('#txtPincode').val('');
+    $('#txtInvoicePrefix').val('');
     var button = document.getElementById("btncompany");
     if ($('#txtCompanyid').val() == '') {
         button.textContent = "Create";
@@ -139,6 +139,7 @@ function GetCompnaytById(CompanyId) {
             $('#dropState').val(response.stateId);
             $('#txtCountry').val(response.countryId);
             $('#txtPincode').val(response.pincode);
+            $("#txtInvoicePrefix").val(response.invoicePef),
 
             setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
 
@@ -179,6 +180,7 @@ function SelectCompanyDetails(CompanyId, element) {
                 $('#dspState').val(response.stateName);
                 $('#dspCountry').val(response.countryName);
                 $('#dspPincode').val(response.pincode);
+                $('#dspInvoicePrefix').val(response.invoicePef);
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -204,6 +206,7 @@ function UpdateCompany() {
             StateId: $('#dropState').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
+            InvoicePef: $("#txtInvoicePrefix").val(),
         }
         $.ajax({
             url: '/Company/UpdateCompany',
@@ -302,6 +305,7 @@ function validateAndCreateCompany() {
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required",
+            txtInvoicePrefix: "required",
         },
         messages: {
             txtCompanyName: "Please Enter CompanyName",
@@ -318,6 +322,7 @@ function validateAndCreateCompany() {
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country",
+            txtInvoicePrefix: "Please Enter Invoice Prefix",
         }
     })
     var isValid = true;

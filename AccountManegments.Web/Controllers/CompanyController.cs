@@ -82,6 +82,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedOn = DateTime.Now,
                     Pincode = AddCompany.Pincode,
                     CreatedBy = _userSession.UserId,
+                    InvoicePef = AddCompany.InvoicePef,
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(company, "Company/AddCompany");

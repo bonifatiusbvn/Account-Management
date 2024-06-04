@@ -21,17 +21,24 @@ namespace AccountManagement.DBContext.Models.ViewModels.CompanyModels
 
         public string? Area { get; set; }
 
+        public string? InvoicePef { get; set; }
+
         public int CityId { get; set; }
+
         public string? CityName { get; set; }
 
         public int StateId { get; set; }
+
         public string? StateName { get; set; }
 
         public int Country { get; set; }
+
         public string? CountryName { get; set; }
 
         public string Pincode { get; set; } = null!;
+
         public bool? IsDelete { get; set; }
+
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

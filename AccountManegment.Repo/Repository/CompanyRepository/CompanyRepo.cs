@@ -45,6 +45,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     CreatedOn = DateTime.Now,
                     Pincode = AddCompany.Pincode,
                     CreatedBy = AddCompany.CreatedBy,
+                    InvoicePef = AddCompany.InvoicePef,
                     IsDelete = false,
 
                 };
@@ -100,6 +101,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     Country = a.Country,
                     Pincode = a.Pincode,
                     CreatedOn = a.CreatedOn,
+                    InvoicePef = a.InvoicePef,
                 });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -208,6 +210,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                                Pincode = a.Pincode,
                                CreatedBy = a.CreatedBy,
                                CreatedOn = a.CreatedOn,
+                               InvoicePef = a.InvoicePef,
                                FullAddress = a.Address + "-" + a.Area + "," + b.CityName + "," + c.StatesName + "-" + a.Pincode
                            }).First();
                 return company;
@@ -236,6 +239,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company.StateId = UpdateCompany.StateId;
                     company.Country = UpdateCompany.Country;
                     company.Pincode = UpdateCompany.Pincode;
+                    company.InvoicePef = UpdateCompany.InvoicePef;
                 }
                 Context.Companies.Update(company);
                 Context.SaveChanges();

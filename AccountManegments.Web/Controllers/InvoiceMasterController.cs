@@ -1,11 +1,14 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
+using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -35,22 +38,34 @@ namespace AccountManegments.Web.Controllers
                         invoiceDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
-                }
-                else
-                {
-                    ApiResponseModel Response = await APIServices.GetAsync("", "SupplierInvoice/CheckSupplierInvoiceNo");
-
-                    if (Response.code == 200)
-                    {
-                        ViewBag.SupplierInvoiceNo = Response.data;
-                    }
-                }
+                }   
                 return View(invoiceDetails);
             }
             catch (Exception ex)
             {
                 throw ex;
 
+            }
+        }
+
+        public async Task<IActionResult> CheckSuppliersInvoiceNo(Guid? CompanyId)
+        {
+            try
+            {
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/CheckSuppliersInvoiceNo?CompanyId=" + CompanyId);
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Data = response.data, Code = 200 });
+                }
+                else
+                {
+                    return BadRequest(new { Code = 400,Message = "Failed to create invoice",});
+                }
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 

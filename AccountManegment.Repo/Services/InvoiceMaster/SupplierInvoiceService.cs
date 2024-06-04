@@ -53,9 +53,10 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.UpdateSupplierInvoice(SupplierInvoiceDetails);
         }
 
-        public string CheckSupplierInvoiceNo()
+
+        public string CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
-            return SupplierInvoice.CheckSupplierInvoiceNo();
+            return SupplierInvoice.CheckSuppliersInvoiceNo(CompanyId);
         }
 
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId)

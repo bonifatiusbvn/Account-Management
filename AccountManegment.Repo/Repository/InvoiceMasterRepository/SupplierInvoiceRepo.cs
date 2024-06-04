@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
@@ -456,44 +457,57 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public string CheckSupplierInvoiceNo()
+        public string CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
             try
             {
-                var lastInvoice = Context.SupplierInvoices
-                                         .OrderByDescending(e => e.CreatedOn).Where(a => a.InvoiceNo != "PayOut")
-                                         .FirstOrDefault();
-                var currentDate = DateTime.Now;
-                int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
-                int lastYear = currentYear - 1;
-
-                string supplierInvoiceId;
-                if (lastInvoice == null)
+                var CompanyDetails = Context.Companies.FirstOrDefault(e => e.CompanyId == CompanyId);
+                if (CompanyDetails == null)
                 {
-                    supplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
+                    throw new Exception("Company details not found.");
                 }
                 else
                 {
-                    string lastInvoiceNumber = lastInvoice.InvoiceNo.Substring(24);
-                    if (int.TryParse(lastInvoiceNumber, out int lastInvoiceNumberValue))
+                    var lastInvoice = Context.SupplierInvoices
+                        .Where(a => a.InvoiceNo != "PayOut" && a.CompanyId == CompanyId)
+                        .OrderByDescending(e => e.CreatedOn)
+                        .FirstOrDefault();
+
+                    var currentDate = DateTime.Now;
+                    int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
+                    int lastYear = currentYear - 1;
+
+                    string supplierInvoiceId;
+                    string trimmedInvoicePef = CompanyDetails.InvoicePef.Trim();
+                    if (lastInvoice == null)
                     {
-                        int newInvoiceNumberValue = lastInvoiceNumberValue + 1;
-                        supplierInvoiceId = $"DMInfra/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/" + newInvoiceNumberValue.ToString("D3");
+                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001"; ;
                     }
                     else
                     {
-                        throw new Exception("Supplier invoice id does not have the expected format.");
+                        string lastInvoiceNumber = lastInvoice.InvoiceNo.Substring(lastInvoice.InvoiceNo.LastIndexOf('/') + 1);
+                        Match match = Regex.Match(lastInvoiceNumber, @"\d+$");
+                        if (match.Success)
+                        {
+                            int lastInvoiceNumberValue = int.Parse(match.Value);
+                            int newInvoiceNumberValue = lastInvoiceNumberValue + 1;
+                            supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/{newInvoiceNumberValue:D3}";
+                        }
+                        else
+                        {
+                            throw new Exception("Supplier invoice id does not have the expected format.");
+                        }
                     }
+                    return supplierInvoiceId;
                 }
-                return supplierInvoiceId;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error generating supplier invoice number.", ex);
+                string error;
+                error = "Error generating supplier invoice number.";
+                return error;
             }
         }
-
-
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId)
         {
             try

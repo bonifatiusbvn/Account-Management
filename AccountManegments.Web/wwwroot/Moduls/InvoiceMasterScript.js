@@ -6,6 +6,7 @@ GetCompanyDetail();
 GetSupplierDetail();
 
 function clearInvoicetextbox() {
+    var SiteId = $("#inputsiteId").val()
     if ($("#inputsiteId").val() == "") {
         Swal.fire({
             title: "Kindly select site on dashboard.",
@@ -131,10 +132,10 @@ function GetCompanyDetail() {
 }
 
 $(document).ready(function () {
-
     $('#textCompanyName').change(function () {
 
         getCompanyDetail($(this).val());
+        getInvoiceNumber($(this).val());
     });
 });
 
@@ -316,6 +317,7 @@ $(document).on("click", "#addItemButton", function () {
 });
 
 function InsertMultipleSupplierItem() {
+    debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -344,7 +346,7 @@ function InsertMultipleSupplierItem() {
         }
         var InvoiceDetails = {
             SiteId: siteid,
-            InvoiceNo: $("#textInvoiceId").val(),
+            InvoiceNo: $("#textInvoicePrefix").val(),
             Date: $("#textOrderDate").val(),
             SupplierId: $("#textSupplierName").val(),
             CompanyId: $("#textCompanyName").val(),
@@ -430,7 +432,7 @@ function UpdateInvoiceDetails() {
         var InvoiceDetails = {
             Id: $('#textSupplierInvoiceId').val(),
             SiteId: siteid,
-            InvoiceNo: $("#textInvoiceId").val(),
+            InvoiceNo: $("#textInvoicePrefix").val(),
             Date: $("#textOrderDate").val(),
             SupplierId: $("#textSupplierName").val(),
             CompanyId: $("#textCompanyName").val(),
@@ -995,6 +997,28 @@ function getSupplierDetail(SupplierId) {
     });
 }
 
+function getInvoiceNumber(CompanyId) {
+    debugger
+    siteloadershow();
+    $.ajax({
+        url: '/InvoiceMaster/CheckSuppliersInvoiceNo?CompanyId=' + CompanyId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            debugger
+            siteloaderhide();
+            if (response.code == 200) {
+                debugger
+                siteloaderhide();
+                $('#textInvoicePrefix').val(response.data);
+            } else {
+                siteloaderhide();
+                toastr.error('Empty response received.');
+            }
+        },
+    });
+}
 function getCompanyDetail(CompanyId) {
     siteloadershow();
     $.ajax({
@@ -1006,7 +1030,7 @@ function getCompanyDetail(CompanyId) {
             siteloaderhide();
             if (response) {
                 $('#textCompanyGstNo').val(response.gstno);
-                $('#textCompanyBillingAddress').val(response.fullAddress);
+                $('#textCompanyBillingAddress').val(response.fullAddress);  
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');

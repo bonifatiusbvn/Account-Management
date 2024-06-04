@@ -8,7 +8,7 @@
 }
 
 <style>
-    #paymentStatus-error, #textSupplierName-error, #textCompanyName-error, #txtgst-error, #textSupplierInvoiceNo-error {
+    #paymentStatus-error, #textSupplierName-error, #textCompanyName-error, #txtgst-error, #textSupplierInvoiceNo-error,#txtproductquantity-error {
         color: red;
     }
 
@@ -79,7 +79,8 @@
                                                                 <h6 class="mb-0">Invoice Details</h6>
                                                             </div>
                                                             <div class="col">
-                                                                <input type="text" class="form-control" id="textInvoiceId" value="@ViewBag.SupplierInvoiceNo" readonly />
+                                                                <input type="text" class="form-control" id="textInvoiceId" value="@ViewBag.SupplierInvoiceNo" hidden />
+                                                                <input type="text" class="form-control" id="textInvoicePrefix" readonly />
                                                             </div>
                                                         </div>
                                                     </div>
