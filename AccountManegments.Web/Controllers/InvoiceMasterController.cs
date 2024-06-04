@@ -203,7 +203,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code, postuser.data });
                 }
                 else
                 {
