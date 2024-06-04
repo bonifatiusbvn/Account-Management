@@ -71,7 +71,7 @@ function AddCompany() {
             StateId: $('#dropState').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
-            InvoicePef : $('#txtInvoicePrefix').val(),
+            InvoicePef: $('#txtInvoicePrefix').val(),
         }
         $.ajax({
             url: '/Company/AddCompany',
@@ -109,6 +109,7 @@ function AddCompany() {
 }
 function ClearTextBox() {
     resetCompanyForm();
+    $('#changeName').html('Create Company');
     $('#txtCompanyid').val('');
     $('#txtCompanyName').val('');
     $('#txtGstNo').val('');
@@ -135,6 +136,7 @@ function GetCompnaytById(CompanyId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Compnay');
             $('#txtCompanyid').val(response.companyId);
             $('#txtCompanyName').val(response.companyName);
             $('#txtGstNo').val(response.gstno);
@@ -147,7 +149,7 @@ function GetCompnaytById(CompanyId) {
             $('#txtPincode').val(response.pincode);
             $("#txtInvoicePrefix").val(response.invoicePef),
 
-            setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
+                setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
 
             var button = document.getElementById("btncompany");
             if ($('#txtCompanyid').val() != '') {
@@ -176,6 +178,7 @@ function SelectCompanyDetails(CompanyId, element) {
         success: function (response) {
             siteloaderhide();
             if (response) {
+
                 $('#dspCompanyid').val(response.companyId);
                 $('#dspCompanyName').val(response.companyName);
                 $('#dspGstNo').val(response.gstno);

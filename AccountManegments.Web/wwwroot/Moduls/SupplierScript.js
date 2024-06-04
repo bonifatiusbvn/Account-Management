@@ -60,6 +60,7 @@ function CreateSupplier() {
 
 function ClearSupplierTextBox() {
     resetSupplierForm();
+    $('#changeName').html('Create Supplier');
     $('#txtSupplierid').val('');
     $('#txtSupplierName').val('');
     $('#txtEmail').val('');
@@ -90,6 +91,7 @@ function DisplaySupplierDetails(SupplierId) {
         dataType: 'json',
         success: function (response) {
 
+            $('#changeName').html('Update Supplier');
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
             $('#txtEmail').val(response.email);

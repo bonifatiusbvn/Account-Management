@@ -124,16 +124,18 @@ function CreatePurchaseRequest() {
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
-        siteName = $("#txtPoSiteName").val();
-
+        siteName = $("#SiteIdinPR").val();
+        debugger
         var objData = {
+
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
-            Item: $('#txtItemName').val(),
+            ItemName: $('#txtItemName').val(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
         }
+        debugger
         $.ajax({
             url: '/PurchaseMaster/CreatePurchaseRequest',
             type: 'post',
@@ -179,6 +181,7 @@ function ClearPurchaseRequestTextBox() {
     }
     else {
         resetPRForm();
+        $('#changeName').html('Create PurchaseRequest');
         $('#txtItemName').val('');
         $('#txtUnitType').val('');
         $('#txtQuantity').val('');
@@ -247,6 +250,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update PurchaseRequest');
             $('#PurchaseRequestId').val(response.pid);
             $('#prNo').val(response.prNo);
             $('#searchItemname').val(response.itemId);

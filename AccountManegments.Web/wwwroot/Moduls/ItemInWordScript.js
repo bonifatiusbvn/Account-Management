@@ -185,6 +185,7 @@ function ClearItemInWordTextBox() {
     }
     else {
         resetErrorsMessages();
+        $('#changeName').html('Create Item InWord');
         $('#txtItemName').val('');
         $('#txtItemInWordid').val('');
         $('#txtItemId').val('');
@@ -264,6 +265,7 @@ function EditItemInWordDetails(InwordId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Item InWord');
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitTypeId);
             $('#txtItemId').val(response.itemId);

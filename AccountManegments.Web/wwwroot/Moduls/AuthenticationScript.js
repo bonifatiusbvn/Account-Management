@@ -64,6 +64,7 @@ function GetSiteDetails() {
 
 function ClearUserTextBox() {
     resetUserForm();
+    $('#changeName').html('Create User');
     $('#txtUserid').val('');
     $('#txtFirstName').val('');
     $('#txtLastName').val('');
@@ -91,6 +92,7 @@ function DisplayUserDetails(UserId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update User');
             $('#txtUserid').val(response.id);
             $('#txtFirstName').val(response.firstName);
             $('#txtLastName').val(response.lastName);

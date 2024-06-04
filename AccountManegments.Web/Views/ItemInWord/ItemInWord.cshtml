@@ -6,15 +6,6 @@
     ViewData["Title"] = "Inward Challan";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
-<style>
-    .fixed-button {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        z-index: 1000;
-    }
-</style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
         <form class="position-relative">
@@ -147,7 +138,7 @@
 
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreateItemInWord">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white">Create Item Inword</h5>
+            <h5 class="m-0 me-2 text-white" id="changeName"></h5>
             <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
@@ -182,12 +173,12 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Receiver Name</label>
-                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName" >
+                                    <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName">
                                     <span id="spnReceiverName" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Vehicle Number</label>
-                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber" >
+                                    <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber">
                                     <span id="spnVehicleNumber" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
@@ -250,7 +241,7 @@
 </style>
 
 @section Scripts {
-    <script src="~/moduls/iteminwordscript.js" asp-append-version="true"></script>  
+    <script src="~/moduls/iteminwordscript.js" asp-append-version="true"></script>
 }
 
 
