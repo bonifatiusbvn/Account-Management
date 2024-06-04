@@ -1,6 +1,7 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
+    debugger
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
@@ -321,16 +322,6 @@ function validateAndCreateSupplier() {
     SupplierForm = $("#SupplierForm").validate({
         rules: {
             txtSupplierName: "required",
-            txtPhoneNo: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10
-            },
-            txtEmail: {
-                required: true,
-                email: true
-            },
             txtGST: "required",
             txtBuilding: "required",
             txtArea: "required",
@@ -342,23 +333,10 @@ function validateAndCreateSupplier() {
             },
             ddlCity: "required",
             dropState: "required",
-            ddlCountry: "required",
-            txtBank: "required",
-            txtAccount: "required",
-            txtIFFC: "required",
+            ddlCountry: "required"
         },
         messages: {
             txtSupplierName: "Please Enter SupplierName",
-            txtPhoneNo: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
-            },
-            txtEmail: {
-                required: "Please Enter Email",
-                email: "Please enter a valid email address"
-            },
             txtGST: "Please Enter GST",
             txtBuilding: "Please Enter Building",
             txtArea: "Please Enter Area",
@@ -370,10 +348,7 @@ function validateAndCreateSupplier() {
             },
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
-            ddlCountry: "Please Enter Country",
-            txtBank: "Please Enter Bank",
-            txtAccount: "Please Enter Account",
-            txtIFFC: "Please Enter IFFC",
+            ddlCountry: "Please Enter Country"
         }
     });
     var isValid = true;
