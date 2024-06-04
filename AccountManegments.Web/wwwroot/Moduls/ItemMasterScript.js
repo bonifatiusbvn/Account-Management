@@ -103,6 +103,7 @@ function GetAllUnitType() {
 }
 function ClearTextBox() {
     resetItemForm();
+    $('#changeName').html('Create Item');
     $('#txtItemName').val('');
     $('#txtUnitType').val('');
     $('#txtPricePerUnit').val('');
@@ -184,6 +185,7 @@ function EditItemDetails(ItemId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Item');
             $('#txtItemid').val(response.itemId);
             $('#txtItemName').val(response.itemName);
             $('#txtUnitType').val(response.unitType);

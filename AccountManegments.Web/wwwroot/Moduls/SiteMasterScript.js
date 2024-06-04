@@ -71,6 +71,7 @@ function DisplaySiteDetails(SiteId) {
         dataType: 'json',
         success: function (response) {
             siteloaderhide();
+            $('#changeName').html('Update Site');
             $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
             $('#txtContectPersonName').val(response.contectPersonName);
@@ -256,6 +257,7 @@ function UpdateSiteDetails() {
 
 function ClearSiteTextBox() {
     resetSiteForm();
+    $('#changeName').html('Create Site');
     $('#txtSiteid').val('');
     $('#txtSiteName').val('');
     $('#txtContectPersonName').val('');

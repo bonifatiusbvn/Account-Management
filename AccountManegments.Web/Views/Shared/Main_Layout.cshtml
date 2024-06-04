@@ -42,7 +42,19 @@
 
     <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
     <link href="~/assets/css/style.css" rel="stylesheet" />
+    <style>
+        .fixed-button {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+        }
 
+        .fixedButton {
+            position: fixed;
+            top: 80px;
+            right: 170px;
+        }
+    </style>
 
     <title>@ViewData["Title"] - @_Configuration.GetSection("ProjectName")?.Value </title>
 </head>
@@ -312,7 +324,7 @@
                                         <div class="d-flex flex-row align-items-center gap-2">
                                             <img src="~/assets/images/avatars/06.png" alt="" class="rounded-circle" width="54" height="54">
                                             <div class="">
-                                                <h6 class="mb-0 dropdown-user-name">@_userSession.FullName</h6>
+                                                <p class="mb-0 dropdown-user-name">@_userSession.FullName</p>
                                                 <small class="mb-0 dropdown-user-designation text-secondary">@_userSession.RoleName</small>
                                             </div>
                                         </div>
