@@ -12,10 +12,6 @@
         <td>@item.CompanyName</td>
         <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
-        @if (_userSession.UserRole == 3)
-        {
-            <td>@item.SiteName</td>
-        }
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
         {
             <td>

@@ -5,21 +5,6 @@ GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
 
-function clearInvoicetextbox() {
-    var SiteId = $("#inputsiteId").val()
-    if ($("#inputsiteId").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
-    }
-    else {
-        window.location.href = '/InvoiceMaster/CreateInvoice';
-    }
-}
-
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();

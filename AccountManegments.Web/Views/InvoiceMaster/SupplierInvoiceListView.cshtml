@@ -10,7 +10,7 @@
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Add == true)))
             {
-                <button type="button" class="btn btn-primary fixed-button" onclick="clearInvoicetextbox()"><i class="lni lni-circle-plus"></i>Create Invoice</button>
+                <a type="button" class="btn btn-primary fixed-button" href="/InvoiceMaster/CreateInvoice"><i class="lni lni-circle-plus"></i>Create Invoice</a>
             }
         </form>
     </div>
@@ -72,10 +72,6 @@
                                                         <th>Company</th>
                                                         <th>GST Amount</th>
                                                         <th>Total Amount</th>
-                                                        @if (_userSession.UserRole == 3)
-                                                        {
-                                                            <th>SiteName</th>
-                                                        }
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>
