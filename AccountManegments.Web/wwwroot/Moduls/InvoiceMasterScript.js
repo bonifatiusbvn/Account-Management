@@ -320,6 +320,7 @@ function InsertMultipleSupplierItem() {
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
+
             var ItemDetails = [];
             $(".product").each(function () {
                 var orderRow = $(this);

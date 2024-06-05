@@ -197,7 +197,7 @@ function EditItemDetails(ItemId) {
             $('#txtHSNCode').val(response.hsncode);
             $('#txtIsApproved').val(response.isApproved);
             var button = document.getElementById("btnitem");
-            if ($('#txtItemid').val() != '') {debugger
+            if ($('#txtItemid').val() != '') {
                 button.textContent = "Update";
             }
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));

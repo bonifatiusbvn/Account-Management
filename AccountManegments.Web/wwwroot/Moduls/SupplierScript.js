@@ -1,7 +1,7 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
-    debugger
+
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {

@@ -125,7 +125,7 @@ function CreatePurchaseRequest() {
         var siteName = null;
         var RoleUserId = $('#userRoleId').val();
         siteName = $("#SiteIdinPR").val();
-        debugger
+
         var objData = {
 
             UnitTypeId: $('#txtUnitType').val(),
@@ -135,7 +135,7 @@ function CreatePurchaseRequest() {
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
         }
-        debugger
+
         $.ajax({
             url: '/PurchaseMaster/CreatePurchaseRequest',
             type: 'post',
