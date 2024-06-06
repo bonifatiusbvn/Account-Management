@@ -1045,8 +1045,6 @@ function getCompanyDetails(CompanyId) {
     });
 }
 
-
-
 function UpdateMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
@@ -1172,7 +1170,6 @@ function DeletePODetails(POId) {
     });
 }
 
-
 function PopulateUnitTypeDropdown(itemId) {
 
     $.ajax({
@@ -1197,8 +1194,6 @@ function otherPayment() {
 Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
     e.value = paymentSign + "0.00"
 });
-
-
 function isData() {
     var e = document.getElementsByClassName("plus"),
         t = document.getElementsByClassName("minus");
@@ -1214,8 +1209,6 @@ function isData() {
         }
     })
 }
-
-
 
 
 var count = 0;
@@ -1254,8 +1247,6 @@ function AddNewRow(Result) {
     }
 }
 
-
-
 function updateRowNumbers() {
     $(".product-id").each(function (index) {
         $(this).text(index + 1);
@@ -1288,7 +1279,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount() {
-    
+
     $(".product").each(function () {
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -1302,8 +1293,6 @@ function updateProductTotalAmount() {
     });
 }
 
-
-
 function updateProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
     var newQuantity = quantityInput + increment;
@@ -1313,8 +1302,6 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-
-
 
 function updateTotals() {
 
@@ -1348,8 +1335,6 @@ function removeItem(btn) {
     updateRowNumbers();
     updateTotals();
 }
-
-
 
 var taxRate = .125,
     shippingRate = 65,
