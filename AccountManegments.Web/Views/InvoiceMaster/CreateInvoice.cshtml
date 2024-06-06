@@ -168,6 +168,7 @@
                                                         <th>#</th>
                                                         <th>Product</th>
                                                         <th>HSN</th>
+                                                        <th>Price</th>
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
 
@@ -182,8 +183,6 @@
 
                                                             </div>
                                                         </th>
-
-                                                        <th>Price</th>
                                                         <th>
                                                             <div class="row">
                                                                 <div class="col-sm-6">
@@ -321,7 +320,14 @@
                                                                         Roundoff
                                                                     </th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-roundOff" placeholder="₹0.00" />
+                                                                        @if(Model.Roundoff != null)
+                                                                        {
+                                                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.Roundoff" readonly />
+                                                                        }
+                                                                        else{
+                                                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" placeholder="₹0.00" />
+                                                                        }
+                                                                        
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">

@@ -118,6 +118,7 @@
                                 <th class="border" scope="col">Price</th>
                                 <th class="border" scope="col">Quantity</th>
                                 <th class="border" scope="col">Unit</th>
+                                <th class="border" scope="col">Discount</th>
                                 <th class="border" scope="col">Amount</th>
                             </tr>
                         </thead>
@@ -137,6 +138,7 @@
                                     <td class="border" id="txtHSN">@item.PricePerUnit</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.UnitTypeName</td>
+                                    <td class="border" id="txtper">@item.DiscountAmount (@item.DiscountPer%)</td>
                                     <td class="border" id="txttotal">₹@subtotal</td>
                                 </tr>
                                 index++;
@@ -148,6 +150,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
+                                <td class="border"></td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -155,7 +158,17 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
+                                <td class="border"></td>
                                 <td class="border">₹@firstItem.TotalGstamount</td>
+                            </tr>
+                            <tr>
+                                <td class="border"></td>
+                                <td class="text-end border">Discount</td>
+                                <td class="border"></td>
+                                <td class="border"></td>
+                                <td class="border"></td>
+                                <td class="border"></td>
+                                <td class="border">@firstItem.TotalDiscount</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -164,10 +177,12 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
+                                <td class="border">@firstItem.Roundoff</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
                                 <td class="text-end border">Total</td>
+                                <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>

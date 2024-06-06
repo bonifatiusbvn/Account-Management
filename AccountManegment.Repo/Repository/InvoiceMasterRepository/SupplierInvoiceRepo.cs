@@ -237,6 +237,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          UnitTypeName = b.UnitName,
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = a.Gstper,
+                                                         DiscountAmount = a.DiscountAmount,
+                                                         DiscountPer=a.DiscountPer,
                                                      }).ToList();
 
 

@@ -200,7 +200,6 @@ $(document).ready(function () {
             updateDiscount($(this).closest(".product"))
         }
     });
-    $('#cart-roundOff').val(0);
     $(document).on('keydown', '#cart-roundOff', function (event) {debugger
 
         if (event.keyCode == 13) {
@@ -335,7 +334,6 @@ $(document).ready(function () {
             textSupplierName: "required",
             textCompanyName: "required",
             paymentStatus: "required",
-            textSupplierInvoiceNo: "required",
             textSupplierMobile: {
                 required: true,
                 digits: true,
@@ -348,7 +346,6 @@ $(document).ready(function () {
             textSupplierName: "Select Supplier Name",
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
-            textSupplierInvoiceNo: "Enter Supplier Invoice No",
             textSupplierMobile: {
                 required: "Please Enter Phone Number",
                 digits: "Please enter a valid 10-digit phone number",

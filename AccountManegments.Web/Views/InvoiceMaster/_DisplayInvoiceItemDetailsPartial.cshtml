@@ -13,6 +13,10 @@
             <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly />
         </td>
         <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
+            <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.PricePerUnit" />
+        </td>
+        <td class="text-start">
             <div class="">
                 @if (item.Quantity == 0)
                 {
@@ -35,20 +39,33 @@
         <td class="text-start">
             <div class="row">
                 <div class="col-sm-6">
-                    <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0" >
+                    @if(item.DiscountAmount != null)
+                    {
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="@item.DiscountAmount">
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0">
+                    }
+                    
                 </div>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0"/>
+                    @if(item.DiscountPer != null)
+                    {
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="@item.DiscountPer" />
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0" />
+                    }
+                    
               </div>
               
             </div>
            
            
         </td>
-        <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
-            <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.PricePerUnit" />
-        </td>
+        
         <td class="text-start">
             <div class="row">
                 <div class="col-sm-6">
@@ -62,7 +79,7 @@
         </td>
         <td class="text-start">
             <div>
-                <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" value="@item.ItemAmount" readonly />
+                <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" value="@item.TotalAmount" readonly />
             </div>
         </td>
         <td class="product-removal">
