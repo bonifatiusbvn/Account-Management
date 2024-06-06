@@ -35,11 +35,11 @@
                 </select>
             </div>
         </td>
-       
+
         <td class="text-start">
             <div class="row">
                 <div class="col-sm-6">
-                    @if(item.DiscountAmount != null)
+                    @if (item.DiscountAmount != null)
                     {
                         <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="@item.DiscountAmount">
                     }
@@ -47,10 +47,10 @@
                     {
                         <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0">
                     }
-                    
+
                 </div>
                 <div class="col-sm-6">
-                    @if(item.DiscountPer != null)
+                    @if (item.DiscountPer != null)
                     {
                         <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="@item.DiscountPer" />
                     }
@@ -58,21 +58,21 @@
                     {
                         <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0" />
                     }
-                    
-              </div>
-              
+
+                </div>
+
             </div>
-           
-           
+
+
         </td>
-        
+
         <td class="text-start">
             <div class="row">
                 <div class="col-sm-6">
-                    <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" />
+                    <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" oninput="preventEmptyValue(this)" />
                 </div>
                 <div class="col-sm-6">
-            <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
+                    <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
                 </div>
 
             </div>
