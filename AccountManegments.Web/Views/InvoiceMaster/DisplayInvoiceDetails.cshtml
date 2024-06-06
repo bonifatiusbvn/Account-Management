@@ -8,7 +8,9 @@
     .border-right {
         border-right: 2px solid black;
     }
+
 </style>
+
 @{
     var firstItem = Model;
     decimal? totalAmount = 0;
@@ -80,7 +82,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note Date</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <p class="text-muted text-uppercase"><b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Destination</label>
@@ -103,7 +105,7 @@
                         </div>
                         <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted"><b>Dispatched from Rakhial,Ahemdabad</b></p>
+                            <p class="text-muted"><b>Dispatched from Rakhial, Ahemdabad</b></p>
                         </div>
                     </div>
                 </div>
@@ -139,8 +141,6 @@
                                 </tr>
                                 index++;
                             }
-                            <tr>
-                            </tr>
                             <tr>
                                 <td class="border"></td>
                                 <td class="text-end border">FREIGHT CHARGES</td>
@@ -265,16 +265,15 @@
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
                                 <a class="btn btn-primary btn-ecomm" onclick="printInvoiceDiv();"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
-                                @* <a href="javascript:;" class="btn btn-white btn-ecomm"><i class="bx bx-refresh"></i> Update Cart</a> *@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

@@ -93,14 +93,15 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 var ItemInWordList = (from a in Context.ItemInwords
                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                       join c in Context.Sites on a.SiteId equals c.SiteId
+                                      join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                       where a.IsDeleted == false && (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId)
                                       select new ItemInWordModel
                                       {
                                           InwordId = a.InwordId,
                                           SiteId = a.SiteId,
-                                          SiteName=c.SiteName,
+                                          SiteName = c.SiteName,
                                           ItemId = a.ItemId,
-                                          Item = a.Item,
+                                          Item = i.ItemName,
                                           UnitTypeId = a.UnitTypeId,
                                           Quantity = a.Quantity,
                                           DocumentName = a.DocumentName,
@@ -180,13 +181,14 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                 itemInWordList = (from a in Context.ItemInwords.Where(x => x.InwordId == InwordId)
                                   join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                   join c in Context.Sites on a.SiteId equals c.SiteId
+                                  join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                   select new ItemInWordMasterView
                                   {
                                       InwordId = a.InwordId,
                                       SiteId = a.SiteId,
                                       SiteName = c.SiteName,
                                       ItemId = a.ItemId,
-                                      Item = a.Item,
+                                      Item = i.ItemName,
                                       UnitTypeId = a.UnitTypeId,
                                       UnitName = b.UnitName,
                                       Quantity = a.Quantity,

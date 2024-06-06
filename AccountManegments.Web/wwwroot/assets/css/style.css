@@ -1597,12 +1597,13 @@ tr.active {
 .flex-shrink-0.mt-sm-0.mt-3.border p {
     font-size: 12px;
     font-family: sans-serif;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .product-quantity {
     width: 38%;
 }
+
 .input-step {
     display: flex;
     height: 35px;
@@ -1610,12 +1611,12 @@ tr.active {
 }
 
 .ac-shippingadd .ac-columns {
-    display:flex;
+    display: flex;
 }
 
-.ac-shippingadd .ac-columns label{
-    width:35%
-}
+    .ac-shippingadd .ac-columns label {
+        width: 35%
+    }
 
 /*.card.ac-invoice-total {
     position: relative;
@@ -1629,30 +1630,32 @@ tr.active {
 .row.ac-item {
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 10px;
-  
     font: caption;
     margin: 8px 2px 0 0px;
 }
 
-.row.ac-item div {
-    position: relative;
-    top: 0px;
-    padding-top: 2px;
-}
-.row.ac-item.order2 {
-    top: 9px;
-}
+    .row.ac-item div {
+        position: relative;
+        top: 0px;
+        padding-top: 2px;
+    }
+
+    .row.ac-item.order2 {
+        top: 9px;
+    }
+
     .row.ac-item.order3 {
         top: 6px;
     }
 
-.row.ac-item.order1 {
-    top: 6px;
-}
+    .row.ac-item.order1 {
+        top: 6px;
+    }
 
 .table tr th:last-child {
-   padding-left:35px;
+    padding-left: 35px;
 }
+
 .offcanvas.offcanvas-end.show {
     width: 35% !important;
 }
@@ -1684,9 +1687,69 @@ img.displayImage {
     font-weight: bolder;
     color: red;
 }
+
 .holder img {
     max-width: 135px;
     max-height: 99px;
     padding: 5px;
     border-radius: 15px;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 20mm;
+    }
+
+    body {
+        margin: 0;
+        font-size: 12px;
+    }
+
+    .card {
+        page-break-inside: avoid;
+    }
+
+    .border {
+        border: 1px solid black !important;
+    }
+
+    .text-muted {
+        color: black !important;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .container,
+    .row,
+    .col-xxl-9,
+    .card-body,
+    .table {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+        .table thead {
+            background-color: #f8f8f8;
+        }
+
+        .table th,
+        .table td {
+            padding: 5px;
+        }
+
+    .d-print-none {
+        display: none !important;
+    }
+}
+
+@media screen {
+    .table th,
+    .table td {
+        padding: 10px;
+    }
 }
