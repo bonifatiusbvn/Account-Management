@@ -379,6 +379,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 supplierInvoice.PaymentStatus = SupplierInvoiceDetail.PaymentStatus;
                 supplierInvoice.ShippingAddress = SupplierInvoiceDetail.ShippingAddress;
                 supplierInvoice.Date = SupplierInvoiceDetail.Date;
+                supplierInvoice.Roundoff= SupplierInvoiceDetail.Roundoff;
+                supplierInvoice.TotalDiscount= SupplierInvoiceDetail.TotalDiscount;
                 Context.SupplierInvoices.Update(supplierInvoice);
                 Context.SaveChanges();
                 response.code = 200;
