@@ -31,17 +31,34 @@
                 </select>
             </div>
         </td>
+       
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" oninput="preventEmptyValue(this)" />
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0" >
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0"/>
+              </div>
+              
+            </div>
+           
+           
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0">
+            <input type="text" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
+            <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.PricePerUnit" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" maxlength="4" oninput="preventEmptyValue(this)" />
-        </td>
-        <td class="text-start">
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="text" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" />
+                </div>
+                <div class="col-sm-6">
             <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
+                </div>
+
+            </div>
         </td>
         <td class="text-start">
             <div>
@@ -57,4 +74,8 @@
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
+
+    <script type="text/javascript">
+        $('#txtdiscountpercentage').keyup(function (e) { debugger })
+    </script>
 }

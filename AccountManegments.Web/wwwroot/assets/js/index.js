@@ -776,8 +776,6 @@ var options = {
     }
   };
 
-  var chart = new ApexCharts(document.querySelector("#chart10"), options);
-  chart.render();
 
 
 

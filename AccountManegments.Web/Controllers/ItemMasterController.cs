@@ -407,7 +407,7 @@ namespace AccountManegments.Web.Controllers
                     Items = JsonConvert.DeserializeObject<ItemMasterModel>(response.data.ToString());
                     Items.RowNumber = Items.RowNumber;
                 }
-                return PartialView("~/Views/InvoiceMaster/_DisplayItemDetailsPartial.cshtml", Items);
+                return PartialView("~/Views/InvoiceMaster/_DisplayInvoiceItemDetailsPartial.cshtml", Items);
             }
             catch (Exception ex)
             {
@@ -434,7 +434,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     //Items.RowNumber = Items.RowNumber;
                 }
-                return PartialView("~/Views/InvoiceMaster/_DisplayItemDetailsPartial.cshtml", Items);
+                return PartialView("~/Views/InvoiceMaster/_DisplayInvoiceItemDetailsPartial.cshtml", Items);
             }
             catch (Exception ex)
             {

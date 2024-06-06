@@ -33,7 +33,7 @@
             </div>
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" oninput="preventEmptyValue(this)" />
+            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" onclick="fn_productpriceUpdate(this)" />
         </td>
         <td class="text-start">
             <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" />

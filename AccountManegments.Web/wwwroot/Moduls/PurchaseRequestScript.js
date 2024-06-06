@@ -1288,7 +1288,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount() {
-
+    
     $(".product").each(function () {
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());

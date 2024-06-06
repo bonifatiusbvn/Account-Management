@@ -39,6 +39,7 @@ function filterallItemTable() {
 }
 
 function SerchItemDetailsById(Id, inputField) {
+    clearItemErrorMessage();
     siteloadershow();
     var qty = $(inputField).closest('.ac-item').find('.product-quantity').val();
     var Item = {
@@ -107,6 +108,8 @@ $(document).ready(function () {
         $(this).closest('tr').remove();
         $('.add-addresses').prop('disabled', false);
     });
+
+   
 });
 
 function GetItemDetailsList() {
@@ -169,6 +172,56 @@ $(document).ready(function () {
     today = yyyy + '-' + mm + '-' + dd;
     $("#textOrderDate").val(today);
     $("#textOrderDate").prop("disabled", true);
+
+    
+
+    $(document).on('input', '#txtdiscountamount' , function (event) {
+
+        var value = $(this).val();
+        value = value.replace(/[^0-9]/g, '');
+        $(this).val(value);
+    });
+    $(document).on('keydown','#txtproductquantity, #txtproductamount, #txtgst', function (event) {
+        if (event.keyCode == 13) {
+            var gstvalue = $('#txtgst').val();
+            if (gstvalue > 100) {
+                toastr.warning("GST% cannot be greater than 100%");
+                row.find("#txtgst").val(100);
+            }
+            updateProductTotalAmount();
+            updateTotals();
+        }
+    });
+    $(document).on('keydown', '#txtdiscountpercentage', function (event) {
+        if (event.keyCode == 13) {
+            var value = $(this).val();
+            if (value > 100) {
+                toastr.warning("Discount cannot be greater than 100%");
+                row.find("#txtdiscountamountPer").val(100);
+            }
+            updateDiscount($(this).closest(".product"))
+        }
+    });
+    $(document).on('keydown', '#txtdiscountamount', function (event) {
+        if (event.keyCode == 13) {
+            var valuePer = $(this).val();
+            var amount = $('#txtproductamount').val();
+            
+            if (valuePer > amount) {
+                
+                toastr.warning("Amount cannot be greater than Item price");
+                row.find("#txtdiscountamount").val(amount);
+            }
+            updateDiscount($(this).closest(".product"))
+        }
+    });
+    $('#cart-roundOff').val(0);
+    $(document).on('keydown', '#cart-roundOff', function (event) {debugger
+
+        if (event.keyCode == 13) {
+            updateTotals();
+        }
+    });
 });
 
 
@@ -298,12 +351,26 @@ $(document).ready(function () {
             textCompanyName: "required",
             paymentStatus: "required",
             textSupplierInvoiceNo: "required",
+            textSupplierMobile: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            textSupplierAddress: "required",
         },
         messages: {
             textSupplierName: "Select Supplier Name",
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
             textSupplierInvoiceNo: "Enter Supplier Invoice No",
+            textSupplierMobile: {
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
+            },
+            textSupplierAddress: "Enter supplier address",
         }
     });
 });
@@ -312,9 +379,10 @@ function clearItemErrorMessage() {
     $("#spnitembutton").text("");
 }
 
-$(document).on("click", "#addItemButton", function () {
-    clearItemErrorMessage();
-});
+//$(document).on("click", "#addItemButton", function () {
+//    clearItemErrorMessage();
+
+//});
 
 function InsertMultipleSupplierItem() {
     siteloadershow();
@@ -328,6 +396,7 @@ function InsertMultipleSupplierItem() {
                     ItemId: orderRow.find("#txtItemId").val(),
                     UnitType: orderRow.find("#UnitTypeId").val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
+                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     PricePerUnit: orderRow.find("#txtproductamount").val(),
                     GSTamount: orderRow.find("#txtgstAmount").val(),
@@ -357,6 +426,8 @@ function InsertMultipleSupplierItem() {
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddress: $("#textmdAddress").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
+                Roundoff: $('#cart-roundOff').val(),
+                TotalDiscount: $('#cart-discount').val(),
                 ItemList: ItemDetails,
             }
 
@@ -609,25 +680,67 @@ function bindEventListeners() {
         });
     });
 }
-
+function preventEmptyValue(input) {
+    if (input.value === "") {
+        input.value = 1;
+    }
+}
 function updateProductTotalAmount() {
     $(".product").each(function () {
+        
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
+        var quantity = parseFloat(row.find("#txtproductquantity").val());
         var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-        if (isNaN(discountprice)) {
-            discountprice = 0;
-        }
-        var totalprice_afterdiscount = productPrice - discountprice;
-        var quantity = parseInt(row.find("#txtproductquantity").val());
+        var AmtWithDisc = productPrice - discountprice;
+
+
         var gst = parseFloat(row.find("#txtgst").val());
-        var totalGst = (totalprice_afterdiscount * quantity * gst) / 100;
-        var totalAmount = totalprice_afterdiscount * quantity + totalGst;
+        
+        var totalGst = (AmtWithDisc * quantity * gst) / 100;
+       
+        var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
 
         row.find("#txtgstAmount").val(totalGst.toFixed(2));
-        row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
+        row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
+
+        row.find("#txtproductamount").val(AmtWithDisc.toFixed(2));
     });
 }
+
+function updateDiscount(row) {
+    
+    var productPrice = parseFloat(row.find("#txtproductamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var hiddenAmount = parseFloat(row.find("#productamount").val());
+    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+    var productAmt = productPrice * quantity;
+    if (isNaN(discountprice) || isNaN(discountPercentage)) {
+
+        parseFloat(row.find("#txtdiscountamount").val(0));
+        parseFloat(row.find("#txtdiscountpercentage").val(0));
+        parseFloat(row.find("#txtproductamount").val(hiddenAmount));
+        updateProductTotalAmount(row);
+        updateTotals();
+        return
+    }
+    
+    
+   
+    
+    if (discountprice == 0 && discountPercentage > 0) {
+        discountprice = productPrice * discountPercentage / 100;
+        row.find("#txtdiscountamount").val(discountprice);
+    }
+    
+    var discountperbyamount = discountprice / productPrice * 100;
+    row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+
+    updateProductTotalAmount(row);
+    updateTotals();
+}
+
 
 
 
@@ -641,46 +754,44 @@ function updateProductQuantity(row, increment) {
     }
 }
 
-
-function updateDiscount(row) {
-    var discountPrice = parseFloat(row.find("#txtdiscountamount").val());
-
-    if (isNaN(discountPrice)) {
-        discountPrice = 0;
-    }
-    row.find("#txtdiscountamount").val(discountPrice.toFixed(2));
-
-    updateProductTotalAmount(row);
-    updateTotals();
-}
-
-
-
 function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
     var TotalItemQuantity = 0;
+    var TotalDiscount = 0;
 
-    $(".product").each(function () {
+    var roundoffvalue = $('#cart-roundOff').val();
+   
+    $(".product").each(function () {debugger
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
+        var discountprice = parseFloat(row.find("#txtdiscountamount").val());
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
         totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
+        TotalDiscount += discountprice;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
-    $("#cart-total").val(totalAmount.toFixed(2));
+    $("#cart-discount").val(TotalDiscount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal);
     $("#TotalProductGST").html(totalGst.toFixed(2));
     $("#TotalProductAmount").html(totalAmount.toFixed(2));
+
+    if (roundoffvalue != 0) {
+        debugger
+        var roundtotal = parseFloat(totalAmount) + parseFloat(roundoffvalue);
+        $("#cart-total").val(roundtotal)
+    } else {
+        $("#cart-total").val(totalAmount.toFixed(2));
+    }
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();
@@ -1038,10 +1149,10 @@ function getCompanyDetail(CompanyId) {
     });
 }
 
-$(document).on("click", "#addItemButton", function () {
+//$(document).on("click", "#addItemButton", function () {
 
-    clearItemErrorMessages();
-});
+//    clearItemErrorMessages();
+//});
 
 function clearItemErrorMessages() {
     $("#spnitembutton").text("");
@@ -1091,4 +1202,5 @@ function addShippingAddress() {
         });
     }
 }
+
 

@@ -521,68 +521,62 @@ function preventEmptyValue(input) {
 }
 
 
-$(document).ready(function () {
 
-    bindEventListeners();
+//$(document).ready(function () {
 
-    $(document).on('input', '.product-quantity', function () {
-        var row = $(this).closest('.product');
-        updateProductTotalAmount(row);
-        updateTotals();
-    });
+//    bindEventListeners();
 
-
-    $(document).on('keydown', '.product-quantity', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
-    });
+//    $(document).on('input', '.product-quantity', function () {
+//        var row = $(this).closest('.product');
+//        updateProductTotalAmount(row);
+//        updateTotals();
+//    });
 
 
-    $(document).on('input', '#txtproductamount', function () {
-        var row = $(this).closest('.product');
-        updateProductTotalAmount(row);
-        updateTotals();
-    });
+//    $(document).on('keydown', '.product-quantity', function (event) {
+//        if (event.key === 'Enter') {
+//            $(this).blur();
+//        }
+//    });
 
 
-    $(document).on('keydown', '#txtproductamount', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
-    });
+//    $(document).on('input', '#txtproductamount', function () {
+//        var row = $(this).closest('.product');
+//        updateProductTotalAmount(row);
+//        updateTotals();
+//    });
+    
 
-    $(document).on('input', '#txtgst', function () {
-        var row = $(this).closest('.product');
-        updateProductTotalAmount(row);
-        updateTotals();
-    });
+//    $(document).on('keydown', '#txtproductamount', function (event) {
+//        if (event.key === 'Enter') {
+//            $(this).blur();
+//        }
+//    });
 
-    $(document).on('keydown', '#txtgst', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
-    });
+//    $(document).on('input', '#txtgst', function () {
+//        var row = $(this).closest('.product');
+//        updateProductTotalAmount(row);
+//        updateTotals();
+//    });
 
-    $(document).on('input', '#txtdiscountamount', function () {
-        var row = $(this).closest('.product');
-        updateProductTotalAmount(row);
-        updateTotals();
-    });
+//    $(document).on('keydown', '#txtgst', function (event) {
+//        if (event.key === 'Enter') {
+//            $(this).blur();
+//        }
+//    });
 
-    $(document).on('keydown', '#txtdiscountamount', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
-    });
+//    $(document).on('keydown', '#txtdiscountamount', function (event) {
+//        if (event.key === 'Enter') {
+//            $(this).blur();
+//        }
+//    });
 
-    $(document).on('focusout', '.product-quantity', function () {
-        $(this).trigger('input');
-    });
-});
-
+//    $(document).on('focusout', '.product-quantity', function () {
+//        $(this).trigger('input');
+//    });
 
 
+//});
 
 
 

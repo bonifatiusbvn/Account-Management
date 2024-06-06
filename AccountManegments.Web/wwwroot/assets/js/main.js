@@ -163,7 +163,7 @@ $(function () {
     }
 
 
-    new PerfectScrollbar(".header-notifications-list")
+    /*new PerfectScrollbar(".header-notifications-list")*/
 
 
     // Tooltops
