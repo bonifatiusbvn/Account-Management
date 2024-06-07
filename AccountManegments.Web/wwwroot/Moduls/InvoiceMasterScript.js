@@ -751,9 +751,11 @@ function updateDiscount(that) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtdiscountamount").val(discountprice.toFixed(2));
     }
-
-    var discountperbyamount = discountprice / productPrice * 100;
-    row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    if (discountPercentage == 0 && discountprice > 0) {
+        var discountperbyamount = discountprice / productPrice * 100;
+        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    }
+    
 
     updateProductTotalAmount(row);
     updateTotals();
