@@ -74,7 +74,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (SupplierInvoice != null)
                 {
                     Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "Supplierinvoice" + " " + SupplierInvoice.Id + "is removed successfully!";
+                    response.message = "Supplierinvoice is removed successfully!";
                     response.code = 200;
                 }
                 if (InvoiceItemList != null)

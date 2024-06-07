@@ -796,6 +796,7 @@ function updateTotals() {
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-discount").val(TotalDiscount.toFixed(2));
+    $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal);
     $("#TotalProductGST").html(totalGst.toFixed(2));
