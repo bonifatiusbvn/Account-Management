@@ -5,16 +5,12 @@
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId" onclick="updateProductTotalAmount(this)">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
-            <p id="txtItemName" style="padding-top:5px !important;">@item.ItemName</p>
+            <p id="txtItemName" style="padding-top:5px !important; ">@item.ItemName</p>
             <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@item.ItemId" />
             <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@item.UnitType" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly />
-        </td>
-        <td class="text-start">
-            <input type="text" class="product-amount form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" />
-            <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.PricePerUnit" />
+            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly style="width: 75px;" />
         </td>
         <td class="text-start">
             <div class="">
@@ -30,7 +26,7 @@
         </td>
         <td class="text-start">
             <div class="">
-                <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 151px;">
+                <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 75px;">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
             </div>
@@ -44,11 +40,11 @@
                 <div class="col-sm-6">
                     @if (item.DiscountAmount != null)
                     {
-                        <input type="text" class="product-discountamount form-control bg-light border-0 " id="txtdiscountamount" value="@item.DiscountAmount">
+                        <input type="text" class="product-discountamount form-control bg-light border-0 " id="txtdiscountamount" value="@item.DiscountAmount" />
                     }
                     else
                     {
-                        <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0">
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountamount" value="0" onclick="preventEmptyValueInDicount(this)" />
                     }
 
                 </div>
@@ -59,7 +55,7 @@
                     }
                     else
                     {
-                        <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0" />
+                        <input type="text" class="form-control bg-light border-0" id="txtdiscountpercentage" value="0" onclick="preventEmptyValueInDicount(this)"  />
                     }
 
                 </div>
