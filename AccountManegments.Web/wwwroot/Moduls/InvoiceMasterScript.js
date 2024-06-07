@@ -159,23 +159,34 @@ $(document).ready(function () {
     $("#textOrderDate").prop("disabled", true);
 
 
-    $(document).on('keydown', '#txtproductquantity, #txtgst', function (event) {
+    $(document).on('keydown', '#txtproductquantity', function (event) {
+        if (event.keyCode == 13) {
+            var productRow = $(this).closest(".product");
+            var productFocus = productRow.find('#txtproductamount');
+            updateProductTotalAmount(productRow);
+            updateTotals();
+            productFocus.focus();
+        }
+    });
+    $(document).on('keydown', '#txtgst', function (event) {
         if (event.keyCode == 13) {
             var gstvalue = $('#txtgst').val();
             var productRow = $(this).closest(".product");
+            var roundoffFocus = $('#cart-roundOff');
             if (gstvalue > 100) {
                 toastr.warning("GST% cannot be greater than 100%");
                 row.find("#txtgst").val(100);
             }
             updateProductTotalAmount(productRow);
             updateTotals();
+            roundoffFocus.focus();
         }
     });
     $(document).on('keydown', '#txtdiscountpercentage', function (event) {
         if (event.keyCode == 13) {
             var value = $(this).val();
             var productRow = $(this).closest(".product");
-
+            var gstFocus = productRow.find('#txtgst');
             if (value > 100) {
                 toastr.warning("Discount cannot be greater than 100%");
                 row.find("#txtdiscountpercentage").val(100);
@@ -183,9 +194,11 @@ $(document).ready(function () {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
                 updateProductTotalAmount(productRow);
+                gstFocus.focus();
             }
             else {
                 updateDiscount(productRow)
+                gstFocus.focus();
             }
 
         }
@@ -197,8 +210,8 @@ $(document).ready(function () {
 
             var productRow = $(this).closest(".product");
             var discountAmount = parseFloat($(this).val());
-
             var productAmount = parseFloat($(productRow).find("#productamount").val());
+            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
 
             if (discountAmount > productAmount) {
                 toastr.warning("Amount cannot be greater than Item price");
@@ -208,9 +221,11 @@ $(document).ready(function () {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
                 updateProductTotalAmount(productRow);
+                discountPercentagefocus.focus();
             }
             else {
                 updateDiscount(productRow);
+                discountPercentagefocus.focus();
             }
 
         }
@@ -221,6 +236,7 @@ $(document).ready(function () {
         if (event.keyCode == 13) {
             var productRow = $(this).closest(".product");
             var productAmount = parseFloat($(this).val());
+            var discountAmountfocus = productRow.find('#txtdiscountamount');
 
             if (!isNaN(productAmount)) {
                 productRow.find("#txtdiscountamount").val(0);
@@ -229,6 +245,8 @@ $(document).ready(function () {
             productRow.find("#productamount").val(productAmount);
             updateProductTotalAmount(productRow);
             updateTotals();
+            discountAmountfocus.focus();
+
         }
     });
     $(document).on('keydown', '#cart-roundOff', function (event) {
@@ -242,7 +260,6 @@ $(document).ready(function () {
             else {
                 updateTotals();
             }
-
         }
     });
 });
@@ -367,7 +384,6 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    debugger
     $("#CreateInvoiceForm").validate({
 
         rules: {
