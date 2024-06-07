@@ -6,14 +6,7 @@
     ViewData["Title"] = "Inward Challan";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-<style>
-    .fixed-button {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        z-index: 1000;
-    }
-</style>
+
 @section HeaderButton {
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Add == true)))
