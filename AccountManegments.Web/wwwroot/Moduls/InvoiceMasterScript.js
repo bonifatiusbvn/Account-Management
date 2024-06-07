@@ -159,13 +159,6 @@ $(document).ready(function () {
     $("#textOrderDate").prop("disabled", true);
 
 
-
-    $(document).on('input', '#txtdiscountamount', function (event) {
-
-        var value = $(this).val();
-        value = value.replace(/[^0-9]/g, '');
-        $(this).val(value);
-    });
     $(document).on('keydown', '#txtproductquantity, #txtproductamount, #txtgst', function (event) {
         if (event.keyCode == 13) {
             var gstvalue = $('#txtgst').val();
@@ -182,7 +175,7 @@ $(document).ready(function () {
             var value = $(this).val();
             if (value > 100) {
                 toastr.warning("Discount cannot be greater than 100%");
-                row.find("#txtdiscountamountPer").val(100);
+                row.find(".product-discountpercentage").val(100);
             }
             else {
                 updateDiscount($(this).closest(".product"))
@@ -191,21 +184,36 @@ $(document).ready(function () {
         }
     });
     $(document).on('keydown', '#txtdiscountamount', function (event) {
+        debugger
         if (event.keyCode == 13) {
             var discountAmount = parseFloat($(this).val());
-            var productAmount = parseFloat($("#txtproductamount").val());
+            var productAmount = parseFloat($(".product-discountamount").val());
 
             if (discountAmount > productAmount) {
                 toastr.warning("Amount cannot be greater than Item price");
             }
             else {
-                updateDiscount($(this).closest(".product"));
+                updateDiscount($(this));
             }
 
         }
     });
-    $(document).on('keydown', '#cart-roundOff', function (event) {
 
+    $(document).on('keydown', '#txtproductamount', function (event) {
+        if (event.keyCode == 13) {
+            var productRow = $(this).closest(".product");
+            var productAmount = parseFloat($(this).val());
+
+            if (!isNaN(productAmount)) {
+                productRow.find("#txtdiscountamount").val(0);
+                productRow.find("#txtdiscountpercentage").val(0);
+            }
+
+            updateProductTotalAmount();
+            updateTotals();
+        }
+    });
+    $(document).on('keydown', '#cart-roundOff', function (event) {
 
         if (event.keyCode == 13) {
             updateTotals();
@@ -669,41 +677,42 @@ function preventEmptyValue(input) {
         input.value = 1;
     }
 }
-function updateProductTotalAmount() {
-    $(".product").each(function () {
-
-        var row = $(this);
-        var productPrice = parseFloat(row.find("#txtproductamount").val());
-        var quantity = parseFloat(row.find("#txtproductquantity").val());
-        var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-        var AmtWithDisc = productPrice - discountprice;
+function updateProductTotalAmount(that) {
 
 
-        var gst = parseFloat(row.find("#txtgst").val());
-
-        var totalGst = (AmtWithDisc * quantity * gst) / 100;
-
-        var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
-
-        row.find("#txtgstAmount").val(totalGst.toFixed(2));
-        row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
-
-        row.find("#txtproductamount").val(AmtWithDisc.toFixed(2));
-    });
-}
-
-function updateDiscount(row) {
-
+    var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
     var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var AmtWithDisc = productPrice - discountprice;
+
+
+    var gst = parseFloat(row.find("#txtgst").val());
+
+    var totalGst = (AmtWithDisc * quantity * gst) / 100;
+
+    var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
+
+    row.find("#txtgstAmount").val(totalGst.toFixed(2));
+    row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
+
+    row.find("#txtproductamount").val(AmtWithDisc.toFixed(2));
+
+}
+
+function updateDiscount(that) {
+    debugger
+    var row = $(that);
+    var productPrice = parseFloat(row.find(".product-discountamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
     var hiddenAmount = parseFloat(row.find("#productamount").val());
-    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+    var discountPercentage = parseFloat(row.find(".product-discountpercentage").val());
     var productAmt = productPrice * quantity;
     if (isNaN(discountprice) || isNaN(discountPercentage)) {
 
-        parseFloat(row.find("#txtdiscountamount").val(0));
-        parseFloat(row.find("#txtdiscountpercentage").val(0));
+        parseFloat(row.find(".product-discountamount").val(0));
+        parseFloat(row.find(".product-discountpercentage").val(0));
         parseFloat(row.find("#txtproductamount").val(hiddenAmount));
         updateProductTotalAmount(row);
         updateTotals();
@@ -724,9 +733,6 @@ function updateDiscount(row) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
-
-
 
 function updateProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
