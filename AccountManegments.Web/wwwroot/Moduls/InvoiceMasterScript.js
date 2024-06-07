@@ -175,7 +175,7 @@ $(document).ready(function () {
         if (event.keyCode == 13) {
             var value = $(this).val();
             var productRow = $(this).closest(".product");
-            
+
             if (value > 100) {
                 toastr.warning("Discount cannot be greater than 100%");
                 row.find("#txtdiscountpercentage").val(100);
@@ -192,19 +192,19 @@ $(document).ready(function () {
     });
     $(document).on('keydown', '#txtdiscountamount', function (event) {
         event.stopPropagation();
-        
+
         if (event.keyCode == 13) {
-            
+
             var productRow = $(this).closest(".product");
             var discountAmount = parseFloat($(this).val());
-            
+
             var productAmount = parseFloat($(productRow).find("#productamount").val());
 
             if (discountAmount > productAmount) {
                 toastr.warning("Amount cannot be greater than Item price");
                 productRow.find("#txtdiscountamount").val(0);
                 return;
-            } else if (discountAmount <= 0 || discountAmount == ""){
+            } else if (discountAmount <= 0 || discountAmount == "") {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
                 updateProductTotalAmount(productRow);
@@ -217,7 +217,7 @@ $(document).ready(function () {
     });
 
     $(document).on('keydown', '#txtproductamount', function (event) {
-        
+
         if (event.keyCode == 13) {
             var productRow = $(this).closest(".product");
             var productAmount = parseFloat($(this).val());
@@ -235,14 +235,14 @@ $(document).ready(function () {
 
         if (event.keyCode == 13) {
             var roundoff = $('#cart-roundOff').val();
-            if (isNaN(roundoff) || roundoff <= 0 || roundoff == "") {
+            if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
                 $("#cart-roundOff").val(0);
                 updateTotals();
             }
             else {
                 updateTotals();
             }
-           
+
         }
     });
 });
@@ -367,6 +367,7 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
+    debugger
     $("#CreateInvoiceForm").validate({
 
         rules: {
@@ -394,6 +395,7 @@ $(document).ready(function () {
             textSupplierAddress: "Enter supplier address",
         }
     });
+
 });
 
 function clearItemErrorMessage() {
@@ -705,7 +707,7 @@ function preventEmptyValue(input) {
 }
 
 function updateProductTotalAmount(that) {
-    
+
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var hiddenproductPrice = parseFloat(row.find("#productamount").val());
@@ -727,7 +729,7 @@ function updateProductTotalAmount(that) {
 }
 
 function updateDiscount(that) {
-    
+
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -755,7 +757,7 @@ function updateDiscount(that) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
-    
+
 
     updateProductTotalAmount(row);
     updateTotals();
