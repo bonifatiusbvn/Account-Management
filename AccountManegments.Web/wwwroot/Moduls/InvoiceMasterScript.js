@@ -506,6 +506,8 @@ function UpdateInvoiceDetails() {
             UnitTypeId: $("#UnitTypeId").val(),
             Description: $("#textDescription").val(),
             SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
+            Roundoff: $('#cart-roundOff').val(),
+            TotalDiscount: $('#cart-discount').val(),
             ShippingAddress: Address,
         }
 
