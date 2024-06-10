@@ -160,7 +160,7 @@ $(document).ready(function () {
 
 
     $(document).on('keydown', '#txtproductquantity', function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
             var productRow = $(this).closest(".product");
             var productFocus = productRow.find('#txtproductamount');
             updateProductTotalAmount(productRow);
@@ -169,7 +169,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('keydown', '#txtgst', function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
             var gstvalue = $('#txtgst').val();
             var productRow = $(this).closest(".product");
             var roundoffFocus = $('#cart-roundOff');
@@ -183,7 +183,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('keydown', '#txtdiscountpercentage', function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
             var value = $(this).val();
             var productRow = $(this).closest(".product");
             var gstFocus = productRow.find('#txtgst');
@@ -206,7 +206,7 @@ $(document).ready(function () {
     $(document).on('keydown', '#txtdiscountamount', function (event) {
         event.stopPropagation();
 
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
 
             var productRow = $(this).closest(".product");
             var discountAmount = parseFloat($(this).val());
@@ -233,7 +233,7 @@ $(document).ready(function () {
 
     $(document).on('keydown', '#txtproductamount', function (event) {
 
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
             var productRow = $(this).closest(".product");
             var productAmount = parseFloat($(this).val());
             var discountAmountfocus = productRow.find('#txtdiscountamount');
@@ -251,7 +251,7 @@ $(document).ready(function () {
     });
     $(document).on('keydown', '#cart-roundOff', function (event) {
 
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
             var roundoff = $('#cart-roundOff').val();
             if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
                 $("#cart-roundOff").val(0);
@@ -670,7 +670,6 @@ function AddNewRow(Result) {
     if (!isDuplicate) {
         count++;
         $("#addnewproductlink").append(Result);
-        //updateProductTotalAmount(newProductRow);
         updateTotals();
         updateRowNumbers();
     } else {
@@ -924,136 +923,7 @@ if (null === localStorage.getItem("invoice_no") && null === localStorage.getItem
         }));
     document.getElementById("amountTotalPay").value = "$" + viewobj.order_summary.total_amount, document.getElementById("exampleFormControlTextarea1").value = viewobj.notes
 }
-//document.addEventListener("DOMContentLoaded", function () {
-//    var T = document.getElementById("invoice_form");
-//    document.getElementsByClassName("needs-validation");
-//    T.addEventListener("submit", function (e) {
-//        e.preventDefault();
-//        var t = document.getElementById("invoicenoInput").value.slice(4),
-//            e = document.getElementById("companyEmail").value,
-//            n = document.getElementById("date-field").value,
-//            o = document.getElementById("totalamountInput").value.slice(1),
-//            a = document.getElementById("choices-payment-status").value,
-//            l = document.getElementById("billingName").value,
-//            i = document.getElementById("billingAddress").value,
-//            c = document.getElementById("billingPhoneno").value.replace(/[^0-9]/g, ""),
-//            d = document.getElementById("billingTaxno").value,
-//            r = document.getElementById("shippingName").value,
-//            u = document.getElementById("shippingAddress").value,
-//            m = document.getElementById("shippingPhoneno").value.replace(/[^0-9]/g, ""),
-//            s = document.getElementById("shippingTaxno").value,
-//            p = document.getElementById("choices-payment-type").value,
-//            v = document.getElementById("cardholderName").value,
-//            g = document.getElementById("cardNumber").value.replace(/[^0-9]/g, ""),
-//            y = document.getElementById("amountTotalPay").value.slice(1),
-//            E = document.getElementById("registrationNumber").value.replace(/[^0-9]/g, ""),
-//            b = document.getElementById("companyEmail").value,
-//            I = document.getElementById("companyWebsite").value,
-//            h = document.getElementById("compnayContactno").value.replace(/[^0-9]/g, ""),
-//            _ = document.getElementById("companyAddress").value,
-//            B = document.getElementById("companyaddpostalcode").value,
-//            f = document.getElementById("cart-subtotal").value.slice(1),
-//            x = document.getElementById("cart-tax").value.slice(1),
-//            w = document.getElementById("cart-discount").value.slice(1),
-//            S = document.getElementById("cart-shipping").value.slice(1),
-//            j = document.getElementById("cart-total").value.slice(1),
-//            q = document.getElementById("exampleFormControlTextarea1").value,
-//            A = document.getElementsByClassName("product"),
-//            N = 1,
-//            C = [];
-//        Array.from(A).forEach(e => {
-//            var t = e.querySelector("#txtproductName-" + N).value,
-//                n = e.querySelector("#txtproductDescription-" + N).value,
-//                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
-//                o = parseInt(e.querySelector("#txtdiscountamount-" + N).value),
-//                p = parseInt(e.querySelector("#txtgst-" + N).value),
-//                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
-//                a = parseInt(e.querySelector("#product-qty-" + N).value),
-//                e = e.querySelector("#productPrice-" + N).value.split("$"),
-//                t = {
-//                    productName: t,
-//                    productShortDescription: n,
-//                    perUnitPrice: o,
-//                    gst: p,
-//                    perUnitWithGstprice: q,
-//                    quantity: a,
-//                    totalAmount: parseInt(e[1])
-//                };
-//            C.push(t), N++
-//        }), !1 === T.checkValidity() ? T.classList.add("was-validated") : ("edit-invoice" == options && invoice_no == t ? (objIndex = invoices.findIndex(e => e.invoice_no == t), invoices[objIndex].invoice_no = t, invoices[objIndex].customer = l, invoices[objIndex].img = "", invoices[objIndex].email = e, invoices[objIndex].date = n, invoices[objIndex].invoice_amount = o, invoices[objIndex].status = a, invoices[objIndex].billing_address = {
-//            full_name: l,
-//            address: i,
-//            phone: c,
-//            tax: d
-//        }, invoices[objIndex].shipping_address = {
-//            full_name: r,
-//            address: u,
-//            phone: m,
-//            tax: s
-//        }, invoices[objIndex].payment_details = {
-//            payment_method: p,
-//            card_holder_name: v,
-//            card_number: g,
-//            total_amount: y
-//        }, invoices[objIndex].company_details = {
-//            legal_registration_no: E,
-//            email: b,
-//            website: I,
-//            contact_no: h,
-//            address: _,
-//            zip_code: B
-//        }, invoices[objIndex].order_summary = {
-//            sub_total: f,
-//            estimated_tex: x,
-//            discount: w,
-//            shipping_charge: S,
-//            total_amount: j
-//        }, invoices[objIndex].prducts = C, invoices[objIndex].notes = q, localStorage.removeItem("invoices-list"), localStorage.removeItem("option"), localStorage.removeItem("invoice_no"), localStorage.setItem("invoices-list", JSON.stringify(invoices))) : localStorage.setItem("new_data_object", JSON.stringify({
-//            invoice_no: t,
-//            customer: l,
-//            img: "",
-//            email: e,
-//            date: n,
-//            invoice_amount: o,
-//            status: a,
-//            billing_address: {
-//                full_name: l,
-//                address: i,
-//                phone: c,
-//                tax: d
-//            },
-//            shipping_address: {
-//                full_name: r,
-//                address: u,
-//                phone: m,
-//                tax: s
-//            },
-//            payment_details: {
-//                payment_method: p,
-//                card_holder_name: v,
-//                card_number: g,
-//                total_amount: y
-//            },
-//            company_details: {
-//                legal_registration_no: E,
-//                email: b,
-//                website: I,
-//                contact_no: h,
-//                address: _,
-//                zip_code: B
-//            },
-//            order_summary: {
-//                sub_total: f,
-//                estimated_tex: x,
-//                discount: w,
-//                shipping_charge: S,
-//                total_amount: j
-//            },
-//            prducts: C,
-//            notes: q
-//        })), window.location.href = "apps-invoices-list.html")
-//    })
-//});
+
 function InvoiceListTable() {
 
     var searchText = $('#txtInvoiceSearch').val();
@@ -1185,11 +1055,6 @@ function getCompanyDetail(CompanyId) {
         },
     });
 }
-
-//$(document).on("click", "#addItemButton", function () {
-
-//    clearItemErrorMessages();
-//});
 
 function clearItemErrorMessages() {
     $("#spnitembutton").text("");
