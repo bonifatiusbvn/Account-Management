@@ -800,9 +800,6 @@ $(document).ready(function () {
     });
 });
 
-
-
-
 function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
@@ -902,7 +899,6 @@ function InsertMultiplePurchaseOrderDetails() {
     }
 }
 
-
 function checkAndDisableAddButton() {
     if ($('#addNewlink tr').length > 1) {
         $('.add-address').prop('disabled', true);
@@ -911,8 +907,6 @@ function checkAndDisableAddButton() {
     }
 
 }
-
-
 
 $(document).ready(function () {
 
@@ -934,8 +928,6 @@ $(document).ready(function () {
         $('.add-address').prop('disabled', false);
     });
 });
-
-
 function AddShippingAddress() {
     siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
@@ -1398,62 +1390,7 @@ function removeItem(btn) {
     updateTotals();
 }
 
-var taxRate = .125,
-    shippingRate = 65,
-    discountRate = .15,
-    gst = 18;
 
-
-
-function recalculateCart() {
-    var t = 0,
-        e = (Array.from(document.getElementsByClassName("product")).forEach(function (e) {
-            Array.from(e.getElementsByClassName("product-line-price")).forEach(function (e) {
-                e.value && (t += parseFloat(e.value.slice(1)))
-            })
-        }), t * taxRate),
-        n = t * discountRate,
-        o = 0 < t ? shippingRate : 0,
-        a = t + e + o - n,
-        b = t * 18 / 100;
-    p = t
-    document.getElementById("cart-subtotal").value = t.toFixed(2), document.getElementById("cart-tax").value = paymentSign + e.toFixed(2), document.getElementById("totalgst").value = b.toFixed(2), document.getElementById("cart-shipping").value = paymentSign + o.toFixed(2), document.getElementById("cart-total").value = paymentSign + a.toFixed(2), document.getElementById("cart-discount").value = paymentSign + n.toFixed(2), document.getElementById("totalamountInput").value = paymentSign + a.toFixed(2), document.getElementById("amountTotalPay").value = paymentSign + a.toFixed(2)
-}
-
-function amountKeyup() {
-    Array.from(document.getElementsByClassName("product-price")).forEach(function (n) {
-        n.addEventListener("keyup", function (e) {
-            var t = n.parentElement.nextElementSibling.nextElementSibling.querySelector(".product-line-price");
-            updateQuantity(e.target.value, n.parentElement.nextElementSibling.querySelector(".product-quantity").value, t)
-        })
-    })
-}
-
-function updateQuantity(e, t, n) {
-    e = (e = e * t).toFixed(2);
-    n.value = paymentSign + e, recalculateCart()
-}
-
-
-amountKeyup();
-var genericExamples = document.querySelectorAll("[data-trigger]");
-
-function billingFunction() {
-    document.getElementById("same").checked ? (document.getElementById("shippingName").value = document.getElementById("billingName").value, document.getElementById("shippingAddress").value = document.getElementById("billingAddress").value, document.getElementById("shippingPhoneno").value = document.getElementById("billingPhoneno").value, document.getElementById("shippingTaxno").value = document.getElementById("billingTaxno").value) : (document.getElementById("shippingName").value = "", document.getElementById("shippingAddress").value = "", document.getElementById("shippingPhoneno").value = "", document.getElementById("shippingTaxno").value = "")
-}
-Array.from(genericExamples).forEach(function (e) {
-    new Choices(e, {
-        placeholderValue: "This is a placeholder set in the config",
-        searchPlaceholderValue: "This is a search placeholder"
-    })
-});
-
-Array.from(genericExamples).forEach(function (e) {
-    new Cleave(e, {
-        delimiters: ["(", ")", "-"],
-        blocks: [0, 3, 3, 4]
-    })
-});
 let viewobj;
 var value, invoices_list = localStorage.getItem("invoices-list"),
     options = localStorage.getItem("option"),
