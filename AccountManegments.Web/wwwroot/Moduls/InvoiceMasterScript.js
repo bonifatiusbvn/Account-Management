@@ -166,7 +166,9 @@ $(document).ready(function () {
                 $(selector).focus();
             }
         }
-
+        function showErrorMessage(selector, message) {
+            $(selector).text(message).show();
+        }
         $(document).on('input', '#txtproductquantity', function () {
             var productRow = $(this).closest(".product");
             updateProductTotalAmount(productRow);
@@ -261,8 +263,8 @@ $(document).ready(function () {
 
         $(document).on('input', '#cart-roundOff', debounce(function () {
             var roundoff = $('#cart-roundOff').val();
-            if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
-                toastr.warning("Value only between -0.99 to 0.99");
+            if (isNaN(roundoff) || (roundoff < -0.99 || roundoff > 0.99)) {
+                toastr.warning("Value must be between -0.99 and 0.99");
             }
             else {
                 updateTotals();
@@ -405,6 +407,7 @@ $(document).ready(function () {
                 minlength: 10,
                 maxlength: 10
             },
+
             textSupplierAddress: "required",
         },
         messages: {
