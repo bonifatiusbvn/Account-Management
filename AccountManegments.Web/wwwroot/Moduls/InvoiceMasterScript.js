@@ -187,7 +187,7 @@ $(document).ready(function () {
             updateProductTotalAmount(productRow);
             updateTotals();
         })
-        
+
         function debounce(func, delay) {
             let timer;
             return function (...args) {
@@ -259,20 +259,15 @@ $(document).ready(function () {
         });
 
 
-        $(document).on('keydown', '#cart-roundOff', function (event) {
-
-            if (event.keyCode == 13) {
-                var roundoff = $('#cart-roundOff').val();
-                if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
-                    $("#cart-roundOff").val(0);
-                    updateTotals();
-                }
-                else {
-                    updateTotals();
-                }
-
+        $(document).on('input', '#cart-roundOff', debounce(function () {
+            var roundoff = $('#cart-roundOff').val();
+            if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
+                toastr.warning("Value only between -0.99 to 0.99");
             }
-        });
+            else {
+                updateTotals();
+            }
+        }, 300));
     });
 
 
@@ -768,7 +763,7 @@ function updateDiscount(that) {
         return;
     }
 
-     if (discountPercentage == 0 && discountprice > 0) {
+    if (discountPercentage == 0 && discountprice > 0) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
     } else if (discountprice > 0 && discountPercentage > 0) {
@@ -798,7 +793,7 @@ function UpdateDiscountPercentage(that) {
     if (discountprice == 0 && discountPercentage > 0) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtdiscountamount").val(discountprice.toFixed(2));
-    }else if (discountprice > 0 && discountPercentage > 0) {
+    } else if (discountprice > 0 && discountPercentage > 0) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtdiscountamount").val(discountprice.toFixed(2));
     }
