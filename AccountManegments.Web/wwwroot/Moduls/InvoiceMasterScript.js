@@ -259,14 +259,19 @@ $(document).ready(function () {
         });
 
 
-        $(document).on('input', '#cart-roundOff', function () {
-            var roundoff = $('#cart-roundOff').val();
-            if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
-                $(this).val(0);
+        $(document).on('keydown', '#cart-roundOff', function (event) {
+
+            if (event.keyCode == 13) {
+                var roundoff = $('#cart-roundOff').val();
+                if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
+                    $("#cart-roundOff").val(0);
+                    updateTotals();
+                }
+                else {
+                    updateTotals();
+                }
+
             }
-            updateTotals();
-        }).on('keydown', '#cart-roundOff', function (event) {
-            handleFocus(event, null);
         });
     });
 
