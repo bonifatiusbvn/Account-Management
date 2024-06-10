@@ -187,43 +187,52 @@ $(document).ready(function () {
             updateProductTotalAmount(productRow);
             updateTotals();
         })
+        
+        function debounce(func, delay) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
 
-        $(document).on('input', '#txtdiscountpercentage', function () {
-            var productRow = $(this).closest(".product");
+        $(document).on('input', '#txtdiscountpercentage', debounce(function () {
             var value = $(this).val();
+            var productRow = $(this).closest(".product");
             if (value > 100) {
                 toastr.warning("Discount cannot be greater than 100%");
-                $(this).val(100);
+                productRow.find("#txtdiscountpercentage").val(0);
+                productRow.find("#txtdiscountamount").val(0);
             } else if (value <= 0 || value == "") {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
+                updateProductTotalAmount(productRow);
             } else {
-                updateDiscount(productRow);
+                UpdateDiscountPercentage(productRow);
             }
-            updateProductTotalAmount(productRow);
-            updateTotals();
-        }).on('keydown', '#txtdiscountpercentage', function (event) {
+        }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
             var productRow = $(this).closest(".product");
             var gstFocus = productRow.find('#txtgst');
             handleFocus(event, gstFocus);
         });
 
-        $(document).on('input', '#txtdiscountamount', function () {
+        $(document).on('input', '#txtdiscountamount', debounce(function () {
             var productRow = $(this).closest(".product");
             var discountAmount = parseFloat($(this).val());
             var productAmount = parseFloat($(productRow).find("#productamount").val());
+
             if (discountAmount > productAmount) {
                 toastr.warning("Amount cannot be greater than Item price");
-                $(this).val(0);
+                productRow.find("#txtdiscountamount").val(0);
+                productRow.find("#txtdiscountpercentage").val(0);
             } else if (discountAmount <= 0 || discountAmount == "") {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
+                updateProductTotalAmount(productRow);
             } else {
                 updateDiscount(productRow);
             }
-            updateProductTotalAmount(productRow);
-            updateTotals();
-        }).on('keydown', '#txtdiscountamount', function (event) {
+        }, 300)).on('keydown', '#txtdiscountamount', function (event) {
             var productRow = $(this).closest(".product");
             var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
             handleFocus(event, discountPercentagefocus);
@@ -232,18 +241,23 @@ $(document).ready(function () {
         $(document).on('input', '#txtproductamount', function () {
             var productRow = $(this).closest(".product");
             var productAmount = parseFloat($(this).val());
+            var discountAmountfocus = productRow.find('#txtdiscountamount');
+
             if (!isNaN(productAmount)) {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
             }
-            productRow.find("#productamount").val(productAmount);
+
+            productRow.find("#productamount").val(productAmount.toFixed(2));
             updateProductTotalAmount(productRow);
             updateTotals();
+
         }).on('keydown', '#txtproductamount', function (event) {
             var productRow = $(this).closest(".product");
             var discountAmountfocus = productRow.find('#txtdiscountamount');
             handleFocus(event, discountAmountfocus);
         });
+
 
         $(document).on('input', '#cart-roundOff', function () {
             var roundoff = $('#cart-roundOff').val();
@@ -717,7 +731,6 @@ function preventEmptyValue(input) {
 }
 
 function updateProductTotalAmount(that) {
-
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var hiddenproductPrice = parseFloat(row.find("#productamount").val());
@@ -733,42 +746,57 @@ function updateProductTotalAmount(that) {
 
     row.find("#txtgstAmount").val(totalGst.toFixed(2));
     row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
-
-    row.find("#txtproductamount").val(AmtWithDisc.toFixed(2));
-
 }
 
 function updateDiscount(that) {
-
     var row = $(that);
-    var productPrice = parseFloat(row.find("#txtproductamount").val());
+    var productPrice = parseFloat(row.find("#productamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
     var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-    var hiddenAmount = parseFloat(row.find("#productamount").val());
     var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
-    var productAmt = productPrice * quantity;
-    if (isNaN(discountprice) || isNaN(discountPercentage)) {
 
-        parseFloat(row.find("#txtdiscountamount").val(0));
-        parseFloat(row.find("#txtdiscountpercentage").val(0));
+    if (isNaN(discountprice)) {
+        row.find("#txtdiscountamount").val(0);
+        row.find("#txtdiscountpercentage").val(0);
         updateProductTotalAmount(row);
         updateTotals();
-        return
+        return;
     }
 
-
-
-
-    if (discountprice == 0 && discountPercentage > 0) {
-        discountprice = productPrice * discountPercentage / 100;
-        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
-    }
-    if (discountPercentage == 0 && discountprice > 0) {
+     if (discountPercentage == 0 && discountprice > 0) {
+        var discountperbyamount = discountprice / productPrice * 100;
+        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    } else if (discountprice > 0 && discountPercentage > 0) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
 
+    updateProductTotalAmount(row);
+    updateTotals();
+}
 
+function UpdateDiscountPercentage(that) {
+    var row = $(that);
+    var productPrice = parseFloat(row.find("#productamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+
+    if (isNaN(discountPercentage)) {
+        row.find("#txtdiscountamount").val(0);
+        row.find("#txtdiscountpercentage").val(0);
+        updateProductTotalAmount(row);
+        updateTotals();
+        return;
+    }
+
+    if (discountprice == 0 && discountPercentage > 0) {
+        discountprice = productPrice * discountPercentage / 100;
+        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
+    }else if (discountprice > 0 && discountPercentage > 0) {
+        discountprice = productPrice * discountPercentage / 100;
+        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
+    }
     updateProductTotalAmount(row);
     updateTotals();
 }
@@ -812,7 +840,7 @@ function updateTotals() {
     $("#cart-discount").val(TotalDiscount.toFixed(2));
     $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
-    $("#TotalProductPrice").html(totalSubtotal);
+    $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
     $("#TotalProductGST").html(totalGst.toFixed(2));
     $("#TotalProductAmount").html(totalAmount.toFixed(2));
 
