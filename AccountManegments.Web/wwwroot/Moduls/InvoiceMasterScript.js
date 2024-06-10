@@ -159,85 +159,79 @@ $(document).ready(function () {
     $("#textOrderDate").prop("disabled", true);
 
 
-    $(document).on('keydown', '#txtproductquantity', function (event) {
-        if (event.keyCode == 13 || event.keyCode == 9) {
+    $(document).ready(function () {
+        function handleFocus(event, selector) {
+            if (event.keyCode == 13 || event.keyCode == 9) {
+                event.preventDefault();
+                $(selector).focus();
+            }
+        }
+
+        $(document).on('input', '#txtproductquantity', function () {
             var productRow = $(this).closest(".product");
-            var productFocus = productRow.find('#txtproductamount');
             updateProductTotalAmount(productRow);
             updateTotals();
-            productFocus.focus();
-        }
-    });
-    $(document).on('keydown', '#txtgst', function (event) {
-        if (event.keyCode == 13 || event.keyCode == 9) {
-            var gstvalue = $('#txtgst').val();
+        }).on('keydown', '#txtproductquantity', function (event) {
             var productRow = $(this).closest(".product");
-            var roundoffFocus = $('#cart-roundOff');
+            var productFocus = productRow.find('#txtproductamount');
+            handleFocus(event, productFocus);
+        });
+
+        $(document).on('input', '#txtgst', function () {
+            var productRow = $(this).closest(".product");
+            var gstvalue = $('#txtgst').val();
             if (gstvalue > 100) {
                 toastr.warning("GST% cannot be greater than 100%");
-                row.find("#txtgst").val(100);
+                $(this).val(100);
             }
             updateProductTotalAmount(productRow);
             updateTotals();
-            roundoffFocus.focus();
-        }
-    });
-    $(document).on('keydown', '#txtdiscountpercentage', function (event) {
-        if (event.keyCode == 13 || event.keyCode == 9) {
-            var value = $(this).val();
+        })
+
+        $(document).on('input', '#txtdiscountpercentage', function () {
             var productRow = $(this).closest(".product");
-            var gstFocus = productRow.find('#txtgst');
+            var value = $(this).val();
             if (value > 100) {
                 toastr.warning("Discount cannot be greater than 100%");
-                row.find("#txtdiscountpercentage").val(100);
+                $(this).val(100);
             } else if (value <= 0 || value == "") {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
-                updateProductTotalAmount(productRow);
-                gstFocus.focus();
+            } else {
+                updateDiscount(productRow);
             }
-            else {
-                updateDiscount(productRow)
-                gstFocus.focus();
-            }
+            updateProductTotalAmount(productRow);
+            updateTotals();
+        }).on('keydown', '#txtdiscountpercentage', function (event) {
+            var productRow = $(this).closest(".product");
+            var gstFocus = productRow.find('#txtgst');
+            handleFocus(event, gstFocus);
+        });
 
-        }
-    });
-    $(document).on('keydown', '#txtdiscountamount', function (event) {
-        event.stopPropagation();
-
-        if (event.keyCode == 13 || event.keyCode == 9) {
-
+        $(document).on('input', '#txtdiscountamount', function () {
             var productRow = $(this).closest(".product");
             var discountAmount = parseFloat($(this).val());
             var productAmount = parseFloat($(productRow).find("#productamount").val());
-            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
-
             if (discountAmount > productAmount) {
                 toastr.warning("Amount cannot be greater than Item price");
-                productRow.find("#txtdiscountamount").val(0);
-                return;
+                $(this).val(0);
             } else if (discountAmount <= 0 || discountAmount == "") {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
-                updateProductTotalAmount(productRow);
-                discountPercentagefocus.focus();
-            }
-            else {
+            } else {
                 updateDiscount(productRow);
-                discountPercentagefocus.focus();
             }
+            updateProductTotalAmount(productRow);
+            updateTotals();
+        }).on('keydown', '#txtdiscountamount', function (event) {
+            var productRow = $(this).closest(".product");
+            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
+            handleFocus(event, discountPercentagefocus);
+        });
 
-        }
-    });
-
-    $(document).on('keydown', '#txtproductamount', function (event) {
-
-        if (event.keyCode == 13 || event.keyCode == 9) {
+        $(document).on('input', '#txtproductamount', function () {
             var productRow = $(this).closest(".product");
             var productAmount = parseFloat($(this).val());
-            var discountAmountfocus = productRow.find('#txtdiscountamount');
-
             if (!isNaN(productAmount)) {
                 productRow.find("#txtdiscountamount").val(0);
                 productRow.find("#txtdiscountpercentage").val(0);
@@ -245,23 +239,24 @@ $(document).ready(function () {
             productRow.find("#productamount").val(productAmount);
             updateProductTotalAmount(productRow);
             updateTotals();
-            discountAmountfocus.focus();
+        }).on('keydown', '#txtproductamount', function (event) {
+            var productRow = $(this).closest(".product");
+            var discountAmountfocus = productRow.find('#txtdiscountamount');
+            handleFocus(event, discountAmountfocus);
+        });
 
-        }
-    });
-    $(document).on('keydown', '#cart-roundOff', function (event) {
-
-        if (event.keyCode == 13 || event.keyCode == 9) {
+        $(document).on('input', '#cart-roundOff', function () {
             var roundoff = $('#cart-roundOff').val();
             if (isNaN(roundoff) || roundoff == 0 || roundoff == "" || roundoff < -0.99 || roundoff > 0.99) {
-                $("#cart-roundOff").val(0);
-                updateTotals();
+                $(this).val(0);
             }
-            else {
-                updateTotals();
-            }
-        }
+            updateTotals();
+        }).on('keydown', '#cart-roundOff', function (event) {
+            handleFocus(event, null);
+        });
     });
+
+
 });
 
 
