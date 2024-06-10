@@ -300,19 +300,19 @@
                                                                 <tr>
                                                                     <th scope="row">Sub Total</th>
                                                                     <td style="width:150px;">
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                        <input type="text" class="form-control border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Total GST</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
+                                                                        <input type="text" class="form-control border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Discount <small class="text-muted"></small></th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
+                                                                        <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -320,20 +320,21 @@
                                                                         Roundoff
                                                                     </th>
                                                                     <td>
-                                                                        @if(Model.Roundoff != null)
+                                                                        @if (Model.Roundoff != null)
                                                                         {
                                                                             <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.Roundoff" readonly />
                                                                         }
-                                                                        else{
+                                                                        else
+                                                                        {
                                                                             <input type="text" class="form-control bg-light border-0" id="cart-roundOff" placeholder="₹0.00" />
                                                                         }
-                                                                        
+
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">
                                                                     <th scope="row">Total Amount</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmountInvoice" readonly />
+                                                                        <input type="text" class="form-control border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmountInvoice" readonly />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -468,7 +469,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');
