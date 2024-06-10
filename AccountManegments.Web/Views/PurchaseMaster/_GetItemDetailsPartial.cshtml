@@ -2,7 +2,7 @@
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId">
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId" onclick="updateProductTotalAmount(this)">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
             <p id="txtItemName" style="padding-top:5px !important;">@item.ItemName</p>
@@ -33,18 +33,18 @@
             </div>
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" onclick="fn_productpriceUpdate(this)" />
+            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
             <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" />
 
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
+            <input type="number" class="form-control border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
         </td>
         <td class="text-start">
             <div>
-                <input type="number" class="form-control bg-light border-0" id="txtproducttotalamount" value="@item.ItemAmount" readonly />
+                <input type="number" class="form-control border-0" id="txtproducttotalamount" value="@item.ItemAmount" readonly />
             </div>
         </td>
         <td class="product-removal">

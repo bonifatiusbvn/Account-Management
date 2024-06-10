@@ -695,6 +695,46 @@ $(document).ready(function () {
     $("#orderdate").val(today);
     $("#txtDeliverySchedule").val(today);
 
+    function handleFocus(event, selector) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
+            event.preventDefault();
+            $(selector).focus();
+        }
+    }
+    $(document).on('input', '#txtproductquantity', function () {
+        var productRow = $(this).closest(".product");
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    }).on('keydown', '#txtproductquantity', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtproductamount');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtgst', function () {
+        var productRow = $(this).closest(".product");
+        var gstvalue = $('#txtgst').val();
+        if (gstvalue > 100) {
+            toastr.warning("GST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    })
+
+    $(document).on('input', '#txtproductamount', function () {
+        var productRow = $(this).closest(".product");
+        var productAmount = parseFloat($(this).val());
+
+        productRow.find("#productamount").val(productAmount.toFixed(2));
+        updateProductTotalAmount(productRow);
+        updateTotals();
+
+    }).on('keydown', '#txtproductamount', function (event) {
+        var productRow = $(this).closest(".product");
+        var gstFocus = productRow.find('#txtgst');
+        handleFocus(event, gstFocus);
+    });
 });
 function clearShippingAddressErrorMssage() {
     $("#spnshipping").text("");
@@ -729,6 +769,13 @@ $(document).ready(function () {
                 minlength: 10,
                 maxlength: 10
             },
+            txtSuppliermobile: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            txtSupplierAddress: "required",
         },
         messages: {
             txtSuppliername: "Select Supplier",
@@ -742,6 +789,13 @@ $(document).ready(function () {
                 minlength: "Phone number must be 10 digits long",
                 maxlength: "Phone number must be 10 digits long"
             },
+            txtSuppliermobile: {
+                required: "Please Enter Phone Number",
+                digits: "Please enter a valid 10-digit phone number",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long"
+            },
+            txtSupplierAddress: "Enter supplier address",
         }
     });
 });
@@ -995,24 +1049,34 @@ $(document).ready(function () {
 });
 
 function getSupplierDetails(SupplierId) {
-    siteloadershow();
-    $.ajax({
-        url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            siteloaderhide();
-            if (response) {
-                $('#txtSuppliermobile').val(response.mobile);
-                $('#txtSupplierGST').val(response.gstno);
-                $('#txtSupplierAddress').val(response.fullAddress);
-            } else {
+
+    if (SupplierId == "") {
+
+        toastr.warning('Kindly select valid supplier');
+        siteloaderhide();
+    }
+    else {
+
+
+        siteloadershow();
+        $.ajax({
+            url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
                 siteloaderhide();
-                toastr.error('Empty response received.');
-            }
-        },
-    });
+                if (response) {
+                    $('#txtSuppliermobile').val(response.mobile);
+                    $('#txtSupplierGST').val(response.gstno);
+                    $('#txtSupplierAddress').val(response.fullAddress);
+                } else {
+                    siteloaderhide();
+                    toastr.error('Empty response received.');
+                }
+            },
+        });
+    }
 }
 
 $(document).ready(function () {
@@ -1232,7 +1296,6 @@ function AddNewRow(Result) {
     if (!isDuplicate) {
         count++;
         $("#addNewlink").append(Result);
-        updateProductTotalAmount();
         updateTotals();
         updateRowNumbers();
     } else {
@@ -1278,19 +1341,18 @@ function bindEventListeners() {
     });
 }
 
-function updateProductTotalAmount() {
+function updateProductTotalAmount(that) {
 
-    $(".product").each(function () {
-        var row = $(this);
-        var productPrice = parseFloat(row.find("#txtproductamount").val());
-        var quantity = parseInt(row.find("#txtproductquantity").val());
-        var gst = parseFloat(row.find("#txtgst").val());
-        var totalGst = (productPrice * quantity * gst) / 100;
-        var totalAmount = productPrice * quantity + totalGst;
+    var row = $(that);
+    var productPrice = parseFloat(row.find("#txtproductamount").val());
+    var quantity = parseInt(row.find("#txtproductquantity").val());
+    var gst = parseFloat(row.find("#txtgst").val());
+    var totalGst = (productPrice * quantity * gst) / 100;
+    var totalAmount = productPrice * quantity + totalGst;
 
-        row.find("#txtgstAmount").val(totalGst.toFixed(2));
-        row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
-    });
+    row.find("#txtgstAmount").val(totalGst.toFixed(2));
+    row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
+
 }
 
 function updateProductQuantity(row, increment) {
@@ -1326,7 +1388,7 @@ function updateTotals() {
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
-    $("#TotalProductPrice").html(totalSubtotal);
+    $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
     $("#TotalProductGST").html(totalGst.toFixed(2));
     $("#TotalProductAmount").html(totalAmount.toFixed(2));
 }
