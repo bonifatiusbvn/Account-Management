@@ -166,33 +166,43 @@ function CreateSite() {
             ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
             ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
+
+            
         }
-        $.ajax({
-            url: '/SiteMaster/CreateSite',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createSite');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+        if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+        else {
+            $.ajax({
+                url: '/SiteMaster/CreateSite',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createSite');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllSiteListTable();
+                        toastr.success(Result.message);
                     } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        toastr.error(Result.message);
                     }
+                    siteloaderhide();
+                },
+            })
 
-                    AllSiteListTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-                siteloaderhide();
-            },
-        })
+        }
+       
     }
     else {
         siteloaderhide();
@@ -282,6 +292,11 @@ function ClearSiteTextBox() {
 var sForm;
 function validateAndCreateSite() {
 
+    $.validator.addMethod("notZero", function (value, element) {
+        return value !== "0";
+    }, "Please select a valid option");
+
+
     sForm = $("#siteForm").validate({
 
         rules: {
@@ -303,8 +318,14 @@ function validateAndCreateSite() {
                 maxlength: 6
             },
             ddlCountry: "required",
-            stateDropdown: "required",
-            ddlCity: "required",
+            stateDropdown: {
+                required: true,
+                notZero: true
+            },
+            ddlCity: {
+                required: true,
+                notZero: true
+            },
             txtShippingAddress: "required",
             txtShippingArea: "required",
             txtShippingPincode: {
@@ -335,8 +356,14 @@ function validateAndCreateSite() {
                 maxlength: "Pin code must be 6 digits long"
             },
             ddlCountry: "Please Enter Country",
-            stateDropdown: "Please Enter state",
-            ddlCity: "Please Enter City",
+            stateDropdown: {
+                required: "Please Enter state",
+                notZero: "Please select a valid state"
+            },
+            ddlCity: {
+                required: "Please Enter City",
+                notZero: "Please select a valid city"
+            },
             txtShippingAddress: "Please Enter ShippingAddress",
             txtShippingArea: "Please Enter ShippingArea",
             txtShippingPincode: {
