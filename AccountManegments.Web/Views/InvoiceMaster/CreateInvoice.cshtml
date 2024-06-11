@@ -42,7 +42,7 @@
                                                                 <label for="textSupplierName" class="form-label">Supplier Name</label>
                                                                 @if (Model.SupplierName != null)
                                                                 {
-                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName" disabled>
+                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName">
                                                                         <option selected value="@Model.SupplierId">@Model.SupplierName</option>
                                                                     </select>
                                                                 }
@@ -96,7 +96,7 @@
                                                                 <div class="ms-auto">
                                                                     @if (Model.CompanyName != null)
                                                                     {
-                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName" disabled>
+                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName" >
                                                                             <option selected value="@Model.CompanyId">@Model.CompanyName</option>
                                                                         </select>
                                                                     }
@@ -110,6 +110,7 @@
                                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                                     <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
                                                                     <input type="hidden" class="form-control" id="textSupplierInvoiceId" value="@Model.Id">
+                                                                    <input type="hidden" class="form-control" id="textCreatedOn" value="@Model.CreatedOn">
 
                                                                 </div>
                                                             </div>
@@ -119,7 +120,7 @@
                                                             </div>
                                                             <div class="col-3 col-lg-3">
                                                                 <label for="textOrderDate" class="form-label">Order Date</label>
-                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date" value="@Model.Date?.ToString("dd/MM/yyyy")" readonly>
+                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date" value="@Model.Date?.ToString("dd/MM/yyyy")">
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
@@ -148,18 +149,11 @@
 
                                         <h5 class="card-header">
                                             Add Product
-                                            @if (Model.ItemList != null)
-                                            {
-                                                <a class="disabled">
-                                                    <i class="lni lni-circle-plus"></i>
-                                                </a>
-                                            }
-                                            else
-                                            {
+                                           
                                                 <a class="font-22" onclick="fn_OpenAddproductmodal()">
                                                     <i class="lni lni-circle-plus"></i>
                                                 </a>
-                                            }
+                                            
                                             <span id="spnitembutton" class="text-danger"></span>
                                         </h5>
                                     </div>
@@ -203,7 +197,7 @@
                                                 </thead>
                                                 @if (Model.ItemList != null)
                                                 {
-                                                    <tbody id="addnewproductlink" class="disabled">
+                                                    <tbody id="addnewproductlink">
                                                         @Html.Partial("_DisplayInvoiceItemDetailsPartial", Model.ItemList)
                                                     </tbody>
                                                 }
@@ -247,15 +241,15 @@
                                                                 @if (Model.PaymentStatus != null)
                                                                 {
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" name="paymentStatus" value="unpaid" @(Model.PaymentStatus == "unpaid" ? "checked" : "") disabled>
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" name="paymentStatus" value="unpaid" @(Model.PaymentStatus == "unpaid" ? "checked" : "") >
                                                                         <label class="form-check-label" for="unpaidRadio">Unpaid</label>
                                                                     </div>
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" name="paymentStatus" value="paid" @(Model.PaymentStatus == "paid" ? "checked" : "") disabled>
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" name="paymentStatus" value="paid" @(Model.PaymentStatus == "paid" ? "checked" : "") >
                                                                         <label class="form-check-label" for="paidRadio">Paid</label>
                                                                     </div>
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" name="paymentStatus" value="cash" @(Model.PaymentStatus == "cash" ? "checked" : "") disabled>
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" name="paymentStatus" value="cash" @(Model.PaymentStatus == "cash" ? "checked" : "") >
                                                                         <label class="form-check-label" for="cashRadio">Cash</label>
                                                                     </div>
                                                                 }
@@ -282,7 +276,7 @@
                                                                 {
                                                                     <div class="input-group mb-3">
                                                                         <label class="input-group-text" for="textDescription">Description</label>
-                                                                        <textarea type="text" id="textDescription" rows="3" class="form-control disabled" placeholder="Enter Description" name="textDescription">@Model.Description</textarea>
+                                                                        <textarea type="text" id="textDescription" rows="3" class="form-control" placeholder="Enter Description" name="textDescription">@Model.Description</textarea>
                                                                     </div>
                                                                 }
                                                                 else

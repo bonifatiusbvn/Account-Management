@@ -26,9 +26,11 @@
         </td>
         <td class="text-start">
             <div class="">
-                <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 75px;">
-                    <option value="@item.UnitType">@item.UnitTypeName</option>
-                </select>
+
+                    <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 75px;" onclick="UnitTypeDropdown(@item.ItemId)">
+                        <option value="@item.UnitType">@item.UnitTypeName</option>
+                    </select>
+               
             </div>
         </td>
         <td class="text-start">
@@ -85,9 +87,14 @@
             <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
         </td>
     </tr>
+
+    
 }
 
 
 @section Scripts {
+
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
+    
 }
+

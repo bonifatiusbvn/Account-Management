@@ -220,6 +220,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Roundoff = a.Roundoff,
                                     ContactName = a.ContactName,
                                     ContactNumber = a.ContactNumber,
+                                    CreatedOn = a.CreatedOn,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName + "-" + c.Pincode,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName + "-" + b.PinCode,
                                 }).FirstOrDefault();
@@ -357,38 +358,93 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var supplierInvoice = await Context.SupplierInvoices.FindAsync(SupplierInvoiceDetail.Id);
-
-                if (supplierInvoice == null)
+              
+                var supplierInvoice = new SupplierInvoice()
                 {
-                    response.code = (int)HttpStatusCode.NotFound;
-                    response.message = $"Invoice with id {SupplierInvoiceDetail.Id} not found";
-                    return response;
-                }
-                supplierInvoice.Id = SupplierInvoiceDetail.Id;
-                supplierInvoice.InvoiceNo = SupplierInvoiceDetail.InvoiceNo;
-                supplierInvoice.SiteId = SupplierInvoiceDetail.SiteId;
-                supplierInvoice.SupplierId = SupplierInvoiceDetail.SupplierId;
-                supplierInvoice.CompanyId = SupplierInvoiceDetail.CompanyId;
-                supplierInvoice.SupplierInvoiceNo = SupplierInvoiceDetail.SupplierInvoiceNo;
-                supplierInvoice.TotalAmount = SupplierInvoiceDetail.TotalAmountInvoice;
-                supplierInvoice.TotalDiscount = SupplierInvoiceDetail.TotalDiscount;
-                supplierInvoice.Description = SupplierInvoiceDetail.Description;
-                supplierInvoice.TotalGstamount = SupplierInvoiceDetail.TotalGstamount;
-                supplierInvoice.Roundoff = SupplierInvoiceDetail.Roundoff;
-                supplierInvoice.PaymentStatus = SupplierInvoiceDetail.PaymentStatus;
-                supplierInvoice.ShippingAddress = SupplierInvoiceDetail.ShippingAddress;
-                supplierInvoice.Date = SupplierInvoiceDetail.Date;
-                supplierInvoice.Roundoff= SupplierInvoiceDetail.Roundoff;
-                supplierInvoice.TotalDiscount= SupplierInvoiceDetail.TotalDiscount;
+                    Id = SupplierInvoiceDetail.Id,
+                    InvoiceNo = SupplierInvoiceDetail.InvoiceNo,
+                    SiteId = SupplierInvoiceDetail.SiteId,
+                    SupplierId = SupplierInvoiceDetail.SupplierId,
+                    CompanyId = SupplierInvoiceDetail.CompanyId,
+                    SupplierInvoiceNo = SupplierInvoiceDetail.SupplierInvoiceNo,
+                    Description = SupplierInvoiceDetail.Description,
+                    TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
+                    TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
+                    TotalAmount = SupplierInvoiceDetail.TotalAmountInvoice,
+                    PaymentStatus = SupplierInvoiceDetail.PaymentStatus,
+                    Roundoff = SupplierInvoiceDetail.Roundoff,
+                    ShippingAddress = SupplierInvoiceDetail.ShippingAddress,
+                    IsPayOut = SupplierInvoiceDetail.IsPayOut,
+                    Date = SupplierInvoiceDetail.Date,
+                    UpdatedOn=DateTime.Now,
+                    UpdatedBy=SupplierInvoiceDetail.UpdatedBy,
+                    CreatedOn=SupplierInvoiceDetail.CreatedOn,
+                };
                 Context.SupplierInvoices.Update(supplierInvoice);
-                Context.SaveChanges();
-                response.code = 200;
-                response.message = "Invoice updated successfully.";
+
+                foreach (var item in SupplierInvoiceDetail.ItemList)
+                {
+                    var existingSupplierInvoice = Context.SupplierInvoiceDetails.FirstOrDefault(e => e.RefInvoiceId == supplierInvoice.Id && e.ItemId == item.ItemId);
+
+                    if (existingSupplierInvoice != null)
+                    {
+                        existingSupplierInvoice.RefInvoiceId = supplierInvoice.Id;
+                        existingSupplierInvoice.ItemId = item.ItemId;
+                        existingSupplierInvoice.ItemName=item.ItemName;
+                        existingSupplierInvoice.UnitTypeId=item.UnitType;
+                        existingSupplierInvoice.Quantity = item.Quantity;
+                        existingSupplierInvoice.Price=item.PricePerUnit;
+                        existingSupplierInvoice.DiscountAmount = item.DiscountAmount;
+                        existingSupplierInvoice.DiscountPer=item.DiscountPer;
+                        existingSupplierInvoice.Gst = item.Gstamount;
+                        existingSupplierInvoice.Gstper = item.GstPercentage;
+                        existingSupplierInvoice.TotalAmount = item.TotalAmount;
+                        existingSupplierInvoice.Date = supplierInvoice.Date;
+                        existingSupplierInvoice.UpdatedOn=DateTime.Now;
+                        existingSupplierInvoice.UpdatedBy=supplierInvoice.UpdatedBy;
+                        existingSupplierInvoice.CreatedOn=supplierInvoice.CreatedOn;
+
+                        Context.SupplierInvoiceDetails.Update(existingSupplierInvoice);
+                    }
+                    else
+                    {
+                        var newSupplierInvoice = new SupplierInvoiceDetail()
+                        {
+                            RefInvoiceId = supplierInvoice.Id,
+                            ItemId = item.ItemId,
+                            ItemName = item.ItemName,
+                            UnitTypeId = item.UnitType,
+                            Quantity = item.Quantity,
+                            Price = item.PricePerUnit,
+                            DiscountAmount = item.DiscountAmount,
+                            DiscountPer = item.DiscountPer,
+                            Gst = item.Gstamount,
+                            Gstper = item.GstPercentage,
+                            TotalAmount = item.TotalAmount,
+                            Date = supplierInvoice.Date,
+                            CreatedOn = DateTime.Now,
+                        };
+
+                        Context.SupplierInvoiceDetails.Add(newSupplierInvoice);
+                    }
+                }
+
+                var deletedSupplierInvoice = SupplierInvoiceDetail.ItemList.Select(a => a.ItemId).ToList();
+
+                var SupplierInvoiceToRemove = Context.SupplierInvoiceDetails
+                    .Where(e => e.RefInvoiceId == SupplierInvoiceDetail.Id && !deletedSupplierInvoice.Contains(e.ItemId))
+                    .ToList();
+
+                Context.SupplierInvoiceDetails.RemoveRange(SupplierInvoiceToRemove);
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Invoice Update successfully.";
+                response.data = supplierInvoice.Id;
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = 500;
+                response.message = "Error creating invoice: " + ex.Message;
             }
             return response;
         }
