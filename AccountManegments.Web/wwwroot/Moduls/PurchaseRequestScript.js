@@ -120,6 +120,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
+
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
@@ -290,23 +291,16 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
+
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
-        var siteName = null;
-        var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
-            siteName = $("#txtPoSiteName").val();
-        }
-        else {
-            siteName = $("#txtPRsiteid").val();
-        }
 
         var objData = {
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
             Item: $('#txtItemName').val(),
-            SiteId: siteName,
+            SiteId: $("#txtPoSiteName").val(),
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
             CreatedBy: $('#txtcreatedby').val(),
