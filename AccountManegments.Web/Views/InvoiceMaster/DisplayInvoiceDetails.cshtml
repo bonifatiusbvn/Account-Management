@@ -8,20 +8,17 @@
     .border-right {
         border-right: 2px solid black;
     }
-
 </style>
 
 @{
     var firstItem = Model;
-    decimal? totalAmount = 0;
-    decimal? totalGst = 0;
 }
 
 <div class="row justify-content-center" id="displayInvoiceDetail">
     <div class="col-xxl-9">
         <div class="card border">
-            <div class="row">
-                <div class="card-body" id="cardbody1">
+            <div class="card" id="cardbody1">
+                <div class="card-body">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -35,7 +32,7 @@
                             <span class="text-muted">@firstItem.ShippingAddress</span><br />
                             <span class="text-muted">GSTIN:- </span>
                         </div>
-                        <div class="flex-grow-1 col-3">
+                        <div class="flex-grow-1 col-3 border">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Invoice No</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
@@ -82,7 +79,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note Date</label>
-                                <p class="text-muted text-uppercase"><b></p>
+                                <p class="text-muted text-uppercase"></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Destination</label>
@@ -95,7 +92,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody2" style="margin-top:-33px;">
+            </div>
+            <div class="card" style="margin-top:-23px;" id="cardbody2">
+                <div class="card-body">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
@@ -109,11 +108,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody3" style="margin-top:-33px;">
+            </div>
+            <div class="card" id="cardbody3">
+                <div class="card-body">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
                         <thead>
                             <tr class="table-active">
-                                <th class="border" scope="col">SINo.</th>
+                                <th class="border" scope="col">SRr.No.</th>
                                 <th class="border" scope="col">Product Details</th>
                                 <th class="border" scope="col">Price</th>
                                 <th class="border" scope="col">Quantity</th>
@@ -125,7 +126,7 @@
                         <tbody id="products-list">
                             @{
                                 int index = 1;
-                                decimal subtotal = 0;
+                                decimal? subtotal = 0;
                             }
                             @foreach (var item in Model.ItemList)
                             {
@@ -134,8 +135,10 @@
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.ItemName</span>
+                                        <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
+                                        <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
                                     </td>
-                                    <td class="border" id="txtHSN">@item.PricePerUnit</td>
+                                    <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.UnitTypeName</td>
                                     <td class="border" id="txtper">@item.DiscountAmount (@item.DiscountPer%)</td>
@@ -195,7 +198,9 @@
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
+            </div>
+            <div class="card" id="cardbody4">
+                <div class="card-body">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
                         <thead>
                             <tr class="table-active">
@@ -236,7 +241,6 @@
                                     </td>
                                     <td class="border" id="txtgsttotal">₹@item.Gstamount</td>
                                 </tr>
-                                index++;
                             }
                             <tr>
                                 <td class="border">Total</td>
@@ -254,9 +258,15 @@
                                 <td class="border">₹@firstItem.TotalGstamount</td>
                             </tr>
                         </tbody>
-                    </table><!--end table-->
-                    <span class="text-muted">Tax Amount (in words) : </span>
-                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
+                    </table><!--end table-->                  
+                </div>
+            </div>
+            <div class="card" id="cardbody5">
+                <div class="card-body">
+                    <div class="flex-grow-1 col-12">
+                        <span class="text-muted">Tax Amount (in words) : </span>
+                        <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
+                    </div>
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6">
                             <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b>@firstItem.CompanyPanNo</b></span></p>
@@ -292,4 +302,4 @@
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-}
+    }
