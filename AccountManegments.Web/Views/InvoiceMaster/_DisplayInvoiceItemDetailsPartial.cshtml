@@ -26,6 +26,7 @@
         </td>
         <td class="text-start">
             <div class="">
+                <input type="hidden" id="txtunittype_@item.ItemId" value="@item.UnitType" />
                 <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 75px;" onclick="UnitTypeDropdown('@item.ItemId')">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>

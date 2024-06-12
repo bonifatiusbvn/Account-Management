@@ -95,6 +95,8 @@ $(document).ready(function () {
     });
 
 
+
+
 });
 
 function GetItemDetailsList() {
@@ -146,7 +148,7 @@ function GetSupplierDetail() {
             var selectedValue = $('#textSupplierName').find('option:first').val();
 
             $.each(result, function (i, data) {
-                
+
                 if (data.supplierId !== selectedValue) {
                     $('#textSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
                 }
@@ -552,6 +554,7 @@ function UpdateInvoiceDetails() {
 
             var ItemDetails = [];
             $(".product").each(function () {
+
                 var orderRow = $(this);
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
@@ -659,6 +662,9 @@ function UpdateInvoiceDetails() {
 
 function UnitTypeDropdown(itemId) {
 
+    if ($('#txtPOUnitType_' + itemId + ' option').length > 1) {
+        return
+    }
 
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
@@ -667,9 +673,15 @@ function UnitTypeDropdown(itemId) {
 
             $.each(result, function (i, data) {
                 $('#txtPOUnitType_' + itemId).append('<option value=' + data.unitId + '>' + data.unitName + '</option>');
+
             });
+
+            $('#txtPOUnitType_' + itemId).val($("#txtunittype_" + itemId).val())
+
+
         }
     });
+
 }
 
 
@@ -714,9 +726,10 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-    
+
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
+    UnitTypeDropdown(itemId)
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;
 
