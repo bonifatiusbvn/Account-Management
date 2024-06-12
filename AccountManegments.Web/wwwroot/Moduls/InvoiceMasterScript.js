@@ -108,16 +108,26 @@ function GetItemDetailsList() {
 }
 
 function GetCompanyDetail() {
-
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
+
+            var selectedValue = $('#textCompanyName').find('option:first').val();
+
             $.each(result, function (i, data) {
-                $('#textCompanyName').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                if (data.companyId !== selectedValue) {
+                    $('#textCompanyName').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                }
             });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
         }
     });
 }
+
+
+
 
 $(document).ready(function () {
     $('#textCompanyName').change(function () {
@@ -133,8 +143,13 @@ function GetSupplierDetail() {
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
         success: function (result) {
+            var selectedValue = $('#textSupplierName').find('option:first').val();
+
             $.each(result, function (i, data) {
-                $('#textSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+                
+                if (data.supplierId !== selectedValue) {
+                    $('#textSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+                }
             });
         }
     });
