@@ -167,7 +167,7 @@ function CreateSite() {
             ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
 
-            
+
         }
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
             siteloaderhide();
@@ -202,7 +202,7 @@ function CreateSite() {
             })
 
         }
-       
+
     }
     else {
         siteloaderhide();
@@ -232,32 +232,40 @@ function UpdateSiteDetails() {
             ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
         }
-        $.ajax({
-            url: '/SiteMaster/UpdateSiteDetails',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createSite');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+        if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+        else {
+            $.ajax({
+                url: '/SiteMaster/UpdateSiteDetails',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createSite');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllSiteListTable();
+                        toastr.success(Result.message);
                     } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        toastr.error(Result.message);
                     }
-
-                    AllSiteListTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
+                    siteloaderhide();
                 }
-                siteloaderhide();
-            }
-        })
+            })
+
+        }
+
     }
     else {
         siteloaderhide();
@@ -312,7 +320,6 @@ function validateAndCreateSite() {
             txtAddress: "required",
             txtArea: "required",
             txtPincode: {
-                required: true,
                 digits: true,
                 minlength: 6,
                 maxlength: 6
@@ -350,7 +357,6 @@ function validateAndCreateSite() {
             txtAddress: "Please Enter Address",
             txtArea: "Please Enter Area",
             txtPincode: {
-                required: "Please Enter Pin Code",
                 digits: "Pin code must contain only digits",
                 minlength: "Pin code must be 6 digits long",
                 maxlength: "Pin code must be 6 digits long"

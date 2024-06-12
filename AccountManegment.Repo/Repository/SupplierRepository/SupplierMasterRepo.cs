@@ -440,11 +440,11 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     {
                         Context.SupplierMasters.AddRange(suppliersToAdd);
                     }
-                    if(suppliersToUpdate.Any())
+                    if (suppliersToUpdate.Any())
                     {
                         Context.SupplierMasters.UpdateRange(suppliersToAdd);
                     }
-                    
+
                     await Context.SaveChangesAsync();
                     response.code = (int)HttpStatusCode.OK;
                     response.message = "Supplier details successfully inserted";

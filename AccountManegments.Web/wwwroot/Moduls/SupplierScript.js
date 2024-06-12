@@ -1,7 +1,7 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
-
+    debugger
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
@@ -20,37 +20,47 @@ function CreateSupplier() {
             CreatedBy: $('#txtUserid').val(),
 
         }
-        $.ajax({
-            url: '/Supplier/CreateSupplier',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createSupplier');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
-                    } else {
+        if (objData.City == "--Select City--" || objData.State == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+        else {
+            $.ajax({
+                url: '/Supplier/CreateSupplier',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    debugger
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createSupplier');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllUserTable();
+                        toastr.success(Result.message);
                     }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                    siteloaderhide();
+                },
+                error: function (xhr, status, error) {
 
-                    AllUserTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
+                    siteloaderhide();
+                    toastr.warning("Supplier already exists.");
                 }
-                siteloaderhide();
-            },
-            error: function (xhr, status, error) {
+            })
+        }
 
-                siteloaderhide();
-                toastr.error("An error occurred while creating Supplier");
-            }
-        })
     }
     else {
         siteloaderhide();
@@ -241,32 +251,41 @@ function UpdateSupplierDetails() {
             Iffccode: $('#txtIFFC').val(),
             UpdatedBy: $('#txtUserid').val(),
         }
-        $.ajax({
-            url: '/Supplier/UpdateSupplierDetails',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createSupplier');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
+        if (objData.City == "--Select City--" || objData.State == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+
+        else {
+            $.ajax({
+                url: '/Supplier/UpdateSupplierDetails',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createSupplier');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllUserTable();
+                        toastr.success(Result.message);
                     } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        toastr.error(Result.message);
                     }
+                    siteloaderhide();
+                },
+            })
+        }
 
-                    AllUserTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-                siteloaderhide();
-            },
-        })
     }
     else {
         siteloaderhide();

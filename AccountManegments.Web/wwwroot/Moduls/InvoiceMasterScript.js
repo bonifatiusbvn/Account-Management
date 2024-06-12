@@ -534,7 +534,7 @@ function UpdateInvoiceDetails() {
     if ($("#CreateInvoiceForm").valid()) {
 
         if ($('#addnewproductlink tr').length >= 1) {
-            
+
             var ItemDetails = [];
             $(".product").each(function () {
                 var orderRow = $(this);
@@ -587,7 +587,7 @@ function UpdateInvoiceDetails() {
                 ItemList: ItemDetails,
                 ShippingAddress: Address,
             }
-            
+
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
 
@@ -637,7 +637,7 @@ function UpdateInvoiceDetails() {
         toastr.error("Kindly fill all details");
     }
 
-    
+
 }
 
 
@@ -648,6 +648,8 @@ function UnitTypeDropdown(itemId) {
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
         success: function (result) {
+            $('#txtPOUnitType_' + itemId).empty();
+
             $.each(result, function (i, data) {
                 $('#txtPOUnitType_' + itemId).append('<option value=' + data.unitId + '>' + data.unitName + '</option>');
             });
@@ -697,9 +699,9 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
+    debugger
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
-    UnitTypeDropdown(itemId);
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;
 

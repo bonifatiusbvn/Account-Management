@@ -73,34 +73,42 @@ function AddCompany() {
             Pincode: $('#txtPincode').val(),
             InvoicePef: $('#txtInvoicePrefix').val(),
         }
-        $.ajax({
-            url: '/Company/AddCompany',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createCompany');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+        if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+        else {
+            $.ajax({
+                url: '/Company/AddCompany',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createCompany');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllCompanyTable();
+                        toastr.success(Result.message);
                     } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        toastr.error(Result.message);
                     }
+                    siteloaderhide();
 
-                    AllCompanyTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-                siteloaderhide();
+                },
 
-            },
+            })
 
-        })
+        }
+
     }
     else {
         siteloaderhide();
@@ -217,32 +225,41 @@ function UpdateCompany() {
             Pincode: $('#txtPincode').val(),
             InvoicePef: $("#txtInvoicePrefix").val(),
         }
-        $.ajax({
-            url: '/Company/UpdateCompany',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('createCompany');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-                    if (offcanvas) {
-                        offcanvas.hide();
+        if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
+            siteloaderhide();
+            toastr.error("Kindly fill all details");
+        }
+        else {
+            $.ajax({
+                url: '/Company/UpdateCompany',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        var offcanvasElement = document.getElementById('createCompany');
+                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                        if (offcanvas) {
+                            offcanvas.hide();
+                        } else {
+
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            offcanvas.hide();
+                        }
+
+                        AllCompanyTable();
+                        toastr.success(Result.message);
                     } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
+                        toastr.error(Result.message);
                     }
+                    siteloaderhide();
+                },
+            })
 
-                    AllCompanyTable();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-                siteloaderhide();
-            },
-        })
+        }
+
     }
     else {
         siteloaderhide();
@@ -322,7 +339,7 @@ function validateAndCreateCompany() {
             txtInvoicePrefix: {
                 required: true,
                 maxlength: 6,
-            }, 
+            },
         },
         messages: {
             txtCompanyName: "Please Enter CompanyName",
