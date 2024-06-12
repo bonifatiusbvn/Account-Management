@@ -644,6 +644,7 @@ function UpdateInvoiceDetails() {
 
 function UnitTypeDropdown(itemId) {
 
+
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
         success: function (result) {
