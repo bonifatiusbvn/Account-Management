@@ -92,7 +92,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(response.message), Code = response.code });
+                    return Ok(new { Message = string.Format(response.message), Code = response.code });
                 }
             }
             catch (Exception ex)
@@ -132,7 +132,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = response.message, Code = response.code });
+                    return Ok(new { Message = response.message, Code = response.code });
                 }
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(company.message), Code = company.code });
+                    return Ok(new { Message = string.Format(company.message), Code = company.code });
                 }
             }
             catch (Exception ex)

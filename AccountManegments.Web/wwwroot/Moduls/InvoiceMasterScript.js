@@ -643,7 +643,6 @@ function UpdateInvoiceDetails() {
 
 
 function UnitTypeDropdown(itemId) {
-    debugger
 
     $.ajax({
         url: '/ItemMaster/GetAllUnitType',
@@ -699,7 +698,7 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-    debugger
+    
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
     var newProductId = newProductRow.attr('data-product-id');

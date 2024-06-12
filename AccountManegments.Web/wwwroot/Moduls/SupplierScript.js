@@ -31,7 +31,7 @@ function CreateSupplier() {
                 type: 'post',
                 data: objData,
                 datatype: 'json',
-                success: function (Result) {
+                success: function (Result) {debugger
                     debugger
                     if (Result.code == 200) {
                         var offcanvasElement = document.getElementById('createSupplier');
@@ -48,7 +48,7 @@ function CreateSupplier() {
                         AllUserTable();
                         toastr.success(Result.message);
                     }
-                    else {
+                    else {debugger
                         toastr.error(Result.message);
                     }
                     siteloaderhide();

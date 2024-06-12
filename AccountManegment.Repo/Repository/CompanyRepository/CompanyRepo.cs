@@ -31,28 +31,38 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var company = new Company()
+                var existingCompany = Context.Companies.FirstOrDefault(x => x.CompanyName == AddCompany.CompanyName);
+                if (existingCompany == null)
                 {
-                    CompanyId = Guid.NewGuid(),
-                    CompanyName = AddCompany.CompanyName,
-                    Gstno = AddCompany.Gstno,
-                    PanNo = AddCompany.PanNo,
-                    Address = AddCompany.Address,
-                    Area = AddCompany.Area,
-                    CityId = AddCompany.CityId,
-                    StateId = AddCompany.StateId,
-                    Country = AddCompany.Country,
-                    CreatedOn = DateTime.Now,
-                    Pincode = AddCompany.Pincode,
-                    CreatedBy = AddCompany.CreatedBy,
-                    InvoicePef = AddCompany.InvoicePef,
-                    IsDelete = false,
+                    var company = new Company()
+                    {
+                        CompanyId = Guid.NewGuid(),
+                        CompanyName = AddCompany.CompanyName,
+                        Gstno = AddCompany.Gstno,
+                        PanNo = AddCompany.PanNo,
+                        Address = AddCompany.Address,
+                        Area = AddCompany.Area,
+                        CityId = AddCompany.CityId,
+                        StateId = AddCompany.StateId,
+                        Country = AddCompany.Country,
+                        CreatedOn = DateTime.Now,
+                        Pincode = AddCompany.Pincode,
+                        CreatedBy = AddCompany.CreatedBy,
+                        InvoicePef = AddCompany.InvoicePef,
+                        IsDelete = false,
 
-                };
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "Company successfully created.";
-                Context.Companies.Add(company);
-                Context.SaveChanges();
+                    };
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Company successfully created.";
+                    Context.Companies.Add(company);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Company already exists.";
+                }
+                
             }
             catch (Exception)
             {
