@@ -1,7 +1,7 @@
 ﻿AllUserTable();
 fn_getState('dropState', 1);
 function CreateSupplier() {
-    debugger
+
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
@@ -25,6 +25,7 @@ function CreateSupplier() {
             siteloaderhide();
             toastr.error("Kindly fill all details");
         }
+
         else {
             $.ajax({
                 url: '/Supplier/CreateSupplier',
@@ -32,7 +33,7 @@ function CreateSupplier() {
                 data: objData,
                 datatype: 'json',
                 success: function (Result) {
-                    debugger
+
                     if (Result.code == 200) {
                         var offcanvasElement = document.getElementById('createSupplier');
                         var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
@@ -49,14 +50,14 @@ function CreateSupplier() {
                         toastr.success(Result.message);
                     }
                     else {
-                        toastr.error(Result.message);
+                        toastr.warning(Result.message);
                     }
                     siteloaderhide();
                 },
                 error: function (xhr, status, error) {
 
                     siteloaderhide();
-                    toastr.warning("Supplier already exists.");
+                    toastr.warning("An error occurred while creating Supplier");
                 }
             })
         }
