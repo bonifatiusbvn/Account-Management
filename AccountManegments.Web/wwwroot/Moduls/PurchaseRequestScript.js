@@ -812,7 +812,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
-                    UnitTypeId: orderRow.find("#UnitTypeId").val(),
+                    UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     TotalPrice: orderRow.find("#txtproductamount").val(),
                     Price: orderRow.find("#txtproductamount").val(),

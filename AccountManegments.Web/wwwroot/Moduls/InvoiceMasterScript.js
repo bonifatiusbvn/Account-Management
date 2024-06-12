@@ -461,7 +461,7 @@ function InsertMultipleSupplierItem() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
-                    UnitType: orderRow.find("#UnitTypeId").val(),
+                    UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
@@ -559,7 +559,7 @@ function UpdateInvoiceDetails() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
-                    UnitType: orderRow.find("#UnitTypeId").val(),
+                    UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
@@ -584,7 +584,6 @@ function UpdateInvoiceDetails() {
             } else {
                 Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
             }
-
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
                 SiteId: siteid,
