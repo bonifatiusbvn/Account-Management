@@ -120,6 +120,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
+
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
@@ -290,23 +291,16 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
+
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
-        var siteName = null;
-        var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
-            siteName = $("#txtPoSiteName").val();
-        }
-        else {
-            siteName = $("#txtPRsiteid").val();
-        }
 
         var objData = {
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
             Item: $('#txtItemName').val(),
-            SiteId: siteName,
+            SiteId: $("#txtPoSiteName").val(),
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
             CreatedBy: $('#txtcreatedby').val(),
@@ -560,8 +554,11 @@ function GetCompanyName() {
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             if (result.length > 0) {
+                var selectedValue = $('#txtcompanyname').find('option:first').val();
                 $.each(result, function (i, data) {
-                    $('#txtcompanyname').append('<option value=' + data.companyId + '>' + data.companyName + '</option>');
+                    if (data.companyId !== selectedValue) {
+                        $('#txtcompanyname').append('<option value=' + data.companyId + '>' + data.companyName + '</option>');
+                    }
                 });
                 $('#txtcompanyname option:first').prop('selected', true);
 
@@ -601,8 +598,11 @@ function GetSupplierDetails() {
         url: '/Supplier/GetSupplierNameList',
         success: function (result) {
             if (result.length > 0) {
+                var selectedValue = $('#txtSuppliername').find('option:first').val();
                 $.each(result, function (i, data) {
-                    $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+                    if (data.supplierId !== selectedValue) {
+                        $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+                    }
                 });
             }
 

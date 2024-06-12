@@ -60,7 +60,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Code = 400,Message = "Failed to create invoice",});
+                    return Ok(new { Code = 400,Message = "Failed to create invoice",});
                 }
             }
             catch (Exception ex) 
@@ -120,7 +120,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -159,7 +159,7 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
 
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -207,7 +207,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -230,7 +230,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -257,7 +257,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

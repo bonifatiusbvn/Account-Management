@@ -134,7 +134,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -155,7 +155,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -177,7 +177,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -202,7 +202,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -259,7 +259,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message });
+                    return Ok(new { postuser.message });
                 }
             }
             catch (Exception ex)
@@ -329,7 +329,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message });
+                    return Ok(new { postuser.message });
                 }
             }
             catch (Exception ex)
@@ -351,7 +351,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

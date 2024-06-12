@@ -50,6 +50,11 @@ namespace AccountManagement.API.Controllers
                 response.code = sitemaster.code;
                 response.message = sitemaster.message;
             }
+            else
+            {
+                response.code = sitemaster.code;
+                response.message = sitemaster.message;
+            }
             return StatusCode(response.code, response);
         }
         [HttpPost]

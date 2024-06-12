@@ -32,7 +32,7 @@ namespace AccountManagement.API.Controllers
                 var result = _companyService.AddCompany(AddCompany);
                 if (result.Result.code == 200)
                 {
-                    response.code = (int)HttpStatusCode.OK;
+                    response.code = result.Result.code;
                     response.message = result.Result.message;
                 }
                 else

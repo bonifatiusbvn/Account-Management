@@ -42,6 +42,7 @@ namespace AccountManagement.API.Controllers
             else
             {
                 response.code = (int)HttpStatusCode.BadRequest;
+                response.message = CreateSupplier.message;
             }
 
             return StatusCode(response.code, response);

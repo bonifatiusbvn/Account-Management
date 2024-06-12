@@ -27,33 +27,42 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var SiteMaster = new Site()
+                var existingSite = Context.Sites.FirstOrDefault(x => x.SiteName == SiteDetails.SiteName);
+                if(existingSite == null)
                 {
-                    SiteId = Guid.NewGuid(),
-                    SiteName = SiteDetails.SiteName,
-                    IsActive = true,
-                    ContectPersonName = SiteDetails.ContectPersonName,
-                    ContectPersonPhoneNo = SiteDetails.ContectPersonPhoneNo,
-                    Address = SiteDetails.Address,
-                    Area = SiteDetails.Area,
-                    CityId = SiteDetails.CityId,
-                    StateId = SiteDetails.StateId,
-                    Country = SiteDetails.Country,
-                    Pincode = SiteDetails.Pincode,
-                    ShippingAddress = SiteDetails.ShippingAddress,
-                    ShippingArea = SiteDetails.ShippingArea,
-                    ShippingCityId = SiteDetails.ShippingCityId,
-                    ShippingStateId = SiteDetails.ShippingStateId,
-                    ShippingCountry = SiteDetails.ShippingCountry,
-                    ShippingPincode = SiteDetails.ShippingPincode,
-                    IsDeleted = false,
-                    CreatedBy = SiteDetails.CreatedBy,
-                    CreatedOn = DateTime.Now,
-                };
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "Site is successfully created.";
-                Context.Sites.Add(SiteMaster);
-                Context.SaveChanges();
+                    var SiteMaster = new Site()
+                    {
+                        SiteId = Guid.NewGuid(),
+                        SiteName = SiteDetails.SiteName,
+                        IsActive = true,
+                        ContectPersonName = SiteDetails.ContectPersonName,
+                        ContectPersonPhoneNo = SiteDetails.ContectPersonPhoneNo,
+                        Address = SiteDetails.Address,
+                        Area = SiteDetails.Area,
+                        CityId = SiteDetails.CityId,
+                        StateId = SiteDetails.StateId,
+                        Country = SiteDetails.Country,
+                        Pincode = SiteDetails.Pincode,
+                        ShippingAddress = SiteDetails.ShippingAddress,
+                        ShippingArea = SiteDetails.ShippingArea,
+                        ShippingCityId = SiteDetails.ShippingCityId,
+                        ShippingStateId = SiteDetails.ShippingStateId,
+                        ShippingCountry = SiteDetails.ShippingCountry,
+                        ShippingPincode = SiteDetails.ShippingPincode,
+                        IsDeleted = false,
+                        CreatedBy = SiteDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Site is successfully created.";
+                    Context.Sites.Add(SiteMaster);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Site already exists.";
+                }
             }
             catch (Exception)
             {
