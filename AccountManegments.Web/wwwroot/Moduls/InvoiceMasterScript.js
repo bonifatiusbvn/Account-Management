@@ -586,7 +586,7 @@ function UpdateInvoiceDetails() {
                 Id: $('#textSupplierInvoiceId').val(),
                 SiteId: siteid,
                 InvoiceNo: $("#textInvoicePrefix").val(),
-                Date: $("#textOrderDate").val(),
+                Date: $("#textOrderDate2").val(),
                 SupplierId: $("#textSupplierName").val(),
                 CompanyId: $("#textCompanyName").val(),
                 TotalAmountInvoice: $("#cart-total").val(),
