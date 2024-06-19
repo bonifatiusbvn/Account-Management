@@ -40,16 +40,25 @@ namespace AccountManegments.Web.Controllers
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListView()
         {
+            
+          return View();
+            
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CheckPRNo()
+        {
             try
             {
                 ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
+                string PRNo = null;
 
                 if (Response.code == 200)
                 {
-                    ViewData["PrNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                    PRNo = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
                 }
 
-                return View();
+                return new JsonResult(PRNo);
             }
             catch (Exception ex)
             {
@@ -57,6 +66,11 @@ namespace AccountManegments.Web.Controllers
 
             }
         }
+
+
+
+
+
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
         {
