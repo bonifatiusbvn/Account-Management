@@ -10,7 +10,7 @@
 <style>
 
 
-    #searchItemname-error, #txtUnitType-error, #txtQuantity-error {
+    #searchItemname-error, #txtUnitType-error, #txtQuantity-error, #txtPoSiteName-error {
         color: red;
     }
 
@@ -196,11 +196,19 @@
                                     <div class="col-12" id="siteDetails">
                                         <label class="form-label">Site</label>
                                         <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
+                                            <option value="" selected>--Select Site--</option>
                                         </select>
                                         <span id="spnSiteName" class="text-danger"></span>
                                     </div>
                                 }
                                 <input type="hidden" id="txtPRsiteid" value="@UserSession.SiteId" />
+                                <input type="hidden" id="txtPRRoleId" value="@_userSession.UserRole" />
+
+                                <div class="col-12">
+                                    <label class="form-label">Where To Ship</label>
+                                    <select class="single-select form-select" id="drpPRSiteAddress" name="drpPRSiteAddress">
+                                    </select>
+                                </div>
                                 <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
                                 </div>

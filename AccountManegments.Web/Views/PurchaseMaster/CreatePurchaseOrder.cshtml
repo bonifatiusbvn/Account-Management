@@ -15,8 +15,8 @@
 
     #txtSuppliername-error, #companybillingaddressDetails-error, #txtcompanyname-error,
     #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error, #txtgst-error, 
-    #txtSupplierAddress-error, #txtSuppliermobile-error {
-        color: red;``
+    #txtmdAddress-error, #txtSuppliermobile-error {
+        color: red;
     }
 
     #txtPoSiteName-error, #txtmdqty-error {
@@ -397,7 +397,7 @@
                         <div class="row">
                             <div class="col-10 col-sm-10 ">
                                 <label class="form-lable">Select Site</label>
-                                <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName" required>
+                                <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
                                     <option selected value="">--Select Site--</option>
                                 </select>
                             </div>
@@ -405,7 +405,13 @@
                         <div class="row mt-2">
                             <div class="col-9 col-sm-9">
                                 <label class="form-lable">Address</label>
-                                <textarea class="form-control" id="txtmdAddress" style="height:90px;"></textarea>
+                                <select class="single-select form-select" id="drpPOSiteAddress">
+                                    <option value="">--Select Site Address--</option>
+                                </select>
+                                <br />
+                                <div>
+                                    <textarea class="form-control" id="txtmdAddress" name="txtmdAddress" style="height:90px;"></textarea>
+                                </div>
                                 <span id="spnSiteAddress" style="color:red;"></span>
                             </div>
                             <div class="col-3 col-sm-3">

@@ -11,6 +11,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
         public Guid Pid { get; set; }
 
         public Guid? ItemId { get; set; }
+
         public string? ItemName { get; set; }
 
         public int UnitTypeId { get; set; }
@@ -19,9 +20,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
 
         public Guid SiteId { get; set; }
 
+        public int? SiteAddressId { get; set; }
+
+        public string? SiteAddress { get; set; }
+
         public string PrNo { get; set; } = null!;
 
         public bool? IsApproved { get; set; }
+
         public bool? IsDeleted { get; set; }
 
         public Guid CreatedBy { get; set; }

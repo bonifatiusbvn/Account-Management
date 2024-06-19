@@ -214,5 +214,56 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetSiteAddressList(Guid SiteId)
+        {
+            try
+            {
+                List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
+                if (res.code == 200)
+                {
+                    SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
+                }
+
+                return new JsonResult(SiteName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> DisplaySiteAddressList(Guid SiteId)
+        {
+            try
+            {
+                List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
+                if (res.code == 200)
+                {
+                    SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
+                }
+                if (SiteName.Count == 0)
+                {
+                    SiteMasterModel SiteDetails = new SiteMasterModel();
+                    ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
+                    if (response.code == 200)
+                    {
+                        SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
+                    }
+                    return new JsonResult(SiteDetails);
+                }
+                else
+                {
+                    return new JsonResult(SiteName);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

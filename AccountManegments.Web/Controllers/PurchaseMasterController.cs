@@ -125,6 +125,9 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = UserSession.UserId,
                     PrNo = PurchaseRequestDetails.PrNo,
                     IsApproved = false,
+                    SiteAddress = PurchaseRequestDetails.SiteAddress,
+                    SiteAddressId  = PurchaseRequestDetails.SiteAddressId,
+                    ItemName = PurchaseRequestDetails.ItemName,
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(PurchaseRequest, "PurchaseRequest/AddPurchaseRequestDetails");
@@ -223,6 +226,11 @@ namespace AccountManegments.Web.Controllers
                     if (res.code == 200)
                     {
                         response = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(res.data.ToString());
+                        int rowNumber = 0;
+                        foreach (var item in response.ItemList)
+                        {
+                            item.RowNumber = rowNumber++;
+                        }
                     }
                     ViewBag.PurchaseOrderNo = response.Poid;
                 }

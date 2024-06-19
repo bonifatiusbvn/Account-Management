@@ -66,6 +66,44 @@ function GetSiteDetail() {
     });
 }
 
+$(document).ready(function () {
+    var RoleUserId = $('#txtPRRoleId').val();
+    var prSiteId = $('#txtPRsiteid').val();
+
+    if (RoleUserId == 8) {
+        fn_getPRSiteDetail(prSiteId);
+    }
+    else {
+        $('#txtPoSiteName').change(function () {
+            fn_getPRSiteDetail($(this).val());
+        });
+    }
+});
+
+
+function fn_getPRSiteDetail(SiteId, callback) {
+    $('#drpPRSiteAddress').empty();
+    siteloadershow();
+    $.ajax({
+        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+            $('#drpPRSiteAddress').append('<option value="" selected disabled>--Select Site Address--</option>')
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#drpPRSiteAddress').append('<option value=' + data.aid + '>' + data.address + '</option>')
+                });
+            }
+            if (callback && typeof callback === "function") {
+                callback();
+            }
+        },
+    });
+}
+
 function sortPurchaseRequestTable() {
     siteloadershow();
     var sortBy = $('#PurchaseRequestSortBy').val();
@@ -120,18 +158,25 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
-
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
-        var RoleUserId = $('#userRoleId').val();
-        siteName = $("#SiteIdinPR").val();
+        var siteId = $("#SiteIdinPR").val();
+        var PRsiteId = $("#txtPoSiteName").val();
+        if (PRsiteId && PRsiteId !== "") {
+            siteName = PRsiteId;
+        } else {
+            siteName = siteId;
+        }
+        var siteAddressId = $('#drpPRSiteAddress').val();
+        var siteAddress = $('#drpPRSiteAddress option:selected').text();
 
         var objData = {
-
+            SiteAddressId: siteAddressId,
+            SiteAddress: siteAddress,
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
-            ItemName: $('#txtItemName').val(),
+            ItemName: $('#searchItemname option:selected').text(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
@@ -186,6 +231,8 @@ function ClearPurchaseRequestTextBox() {
         $('#txtItemName').val('');
         $('#txtUnitType').val('');
         $('#txtQuantity').val('');
+        $('#txtPoSiteName').val('');
+        $('#drpPRSiteAddress').val('');
         $('#PurchaseRequestId').val('');
 
         var button = document.getElementById("btnpurchaseRequest");
@@ -208,6 +255,13 @@ function ClearPurchaseRequestTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreatePurchaseRequest")
         });
+        $('#drpPRSiteAddress').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
     }
 }
 var PRForm;
@@ -217,11 +271,13 @@ function validateAndCreatePurchaseRequest() {
             searchItemname: "required",
             txtUnitType: "required",
             txtQuantity: "required",
+            txtPoSiteName: "required",
         },
         messages: {
             searchItemname: "Select Item!",
             txtUnitType: "Select UnitType!",
             txtQuantity: "Enter Quantity",
+            txtPoSiteName: "Select Site",
         }
     });
     var isValid = true;
@@ -259,8 +315,12 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitTypeId);
-            $('#txtPoSiteName').val(response.siteId);
+            $('#txtUnitType').val(response.unitTypeId);                 
+
+            fn_getPRSiteDetail(response.siteId, function () {
+                $('#drpPRSiteAddress').val(response.siteAddressId);
+            });
+
             var button = document.getElementById("btnpurchaseRequest");
             if ($('#PurchaseRequestId').val() != '') {
                 button.textContent = "Update";
@@ -282,6 +342,13 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 allowClear: Boolean($(this).data('allow-clear')),
                 dropdownParent: $("#CreatePurchaseRequest")
             });
+            $('#drpPRSiteAddress').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -291,16 +358,29 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
 
+        var siteName = null;
+        siteId = $("#SiteIdinPR").val();
+        PRsiteId = $("#txtPoSiteName").val();
+        if (PRsiteId != undefined) {
+            siteName = PRsiteId;
+        }
+        else {
+            siteName = siteId
+        }
+        var siteAddressId = $('#drpPRSiteAddress').val();
+        var siteAddress = $('#drpPRSiteAddress option:selected').text();
+
         var objData = {
+            SiteAddressId: siteAddressId,
+            SiteAddress: siteAddress,
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
-            Item: $('#txtItemName').val(),
-            SiteId: $("#txtPoSiteName").val(),
+            ItemName: $('#searchItemname option:selected').text(),
+            SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
             CreatedBy: $('#txtcreatedby').val(),
@@ -313,6 +393,7 @@ function UpdatePurchaseRequestDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                siteloaderhide();
                 if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreatePurchaseRequest');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
@@ -911,22 +992,44 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
-        $.ajax({
-            url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
-            type: 'GET',
-            success: function (result) {
-                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
-            },
-
+        fn_GetPOSiteAddressList(Site);
+        $('#drpPOSiteAddress').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#mdShippingAdd")
         });
     });
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-address').prop('disabled', false);
     });
+});
+function fn_GetPOSiteAddressList(SiteId) {
+    $.ajax({
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+        success: function (result) {
+            $('#drpPOSiteAddress').empty();
+            $('#drpPOSiteAddress').append('<option value="">-- Select site address --</option>');
+            $('#txtmdAddress').val('');
+
+            if (Array.isArray(result)) {
+                $.each(result, function (i, data) {
+                    $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            } else {
+                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            }
+
+        }
+    });
+}
+$('#drpPOSiteAddress').on('change', function () {
+    var selectedPOAddress = $(this).val();
+    $('#txtmdAddress').val(selectedPOAddress);
 });
 function AddShippingAddress() {
     siteloadershow();
@@ -1021,11 +1124,11 @@ function AddShippingAddress() {
 $(document).ready(function () {
     $("#ShippingAddressForm").validate({
         rules: {
-            txtPoSiteName: "required",
+            txtmdAddress: "required",
             txtmdqty: "required",
         },
         messages: {
-            txtPoSiteName: "Select Site",
+            txtmdAddress: "Select Site",
             txtmdqty: "Enter Quantity",
 
         }
