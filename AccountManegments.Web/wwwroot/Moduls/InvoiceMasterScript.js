@@ -79,7 +79,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
-            success: function () {
+            success: function (Result) {
                 fn_GetInvoiceSiteAddressList(Site);
                 $('#drpInvoiceSiteAddress').select2({
                     theme: 'bootstrap4',
@@ -103,15 +103,26 @@ $(document).ready(function () {
 
 function fn_GetInvoiceSiteAddressList(SiteId) {
     $.ajax({
-        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
         success: function (result) {
             $('#drpInvoiceSiteAddress').empty();
-            $.each(result, function (i, data) {
-                $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-            });
+            $('#textmdAddress').val('');
+
+            if (Array.isArray(result)) {
+                $.each(result, function (i, data) {
+                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            } else {
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            }
         }
     });
 }
+
+$('#drpInvoiceSiteAddress').on('change', function () {
+    var selectedInvoiceAddress = $(this).val();
+    $('#textmdAddress').val(selectedInvoiceAddress);
+});
 
 function GetItemDetailsList() {
 
@@ -503,7 +514,7 @@ function InsertMultipleSupplierItem() {
                 Description: $("#textDescription").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: $("#drpInvoiceSiteAddress").val(),
+                ShippingAddress: $("#textmdAddress").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
@@ -589,7 +600,7 @@ function UpdateInvoiceDetails() {debugger
             } else {
                 siteid = document.getElementById("siteid").getAttribute("value");
             }
-            var shippingAdd = $("#drpInvoiceSiteAddress").val();
+            var shippingAdd = $("#textmdAddress").val();
             var Address = null;
             if (shippingAdd != "") {
                 Address = shippingAdd;
@@ -1171,7 +1182,7 @@ function clearItemErrorMessages() {
 function addShippingAddress() {
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
-        var address = $("#drpInvoiceSiteAddress").val();
+        var address = $("#textmdAddress").val();
         var sitename = $("#textInvoiceSiteName").val();
 
         if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {

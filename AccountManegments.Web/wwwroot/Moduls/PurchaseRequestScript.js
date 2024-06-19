@@ -937,20 +937,30 @@ $(document).ready(function () {
 });
 function fn_GetPOSiteAddressList(SiteId) {
     $.ajax({
-        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
         success: function (result) {
             $('#drpPOSiteAddress').empty();
-            $.each(result, function (i, data) {
-                $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-            });
+            if (Array.isArray(result)) {
+                $('#txtmdAddress').val('');
+                $.each(result, function (i, data) {
+                    $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            } else {
+                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            }
+           
         }
     });
 }
+$('#drpPOSiteAddress').on('change', function () {
+    var selectedPOAddress = $(this).val();
+    $('#txtmdAddress').val(selectedPOAddress);
+});
 function AddShippingAddress() {
     siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
         var quantity = $("#txtmdqty").val();
-        var address = $("#drpPOSiteAddress").val();
+        var address = $("#txtmdAddress").val();
         var ItemQuantity = $("#TotalProductQuantity").text();
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
 

@@ -223,6 +223,11 @@ namespace AccountManegments.Web.Controllers
                     if (res.code == 200)
                     {
                         response = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(res.data.ToString());
+                        int rowNumber = 0;
+                        foreach (var item in response.ItemList)
+                        {
+                            item.RowNumber = rowNumber++;
+                        }
                     }
                     ViewBag.PurchaseOrderNo = response.Poid;
                 }

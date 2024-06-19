@@ -209,7 +209,7 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetSiteAddressList(Guid SiteId)
+        public async Task<JsonResult> DisplaySiteAddressList(Guid SiteId)
         {
             try
             {
@@ -219,8 +219,20 @@ namespace AccountManegments.Web.Controllers
                 {
                     SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
                 }
-
-                return new JsonResult(SiteName);
+                if(SiteName.Count == 0)
+                {
+                    SiteMasterModel SiteDetails = new SiteMasterModel();
+                    ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
+                    if (response.code == 200)
+                    {
+                        SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
+                    }
+                    return new JsonResult(SiteDetails);
+                }
+                else
+                {
+                    return new JsonResult(SiteName);
+                }
             }
             catch (Exception ex)
             {
