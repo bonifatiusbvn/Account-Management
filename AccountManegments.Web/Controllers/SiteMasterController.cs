@@ -97,10 +97,13 @@ namespace AccountManegments.Web.Controllers
                     Address = createSite.Address,
                     Pincode = createSite.Pincode,
                     ShippingAddress = createSite.ShippingAddress,
+                    ShippingArea = createSite.ShippingArea,
+                    ShippingCityId = createSite.ShippingCityId,
+                    ShippingStateId = createSite.ShippingStateId,
+                    ShippingCountry = createSite.ShippingCountry,
+                    ShippingPincode = createSite.ShippingPincode,
                     CreatedBy = UserSession.UserId,
                 };
-
-
 
                 ApiResponseModel postUser = await APIServices.PostAsync(Site, "SiteMaster/AddSiteDetails");
                 if (postUser.code == 200)
@@ -182,7 +185,6 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
         [FormPermissionAttribute("Site-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSite(Guid SiteId)
@@ -201,27 +203,6 @@ namespace AccountManegments.Web.Controllers
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpGet]
-
-        public async Task<JsonResult> GetSiteAddressList(Guid SiteId)
-        {
-            try
-            {
-                List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
-                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
-                if (res.code == 200)
-                {
-                    SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
-                }
-
-                return new JsonResult(SiteName);
             }
             catch (Exception ex)
             {

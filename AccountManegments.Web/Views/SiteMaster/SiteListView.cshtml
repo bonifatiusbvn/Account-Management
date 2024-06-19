@@ -4,7 +4,6 @@
     ViewData["Title"] = "Site Master";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
 @section HeaderButton {
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
@@ -164,8 +163,11 @@
                                     <span id="spnContectPersonPhoneNo" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Address</label>
-                                    <textarea class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
+                                    <label class="form-label">Address</label> <br />
+                                    <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                    <label for="hideShippingAddress"><b>Is Your Address is same as Shipping Address?</b></label>
+
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
@@ -202,39 +204,64 @@
                                     <input type="hidden" id="txtSiteCity" value="" />
                                     <span id="spnCity" class="text-danger"></span>
                                 </div>
-                                <div class="card border mb-3">
-                                    <div id="shippingAddressFields" class="mb-2">
-                                        <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
-                                            <h5><b>Shipping Address</b></h5>
-                                            <button class="btn btn-secondary mb-2" id="btnaddmoresite">Add More?</button>
+                                <div id="shippingAddressFields" style="display:none;">
+                                    <div class="col-12">
+                                        <h5><b>Shipping Address</b></h5>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Shipping Address</label>
+                                        <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" name="txtShippingAddress"></textarea>
+                                        <span id="spnShippingAddress" class="text-danger"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label">Shipping Landmark</label>
+                                            <input type="text" class="form-control" placeholder="Shipping Landmark" id="txtShippingArea" name="txtShippingArea">
+                                            <span id="spnShippingArea" class="text-danger"></span>
                                         </div>
-                                        <table class="table table-bordered">
-                                            <tbody id="shippingAddressTable">
-                                                <tr id="shippingAddressContainer-1">
-                                                    <td>
-                                                        <label class="form-label">Shipping Address 1</label>
-                                                    </td>
-                                                    <td>
-                                                        <textarea class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress-1" name="txtShippingAddress-1"></textarea>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="col-6">
+                                            <label class="form-label">Shipping Pincode</label>
+                                            <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" name="txtShippingPincode">
+                                            <span id="spnShippingPincode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label class="form-label"> Shipping Country</label>
+                                            <select id="shippingCountry" name="shippingCountry" class="form-select" onchange="fn_getShippingState('ShippingState', null, this)">
+                                                <option value=" ">--Select Country--</option>
+                                            </select>
+                                            <input type="hidden" id="txtShippingCountry" value="" />
+                                            <span id="spnShippingCountry" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label"> Shipping State</label>
+                                            <select id="ShippingState" name="ShippingState" class="form-select" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
+                                                <option>--Select State--</option>
+                                            </select>
+                                            <input type="hidden" id="txtShippingState" value="" />
+                                            <span id="spnShippingState" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label">Shipping City</label>
+                                            <select id="ShippingCity" name="ShippingCity" class="form-select">
+                                                <option>--Select City--</option>
+                                            </select>
+                                            <input type="hidden" id="txtShippingCity" value="" />
+                                            <span id="spnShippingCity" class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite">Save</button>
+                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite"></button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
 
     </div>
 </div>
@@ -253,9 +280,9 @@
 </style>
 
 @section Scripts {
-
     <script src="~/moduls/masterlistscript.js" asp-append-version="true"></script>
     <script src="~/moduls/sitemasterscript.js" asp-append-version="true"></script>
+
 }
 
 
