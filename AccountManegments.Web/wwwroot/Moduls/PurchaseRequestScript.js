@@ -992,23 +992,15 @@ function checkAndDisableAddButton() {
 $(document).ready(function () {
 
     $('#txtPoSiteName').change(function () {
-
         var Site = $(this).val();
         $('#txtPoSiteName').val(Site);
-        $.ajax({
-            url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
-            type: 'GET',
-            success: function (result) {
-                fn_GetPOSiteAddressList(Site);
-                $('#drpPOSiteAddress').select2({
-                    theme: 'bootstrap4',
-                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                    placeholder: $(this).data('placeholder'),
-                    allowClear: Boolean($(this).data('allow-clear')),
-                    dropdownParent: $("#mdShippingAdd")
-                });
-            },
-
+        fn_GetPOSiteAddressList(Site);
+        $('#drpPOSiteAddress').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#mdShippingAdd")
         });
     });
     $(document).on('click', '#removeAddress', function () {
@@ -1021,15 +1013,17 @@ function fn_GetPOSiteAddressList(SiteId) {
         url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
         success: function (result) {
             $('#drpPOSiteAddress').empty();
+            $('#drpPOSiteAddress').append('<option value="">-- Select site address --</option>');
+            $('#txtmdAddress').val('');
+
             if (Array.isArray(result)) {
-                $('#txtmdAddress').val('');
                 $.each(result, function (i, data) {
                     $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
                 });
             } else {
                 $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
             }
-           
+
         }
     });
 }
@@ -1130,11 +1124,11 @@ function AddShippingAddress() {
 $(document).ready(function () {
     $("#ShippingAddressForm").validate({
         rules: {
-            txtPoSiteName: "required",
+            txtmdAddress: "required",
             txtmdqty: "required",
         },
         messages: {
-            txtPoSiteName: "Select Site",
+            txtmdAddress: "Select Site",
             txtmdqty: "Enter Quantity",
 
         }

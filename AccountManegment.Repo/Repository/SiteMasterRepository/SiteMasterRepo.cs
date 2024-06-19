@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,10 +80,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 SiteList = (from a in Context.Sites.Where(x => x.SiteId == SiteId)
                             join b in Context.Cities on a.CityId equals b.CityId into CityJoin
                             from city in CityJoin.DefaultIfEmpty()
+                            join sc in Context.Cities on a.ShippingCityId equals sc.CityId into ShippingCityJoin
+                            from shippingCity in ShippingCityJoin.DefaultIfEmpty()
                             join c in Context.States on a.StateId equals c.StatesId
                             join d in Context.Countries on a.Country equals d.CountryId
-                            
-                            join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
+                            join shippingState in Context.States on a.ShippingStateId equals shippingState.StatesId
                             join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
                             select new SiteMasterModel
                             {
@@ -128,6 +130,9 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 join b in Context.Cities on a.CityId equals b.CityId
                                 join c in Context.States on a.StateId equals c.StatesId
                                 join d in Context.Countries on a.Country equals d.CountryId
+                                join e in Context.Countries on a.ShippingCountry equals e.CountryId
+                                join f in Context.States on a.ShippingStateId equals f.StatesId
+                                join g in Context.Cities on a.ShippingCityId equals g.CityId
                                 where a.IsDeleted == false
                                 select new SiteMasterModel
                                 {
@@ -366,9 +371,26 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
+        public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await Context.SiteAddresses
+                                       .Where(a => a.SiteId == SiteId && a.IsDeleted != true)
+                                       .Select(a => new SiteAddressModel
+                                       {
+                                           Aid = a.Aid,
+                                           SiteId = a.SiteId,
+                                           Address = a.Address,
+                                           IsDeleted = a.IsDeleted
+                                       })
+                                       .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
