@@ -8,7 +8,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
 {
     public class POItemDetailsModel
     {
-        public Guid? ItemId { get; set; }
+        public Guid ItemId { get; set; }
         public int DetailId { get; set; }
         public string? ItemName { get; set; }
         public int UnitType { get; set; }

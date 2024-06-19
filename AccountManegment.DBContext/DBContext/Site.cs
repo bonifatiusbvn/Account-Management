@@ -51,5 +51,7 @@ public partial class Site
 
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
 
+    public virtual ICollection<SiteAddress> SiteAddresses { get; set; } = new List<SiteAddress>();
+
     public virtual ICollection<SupplierInvoice> SupplierInvoices { get; set; } = new List<SupplierInvoice>();
 }

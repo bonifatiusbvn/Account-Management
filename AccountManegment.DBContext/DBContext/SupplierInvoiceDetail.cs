@@ -9,7 +9,7 @@ public partial class SupplierInvoiceDetail
 
     public Guid? RefInvoiceId { get; set; }
 
-    public Guid? ItemId { get; set; }
+    public Guid ItemId { get; set; }
 
     public string? ItemName { get; set; }
 

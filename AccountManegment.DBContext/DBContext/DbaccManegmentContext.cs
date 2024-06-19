@@ -41,6 +41,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Site> Sites { get; set; }
 
+    public virtual DbSet<SiteAddress> SiteAddresses { get; set; }
+
     public virtual DbSet<State> States { get; set; }
 
     public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
@@ -55,8 +57,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -261,6 +263,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.SiteAddress).HasMaxLength(500);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Item).WithMany(p => p.PurchaseRequests)
@@ -307,6 +310,23 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ShippingPincode).HasMaxLength(10);
             entity.Property(e => e.SiteName).HasMaxLength(250);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<SiteAddress>(entity =>
+        {
+            entity.HasKey(e => e.Aid);
+
+            entity.ToTable("SiteAddress");
+
+            entity.Property(e => e.Aid)
+                .ValueGeneratedNever()
+                .HasColumnName("AId");
+            entity.Property(e => e.Address).HasMaxLength(500);
+
+            entity.HasOne(d => d.Site).WithMany(p => p.SiteAddresses)
+                .HasForeignKey(d => d.SiteId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SiteAddress_Site");
         });
 
         modelBuilder.Entity<State>(entity =>

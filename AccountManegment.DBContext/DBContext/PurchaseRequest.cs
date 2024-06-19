@@ -19,6 +19,10 @@ public partial class PurchaseRequest
 
     public string PrNo { get; set; } = null!;
 
+    public int? SiteAddressId { get; set; }
+
+    public string? SiteAddress { get; set; }
+
     public bool? IsApproved { get; set; }
 
     public bool? IsDeleted { get; set; }
