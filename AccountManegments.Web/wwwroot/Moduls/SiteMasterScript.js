@@ -166,14 +166,17 @@ function CreateSite() {
             ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
             ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
+            SiteShippingAddresses: []
+        };
 
+        $('#shippingAddressTable textarea').each(function () {
+            objData.SiteShippingAddresses.push($(this).val());
+        });
 
-        }
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
             siteloaderhide();
             toastr.error("Kindly fill all details");
-        }
-        else {
+        } else {
             $.ajax({
                 url: '/SiteMaster/CreateSite',
                 type: 'post',
@@ -187,7 +190,6 @@ function CreateSite() {
                         if (offcanvas) {
                             offcanvas.hide();
                         } else {
-
                             offcanvas = new bootstrap.Offcanvas(offcanvasElement);
                             offcanvas.hide();
                         }
@@ -199,12 +201,9 @@ function CreateSite() {
                     }
                     siteloaderhide();
                 },
-            })
-
+            });
         }
-
-    }
-    else {
+    } else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
@@ -584,6 +583,43 @@ function GetShippingCountry() {
         }
     });
 }
+$(document).ready(function () {
+    let shippingAddressCount = 1;
+
+    $('#btnaddmoresite').click(function (e) {
+        e.preventDefault();
+        shippingAddressCount++;
+
+        const newShippingAddress = `
+            <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}">
+                <label class="form-label">Shipping Address ${shippingAddressCount}</label>
+                <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
+                <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+            </div>`;
+        $('#shippingAddressTable').append(newShippingAddress);
+    });
+
+    window.removeItem = function (btn) {
+        const container = $(btn).closest('.col-12');
+        const totalAddresses = $('#shippingAddressTable .col-12').length;
+        if (totalAddresses > 1 || container.attr('id') === 'shippingAddressContainer-1') {
+            container.remove();
+            updateShippingAddressNumbers();
+        }
+    }
+
+    function updateShippingAddressNumbers() {
+        $('#shippingAddressTable .col-12').each(function (index) {
+            const newIndex = index + 1;
+            $(this).attr('id', `shippingAddressContainer-${newIndex}`);
+            $(this).find('.form-label').text(`Shipping Address ${newIndex}`);
+            $(this).find('textarea').attr('id', `txtShippingAddress-${newIndex}`).attr('name', `txtShippingAddress-${newIndex}`);
+        });
+        shippingAddressCount = $('#shippingAddressTable .col-12').length;
+    }
+});
+
+
 
 function toggleShippingAddress() {
     var checkbox = document.getElementById("hideShippingAddress");
