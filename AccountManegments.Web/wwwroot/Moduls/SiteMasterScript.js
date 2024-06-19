@@ -160,20 +160,17 @@ function CreateSite() {
             StateId: $('#stateDropdown').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
-            ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#txtAddress').val() : $('#txtShippingAddress').val(),
-            ShippingArea: $('#hideShippingAddress').is(':checked') ? $('#txtArea').val() : $('#txtShippingArea').val(),
-            ShippingPincode: $('#hideShippingAddress').is(':checked') ? $('#txtPincode').val() : $('#txtShippingPincode').val(),
-            ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
-            ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
-            ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
+            ShippingAddress: []
+        };
 
+        $('#shippingAddressTable textarea').each(function () {
+            objData.ShippingAddress.push($(this).val());
+        });
 
-        }
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
             siteloaderhide();
             toastr.error("Kindly fill all details");
-        }
-        else {
+        } else {
             $.ajax({
                 url: '/SiteMaster/CreateSite',
                 type: 'post',
@@ -187,7 +184,6 @@ function CreateSite() {
                         if (offcanvas) {
                             offcanvas.hide();
                         } else {
-
                             offcanvas = new bootstrap.Offcanvas(offcanvasElement);
                             offcanvas.hide();
                         }
@@ -199,16 +195,14 @@ function CreateSite() {
                     }
                     siteloaderhide();
                 },
-            })
-
+            });
         }
-
-    }
-    else {
+    } else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
 }
+
 
 function UpdateSiteDetails() {
     siteloadershow();
@@ -584,6 +578,43 @@ function GetShippingCountry() {
         }
     });
 }
+
+let shippingAddressCount = 1;
+
+$('#btnaddmoresite').click(function (e) {
+    e.preventDefault();
+    shippingAddressCount++;
+
+    const newShippingAddress = `
+            <tr id="shippingAddressContainer-${shippingAddressCount}">
+                <td>
+                    <label class="form-label">Shipping Address ${shippingAddressCount}</label>
+                </td>
+                <td>
+                    <textarea class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+                </td>
+            </tr>`;
+    $('#shippingAddressTable').append(newShippingAddress);
+});
+
+window.removeItem = function (btn) {
+    $(btn).closest('tr').remove();
+    updateShippingAddressNumbers();
+}
+
+function updateShippingAddressNumbers() {
+    $('#shippingAddressTable tr').each(function (index) {
+        const newIndex = index + 1;
+        $(this).attr('id', `shippingAddressContainer-${newIndex}`);
+        $(this).find('.form-label').text(`Shipping Address ${newIndex}`);
+        $(this).find('textarea').attr('id', `txtShippingAddress-${newIndex}`).attr('name', `txtShippingAddress-${newIndex}`);
+    });
+    shippingAddressCount = $('#shippingAddressTable tr').length;
+}
+
 
 function toggleShippingAddress() {
     var checkbox = document.getElementById("hideShippingAddress");

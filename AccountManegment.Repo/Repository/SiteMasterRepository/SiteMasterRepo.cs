@@ -28,7 +28,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var existingSite = Context.Sites.FirstOrDefault(x => x.SiteName == SiteDetails.SiteName);
-                if(existingSite == null)
+                if (existingSite == null)
                 {
                     var SiteMaster = new Site()
                     {
@@ -43,12 +43,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         StateId = SiteDetails.StateId,
                         Country = SiteDetails.Country,
                         Pincode = SiteDetails.Pincode,
-                        ShippingAddress = SiteDetails.ShippingAddress,
-                        ShippingArea = SiteDetails.ShippingArea,
-                        ShippingCityId = SiteDetails.ShippingCityId,
-                        ShippingStateId = SiteDetails.ShippingStateId,
-                        ShippingCountry = SiteDetails.ShippingCountry,
-                        ShippingPincode = SiteDetails.ShippingPincode,
                         IsDeleted = false,
                         CreatedBy = SiteDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -101,15 +95,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 Country = a.Country,
                                 CountryName = d.CountryName,
                                 Pincode = a.Pincode,
-                                ShippingAddress = a.ShippingAddress,
-                                ShippingArea = a.ShippingArea,
-                                ShippingCityId = a.ShippingCityId,
-                                ShippingCityName = shippingCity.CityName,
-                                ShippingStateId = a.ShippingStateId,
-                                ShippingStateName = shippingState.StatesName,
-                                ShippingCountry = a.ShippingCountry,
-                                ShippingCountryName = shippingCountry.CountryName,
-                                ShippingPincode = a.ShippingPincode,
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
                             }).First();
@@ -132,7 +117,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 join e in Context.Countries on a.ShippingCountry equals e.CountryId
                                 join f in Context.States on a.ShippingStateId equals f.StatesId
                                 join g in Context.Cities on a.ShippingCityId equals g.CityId
-                                where a.IsDeleted==false
+                                where a.IsDeleted == false
                                 select new SiteMasterModel
                                 {
                                     SiteId = a.SiteId,
@@ -149,15 +134,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                     Country = a.Country,
                                     CountryName = d.CountryName,
                                     Pincode = a.Pincode,
-                                    ShippingAddress = a.ShippingAddress,
-                                    ShippingArea = a.ShippingArea,
-                                    ShippingCityId = a.ShippingCityId,
-                                    ShippingCityName = g.CityName,
-                                    ShippingStateId = a.ShippingStateId,
-                                    ShippingStateName = f.StatesName,
-                                    ShippingCountry = a.ShippingCountry,
-                                    ShippingCountryName = e.CountryName,
-                                    ShippingPincode = a.ShippingPincode,
                                     CreatedBy = a.CreatedBy,
                                     CreatedOn = a.CreatedOn,
                                 });
@@ -244,12 +220,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteMaster.StateId = SiteDetails.StateId;
                     SiteMaster.Country = SiteDetails.Country;
                     SiteMaster.Pincode = SiteDetails.Pincode;
-                    SiteMaster.ShippingAddress = SiteDetails.ShippingAddress;
-                    SiteMaster.ShippingArea = SiteDetails.ShippingArea;
-                    SiteMaster.ShippingCityId = SiteDetails.ShippingCityId;
-                    SiteMaster.ShippingStateId = SiteDetails.ShippingStateId;
-                    SiteMaster.ShippingCountry = SiteDetails.ShippingCountry;
-                    SiteMaster.ShippingPincode = SiteDetails.ShippingPincode;
                 }
                 Context.Sites.Update(SiteMaster);
                 Context.SaveChanges();
@@ -308,12 +278,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             {
                 var siteDetails = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
                 var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true && e.IsDeleted == false);
-                var Purchaserequest=Context.PurchaseRequests.Where(b=>b.SiteId==SiteId).ToList();
-                var inwardchallan=Context.ItemInwords.Where(c=>c.SiteId==SiteId).ToList();
+                var Purchaserequest = Context.PurchaseRequests.Where(b => b.SiteId == SiteId).ToList();
+                var inwardchallan = Context.ItemInwords.Where(c => c.SiteId == SiteId).ToList();
 
                 if (siteDetails != null && siteDetails.IsActive == false)
                 {
-                    if(activeUsersCount == 0)
+                    if (activeUsersCount == 0)
                     {
                         siteDetails.IsDeleted = true;
                         Context.Sites.Update(siteDetails);
