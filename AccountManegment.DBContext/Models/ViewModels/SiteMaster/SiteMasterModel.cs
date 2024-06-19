@@ -30,9 +30,18 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public int Country { get; set; }
 
         public string? Pincode { get; set; }
+        [Required]
+        public string ShippingAddress { get; set; } = null!;
+        [Required]
+        public string ShippingArea { get; set; } = null!;
+        [Required]
+        public int? ShippingCityId { get; set; }
+        [Required]
+        public int? ShippingStateId { get; set; }
+        [Required]
+        public int? ShippingCountry { get; set; }
 
-        public string ShippingAddress { get; set; }
-
+        public string? ShippingPincode { get; set; }
         public bool? IsDeleted { get; set; }
         [Required]
         public Guid CreatedBy { get; set; }
