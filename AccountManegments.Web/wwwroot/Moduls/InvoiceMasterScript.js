@@ -76,28 +76,20 @@ function GetSiteDetail() {
 $(document).ready(function () {
     $('#textInvoiceSiteName').change(function () {
         var Site = $(this).val();
-        $.ajax({
-            url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
-            type: 'GET',
-            success: function (Result) {
-                fn_GetInvoiceSiteAddressList(Site);
-                $('#drpInvoiceSiteAddress').select2({
-                    theme: 'bootstrap4',
-                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                    placeholder: $(this).data('placeholder'),
-                    allowClear: Boolean($(this).data('allow-clear')),
-                    dropdownParent: $("#mdShippingAdd")
-                });
-            },
-            error: function (xhr, status, error) {
-                toastr.error("Error fetching company details:", error);
-            }
-        });
-    });
 
-    $(document).on('click', '#removeAddress', function () {
-        $(this).closest('tr').remove();
-        $('.add-addresses').prop('disabled', false);
+        fn_GetInvoiceSiteAddressList(Site);
+        $('#drpInvoiceSiteAddress').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#mdShippingAdd")
+        });
+
+        $(document).on('click', '#removeAddress', function () {
+            $(this).closest('tr').remove();
+            $('.add-addresses').prop('disabled', false);
+        });
     });
 });
 
@@ -107,7 +99,7 @@ function fn_GetInvoiceSiteAddressList(SiteId) {
         success: function (result) {
             $('#drpInvoiceSiteAddress').empty();
             $('#textmdAddress').val('');
-
+            $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
             if (Array.isArray(result)) {
                 $.each(result, function (i, data) {
                     $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
@@ -428,10 +420,10 @@ function DeleteSupplierInvoice(Id) {
 $(document).ready(function () {
     $("#shippingAddressForm").validate({
         rules: {
-            textInvoiceSiteName: "required",
+            textmdAddress: "required",
         },
         messages: {
-            textInvoiceSiteName: "Select Site",
+            textmdAddress: "Select shipping address",
         }
     });
 });
@@ -569,7 +561,8 @@ function InsertMultipleSupplierItem() {
         toastr.error("Kindly fill all details");
     }
 }
-function UpdateInvoiceDetails() {debugger
+function UpdateInvoiceDetails() {
+    debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 
@@ -1180,6 +1173,7 @@ function clearItemErrorMessages() {
 }
 
 function addShippingAddress() {
+    debugger
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
         var address = $("#textmdAddress").val();
@@ -1214,13 +1208,7 @@ function addShippingAddress() {
         siteloaderhide();
     } else {
         siteloaderhide();
-
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
+        toastr.warning('please select address!');
     }
 }
 

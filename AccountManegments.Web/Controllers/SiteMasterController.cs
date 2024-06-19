@@ -236,7 +236,6 @@ namespace AccountManegments.Web.Controllers
                     return new JsonResult(SiteName);
                 }
             }
-            }
             catch (Exception ex)
             {
                 throw ex;
