@@ -66,6 +66,44 @@ function GetSiteDetail() {
     });
 }
 
+$(document).ready(function () {
+
+    var RoleUserId = $('#txtPRRoleId').val();
+    var prSiteId = $('#txtPRsiteid').val();
+ 
+    if (RoleUserId == 3) {
+        fn_getPOSiteDetail(val(prSiteId));
+    }
+    else {
+        $('#txtPoSiteName').change(function () {
+
+            fn_getPOSiteDetail($(this).val());
+        });
+    }
+});
+
+
+function fn_getPOSiteDetail(SiteId) {
+    $('#txtPoSiteAddress').empty();
+    siteloadershow();
+    $.ajax({
+        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+            $('#txtPoSiteAddress').append('<option value="">--Select Site Address</option>');
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    debugger
+                    $('#txtPoSiteAddress').append('<option value=' + data.aid + '>' + data.address+ '</option>')
+                });
+            }
+        },
+    });
+}
+
 function sortPurchaseRequestTable() {
     siteloadershow();
     var sortBy = $('#PurchaseRequestSortBy').val();
@@ -120,15 +158,22 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
 }
 
 function CreatePurchaseRequest() {
-
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
-        var RoleUserId = $('#userRoleId').val();
+        var RoleUserId = $('#txtPRRoleId').val();
         siteName = $("#SiteIdinPR").val();
+        PRsiteId = $("#txtPoSiteName").val();
+        if (!PRsiteId) {
+            siteName = PRsiteId;
+        }
+
+        var siteAddressId = $('#drpPoSiteAddress').val(); 
+        var siteAddress = $('#drpPoSiteAddress option:selected').text();
 
         var objData = {
-
+            SiteAddressId: siteAddressId,
+            SiteAddress: siteAddress,
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
             ItemName: $('#txtItemName').val(),
@@ -186,6 +231,8 @@ function ClearPurchaseRequestTextBox() {
         $('#txtItemName').val('');
         $('#txtUnitType').val('');
         $('#txtQuantity').val('');
+        $('#txtPoSiteName').val('');
+        $('#txtPoSiteAddress').val('');
         $('#PurchaseRequestId').val('');
 
         var button = document.getElementById("btnpurchaseRequest");
@@ -202,6 +249,13 @@ function ClearPurchaseRequestTextBox() {
             dropdownParent: $("#CreatePurchaseRequest")
         });
         $('#txtUnitType').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+            dropdownParent: $("#CreatePurchaseRequest")
+        });
+        $('#drpPoSiteAddress').select2({
             theme: 'bootstrap4',
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
@@ -282,6 +336,13 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 allowClear: Boolean($(this).data('allow-clear')),
                 dropdownParent: $("#CreatePurchaseRequest")
             });
+            $('#drpPoSiteAddress').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -291,11 +352,15 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
 
+        var siteAddressId = $('#drpPoSiteAddress').val();
+        var siteAddress = $('#drpPoSiteAddress option:selected').text();
+
         var objData = {
+            SiteAddressId: siteAddressId,
+            SiteAddress: siteAddress,
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),

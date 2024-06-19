@@ -212,7 +212,6 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpGet]
-
         public async Task<JsonResult> GetSiteAddressList(Guid SiteId)
         {
             try

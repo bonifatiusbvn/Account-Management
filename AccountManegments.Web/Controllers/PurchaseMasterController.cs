@@ -125,6 +125,8 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = UserSession.UserId,
                     PrNo = PurchaseRequestDetails.PrNo,
                     IsApproved = false,
+                    SiteAddress = PurchaseRequestDetails.SiteAddress,
+                    SiteAddressId  = PurchaseRequestDetails.SiteAddressId,
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(PurchaseRequest, "PurchaseRequest/AddPurchaseRequestDetails");

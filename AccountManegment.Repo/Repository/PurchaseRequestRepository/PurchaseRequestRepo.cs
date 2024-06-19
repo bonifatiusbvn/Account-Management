@@ -48,15 +48,15 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                 if (LastPr == null)
                 {
 
-                    PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
+                    PurchaseRequestId = $"PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
                 }
                 else
                 {
-                    if (LastPr.PrNo.Length >= 19)
+                    if (LastPr.PrNo.Length >= 12)
                     {
 
-                        int PrNumber = int.Parse(LastPr.PrNo.Substring(18)) + 1;
-                        PurchaseRequestId = $"DMInfra/PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                        int PrNumber = int.Parse(LastPr.PrNo.Substring(11)) + 1;
+                        PurchaseRequestId = $"PR/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
                     }
                     else
                     {
@@ -90,6 +90,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     IsDeleted = false,
                     CreatedBy = PurchaseRequestDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
+                    SiteAddressId = PurchaseRequestDetails.SiteAddressId,
+                    SiteAddress = PurchaseRequestDetails.SiteAddress,
                 };
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase request successfully created.";
@@ -149,6 +151,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                            SiteName = c.SiteName,
                                            CreatedBy = a.CreatedBy,
                                            CreatedOn = a.CreatedOn,
+                                           SiteAddress = a.SiteAddress,
+                                           SiteAddressId = a.SiteAddressId,
                                        }).First();
                 return purchaseRequestList;
             }
@@ -181,7 +185,9 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                               SiteName = c.SiteName,
                                               CreatedBy = a.CreatedBy,
                                               CreatedOn = a.CreatedOn,
-                                              IsApproved = a.IsApproved
+                                              IsApproved = a.IsApproved,
+                                             SiteAddress = a.SiteAddress,
+                                             SiteAddressId  = a.SiteAddressId
                                           };
 
 
@@ -260,6 +266,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
+                    PurchaseRequestData.SiteAddressId = PurchaseRequestDetails.SiteAddressId;
+                    PurchaseRequestData.SiteAddress = PurchaseRequestDetails.SiteAddress;
 
                 }
                 Context.PurchaseRequests.Update(PurchaseRequestData);
