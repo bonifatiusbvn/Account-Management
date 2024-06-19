@@ -138,5 +138,13 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SiteMasterModel> SiteName = await SiteMaster.GetSiteNameList();
             return Ok(new { code = 200, data = SiteName.ToList() });
         }
+
+        [HttpGet]
+        [Route("GetSiteAddressList")]
+        public async Task<IActionResult> GetSiteAddressList(Guid SiteId)
+        {
+            IEnumerable<SiteAddressModel> SiteName = await SiteMaster.GetSiteAddressList(SiteId);
+            return Ok(new { code = 200, data = SiteName.ToList() });
+        }
     }
 }
