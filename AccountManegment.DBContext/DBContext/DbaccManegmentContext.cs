@@ -58,7 +58,8 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    {
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -306,9 +307,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.ContectPersonPhoneNo).HasMaxLength(10);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Pincode).HasMaxLength(10);
-            entity.Property(e => e.ShippingAddress).HasMaxLength(100);
-            entity.Property(e => e.ShippingArea).HasMaxLength(100);
-            entity.Property(e => e.ShippingPincode).HasMaxLength(10);
             entity.Property(e => e.SiteName).HasMaxLength(250);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -319,9 +317,7 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.ToTable("SiteAddress");
 
-            entity.Property(e => e.Aid)
-                .ValueGeneratedNever()
-                .HasColumnName("AId");
+            entity.Property(e => e.Aid).HasColumnName("AId");
             entity.Property(e => e.Address).HasMaxLength(500);
 
             entity.HasOne(d => d.Site).WithMany(p => p.SiteAddresses)
