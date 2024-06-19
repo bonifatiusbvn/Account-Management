@@ -253,6 +253,35 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
+                                    <h5>
+                                        <b>
+                                            Multipul Shipping Address
+                                            <a class="font-22" id="btnaddmoresite">
+                                                <i class="lni lni-circle-plus"></i>
+                                            </a>
+                                        </b>
+                                    </h5>
+                                </div>
+                                <div class="col-12">
+                                    <div class="card border mb-3">
+                                        <div id="shippingAddressFields" class="mb-2">
+                                            <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
+                                            </div>
+                                            <div id="shippingAddressTable">
+                                                <div class="col-12 mb-2" id="shippingAddressContainer-1">
+                                                    <label class="form-label">
+                                                        Shipping Address 1
+                                                    </label>
+                                                    <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-1" name="txtShippingAddress-1"></textarea>
+                                                    <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                                                    <span id="spnShippingAddress" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
                                     <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateSite()" id="btnSite"></button>
                                 </div>
                             </form>

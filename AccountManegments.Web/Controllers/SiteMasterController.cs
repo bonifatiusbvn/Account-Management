@@ -103,6 +103,7 @@ namespace AccountManegments.Web.Controllers
                     ShippingCountry = createSite.ShippingCountry,
                     ShippingPincode = createSite.ShippingPincode,
                     CreatedBy = UserSession.UserId,
+                    SiteShippingAddresses = createSite.SiteShippingAddresses,
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(Site, "SiteMaster/AddSiteDetails");
@@ -120,6 +121,10 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+
+
+
         [FormPermissionAttribute("Site-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSiteDetails(SiteMasterModel updateSite)
