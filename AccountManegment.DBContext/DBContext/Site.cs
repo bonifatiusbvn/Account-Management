@@ -27,18 +27,6 @@ public partial class Site
 
     public string? Pincode { get; set; }
 
-    public string ShippingAddress { get; set; } = null!;
-
-    public string ShippingArea { get; set; } = null!;
-
-    public int ShippingCityId { get; set; }
-
-    public int ShippingStateId { get; set; }
-
-    public int ShippingCountry { get; set; }
-
-    public string? ShippingPincode { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
