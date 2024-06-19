@@ -420,7 +420,6 @@ $(document).ready(function () {
             textCompanyName: "required",
             paymentStatus: "required",
             textSupplierMobile: {
-                required: true,
                 digits: true,
                 minlength: 10,
                 maxlength: 10
@@ -433,7 +432,6 @@ $(document).ready(function () {
             textCompanyName: "Select Company Name",
             paymentStatus: "Select Payment Status",
             textSupplierMobile: {
-                required: "Please Enter Phone Number",
                 digits: "Please enter a valid 10-digit phone number",
                 minlength: "Phone number must be 10 digits long",
                 maxlength: "Phone number must be 10 digits long"
