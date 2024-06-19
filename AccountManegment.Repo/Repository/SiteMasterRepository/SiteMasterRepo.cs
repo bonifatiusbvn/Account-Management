@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -363,6 +364,29 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteName = a.SiteName,
                 });
                 return SiteName;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
+        {
+            try
+            {
+                var data = await Context.SiteAddresses
+                                       .Where(a => a.SiteId == SiteId && a.IsDeleted != true)
+                                       .Select(a => new SiteAddressModel
+                                       {
+                                           Aid = a.Aid,
+                                           SiteId = a.SiteId,
+                                           Address = a.Address,
+                                           IsDeleted = a.IsDeleted
+                                       })
+                                       .ToListAsync();
+
+                return data;
             }
             catch (Exception ex)
             {
