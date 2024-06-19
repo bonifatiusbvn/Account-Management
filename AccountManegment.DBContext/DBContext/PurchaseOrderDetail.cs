@@ -9,7 +9,7 @@ public partial class PurchaseOrderDetail
 
     public Guid PorefId { get; set; }
 
-    public Guid? ItemId { get; set; }
+    public Guid ItemId { get; set; }
 
     public string? ItemName { get; set; }
 
@@ -35,7 +35,7 @@ public partial class PurchaseOrderDetail
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual ItemMaster? Item { get; set; }
+    public virtual ItemMaster Item { get; set; } = null!;
 
     public virtual PurchaseOrder Poref { get; set; } = null!;
 

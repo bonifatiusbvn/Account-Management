@@ -237,6 +237,7 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.PurchaseOrderDetails)
                 .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseOrderDetails_ItemMaster");
 
             entity.HasOne(d => d.Poref).WithMany(p => p.PurchaseOrderDetails)
