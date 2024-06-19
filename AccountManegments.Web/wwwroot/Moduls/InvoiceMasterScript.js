@@ -76,27 +76,52 @@ function GetSiteDetail() {
 $(document).ready(function () {
     $('#textInvoiceSiteName').change(function () {
         var Site = $(this).val();
-        $('#textInvoiceSiteName').val(Site);
         $.ajax({
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
-            success: function (result) {
-
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            success: function (Result) {
+                fn_GetInvoiceSiteAddressList(Site);
+                $('#drpInvoiceSiteAddress').select2({
+                    theme: 'bootstrap4',
+                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                    placeholder: $(this).data('placeholder'),
+                    allowClear: Boolean($(this).data('allow-clear')),
+                    dropdownParent: $("#mdShippingAdd")
+                });
             },
             error: function (xhr, status, error) {
                 toastr.error("Error fetching company details:", error);
             }
         });
     });
+
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-addresses').prop('disabled', false);
     });
+});
 
+function fn_GetInvoiceSiteAddressList(SiteId) {
+    $.ajax({
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+        success: function (result) {
+            $('#drpInvoiceSiteAddress').empty();
+            $('#textmdAddress').val('');
 
+            if (Array.isArray(result)) {
+                $.each(result, function (i, data) {
+                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            } else {
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            }
+        }
+    });
+}
 
-
+$('#drpInvoiceSiteAddress').on('change', function () {
+    var selectedInvoiceAddress = $(this).val();
+    $('#textmdAddress').val(selectedInvoiceAddress);
 });
 
 function GetItemDetailsList() {
@@ -544,7 +569,7 @@ function InsertMultipleSupplierItem() {
         toastr.error("Kindly fill all details");
     }
 }
-function UpdateInvoiceDetails() {
+function UpdateInvoiceDetails() {debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 

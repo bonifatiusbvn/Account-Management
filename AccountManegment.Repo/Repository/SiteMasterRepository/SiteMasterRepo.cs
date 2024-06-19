@@ -5,7 +5,6 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +43,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         StateId = SiteDetails.StateId,
                         Country = SiteDetails.Country,
                         Pincode = SiteDetails.Pincode,
+                        ShippingAddress = SiteDetails.ShippingAddress,
+                        ShippingArea = SiteDetails.ShippingArea,
+                        ShippingCityId = SiteDetails.ShippingCityId,
+                        ShippingStateId = SiteDetails.ShippingStateId,
+                        ShippingCountry = SiteDetails.ShippingCountry,
+                        ShippingPincode = SiteDetails.ShippingPincode,
                         IsDeleted = false,
                         CreatedBy = SiteDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -76,6 +81,9 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                             from city in CityJoin.DefaultIfEmpty()
                             join c in Context.States on a.StateId equals c.StatesId
                             join d in Context.Countries on a.Country equals d.CountryId
+                            
+                            join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
+                            join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
                             select new SiteMasterModel
                             {
                                 SiteId = a.SiteId,
@@ -92,6 +100,15 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 Country = a.Country,
                                 CountryName = d.CountryName,
                                 Pincode = a.Pincode,
+                                ShippingAddress = a.ShippingAddress,
+                                ShippingArea = a.ShippingArea,
+                                ShippingCityId = a.ShippingCityId,
+                                ShippingCityName = shippingCity.CityName,
+                                ShippingStateId = a.ShippingStateId,
+                                ShippingStateName = shippingState.StatesName,
+                                ShippingCountry = a.ShippingCountry,
+                                ShippingCountryName = shippingCountry.CountryName,
+                                ShippingPincode = a.ShippingPincode,
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
                             }).First();
@@ -128,6 +145,15 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                     Country = a.Country,
                                     CountryName = d.CountryName,
                                     Pincode = a.Pincode,
+                                    ShippingAddress = a.ShippingAddress,
+                                    ShippingArea = a.ShippingArea,
+                                    ShippingCityId = a.ShippingCityId,
+                                    ShippingCityName = g.CityName,
+                                    ShippingStateId = a.ShippingStateId,
+                                    ShippingStateName = f.StatesName,
+                                    ShippingCountry = a.ShippingCountry,
+                                    ShippingCountryName = e.CountryName,
+                                    ShippingPincode = a.ShippingPincode,
                                     CreatedBy = a.CreatedBy,
                                     CreatedOn = a.CreatedOn,
                                 });
@@ -214,6 +240,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteMaster.StateId = SiteDetails.StateId;
                     SiteMaster.Country = SiteDetails.Country;
                     SiteMaster.Pincode = SiteDetails.Pincode;
+                    SiteMaster.ShippingAddress = SiteDetails.ShippingAddress;
+                    SiteMaster.ShippingArea = SiteDetails.ShippingArea;
+                    SiteMaster.ShippingCityId = SiteDetails.ShippingCityId;
+                    SiteMaster.ShippingStateId = SiteDetails.ShippingStateId;
+                    SiteMaster.ShippingCountry = SiteDetails.ShippingCountry;
+                    SiteMaster.ShippingPincode = SiteDetails.ShippingPincode;
                 }
                 Context.Sites.Update(SiteMaster);
                 Context.SaveChanges();
@@ -334,27 +366,9 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
+        public Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
         {
-            try
-            {
-                var data = await Context.SiteAddresses
-                                       .Where(a => a.SiteId == SiteId && a.IsDeleted != true)
-                                       .Select(a => new SiteAddressModel
-                                       {
-                                           Aid = a.Aid,
-                                           SiteId = a.SiteId,
-                                           Address = a.Address,
-                                           IsDeleted = a.IsDeleted
-                                       })
-                                       .ToListAsync();
-
-                return data;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            throw new NotImplementedException();
         }
     }
 }

@@ -97,10 +97,13 @@ namespace AccountManegments.Web.Controllers
                     Address = createSite.Address,
                     Pincode = createSite.Pincode,
                     ShippingAddress = createSite.ShippingAddress,
+                    ShippingArea = createSite.ShippingArea,
+                    ShippingCityId = createSite.ShippingCityId,
+                    ShippingStateId = createSite.ShippingStateId,
+                    ShippingCountry = createSite.ShippingCountry,
+                    ShippingPincode = createSite.ShippingPincode,
                     CreatedBy = UserSession.UserId,
                 };
-
-
 
                 ApiResponseModel postUser = await APIServices.PostAsync(Site, "SiteMaster/AddSiteDetails");
                 if (postUser.code == 200)
@@ -182,7 +185,6 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-
         [FormPermissionAttribute("Site-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSite(Guid SiteId)
