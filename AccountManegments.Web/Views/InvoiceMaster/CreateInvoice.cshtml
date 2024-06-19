@@ -417,7 +417,7 @@
                         <div class="row">
                             <div class="col-10 col-sm-10 ">
                                 <label class="form-label">Select Site</label>
-                                <select class="form-control form-control" id="textInvoiceSiteName">
+                                <select class="form-control" id="textInvoiceSiteName">
                                     <option selected value="">--Select Site--</option>
                                 </select>
                             </div>
@@ -425,11 +425,13 @@
                         <div class="row mt-2">
                             <div class="col-10 col-sm-10">
                                 <label class="form-label">Address</label>
-                                <textarea class="form-control" id="textmdAddress" style="height:90px;"></textarea>
+                                <select class="single-select form-select" id="drpInvoiceSiteAddress">
+                                    <option selected value="">--Select Site Address--</option>
+                                </select>
+                                @* <textarea class="form-control" id="textmdAddress" style="height:90px;"></textarea> *@
                                 <span id="spnSiteAddress" style="color:red;"></span>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>

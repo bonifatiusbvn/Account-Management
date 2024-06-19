@@ -76,28 +76,42 @@ function GetSiteDetail() {
 $(document).ready(function () {
     $('#textInvoiceSiteName').change(function () {
         var Site = $(this).val();
-        $('#textInvoiceSiteName').val(Site);
         $.ajax({
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
-            success: function (result) {
-
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+            success: function () {
+                fn_GetInvoiceSiteAddressList(Site);
+                $('#drpInvoiceSiteAddress').select2({
+                    theme: 'bootstrap4',
+                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                    placeholder: $(this).data('placeholder'),
+                    allowClear: Boolean($(this).data('allow-clear')),
+                    dropdownParent: $("#mdShippingAdd")
+                });
             },
             error: function (xhr, status, error) {
                 toastr.error("Error fetching company details:", error);
             }
         });
     });
+
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-addresses').prop('disabled', false);
     });
-
-
-
-
 });
+
+function fn_GetInvoiceSiteAddressList(SiteId) {
+    $.ajax({
+        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        success: function (result) {
+            $('#drpInvoiceSiteAddress').empty();
+            $.each(result, function (i, data) {
+                $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+            });
+        }
+    });
+}
 
 function GetItemDetailsList() {
 
@@ -489,7 +503,7 @@ function InsertMultipleSupplierItem() {
                 Description: $("#textDescription").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: $("#textmdAddress").val(),
+                ShippingAddress: $("#drpInvoiceSiteAddress").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
@@ -544,7 +558,7 @@ function InsertMultipleSupplierItem() {
         toastr.error("Kindly fill all details");
     }
 }
-function UpdateInvoiceDetails() {
+function UpdateInvoiceDetails() {debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 
@@ -575,7 +589,7 @@ function UpdateInvoiceDetails() {
             } else {
                 siteid = document.getElementById("siteid").getAttribute("value");
             }
-            var shippingAdd = $("#textmdAddress").val();
+            var shippingAdd = $("#drpInvoiceSiteAddress").val();
             var Address = null;
             if (shippingAdd != "") {
                 Address = shippingAdd;
@@ -1157,7 +1171,7 @@ function clearItemErrorMessages() {
 function addShippingAddress() {
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
-        var address = $("#textmdAddress").val();
+        var address = $("#drpInvoiceSiteAddress").val();
         var sitename = $("#textInvoiceSiteName").val();
 
         if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {

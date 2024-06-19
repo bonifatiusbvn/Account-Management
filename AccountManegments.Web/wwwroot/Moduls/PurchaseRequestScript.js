@@ -918,7 +918,14 @@ $(document).ready(function () {
             url: '/SiteMaster/DisplaySiteDetails/?SiteId=' + Site,
             type: 'GET',
             success: function (result) {
-                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+                fn_GetPOSiteAddressList(Site);
+                $('#drpPOSiteAddress').select2({
+                    theme: 'bootstrap4',
+                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                    placeholder: $(this).data('placeholder'),
+                    allowClear: Boolean($(this).data('allow-clear')),
+                    dropdownParent: $("#mdShippingAdd")
+                });
             },
 
         });
@@ -928,11 +935,22 @@ $(document).ready(function () {
         $('.add-address').prop('disabled', false);
     });
 });
+function fn_GetPOSiteAddressList(SiteId) {
+    $.ajax({
+        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        success: function (result) {
+            $('#drpPOSiteAddress').empty();
+            $.each(result, function (i, data) {
+                $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+            });
+        }
+    });
+}
 function AddShippingAddress() {
     siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
         var quantity = $("#txtmdqty").val();
-        var address = $("#txtmdAddress").val();
+        var address = $("#drpPOSiteAddress").val();
         var ItemQuantity = $("#TotalProductQuantity").text();
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
 

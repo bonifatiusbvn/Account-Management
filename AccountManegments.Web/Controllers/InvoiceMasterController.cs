@@ -222,7 +222,15 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["UpdateSupplierItems"];
-                var UpdateDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails.ToString());
+                var DateFormat = new JsonSerializerSettings
+                {
+                    DateFormatString = "dd-MM-yyyy HH:mm:ss",
+                    Error = (sender, args) =>
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                };
+                var UpdateDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails, DateFormat);
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "SupplierInvoice/UpdateSupplierInvoice");
                 if (postuser.code == 200)
                 {
