@@ -253,7 +253,6 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
 
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
         {
-
             ApiResponseModel model = new ApiResponseModel();
             var PurchaseRequestData = Context.PurchaseRequests.Where(e => e.Pid == PurchaseRequestDetails.Pid).FirstOrDefault();
             try
@@ -268,6 +267,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
                     PurchaseRequestData.SiteAddressId = PurchaseRequestDetails.SiteAddressId;
                     PurchaseRequestData.SiteAddress = PurchaseRequestDetails.SiteAddress;
+                    PurchaseRequestData.ItemName = PurchaseRequestDetails.ItemName;
 
                 }
                 Context.PurchaseRequests.Update(PurchaseRequestData);

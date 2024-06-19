@@ -127,6 +127,7 @@ namespace AccountManegments.Web.Controllers
                     IsApproved = false,
                     SiteAddress = PurchaseRequestDetails.SiteAddress,
                     SiteAddressId  = PurchaseRequestDetails.SiteAddressId,
+                    ItemName = PurchaseRequestDetails.ItemName,
                 };
 
                 ApiResponseModel postUser = await APIServices.PostAsync(PurchaseRequest, "PurchaseRequest/AddPurchaseRequestDetails");

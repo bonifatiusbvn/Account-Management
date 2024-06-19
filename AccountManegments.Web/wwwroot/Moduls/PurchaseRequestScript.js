@@ -67,24 +67,22 @@ function GetSiteDetail() {
 }
 
 $(document).ready(function () {
-
     var RoleUserId = $('#txtPRRoleId').val();
     var prSiteId = $('#txtPRsiteid').val();
- 
-    if (RoleUserId == 3) {
-        fn_getPOSiteDetail(val(prSiteId));
+
+    if (RoleUserId == 8) {
+        fn_getPRSiteDetail(prSiteId);
     }
     else {
         $('#txtPoSiteName').change(function () {
-
-            fn_getPOSiteDetail($(this).val());
+            fn_getPRSiteDetail($(this).val());
         });
     }
 });
 
 
-function fn_getPOSiteDetail(SiteId) {
-    $('#txtPoSiteAddress').empty();
+function fn_getPRSiteDetail(SiteId, callback) {
+    $('#drpPRSiteAddress').empty();
     siteloadershow();
     $.ajax({
         url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
@@ -93,12 +91,14 @@ function fn_getPOSiteDetail(SiteId) {
         dataType: 'json',
         success: function (result) {
             siteloaderhide();
-            $('#txtPoSiteAddress').append('<option value="">--Select Site Address</option>');
+            $('#drpPRSiteAddress').append('<option value="" selected disabled>--Select Site Address--</option>')
             if (result.length > 0) {
                 $.each(result, function (i, data) {
-                    debugger
-                    $('#txtPoSiteAddress').append('<option value=' + data.aid + '>' + data.address+ '</option>')
+                    $('#drpPRSiteAddress').append('<option value=' + data.aid + '>' + data.address + '</option>')
                 });
+            }
+            if (callback && typeof callback === "function") {
+                callback();
             }
         },
     });
@@ -161,22 +161,22 @@ function CreatePurchaseRequest() {
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
         var siteName = null;
-        var RoleUserId = $('#txtPRRoleId').val();
-        siteName = $("#SiteIdinPR").val();
-        PRsiteId = $("#txtPoSiteName").val();
-        if (!PRsiteId) {
+        var siteId = $("#SiteIdinPR").val();
+        var PRsiteId = $("#txtPoSiteName").val();
+        if (PRsiteId && PRsiteId !== "") {
             siteName = PRsiteId;
+        } else {
+            siteName = siteId;
         }
-
-        var siteAddressId = $('#drpPoSiteAddress').val(); 
-        var siteAddress = $('#drpPoSiteAddress option:selected').text();
+        var siteAddressId = $('#drpPRSiteAddress').val();
+        var siteAddress = $('#drpPRSiteAddress option:selected').text();
 
         var objData = {
             SiteAddressId: siteAddressId,
             SiteAddress: siteAddress,
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
-            ItemName: $('#txtItemName').val(),
+            ItemName: $('#searchItemname option:selected').text(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
@@ -232,7 +232,7 @@ function ClearPurchaseRequestTextBox() {
         $('#txtUnitType').val('');
         $('#txtQuantity').val('');
         $('#txtPoSiteName').val('');
-        $('#txtPoSiteAddress').val('');
+        $('#drpPRSiteAddress').val('');
         $('#PurchaseRequestId').val('');
 
         var button = document.getElementById("btnpurchaseRequest");
@@ -255,7 +255,7 @@ function ClearPurchaseRequestTextBox() {
             allowClear: Boolean($(this).data('allow-clear')),
             dropdownParent: $("#CreatePurchaseRequest")
         });
-        $('#drpPoSiteAddress').select2({
+        $('#drpPRSiteAddress').select2({
             theme: 'bootstrap4',
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
@@ -271,11 +271,13 @@ function validateAndCreatePurchaseRequest() {
             searchItemname: "required",
             txtUnitType: "required",
             txtQuantity: "required",
+            txtPoSiteName: "required",
         },
         messages: {
             searchItemname: "Select Item!",
             txtUnitType: "Select UnitType!",
             txtQuantity: "Enter Quantity",
+            txtPoSiteName: "Select Site",
         }
     });
     var isValid = true;
@@ -313,8 +315,12 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitTypeId);
-            $('#txtPoSiteName').val(response.siteId);
+            $('#txtUnitType').val(response.unitTypeId);                 
+
+            fn_getPRSiteDetail(response.siteId, function () {
+                $('#drpPRSiteAddress').val(response.siteAddressId);
+            });
+
             var button = document.getElementById("btnpurchaseRequest");
             if ($('#PurchaseRequestId').val() != '') {
                 button.textContent = "Update";
@@ -336,7 +342,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 allowClear: Boolean($(this).data('allow-clear')),
                 dropdownParent: $("#CreatePurchaseRequest")
             });
-            $('#drpPoSiteAddress').select2({
+            $('#drpPRSiteAddress').select2({
                 theme: 'bootstrap4',
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                 placeholder: $(this).data('placeholder'),
@@ -355,8 +361,17 @@ function UpdatePurchaseRequestDetails() {
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
 
-        var siteAddressId = $('#drpPoSiteAddress').val();
-        var siteAddress = $('#drpPoSiteAddress option:selected').text();
+        var siteName = null;
+        siteId = $("#SiteIdinPR").val();
+        PRsiteId = $("#txtPoSiteName").val();
+        if (PRsiteId != undefined) {
+            siteName = PRsiteId;
+        }
+        else {
+            siteName = siteId
+        }
+        var siteAddressId = $('#drpPRSiteAddress').val();
+        var siteAddress = $('#drpPRSiteAddress option:selected').text();
 
         var objData = {
             SiteAddressId: siteAddressId,
@@ -364,8 +379,8 @@ function UpdatePurchaseRequestDetails() {
             Pid: $('#PurchaseRequestId').val(),
             UnitTypeId: $('#txtUnitType').val(),
             ItemId: $('#searchItemname').val(),
-            Item: $('#txtItemName').val(),
-            SiteId: $("#txtPoSiteName").val(),
+            ItemName: $('#searchItemname option:selected').text(),
+            SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
             CreatedBy: $('#txtcreatedby').val(),
@@ -378,6 +393,7 @@ function UpdatePurchaseRequestDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
+                siteloaderhide();
                 if (Result.code == 200) {
                     var offcanvasElement = document.getElementById('CreatePurchaseRequest');
                     var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
