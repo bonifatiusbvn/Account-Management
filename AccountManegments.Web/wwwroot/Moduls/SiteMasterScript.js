@@ -673,36 +673,37 @@ function GetShippingCountry() {
     });
 }
 $(document).ready(function () {
-
     let shippingAddressCount = 1;
+    const maxShippingAddresses = 11;
 
     $('#btnaddmoresite').click(function (e) {
         e.preventDefault();
 
-        const newShippingAddress = `
-            <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}" style="padding: 20px;">
-                <label class="form-label">Shipping Address </label>
-                <div class="row">
-                                                        <div class="col-11">
-                <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
-                </div>
-                                                        <div class="col-1" style="position:relative;right:16px;top:22px;">
-                <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
-                </div>
-            </div>`;
-        $('#shippingAddressTable').append(newShippingAddress);
-        shippingAddressCount++;
+        if (shippingAddressCount < maxShippingAddresses) {
+            const newShippingAddress = `
+                <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}" style="padding: 20px;">
+                    <label class="form-label">Shipping Address ${shippingAddressCount}</label>
+                    <div class="row">
+                        <div class="col-11">
+                            <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
+                        </div>
+                        <div class="col-1" style="position:relative;right:16px;top:22px;">
+                            <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                        </div>
+                    </div>
+                </div>`;
+            $('#shippingAddressTable').append(newShippingAddress);
+            shippingAddressCount++;
+        } else {
+            toastr.warning("You can add up to 10 shipping addresses only.");
+        }
     });
 
 
     window.removeItem = function (btn) {
-        const container = $(btn).closest('.col-12');
-        const totalAddresses = $('#shippingAddressTable .col-12').length;
-        if (totalAddresses > 1 || container.attr('id') === 'shippingAddressContainer-1') {
-            container.remove();
-            updateShippingAddressNumbers();
-        }
-    }
+        $(btn).closest('.col-12').remove();
+        updateShippingAddressNumbers();
+    };
 
     function updateShippingAddressNumbers() {
         $('#shippingAddressTable .col-12').each(function (index) {
@@ -714,6 +715,7 @@ $(document).ready(function () {
         shippingAddressCount = $('#shippingAddressTable .col-12').length;
     }
 });
+
 
 
 
