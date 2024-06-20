@@ -321,11 +321,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                     switch (field.ToLower())
                     {
-                        case "sitename":
+                        case "companyname":
                             if (sortOrder == "ascending")
-                                supplierList = supplierList.OrderBy(u => u.SiteName);
+                                supplierList = supplierList.OrderBy(u => u.CompanyName);
                             else if (sortOrder == "descending")
-                                supplierList = supplierList.OrderByDescending(u => u.SiteName);
+                                supplierList = supplierList.OrderByDescending(u => u.CompanyName);
                             break;
                         case "invoiceno":
                             if (sortOrder == "ascending")
