@@ -218,67 +218,58 @@ function CreatePurchaseRequest() {
 
 function ClearPurchaseRequestTextBox() {
 
-    if ($("#textsiteId").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
-    }
-    else {
-        $('#prNo').val('');
-        $.ajax({
-            url: '/PurchaseMaster/CheckPRNo',
-            type: 'GET',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            success: function (response) {
-                siteloaderhide();
-                $('#prNo').val(response);
-            }, error: function () {
-                siteloaderhide();
-                toastr.error("Error in getting PR No");
-            }
-        });
-        resetPRForm();
-        $('#changeName').html('Create PurchaseRequest');
-        $('#txtItemName').val('');
-        $('#txtUnitType').val('');
-        $('#searchItemname').val('');
-        $('#txtQuantity').val('');
-        $('#txtPoSiteName').val('');
-        $('#drpPRSiteAddress').val('');
-        $('#PurchaseRequestId').val('');
-
-        var button = document.getElementById("btnpurchaseRequest");
-        if ($('#PurchaseRequestId').val() == '') {
-            button.textContent = "Create";
+    $('#prNo').val('');
+    $.ajax({
+        url: '/PurchaseMaster/CheckPRNo',
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            $('#prNo').val(response);
+        }, error: function () {
+            siteloaderhide();
+            toastr.error("Error in getting PR No");
         }
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-        offcanvas.show();
-        $('#searchItemname').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
-        $('#txtUnitType').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
-        $('#drpPRSiteAddress').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
+    });
+    resetPRForm();
+    $('#changeName').html('Create PurchaseRequest');
+    $('#txtItemName').val('');
+    $('#txtUnitType').val('');
+    $('#searchItemname').val('');
+    $('#txtQuantity').val('');
+    $('#txtPoSiteName').val('');
+    $('#drpPRSiteAddress').val('');
+    $('#PurchaseRequestId').val('');
+
+    var button = document.getElementById("btnpurchaseRequest");
+    if ($('#PurchaseRequestId').val() == '') {
+        button.textContent = "Create";
     }
+    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
+    offcanvas.show();
+    $('#searchItemname').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
+    $('#txtUnitType').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
+    $('#drpPRSiteAddress').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
+
 }
 var PRForm;
 function validateAndCreatePurchaseRequest() {
@@ -534,17 +525,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
 }
 
 function clearPOtextbox() {
-    if ($("#inputSiteId").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
-    }
-    else {
-        window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
-    }
+    window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
 }
 function GetAllUnitType() {
 
