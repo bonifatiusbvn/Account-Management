@@ -84,29 +84,8 @@ namespace AccountManegments.Web.Controllers
 
             try
             {
-                var Site = new SiteMasterModel()
-                {
-                    SiteId = Guid.NewGuid(),
-                    SiteName = createSite.SiteName,
-                    ContectPersonName = createSite.ContectPersonName,
-                    ContectPersonPhoneNo = createSite.ContectPersonPhoneNo,
-                    Country = createSite.Country,
-                    CityId = createSite.CityId,
-                    StateId = createSite.StateId,
-                    Area = createSite.Area,
-                    Address = createSite.Address,
-                    Pincode = createSite.Pincode,
-                    ShippingAddress = createSite.ShippingAddress,
-                    ShippingArea = createSite.ShippingArea,
-                    ShippingCityId = createSite.ShippingCityId,
-                    ShippingStateId = createSite.ShippingStateId,
-                    ShippingCountry = createSite.ShippingCountry,
-                    ShippingPincode = createSite.ShippingPincode,
-                    CreatedBy = UserSession.UserId,
-                    SiteShippingAddresses = createSite.SiteShippingAddresses,
-                };
-
-                ApiResponseModel postUser = await APIServices.PostAsync(Site, "SiteMaster/AddSiteDetails");
+                
+                ApiResponseModel postUser = await APIServices.PostAsync(createSite, "SiteMaster/AddSiteDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });

@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
+using AccountManagement.Repository.Services.SiteMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,10 +55,22 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         CreatedBy = SiteDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
+                    Context.Sites.Add(SiteMaster);
+
+                    foreach(var item in SiteDetails.SiteShippingAddresses)
+                    {
+                        var shippingAddress = new SiteAddress()
+                        {
+                            SiteId = SiteMaster.SiteId,
+                            Address = item.Address,
+                            IsDeleted=false,
+                        };
+                        Context.SiteAddresses.Add(shippingAddress);
+                    }
+                    
+                    Context.SaveChanges();
                     response.code = (int)HttpStatusCode.OK;
                     response.message = "Site is successfully created.";
-                    Context.Sites.Add(SiteMaster);
-                    Context.SaveChanges();
                 }
                 else
                 {
@@ -86,6 +99,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                             join d in Context.Countries on a.Country equals d.CountryId
                             join shippingState in Context.States on a.ShippingStateId equals shippingState.StatesId
                             join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
+                            join shippingAddress in Context.SiteAddresses on a.SiteId equals shippingAddress.SiteId
                             select new SiteMasterModel
                             {
                                 SiteId = a.SiteId,
@@ -114,6 +128,17 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
                             }).First();
+
+                List<SiteAddressModel> siteAddress = (from shippingAddress in Context.SiteAddresses.Where(a=>a.SiteId==SiteId)
+                                                      select new SiteAddressModel
+                                                      {
+                                                          Aid=shippingAddress.Aid,
+                                                          SiteId=shippingAddress.SiteId,
+                                                          Address=shippingAddress.Address,
+                                                      }).ToList();
+
+                SiteList.SiteShippingAddresses = siteAddress;
+
                 return SiteList;
             }
             catch (Exception ex)
@@ -253,6 +278,31 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteMaster.ShippingPincode = SiteDetails.ShippingPincode;
                 }
                 Context.Sites.Update(SiteMaster);
+                foreach(var item in SiteDetails.SiteShippingAddresses)
+                {
+                    var existingSiteAddress=Context.SiteAddresses.FirstOrDefault(a=>a.SiteId== SiteMaster.SiteId && a.Address == item.Address);
+                    if (existingSiteAddress!=null)
+                    {
+                        existingSiteAddress.Address = item.Address;
+                        existingSiteAddress.SiteId= SiteMaster.SiteId;
+
+                        Context.SiteAddresses.Update(existingSiteAddress);
+                    }
+                    else
+                    {
+                        var shippingAddress = new SiteAddress()
+                        {
+                            SiteId = SiteMaster.SiteId,
+                            Address = item.Address,
+                            IsDeleted = false,
+                        };
+                        Context.SiteAddresses.Add(shippingAddress);
+                    }
+                }
+                var siteAddress=SiteDetails.SiteShippingAddresses.Select(a=>a.Address).ToList();
+                var siteAddressToRemove=Context.SiteAddresses.Where(a=>a.SiteId==SiteDetails.SiteId && !siteAddress.Contains(a.Address)).ToList();
+                Context.SiteAddresses.RemoveRange(siteAddressToRemove);
+
                 Context.SaveChanges();
                 model.code = 200;
                 model.message = "Site details successfully updated.";
