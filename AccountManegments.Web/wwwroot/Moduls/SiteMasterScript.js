@@ -188,7 +188,7 @@ function CreateSite() {
                 Address: address.val()
             };
             address.on('input', function () {
-                address.css("border", "1px solid #ced4da"); 
+                address.css("border", "1px solid #ced4da");
             });
 
             if (addressData.Address === "") {
@@ -196,14 +196,14 @@ function CreateSite() {
                 address.css("border", "2px solid red");
                 siteloaderhide();
                 toastr.error("Kindly fill Multiple Site Address");
-                return false; 
+                return false;
             }
 
             shippingAddressDetails.push(addressData);
         });
 
         if (!isValidProduct) {
-            return; 
+            return;
         }
 
         var objData = {
@@ -679,10 +679,17 @@ $(document).ready(function () {
     $('#btnaddmoresite').click(function (e) {
         e.preventDefault();
 
+        const lastTextarea = $(`#txtShippingAddress-${shippingAddressCount}`);
+        if (lastTextarea.length && lastTextarea.val().trim() === '') {
+            toastr.error("Kindly fill the current Shipping Address before adding a new one.");
+            return;
+        }
+
         if (shippingAddressCount < maxShippingAddresses) {
+            shippingAddressCount++;
             const newShippingAddress = `
                 <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}" style="padding: 20px;">
-                    <label class="form-label">Shipping Address ${shippingAddressCount}</label>
+                    <label class="form-label">Shipping Address</label>
                     <div class="row">
                         <div class="col-11">
                             <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
@@ -693,12 +700,10 @@ $(document).ready(function () {
                     </div>
                 </div>`;
             $('#shippingAddressTable').append(newShippingAddress);
-            shippingAddressCount++;
         } else {
             toastr.warning("You can add up to 10 shipping addresses only.");
         }
     });
-
 
     window.removeItem = function (btn) {
         $(btn).closest('.col-12').remove();
@@ -715,6 +720,7 @@ $(document).ready(function () {
         shippingAddressCount = $('#shippingAddressTable .col-12').length;
     }
 });
+
 
 
 
