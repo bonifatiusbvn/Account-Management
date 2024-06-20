@@ -69,7 +69,7 @@ function DisplaySiteDetails(SiteId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {
+        success: function (response) {debugger
             siteloaderhide();
             $('#changeName').html('Update Site');
             $('#txtSiteid').val(response.siteId);
@@ -91,26 +91,31 @@ function DisplaySiteDetails(SiteId) {
 
             $('#shippingAddressTable').empty();
 
-            $.each(response.siteShippingAddresses, function (i, data) {
-               
-                var shippingAddressNumber = i + 1;
+            if (response.siteShippingAddresses == null) {debugger
 
-                $('#shippingAddressTable').append(
-                   
-                    '<div class="col-12 mb-2" id="shippingAddressContainer-' + shippingAddressNumber + '" style="padding: 20px;">' +
-                    '<label class="form-label">Shipping Address</label>' +
-                    '<div class="row">' +
-                    '<div class="col-11">' +
-                    '<textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="shippingAddressContainer-' + shippingAddressNumber + '" name="txtShippingAddress-' + shippingAddressNumber + '">' + data.address + '</textarea>' +
-                    '</div>' +
-                    '<div class="col-1" style="position:relative; right:16px; top:22px;">' +
-                    '<a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>' +
-                    '</div>' +
-                    '</div>' +
-                    
-                    '</div>'
-                );
-            });
+            } else {
+                $.each(response.siteShippingAddresses, function (i, data) {
+
+                    var shippingAddressNumber = i + 1;
+
+                    $('#shippingAddressTable').append(
+
+                        '<div class="col-12 mb-2" id="shippingAddressContainer-' + shippingAddressNumber + '" style="padding: 20px;">' +
+                        '<label class="form-label">Shipping Address</label>' +
+                        '<div class="row">' +
+                        '<div class="col-11">' +
+                        '<textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="shippingAddressContainer-' + shippingAddressNumber + '" name="txtShippingAddress-' + shippingAddressNumber + '">' + data.address + '</textarea>' +
+                        '</div>' +
+                        '<div class="col-1" style="position:relative; right:16px; top:22px;">' +
+                        '<a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>' +
+                        '</div>' +
+                        '</div>' +
+
+                        '</div>'
+                    );
+                });
+            }
+           
 
 
             setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
@@ -237,7 +242,6 @@ function CreateSite() {
 }
 
 function UpdateSiteDetails() {
-    debugger
     siteloadershow();
     if ($("#siteForm").valid()) {
 
@@ -268,7 +272,6 @@ function UpdateSiteDetails() {
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
             SiteShippingAddresses: shippingAddressDetails,
         };
-        debugger
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
             siteloaderhide();
             toastr.error("Kindly fill all details");
@@ -300,9 +303,7 @@ function UpdateSiteDetails() {
                     siteloaderhide();
                 }
             })
-
         }
-
     }
     else {
         siteloaderhide();
@@ -629,12 +630,10 @@ function GetShippingCountry() {
     });
 }
 $(document).ready(function () {
-    debugger
 
     let shippingAddressCount = 1;
 
     $('#btnaddmoresite').click(function (e) {
-        debugger
             e.preventDefault();
 
         const newShippingAddress = `
@@ -654,7 +653,6 @@ $(document).ready(function () {
 
     
     window.removeItem = function (btn) {
-        debugger
         const container = $(btn).closest('.col-12');
         const totalAddresses = $('#shippingAddressTable .col-12').length;
         if (totalAddresses > 1 || container.attr('id') === 'shippingAddressContainer-1') {

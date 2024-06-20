@@ -99,7 +99,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                             join d in Context.Countries on a.Country equals d.CountryId
                             join shippingState in Context.States on a.ShippingStateId equals shippingState.StatesId
                             join shippingCountry in Context.Countries on a.ShippingCountry equals shippingCountry.CountryId
-                            join shippingAddress in Context.SiteAddresses on a.SiteId equals shippingAddress.SiteId
                             select new SiteMasterModel
                             {
                                 SiteId = a.SiteId,
@@ -128,6 +127,8 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
                             }).First();
+
+                
 
                 List<SiteAddressModel> siteAddress = (from shippingAddress in Context.SiteAddresses.Where(a=>a.SiteId==SiteId)
                                                       select new SiteAddressModel
@@ -260,7 +261,6 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             {
                 if (SiteMaster != null)
                 {
-                    SiteMaster.SiteId = SiteDetails.SiteId;
                     SiteMaster.SiteName = SiteDetails.SiteName;
                     SiteMaster.ContectPersonName = SiteDetails.ContectPersonName;
                     SiteMaster.ContectPersonPhoneNo = SiteDetails.ContectPersonPhoneNo;
@@ -277,42 +277,55 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     SiteMaster.ShippingCountry = SiteDetails.ShippingCountry;
                     SiteMaster.ShippingPincode = SiteDetails.ShippingPincode;
                 }
-                Context.Sites.Update(SiteMaster);
-                foreach(var item in SiteDetails.SiteShippingAddresses)
-                {
-                    var existingSiteAddress=Context.SiteAddresses.FirstOrDefault(a=>a.SiteId== SiteMaster.SiteId && a.Address == item.Address);
-                    if (existingSiteAddress!=null)
-                    {
-                        existingSiteAddress.Address = item.Address;
-                        existingSiteAddress.SiteId= SiteMaster.SiteId;
 
-                        Context.SiteAddresses.Update(existingSiteAddress);
-                    }
-                    else
-                    {
-                        var shippingAddress = new SiteAddress()
-                        {
-                            SiteId = SiteMaster.SiteId,
-                            Address = item.Address,
-                            IsDeleted = false,
-                        };
-                        Context.SiteAddresses.Add(shippingAddress);
-                    }
+                Context.Sites.Update(SiteMaster);
+
+                if (SiteDetails.SiteShippingAddresses == null || SiteDetails.SiteShippingAddresses.Count == 0)
+                {
+                    var siteAddressesToRemove = Context.SiteAddresses.Where(a => a.SiteId == SiteDetails.SiteId).ToList();
+                    Context.SiteAddresses.RemoveRange(siteAddressesToRemove);
                 }
-                var siteAddress=SiteDetails.SiteShippingAddresses.Select(a=>a.Address).ToList();
-                var siteAddressToRemove=Context.SiteAddresses.Where(a=>a.SiteId==SiteDetails.SiteId && !siteAddress.Contains(a.Address)).ToList();
-                Context.SiteAddresses.RemoveRange(siteAddressToRemove);
+                else
+                {
+                    foreach (var item in SiteDetails.SiteShippingAddresses)
+                    {
+                        var existingSiteAddress = Context.SiteAddresses.FirstOrDefault(a => a.SiteId == SiteMaster.SiteId && a.Address == item.Address);
+                        if (existingSiteAddress != null)
+                        {
+                            existingSiteAddress.Address = item.Address;
+                            existingSiteAddress.SiteId = SiteMaster.SiteId;
+                            Context.SiteAddresses.Update(existingSiteAddress);
+                        }
+                        else
+                        {
+                            var shippingAddress = new SiteAddress()
+                            {
+                                SiteId = SiteMaster.SiteId,
+                                Address = item.Address,
+                                IsDeleted = false,
+                            };
+                            Context.SiteAddresses.Add(shippingAddress);
+                        }
+                    }
+
+                    var siteAddressIds = SiteDetails.SiteShippingAddresses.Select(a => a.Address).ToList();
+                    var siteAddressesToRemove = Context.SiteAddresses.Where(a => a.SiteId == SiteDetails.SiteId && !siteAddressIds.Contains(a.Address)).ToList();
+                    Context.SiteAddresses.RemoveRange(siteAddressesToRemove);
+                }
 
                 Context.SaveChanges();
+
                 model.code = 200;
                 model.message = "Site details successfully updated.";
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.code = 500;
+                model.message = "An error occurred while updating site details: " + ex.Message;
             }
             return model;
         }
+
         public async Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId)
         {
             ApiResponseModel response = new ApiResponseModel();
