@@ -562,7 +562,6 @@ function InsertMultipleSupplierItem() {
     }
 }
 function UpdateInvoiceDetails() {
-    debugger
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
 
@@ -1173,7 +1172,6 @@ function clearItemErrorMessages() {
 }
 
 function addShippingAddress() {
-    debugger
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
         var address = $("#textmdAddress").val();

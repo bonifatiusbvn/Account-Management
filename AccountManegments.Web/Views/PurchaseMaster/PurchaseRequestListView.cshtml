@@ -141,6 +141,10 @@
                                             <input class="form-check-input font-22" id="dspIsApproved" type="checkbox" style="margin-left:-35px;" disabled>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Site Address</label>
+                                        <textarea type="text" class="form-control" row="3" id="dspPrSiteAddress" readonly></textarea>
+                                    </div>
                                 </div>
                             </div>
                             @* </form> *@
@@ -165,7 +169,7 @@
                             <form class="row g-3" id="purchaseRequestForm">
                                 <div class="col-12">
                                     <label class="form-label">Purchase Request No</label>
-                                    <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" readonly />
+                                    <input type="text" class="form-control form-control" id="prNo" readonly />
                                     <input type="hidden" class="form-control form-control" id="PurchaseRequestId" readonly />
                                     <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
                                     <input type="hidden" id="RoleIdinPR" value="@_userSession.UserRole">

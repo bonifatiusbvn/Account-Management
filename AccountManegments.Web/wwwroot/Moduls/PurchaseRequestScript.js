@@ -143,6 +143,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
                 $('#dspUnitName').val(response.unitName);
                 $('#dspQuantity').val(response.quantity);
                 $('#dspSiteName').val(response.siteName);
+                $('#dspPrSiteAddress').val(response.siteAddress);
                 $('#dspIsApproved').prop('checked', response.isApproved);
             } else {
                 siteloaderhide();
@@ -226,10 +227,25 @@ function ClearPurchaseRequestTextBox() {
         });
     }
     else {
+        $('#prNo').val('');
+        $.ajax({
+            url: '/PurchaseMaster/CheckPRNo',
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                siteloaderhide();
+                $('#prNo').val(response);
+            }, error: function () {
+                siteloaderhide();
+                toastr.error("Error in getting PR No");
+            }
+        });
         resetPRForm();
         $('#changeName').html('Create PurchaseRequest');
         $('#txtItemName').val('');
         $('#txtUnitType').val('');
+        $('#searchItemname').val('');
         $('#txtQuantity').val('');
         $('#txtPoSiteName').val('');
         $('#drpPRSiteAddress').val('');
@@ -315,7 +331,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#txtItemName').val(response.item);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitTypeId);                 
+            $('#txtUnitType').val(response.unitTypeId);
 
             fn_getPRSiteDetail(response.siteId, function () {
                 $('#drpPRSiteAddress').val(response.siteAddressId);
