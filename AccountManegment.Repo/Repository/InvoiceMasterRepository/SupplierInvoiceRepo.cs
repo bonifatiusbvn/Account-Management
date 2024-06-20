@@ -545,7 +545,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     string trimmedInvoicePef = CompanyDetails.InvoicePef.Trim();
                     if (lastInvoice == null)
                     {
-                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001"; ;
+                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001"; 
                     }
                     else
                     {

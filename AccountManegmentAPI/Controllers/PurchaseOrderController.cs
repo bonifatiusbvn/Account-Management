@@ -77,9 +77,9 @@ namespace AccountManagement.API.Controllers
         }
         [HttpGet]
         [Route("CheckPONo")]
-        public IActionResult CheckPONo()
+        public IActionResult CheckPONo(Guid? CompanyId)
         {
-            var checkPONo = PurchaseOrder.CheckPONo();
+            var checkPONo = PurchaseOrder.CheckPONo(CompanyId);
             return Ok(new { code = 200, data = checkPONo });
         }
 

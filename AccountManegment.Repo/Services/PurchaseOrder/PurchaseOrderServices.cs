@@ -23,9 +23,9 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.AddPurchaseOrderDetails(PurchaseOrderDetails);
         }
 
-        public string CheckPONo()
+        public string CheckPONo(Guid? CompanyId)
         {
-            return PurchaseOrder.CheckPONo();
+            return PurchaseOrder.CheckPONo(CompanyId);
         }
 
         public async Task<ApiResponseModel> DeletePurchaseOrderDetails(Guid POId)

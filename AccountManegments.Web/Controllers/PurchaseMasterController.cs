@@ -67,10 +67,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
-
-
-
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
         {
@@ -245,16 +241,6 @@ namespace AccountManegments.Web.Controllers
                         {
                             item.RowNumber = rowNumber++;
                         }
-                    }
-                    ViewBag.PurchaseOrderNo = response.Poid;
-                }
-                else
-                {
-
-                    ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrder/CheckPONo");
-                    if (Response.code == 200)
-                    {
-                        ViewBag.PurchaseOrderNo = Response.data;
                     }
                 }
                 return View(response);
@@ -761,6 +747,27 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-    }
 
+        [HttpGet]
+        public async Task<IActionResult> CheckPurchaseOrderNo(Guid? CompanyId)
+        {
+            try
+            {
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrder/CheckPONo?CompanyId=" + CompanyId);
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Data = response.data, Code = 200 });
+                }
+                else
+                {
+                    return Ok(new { Code = 400, Message = "Failed to create invoice", });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+    }
 }

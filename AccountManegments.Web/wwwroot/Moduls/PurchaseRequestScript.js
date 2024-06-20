@@ -628,7 +628,7 @@ function EditPurchaseOrderDetails(Id) {
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
             $('#txtbillingAddress').val(response.billingAddress);
-            $('#txtPoId').val(response.poid);
+            $('#textPOPrefix').val(response.poid);
             $('#orderdate').val(response.date);
             $('#txtSuppliername').val(response.fromSupplierId);
             $('#searchItemname').val(response.itemId);
@@ -646,24 +646,89 @@ function EditPurchaseOrderDetails(Id) {
 }
 
 function GetCompanyName() {
-
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             if (result.length > 0) {
+
                 var selectedValue = $('#txtcompanyname').find('option:first').val();
                 $.each(result, function (i, data) {
                     if (data.companyId !== selectedValue) {
-                        $('#txtcompanyname').append('<option value=' + data.companyId + '>' + data.companyName + '</option>');
+                        $('#txtcompanyname').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
                     }
                 });
-                $('#txtcompanyname option:first').prop('selected', true);
-
-                $('#txtcompanyname').trigger('change');
             }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
         }
     });
 }
+
+
+function getPONumber(CompanyId) {
+    debugger
+    siteloadershow();
+    $.ajax({
+        url: '/PurchaseMaster/CheckPurchaseOrderNo?CompanyId=' + CompanyId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            if (response.code == 200) {
+                siteloaderhide();
+                $('#textPOPrefix').val(response.data);
+            } else {
+                siteloaderhide();
+                toastr.error('Empty response received.');
+            }
+        },
+    });
+}
+
+
+$(document).ready(function () {
+    $('#txtcompanyname').change(function () {
+        getPONumber($(this).val());
+    });
+});
+
+$(document).ready(function () {
+    $('#txtcompanyname').change(function () {
+        siteloadershow();
+        var Company = $(this).val();
+        $('#txtcompany').val(Company);
+        $.ajax({
+            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
+            type: 'GET',
+            success: function (result) {
+                siteloaderhide();
+                $('#companybillingaddressDetails').empty().append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
+                );
+            },
+
+        });
+    });
+
+
+    $('#sameAsBillingAddress').change(function () {
+        var billingAddress = $('#companybillingaddressDetails textarea').val();
+        var shippingNameInput = $('#shippingName');
+        var shippingAddressInput = $('#txtshippingAddress');
+        if (this.checked) {
+            var companyName = $('#companybillingaddressDetails input').val();
+            shippingNameInput.val(companyName);
+            shippingAddressInput.val(billingAddress);
+        } else {
+            shippingNameInput.val("");
+            shippingAddressInput.val("");
+        }
+    });
+});
+
 function GetItemDetails() {
 
     $.ajax({
@@ -706,40 +771,6 @@ function GetSupplierDetails() {
         }
     });
 }
-$(document).ready(function () {
-    $('#txtcompanyname').change(function () {
-        siteloadershow();
-        var Company = $(this).val();
-        $('#txtcompany').val(Company);
-        $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
-            type: 'GET',
-            success: function (result) {
-                siteloaderhide();
-                $('#companybillingaddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
-                );
-            },
-
-        });
-    });
-
-
-    $('#sameAsBillingAddress').change(function () {
-        var billingAddress = $('#companybillingaddressDetails textarea').val();
-        var shippingNameInput = $('#shippingName');
-        var shippingAddressInput = $('#txtshippingAddress');
-        if (this.checked) {
-            var companyName = $('#companybillingaddressDetails input').val();
-            shippingNameInput.val(companyName);
-            shippingAddressInput.val(billingAddress);
-        } else {
-            shippingNameInput.val("");
-            shippingAddressInput.val("");
-        }
-    });
-});
 
 function SerchItemDetailsById(Id, inputField) {
     siteloadershow();
@@ -931,7 +962,7 @@ function InsertMultiplePurchaseOrderDetails() {
 
             var PORequest = {
                 SiteId: $("#siteid").val(),
-                Poid: $("#txtPoId").val(),
+                Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
@@ -1237,7 +1268,7 @@ function UpdateMultiplePurchaseOrderDetails() {
             var PORequest = {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#siteid").val(),
-                Poid: $("#txtPoId").val(),
+                Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
@@ -1625,3 +1656,4 @@ function toggleRadio() {
         dateInput.disabled = false;
     }
 }
+

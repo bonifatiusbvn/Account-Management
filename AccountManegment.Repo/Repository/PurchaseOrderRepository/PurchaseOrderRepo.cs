@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
@@ -54,52 +55,53 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             return responseModel;
         }
 
-        public string CheckPONo()
+        public string CheckPONo(Guid? CompanyId)
         {
             try
             {
-                var LastPO = Context.PurchaseOrders.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                var currentDate = DateTime.Now;
-
-                int currentYear;
-                int lastYear;
-                if (currentDate.Month > 4)
+                var CompanyDetails = Context.Companies.FirstOrDefault(e => e.CompanyId == CompanyId);
+                if (CompanyDetails == null)
                 {
-
-                    currentYear = currentDate.Year + 1;
-                    lastYear = currentDate.Year;
+                    throw new Exception("Company details not found.");
                 }
                 else
                 {
+                    var LastPO = Context.PurchaseOrders.Where(a=>a.ToCompanyId == CompanyId).OrderByDescending(e => e.CreatedOn).FirstOrDefault();
 
-                    currentYear = currentDate.Year;
-                    lastYear = currentDate.Year - 1;
-                }
+                    var currentDate = DateTime.Now;
+                    int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
+                    int lastYear = currentYear - 1;
 
-                string PurchaseOrderId;
-                if (LastPO == null)
-                {
-
-                    PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/001";
-                }
-                else
-                {
-                    if (LastPO.Poid.Length >= 19)
+                    string PurchaseOrderId;
+                    string trimmedPOPef = CompanyDetails.InvoicePef.Trim();
+                    if (LastPO == null)
                     {
 
-                        int PrNumber = int.Parse(LastPO.Poid.Substring(18)) + 1;
-                        PurchaseOrderId = $"DMInfra/PO/{(lastYear % 100).ToString("D2")}-{(currentYear % 100).ToString("D2")}/" + PrNumber.ToString("D3");
+                        PurchaseOrderId = $"{trimmedPOPef}/PO/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
                     }
                     else
                     {
-                        throw new Exception("Purchase order id does not have the expected format.");
+                        string lastPONumber = LastPO.Poid.Substring(LastPO.Poid.LastIndexOf('/') + 1);
+                        Match match = Regex.Match(lastPONumber, @"\d+$");
+                        if (match.Success)
+                        {
+                            int lastPONumberValue = int.Parse(match.Value);
+                            int newPONumberValue = lastPONumberValue + 1;
+                            PurchaseOrderId = $"{trimmedPOPef}/PO/{(lastYear % 100):D2}-{(currentYear % 100):D2}/{newPONumberValue:D3}";
+                        }
+                        else
+                        {
+                            throw new Exception("Purchase order id does not have the expected format.");
+                        }
                     }
-                }
-                return PurchaseOrderId;
+                    return PurchaseOrderId;
+                }           
             }
             catch (Exception ex)
             {
-                throw ex;
+                string error;
+                error = "Error generating Purchase Order number.";
+                return error;
             }
         }
 

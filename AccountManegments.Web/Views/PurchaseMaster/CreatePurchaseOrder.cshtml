@@ -107,6 +107,7 @@
                                                                     else
                                                                     {
                                                                         <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                            <option selected value="" disabled>--Select Company--</option>
                                                                         </select>
                                                                     }
 
@@ -117,8 +118,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-5 col-lg-5">
-                                                                <label for="txtPoId " class="form-label">Order No</label>
-                                                                <input type="text" class="form-control" id="txtPoId" value="@ViewBag.PurchaseOrderNo" readonly />
+                                                                <label for="textPOPrefix " class="form-label">Order No</label>
+                                                                <input type="text" class="form-control" id="textPOPrefix" placeholder="Purchase Order Number" readonly value="@Model.Poid" />
                                                             </div>
                                                             <div class="col-3 col-lg-3 ">
                                                                 <label for="orderdate" class="form-label">Order Date</label>
