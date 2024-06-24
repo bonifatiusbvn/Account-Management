@@ -69,7 +69,7 @@ function DisplaySiteDetails(SiteId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
             siteloaderhide();
             $('#changeName').html('Update Site');
             $('#txtSiteid').val(response.siteId);
@@ -91,7 +91,7 @@ function DisplaySiteDetails(SiteId) {
 
             $('#shippingAddressTable').empty();
 
-            if (response.siteShippingAddresses == null) {debugger
+            if (response.siteShippingAddresses == null) {
 
             } else {
                 $.each(response.siteShippingAddresses, function (i, data) {

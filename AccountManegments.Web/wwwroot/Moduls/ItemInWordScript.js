@@ -135,7 +135,7 @@ function GetItemDetails() {
         success: function (result) {
 
             $('#txtItemId').empty();
-            $('#txtItemId').append('<option value="">--Select Item --</option>');
+            
             $.each(result, function (i, data) {
                 $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
@@ -204,6 +204,8 @@ function ClearItemInWordTextBox() {
         offcanvas.show();
         $('#txtItemId').select2({
             theme: 'bootstrap4',
+            maximumSelectionLength: 1,
+            closeOnSelect: true,
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
             allowClear: Boolean($(this).data('allow-clear')),
@@ -211,6 +213,8 @@ function ClearItemInWordTextBox() {
         });
         $('#txtUnitType').select2({
             theme: 'bootstrap4',
+            maximumSelectionLength: 1,
+            closeOnSelect: true,
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder'),
             allowClear: Boolean($(this).data('allow-clear')),
@@ -298,6 +302,8 @@ function EditItemInWordDetails(InwordId) {
             offcanvas.show();
             $('#txtItemId').select2({
                 theme: 'bootstrap4',
+                maximumSelectionLength: 1,
+                closeOnSelect: true,
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                 placeholder: $(this).data('placeholder'),
                 allowClear: Boolean($(this).data('allow-clear')),
@@ -305,6 +311,8 @@ function EditItemInWordDetails(InwordId) {
             });
             $('#txtUnitType').select2({
                 theme: 'bootstrap4',
+                maximumSelectionLength: 1,
+                closeOnSelect: true,
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                 placeholder: $(this).data('placeholder'),
                 allowClear: Boolean($(this).data('allow-clear')),
@@ -474,9 +482,16 @@ function InsertMultipleItemInWordDetails() {
         else {
             siteId = $("#txtSiteid").val();
         }
+
+        var unitTypeIdValue = $("#txtUnitType").val();
+        var unitTypeId = Array.isArray(unitTypeIdValue) ? parseInt(unitTypeIdValue[0], 10) : parseInt(unitTypeIdValue, 10);
+
+        var ItemIdValue = $("#txtItemId").val();
+        var ItemId = Array.isArray(ItemIdValue) ? ItemIdValue[0] : ItemIdValue;
+
         var ItemInWordRequest = {
-            UnitTypeId: $("#txtUnitType").val(),
-            ItemId: $("#txtItemId").val(),
+            UnitTypeId: unitTypeId,
+            ItemId: ItemId,
             Item: $("#txtItemName").val(),
             Quantity: $("#txtQuantity").val(),
             SiteId: siteId,
@@ -544,10 +559,16 @@ function UpdateMultipleItemInWordDetails() {
             siteId = $("#txtSiteid").val();
         }
         var documentName = $("#txtDocumentName").val();
+
+        var unitTypeIdValue = $("#txtUnitType").val();
+        var unitTypeId = Array.isArray(unitTypeIdValue) ? parseInt(unitTypeIdValue[0], 10) : parseInt(unitTypeIdValue, 10);
+
+        var ItemIdValue = $("#txtItemId").val();
+        var ItemId = Array.isArray(ItemIdValue) ? ItemIdValue[0] : ItemIdValue;
         var UpdateItemInWord = {
             InwordId: $('#txtItemInWordid').val(),
-            UnitTypeId: $("#txtUnitType").val(),
-            ItemId: $("#txtItemId").val(),
+            UnitTypeId: unitTypeId,
+            ItemId: ItemId,
             Item: $("#txtItemName").val(),
             Quantity: $("#txtQuantity").val(),
             VehicleNumber: $("#txtVehicleNumber").val(),

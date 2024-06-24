@@ -151,8 +151,8 @@
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <div class="col-12">
                                     <label class="form-label" for="txtItemId">Product Names</label>
-                                    <select id="txtItemId" name="txtItemId" class="form-select">
-                                        <option selected disabled value="">select Item</option>
+                                    <select id="txtItemId" name="txtItemId" class="multiple-select" multiple="multiple">
+                                        
                                     </select>
                                     <input type="hidden" id="searchItemnameid">
                                     <input type="hidden" id="txtItemName">
@@ -163,8 +163,8 @@
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="form-select" id="txtUnitType" name="txtUnitType">
-                                        <option selected disabled value="">--Select Unit Type--</option>
+                                    <select class="multiple-select" multiple="multiple" id="txtUnitType" name="txtUnitType">
+                                        
                                     </select>
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
