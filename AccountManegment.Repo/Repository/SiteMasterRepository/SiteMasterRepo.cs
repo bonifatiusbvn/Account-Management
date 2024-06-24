@@ -57,17 +57,19 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     };
                     Context.Sites.Add(SiteMaster);
 
-                    foreach(var item in SiteDetails.SiteShippingAddresses)
+                    if (SiteDetails.SiteShippingAddresses != null)
                     {
-                        var shippingAddress = new SiteAddress()
+                        foreach (var item in SiteDetails.SiteShippingAddresses)
                         {
-                            SiteId = SiteMaster.SiteId,
-                            Address = item.Address,
-                            IsDeleted=false,
-                        };
-                        Context.SiteAddresses.Add(shippingAddress);
+                            var shippingAddress = new SiteAddress()
+                            {
+                                SiteId = SiteMaster.SiteId,
+                                Address = item.Address,
+                                IsDeleted = false,
+                            };
+                            Context.SiteAddresses.Add(shippingAddress);
+                        }
                     }
-                    
                     Context.SaveChanges();
                     response.code = (int)HttpStatusCode.OK;
                     response.message = "Site is successfully created.";

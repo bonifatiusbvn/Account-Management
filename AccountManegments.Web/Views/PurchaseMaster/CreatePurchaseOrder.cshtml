@@ -14,7 +14,7 @@
     }
 
     #txtSuppliername-error, #companybillingaddressDetails-error, #txtcompanyname-error,
-    #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error, #txtgst-error, 
+    #txtDeliverySchedule-error, #txtContectPerson-error, #txtMobileNo-error, #txtgst-error,
     #txtmdAddress-error, #txtSuppliermobile-error {
         color: red;
     }
@@ -107,18 +107,20 @@
                                                                     else
                                                                     {
                                                                         <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                            <option selected value="" disabled>--Select Company--</option>
                                                                         </select>
                                                                     }
 
                                                                     <span id="spncompanyname" class="text-danger"></span>
                                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
-                                                                    <input type="hidden" class="form-control" id="siteid" value="@UserSession.SiteId">
+                                                                    <input type="hidden" class="form-control" id="positeid" value="@UserSession.SiteId">
                                                                     <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
+                                                                    <input type="hidden" class="form-control" id="UserRoleinPO" value="@_userSession.UserRole">
                                                                 </div>
                                                             </div>
                                                             <div class="col-5 col-lg-5">
-                                                                <label for="txtPoId " class="form-label">Order No</label>
-                                                                <input type="text" class="form-control" id="txtPoId" value="@ViewBag.PurchaseOrderNo" readonly />
+                                                                <label for="textPOPrefix " class="form-label">Order No</label>
+                                                                <input type="text" class="form-control" id="textPOPrefix" placeholder="Purchase Order Number" readonly value="@Model.Poid" />
                                                             </div>
                                                             <div class="col-3 col-lg-3 ">
                                                                 <label for="orderdate" class="form-label">Order Date</label>
@@ -133,7 +135,7 @@
                                                                 {
                                                                     <input type="date" id="orderdate2" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@formattedDate">
                                                                 }
-                                                                
+
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
@@ -397,9 +399,18 @@
                         <div class="row">
                             <div class="col-10 col-sm-10 ">
                                 <label class="form-lable">Select Site</label>
-                                <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
-                                    <option selected value="">--Select Site--</option>
-                                </select>
+                                @if (_userSession.UserRole == 3)
+                                {
+                                    <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
+                                        <option selected value="">--Select Site--</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="form-control" id="txtPoSiteName" name="txtPoSiteName" disabled>
+                                        <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
+                                    </select>
+                                }
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -416,8 +427,7 @@
                             </div>
                             <div class="col-3 col-sm-3">
                                 <label class="form-lable">Qty</label>
-                                <input class="form-control" id="txtmdqty" name="txtmdqty" value="" required />
-                                <span id="spnShippingQuantity" style="color:red;"></span>
+                                <input class="form-control" id="txtmdqty" value=""/>
                             </div>
                         </div>
 
@@ -472,7 +482,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

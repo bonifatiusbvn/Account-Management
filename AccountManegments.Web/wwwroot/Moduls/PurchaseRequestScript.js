@@ -218,38 +218,29 @@ function CreatePurchaseRequest() {
 
 function ClearPurchaseRequestTextBox() {
 
-    if ($("#textsiteId").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
-    }
-    else {
-        $('#prNo').val('');
-        $.ajax({
-            url: '/PurchaseMaster/CheckPRNo',
-            type: 'GET',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            success: function (response) {
-                siteloaderhide();
-                $('#prNo').val(response);
-            }, error: function () {
-                siteloaderhide();
-                toastr.error("Error in getting PR No");
-            }
-        });
-        resetPRForm();
-        $('#changeName').html('Create PurchaseRequest');
-        $('#txtItemName').val('');
-        $('#txtUnitType').val('');
-        $('#searchItemname').val('');
-        $('#txtQuantity').val('');
-        $('#txtPoSiteName').val('');
-        $('#drpPRSiteAddress').val('');
-        $('#PurchaseRequestId').val('');
+    $('#prNo').val('');
+    $.ajax({
+        url: '/PurchaseMaster/CheckPRNo',
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            $('#prNo').val(response);
+        }, error: function () {
+            siteloaderhide();
+            toastr.error("Error in getting PR No");
+        }
+    });
+    resetPRForm();
+    $('#changeName').html('Create PurchaseRequest');
+    $('#txtItemName').val('');
+    $('#txtUnitType').val('');
+    $('#searchItemname').val('');
+    $('#txtQuantity').val('');
+    $('#txtPoSiteName').val('');
+    $('#drpPRSiteAddress').val('');
+    $('#PurchaseRequestId').val('');
 
         var button = document.getElementById("btnpurchaseRequest");
         if ($('#PurchaseRequestId').val() == '') {
@@ -545,17 +536,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
 }
 
 function clearPOtextbox() {
-    if ($("#inputSiteId").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
-    }
-    else {
-        window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
-    }
+    window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
 }
 function GetAllUnitType() {
 
@@ -639,7 +620,7 @@ function EditPurchaseOrderDetails(Id) {
             $('#purchaseorderid').val(response.id);
             $('#txtcompanyname').val(response.toCompanyId);
             $('#txtbillingAddress').val(response.billingAddress);
-            $('#txtPoId').val(response.poid);
+            $('#textPOPrefix').val(response.poid);
             $('#orderdate').val(response.date);
             $('#txtSuppliername').val(response.fromSupplierId);
             $('#searchItemname').val(response.itemId);
@@ -657,24 +638,89 @@ function EditPurchaseOrderDetails(Id) {
 }
 
 function GetCompanyName() {
-
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             if (result.length > 0) {
+
                 var selectedValue = $('#txtcompanyname').find('option:first').val();
                 $.each(result, function (i, data) {
                     if (data.companyId !== selectedValue) {
-                        $('#txtcompanyname').append('<option value=' + data.companyId + '>' + data.companyName + '</option>');
+                        $('#txtcompanyname').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
                     }
                 });
-                $('#txtcompanyname option:first').prop('selected', true);
-
-                $('#txtcompanyname').trigger('change');
             }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
         }
     });
 }
+
+
+function getPONumber(CompanyId) {
+    debugger
+    siteloadershow();
+    $.ajax({
+        url: '/PurchaseMaster/CheckPurchaseOrderNo?CompanyId=' + CompanyId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            if (response.code == 200) {
+                siteloaderhide();
+                $('#textPOPrefix').val(response.data);
+            } else {
+                siteloaderhide();
+                toastr.error('Empty response received.');
+            }
+        },
+    });
+}
+
+
+$(document).ready(function () {
+    $('#txtcompanyname').change(function () {
+        getPONumber($(this).val());
+    });
+});
+
+$(document).ready(function () {
+    $('#txtcompanyname').change(function () {
+        siteloadershow();
+        var Company = $(this).val();
+        $('#txtcompany').val(Company);
+        $.ajax({
+            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
+            type: 'GET',
+            success: function (result) {
+                siteloaderhide();
+                $('#companybillingaddressDetails').empty().append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
+                );
+            },
+
+        });
+    });
+
+
+    $('#sameAsBillingAddress').change(function () {
+        var billingAddress = $('#companybillingaddressDetails textarea').val();
+        var shippingNameInput = $('#shippingName');
+        var shippingAddressInput = $('#txtshippingAddress');
+        if (this.checked) {
+            var companyName = $('#companybillingaddressDetails input').val();
+            shippingNameInput.val(companyName);
+            shippingAddressInput.val(billingAddress);
+        } else {
+            shippingNameInput.val("");
+            shippingAddressInput.val("");
+        }
+    });
+});
+
 function GetItemDetails() {
 
     $.ajax({
@@ -717,40 +763,6 @@ function GetSupplierDetails() {
         }
     });
 }
-$(document).ready(function () {
-    $('#txtcompanyname').change(function () {
-        siteloadershow();
-        var Company = $(this).val();
-        $('#txtcompany').val(Company);
-        $.ajax({
-            url: '/Company/GetCompnaytById/?CompanyId=' + Company,
-            type: 'GET',
-            success: function (result) {
-                siteloaderhide();
-                $('#companybillingaddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="txtbillingcompanyname" value="' + result.companyName + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="txtbillingAddress" name="data[#].ShippingAddress" rows="3" readonly style="height: 90px;">' + result.address + ', ' + result.area + ', ' + result.cityName + ', ' + result.stateName + ', ' + result.countryName + ', ' + result.pincode + '</textarea></div>'
-                );
-            },
-
-        });
-    });
-
-
-    $('#sameAsBillingAddress').change(function () {
-        var billingAddress = $('#companybillingaddressDetails textarea').val();
-        var shippingNameInput = $('#shippingName');
-        var shippingAddressInput = $('#txtshippingAddress');
-        if (this.checked) {
-            var companyName = $('#companybillingaddressDetails input').val();
-            shippingNameInput.val(companyName);
-            shippingAddressInput.val(billingAddress);
-        } else {
-            shippingNameInput.val("");
-            shippingAddressInput.val("");
-        }
-    });
-});
 
 function SerchItemDetailsById(Id, inputField) {
     siteloadershow();
@@ -939,10 +951,9 @@ function InsertMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
-
             var PORequest = {
-                SiteId: $("#siteid").val(),
-                Poid: $("#txtPoId").val(),
+                SiteId: $("#txtPoSiteName").val(),
+                Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
@@ -1013,28 +1024,35 @@ function checkAndDisableAddButton() {
     } else {
         $('.add-address').prop('disabled', false);
     }
-
 }
 
 $(document).ready(function () {
+    var poRoleUser = $('#UserRoleinPO').val();
+    var poSiteId = $('#txtPoSiteName').val();
 
-    $('#txtPoSiteName').change(function () {
-        var Site = $(this).val();
-        $('#txtPoSiteName').val(Site);
-        fn_GetPOSiteAddressList(Site);
-        $('#drpPOSiteAddress').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#mdShippingAdd")
+    if (poRoleUser == 8) {
+        fn_GetPOSiteAddressList(poSiteId);
+    }
+    else {
+        $('#txtPoSiteName').change(function () {
+            var Site = $(this).val();
+            $('#txtPoSiteName').val(Site);
+            fn_GetPOSiteAddressList(Site);
         });
+    }
+    $('#drpPOSiteAddress').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#mdShippingAdd")
     });
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-address').prop('disabled', false);
     });
 });
+
 function fn_GetPOSiteAddressList(SiteId) {
     $.ajax({
         url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
@@ -1071,12 +1089,6 @@ function AddShippingAddress() {
         $('#dvshippingAdd .row.ac-invoice-shippingadd').each(function () {
             totalQuantity += parseInt($(this).find('#shippingquantity').text().trim());
         });
-
-        if (ItemQuantity == 0) {
-            siteloaderhide();
-            document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
-            return;
-        }
 
         if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
             siteloaderhide();
@@ -1135,13 +1147,7 @@ function AddShippingAddress() {
             updateRowNumbers();
         } else {
             siteloaderhide();
-            Swal.fire({
-                title: "Address already added!",
-                text: "The selected address is already added.",
-                icon: "warning",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "OK"
-            });
+            toastr.warning("The selected address is already added.");
         }
     } else {
         siteloaderhide();
@@ -1152,12 +1158,9 @@ $(document).ready(function () {
     $("#ShippingAddressForm").validate({
         rules: {
             txtmdAddress: "required",
-            txtmdqty: "required",
         },
         messages: {
             txtmdAddress: "Select Site",
-            txtmdqty: "Enter Quantity",
-
         }
     });
 });
@@ -1248,7 +1251,7 @@ function UpdateMultiplePurchaseOrderDetails() {
             var PORequest = {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#siteid").val(),
-                Poid: $("#txtPoId").val(),
+                Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
@@ -1636,3 +1639,4 @@ function toggleRadio() {
         dateInput.disabled = false;
     }
 }
+

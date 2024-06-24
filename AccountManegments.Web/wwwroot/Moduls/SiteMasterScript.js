@@ -115,7 +115,7 @@ function DisplaySiteDetails(SiteId) {
                     );
                 });
             }
-           
+
 
 
             setTimeout(function () { $('#ddlCity').val(response.cityId); $('#ShippingCity').val(response.shippingCityId); }, 100)
@@ -177,15 +177,35 @@ function SelectSiteDetails(SiteId, element) {
 
 function CreateSite() {
     siteloadershow();
+
     if ($("#siteForm").valid()) {
         var shippingAddressDetails = [];
+
+        var isValidProduct = true;
         $('#shippingAddressTable textarea').each(function () {
             var address = $(this);
             var addressData = {
-                Address: address.val(),
+                Address: address.val()
+            };
+            address.on('input', function () {
+                address.css("border", "1px solid #ced4da");
+            });
+
+            if (addressData.Address === "") {
+                isValidProduct = false;
+                address.css("border", "2px solid red");
+                siteloaderhide();
+                toastr.error("Kindly fill Multiple Site Address");
+                return false;
             }
+
             shippingAddressDetails.push(addressData);
         });
+
+        if (!isValidProduct) {
+            return;
+        }
+
         var objData = {
             SiteName: $('#txtSiteName').val(),
             ContectPersonName: $('#txtContectPersonName').val(),
@@ -196,63 +216,86 @@ function CreateSite() {
             StateId: $('#stateDropdown').val(),
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
+            CreatedBy: $("#txtSiteUserId").val(),
             ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#txtAddress').val() : $('#txtShippingAddress').val(),
             ShippingArea: $('#hideShippingAddress').is(':checked') ? $('#txtArea').val() : $('#txtShippingArea').val(),
             ShippingPincode: $('#hideShippingAddress').is(':checked') ? $('#txtPincode').val() : $('#txtShippingPincode').val(),
             ShippingCityId: $('#hideShippingAddress').is(':checked') ? $('#ddlCity').val() : $('#ShippingCity').val(),
             ShippingStateId: $('#hideShippingAddress').is(':checked') ? $('#stateDropdown').val() : $('#ShippingState').val(),
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
-            SiteShippingAddresses: shippingAddressDetails,
+            SiteShippingAddresses: shippingAddressDetails
         };
 
-        if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
+        if (objData.CityId === "--Select City--" || objData.StateId === "--Select State--") {
             siteloaderhide();
             toastr.error("Kindly fill all details");
-        } else {
-            $.ajax({
-                url: '/SiteMaster/CreateSite',
-                type: 'post',
-                data: objData,
-                datatype: 'json',
-                success: function (Result) {
-                    if (Result.code == 200) {
-                        var offcanvasElement = document.getElementById('createSite');
-                        var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-                        if (offcanvas) {
-                            offcanvas.hide();
-                        } else {
-                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                            offcanvas.hide();
-                        }
-
-                        AllSiteListTable();
-                        toastr.success(Result.message);
-                    } else {
-                        toastr.error(Result.message);
-                    }
-                    siteloaderhide();
-                },
-            });
+            return;
         }
+
+        $.ajax({
+            url: '/SiteMaster/CreateSite',
+            type: 'post',
+            data: objData,
+            dataType: 'json',
+            success: function (Result) {
+                if (Result.code === 200) {
+                    var offcanvasElement = document.getElementById('createSite');
+                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    } else {
+                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        offcanvas.hide();
+                    }
+
+                    AllSiteListTable();
+                    toastr.success(Result.message);
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            complete: function () {
+                siteloaderhide();
+            }
+        });
+
     } else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
 }
 
+
 function UpdateSiteDetails() {
     siteloadershow();
     if ($("#siteForm").valid()) {
-
         var shippingAddressDetails = [];
+
+        var isValidProduct = true;
         $('#shippingAddressTable textarea').each(function () {
             var address = $(this);
             var addressData = {
-                Address: address.val(),
+                Address: address.val()
+            };
+            address.on('input', function () {
+                address.css("border", "1px solid #ced4da");
+            });
+
+            if (addressData.Address === "") {
+                isValidProduct = false;
+                address.css("border", "2px solid red");
+                siteloaderhide();
+                toastr.error("Kindly fill Multiple Site Address");
+                return false;
             }
+
             shippingAddressDetails.push(addressData);
         });
+
+        if (!isValidProduct) {
+            return;
+        }
         var objData = {
             SiteId: $('#txtSiteid').val(),
             SiteName: $('#txtSiteName').val(),
@@ -630,36 +673,42 @@ function GetShippingCountry() {
     });
 }
 $(document).ready(function () {
-
     let shippingAddressCount = 1;
+    const maxShippingAddresses = 11;
 
     $('#btnaddmoresite').click(function (e) {
-            e.preventDefault();
+        e.preventDefault();
 
-        const newShippingAddress = `
-            <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}" style="padding: 20px;">
-                <label class="form-label">Shipping Address </label>
-                <div class="row">
-                                                        <div class="col-11">
-                <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
-                </div>
-                                                        <div class="col-1" style="position:relative;right:16px;top:22px;">
-                <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
-                </div>
-            </div>`;
-        $('#shippingAddressTable').append(newShippingAddress);
-        shippingAddressCount++;
+        const lastTextarea = $(`#txtShippingAddress-${shippingAddressCount}`);
+        if (lastTextarea.length && lastTextarea.val().trim() === '') {
+            toastr.error("Kindly fill the current Shipping Address before adding a new one.");
+            return;
+        }
+
+        if (shippingAddressCount < maxShippingAddresses) {
+            shippingAddressCount++;
+            const newShippingAddress = `
+                <div class="col-12 mb-2" id="shippingAddressContainer-${shippingAddressCount}" style="padding: 20px;">
+                    <label class="form-label">Shipping Address</label>
+                    <div class="row">
+                        <div class="col-11">
+                            <textarea class="form-control mb-2" rows="3" placeholder="Shipping Address" id="txtShippingAddress-${shippingAddressCount}" name="txtShippingAddress-${shippingAddressCount}"></textarea>
+                        </div>
+                        <div class="col-1" style="position:relative;right:16px;top:22px;">
+                            <a id="remove" class="btn text-primary" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                        </div>
+                    </div>
+                </div>`;
+            $('#shippingAddressTable').append(newShippingAddress);
+        } else {
+            toastr.warning("You can add up to 10 shipping addresses only.");
+        }
     });
 
-    
     window.removeItem = function (btn) {
-        const container = $(btn).closest('.col-12');
-        const totalAddresses = $('#shippingAddressTable .col-12').length;
-        if (totalAddresses > 1 || container.attr('id') === 'shippingAddressContainer-1') {
-            container.remove();
-            updateShippingAddressNumbers();
-        }
-    }
+        $(btn).closest('.col-12').remove();
+        updateShippingAddressNumbers();
+    };
 
     function updateShippingAddressNumbers() {
         $('#shippingAddressTable .col-12').each(function (index) {
@@ -671,6 +720,8 @@ $(document).ready(function () {
         shippingAddressCount = $('#shippingAddressTable .col-12').length;
     }
 });
+
+
 
 
 
