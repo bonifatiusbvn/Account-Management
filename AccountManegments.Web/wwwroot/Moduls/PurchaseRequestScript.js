@@ -182,7 +182,7 @@ function CreatePurchaseRequest() {
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
         }
-        
+
         $.ajax({
             url: '/PurchaseMaster/CreatePurchaseRequest',
             type: 'post',
@@ -242,42 +242,42 @@ function ClearPurchaseRequestTextBox() {
     $('#drpPRSiteAddress').val('');
     $('#PurchaseRequestId').val('');
 
-        var button = document.getElementById("btnpurchaseRequest");
-        if ($('#PurchaseRequestId').val() == '') {
-            button.textContent = "Create";
-        }
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-        offcanvas.show();
-        $('#searchItemname').select2({
-            maximumSelectionLength: 1,
-            theme: 'bootstrap4',
-
-            closeOnSelect: true,
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
-        $('#txtUnitType').select2({
-            maximumSelectionLength: 1,
-            theme: 'bootstrap4',
-     
-            closeOnSelect: true,
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
-        $('#drpPRSiteAddress').select2({
-            
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreatePurchaseRequest")
-        });
+    var button = document.getElementById("btnpurchaseRequest");
+    if ($('#PurchaseRequestId').val() == '') {
+        button.textContent = "Create";
     }
+    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
+    offcanvas.show();
+    $('#searchItemname').select2({
+        maximumSelectionLength: 1,
+        theme: 'bootstrap4',
+
+        closeOnSelect: true,
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
+    $('#txtUnitType').select2({
+        maximumSelectionLength: 1,
+        theme: 'bootstrap4',
+
+        closeOnSelect: true,
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
+    $('#drpPRSiteAddress').select2({
+
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#CreatePurchaseRequest")
+    });
 }
+
 var PRForm;
 function validateAndCreatePurchaseRequest() {
     PRForm = $("#purchaseRequestForm").validate({
@@ -358,9 +358,9 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 allowClear: Boolean($(this).data('allow-clear')),
                 dropdownParent: $("#CreatePurchaseRequest")
             });
-            
+
             $('#drpPRSiteAddress').select2({
-                
+
                 theme: 'bootstrap4',
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                 placeholder: $(this).data('placeholder'),
