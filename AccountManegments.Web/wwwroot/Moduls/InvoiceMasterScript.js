@@ -74,22 +74,29 @@ function GetSiteDetail() {
 }
 
 $(document).ready(function () {
-    $('#textInvoiceSiteName').change(function () {
-        var Site = $(this).val();
+    var invoiceRoleUser = $('#UserRoleinInvoice').val();
+    var invoiceSiteId = $('#textInvoiceSiteName').val();
 
-        fn_GetInvoiceSiteAddressList(Site);
-        $('#drpInvoiceSiteAddress').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#mdShippingAdd")
+    if (invoiceRoleUser == 8) {
+        fn_GetInvoiceSiteAddressList(invoiceSiteId);
+    }
+    else {
+        $('#textInvoiceSiteName').change(function () {
+            var Site = $(this).val();
+            fn_GetInvoiceSiteAddressList(Site);
         });
+    }
+    $('#drpInvoiceSiteAddress').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#mdShippingAdd")
+    });
 
-        $(document).on('click', '#removeAddress', function () {
-            $(this).closest('tr').remove();
-            $('.add-addresses').prop('disabled', false);
-        });
+    $(document).on('click', '#removeAddress', function () {
+        $(this).closest('tr').remove();
+        $('.add-addresses').prop('disabled', false);
     });
 });
 
@@ -431,7 +438,6 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
-
         rules: {
             textSupplierName: "required",
             textCompanyName: "required",
@@ -487,7 +493,7 @@ function InsertMultipleSupplierItem() {
                 };
                 ItemDetails.push(objData);
             });
-            var sitevalue = $("#textInvoiceSiteName").val();
+            var sitevalue = $("#txtPoSiteName").val();
             var siteid = null;
             if (sitevalue != "") {
                 siteid = sitevalue;

@@ -210,6 +210,10 @@
                     <div class="card d-print-none">
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+                                {
+                                    <a class="btn btn-primary btn-ecomm" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Purchase Order</a>
+                                }
                                 <a class="btn btn-primary btn-ecomm" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
                                 @* <a href="javascript:;" class="btn btn-white btn-ecomm"><i class="bx bx-refresh"></i> Update Cart</a> *@
                             </div>

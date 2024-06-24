@@ -940,9 +940,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
-
             var PORequest = {
-                SiteId: $("#siteid").val(),
+                SiteId: $("#txtPoSiteName").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1014,28 +1013,35 @@ function checkAndDisableAddButton() {
     } else {
         $('.add-address').prop('disabled', false);
     }
-
 }
 
 $(document).ready(function () {
+    var poRoleUser = $('#UserRoleinPO').val();
+    var poSiteId = $('#txtPoSiteName').val();
 
-    $('#txtPoSiteName').change(function () {
-        var Site = $(this).val();
-        $('#txtPoSiteName').val(Site);
-        fn_GetPOSiteAddressList(Site);
-        $('#drpPOSiteAddress').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#mdShippingAdd")
+    if (poRoleUser == 8) {
+        fn_GetPOSiteAddressList(poSiteId);
+    }
+    else {
+        $('#txtPoSiteName').change(function () {
+            var Site = $(this).val();
+            $('#txtPoSiteName').val(Site);
+            fn_GetPOSiteAddressList(Site);
         });
+    }
+    $('#drpPOSiteAddress').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#mdShippingAdd")
     });
     $(document).on('click', '#removeAddress', function () {
         $(this).closest('tr').remove();
         $('.add-address').prop('disabled', false);
     });
 });
+
 function fn_GetPOSiteAddressList(SiteId) {
     $.ajax({
         url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
@@ -1072,12 +1078,6 @@ function AddShippingAddress() {
         $('#dvshippingAdd .row.ac-invoice-shippingadd').each(function () {
             totalQuantity += parseInt($(this).find('#shippingquantity').text().trim());
         });
-
-        if (ItemQuantity == 0) {
-            siteloaderhide();
-            document.getElementById("spnShippingQuantity").innerText = "Please Add Product!";
-            return;
-        }
 
         if ((totalQuantity + parseInt(quantity)) > ItemQuantity) {
             siteloaderhide();
@@ -1136,13 +1136,7 @@ function AddShippingAddress() {
             updateRowNumbers();
         } else {
             siteloaderhide();
-            Swal.fire({
-                title: "Address already added!",
-                text: "The selected address is already added.",
-                icon: "warning",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "OK"
-            });
+            toastr.warning("The selected address is already added.");
         }
     } else {
         siteloaderhide();
@@ -1153,12 +1147,9 @@ $(document).ready(function () {
     $("#ShippingAddressForm").validate({
         rules: {
             txtmdAddress: "required",
-            txtmdqty: "required",
         },
         messages: {
             txtmdAddress: "Select Site",
-            txtmdqty: "Enter Quantity",
-
         }
     });
 });
