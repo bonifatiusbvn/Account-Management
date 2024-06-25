@@ -516,6 +516,7 @@ function InsertMultipleSupplierItem() {
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
+                Terms: $("#textInvoiceTerms").val(),
                 ItemList: ItemDetails,
             }
 
@@ -618,6 +619,7 @@ function UpdateInvoiceDetails() {
                 UpdatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
                 Description: $("#textDescription").val(),
+                Terms: $("#textInvoiceTerms").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
@@ -916,9 +918,9 @@ function updateTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice;
+        totalAmount = totalSubtotal + totalGst - TotalDiscount;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));

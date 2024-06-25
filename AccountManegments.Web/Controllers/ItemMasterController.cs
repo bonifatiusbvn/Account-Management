@@ -378,6 +378,7 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
+                    Items.ForEach(a => a.TotalAmount = a.PricePerUnit + a.Gstamount);
                     var qty = GetItem.Quantity;
                     foreach (var item in Items)
                     {

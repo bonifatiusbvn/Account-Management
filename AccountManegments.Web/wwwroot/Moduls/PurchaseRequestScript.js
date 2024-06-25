@@ -648,7 +648,6 @@ function GetCompanyName() {
 
 
 function getPONumber(CompanyId) {
-    debugger
     siteloadershow();
     $.ajax({
         url: '/PurchaseMaster/CheckPurchaseOrderNo?CompanyId=' + CompanyId,
@@ -1237,11 +1236,23 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
+            var SiteValue;
+            var Siteid = $("#POModelSiteid").val();
+            var newSiteId = $("#txtPoSiteName").val();
+            var sessionSiteId = $("#positeid").val();
+
+            if (newSiteId) {
+                SiteValue = newSiteId;
+            } else if (Siteid) {
+                SiteValue = Siteid;
+            } else {
+                SiteValue = sessionSiteId;
+            }
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: $("#siteid").val(),
+                SiteId: SiteValue,
                 Poid: $("#textPOPrefix").val(),
-                Date: $("#orderdate").val(),
+                Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
                 TotalAmount: $("#cart-total").val(),
@@ -1456,7 +1467,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount(that) {
-
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseInt(row.find("#txtproductquantity").val());
