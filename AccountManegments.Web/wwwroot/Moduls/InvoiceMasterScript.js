@@ -926,6 +926,7 @@ function updateTotals() {
         totalGst += gst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice * totalquantity;
+        totalAmount = totalSubtotal + totalGst;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
