@@ -257,6 +257,7 @@ function UpdateUserDetails() {
 }
 var UserForm;
 function validateAndCreateUser() {
+
     if ($('#ddlUserRole').val() == 3) {
         UserForm = $("#userForm").validate({
             rules: {
@@ -313,7 +314,7 @@ function validateAndCreateUser() {
                     maxlength: 10
                 },
                 ddlUserRole: "required",
-                ddlSiteName: "required",
+
             },
             messages: {
                 txtFirstName: "FirstName is Required!",
@@ -331,7 +332,7 @@ function validateAndCreateUser() {
                     maxlength: "Phone number must be 10 digits long"
                 },
                 ddlUserRole: "Select User Role!",
-                ddlSiteName: "Select Site!",
+
             }
         })
     }
@@ -545,7 +546,7 @@ function preventEmptyValue(input) {
 //        updateProductTotalAmount(row);
 //        updateTotals();
 //    });
-    
+
 
 //    $(document).on('keydown', '#txtproductamount', function (event) {
 //        if (event.key === 'Enter') {
