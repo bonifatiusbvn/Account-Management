@@ -7,6 +7,7 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+
 @section HeaderButton {
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Add == true)))
@@ -149,25 +150,22 @@
                     <div class="card">
                         <div class="card-body">
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
+                                <input type="hidden" id="txtItemInWordid">
+                                <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
+                                <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
+                                <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
                                 <div class="col-12">
-                                    <label class="form-label" for="txtItemId">Product Names</label>
-                                    <select id="txtItemId" name="txtItemId" class="multiple-select" multiple="multiple">
-                                        
-                                    </select>
-                                    <input type="hidden" id="searchItemnameid">
-                                    <input type="hidden" id="txtItemName">
-                                    <input type="hidden" id="txtItemInWordid">
-                                    <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
-                                    <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
-                                    <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
+                                    <label class="form-label">Product Names</label>
+                                    <input type="text" id="searchItemnameInput" name="searchItemnameInput" class="form-control">
+                                    <input type="hidden" id="txtItemName" name="txtItemName">
+                                    <span id="searchItemnameInput" class="text-danger"></span>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Unit Type</label>
-                                    <select class="multiple-select" multiple="multiple" id="txtUnitType" name="txtUnitType">
-                                        
-                                    </select>
+                                    <input type="text" id="txtUnitType" name="txtUnitType" class="form-control">
                                     <span id="spnUnitType" class="text-danger"></span>
                                 </div>
+                                <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
                                 <div class="col-6">
                                     <label class="form-label">Quantity</label>
                                     <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
