@@ -1,5 +1,5 @@
 ﻿AllItemTable();
-GetAllUnitType();
+
 function AllItemTable() {
 
     var searchText = $('#txtItemSearch').val();
@@ -90,17 +90,43 @@ function DisplayItemDetails(ItemId, element) {
         }
     });
 }
-function GetAllUnitType() {
+$(document).ready(function () {
+    function GetAllUnitType() {
+        $.ajax({
+            url: '/ItemMaster/GetAllUnitType',
+            method: 'GET',
+            success: function (result) {
+                var unitTypes = result.map(function (data) {
+                    return {
+                        label: data.unitName,
+                        value: data.unitId
+                    };
+                });
 
-    $.ajax({
-        url: '/ItemMaster/GetAllUnitType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
-            });
-        }
-    });
-}
+
+                $("#txtUnitType").autocomplete({
+                    source: unitTypes,
+                    minLength: 0,
+                    select: function (event, ui) {
+
+                        event.preventDefault();
+                        $("#txtUnitType").val(ui.item.label);
+                        $("#txtUnitTypeHidden").val(ui.item.value);
+
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+
+    GetAllUnitType();
+});
+
 function ClearTextBox() {
     resetItemForm();
     $('#changeName').html('Create Item');
@@ -118,13 +144,7 @@ function ClearTextBox() {
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
     offcanvas.show();
-    $('#txtUnitType').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreateItem")
-    });
+
 }
 function CreateItem() {
     siteloadershow();
@@ -132,7 +152,7 @@ function CreateItem() {
     if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemName: $('#txtItemName').val(),
-            UnitType: $('#txtUnitType').val(),
+            UnitType: $('#txtUnitTypeHidden').val(),
             PricePerUnit: $('#txtPricePerUnit').val(),
             IsWithGst: $('#txtIsWithGst').prop('checked'),
             Gstamount: $('#txtGstAmount').val(),
@@ -178,6 +198,7 @@ function CreateItem() {
 
 
 function EditItemDetails(ItemId) {
+
     siteloadershow();
     $.ajax({
         url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
@@ -185,11 +206,13 @@ function EditItemDetails(ItemId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+
             siteloaderhide();
             $('#changeName').html('Update Item');
             $('#txtItemid').val(response.itemId);
             $('#txtItemName').val(response.itemName);
-            $('#txtUnitType').val(response.unitType);
+            $('#txtUnitTypeHidden').val(response.unitType);
+            $('#txtUnitType').val(response.unitTypeName);
             $('#txtPricePerUnit').val(response.pricePerUnit);
             $('#txtIsWithGst').prop('checked', response.isWithGst);
             $('#txtGstAmount').val(response.gstamount);
@@ -203,13 +226,7 @@ function EditItemDetails(ItemId) {
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItem'));
             resetItemForm()
             offcanvas.show();
-            $('#txtUnitType').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreateItem")
-            });
+
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -218,12 +235,13 @@ function EditItemDetails(ItemId) {
     });
 }
 function UpdateItemDetails() {
+
     siteloadershow();
     if ($("#ItemMsterForm").valid()) {
         var objData = {
             ItemId: $('#txtItemid').val(),
             ItemName: $('#txtItemName').val(),
-            UnitType: $('#txtUnitType').val(),
+            UnitType: $('#txtUnitTypeHidden').val(),
             PricePerUnit: $('#txtPricePerUnit').val(),
             Gstamount: $('#txtGstAmount').val(),
             IsWithGst: $('#txtIsWithGst').prop('checked'),

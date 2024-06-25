@@ -1,6 +1,4 @@
 ﻿AllItemInWordListTable();
-GetItemDetails();
-GetUnitType();
 GetSiteList();
 toggleSiteList();
 
@@ -128,39 +126,11 @@ function SelectItemInWordDetails(InwordId, element) {
     });
 }
 
-function GetItemDetails() {
-
-    $.ajax({
-        url: '/ItemMaster/GetItemNameList',
-        success: function (result) {
-
-            $('#txtItemId').empty();
-            $('#txtItemId').append('<option value="">--Select Item --</option>');
-            $.each(result, function (i, data) {
-                $('#txtItemId').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
-            });
-        }
-    });
-}
 $(document).ready(function () {
-    $('#txtItemId').change(function () {
-        var Text = $("#txtItemId Option:Selected").text();
-
-        $("#txtItemName").val(Text);
-    });
+    fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
+    fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
 });
-function GetUnitType() {
 
-    $.ajax({
-        url: '/ItemMaster/GetAllUnitType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
-            });
-
-        }
-    });
-}
 
 function GetSiteList() {
 
@@ -202,20 +172,7 @@ function ClearItemInWordTextBox() {
         }
         var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
         offcanvas.show();
-        $('#txtItemId').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreateItemInWord")
-        });
-        $('#txtUnitType').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-            dropdownParent: $("#CreateItemInWord")
-        });
+
     }
 }
 
@@ -264,12 +221,14 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            debugger
             siteloaderhide();
             $('#changeName').html('Update Item InWord');
             $('#txtItemInWordid').val(response.inwordId);
-            $('#txtUnitType').val(response.unitTypeId);
-            $('#txtItemId').val(response.itemId);
-            $('#txtItemName').val(response.item);
+            $('#txtUnitType').val(response.unitName);
+            $('#txtUnitTypeHidden').val(response.unitTypeId);
+            $('#txtItemName').val(response.itemId);
+            $('#searchItemnameInput').val(response.item);
             $('#txtQuantity').val(response.quantity);
             $("#txtVehicleNumber").val(response.vehicleNumber);
             $("#txtReceiverName").val(response.receiverName);
@@ -296,20 +255,7 @@ function EditItemInWordDetails(InwordId) {
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
             resetErrorsMessages();
             offcanvas.show();
-            $('#txtItemId').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreateItemInWord")
-            });
-            $('#txtUnitType').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreateItemInWord")
-            });
+
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -474,10 +420,12 @@ function InsertMultipleItemInWordDetails() {
         else {
             siteId = $("#txtSiteid").val();
         }
+
+
         var ItemInWordRequest = {
-            UnitTypeId: $("#txtUnitType").val(),
-            ItemId: $("#txtItemId").val(),
-            Item: $("#txtItemName").val(),
+            UnitTypeId: $("#txtUnitTypeHidden").val(),
+            ItemId: $("#txtItemName").val(),
+            Item: $("#searchItemnameInput").val(),
             Quantity: $("#txtQuantity").val(),
             SiteId: siteId,
             CreatedBy: $("#txtCreatedBy").val(),
@@ -533,6 +481,7 @@ function InsertMultipleItemInWordDetails() {
 }
 
 function UpdateMultipleItemInWordDetails() {
+    debugger
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
@@ -544,11 +493,13 @@ function UpdateMultipleItemInWordDetails() {
             siteId = $("#txtSiteid").val();
         }
         var documentName = $("#txtDocumentName").val();
+
+
         var UpdateItemInWord = {
             InwordId: $('#txtItemInWordid').val(),
-            UnitTypeId: $("#txtUnitType").val(),
-            ItemId: $("#txtItemId").val(),
-            Item: $("#txtItemName").val(),
+            UnitTypeId: $("#txtUnitTypeHidden").val(),
+            ItemId: $("#txtItemName").val(),
+            Item: $("#searchItemnameInput").val(),
             Quantity: $("#txtQuantity").val(),
             VehicleNumber: $("#txtVehicleNumber").val(),
             ReceiverName: $("#txtReceiverName").val(),
@@ -556,7 +507,7 @@ function UpdateMultipleItemInWordDetails() {
             DocumentName: documentName,
             SiteId: siteId,
         };
-
+        debugger
         var form_data = new FormData();
         form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 
