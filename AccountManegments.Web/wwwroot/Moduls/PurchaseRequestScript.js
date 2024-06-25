@@ -8,12 +8,10 @@ var TotalPending = '';
 AllPurchaseRequestListTable();
 GetSiteDetail();
 GetCompanyName();
-GetItemDetails();
 GetSupplierDetails();
 GetPurchaseOrderList();
 GetPOList();
 checkAndDisableAddButton();
-GetAllUnitType();
 GetAllItemDetailsList();
 updateTotals();
 
@@ -175,9 +173,9 @@ function CreatePurchaseRequest() {
         var objData = {
             SiteAddressId: siteAddressId,
             SiteAddress: siteAddress,
-            UnitTypeId: $('#txtUnitType').val(),
-            ItemId: $('#searchItemname').val(),
-            ItemName: $('#searchItemname option:selected').text(),
+            UnitTypeId: $('#txtUnitTypeHidden').val(),
+            ItemId: $('#txtItemName').val(),
+            ItemName: $('#searchItemnameInput').val(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
@@ -234,7 +232,7 @@ function ClearPurchaseRequestTextBox() {
     });
     resetPRForm();
     $('#changeName').html('Create PurchaseRequest');
-    $('#txtItemName').val('');
+    $('#searchItemnameInput').val('');
     $('#txtUnitType').val('');
     $('#searchItemname').val('');
     $('#txtQuantity').val('');
@@ -258,16 +256,7 @@ function ClearPurchaseRequestTextBox() {
         allowClear: Boolean($(this).data('allow-clear')),
         dropdownParent: $("#CreatePurchaseRequest")
     });
-    $('#txtUnitType').select2({
-        maximumSelectionLength: 1,
-        theme: 'bootstrap4',
 
-        closeOnSelect: true,
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
     $('#drpPRSiteAddress').select2({
 
         theme: 'bootstrap4',
@@ -282,13 +271,13 @@ var PRForm;
 function validateAndCreatePurchaseRequest() {
     PRForm = $("#purchaseRequestForm").validate({
         rules: {
-            searchItemname: "required",
+            searchItemnameInput: "required",
             txtUnitType: "required",
             txtQuantity: "required",
             txtPoSiteName: "required",
         },
         messages: {
-            searchItemname: "Select Item!",
+            searchItemnameInput: "Select Item!",
             txtUnitType: "Select UnitType!",
             txtQuantity: "Enter Quantity",
             txtPoSiteName: "Select Site",
@@ -314,6 +303,7 @@ function resetPRForm() {
 }
 
 function EditPurchaseRequestDetails(PurchaseId) {
+
     siteloadershow();
     $.ajax({
         url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
@@ -321,15 +311,17 @@ function EditPurchaseRequestDetails(PurchaseId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
+
             siteloaderhide();
             $('#changeName').html('Update PurchaseRequest');
             $('#PurchaseRequestId').val(response.pid);
+            $('#txtUnitTypeHidden').val(response.unitTypeId);
             $('#prNo').val(response.prNo);
             $('#searchItemname').val(response.itemId);
-            $('#txtItemName').val(response.item);
+            $('#searchItemnameInput').val(response.itemName);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitTypeId);
+            $('#txtUnitType').val(response.unitName);
 
             fn_getPRSiteDetail(response.siteId, function () {
                 $('#drpPRSiteAddress').val(response.siteAddressId);
@@ -350,14 +342,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 allowClear: Boolean($(this).data('allow-clear')),
                 dropdownParent: $("#CreatePurchaseRequest")
             });
-            $('#txtUnitType').select2({
-                maximumSelectionLength: 1,
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreatePurchaseRequest")
-            });
+
 
             $('#drpPRSiteAddress').select2({
 
@@ -376,6 +361,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 
 function UpdatePurchaseRequestDetails() {
+
     siteloadershow();
     if ($("#purchaseRequestForm").valid()) {
 
@@ -395,16 +381,14 @@ function UpdatePurchaseRequestDetails() {
             SiteAddressId: siteAddressId,
             SiteAddress: siteAddress,
             Pid: $('#PurchaseRequestId').val(),
-            UnitTypeId: $('#txtUnitType').val(),
-            ItemId: $('#searchItemname').val(),
-            ItemName: $('#searchItemname option:selected').text(),
+            CreatedBy: $('#txtcreatedby').val(),
+            UnitTypeId: $('#txtUnitTypeHidden').val(),
+            ItemId: $('#txtItemName').val(),
+            ItemName: $('#searchItemnameInput').val(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
-            CreatedBy: $('#txtcreatedby').val(),
         }
-
-
         $.ajax({
             url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
             type: 'post',
@@ -538,18 +522,14 @@ function PurchaseRequestIsApproved(PurchaseId) {
 function clearPOtextbox() {
     window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
 }
-function GetAllUnitType() {
 
-    $.ajax({
-        url: '/ItemMaster/GetAllUnitType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtUnitType').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
-                $('#txtPOUnitType_').append('<Option value=' + data.unitId + '>' + data.unitName + '</Option>')
-            });
-        }
-    });
-}
+
+
+$(document).ready(function () {
+    fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
+    fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
+});
+
 function GetPurchaseOrderList() {
     siteloadershow();
     var searchText = $('#txtPurchaseOrderSearch').val();
@@ -659,7 +639,7 @@ function GetCompanyName() {
 
 
 function getPONumber(CompanyId) {
-    debugger
+
     siteloadershow();
     $.ajax({
         url: '/PurchaseMaster/CheckPurchaseOrderNo?CompanyId=' + CompanyId,
@@ -1248,11 +1228,23 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
+            var SiteValue;
+            var Siteid = $("#POModelSiteid").val();
+            var newSiteId = $("#txtPoSiteName").val();
+            var sessionSiteId = $("#positeid").val();
+
+            if (newSiteId) {
+                SiteValue = newSiteId;
+            } else if (Siteid) {
+                SiteValue = Siteid;
+            } else {
+                SiteValue = sessionSiteId;
+            }
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: $("#siteid").val(),
+                SiteId: SiteValue,
                 Poid: $("#textPOPrefix").val(),
-                Date: $("#orderdate").val(),
+                Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
                 TotalAmount: $("#cart-total").val(),
@@ -1467,7 +1459,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount(that) {
-
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseInt(row.find("#txtproductquantity").val());

@@ -378,12 +378,12 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
-                    var qty = GetItem.Quantity;
                     foreach (var item in Items)
                     {
-                        item.Quantity = qty;
+                        item.Gstamount = (item.PricePerUnit * GetItem.Quantity * item.GstPercentage) / 100;
+                        item.TotalAmount = (GetItem.Quantity * item.PricePerUnit) + item.Gstamount;
+                        item.Quantity = GetItem.Quantity;
                     }
-                    //Items.RowNumber = Items.RowNumber;
                 }
                 return PartialView("~/Views/PurchaseMaster/_GetItemDetailsPartial.cshtml", Items);
             }
@@ -427,13 +427,12 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     Items = JsonConvert.DeserializeObject<List<POItemDetailsModel>>(response.data.ToString());
-                    Items.ForEach(a => a.TotalAmount = a.PricePerUnit + a.Gstamount);
-                    var qty = GetItem.Quantity;
                     foreach (var item in Items)
                     {
-                        item.Quantity = qty;
+                        item.Gstamount = (item.PricePerUnit * GetItem.Quantity * item.GstPercentage) / 100;
+                        item.TotalAmount = (GetItem.Quantity * item.PricePerUnit) + item.Gstamount;
+                        item.Quantity = GetItem.Quantity;
                     }
-                    //Items.RowNumber = Items.RowNumber;
                 }
                 return PartialView("~/Views/InvoiceMaster/_DisplayInvoiceItemDetailsPartial.cshtml", Items);
             }
