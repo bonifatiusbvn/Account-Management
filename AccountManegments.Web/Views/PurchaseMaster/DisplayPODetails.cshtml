@@ -204,7 +204,12 @@
                         </tbody>
                     </table><!--end table-->
                     <span class="text-muted"><b>In words: </b></span>
-                    <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span>
+                    <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span><br /><br />
+                    @if (firstItem.Terms != null)
+                    {
+                        <span class="text-muted"><u>Terms & Conditions</u></span><br />
+                        <div id="invoiceTermsDetails">@Html.Raw(firstItem.Terms)</div>
+                    }
                 </div>
                 <div class="card border">
                     <div class="card d-print-none">

@@ -37,30 +37,30 @@
                                 <label class="form-label">Invoice No</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
                             </div>
-                            
-                            @if(firstItem.ChallanNo != null)
+
+                            @if (firstItem.ChallanNo != null)
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">Challan/Document No</label>
                                     <p><span class="text-muted"><b>@firstItem.ChallanNo</b></span></p>
                                 </div>
-                                
+
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">Dispatch By</label>
                                     <p class="text-muted text-uppercase"><b>@firstItem.DispatchBy</b></p>
                                 </div>
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Payment Terms</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.PaymentTerms</b></p>
+                                    <label class="form-label">Payment Terms</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.PaymentTerms</b></p>
                                 </div>
-                            } 
+                            }
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Date</label>
                                 <p><span class="text-muted text-uppercase"><b>@firstItem.Date?.ToString("dd/MM/yyyy")</b></span></p>
                             </div>
-                            @if(firstItem.Lrno != null)
+                            @if (firstItem.Lrno != null)
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">LR No</label>
@@ -71,14 +71,14 @@
                                     <p class="text-muted text-uppercase"><b>@firstItem.VehicleNo</b></p>
                                 </div>
                             }
-                            @if (firstItem.Description != "")
+                            @* @if (firstItem.Description != "")
                             {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Delivery Note</label>
-                                    <p class="text-muted">@firstItem.Description</p>
-                                </div>
-                            }
-                            
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                            <label class="form-label">Delivery Note</label>
+                            <p class="text-muted">@firstItem.Description</p>
+                            </div>
+                            } *@
+
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                             <p class="text-muted"><b>Consignee (Ship to):</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.SiteName</b></span><br />
                             <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                          
+
                         </div>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                                 <td class="border">₹@firstItem.TotalGstamount</td>
                             </tr>
                         </tbody>
-                    </table><!--end table-->                  
+                    </table><!--end table-->
                 </div>
             </div>
             <div class="card" id="cardbody5">
@@ -292,4 +292,4 @@
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-    }
+}

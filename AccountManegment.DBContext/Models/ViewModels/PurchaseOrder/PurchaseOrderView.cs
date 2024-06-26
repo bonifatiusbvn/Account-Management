@@ -21,6 +21,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public decimal TotalAmount { get; set; }
 
+        public string? Terms { get; set; }
+
         public string? Description { get; set; }
 
         public string? DeliveryShedule { get; set; }

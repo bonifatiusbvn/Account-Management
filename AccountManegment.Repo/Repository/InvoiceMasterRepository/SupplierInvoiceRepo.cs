@@ -221,13 +221,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     ChallanNo = a.ChallanNo,
                                     Lrno = a.Lrno,
                                     VehicleNo = a.VehicleNo,
-                                    DispatchBy=a.DispatchBy,
+                                    DispatchBy = a.DispatchBy,
                                     PaymentTerms = a.PaymentTerms,
                                     ContactName = a.ContactName,
                                     ContactNumber = a.ContactNumber,
                                     CreatedOn = a.CreatedOn,
-                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName + "-" + c.Pincode,
-                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName + "-" + b.PinCode,
+                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId

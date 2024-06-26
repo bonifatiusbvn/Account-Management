@@ -277,7 +277,7 @@
                                                                     <label class="input-group-text">
                                                                         Payment Terms
                                                                     </label>
-                                                                    <textarea class="form-control" placeholder="Payment Terms" id="txtpayment" name="txtpayment" style="height:90px;">@Model.PaymentTerms</textarea>
+                                                                    <input type="text" class="form-control" placeholder="Payment Terms" id="txtpayment" name="txtpayment" value="@Model.PaymentTerms">
 
                                                                 </div>
                                                                 <div class="form-check form-check-inline" style="display:none">
@@ -480,7 +480,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');
