@@ -130,14 +130,14 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 CreatedOn = a.CreatedOn,
                             }).First();
 
-                
 
-                List<SiteAddressModel> siteAddress = (from shippingAddress in Context.SiteAddresses.Where(a=>a.SiteId==SiteId)
+
+                List<SiteAddressModel> siteAddress = (from shippingAddress in Context.SiteAddresses.Where(a => a.SiteId == SiteId)
                                                       select new SiteAddressModel
                                                       {
-                                                          Aid=shippingAddress.Aid,
-                                                          SiteId=shippingAddress.SiteId,
-                                                          Address=shippingAddress.Address,
+                                                          Aid = shippingAddress.Aid,
+                                                          SiteId = shippingAddress.SiteId,
+                                                          Address = shippingAddress.Address,
                                                       }).ToList();
 
                 SiteList.SiteShippingAddresses = siteAddress;
@@ -219,13 +219,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    // Default sorting by CreatedOn in descending order
                     SiteList = SiteList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length); // Remove the "Ascending" or "Descending" part
+                    string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {

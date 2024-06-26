@@ -3,7 +3,7 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
-    ViewData["Title"] = "CreatePurchaseOrder";
+    ViewData["Title"] = "Create PurchaseOrder";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
@@ -23,449 +23,458 @@
         color: red;
     }
 </style>
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="" id="invoiceList">
-            <form id="CreatePOForm">
-                <div class="">
-                    <div>
-                        <div class="row justify-content-center">
-                            <div class="col-xxl-12">
+<div class="">
+    <div class="">
+        <div class="radius-10 w-100">
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="" id="invoiceList">
+                            <form id="CreatePOForm">
                                 <div class="">
+                                    <div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-xxl-12">
+                                                <div class="">
 
-                                    <div class=" border-bottom border-bottom-dashed">
-                                        <div class="row">
-                                            <div class="col-6 col-lg-6">
-                                                <div class=" card">
-                                                    <h5 class="card-header">Supplier Details</h5>
-                                                    <div class="card-body">
+                                                    <div class=" border-bottom border-bottom-dashed">
                                                         <div class="row">
-                                                            <div class="col-6 col-lg-6 ">
-                                                                <label for="txtSuppliername" class="form-label ">Supplier Name</label>
-                                                                @if (Model.SupplierName != null)
+                                                            <div class="col-6 col-lg-6">
+                                                                <div class=" card">
+                                                                    <h5 class="card-header">Supplier Details</h5>
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-6 col-lg-6 ">
+                                                                                <label for="txtSuppliername" class="form-label ">Supplier Name</label>
+                                                                                @if (Model.SupplierName != null)
+                                                                                {
+                                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
+                                                                                        <option selected value="@Model.FromSupplierId">@Model.SupplierName</option>
+                                                                                    </select>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
+                                                                                        <option selected value="">--Select Supplier--</option>
+                                                                                    </select>
+                                                                                }
+                                                                                <span id="spnsuppliername" class="text-danger"></span>
+                                                                            </div>
+
+                                                                            <div class="col-6 col-lg-6 ">
+
+                                                                                <label for="" class="form-label ">Mobile No</label>
+
+                                                                                <input type="text" id="txtSuppliermobile" name="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" />
+                                                                                <span id="spnsuppliername" class="text-danger"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-6 col-lg-6">
+
+                                                                                <label for="" class="form-label ">Address</label>
+                                                                                <input type="text" id="txtSupplierAddress" name="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" />
+                                                                                <span id="spnsuppliername" class="text-danger"></span>
+
+                                                                            </div>
+
+                                                                            <div class="col-6 col-lg-6">
+
+                                                                                <label class="form-label ">GST NO</label>
+                                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" readonly />
+                                                                                <span id="spnGstNo" class="text-danger"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-6 col-lg-6">
+                                                                <div class=" card">
+                                                                    <h5 class="card-header">Purchase Order Details</h5>
+
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div>
+                                                                                    <label class="form-label">Company Name</label>
+                                                                                </div>
+
+                                                                                <div class="ms-auto">
+                                                                                    @if (Model.CompanyName != null)
+                                                                                    {
+                                                                                        <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                                            <option selected value="@Model.ToCompanyId">@Model.CompanyName</option>
+                                                                                        </select>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                                            <option selected value="" disabled>--Select Company--</option>
+                                                                                        </select>
+                                                                                    }
+
+                                                                                    <span id="spncompanyname" class="text-danger"></span>
+                                                                                    <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
+                                                                                    <input type="hidden" class="form-control" id="positeid" value="@UserSession.SiteId">
+                                                                                    <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
+                                                                                    <input type="hidden" class="form-control" id="UserRoleinPO" value="@_userSession.UserRole">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-5 col-lg-5">
+                                                                                <label for="textPOPrefix " class="form-label">Order No</label>
+                                                                                <input type="text" class="form-control" id="textPOPrefix" placeholder="Purchase Order Number" readonly value="@Model.Poid" />
+                                                                            </div>
+                                                                            <div class="col-3 col-lg-3 ">
+                                                                                <label for="orderdate" class="form-label">Order Date</label>
+                                                                                @{
+                                                                                    string formattedDate = Model.Date.HasValue ? Model.Date.Value.ToString("yyyy-MM-dd") : "";
+                                                                                }
+                                                                                @if (Model.Date == null)
+                                                                                {
+                                                                                    <input type="date" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date">
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <input type="date" id="orderdate2" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@formattedDate">
+                                                                                }
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mt-3">
+                                                                            <div class="col-6 col-lg-6">
+
+                                                                                <label for="" class="form-label ">Billing Address</label>
+                                                                                <input type="text" id="companybillingaddressDetails" name="companybillingaddressDetails" value="@Model.BillingAddress" class="form-control" placeholder="Billing Address" />
+                                                                                <span id="spnbillingaddress" class="text-danger"></span>
+
+                                                                            </div>
+
+                                                                            <div class="col-6 col-lg-6">
+
+                                                                                <label class="form-label ">GST NO</label>
+                                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" readonly />
+                                                                                <span id="spnGstNo" class="text-danger"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <!--end row-->
+
+                                                </div>
+
+                                                <!---- Product Details ---->
+                                                <div class="row">
+                                                </div>
+                                                <div class="card">
+                                                    <div class="row p-3">
+
+                                                        <h5 class="card-header">
+                                                            Add Product
+                                                            @if (Model.ItemList != null)
+                                                            {
+                                                                <a class="disabled">
+                                                                    <i class="lni lni-circle-plus"></i>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                                    <i class="lni lni-circle-plus"></i>
+                                                                </a>
+                                                            }
+                                                            <span id="spnitembutton" class="text-danger"></span>
+                                                        </h5>
+
+                                                    </div>
+
+                                                    <div class="card-body pt-0">
+                                                        <div class="table-responsive" style="height:350px">
+                                                            <table class="table align-middle mb-0">
+                                                                <thead class="table-secondary">
+                                                                    <tr class="text-uppercase">
+                                                                        <th>#</th>
+                                                                        <th>Product Details</th>
+                                                                        <th>HSN Code</th>
+                                                                        <th>Quantity</th>
+                                                                        <th>Qty Type</th>
+                                                                        <th>Price</th>
+                                                                        <th>GST (%)</th>
+                                                                        <th>GST Amt (₹)</th>
+                                                                        <th>Amount (₹)</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                @if (Model.ItemList != null)
                                                                 {
-                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
-                                                                        <option selected value="@Model.FromSupplierId">@Model.SupplierName</option>
-                                                                    </select>
+                                                                    <tbody id="addNewlink" class="disabled">
+                                                                        @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
+                                                                    </tbody>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <select class="form-select" id="txtSuppliername" name="txtSuppliername">
-                                                                        <option selected value="">--Select Supplier--</option>
-                                                                    </select>
+                                                                    <tbody id="addNewlink">
+                                                                    </tbody>
                                                                 }
-                                                                <span id="spnsuppliername" class="text-danger"></span>
-                                                            </div>
 
-                                                            <div class="col-6 col-lg-6 ">
 
-                                                                <label for="" class="form-label ">Mobile No</label>
 
-                                                                <input type="text" id="txtSuppliermobile" name="txtSuppliermobile" value="@Model.SupplierMobile" class="form-control" placeholder="Mobile No" />
-                                                                <span id="spnsuppliername" class="text-danger"></span>
-                                                            </div>
+                                                            </table>
+
                                                         </div>
-                                                        <div class="row mt-3">
-                                                            <div class="col-6 col-lg-6">
+                                                        <div class="card-footer">
+                                                            <table class="table align-middle mb-0">
+                                                                <thead class="table align-middle mb-0">
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th colspan="2">Total</th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th id="TotalProductQuantity"></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th id="TotalProductPrice"></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th id="TotalProductGST"></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th id="TotalProductAmount"></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                        <div class=" card">
+                                                            <div class="row card-body">
+                                                                <div class="col-lg-6 col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6 col-sm-6">
+                                                                            <div class="input-group mb-3">
+                                                                                <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
+                                                                                <input type="date" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" onchange="toggleDate()">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3 col-sm-6">
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio" id="txtImmediate" name="txtDeliverySchedule" value="Immediate" onchange="toggleRadio()" @(Model.DeliveryShedule == "Immediate" ? "checked" : "")>
+                                                                                    <label class="form-check-label" style="font-size:16px;" for="txtImmediate"><b>Immediate</b></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-3 col-sm-6">
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio" id="txtradiodate" name="txtDeliverySchedule" value="Date" onchange="toggleRadio()" @(Model.DeliveryShedule != "Immediate" ? "checked" : "")>
+                                                                                    <label class="form-check-label" style="font-size:16px;" for="txtradiodate"><b>Date</b></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
 
-                                                                <label for="" class="form-label ">Address</label>
-                                                                <input type="text" id="txtSupplierAddress" name="txtSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" />
-                                                                <span id="spnsuppliername" class="text-danger"></span>
+                                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                                            <div class="mb-2">
+                                                                                <div class="input-group mb-3">
+                                                                                    <label class="input-group-text" for="txtdelivryschedule">Contect Person</label>
+                                                                                    <input type="text" id="txtContectPerson" class="form-control" name="txtContectPerson" placeholder="Contect Person Name" value="@Model.ContactName">
+                                                                                </div>
+                                                                                <span id="spnContectPerson" class="text-danger"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                                            <div class="mb-2">
+                                                                                <div class="input-group mb-3">
+                                                                                    <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
+                                                                                    <input type="text" id="txtMobileNo" name="txtMobileNo" class="form-control" placeholder="Mobile No" value="@Model.ContactNumber">
+                                                                                </div>
+                                                                                <span id="spnMobileNo" class="text-danger"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                                            </div>
 
-                                                            <div class="col-6 col-lg-6">
-
-                                                                <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtSupplierGST" value="@Model.SupplierGstno" class="form-control" placeholder="GST No" readonly />
-                                                                <span id="spnGstNo" class="text-danger"></span>
+                                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                                    <div class="table">
+                                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th scope="row">Sub Total</th>
+                                                                                    <td style="width:150px;">
+                                                                                        <input type="text" class="form-control border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th scope="row">Total GST</th>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr class="border-top border-top-dashed">
+                                                                                    <th scope="row">Total Amount</th>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-6 col-lg-6">
-                                                <div class=" card">
-                                                    <h5 class="card-header">Purchase Order Details</h5>
-
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div>
-                                                                    <label class="form-label">Company Name</label>
-                                                                </div>
-
-                                                                <div class="ms-auto">
-                                                                    @if (Model.CompanyName != null)
-                                                                    {
-                                                                        <select class="form-select" id="txtcompanyname" name="txtcompanyname">
-                                                                            <option selected value="@Model.ToCompanyId">@Model.CompanyName</option>
-                                                                        </select>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <select class="form-select" id="txtcompanyname" name="txtcompanyname">
-                                                                            <option selected value="" disabled>--Select Company--</option>
-                                                                        </select>
-                                                                    }
-
-                                                                    <span id="spncompanyname" class="text-danger"></span>
-                                                                    <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
-                                                                    <input type="hidden" class="form-control" id="positeid" value="@UserSession.SiteId">
-                                                                    <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
-                                                                    <input type="hidden" class="form-control" id="UserRoleinPO" value="@_userSession.UserRole">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-5 col-lg-5">
-                                                                <label for="textPOPrefix " class="form-label">Order No</label>
-                                                                <input type="text" class="form-control" id="textPOPrefix" placeholder="Purchase Order Number" readonly value="@Model.Poid" />
-                                                            </div>
-                                                            <div class="col-3 col-lg-3 ">
-                                                                <label for="orderdate" class="form-label">Order Date</label>
-                                                                @{
-                                                                    string formattedDate = Model.Date.HasValue ? Model.Date.Value.ToString("yyyy-MM-dd") : "";
-                                                                }
-                                                                @if (Model.Date == null)
+                                                <div class="row">
+                                                    <div class="col-6 col-sm-6">
+                                                        <div class="card">
+                                                            <h5 class="card-header">
+                                                                Shipping Addresses
+                                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                                    <i class="lni lni-circle-plus"></i>
+                                                                </a>
+                                                                <span id="spnshipping" style="color:red;"></span>
+                                                            </h5>
+                                                            <div class="card-body Address" id="dvshippingAdd">
+                                                                @if (Model.AddressList != null)
                                                                 {
-                                                                    <input type="date" id="orderdate" class="form-control" name="orderdate" placeholder="Select Order-Date">
+                                                                    @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
                                                                 }
-                                                                else
-                                                                {
-                                                                    <input type="date" id="orderdate2" class="form-control" name="orderdate" placeholder="Select Order-Date" value="@formattedDate">
-                                                                }
-
                                                             </div>
                                                         </div>
-                                                        <div class="row mt-3">
-                                                            <div class="col-6 col-lg-6">
-
-                                                                <label for="" class="form-label ">Billing Address</label>
-                                                                <input type="text" id="companybillingaddressDetails" name="companybillingaddressDetails" value="@Model.BillingAddress" class="form-control" placeholder="Billing Address" />
-                                                                <span id="spnbillingaddress" class="text-danger"></span>
-
-                                                            </div>
-
-                                                            <div class="col-6 col-lg-6">
-
-                                                                <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="txtCompanyGstNo" value="@Model.CompanyGstno" class="form-control" placeholder="GST No" readonly />
-                                                                <span id="spnGstNo" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-6 col-sm-6">
+                                                        <div class="card">
+                                                            <h5 class="card-header">Terms</h5>
+                                                            <div id="dvPOTerms" data-terms="@Model.Terms">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
+                                                <div id="dvshipping" class="col-lg-6">
+                                                    <div class="row">
+                                                    </div>
+                                                </div>
+                                                <!--end row-->
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                                            @if (Model.Id == Guid.Empty)
+                                                            {
+
+                                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
+                                        <!--end col-->
                                     </div>
-                                    <!--end row-->
-
                                 </div>
-
-                                <!---- Product Details ---->
-                                <div class="row">
-                                </div>
-                                <div class="card">
-                                    <div class="row p-3">
-
-                                        <h5 class="card-header">
-                                            Add Product
-                                            @if (Model.ItemList != null)
-                                            {
-                                                <a class="disabled">
-                                                    <i class="lni lni-circle-plus"></i>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                    <i class="lni lni-circle-plus"></i>
-                                                </a>
-                                            }
-                                            <span id="spnitembutton" class="text-danger"></span>
-                                        </h5>
-
-                                    </div>
-
-                                    <div class="card-body pt-0">
-                                        <div class="table-responsive" style="height:350px">
-                                            <table class="table align-middle mb-0">
-                                                <thead class="table-secondary">
-                                                    <tr class="text-uppercase">
-                                                        <th>#</th>
-                                                        <th>Product Details</th>
-                                                        <th>HSN Code</th>
-                                                        <th>Quantity</th>
-                                                        <th>Qty Type</th>
-                                                        <th>Price</th>
-                                                        <th>GST (%)</th>
-                                                        <th>GST Amt (₹)</th>
-                                                        <th>Amount (₹)</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-
-                                                @if (Model.ItemList != null)
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mdShippingAddlLabel">Shipping Address</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="ShippingAddressForm">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-10 col-sm-10 ">
+                                                <label class="form-lable">Select Site</label>
+                                                @if (_userSession.UserRole == 3)
                                                 {
-                                                    <tbody id="addNewlink" class="disabled">
-                                                        @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
-                                                    </tbody>
+                                                    <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
+                                                        <option selected value="">--Select Site--</option>
+                                                    </select>
+                                                    <input type="hidden" id="POModelSiteid" value="@Model.SiteId" />
                                                 }
                                                 else
                                                 {
-                                                    <tbody id="addNewlink">
-                                                    </tbody>
-                                                }
-
-
-
-                                            </table>
-
-                                        </div>
-                                        <div class="card-footer">
-                                            <table class="table align-middle mb-0">
-                                                <thead class="table align-middle mb-0">
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th colspan="2">Total</th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th id="TotalProductQuantity"></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th id="TotalProductPrice"></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th id="TotalProductGST"></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th id="TotalProductAmount"></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                        <div class=" card">
-                                            <div class="row card-body">
-                                                <div class="col-lg-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-sm-6">
-                                                            <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
-                                                                <input type="date" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule" value="@Model.DeliveryShedule" onchange="toggleDate()">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3 col-sm-6">
-                                                            <div class="input-group mb-3">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" id="txtImmediate" name="txtDeliverySchedule" value="Immediate" onchange="toggleRadio()" @(Model.DeliveryShedule == "Immediate" ? "checked" : "")>
-                                                                    <label class="form-check-label" style="font-size:16px;" for="txtImmediate"><b>Immediate</b></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3 col-sm-6">
-                                                            <div class="input-group mb-3">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" id="txtradiodate" name="txtDeliverySchedule" value="Date" onchange="toggleRadio()" @(Model.DeliveryShedule != "Immediate" ? "checked" : "")>
-                                                                    <label class="form-check-label" style="font-size:16px;" for="txtradiodate"><b>Date</b></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-2">
-                                                                <div class="input-group mb-3">
-                                                                    <label class="input-group-text" for="txtdelivryschedule">Contect Person</label>
-                                                                    <input type="text" id="txtContectPerson" class="form-control" name="txtContectPerson" placeholder="Contect Person Name" value="@Model.ContactName">
-                                                                </div>
-                                                                <span id="spnContectPerson" class="text-danger"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-2">
-                                                                <div class="input-group mb-3">
-                                                                    <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
-                                                                    <input type="text" id="txtMobileNo" name="txtMobileNo" class="form-control" placeholder="Mobile No" value="@Model.ContactNumber">
-                                                                </div>
-                                                                <span id="spnMobileNo" class="text-danger"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
-                                                    <div class="table">
-                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th scope="row">Sub Total</th>
-                                                                    <td style="width:150px;">
-                                                                        <input type="text" class="form-control border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">Total GST</th>
-                                                                    <td>
-                                                                        <input type="text" class="form-control border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGstamount" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="border-top border-top-dashed">
-                                                                    <th scope="row">Total Amount</th>
-                                                                    <td>
-                                                                        <input type="text" class="form-control border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6 col-sm-6">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Shipping Addresses
-                                                <a class="font-22" onclick="fn_OpenShippingModal()">
-                                                    <i class="lni lni-circle-plus"></i>
-                                                </a>
-                                                <span id="spnshipping" style="color:red;"></span>
-                                            </h5>
-                                            <div class="card-body Address" id="dvshippingAdd">
-                                                @if (Model.AddressList != null)
-                                                {
-                                                    @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                                    <select class="form-control" id="txtPoSiteName" name="txtPoSiteName" disabled>
+                                                        <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
+                                                    </select>
                                                 }
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6 col-sm-6">
-                                        <div class="card">
-                                            <h5 class="card-header">Terms</h5>
-                                            <div id="dvPOTerms" data-terms="@Model.Terms">
+                                        <div class="row mt-2">
+                                            <div class="col-9 col-sm-9">
+                                                <label class="form-lable">Address</label>
+                                                <select class="single-select form-select" id="drpPOSiteAddress">
+                                                    <option value="">--Select Site Address--</option>
+                                                </select>
+                                                <br />
+                                                <div>
+                                                    <textarea class="form-control" id="txtmdAddress" name="txtmdAddress" style="height:90px;"></textarea>
+                                                </div>
+                                                <span id="spnSiteAddress" style="color:red;"></span>
+                                            </div>
+                                            <div class="col-3 col-sm-3">
+                                                <label class="form-lable">Qty</label>
+                                                <input class="form-control" id="txtmdqty" value="" />
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div id="dvshipping" class="col-lg-6">
-                                    <div class="row">
-                                    </div>
-                                </div>
-                                <!--end row-->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            @if (Model.Id == Guid.Empty)
-                                            {
-
-                                                <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
-                                            }
-                                            else
-                                            {
-                                                <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
+                                <span id="spnaddressbutton" style="color:red;"></span>
+                                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
                             </div>
                         </div>
-                        <!--end col-->
+                    </div>
+                </div>
+                <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Select Product</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-header">
+                                <label class="form-label">Search Product</label>
+                                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+                            </div>
+
+                            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="mdShippingAddlLabel">Shipping Address</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="ShippingAddressForm">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-10 col-sm-10 ">
-                                <label class="form-lable">Select Site</label>
-                                @if (_userSession.UserRole == 3)
-                                {
-                                    <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
-                                        <option selected value="">--Select Site--</option>
-                                    </select>
-                                    <input type="hidden" id="POModelSiteid" value="@Model.SiteId" />
-                                }
-                                else
-                                {
-                                    <select class="form-control" id="txtPoSiteName" name="txtPoSiteName" disabled>
-                                        <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
-                                    </select>
-                                }
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-9 col-sm-9">
-                                <label class="form-lable">Address</label>
-                                <select class="single-select form-select" id="drpPOSiteAddress">
-                                    <option value="">--Select Site Address--</option>
-                                </select>
-                                <br />
-                                <div>
-                                    <textarea class="form-control" id="txtmdAddress" name="txtmdAddress" style="height:90px;"></textarea>
-                                </div>
-                                <span id="spnSiteAddress" style="color:red;"></span>
-                            </div>
-                            <div class="col-3 col-sm-3">
-                                <label class="form-lable">Qty</label>
-                                <input class="form-control" id="txtmdqty" value="" />
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
-                <span id="spnaddressbutton" style="color:red;"></span>
-                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-header">
-                <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
-            </div>
-
-            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
-            </div>
-
-        </div>
-    </div>
 </div>
 <!--end col-->
 @section Scripts {
@@ -487,7 +496,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
