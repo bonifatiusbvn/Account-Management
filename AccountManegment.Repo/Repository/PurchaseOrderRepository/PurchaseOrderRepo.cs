@@ -67,7 +67,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 }
                 else
                 {
-                    var LastPO = Context.PurchaseOrders.Where(a=>a.ToCompanyId == CompanyId).OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                    var LastPO = Context.PurchaseOrders.Where(a => a.ToCompanyId == CompanyId).OrderByDescending(e => e.CreatedOn).FirstOrDefault();
 
                     var currentDate = DateTime.Now;
                     int currentYear = currentDate.Month > 4 ? currentDate.Year + 1 : currentDate.Year;
@@ -96,7 +96,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         }
                     }
                     return PurchaseOrderId;
-                }           
+                }
             }
             catch (Exception ex)
             {
@@ -189,7 +189,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                      Terms = a.Terms,
-                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName + "-" + b.PinCode
+                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName
                                  }).First();
 
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
@@ -208,7 +208,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = b.Gstper,
                                                          Hsncode = b.Hsncode,
-                                                         TotalAmount=a.ItemTotal,
+                                                         TotalAmount = a.ItemTotal,
                                                      }).ToList();
 
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)

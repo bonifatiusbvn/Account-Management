@@ -1063,7 +1063,7 @@ function fn_GetPOSiteAddressList(SiteId) {
                     $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
                 });
             } else {
-                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
             }
 
         }
@@ -1477,7 +1477,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount(that) {
-    
+
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseInt(row.find("#txtproductquantity").val());

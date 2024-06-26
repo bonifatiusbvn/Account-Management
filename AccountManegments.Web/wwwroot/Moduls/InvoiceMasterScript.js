@@ -112,7 +112,7 @@ function fn_GetInvoiceSiteAddressList(SiteId) {
                     $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
                 });
             } else {
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ', ' + result.shippingPincode);
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
             }
         }
     });
