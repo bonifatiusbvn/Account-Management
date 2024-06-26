@@ -21,6 +21,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public DateTime? Date { get; set; }
 
+        public string? Terms { get; set; }
+
         public string? Description { get; set; }
         public Guid? ItemId { get; set; }
         public string? Item { get; set; }

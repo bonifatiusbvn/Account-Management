@@ -900,6 +900,22 @@ $(document).ready(function () {
     });
 });
 
+let editorPOInstance;
+const poTermsElement = document.querySelector('#dvPOTerms');
+const initialPOTerms = poTermsElement.getAttribute('data-terms');
+
+ClassicEditor
+    .create(poTermsElement)
+    .then(editor => {
+        editorPOInstance = editor;
+        if (initialPOTerms) {
+            editor.setData(initialPOTerms);
+        }
+    })
+    .catch(error => {
+        toastr.error(error);
+    });
+
 function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
@@ -945,6 +961,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 ContactNumber: $("#txtMobileNo").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
+                Terms: editorPOInstance.getData(),
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             }
@@ -1254,6 +1271,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
+                Terms: editorPOInstance.getData(),
                 ShippingAddressList: AddressDetails,
             }
             var form_data = new FormData();
@@ -1459,7 +1477,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount(that) {
-    debugger
+    
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseInt(row.find("#txtproductquantity").val());

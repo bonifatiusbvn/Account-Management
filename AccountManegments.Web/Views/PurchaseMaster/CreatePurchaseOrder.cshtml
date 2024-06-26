@@ -354,6 +354,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="card">
+                                            <h5 class="card-header">Terms</h5>
+                                            <div id="dvPOTerms" data-terms="@Model.Terms">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id="dvshipping" class="col-lg-6">
@@ -427,7 +434,7 @@
                             </div>
                             <div class="col-3 col-sm-3">
                                 <label class="form-lable">Qty</label>
-                                <input class="form-control" id="txtmdqty" value=""/>
+                                <input class="form-control" id="txtmdqty" value="" />
                             </div>
                         </div>
                     </div>
@@ -480,7 +487,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

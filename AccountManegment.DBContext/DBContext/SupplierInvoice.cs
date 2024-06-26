@@ -19,6 +19,16 @@ public partial class SupplierInvoice
 
     public DateTime? Date { get; set; }
 
+    public string? ChallanNo { get; set; }
+
+    public string? Lrno { get; set; }
+
+    public string? VehicleNo { get; set; }
+
+    public string? DispatchBy { get; set; }
+
+    public string? PaymentTerms { get; set; }
+
     public string? Description { get; set; }
 
     public decimal TotalAmount { get; set; }
