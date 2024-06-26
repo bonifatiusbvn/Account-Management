@@ -903,9 +903,13 @@ $(document).ready(function () {
 let editorPOInstance;
 const poTermsElement = document.querySelector('#dvPOTerms');
 const initialPOTerms = poTermsElement.getAttribute('data-terms');
-
+var uploadUrl = '/PurchaseMaster/UploadTermsImage';
 ClassicEditor
-    .create(poTermsElement)
+    .create(poTermsElement, {
+        ckfinder: {
+            uploadUrl: uploadUrl 
+        }
+    })
     .then(editor => {
         editorPOInstance = editor;
         if (initialPOTerms) {

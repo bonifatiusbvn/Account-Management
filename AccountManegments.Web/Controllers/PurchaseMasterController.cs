@@ -16,6 +16,10 @@ using Aspose.Pdf.Operators;
 using System.Text;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Globalization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AccountManegments.Web.Controllers
@@ -40,9 +44,9 @@ namespace AccountManegments.Web.Controllers
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListView()
         {
-            
-          return View();
-            
+
+            return View();
+
         }
 
         [HttpGet]
@@ -136,7 +140,7 @@ namespace AccountManegments.Web.Controllers
                     PrNo = PurchaseRequestDetails.PrNo,
                     IsApproved = false,
                     SiteAddress = PurchaseRequestDetails.SiteAddress,
-                    SiteAddressId  = PurchaseRequestDetails.SiteAddressId,
+                    SiteAddressId = PurchaseRequestDetails.SiteAddressId,
                     ItemName = PurchaseRequestDetails.ItemName,
                 };
 
@@ -769,5 +773,40 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
+        [HttpPost]
+        public ActionResult UploadTermsImage(IFormFile upload)
+        {
+            try
+            {
+                if (upload != null)
+                {
+
+                    var uploadsFolder = Path.Combine(Environment.WebRootPath, "Uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(upload.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        upload.CopyTo(fileStream);
+                    }
+                    string url = Url.Content("~/Uploads/" + uniqueFileName);
+                    return Json(new { uploaded = true, url });
+                }
+                else
+                {
+                    return Json(new { uploaded = false, error = "No file uploaded" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { uploaded = false, error = ex.Message });
+            }
+        }
     }
 }
+
