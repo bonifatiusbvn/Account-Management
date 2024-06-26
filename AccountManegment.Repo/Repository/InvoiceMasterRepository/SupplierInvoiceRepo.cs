@@ -239,7 +239,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = a.Gstper,
                                                          DiscountAmount = a.DiscountAmount,
-                                                         DiscountPer=a.DiscountPer,
+                                                         DiscountPer = a.DiscountPer,
                                                      }).ToList();
 
 
@@ -358,7 +358,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-              
+
                 var supplierInvoice = new SupplierInvoice()
                 {
                     Id = SupplierInvoiceDetail.Id,
@@ -376,9 +376,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     ShippingAddress = SupplierInvoiceDetail.ShippingAddress,
                     IsPayOut = SupplierInvoiceDetail.IsPayOut,
                     Date = SupplierInvoiceDetail.Date,
-                    UpdatedOn=DateTime.Now,
-                    UpdatedBy=SupplierInvoiceDetail.UpdatedBy,
-                    CreatedOn=SupplierInvoiceDetail.CreatedOn,
+                    UpdatedOn = DateTime.Now,
+                    UpdatedBy = SupplierInvoiceDetail.UpdatedBy,
+                    CreatedOn = SupplierInvoiceDetail.CreatedOn,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
@@ -390,19 +390,19 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     {
                         existingSupplierInvoice.RefInvoiceId = supplierInvoice.Id;
                         existingSupplierInvoice.ItemId = item.ItemId;
-                        existingSupplierInvoice.ItemName=item.ItemName;
-                        existingSupplierInvoice.UnitTypeId=item.UnitType;
+                        existingSupplierInvoice.ItemName = item.ItemName;
+                        existingSupplierInvoice.UnitTypeId = item.UnitType;
                         existingSupplierInvoice.Quantity = item.Quantity;
-                        existingSupplierInvoice.Price=item.PricePerUnit;
+                        existingSupplierInvoice.Price = item.PricePerUnit;
                         existingSupplierInvoice.DiscountAmount = item.DiscountAmount;
-                        existingSupplierInvoice.DiscountPer=item.DiscountPer;
+                        existingSupplierInvoice.DiscountPer = item.DiscountPer;
                         existingSupplierInvoice.Gst = item.Gstamount;
                         existingSupplierInvoice.Gstper = item.GstPercentage;
                         existingSupplierInvoice.TotalAmount = item.TotalAmount;
                         existingSupplierInvoice.Date = supplierInvoice.Date;
-                        existingSupplierInvoice.UpdatedOn=DateTime.Now;
-                        existingSupplierInvoice.UpdatedBy=supplierInvoice.UpdatedBy;
-                        existingSupplierInvoice.CreatedOn=supplierInvoice.CreatedOn;
+                        existingSupplierInvoice.UpdatedOn = DateTime.Now;
+                        existingSupplierInvoice.UpdatedBy = supplierInvoice.UpdatedBy;
+                        existingSupplierInvoice.CreatedOn = supplierInvoice.CreatedOn;
 
                         Context.SupplierInvoiceDetails.Update(existingSupplierInvoice);
                     }
@@ -478,6 +478,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalAmount = SupplierItemDetails.TotalAmountInvoice,
                     PaymentStatus = SupplierItemDetails.PaymentStatus,
                     Roundoff = SupplierItemDetails.Roundoff,
+                    ChallanNo = SupplierItemDetails.ChallanNo,
+                    Lrno = SupplierItemDetails.Lrno,
+                    VehicleNo = SupplierItemDetails.VehicleNo,
+                    DispatchBy = SupplierItemDetails.DispatchBy,
+                    PaymentTerms = SupplierItemDetails.PaymentTerms,
                     ShippingAddress = SupplierItemDetails.ShippingAddress,
                     IsPayOut = PayOut,
                     Date = SupplierItemDetails.Date,
@@ -545,7 +550,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     string trimmedInvoicePef = CompanyDetails.InvoicePef.Trim();
                     if (lastInvoice == null)
                     {
-                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001"; 
+                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
                     }
                     else
                     {

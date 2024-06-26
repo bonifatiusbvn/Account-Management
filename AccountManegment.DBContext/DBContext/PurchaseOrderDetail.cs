@@ -34,10 +34,4 @@ public partial class PurchaseOrderDetail
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public virtual ItemMaster Item { get; set; } = null!;
-
-    public virtual PurchaseOrder Poref { get; set; } = null!;
-
-    public virtual UnitMaster UnitType { get; set; } = null!;
 }

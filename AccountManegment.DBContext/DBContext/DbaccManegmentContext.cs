@@ -234,21 +234,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Item).WithMany(p => p.PurchaseOrderDetails)
-                .HasForeignKey(d => d.ItemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseOrderDetails_ItemMaster");
-
-            entity.HasOne(d => d.Poref).WithMany(p => p.PurchaseOrderDetails)
-                .HasForeignKey(d => d.PorefId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseOrderDetails_PurchaseOrder");
-
-            entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseOrderDetails)
-                .HasForeignKey(d => d.UnitTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseOrderDetails_UnitMaster");
         });
 
         modelBuilder.Entity<PurchaseRequest>(entity =>
@@ -349,12 +334,17 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("SupplierInvoice");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.ChallanNo).HasMaxLength(100);
             entity.Property(e => e.ContactName).HasMaxLength(50);
             entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.Lrno)
+                .HasMaxLength(100)
+                .HasColumnName("LRNo");
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
@@ -364,6 +354,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGSTAmount");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VehicleNo).HasMaxLength(15);
 
             entity.HasOne(d => d.Site).WithMany(p => p.SupplierInvoices)
                 .HasForeignKey(d => d.SiteId)

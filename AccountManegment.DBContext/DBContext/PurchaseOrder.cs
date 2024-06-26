@@ -17,6 +17,8 @@ public partial class PurchaseOrder
 
     public DateTime? Date { get; set; }
 
+    public string? Terms { get; set; }
+
     public string? Description { get; set; }
 
     public string? DeliveryShedule { get; set; }
@@ -44,6 +46,4 @@ public partial class PurchaseOrder
     public DateTime? UpdatedOn { get; set; }
 
     public virtual SupplierMaster FromSupplier { get; set; } = null!;
-
-    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
 }

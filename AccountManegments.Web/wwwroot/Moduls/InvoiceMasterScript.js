@@ -513,10 +513,14 @@ function InsertMultipleSupplierItem() {
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddress: $("#textmdAddress").val(),
+                ChallanNo: $("#txtchalanNo").val(),
+                Lrno: $("#txtlrNo").val(),
+                VehicleNo: $("#txtvehicleno").val(),
+                DispatchBy: $("#txtdispatch").val(),
+                PaymentTerms: $("#txtpayment").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
-                Terms: $("#textInvoiceTerms").val(),
                 ItemList: ItemDetails,
             }
 
