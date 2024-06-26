@@ -630,6 +630,11 @@ function UpdateInvoiceDetails() {
                 CreatedOn: $('#textCreatedOn').val(),
                 ItemList: ItemDetails,
                 ShippingAddress: Address,
+                ChallanNo: $("#txtchalanNo").val(),
+                Lrno: $("#txtlrNo").val(),
+                VehicleNo: $("#txtvehicleno").val(),
+                DispatchBy: $("#txtdispatch").val(),
+                PaymentTerms: $("#txtpayment").val(),
             }
 
             var form_data = new FormData();
