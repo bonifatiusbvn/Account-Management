@@ -208,6 +208,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = b.Gstper,
                                                          Hsncode = b.Hsncode,
+                                                         TotalAmount=a.ItemTotal,
                                                      }).ToList();
 
                 List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)

@@ -513,10 +513,14 @@ function InsertMultipleSupplierItem() {
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddress: $("#textmdAddress").val(),
+                ChallanNo: $("#txtchalanNo").val(),
+                Lrno: $("#txtlrNo").val(),
+                VehicleNo: $("#txtvehicleno").val(),
+                DispatchBy: $("#txtdispatch").val(),
+                PaymentTerms: $("#txtpayment").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
-                Terms: $("#textInvoiceTerms").val(),
                 ItemList: ItemDetails,
             }
 
@@ -626,6 +630,11 @@ function UpdateInvoiceDetails() {
                 CreatedOn: $('#textCreatedOn').val(),
                 ItemList: ItemDetails,
                 ShippingAddress: Address,
+                ChallanNo: $("#txtchalanNo").val(),
+                Lrno: $("#txtlrNo").val(),
+                VehicleNo: $("#txtvehicleno").val(),
+                DispatchBy: $("#txtdispatch").val(),
+                PaymentTerms: $("#txtpayment").val(),
             }
 
             var form_data = new FormData();
@@ -846,6 +855,7 @@ function updateDiscount(that) {
     if (isNaN(discountprice)) {
         row.find("#txtdiscountamount").val(0);
         row.find("#txtdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         updateProductTotalAmount(row);
         updateTotals();
         return;
@@ -858,7 +868,8 @@ function updateDiscount(that) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
-
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     updateProductTotalAmount(row);
     updateTotals();
 }
@@ -873,6 +884,7 @@ function UpdateDiscountPercentage(that) {
     if (isNaN(discountPercentage)) {
         row.find("#txtdiscountamount").val(0);
         row.find("#txtdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         updateProductTotalAmount(row);
         updateTotals();
         return;
@@ -885,6 +897,9 @@ function UpdateDiscountPercentage(that) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtdiscountamount").val(discountprice.toFixed(2));
     }
+
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     updateProductTotalAmount(row);
     updateTotals();
 }
@@ -919,8 +934,8 @@ function updateTotals() {
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
         TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice;
-        totalAmount = totalSubtotal + totalGst - TotalDiscount;
+        TotalDiscount += discountprice * totalquantity;
+        totalAmount = totalSubtotal + totalGst;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));

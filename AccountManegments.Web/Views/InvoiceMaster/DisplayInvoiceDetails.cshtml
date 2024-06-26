@@ -24,19 +24,53 @@
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <span class="text-muted"><b>@firstItem.SupplierName</b></span> <br />
                                 <span class="text-muted">@firstItem.SupplierBuildingName,@firstItem.SupplierArea,@firstItem.SupplierCity,@firstItem.SupplierState - @firstItem.SupplierPincode</span><br />
-                                <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.SupplierGstNo</span><br />
+                                <span class="text-muted text-uppercase">GST-No.:@firstItem.SupplierGstNo</span><br />
                                 <p class="text-muted text-uppercase">Email :@firstItem.SupplierEmail</p>
                             </div>
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
                             <span class="text-muted text-uppercase">@firstItem.CompanyAddress,@firstItem.CompanyArea,@firstItem.CompanyCityName,@firstItem.CompanyStateName,@firstItem.CompanyCountryName,@firstItem.CompanyPincode</span><br />
-                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.CompanyGstNo</b></p>
+                            <p class="text-muted text-uppercase"><b>GST-No.:@firstItem.CompanyGstNo</b></p>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Invoice No</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
                             </div>
+                            
+                            @if(firstItem.ChallanNo != null)
+                            {
+                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                    <label class="form-label">Challan/Document No</label>
+                                    <p><span class="text-muted"><b>@firstItem.ChallanNo</b></span></p>
+                                </div>
+                                
+                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                    <label class="form-label">Dispatch By</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.DispatchBy</b></p>
+                                </div>
+                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Payment Terms</label>
+                                <p class="text-muted text-uppercase"><b>@firstItem.PaymentTerms</b></p>
+                                </div>
+                            } 
+                        </div>
+                        <div class="flex-grow-1 col-3">
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Date</label>
+                                <p><span class="text-muted text-uppercase"><b>@firstItem.Date?.ToString("dd/MM/yyyy")</b></span></p>
+                            </div>
+                            @if(firstItem.Lrno != null)
+                            {
+                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                    <label class="form-label">LR No</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.Lrno</b></p>
+                                </div>
+                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                    <label class="form-label">Vehicle No</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.VehicleNo</b></p>
+                                </div>
+                            }
                             @if (firstItem.Description != "")
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -44,54 +78,7 @@
                                     <p class="text-muted">@firstItem.Description</p>
                                 </div>
                             }
-                            @*  <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Reference No. & Date</label>
-                            <p><span class="text-muted"><b></b></span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Buyer's Order No</label>
-                            <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Dispatch Doc No.</label>
-                            <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Dispatched Through</label>
-                            <p class="text-muted text-uppercase"><b>Tempo</b></p>
-                            </div>
-                            <label class="form-label">Bill of Landing/LR-RR No.</label>
-                            <p class="text-muted text-uppercase"><b></b></p>*@
-                        </div>
-                        <div class="flex-grow-1 col-3">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Date</label>
-                                <p><span class="text-muted fw-normal">@firstItem.Date?.ToString("dd/MM/yyyy")</span></p>
-                            </div>
-                            @*<div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Mode/Terms of Payment</label>
-                            <p><span class="text-muted text-uppercase"><b>7 days</b></span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Other Reference</label>
-                            <p class="text-muted"></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Date</label>
-                            <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Delivery Note Date</label>
-                            <p class="text-muted text-uppercase"></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Destination</label>
-                            <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                            <label class="form-label">Motor Vehicle No</label>
-                            <p class="text-muted text-uppercase"><b>GJ27TT6505</b></p>
-                            </div>*@
+                            
                         </div>
                     </div>
                 </div>
@@ -103,11 +90,7 @@
                             <p class="text-muted"><b>Consignee (Ship to):</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.SiteName</b></span><br />
                             <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                            <span class="text-muted">GSTIN:- </span>
-                        </div>
-                        <div class="flex-grow-1 col-6 border">
-                            <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted"><b>Dispatched from Rakhial, Ahemdabad</b></p>
+                          
                         </div>
                     </div>
                 </div>

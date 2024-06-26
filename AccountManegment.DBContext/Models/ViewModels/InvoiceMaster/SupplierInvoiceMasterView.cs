@@ -109,6 +109,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? CompanyPanNo { get; set; }
         public string? SupplierFullAddress { get; set; }
         public string? CompanyFullAddress { get; set; }
+        public string? ChallanNo { get; set; }
+
+        public string? Lrno { get; set; }
+
+        public string? VehicleNo { get; set; }
+
+        public string? DispatchBy { get; set; }
+
+        public string? PaymentTerms { get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
     }
