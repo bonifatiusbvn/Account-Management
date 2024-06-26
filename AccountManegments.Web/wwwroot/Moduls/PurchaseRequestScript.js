@@ -317,7 +317,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PurchaseRequestId').val(response.pid);
             $('#txtUnitTypeHidden').val(response.unitTypeId);
             $('#prNo').val(response.prNo);
-            $('#searchItemname').val(response.itemId);
+            $('#txtItemName').val(response.itemId);
             $('#searchItemnameInput').val(response.itemName);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
