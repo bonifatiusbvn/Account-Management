@@ -1014,13 +1014,6 @@ ion-icon {
     margin-left: 0.1em;
 }
 
-.table-responsive {
-    white-space: nowrap;
-}
-
-
-
-
 /* swicther */
 
 .btn-switcher {
@@ -1753,7 +1746,7 @@ img.displayImage {
 @media screen {
     .table th,
     .table td {
-        padding: 10px;
+        padding: 5px;
     }
 }
 
