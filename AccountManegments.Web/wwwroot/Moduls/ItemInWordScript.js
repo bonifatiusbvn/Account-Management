@@ -155,8 +155,8 @@ function ClearItemInWordTextBox() {
     }
     else {
         resetErrorsMessages();
-        $('#changeName').html('Create Item InWord');
-        $('#txtItemName').val('');
+        $('#changeName').html('Create Item Inword');
+        $('#searchItemnameInput').val('');
         $('#txtItemInWordid').val('');
         $('#txtItemId').val('');
         $('#txtUnitType').val('');
@@ -223,7 +223,7 @@ function EditItemInWordDetails(InwordId) {
         success: function (response) {
 
             siteloaderhide();
-            $('#changeName').html('Update Item InWord');
+            $('#changeName').html('Update Item Inword');
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitName);
             $('#txtUnitTypeHidden').val(response.unitTypeId);
