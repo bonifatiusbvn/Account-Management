@@ -186,6 +186,7 @@ function CreateItem() {
                 siteloaderhide();
             },
             error: function (xhr, status, error) {
+
                 siteloaderhide();
                 toastr.error('An error occurred while processing your request.');
             }

@@ -221,7 +221,7 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
+
             siteloaderhide();
             $('#changeName').html('Update Item InWord');
             $('#txtItemInWordid').val(response.inwordId);
@@ -481,7 +481,7 @@ function InsertMultipleItemInWordDetails() {
 }
 
 function UpdateMultipleItemInWordDetails() {
-    debugger
+
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
@@ -507,7 +507,7 @@ function UpdateMultipleItemInWordDetails() {
             DocumentName: documentName,
             SiteId: siteId,
         };
-        debugger
+
         var form_data = new FormData();
         form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 

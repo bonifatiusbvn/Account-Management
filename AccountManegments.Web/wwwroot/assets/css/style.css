@@ -1656,8 +1656,11 @@ tr.active {
     padding-left: 35px;
 }
 
-.offcanvas.offcanvas-end.show {
-    width: 35% !important;
+
+@media (min-width: 992px) {
+    .offcanvas.offcanvas-end.show {
+        width: 35% !important;
+    }
 }
 
 .card-footer tr th {
@@ -1751,5 +1754,22 @@ img.displayImage {
     .table th,
     .table td {
         padding: 10px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .hide-sm {
+        display: none
+    }
+
+    .ac-add-edit {
+        width: 70% !important;
+    }
+
+    .ac-m-btn {
+        text-align: end !important;
+        position: relative;
+        top: -34px;
+        margin-bottom: -36px
     }
 }
