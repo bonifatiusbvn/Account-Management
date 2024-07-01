@@ -189,18 +189,6 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-    $("#textOrderDate").val(today);
-
-
-
-
     $(document).ready(function () {
         function handleFocus(event, selector) {
             if (event.keyCode == 13 || event.keyCode == 9) {
@@ -614,7 +602,7 @@ function UpdateInvoiceDetails() {
                 Id: $('#textSupplierInvoiceId').val(),
                 SiteId: siteid,
                 InvoiceNo: $("#textInvoicePrefix").val(),
-                Date: $("#textOrderDate2").val(),
+                Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
                 CompanyId: $("#textCompanyName").val(),
                 TotalAmountInvoice: $("#cart-total").val(),
@@ -636,7 +624,6 @@ function UpdateInvoiceDetails() {
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
             }
-
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
 
