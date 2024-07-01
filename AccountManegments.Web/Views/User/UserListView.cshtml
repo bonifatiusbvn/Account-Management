@@ -151,23 +151,23 @@
                         <div class="card">
                             <div class="card-body">
                                 <form class="row g-3" id="userForm">
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">First Name</label>
                                         <input type="text" class="form-control" placeholder="First Name" id="txtFirstName" name="txtFirstName">
                                         <input type="hidden" id="txtUserid">
                                         <input type="hidden" id="txtUserRole" value="@_userSession.UserRole">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Last Name</label>
                                         <input type="text" class="form-control" placeholder="Last Name" id="txtLastName" name="txtLastName">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">User Name</label>
                                         <input type="text" class="form-control" placeholder="User Name" id="txtUserName" name="txtUserName">
                                     </div>
                                     @if (_userSession.UserRole == 3)
                                     {
-                                        <div class="col-12">
+                                        <div class="col-lg-12 col-12">
                                             <label class="form-label">Site</label>
                                             <select class="form-select" id="ddlSiteName" name="ddlSiteName">
                                                 <option selected value="">All Site</option>
@@ -176,21 +176,21 @@
                                     }
                                     else
                                     {
-                                        <div class="col-12">
+                                        <div class="col-lg-12 col-12">
                                             <label class="form-label">Site</label>
                                             <select class="form-select" id="ddlSiteName" name="ddlSiteName" disabled>
                                                 <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
                                             </select>
                                         </div>
                                     }
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Role</label>
                                         <select class="form-select" id="ddlUserRole" name="ddlUserRole">
                                             <option value="">--Select--</option>
                                         </select>
                                         <input type="hidden" id="txtrole">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Password</label>
                                         <div class="input-group">
                                             <input type="password" class="form-control" placeholder="Password" id="txtPassword" name="txtPassword">
@@ -207,15 +207,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Email</label>
                                         <input type="text" class="form-control" placeholder="Email" id="txtEmail" name="txtEmail">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Phone Number</label>
                                         <input type="text" class="form-control" placeholder="Phone Number" id="txtPhoneNo" name="txtPhoneNo">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreateUser()" id="btnuser"></button>
                                     </div>
                                 </form>
