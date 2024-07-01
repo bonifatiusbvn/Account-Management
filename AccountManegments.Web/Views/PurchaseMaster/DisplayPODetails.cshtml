@@ -19,219 +19,231 @@
 }
 
 
-<div class="row justify-content-center" id="displayPODetail">
-    <div class="col-xxl-9">
-        <div class="card border">
-            <div class="card">
-                <div class="card-body" id="cardbody1">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-6 border">
-                            <p class="text-muted"><b>@firstItem.CompanyName</b></p>
-                            <p class="text-muted">@firstItem.BillingAddress</p>
-                        </div>
-                        <div class="flex-grow-1 col-3">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Purchase Order Id</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Mode/Terms of Payment</label>
-                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 col-3">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dated</label>
-                                <p><span class="text-muted fw-normal">@firstItem.Date?.ToString("dd/MM/yyyy")</span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Mode/Terms of Payment</label>
-                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card" style="margin-top:-20px;">
-                <div class="card-body" id="cardbody2">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-6 border">
-                            <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
-                            <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
-                            <p class="text-muted">GSTIN:- </p>
-                        </div>
-                        <div class="flex-grow-1 col-3 border">
-                            <label class="form-label">Buyer's Ref./Order No.</label>
-                            <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
-                        </div>
-                        <div class="flex-grow-1 col-3 border">
-                            <label class="form-label">Dispatched through</label>
-                            <p class="text-muted"><b>@firstItem.SupplierName</b></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card" style="margin-top:-20px;">
-                <div class="card-body" id="cardbody3">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-6 border">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                <p class="text-muted text-uppercase"><b>@firstItem.SiteName</b></p>
-                                @{
-                                    int Index = 1;
-                                }
-                                @foreach (var item in Model.AddressList)
-                                {
-                                    <p><span>@Index</span><span> </span><span>@item.Address</span></p>
-                                    Index++;
-                                }
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 col-6 border">
-                            <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted"><b>@firstItem.DeliveryShedule</b></p>
-                            <div class="d-flex">
-                                <div class="flex-grow-1 col-3">
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                        <label class="form-label">Contact Name</label>
-                                        <p><span class="text-muted"><b>@firstItem.ContactName</b></span></p>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 col-3">
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                        <label class="form-label">Contact Number</label>
-                                        <p><span class="text-muted"><b>@firstItem.ContactNumber</b></span></p>
+<div class="radius-10 w-100">
+    <div class="my-3 border-bottom"></div>
+    <div class="">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row justify-content-center" id="displayPODetail">
+                    <div class="col-xxl-9">
+                        <div class="card border">
+                            <div class="card">
+                                <div class="card-body" id="cardbody1">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 col-6 border">
+                                            <p class="text-muted"><b>@firstItem.CompanyName</b></p>
+                                            <p class="text-muted">@firstItem.BillingAddress</p>
+                                        </div>
+                                        <div class="flex-grow-1 col-3">
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                <label class="form-label">Purchase Order Id</label>
+                                                <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                                            </div>
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                <label class="form-label">Mode/Terms of Payment</label>
+                                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 col-3">
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                <label class="form-label">Dated</label>
+                                                <p><span class="text-muted fw-normal">@firstItem.Date?.ToString("dd/MM/yyyy")</span></p>
+                                            </div>
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                <label class="form-label">Mode/Terms of Payment</label>
+                                                <p><span class="text-muted"><b>100% against Pi before dispatch</b></span></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0">
-                        <thead>
-                            <tr class="table-active">
-                                <th class="border" scope="col">SRr.No.</th>
-                                <th class="border" scope="col">Product Details</th>
-                                @*   <th class="border" scope="col">HSN / SAC</th>*@
-                                <th class="border" scope="col">Quantity</th>
-                                <th class="border" scope="col">Rate</th>
-                                <th class="border" scope="col">GST</th>
-                                <th class="border" scope="col">GSTAmount</th>
-                                <th class="border" scope="col">Amount</th>
-                                <th class="border" scope="col">AmountwithGST</th>
+                            <div class="card" style="margin-top:-20px;">
+                                <div class="card-body" id="cardbody2">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 col-6 border">
+                                            <p class="text-muted"><b>Consigner:@firstItem.SupplierName</b></p>
+                                            <p class="text-muted">@firstItem.BuildingName,@firstItem.Area,@firstItem.Cityname,@firstItem.Statename,@firstItem.Pincode</p>
+                                            <p class="text-muted">GSTIN:- </p>
+                                        </div>
+                                        <div class="flex-grow-1 col-3 border">
+                                            <label class="form-label">Buyer's Ref./Order No.</label>
+                                            <p class="text-muted text-uppercase"><b>@firstItem.Poid</b></p>
+                                        </div>
+                                        <div class="flex-grow-1 col-3 border">
+                                            <label class="form-label">Dispatched through</label>
+                                            <p class="text-muted"><b>@firstItem.SupplierName</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-top:-20px;">
+                                <div class="card-body" id="cardbody3">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 col-6 border">
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
+                                                <p class="text-muted text-uppercase"><b>@firstItem.SiteName</b></p>
+                                                @{
+                                                    int Index = 1;
+                                                }
+                                                @foreach (var item in Model.AddressList)
+                                                {
+                                                    <p><span>@Index</span><span> </span><span>@item.Address</span></p>
+                                                    Index++;
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 col-6 border">
+                                            <label class="form-label">Terms of Delivery</label>
+                                            <p class="text-muted"><b>@firstItem.DeliveryShedule</b></p>
+                                            <div class="d-flex">
+                                                <div class="flex-grow-1 col-3">
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                        <label class="form-label">Contact Name</label>
+                                                        <p><span class="text-muted"><b>@firstItem.ContactName</b></span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 col-3">
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                                        <label class="form-label">Contact Number</label>
+                                                        <p><span class="text-muted"><b>@firstItem.ContactNumber</b></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
+                                    <table class="table table-border text-center table-nowrap align-middle mb-0">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th class="border" scope="col">SRr.No.</th>
+                                                <th class="border" scope="col">Product Details</th>
+                                                @*   <th class="border" scope="col">HSN / SAC</th>*@
+                                                <th class="border" scope="col">Quantity</th>
+                                                <th class="border" scope="col">Rate</th>
+                                                <th class="border" scope="col">GST</th>
+                                                <th class="border" scope="col">GSTAmount</th>
+                                                <th class="border" scope="col">Amount</th>
+                                                <th class="border" scope="col">AmountwithGST</th>
 
-                            </tr>
-                        </thead>
-                        <tbody id="products-list">
-                            @{
-                                int index = 1;
-                                decimal? subtotal = 0;
-                                decimal? withgst = 0;
-                                decimal? subgst = 0;
-                                decimal? totalprice = 0;
-                            }
-                            @foreach (var item in Model.ItemList)
-                            {
-                                withgst = (item.Quantity * item.PricePerUnit + item.Gstamount);
-                                totalprice = (item.Quantity * item.PricePerUnit);
-                                <tr class="product">
-                                    <td class="border">@index</td>
-                                    <td class="text-start border">
-                                        <span class="fw-medium" id="txtproductname">@item.ItemName</span>
-                                        <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
-                                        <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
-                                    </td>
-                                    @*<td class="border" id="txtHSN"></td>*@
-                                    <td class="border" id="txtquantity">@item.Quantity</td>
-                                    <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
-                                    <td class="border" id="txtgstpercentage">@item.GstPercentage%</td>
-                                    <td class="border" id="txtgstpercentage">₹@item.Gstamount</td>
-                                    <td class="border" id="txtTotalAmount">₹@totalprice</td>
-                                    <td class="border" id="txtTotalAmount">₹@withgst</td>
-                                </tr>
-                                subtotal += @totalprice;
-                                subgst += @item.Gstamount;
-                                index++;
-                            }
-                            <tr style="height: 34px;">
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                @*<td class="border"></td>*@
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">Sub Total</td>
-                                @*<td class="border"></td>*@
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border">₹@subgst</td>
-                                <td class="border">₹@subtotal</td>
-                                <td class="border"></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">Round Off</td>
-                                @*<td class="border"></td>*@
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">Total</td>
-                                @*<td class="border"></td>*@
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border">₹@firstItem.TotalAmount</td>
-                            </tr>
-                        </tbody>
-                    </table><!--end table-->
-                    <span class="text-muted"><b>In words: </b></span>
-                    <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span><br /><br />
-                    @if (firstItem.Terms != null)
-                    {
-                        <span class="text-muted"><u>Terms & Conditions</u></span><br />
-                        <div id="invoiceTermsDetails">@Html.Raw(firstItem.Terms)</div>
-                    }
-                </div>
-                <div class="card border">
-                    <div class="card d-print-none">
-                        <div class="card-body">
-                            <div class="d-lg-flex align-items-center gap-3">
-                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
-                                {
-                                    <a class="btn btn-primary btn-ecomm" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Purchase Order</a>
-                                }
-                                <a class="btn btn-primary btn-ecomm" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
-                                @* <a href="javascript:;" class="btn btn-white btn-ecomm"><i class="bx bx-refresh"></i> Update Cart</a> *@
+                                            </tr>
+                                        </thead>
+                                        <tbody id="products-list">
+                                            @{
+                                                int index = 1;
+                                                decimal? subtotal = 0;
+                                                decimal? withgst = 0;
+                                                decimal? subgst = 0;
+                                                decimal? totalprice = 0;
+                                            }
+                                            @foreach (var item in Model.ItemList)
+                                            {
+                                                withgst = (item.Quantity * item.PricePerUnit + item.Gstamount);
+                                                totalprice = (item.Quantity * item.PricePerUnit);
+                                                <tr class="product">
+                                                    <td class="border">@index</td>
+                                                    <td class="text-start border">
+                                                        <span class="fw-medium" id="txtproductname">@item.ItemName</span>
+                                                        <span class="fw-medium" id="txtproductid" hidden>@item.ItemId</span>
+                                                        <p class="text-muted mb-0" id="txtdescription">@Model.Description</p>
+                                                    </td>
+                                                    @*<td class="border" id="txtHSN"></td>*@
+                                                    <td class="border" id="txtquantity">@item.Quantity</td>
+                                                    <td class="border" id="txtpriceperunit">₹@item.PricePerUnit</td>
+                                                    <td class="border" id="txtgstpercentage">@item.GstPercentage%</td>
+                                                    <td class="border" id="txtgstpercentage">₹@item.Gstamount</td>
+                                                    <td class="border" id="txtTotalAmount">₹@totalprice</td>
+                                                    <td class="border" id="txtTotalAmount">₹@withgst</td>
+                                                </tr>
+                                                subtotal += @totalprice;
+                                                subgst += @item.Gstamount;
+                                                index++;
+                                            }
+                                            <tr style="height: 34px;">
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                @*<td class="border"></td>*@
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="text-end border">Sub Total</td>
+                                                @*<td class="border"></td>*@
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border">₹@subgst</td>
+                                                <td class="border">₹@subtotal</td>
+                                                <td class="border"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="text-end border">Round Off</td>
+                                                @*<td class="border"></td>*@
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="text-end border">Total</td>
+                                                @*<td class="border"></td>*@
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border">₹@firstItem.TotalAmount</td>
+                                            </tr>
+                                        </tbody>
+                                    </table><!--end table-->
+                                    <span class="text-muted"><b>In words: </b></span>
+                                    <span class="text-muted text-capitalize"><b>@ViewData["TotalAmountInWords"]</b></span><br /><br />
+                                    @if (firstItem.Terms != null)
+                                    {
+                                        <span class="text-muted"><u>Terms & Conditions</u></span>
+
+                                        <br />
+                                        <div id="invoiceTermsDetails">@Html.Raw(firstItem.Terms)</div>
+                                    }
+                                </div>
+                                <div class="card border">
+                                    <div class="card d-print-none">
+                                        <div class="card-body">
+                                            <div class="d-lg-flex align-items-center gap-3">
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+                                                {
+                                                    <a class="btn btn-primary btn-ecomm" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Purchase Order</a>
+                                                }
+                                                <a class="btn btn-primary btn-ecomm" onclick="printDiv();"><i class="fadeIn animated bx bx-printer"></i>Print PurchaseOrder</a>
+                                                @* <a href="javascript:;" class="btn btn-white btn-ecomm"><i class="bx bx-refresh"></i> Update Cart</a> *@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
-
+    </div>
 
 
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
-        }
+}

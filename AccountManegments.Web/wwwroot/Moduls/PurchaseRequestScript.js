@@ -907,7 +907,7 @@ var uploadUrl = '/PurchaseMaster/UploadTermsImage';
 ClassicEditor
     .create(poTermsElement, {
         ckfinder: {
-            uploadUrl: uploadUrl 
+            uploadUrl: uploadUrl
         }
     })
     .then(editor => {
@@ -1454,31 +1454,7 @@ function updateRowNumbers() {
         $(this).text(index + 1);
     });
 }
-function bindEventListeners() {
 
-    document.querySelectorAll(".product-removal a").forEach(function (e) {
-        e.addEventListener("click", function (event) {
-            removeItem(event.target.closest("tr"));
-            updateTotals();
-        });
-    });
-
-
-    document.querySelectorAll(".plus").forEach(function (btn) {
-        btn.addEventListener("click", function (event) {
-            updateProductQuantity(event.target.closest("tr"), 1);
-            updateTotals();
-        });
-    });
-
-
-    document.querySelectorAll(".minus").forEach(function (btn) {
-        btn.addEventListener("click", function (event) {
-            updateProductQuantity(event.target.closest("tr"), -1);
-            updateTotals();
-        });
-    });
-}
 
 function updateProductTotalAmount(that) {
 
