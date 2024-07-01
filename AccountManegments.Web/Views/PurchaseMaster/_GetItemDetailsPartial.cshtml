@@ -4,13 +4,13 @@
 {
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ItemId" onclick="updateProductTotalAmount(this)">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
-        <td class="text-start">
-            <p id="txtItemName" style="padding-top:5px !important;">@item.ItemName</p>
+        <td class="text-start" style="width:230px">
+            <p id="txtItemName">@item.ItemName</p>
             <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@item.ItemId" />
             <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@item.UnitType" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly />
+            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsncode" readonly style="width: 75px;" />
         </td>
         <td class="text-start">
             <div class="">
@@ -26,25 +26,25 @@
         </td>
         <td class="text-start">
             <div class="position-relative">
-                <select class="form-select" id="txtPOUnitType_@item.ItemId" style="width: 151px;">
+                <select class="form-select" id="txtPOUnitType_@item.ItemId" style="width: 100px;">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
 
             </div>
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" oninput="preventEmptyValue(this)" />
+            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PricePerUnit" min="1" oninput="preventEmptyValue(this)" style="width:100px;" />
         </td>
         <td class="text-start">
-            <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" />
+            <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.GstPercentage" max="99" oninput="preventEmptyValue(this)" style="width:100px;" />
 
         </td>
         <td class="text-start">
-            <input type="number" class="form-control border-0" id="txtgstAmount" value="@item.Gstamount" readonly />
+            <input type="number" class="form-control border-0" id="txtgstAmount" value="@item.Gstamount" readonly style="width:130px;" />
         </td>
         <td class="text-start">
             <div>
-                <input type="number" class="form-control border-0" id="txtproducttotalamount" value="@item.TotalAmount" readonly />
+                <input type="number" class="form-control border-0" id="txtproducttotalamount" value="@item.TotalAmount" readonly style="width:130px;" />
             </div>
         </td>
         <td class="product-removal">
