@@ -147,24 +147,24 @@
                     <div class="card">
                         <div class="card-body">
                             <form class="row g-3" id="siteForm">
-                                <div class="col-12">
+                                <div class="col-lg-12 col-12">
                                     <label class="form-label">Site Name</label>
                                     <input type="text" class="form-control" placeholder="Site Name" id="txtSiteName" name="txtSiteName">
                                     <input type="hidden" id="txtSiteid">
                                     <input type="hidden" id="txtSiteUserId" value="@_userSession.UserId">
                                     <span id="spnSiteName" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6 col-12">
                                     <label class="form-label">Contact Name</label>
-                                    <input type="text" class="form-control" placeholder="Contact Person Name" id="txtContectPersonName" name="txtContectPersonName">
+                                    <input type="text" class="form-control" placeholder="Contact Name" id="txtContectPersonName" name="txtContectPersonName">
                                     <span id="spnContectPersonName" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6 col-12">
                                     <label class="form-label">Contact Phone No.</label>
-                                    <input type="number" class="form-control" placeholder="Contact Person Phone No." id="txtContectPersonPhoneNo" name="txtContectPersonPhoneNo">
+                                    <input type="number" class="form-control" placeholder="Contact Phone No." id="txtContectPersonPhoneNo" name="txtContectPersonPhoneNo">
                                     <span id="spnContectPersonPhoneNo" class="text-danger"></span>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-lg-12 col-12">
                                     <label class="form-label">Address</label> <br />
                                     <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
                                     <label for="hideShippingAddress"><b>Is Your Address is same as Shipping Address?</b></label>
@@ -172,17 +172,17 @@
                                     <textarea type="text" class="form-control" rows="3" placeholder="Address" id="txtAddress" name="txtAddress"></textarea>
                                     <span id="spnAddress" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6 col-12">
                                     <label class="form-label">Landmark</label>
                                     <input type="text" class="form-control" placeholder="Landmark" id="txtArea" name="txtArea">
                                     <span id="spnArea" class="text-danger"></span>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6 col-12">
                                     <label class="form-label">Pincode</label>
                                     <input type="number" class="form-control" placeholder="Pincode" id="txtPincode" name="txtPincode">
                                     <span id="spnPincode" class="text-danger"></span>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-lg-4 col-12">
                                     <label class="form-label">Country</label>
                                     <select id="ddlCountry" name="ddlCountry" class="form-select" onchange="fn_getState('stateDropdown',null,this)">
                                         <option>--Select Country--</option>
@@ -190,7 +190,7 @@
                                     <input type="hidden" id="txtSiteCountry" value="" />
                                     <span id="spnCountry" class="text-danger"></span>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-lg-4 col-12">
                                     <label class="form-label">State</label>
                                     <select id="stateDropdown" name="stateDropdown" class="form-select" onchange="fn_getcitiesbystateId('ddlCity', null, this)">
                                         <option>--Select State--</option>
@@ -198,7 +198,7 @@
                                     <input type="hidden" id="txtSiteState" value="" />
                                     <span id="spnState" class="text-danger"></span>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-lg-4 col-12">
                                     <label class="form-label">City</label>
                                     <select id="ddlCity" name="ddlCity" class="form-select">
                                         <option>--Select City--</option>
@@ -207,28 +207,28 @@
                                     <span id="spnCity" class="text-danger"></span>
                                 </div>
                                 <div id="shippingAddressFields" style="display:none;">
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <h5><b>Shipping Address</b></h5>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-12">
                                         <label class="form-label">Shipping Address</label>
                                         <textarea type="text" class="form-control" rows="3" placeholder="Shipping Address" id="txtShippingAddress" name="txtShippingAddress"></textarea>
                                         <span id="spnShippingAddress" class="text-danger"></span>
                                     </div>
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-lg-6 col-12">
                                             <label class="form-label">Shipping Landmark</label>
                                             <input type="text" class="form-control" placeholder="Shipping Landmark" id="txtShippingArea" name="txtShippingArea">
                                             <span id="spnShippingArea" class="text-danger"></span>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-lg-6 col-12">
                                             <label class="form-label">Shipping Pincode</label>
                                             <input type="text" class="form-control" placeholder="Shipping Pincode" id="txtShippingPincode" name="txtShippingPincode">
                                             <span id="spnShippingPincode" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-lg-4 col-12">
                                             <label class="form-label"> Shipping Country</label>
                                             <select id="shippingCountry" name="shippingCountry" class="form-select" onchange="fn_getShippingState('ShippingState', null, this)">
                                                 <option value=" ">--Select Country--</option>
@@ -236,7 +236,7 @@
                                             <input type="hidden" id="txtShippingCountry" value="" />
                                             <span id="spnShippingCountry" class="text-danger"></span>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-lg-4 col-12">
                                             <label class="form-label"> Shipping State</label>
                                             <select id="ShippingState" name="ShippingState" class="form-select" onchange="fn_getShippingcitiesbystateId('ShippingCity', null, this)">
                                                 <option>--Select State--</option>
@@ -244,7 +244,7 @@
                                             <input type="hidden" id="txtShippingState" value="" />
                                             <span id="spnShippingState" class="text-danger"></span>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-lg-4 col-12">
                                             <label class="form-label">Shipping City</label>
                                             <select id="ShippingCity" name="ShippingCity" class="form-select">
                                                 <option>--Select City--</option>
@@ -254,7 +254,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-lg-12 col-12">
                                     <h5>
                                         <b>
                                             Multiple Shipping Address
@@ -264,7 +264,7 @@
                                         </b>
                                     </h5>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-lg-12 col-12">
                                     <div class="card border mb-3">
                                         <div id="shippingAddressTable" class="mb-2" style="height: 180px;overflow-y: scroll;">
                                         </div>
