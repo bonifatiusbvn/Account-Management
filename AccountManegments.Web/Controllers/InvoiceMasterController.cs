@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
+using AccountManegments.Web.Models;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +86,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
 
                 string apiUrl = $"SupplierInvoice/GetSupplierInvoiceList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
@@ -93,6 +96,10 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(res.data.ToString());
+                    if(SiteId != null)
+                    {
+                        GetInvoiceList = GetInvoiceList.Where(a => a.SiteId == SiteId).ToList();
+                    }
 
                     return PartialView("~/Views/InvoiceMaster/_SupplierInvoiceListPartial.cshtml", GetInvoiceList);
                 }

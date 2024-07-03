@@ -382,7 +382,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
                 string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
@@ -390,7 +391,10 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
-
+                    if (SiteId != null)
+                    {
+                        GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
+                    }
                     return PartialView("~/Views/PurchaseMaster/_POListPartial.cshtml", GetPOList);
                 }
                 else
