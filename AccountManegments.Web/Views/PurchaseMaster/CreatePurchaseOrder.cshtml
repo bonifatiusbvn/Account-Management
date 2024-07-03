@@ -232,7 +232,7 @@
                                                         </div>
                                                         <div class="card-footer">
                                                             <table class="table align-middle mb-0">
-                                                                <thead class="table align-middle mb-0">
+                                                                <thead class="table-light btn-primary">
                                                                     <tr>
                                                                         <th>#</th>
                                                                         <th colspan="2">Total</th>
@@ -497,7 +497,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
