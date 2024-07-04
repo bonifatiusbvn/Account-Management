@@ -73,56 +73,6 @@ function GetSiteDetail() {
     });
 }
 
-$(document).ready(function () {
-    var invoiceRoleUser = $('#UserRoleinInvoice').val();
-    var invoiceSiteId = $('#textInvoiceSiteName').val();
-
-    if (invoiceRoleUser == 8) {
-        fn_GetInvoiceSiteAddressList(invoiceSiteId);
-    }
-    else {
-        $('#textInvoiceSiteName').change(function () {
-            var Site = $(this).val();
-            fn_GetInvoiceSiteAddressList(Site);
-        });
-    }
-    $('#drpInvoiceSiteAddress').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#mdShippingAdd")
-    });
-
-    $(document).on('click', '#removeAddress', function () {
-        $(this).closest('tr').remove();
-        $('.add-addresses').prop('disabled', false);
-    });
-});
-
-function fn_GetInvoiceSiteAddressList(SiteId) {
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
-        success: function (result) {
-            $('#drpInvoiceSiteAddress').empty();
-            $('#textmdAddress').val('');
-            $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
-            if (Array.isArray(result)) {
-                $.each(result, function (i, data) {
-                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-                });
-            } else {
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
-            }
-        }
-    });
-}
-
-$('#drpInvoiceSiteAddress').on('change', function () {
-    var selectedInvoiceAddress = $(this).val();
-    $('#textmdAddress').val(selectedInvoiceAddress);
-});
-
 function GetItemDetailsList() {
 
     var searchText = $('#mdProductSearch').val();
@@ -1105,6 +1055,54 @@ function clearItemErrorMessages() {
     $("#spnitembutton").text("");
 }
 
+$(document).ready(function () {
+    var invoiceRoleUser = $('#UserRoleinInvoice').val();
+    var invoiceSiteId = $('#textInvoiceSiteName').val();
+
+    if (invoiceRoleUser == 8) {
+        fn_GetInvoiceSiteAddressList(invoiceSiteId);
+    }
+    else {
+        $('#textInvoiceSiteName').change(function () {
+            var Site = $(this).val();
+            fn_GetInvoiceSiteAddressList(Site);
+        });
+    }
+    $('#drpInvoiceSiteAddress').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#mdShippingAdd")
+    });
+
+    $(document).on('click', '#removeAddress', function () {
+        $(this).closest('tr').remove();
+        $('.add-addresses').prop('disabled', false);
+    });
+});
+
+function fn_GetInvoiceSiteAddressList(SiteId) {
+    $.ajax({
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+        success: function (result) {
+            $('#drpInvoiceSiteAddress').empty();
+            $('#textmdAddress').val('');
+            $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
+            if (Array.isArray(result)) {
+                $.each(result, function (i, data) {
+                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            } else {
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
+            }
+        }
+    });
+}
+$('#drpInvoiceSiteAddress').on('change', function () {
+    var selectedInvoiceAddress = $(this).val();
+    $('#textmdAddress').val(selectedInvoiceAddress);
+});
 function addShippingAddress() {
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
@@ -1124,19 +1122,21 @@ function addShippingAddress() {
         }
 
         var newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
-            '<div class="col-2 col-sm-2">' +
+            '<div class="col-1 col-sm-1">' +
             '<label id="lblshprownum1">1</label>' +
             '</div>' +
-            '<div class="col-5 col-sm-5">' +
+            '<div class="col-5 col-sm-5 text-center">' +
             '<p class="shippingaddress">' + address + '</p>' +
             '</div>' +
+            '<div class="col-2 col-sm-2">' +
+            '<a id="remove" class="btn text-primary text-center" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
+            '</div>'+
             '</div>';
 
         $('#dvShippingAddress').append(newRow);
         updateProductTotalAmount();
         updateTotals();
         updateRowNumbers();
-        $('#mdShippingAdd').modal('toggle');
         siteloaderhide();
     } else {
         siteloaderhide();
@@ -1145,3 +1145,27 @@ function addShippingAddress() {
 }
 
 
+function fn_GetSiteAddressBySession(selectedSiteId) {debugger
+    $.ajax({
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + selectedSiteId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            debugger
+            if (Array.isArray(result)) {
+                if (result.length > 0) {
+                    $('#textmdAddress').val(result[0].address);
+                }
+                $.each(result, function (i, data) {
+                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                });
+            }
+            else {
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
+            }
+            location.reload();
+            addShippingAddress();
+        }
+    });
+}

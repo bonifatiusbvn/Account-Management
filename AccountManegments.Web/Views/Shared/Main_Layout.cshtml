@@ -495,7 +495,11 @@
             fn_ChangeSite(selectedSiteId, SiteText);
 
             sessionStorage.setItem('SelectedSiteId', selectedSiteId);
+            fn_GetSiteAddressBySession(selectedSiteId);
+            location.reload();
+          
         });
+
 
         $('#CompanyNameList').change(function () {
             siteloadershow();
