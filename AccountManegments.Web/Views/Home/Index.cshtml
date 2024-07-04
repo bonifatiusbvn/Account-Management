@@ -6,31 +6,11 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
-
-
-
 <div class="row">
     <div class="col-12 col-lg-4 col-xl-4 d-flex">
         <div class="card radius-10 w-100">
-            <form id="frmdrpdashbord">
-                @if (_userSession.UserRole == 3)
-                {
-                    <select class="form-select form-control-lg" id="drpSiteName">
-                        <option value="">All Site</option>
-                    </select>
-                }
-                else
-                {
-                    <select class="form-select form-control-lg" id="drpSiteName" disabled>
-                        <option value="@UserSession.SiteId">@UserSession.SiteName</option>
-                    </select>
-                }
-            </form>
         </div>
-
     </div>
-
-
 </div>
 
 <!--end breadcrumb-->
@@ -40,7 +20,6 @@
         <div class="card radius-10 w-100">
             <div class="card-header">
                 <h5>Purchase Requests</h5>
-
             </div>
             <div class="card-body">
                 <div class="table-responsive mt-3" style="max-height:350px;">
@@ -97,80 +76,6 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-        var role = "@_userSession.UserRole";
-        var SiteId = "@UserSession.SiteId";
-        var SiteName = "@UserSession.SiteName";
-        $(function () {
-            fn_fillsiteDropDown();
-            GetCompanyList();
-            if (role == 3) {
-                fn_ChangeSite(null, "All Site")
-            } else {
-                fn_ChangeSite(SiteId, SiteName)
-            }
-
-        });
-
-        function fn_fillsiteDropDown() {
-            $.ajax({
-                url: '/SiteMaster/GetSiteNameList',
-                success: function (result) {
-                    $.each(result, function (i, data) {
-                        $('#drpSiteName').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
-                    });
-
-                    var selectedSiteId = sessionStorage.getItem('SelectedSiteId');
-
-                    if (selectedSiteId) {
-                        $('#drpSiteName').val(selectedSiteId);
-                    }
-                }
-            });
-        }
-
-        $('#drpSiteName').change(function () {
-            siteloadershow();
-            var SiteText = $(this).find('option:selected').text();
-            var selectedSiteId = $(this).val();
-            $('#txtsiteName').html(SiteText);
-            fn_ChangeSite(selectedSiteId, SiteText);
-
-            sessionStorage.setItem('SelectedSiteId', selectedSiteId);
-        });
-
-        $('#CompanyNameList').change(function () {
-            siteloadershow();
-            var Text = $("#CompanyNameList Option:Selected").text();
-            var CompanyId = $(this).val();
-            fn_ChangeCompany(CompanyId)
-        });
-
-        function fn_ChangeSite(selectedSiteId, SiteText) {
-            var searchText = "";
-            var searchBy = "";
-            $.ajax({
-                url: '/Home/PurchaseRequestList',
-                type: 'GET',
-                data: {
-                    searchText: searchText,
-                    searchBy: searchBy,
-                    SiteId: selectedSiteId,
-                    SiteName: SiteText,
-                },
-                success: function (result) {
-
-                    siteloaderhide();
-                    $("#tbPndingApproval").html(result);
-
-                },
-                error: function (xhr, status, error) {
-
-                }
-            });
-
-        }
-
-
 
         function GetCompanyList() {
             $.ajax({
@@ -187,7 +92,6 @@
                 }
             });
         }
-
 
         function fn_ChangeCompany(CompanyId) {
 
