@@ -429,7 +429,7 @@ function UserLogout() {
 }
 
 function logout() {
-
+    sessionStorage.removeItem('SelectedSiteId');
     fetch('/Authentication/Logout', {
         method: 'POST',
         headers: {

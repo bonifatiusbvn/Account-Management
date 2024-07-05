@@ -952,7 +952,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 AddressDetails.push(addressData);
             });
             var PORequest = {
-                SiteId: $("#txtPoSiteName").val(),
+                SiteId: $("#drpSiteNameList").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1249,21 +1249,9 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
-            var SiteValue;
-            var Siteid = $("#POModelSiteid").val();
-            var newSiteId = $("#txtPoSiteName").val();
-            var sessionSiteId = $("#positeid").val();
-
-            if (newSiteId) {
-                SiteValue = newSiteId;
-            } else if (Siteid) {
-                SiteValue = Siteid;
-            } else {
-                SiteValue = sessionSiteId;
-            }
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: SiteValue,
+                SiteId: $("#drpSiteNameList").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1630,3 +1618,19 @@ function toggleRadio() {
     }
 }
 
+
+function fn_OpenAddproductmodal() {
+    if ($("#drpSiteNameList").val() == "") {
+        $("#frmdrpdashbord").css("border", "2px solid red");
+        $("#siteErrorMesssage").html("Select Site").css("color", "red");
+    } else {
+        $('#mdProductSearch').val('');
+        $('#mdPoproductModal').modal('show');
+    }
+}
+$("#drpSiteNameList").change(function () {
+    if ($(this).val() != "") {
+        $("#frmdrpdashbord").css("border", "");
+        $("#siteErrorMesssage").html("").css("color", "");
+    }
+});

@@ -76,7 +76,7 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-
+        GetCompanyList();
         function GetCompanyList() {
             $.ajax({
                 url: '/Company/GetCompanyNameList',
@@ -92,6 +92,13 @@
                 }
             });
         }
+
+        $('#CompanyNameList').change(function () {
+            siteloadershow();
+            var Text = $("#CompanyNameList Option:Selected").text();
+            var CompanyId = $(this).val();
+            fn_ChangeCompany(CompanyId)
+        });
 
         function fn_ChangeCompany(CompanyId) {
 

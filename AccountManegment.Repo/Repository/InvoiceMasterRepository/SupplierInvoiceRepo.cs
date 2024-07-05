@@ -173,7 +173,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 supplierList = (from a in Context.SupplierInvoices.Where(x => x.Id == Id)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                //join d in Context.Sites on a.SiteId equals d.SiteId
+                                join d in Context.Sites on a.SiteId equals d.SiteId
                                 join e in Context.Cities on c.CityId equals e.CityId
                                 join f in Context.States on c.StateId equals f.StatesId
                                 join g in Context.Countries on c.Country equals g.CountryId
@@ -184,7 +184,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Id = a.Id,
                                     InvoiceNo = a.InvoiceNo,
                                     SiteId = a.SiteId,
-                                    //SiteName = d.SiteName,
+                                    SiteName = d.SiteName,
                                     SupplierId = a.SupplierId,
                                     SupplierName = b.SupplierName,
                                     Description = a.Description,
@@ -264,7 +264,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierList = (from a in Context.SupplierInvoices
                                     join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                     join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                    //join d in Context.Sites on a.SiteId equals d.SiteId
+                                    join d in Context.Sites on a.SiteId equals d.SiteId
                                     where a.InvoiceNo != "PayOut"
                                     select new SupplierInvoiceModel
                                     {
@@ -280,7 +280,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         CompanyId = a.CompanyId,
                                         Date = DateTime.Now,
                                         CompanyName = c.CompanyName,
-                                        //SiteName = d.SiteName,
+                                        SiteName = d.SiteName,
                                         SupplierName = b.SupplierName,
                                         CreatedOn = a.CreatedOn,
                                         SupplierInvoiceNo = a.SupplierInvoiceNo,

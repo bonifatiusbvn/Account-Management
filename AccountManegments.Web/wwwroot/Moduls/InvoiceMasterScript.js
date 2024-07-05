@@ -481,15 +481,8 @@ function InsertMultipleSupplierItem() {
                 };
                 ItemDetails.push(objData);
             });
-            var sitevalue = $("#txtPoSiteName").val();
-            var siteid = null;
-            if (sitevalue != "") {
-                siteid = sitevalue;
-            } else {
-                siteid = $("#siteid").val();
-            }
             var InvoiceDetails = {
-                SiteId: siteid,
+                SiteId: $("#drpSiteNameList").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
@@ -584,13 +577,6 @@ function UpdateInvoiceDetails() {
                 };
                 ItemDetails.push(objData);
             });
-            var sitevalue = $("#textInvoiceSiteName").val();
-            var siteid = null;
-            if (sitevalue != "") {
-                siteid = sitevalue;
-            } else {
-                siteid = document.getElementById("siteid").getAttribute("value");
-            }
             var shippingAdd = $("#textmdAddress").val();
             var Address = null;
             if (shippingAdd != "") {
@@ -600,7 +586,7 @@ function UpdateInvoiceDetails() {
             }
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
-                SiteId: siteid,
+                SiteId: $("#drpSiteNameList").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
@@ -1144,4 +1130,21 @@ function addShippingAddress() {
     }
 }
 
+function fn_OpenAddproductmodal() {
+    if ($("#drpSiteNameList").val() == "") {
+        $("#frmdrpdashbord").css("border", "2px solid red");
+        $("#siteErrorMesssage").html("Select Site").css("color", "red");
+    }
+    else {
+        $('#mdProductSearch').val('');
+        $('#mdPoproductModal').modal('show');
+    }
+}
+
+$("#drpSiteNameList").change(function () {
+    if ($(this).val() != "") {
+        $("#frmdrpdashbord").css("border", "");
+        $("#siteErrorMesssage").html("").css("color", "");
+    }
+});
 

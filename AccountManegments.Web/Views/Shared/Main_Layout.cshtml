@@ -297,20 +297,30 @@
                 <form id="frmdrpdashbord">
                     @if (_userSession.UserRole == 3)
                     {
-                        <select class="form-select form-control-lg" id="drpSiteName">
+                        <div>
+                            <div class="dropdown-menu" id="drpSiteListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--All Site--</a>
+                            </div>
+                        </div>
+
+                        <select class="form-select form-control-lg" id="drpSiteNameList">
                             <option value="">All Site</option>
                         </select>
                     }
                     else
                     {
+                        <div>
+                            <div class="dropdown-menu" id="drpSiteListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--Selected Site--</a>
+                            </div>
+                        </div>
                         <select class="form-select form-control-lg" id="drpSiteName" disabled>
                             <option value="@UserSession.SiteId">@UserSession.SiteName</option>
                         </select>
                     }
                 </form>
-                <div class="mobile-menu-button">
-                    <ion-icon name="menu-sharp"></ion-icon>
-                </div>
+                <h5 id="siteErrorMesssage">
+                </h5>
                 <div class="top-navbar-right ms-auto">
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item dropdown dropdown-user-setting">
@@ -459,50 +469,90 @@
         var role = "@_userSession.UserRole";
         var SiteId = "@UserSession.SiteId";
         var SiteName = "@UserSession.SiteName";
-        $(function () {
-            fn_fillsiteDropDown();
-            GetCompanyList();
-            if (role == 3) {
-                fn_ChangeSite(null, "All Site")
-            } else {
-                fn_ChangeSite(SiteId, SiteName)
-            }
 
-        });
+        if (role == 3) {
+            fn_fillsiteDropDownList();
+        }
 
-        function fn_fillsiteDropDown() {
+        var selectedSiteId = sessionStorage.getItem('SelectedSiteId');
+        if (selectedSiteId) {
+            $('#txtsiteidall').val(selectedSiteId);
+        }
+
+        function fn_fillsiteDropDownList() {
+
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 success: function (result) {
+                    var $siteMenu = $("#drpSiteListMenu");
+                    var $hiddenDropdown = $("#drpSiteNameList");
+
+                    $siteMenu.empty();
+                    $hiddenDropdown.empty();
+
+                    $siteMenu.append('<a class="dropdown-item" href="#" data-value="">--All Site--</a>');
+                    $hiddenDropdown.append('<option selected value="">--All Site--</option>');
+
                     $.each(result, function (i, data) {
-                        $('#drpSiteName').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
+
+                        $siteMenu.append('<a class="dropdown-item" href="#" data-value="' + data.siteId + '">' + data.siteName + '</a>');
+                        $hiddenDropdown.append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                     });
 
                     var selectedSiteId = sessionStorage.getItem('SelectedSiteId');
-
                     if (selectedSiteId) {
-                        $('#drpSiteName').val(selectedSiteId);
+                        $('#drpSiteNameList').val(selectedSiteId).trigger('change');
+                        $('.btn-group .btn').text($('#drpSiteNameList option:selected').text());
                     }
+
+                    $('#drpSiteListMenu .dropdown-item').click(function () {
+                        var selectedUserSiteId = $(this).data('value');
+                        var ProjectText = $(this).text();
+
+                        $('.btn-group .btn').text(ProjectText);
+                        $('#drpSiteNameList').val(selectedUserSiteId).trigger('change');
+                        sessionStorage.setItem('selectedSiteId', selectedUserSiteId);
+                    });
                 }
             });
         }
 
-        $('#drpSiteName').change(function () {
-            siteloadershow();
+        $('#drpSiteNameList').change(function () {
             var SiteText = $(this).find('option:selected').text();
             var selectedSiteId = $(this).val();
-            $('#txtsiteName').html(SiteText);
+
+            if (selectedSiteId == "") {
+                SiteText = " ";
+            }
             fn_ChangeSite(selectedSiteId, SiteText);
-
-            sessionStorage.setItem('SelectedSiteId', selectedSiteId);
+            var sessionsideId = selectedSiteId;
+            sessionStorage.setItem('selectedSiteId', sessionsideId);
         });
 
-        $('#CompanyNameList').change(function () {
-            siteloadershow();
-            var Text = $("#CompanyNameList Option:Selected").text();
-            var CompanyId = $(this).val();
-            fn_ChangeCompany(CompanyId)
-        });
+        function fn_ChangeSite(selectedSiteId, SiteText) {
+            
+            var searchText = "";
+            var searchBy = "";
+            $.ajax({
+                url: '/Home/PurchaseRequestList',
+                type: 'GET',
+                data: {
+                    searchText: searchText,
+                    searchBy: searchBy,
+                    SiteId: selectedSiteId,
+                    SiteName: SiteText,
+                },
+                success: function (result) {
+                    
+                    siteloaderhide();
+                    $("#tbPndingApproval").html(result);
+                   
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching purchase request list:", error);
+                }
+            });
+        }
 
         function fn_ChangeSite(selectedSiteId, SiteText) {
             var searchText = "";
@@ -520,6 +570,8 @@
 
                     siteloaderhide();
                     $("#tbPndingApproval").html(result);
+                    sessionStorage.setItem('SelectedSiteId', selectedSiteId);
+
 
                 },
                 error: function (xhr, status, error) {
