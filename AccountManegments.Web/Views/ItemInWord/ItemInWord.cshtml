@@ -10,12 +10,9 @@
 
 @section HeaderButton {
 
-    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Add == true)))
+    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Add == true)))
     {
-        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Add == true)))
-        {
-            <button type="button" class="btn btn-primary fixed-button" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
-        }
+        <button type="button" class="btn btn-primary fixed-button" onclick="ClearItemInWordTextBox()"><i class="lni lni-circle-plus"></i>Item Inward</button>
     }
 }
 
@@ -152,7 +149,7 @@
                             <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                 <input type="hidden" id="txtItemInWordid">
                                 <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
-                                <input type="hidden" id="txtSiteid" value="@UserSession.SiteId">
+                                <input type="hidden" id="txtInwardSiteid" value="@UserSession.SiteId">
                                 <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
                                 <div class="col-12">
                                     <label class="form-label">Product Names</label>

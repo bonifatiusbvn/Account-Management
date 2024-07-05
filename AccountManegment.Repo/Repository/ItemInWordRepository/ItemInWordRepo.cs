@@ -94,7 +94,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                       join c in Context.Sites on a.SiteId equals c.SiteId
                                       join i in Context.ItemMasters on a.ItemId equals i.ItemId
-                                      where a.IsDeleted == false && (siteId == null && a.SiteId == a.SiteId) || (siteId != null && a.SiteId == siteId)
+                                      where a.IsDeleted == false && (siteId == null || a.SiteId == siteId) 
                                       select new ItemInWordModel
                                       {
                                           InwordId = a.InwordId,

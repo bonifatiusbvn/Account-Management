@@ -40,8 +40,12 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
-                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
+                if (SiteId != null)
+                {
+                    UserSession.SiteId = SiteId.ToString();
+                }
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 

@@ -145,13 +145,8 @@ function GetSiteList() {
 }
 
 function ClearItemInWordTextBox() {
-    if ($("#txtSiteid").val() == "") {
-        Swal.fire({
-            title: "Kindly select site on dashboard.",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        });
+    if ($("#txtInwardSiteid").val() == "") {
+        toastr.warning("Select Site");
     }
     else {
         resetErrorsMessages();
@@ -413,14 +408,12 @@ function InsertMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
-        var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
+        if ($("#siteNameList").val()) {
             siteId = $("#siteNameList").val();
         }
         else {
-            siteId = $("#txtSiteid").val();
+            siteId = $("#txtInwardSiteid").val();
         }
-
 
         var ItemInWordRequest = {
             UnitTypeId: $("#txtUnitTypeHidden").val(),
@@ -481,16 +474,14 @@ function InsertMultipleItemInWordDetails() {
 }
 
 function UpdateMultipleItemInWordDetails() {
-
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
-        var RoleUserId = $('#userRoleId').val();
-        if (RoleUserId == 3) {
+        if ($("#siteNameList").val()) {
             siteId = $("#siteNameList").val();
         }
         else {
-            siteId = $("#txtSiteid").val();
+            siteId = $("#txtInwardSiteid").val();
         }
         var documentName = $("#txtDocumentName").val();
 
