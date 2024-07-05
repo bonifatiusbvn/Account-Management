@@ -431,15 +431,9 @@ function InsertMultipleSupplierItem() {
                 };
                 ItemDetails.push(objData);
             });
-            var Site = null;
-            if ($("#UserRoleinInvoice").val() != 3) {
-                Site = $("#drpSiteName").val();
-            } else {
-                Site = $("#drpSiteNameList").val();
-            }
 
             var InvoiceDetails = {
-                SiteId: Site,
+                SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
@@ -542,16 +536,9 @@ function UpdateInvoiceDetails() {
                 Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
             }
 
-            var Site = null;
-            if ($("#UserRoleinInvoice").val() != 3) {
-                Site = $("#drpSiteName").val();
-            } else {
-                Site = $("#drpSiteNameList").val();
-            }
-
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
-                SiteId: Site,
+                SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
@@ -1142,7 +1129,7 @@ function addShippingAddress() {
 }
 
 function fn_OpenAddproductmodal() {
-    if ($("#drpSiteNameList").val() == "") {
+    if ($("#drpSiteName").val() == "") {
         $("#frmdrpdashbord").css("border", "2px solid red");
         $("#siteErrorMesssage").html("Select Site").css("color", "red");
     }
@@ -1152,61 +1139,3 @@ function fn_OpenAddproductmodal() {
     }
 }
 
-//$("#drpSiteNameList").change(function () {
-//    if ($(this).val() != "") {debugger
-//        $("#frmdrpdashbord").css("border", "");
-//        $("#siteErrorMesssage").html("").css("color", "");
-//        debugger
-        
-//    }
-//    else {
-//        $('#dvShippingAddress').empty();
-//    }
-//});
-
-//$(document).ready(function () {
-//    var SiteId = $('#drpSiteName').val();
-//    if (SiteId != undefined) {
-//        $.ajax({
-//            url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
-//            success: function (result) {
-//                $('#dvShippingAddress').empty();
-//                if (Array.isArray(result)) {
-//                    if (result.length > 0) {
-//                        $('#textmdAddress').val(result[0].address);
-//                    }
-//                    $.each(result, function (i, data) {
-//                        $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-//                    });
-//                } else {
-//                    $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
-//                }
-//                addShippingAddress();
-//            }
-//        });
-//    }
-//})
-
-fn_ChangeSessionSiteAddress();
-
-function fn_ChangeSessionSiteAddress() {debugger
-    var SiteId = $('#drpSiteNameList').val();
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
-        success: function (result) {
-            debugger
-            $('#dvShippingAddress').empty();
-            if (Array.isArray(result)) {
-                if (result.length > 0) {
-                    $('#textmdAddress').val(result[0].address);
-                }
-                $.each(result, function (i, data) {
-                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-                });
-            } else {
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
-            }
-            addShippingAddress();
-        }
-    });
-}

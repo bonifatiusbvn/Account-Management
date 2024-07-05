@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -44,15 +45,48 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
-                }   
+                }
+
+                var SiteId = UserSession.SiteId;
+                if(SiteId == "")
+                {
+                    ViewBag.SiteAddress = "";
+                }
+                else
+                {
+                    List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
+                    ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
+                    if (res.code == 200)
+                    {
+
+                        SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
+                    }
+
+                    if (SiteName.Count == 0)
+                    {
+                        SiteMasterModel SiteDetails = new SiteMasterModel();
+                        ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
+                        if (response.code == 200)
+                        {
+
+                            SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
+                        }
+                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName;
+                    }
+                    else
+                    {
+                        ViewBag.SiteAddress = SiteName[0].Address;
+                    }
+                }
+               
                 return View(invoiceDetails);
             }
             catch (Exception ex)
             {
                 throw ex;
-
             }
         }
+
 
         public async Task<IActionResult> CheckSuppliersInvoiceNo(Guid? CompanyId)
         {

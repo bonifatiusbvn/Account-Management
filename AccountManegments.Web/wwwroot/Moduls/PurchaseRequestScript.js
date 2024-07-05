@@ -952,16 +952,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 AddressDetails.push(addressData);
             });
 
-            var Site = null;
-
-            if ($("#UserRoleinPO").val() != 3) {
-                Site = $("#drpSiteName").val();
-            } else {
-                Site = $("#drpSiteNameList").val()
-            }
-
             var PORequest = {
-                SiteId: Site,
+                SiteId: $("#positeid").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1259,16 +1251,9 @@ function UpdateMultiplePurchaseOrderDetails() {
                 AddressDetails.push(addressData);
             });
 
-            var Site = null;
-            if ($("#UserRoleinPO").val() != 3) {
-                Site = $("#drpSiteName").val();
-            } else {
-                Site = $("#drpSiteNameList").val()
-            }
-
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: Site,
+                SiteId: $("#positeid").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1637,7 +1622,7 @@ function toggleRadio() {
 
 
 function fn_OpenAddproductmodal() {
-    if ($("#drpSiteNameList").val() == "") {
+    if ($("#drpSiteName").val() == "") {
         $("#frmdrpdashbord").css("border", "2px solid red");
         $("#siteErrorMesssage").html("Select Site").css("color", "red");
     } else {
@@ -1645,9 +1630,3 @@ function fn_OpenAddproductmodal() {
         $('#mdPoproductModal').modal('show');
     }
 }
-$("#drpSiteNameList").change(function () {
-    if ($(this).val() != "") {
-        $("#frmdrpdashbord").css("border", "");
-        $("#siteErrorMesssage").html("").css("color", "");
-    }
-});

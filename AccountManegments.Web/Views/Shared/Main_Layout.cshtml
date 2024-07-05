@@ -302,13 +302,27 @@
                     @if (_userSession.UserRole == 3)
                     {
                         <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
-                            <option value="all">All Site</option> <!-- Use 'all' as the value for the 'All Site' option -->
+                            <option value="">All Site</option> 
                             @if (userSites != null)
                             {
                                 foreach (var site in userSites)
                                 {
-                                    var selected = new Guid(UserSession.SiteId) == site.SiteId ? "selected" : "";
-                                    <option value="@site.SiteId" selected="@selected">@site.SiteName</option>
+                                    Guid siteGuid;
+                                    bool isValidGuid = Guid.TryParse(UserSession.SiteId, out siteGuid);
+
+                                    var selected = isValidGuid && siteGuid == site.SiteId ? "selected" : "";
+
+                                    if (selected == "selected")
+                                    {
+                                        <option value="@site.SiteId" selected>@site.SiteName</option>
+
+                                    }
+                                    else
+                                    {
+                                        <option value="@site.SiteId">@site.SiteName</option>
+                                        
+                                    }
+
                                 }
                             }
                         </select>
@@ -476,46 +490,36 @@
             var SiteId = "@UserSession.SiteId";
             var SiteName = "@UserSession.SiteName";
 
-            if (role == 3) {
-                var selectedSiteId = sessionStorage.getItem('SelectedSiteId');
-                if (selectedSiteId) {
-                    $('#drpSiteName').val(selectedSiteId);
-                    fn_ChangeSite(selectedSiteId, $('#drpSiteName option:selected').text());
-                }
-            }
+            
 
             $('#drpSiteName').change(function () {
+                
                 var SiteText = $(this).find('option:selected').text();
                 var selectedSiteId = $(this).val();
-
-                if (selectedSiteId == "all") {
-                    selectedSiteId = null;
-                    SiteText = "All Site";
-                }
-
-                sessionStorage.setItem('SelectedSiteId', selectedSiteId);
-                $('#txtsiteName').html(SiteText);
+                
+                $('#drpSiteName').text(SiteText);
                 fn_ChangeSite(selectedSiteId, SiteText);
-                location.reload();
+
             });
         });
 
         function fn_ChangeSite(selectedSiteId, SiteText) {
-            var searchText = "";
-            var searchBy = "";
+            debugger
+           
             $.ajax({
                 url: '/Home/PurchaseRequestList',
                 type: 'GET',
                 data: {
-                    searchText: searchText,
-                    searchBy: searchBy,
                     SiteId: selectedSiteId,
                     SiteName: SiteText
                 },
                 success: function (result) {
+                    debugger
                     siteloaderhide();
+                    $('#drpSiteName').text(SiteText);
                     $("#tbPndingApproval").html(result);
                     sessionStorage.setItem('SelectedSiteId', selectedSiteId);
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching purchase request list:", error);
