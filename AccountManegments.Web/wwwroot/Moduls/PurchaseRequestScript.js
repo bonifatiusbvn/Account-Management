@@ -951,8 +951,17 @@ function InsertMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
+
+            var Site = null;
+
+            if ($("#UserRoleinPO").val() != 3) {
+                Site = $("#drpSiteName").val();
+            } else {
+                Site = $("#drpSiteNameList").val()
+            }
+
             var PORequest = {
-                SiteId: $("#drpSiteNameList").val(),
+                SiteId: Site,
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
@@ -1249,9 +1258,17 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
+
+            var Site = null;
+            if ($("#UserRoleinPO").val() != 3) {
+                Site = $("#drpSiteName").val();
+            } else {
+                Site = $("#drpSiteNameList").val()
+            }
+
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: $("#drpSiteNameList").val(),
+                SiteId: Site,
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
