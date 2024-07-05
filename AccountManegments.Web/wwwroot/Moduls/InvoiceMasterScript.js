@@ -431,8 +431,15 @@ function InsertMultipleSupplierItem() {
                 };
                 ItemDetails.push(objData);
             });
+            var Site = null;
+            if ($("#UserRoleinInvoice").val() != 3) {
+                Site = $("#drpSiteName").val();
+            } else {
+                Site = $("#drpSiteNameList").val();
+            }
+
             var InvoiceDetails = {
-                SiteId: $("#drpSiteNameList").val(),
+                SiteId: Site,
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
@@ -534,9 +541,17 @@ function UpdateInvoiceDetails() {
             } else {
                 Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
             }
+
+            var Site = null;
+            if ($("#UserRoleinInvoice").val() != 3) {
+                Site = $("#drpSiteName").val();
+            } else {
+                Site = $("#drpSiteNameList").val();
+            }
+
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
-                SiteId: $("#drpSiteNameList").val(),
+                SiteId: Site,
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
