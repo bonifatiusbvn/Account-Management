@@ -24,11 +24,37 @@ namespace AccountManegments.Web.Controllers
             APIServices = aPIServices;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string searchText, string searchBy, string sortBy)
         {
-            return View();
+
+            try
+            {
+
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseRequestModel> GetSiteList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(res.data.ToString());
+
+                    return View(GetSiteList.Where(e => e.IsApproved == false));
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Request list." });
+                }
+            }
+            catch (FormatException ex)
+            {
+
+                return BadRequest(new { Message = "Invalid SiteId format." });
+            }
+
+
         }
-        public async Task<IActionResult> PurchaseRequestList(string searchText, string searchBy, string sortBy, Guid? SiteId, string SiteName)
+
+        public async Task<IActionResult> PurchaseRequestList(Guid? SiteId, string SiteName)
         {
             try
             {
@@ -38,21 +64,8 @@ namespace AccountManegments.Web.Controllers
 
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
                 string siteName = string.IsNullOrEmpty(UserSession.SiteName) ? null : new(UserSession.SiteName);
+                return Ok();
 
-                string apiUrl = $"PurchaseRequest/GetPurchaseRequestList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={SiteId}";
-
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
-
-                if (res.code == 200)
-                {
-                    List<PurchaseRequestModel> GetSiteList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(res.data.ToString());
-
-                    return PartialView("~/Views/Home/_DashbordPurchaseRequestList.cshtml", GetSiteList.Where(e => e.IsApproved == false));
-                }
-                else
-                {
-                    return BadRequest(new { Message = "Failed to retrieve Purchase Request list." });
-                }
             }
             catch (Exception ex)
             {

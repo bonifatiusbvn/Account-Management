@@ -302,7 +302,7 @@
                     @if (_userSession.UserRole == 3)
                     {
                         <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
-                            <option value="">All Site</option> 
+                            <option value="">All Site</option>
                             @if (userSites != null)
                             {
                                 foreach (var site in userSites)
@@ -320,7 +320,7 @@
                                     else
                                     {
                                         <option value="@site.SiteId">@site.SiteName</option>
-                                        
+
                                     }
 
                                 }
@@ -490,13 +490,13 @@
             var SiteId = "@UserSession.SiteId";
             var SiteName = "@UserSession.SiteName";
 
-            
+
 
             $('#drpSiteName').change(function () {
-                
+
                 var SiteText = $(this).find('option:selected').text();
                 var selectedSiteId = $(this).val();
-                
+
                 $('#drpSiteName').text(SiteText);
                 fn_ChangeSite(selectedSiteId, SiteText);
 
@@ -504,7 +504,7 @@
         });
 
         function fn_ChangeSite(selectedSiteId, SiteText) {
-           
+
             $.ajax({
                 url: '/Home/PurchaseRequestList',
                 type: 'GET',
