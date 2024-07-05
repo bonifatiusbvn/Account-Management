@@ -504,7 +504,6 @@
         });
 
         function fn_ChangeSite(selectedSiteId, SiteText) {
-            debugger
            
             $.ajax({
                 url: '/Home/PurchaseRequestList',
@@ -514,7 +513,6 @@
                     SiteName: SiteText
                 },
                 success: function (result) {
-                    debugger
                     siteloaderhide();
                     $('#drpSiteName').text(SiteText);
                     $("#tbPndingApproval").html(result);
