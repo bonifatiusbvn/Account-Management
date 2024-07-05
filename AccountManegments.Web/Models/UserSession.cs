@@ -108,6 +108,23 @@ namespace AccountManegments.Web.Models
             }
 
         }
+        public static List<Site> SiteData
+        {
+
+            get
+            {
+                if (StaticHttpContext.Session.GetObjectFromJson<List<Site>>("SiteData") == null)
+                    return new List<Site>();
+                else
+                    return StaticHttpContext.Session.GetObjectFromJson<List<Site>>("SiteData");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("SiteData", value);
+            }
+
+        }
+
         public string Token
         {
             get

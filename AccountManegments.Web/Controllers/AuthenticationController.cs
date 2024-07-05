@@ -179,7 +179,7 @@ namespace AccountManegments.Web.Controllers
                     UserSession.SiteId = userlogin.Data.SiteId?.ToString() ?? "";
                     UserSession.SiteName = userlogin.Data.SiteName ?? "";
                     UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
-
+                    UserSession.SiteData = userlogin.Data.userSites;
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                     return RedirectToAction("Index", "Home");

@@ -321,7 +321,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                 if (tblUser != null)
                 {
-                    // Generate token
+
                     LoginRequest user = new LoginRequest()
                     {
                         UserName = tblUser.User.UserName,
@@ -329,7 +329,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     };
                     var authToken = GenerateToken(user);
 
-                    // Other login logic...
+
                     if (tblUser.User.IsActive)
                     {
                         if (tblUser.User.SiteId != null)
@@ -376,6 +376,15 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                                 userModel.FromPermissionData = fromPermissionData;
 
+                                List<Site> usersites = await (from s in Context.Sites
+                                                              where s.IsActive == true
+                                                              select new Site
+                                                              {
+                                                                  SiteId = s.SiteId,
+                                                                  SiteName = s.SiteName,
+                                                              }).ToListAsync();
+
+                                userModel.userSites = usersites;
 
                             }
                             else
@@ -415,6 +424,16 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                                      Delete = rp.IsDeleteAllow,
                                                                                  }).ToListAsync();
                                 userModel.FromPermissionData = fromPermissionData;
+
+                                List<Site> usersites = await (from s in Context.Sites
+                                                              where s.IsActive == true
+                                                              select new Site
+                                                              {
+                                                                  SiteId = s.SiteId,
+                                                                  SiteName = s.SiteName,
+                                                              }).ToListAsync();
+
+                                userModel.userSites = usersites;
 
                             }
                             else
