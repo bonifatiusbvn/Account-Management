@@ -39,10 +39,7 @@
                             @foreach (var item in Model)
                             {
                                 <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
-                                    @if (UserSession.SiteId == "")
-                                    {
-                                        <td>@item.SiteName</td>
-                                    }
+                                    <td>@item.SiteName</td>
                                     <td>@item.ItemName</td>
                                     <td>@item.UnitName</td>
                                     <td>@item.Quantity</td>
