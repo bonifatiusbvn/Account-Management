@@ -214,9 +214,8 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> DisplaySiteAddressList(Guid SiteId)
+        public async Task<JsonResult> DisplaySiteAddressList(Guid SiteId)
         {
             try
             {
@@ -234,11 +233,11 @@ namespace AccountManegments.Web.Controllers
                     {
                         SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
                     }
-                    return Ok(SiteDetails);
+                    return new JsonResult(SiteDetails);
                 }
                 else
                 {
-                    return Ok(SiteName);
+                    return new JsonResult(SiteName);
                 }
             }
             catch (Exception ex)
@@ -246,5 +245,6 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
     }
 }

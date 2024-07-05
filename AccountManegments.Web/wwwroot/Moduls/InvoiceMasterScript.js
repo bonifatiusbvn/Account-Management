@@ -1093,7 +1093,6 @@ function addShippingAddress() {
     siteloadershow();
     if ($("#shippingAddressForm").valid()) {
         var address = $("#textmdAddress").val();
-        var sitename = $("#textInvoiceSiteName").val();
 
         if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
             siteloaderhide();
@@ -1116,13 +1115,10 @@ function addShippingAddress() {
             '</div>' +
             '<div class="col-2 col-sm-2">' +
             '<a id="remove" class="btn text-primary text-center" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
-            '</div>'+
+            '</div>' +
             '</div>';
 
         $('#dvShippingAddress').append(newRow);
-        updateProductTotalAmount();
-        updateTotals();
-        updateRowNumbers();
         siteloaderhide();
     } else {
         siteloaderhide();
@@ -1141,21 +1137,50 @@ function fn_OpenAddproductmodal() {
     }
 }
 
-$("#drpSiteNameList").change(function () {
-    if ($(this).val() != "") {
-        $("#frmdrpdashbord").css("border", "");
-        $("#siteErrorMesssage").html("").css("color", "");
-    }
-});
+//$("#drpSiteNameList").change(function () {
+//    if ($(this).val() != "") {debugger
+//        $("#frmdrpdashbord").css("border", "");
+//        $("#siteErrorMesssage").html("").css("color", "");
+//        debugger
+        
+//    }
+//    else {
+//        $('#dvShippingAddress').empty();
+//    }
+//});
 
-function fn_GetSiteAddressBySession(selectedSiteId) {debugger
+//$(document).ready(function () {
+//    var SiteId = $('#drpSiteName').val();
+//    if (SiteId != undefined) {
+//        $.ajax({
+//            url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+//            success: function (result) {
+//                $('#dvShippingAddress').empty();
+//                if (Array.isArray(result)) {
+//                    if (result.length > 0) {
+//                        $('#textmdAddress').val(result[0].address);
+//                    }
+//                    $.each(result, function (i, data) {
+//                        $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+//                    });
+//                } else {
+//                    $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
+//                }
+//                addShippingAddress();
+//            }
+//        });
+//    }
+//})
+
+fn_ChangeSessionSiteAddress();
+
+function fn_ChangeSessionSiteAddress() {debugger
+    var SiteId = $('#drpSiteNameList').val();
     $.ajax({
-        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + selectedSiteId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
+        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
         success: function (result) {
             debugger
+            $('#dvShippingAddress').empty();
             if (Array.isArray(result)) {
                 if (result.length > 0) {
                     $('#textmdAddress').val(result[0].address);
@@ -1163,11 +1188,9 @@ function fn_GetSiteAddressBySession(selectedSiteId) {debugger
                 $.each(result, function (i, data) {
                     $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
                 });
-            }
-            else {
+            } else {
                 $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
             }
-            location.reload();
             addShippingAddress();
         }
     });
