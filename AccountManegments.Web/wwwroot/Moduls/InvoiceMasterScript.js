@@ -959,22 +959,31 @@ function InvoiceSortTable() {
     });
 }
 
-function printInvoiceDiv() {
-    var printWindow = window.open('', '_blank');
+function printInvoiceDiv()
+{
     var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
-    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-    var stylesheetHTML = '';
-
-    stylesheets.forEach(function (stylesheet) {
-        if (stylesheet.href.includes('~/assets/css/') || stylesheet.href.includes('https://')) {
-            stylesheetHTML += '<link rel="stylesheet" type="text/css" href="' + stylesheet.href + '">';
-        }
-    });
-
-    printWindow.document.write('<html><head>' + stylesheetHTML + '</head><body>' + printContents + '</body></html>');
-    printWindow.document.close();
-    printWindow.print();
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
 }
+
+//function printInvoiceDiv() {
+//    var printWindow = window.open('', '_blank');
+//    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
+//    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+//    var stylesheetHTML = '';
+
+//    stylesheets.forEach(function (stylesheet) {
+//        if (stylesheet.href.includes('~/assets/css/') || stylesheet.href.includes('https://')) {
+//            stylesheetHTML += '<link rel="stylesheet" type="text/css" href="' + stylesheet.href + '">';
+//        }
+//    });
+
+//    printWindow.document.write('<html><head>' + stylesheetHTML + '</head><body>' + printContents + '</body></html>');
+//    printWindow.document.close();
+//    printWindow.print();
+//}
 
 function getSupplierDetail(SupplierId) {
     siteloadershow();
