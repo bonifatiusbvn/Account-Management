@@ -8,257 +8,272 @@
 @{
     var firstItem = Model;
 }
+<style>
+        @@media print {
+            body * {
+                visibility: hidden;
+            }
+            #displayInvoiceDetail, #displayInvoiceDetail * {
+                visibility: visible;
+            }
+            #displayInvoiceDetail {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .invoice-table td {
+                border: none !important;
+                padding: 2px !important;
+            }
+        }
+    </style>
 
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="row justify-content-center">
-            <div class="card border">
-                <div class="card-title text-center"><h5>Tax Invoice</h5></div>
-                <div class="card-body" id="displayInvoiceDetail">
-                    <div class="col-lg-12">
-                        <div class="row g-0">
-                            <div class="col-5">
+<div class="row justify-content-center" id="displayInvoiceDetail">
+    <div class="card border">
+        <div class="card-title text-center"><h5>Tax Invoice</h5></div>
+        <div class="card-body">
+            <div class="col-lg-12">
+                <div class="row g-0">
+                    <div class="col-5">
+                        <div class="border">
+                            <span class="text-muted"><b>@firstItem.SupplierName</b></span> <br />
+                            <span class="text-muted">@firstItem.SupplierBuildingName,@firstItem.SupplierArea,</span><br />
+                            <span class="text-muted">@firstItem.SupplierCity</span><br />
+                            <span class="text-muted text-uppercase">GST-No.:@firstItem.SupplierGstNo</span><br />
+                            <p class="text-muted">State Name : @firstItem.SupplierState , Code: @firstItem.SupplierPincode</p>
+                        </div>
+                        <div class="border">
+                            <p class="text-muted"><b>Consignee (Ship to):</b></p>
+                            <span class="text-muted text-uppercase"><b>@firstItem.SiteName</b></span><br />
+                            <span class="text-muted">@firstItem.ShippingAddress</span><br />
+                        </div>
+                        <div class="border">
+                            <p class="text-muted"><b>Buyer (Bill to)</b></p>
+                            <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
+                            <span class="text-muted text-uppercase">@firstItem.CompanyAddress,@firstItem.CompanyArea</span><br />
+                            <span class="text-muted">@firstItem.CompanyCityName</span><br />
+                            <span class="text-muted text-uppercase"><b>GST-No.:@firstItem.CompanyGstNo</b></span>
+                            <p class="text-muted">State Name : @firstItem.CompanyStateName , Code: @firstItem.CompanyPincode</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="row g-0 align-items-stretch">
+                            <div class="col-6">
                                 <div class="border">
-                                    <span class="text-muted"><b>@firstItem.SupplierName</b></span> <br />
-                                    <span class="text-muted">@firstItem.SupplierBuildingName,@firstItem.SupplierArea,</span><br />
-                                    <span class="text-muted">@firstItem.SupplierCity</span><br />
-                                    <span class="text-muted text-uppercase">GST-No.:@firstItem.SupplierGstNo</span><br />
-                                    <p class="text-muted">State Name : @firstItem.SupplierState , Code: @firstItem.SupplierPincode</p>
+                                    <label class="form-label">Invoice No</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
                                 </div>
                                 <div class="border">
-                                    <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                    <span class="text-muted text-uppercase"><b>@firstItem.SiteName</b></span><br />
-                                    <span class="text-muted">@firstItem.ShippingAddress</span><br />
+                                    <label class="form-label">Delivery Note</label>
+                                    <p><span class="text-muted"><b></b></span></p>
                                 </div>
                                 <div class="border">
-                                    <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                                    <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
-                                    <span class="text-muted text-uppercase">@firstItem.CompanyAddress,@firstItem.CompanyArea</span><br />
-                                    <span class="text-muted">@firstItem.CompanyCityName</span><br />
-                                    <span class="text-muted text-uppercase"><b>GST-No.:@firstItem.CompanyGstNo</b></span>
-                                    <p class="text-muted">State Name : @firstItem.CompanyStateName , Code: @firstItem.CompanyPincode</p>
+                                    <label class="form-label">Reference No. & Date.</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Buyer's Order No</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Dispatch Doc No.</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.DispatchBy</b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Dispatch through</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
                                 </div>
                             </div>
-                            <div class="col-7">
-                                <div class="row g-0 align-items-stretch">
-                                    <div class="col-6">
-                                        <div class="border">
-                                            <label class="form-label">Invoice No</label>
-                                            <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Delivery Note</label>
-                                            <p><span class="text-muted"><b></b></span></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Reference No. & Date.</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Buyer's Order No</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Dispatch Doc No.</label>
-                                            <p class="text-muted text-uppercase"><b>@firstItem.DispatchBy</b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Dispatch through</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="border">
-                                            <label class="form-label">Dated</label>
-                                            <p><span class="text-muted text-uppercase"><b>@firstItem.Date?.ToString("dd/MM/yyyy")</b></span></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Mode/Terms of Payment</label>
-                                            <p class="text-muted text-uppercase"><b>@firstItem.PaymentTerms</b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Other Reference</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Dated</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Delivery Note Date</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                        <div class="border">
-                                            <label class="form-label">Destinations</label>
-                                            <p class="text-muted text-uppercase"><b></b></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="border">
-                                            <label class="form-label">Terms of Delivery</label>
-                                            <p><span class="text-muted text-uppercase"><b></b></span></p>
-                                        </div>
-                                    </div>
+                            <div class="col-6">
+                                <div class="border">
+                                    <label class="form-label">Dated</label>
+                                    <p><span class="text-muted text-uppercase"><b>@firstItem.Date?.ToString("dd/MM/yyyy")</b></span></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Mode/Terms of Payment</label>
+                                    <p class="text-muted text-uppercase"><b>@firstItem.PaymentTerms</b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Other Reference</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Dated</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Delivery Note Date</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+                                </div>
+                                <div class="border">
+                                    <label class="form-label">Destinations</label>
+                                    <p class="text-muted text-uppercase"><b></b></p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border">
+                                    <label class="form-label">Terms of Delivery</label>
+                                    <p><span class="text-muted text-uppercase"><b></b></span></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex border">
-                        <table class="table table-border text-center table-nowrap align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="border" scope="col">SRr.No.</th>
-                                    <th class="border" scope="col">Product Details</th>
-                                    <th class="border" scope="col">Price</th>
-                                    <th class="border" scope="col">Quantity</th>
-                                    <th class="border" scope="col">Unit</th>
-                                    <th class="border" scope="col">Discount</th>
-                                    <th class="border" scope="col">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody id="products-list">
-                                @{
-                                    int index = 1;
-                                    decimal? subtotal = 0;
-                                }
-                                @foreach (var item in Model.ItemList)
-                                {
-                                    subtotal = (item.Quantity * item.PricePerUnit);
-                                    <tr class="product">
-                                        <td>@index</td>
-                                        <td class="text-start">@item.ItemName</td>
-                                        <td>₹@item.PricePerUnit</td>
-                                        <td>@item.Quantity</td>
-                                        <td>@item.UnitTypeName</td>
-                                        <td>@item.DiscountAmount (@item.DiscountPer%)</td>
-                                        <td>₹@subtotal</td>
-                                    </tr>
-                                    index++;
-                                }
+                </div>
+            </div>
+            <div class="d-flex border">
+                <table class="table table-border text-center table-nowrap align-middle mb-0 invoice-table">
+                    <thead>
+                        <tr>
+                            <th class="border" scope="col">SRr.No.</th>
+                            <th class="border" scope="col">Product Details</th>
+                            <th class="border" scope="col">Price</th>
+                            <th class="border" scope="col">Quantity</th>
+                            <th class="border" scope="col">Unit</th>
+                            <th class="border" scope="col">Discount</th>
+                            <th class="border" scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                            decimal? subtotal = 0;
+                        }
+                        @foreach (var item in Model.ItemList)
+                        {
+                            subtotal = (item.Quantity * item.PricePerUnit);
+                            <tr class="product">
+                                <td class="border">@index</td>
+                                <td class="text-start border">@item.ItemName</td>
+                                <td class="border">₹@item.PricePerUnit</td>
+                                <td class="border">@item.Quantity</td>
+                                <td class="border">@item.UnitTypeName</td>
+                                <td class="border">@item.DiscountAmount (@item.DiscountPer%)</td>
+                                <td class="border">₹@subtotal</td>
+                            </tr>
+                            index++;
+                        }
 
-                                <tr>
-                                    <td></td>
-                                    <td class="text-end">GST</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>₹@firstItem.TotalGstamount</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td class="text-end">Discount</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>@firstItem.TotalDiscount</td>
-                                </tr>
-                                <tr >
-                                    <td></td>
-                                    <td class="text-end">Round Off</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>@firstItem.Roundoff</td>
-                                </tr>
-                                <tr class="border-top">
-                                    <td></td>
-                                    <td class="text-end">Total</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>@firstItem.TotalDiscount</td>
-                                    <td>₹@firstItem.TotalAmountInvoice</td>
-                                </tr>
-                            </tbody>
-                        </table><!--end table-->
-                    </div>
-                    <div class="flex-grow-1 col-12 border">
-                        <span class="text-muted">Amount Chargeable (in words)</span><br />
-                        <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
-                    </div>
-                    <div class="d-flex border">
-                        <table class="table table-border text-center table-nowrap align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="border col-4">HSN / SAC</th>
-                                    <th class="border col-2">Taxable value</th>
-                                    <th class="border col-2">
-                                        <div class="d-flex">
-                                            <div class="flex-grow-1 col-5">
-                                                <label class="form-label">GST%</label>
-                                            </div>
-                                            <div class="flex-grow-1 col-7">
-                                                <label class="form-label">Amount</label>
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th class="text-end border col-2">Total Tax Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody id="products-list">
-                                @{
-                                    decimal? subTotal = 0;
-                                    decimal? taxTotal = 0;
-                                }
-                                @foreach (var item in Model.ItemList)
-                                {
-                                    subTotal = (item.Quantity * item.PricePerUnit);
-                                    taxTotal = +subtotal;
-                                    <tr>
-                                        <td id="txtHSN">@item.Hsncode</td>
-                                        <td id="txtTaxablevalue">₹@subTotal</td>
-                                        <td id="txtgstpercentage">@item.GstPercentage%</td>
-                                        <td id="txtgsttotal">₹@item.Gstamount</td>
-                                    </tr>
-                                }
-                                <tr class="border-top">
-                                    <td>Total</td>
-                                    <td>@taxTotal</td>
-                                    <td></td>
-                                    <td>₹@firstItem.TotalGstamount</td>
-                                </tr>
-                            </tbody>
-                        </table><!--end table-->
-                    </div>
-                    <div class="border">
-                        <div class="flex-grow-1 col-12">
-                            <span class="text-muted">Tax Amount (in words) : </span>
-                            <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span> <br /> <br /> <br /> <br />
-                        </div>
-                        <div class="col-12">
-                            <div class="row g-0">
-                                <div class="col-6">
-                                    <span><u>Declaration</u></span><br />
-                                    <span>We declare that this invoice shows the actual price of the</span>
-                                    <span>goods described and that all particulars are true and correct. </span>
-                                </div>
-                                <div class="col-6 justify-content-end">
-                                    <div class="border border-box text-end p-1" style="border: solid black">
-                                        <p class="text-muted"><b>@firstItem.SupplierName</b></p>
-                                        <br />
-                                        <p class="text-muted">Authorised Signatory</p>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">GST</td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">₹@firstItem.TotalGstamount</td>
+                        </tr>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">Discount</td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">@firstItem.TotalDiscount</td>
+                        </tr>
+                        <tr>
+                            <td class="border"></td>
+                            <td class="text-end border">Round Off</td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">@firstItem.Roundoff</td>
+                        </tr>
+                        <tr class="border-top">
+                            <td class="border"></td>
+                            <td class="text-end border">Total</td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border"></td>
+                            <td class="border">@firstItem.TotalDiscount</td>
+                            <td class="border">₹@firstItem.TotalAmountInvoice</td>
+                        </tr>
+                    </tbody>
+                </table><!--end table-->
+            </div>
+            <div class="flex-grow-1 col-12 border">
+                <span class="text-muted">Amount Chargeable (in words)</span><br />
+                <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
+            </div>
+            <div class="d-flex border">
+                <table class="table table-border text-center table-nowrap align-middle mb-0 invoice-table">
+                    <thead>
+                        <tr>
+                            <th class="border col-4">HSN / SAC</th>
+                            <th class="border col-2">Taxable value</th>
+                            <th class="border col-2">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 col-5">
+                                        <label class="form-label">GST%</label>
+                                    </div>
+                                    <div class="flex-grow-1 col-7">
+                                        <label class="form-label">Amount</label>
                                     </div>
                                 </div>
+                            </th>
+                            <th class="text-end border col-2">Total Tax Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-list">
+                        @{
+                            decimal? subTotal = 0;
+                            decimal? taxTotal = 0;
+                        }
+                        @foreach (var item in Model.ItemList)
+                        {
+                            subTotal = (item.Quantity * item.PricePerUnit);
+                            taxTotal = +subtotal;
+                            <tr>
+                                <td id="txtHSN">@item.Hsncode</td>
+                                <td id="txtTaxablevalue">₹@subTotal</td>
+                                <td id="txtgstpercentage">@item.GstPercentage%</td>
+                                <td id="txtgsttotal">₹@item.Gstamount</td>
+                            </tr>
+                        }
+                        <tr class="border-top">
+                            <td>Total</td>
+                            <td>@taxTotal</td>
+                            <td></td>
+                            <td>₹@firstItem.TotalGstamount</td>
+                        </tr>
+                    </tbody>
+                </table><!--end table-->
+            </div>
+            <div class="border">
+                <div class="flex-grow-1 col-12">
+                    <span class="text-muted">Tax Amount (in words) : </span>
+                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span> <br /> <br /> <br /> <br />
+                </div>
+                <div class="col-12">
+                    <div class="row g-0">
+                        <div class="col-6">
+                            <span><u>Declaration</u></span><br />
+                            <span>We declare that this invoice shows the actual price of the</span>
+                            <span>goods described and that all particulars are true and correct. </span>
+                        </div>
+                        <div class="col-6 justify-content-end">
+                            <div class="border border-box text-end p-1" style="border: solid black">
+                                <p class="text-muted"><b>@firstItem.SupplierName</b></p>
+                                <br />
+                                <p class="text-muted">Authorised Signatory</p>
                             </div>
                         </div>
-
                     </div>
-                    <div class="card d-print-none">
-                        <div class="card-body">
-                            <div class="d-lg-flex align-items-center gap-3">
+                </div>
 
-                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true)))
-                                {
-                                    <a class="btn btn-primary btn-ecomm" href="EditInvoiceDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Invoice</a>
-                                }
-                                <a class="btn btn-primary btn-ecomm" onclick="printInvoiceDiv();"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
-                            </div>
-                        </div>
+            </div>
+            <div class="card d-print-none">
+                <div class="card-body">
+                    <div class="d-lg-flex align-items-center gap-3">
+
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true)))
+                        {
+                            <a class="btn btn-primary btn-ecomm" href="EditInvoiceDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Invoice</a>
+                        }
+                        <a class="btn btn-primary btn-ecomm" onclick="fn_PrintInvoicePage();"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
                     </div>
                 </div>
             </div>
@@ -267,7 +282,6 @@
 </div>
 
 
-
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-    }
+}

@@ -1148,3 +1148,6 @@ function fn_OpenAddproductmodal() {
     }
 }
 
+function fn_PrintInvoicePage() {
+    window.print();
+}
