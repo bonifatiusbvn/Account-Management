@@ -245,6 +245,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          GstPercentage = a.Gstper,
                                                          DiscountAmount = a.DiscountAmount,
                                                          DiscountPer = a.DiscountPer,
+                                                         Hsncode = i.Hsncode,
                                                      }).ToList();
 
 

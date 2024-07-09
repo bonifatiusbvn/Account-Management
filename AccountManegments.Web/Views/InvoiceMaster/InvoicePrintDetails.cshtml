@@ -116,20 +116,20 @@
         margin: 0pt;
     }
 
-    table.td {
-        border-top-style: solid;
-        border-top-width: 1pt;
-        border-left-style: solid;
-        border-left-width: 1pt;
-        border-right-style: solid;
-        border-right-width: 1pt
-    }
-
     table, tbody {
         vertical-align: top;
         overflow: visible;
     }
 
+    .row {
+        --bs-gutter-x: -46.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: calc(var(--bs-gutter-y)* -1);
+        margin-right: calc(var(--bs-gutter-x)* -.5);
+        margin-left: calc(var(--bs-gutter-x)* -.5);
+    }
 </style>
 
 @{
@@ -264,16 +264,16 @@
             <td style="width:246pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-left: 77pt;text-indent: 0pt;line-height: 9pt;text-align: left;">Description of Goods</p>
             </td>
-            <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+            <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s5" style="padding-left: 5pt;text-indent: 0pt;line-height: 9pt;text-align: center;">HSN/SAC</p>
+            </td>
+            <td style="width:180pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="text-indent: 0pt;line-height: 9pt;text-align: center;">Quantity</p>
             </td>
             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p class="s5" style="padding-left: 17pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Rate</p>
+                <p class="s5" style="padding-left: 7pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Rate</p>
             </td>
-            <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p class="s5" style="padding-left: 5pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Unit</p>
-            </td>
-            <td style="width:75pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+            <td style="width:15pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-left: 7pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Discount</p>
             </td>
             <td style="width:77pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -298,26 +298,27 @@
                     <p class="s1" style="padding-top: 5pt;padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@item.ItemName</p>
                 </td>
                 <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                    <p class="s1" style="padding-top: 5pt;padding-right: 1pt;text-indent: 0pt;text-align: center;">@item.Quantity</p>
+                    <p class="s1" style="padding-top: 5pt;padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@item.Hsncode</p>
+                </td>
+                <td style="width:180pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <p class="s1" style="padding-top: 5pt;padding-right: 1pt;text-indent: 0pt;text-align: center;">@item.Quantity @trimmedUnitTypeName</p>
                 </td>
                 <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s5" style="padding-top: 5pt;padding-left: 3pt;text-indent: 0pt;text-align: center;">@item.PricePerUnit</p>
                 </td>
-                <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                    <p class="s1" style="padding-top: 5pt;padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@trimmedUnitTypeName</p>
-                </td>
                 @if (item.DiscountAmount != 0)
                 {
-                    <td style="width:85pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                         <p class="s5" style="padding-top: 5pt;text-indent: 0pt;text-align: center;">
-                            @item.DiscountAmount (@item.DiscountPer%)
+                            @item.DiscountPer%
                         </p>
                     </td>
                 }
                 else
                 {
-                    <td style="width:85pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                    <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                         <p class="s5" style="padding-top: 5pt;text-indent: 0pt;text-align: center;">
+                            0.0%
                         </p>
                     </td>
                 }
@@ -334,13 +335,13 @@
             <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
             <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:75pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -359,14 +360,14 @@
             <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s6" style="padding-top: 20pt;padding-left: 155pt;text-indent: 0pt;line-height: 11pt;text-align: right;">Discount</p>
             </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
             <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s7" style="padding-top: 2pt;padding-right: 1pt;text-indent: 0pt;line-height: 11pt;text-align: right;"></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:75pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s7" style="padding-top: 2pt;padding-left: 3pt;text-indent: 0pt;line-height: 11pt;text-align: left;"></p>
@@ -391,14 +392,14 @@
             <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s6" style="padding-top: 2pt;padding-left: 155pt;text-indent: 0pt;line-height: 11pt;text-align: right;">GST</p>
             </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
             <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s7" style="padding-top: 2pt;padding-right: 1pt;text-indent: 0pt;line-height: 11pt;text-align: right;"></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:75pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s7" style="padding-top: 2pt;padding-left: 3pt;text-indent: 0pt;line-height: 11pt;text-align: left;"></p>
@@ -414,13 +415,13 @@
             <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s6" style="padding-right: 1pt;text-indent: 0pt;line-height: 11pt;text-align: right;">Round Off</p>
             </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
-            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
-            </td>
             <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
+            <td style="width:53pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:75pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -446,14 +447,14 @@
             <td style="width:246pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-right: 1pt;text-indent: 0pt;line-height: 10pt;text-align: right;">Total</p>
             </td>
+            <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br></p>
+            </td>
             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s1" style="padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;"></p>
-            </td>
-            <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:75pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p style="text-indent: 0pt;text-align: center;"> <b>₹@firstItem.TotalDiscount</b></p>
@@ -496,25 +497,25 @@
             SubTotal = (item.Quantity * item.PricePerUnit);
             taxTotal += SubTotal;
             <tr style="height:10pt">
-                <td style="width:214pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2">
+                <td style="width:214pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2">
                     <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 9pt;text-align: left;">@item.Hsncode</p>
                 </td>
-                <td style="width:59pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <td style="width:59pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s5" style="padding-left: 9pt;text-indent: 0pt;line-height: 9pt;text-align: center;">₹@SubTotal</p>
                 </td>
                 @if (item.GstPercentage != 0)
                 {
-                    <td style="width:94pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
+                    <td style="width:94pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
                         <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 9pt;text-align: center;">@item.GstPercentage%</p>
                     </td>
                 }
                 else
                 {
-                    <td style="width:94pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
+                    <td style="width:94pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
                         <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 9pt;text-align: center;"></p>
                     </td>
                 }
-                <td style="width:59pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <td style="width:59pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s5" style="padding-right: 1pt;text-indent: 0pt;line-height: 9pt;text-align: center;">₹@item.Gstamount</p>
                 </td>
             </tr>
