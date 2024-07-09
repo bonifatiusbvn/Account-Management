@@ -10,6 +10,11 @@ using AccountManegments.Web.Models;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -48,7 +53,7 @@ namespace AccountManegments.Web.Controllers
                 }
 
                 var SiteId = UserSession.SiteId;
-                if(SiteId == "")
+                if (SiteId == "")
                 {
                     ViewBag.SiteAddress = "";
                 }
@@ -78,7 +83,7 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.SiteAddress = SiteName[0].Address;
                     }
                 }
-               
+
                 return View(invoiceDetails);
             }
             catch (Exception ex)
@@ -100,10 +105,10 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { Code = 400,Message = "Failed to create invoice",});
+                    return Ok(new { Code = 400, Message = "Failed to create invoice", });
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
@@ -130,7 +135,7 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(res.data.ToString());
-                    if(SiteId != null)
+                    if (SiteId != null)
                     {
                         GetInvoiceList = GetInvoiceList.Where(a => a.SiteId == SiteId).ToList();
                     }
@@ -498,5 +503,93 @@ namespace AccountManegments.Web.Controllers
             }
 
         }
+
+
+
+
+        public async Task<IActionResult> InvoicePrintDetails(Guid Id)
+        {
+            try
+            {
+                SupplierInvoiceMasterView order = new SupplierInvoiceMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                    var number = order.TotalAmountInvoice;
+                    var totalAmountInWords = NumberToWords((decimal)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = order.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<IActionResult> PrintInvoiceDetails(Guid Id)
+        {
+            try
+            {
+                InvoicePrintDetails(Id);
+                SupplierInvoiceMasterView order = new SupplierInvoiceMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                    var number = order.TotalAmountInvoice;
+                    var totalAmountInWords = NumberToWords((decimal)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = order.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
+                }
+
+                var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order);
+                return Content(htmlContent, "text/html");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<string> RenderViewToStringAsync(string viewName, object model)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var viewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { Model = model };
+            var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
+            var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
+
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"View '{viewName}' was not found.");
+                }
+
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewData,
+                    tempData,
+                    stringWriter,
+                    new HtmlHelperOptions()
+                );
+
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
+            }
+        }
+
+
     }
 }

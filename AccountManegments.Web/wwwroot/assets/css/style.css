@@ -1811,3 +1811,12 @@ img.displayImage {
         page-break-inside: avoid;
     }
 }
+
+table.td {
+    border-top-style: solid;
+    border-top-width: 1pt;
+    border-left-style: solid;
+    border-left-width: 1pt;
+    border-right-style: solid;
+    border-right-width: 1pt
+}
