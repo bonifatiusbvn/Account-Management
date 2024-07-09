@@ -78,7 +78,7 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.SiteAddress = SiteName[0].Address;
                     }
                 }
-               
+
                 return View(invoiceDetails);
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace AccountManegments.Web.Controllers
                     return Ok(new { Code = 400,Message = "Failed to create invoice",});
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
@@ -396,27 +396,27 @@ namespace AccountManegments.Web.Controllers
             {
                 if ((integerPart / 1000000) > 0)
                 {
-                    words += NumberToWords(integerPart / 1000000) + " million ";
+                    words += NumberToWords(integerPart / 1000000) + " Million ";
                     integerPart %= 1000000;
                 }
 
                 if ((integerPart / 1000) > 0)
                 {
-                    words += NumberToWords(integerPart / 1000) + " thousand ";
+                    words += NumberToWords(integerPart / 1000) + " Thousand ";
                     integerPart %= 1000;
                 }
 
                 if ((integerPart / 100) > 0)
                 {
-                    words += NumberToWords(integerPart / 100) + " hundred ";
+                    words += NumberToWords(integerPart / 100) + " Hundred ";
                     integerPart %= 100;
                 }
 
 
                 if (integerPart > 0)
                 {
-                    var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
-                    var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+                    var unitsMap = new[] { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+                    var tensMap = new[] { "Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
 
                     if (words != "")
                         words += " ";
@@ -427,7 +427,7 @@ namespace AccountManegments.Web.Controllers
                     {
                         words += tensMap[integerPart / 10];
                         if ((integerPart % 10) > 0)
-                            words += "-" + unitsMap[integerPart % 10];
+                            words += " " + unitsMap[integerPart % 10];
                     }
                 }
             }
