@@ -9,11 +9,7 @@
     var firstItem = Model;
 }
 <style type="text/css">
-    * {
-        margin: 0;
-        padding: 0;
-        text-indent: 0;
-    }
+
 
     h1 {
         color: black;
@@ -130,29 +126,19 @@
         overflow: visible;
     }
 
-    .row {
-        --bs-gutter-x: -46.5rem;
-        --bs-gutter-y: 0;
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: calc(var(--bs-gutter-y)* -1);
-        margin-right: calc(var(--bs-gutter-x)* -.5);
-        margin-left: calc(var(--bs-gutter-x)* -.5);
-    }
 </style>
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
     </div>
 </div>
 
-<div class=" radius-10 w-100">
+<div class=" adius-10 w-100">
     <div class="my-3 border-bottom"></div>
     <div class="row justify-content-center" id="displayInvoiceDetail">
         <div class="card border">
             <div class="card-title text-center"><h5>Tax Invoice</h5></div>
             <div class="card-body">
-                <table style="border-collapse:collapse;margin-left:6.06452pt"
-                       cellspacing="0">
+                <table style="border-collapse:collapse;margin-left:6.06452pt;width:1200px" cellspacing="0">
                     <tbody>
                         <tr style="height:26pt">
                             <td style="width:261pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2" rowspan="3">
@@ -575,7 +561,7 @@
                             {
                                 <a class="btn btn-primary btn-ecomm" href="EditInvoiceDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Invoice</a>
                             }
-                            <a class="btn btn-primary btn-ecomm" id="PrintInvoicePage"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
+                            <a class="btn btn-primary btn-ecomm" onclick="printinvoice()"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
                         </div>
                     </div>
 
@@ -588,21 +574,6 @@
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-    <script>
-        document.getElementById('PrintInvoicePage').addEventListener('click', function () {
-            debugger
-            var invoiceId = '@firstItem.Id';
-            fetch(`/InvoiceMaster/PrintInvoiceDetails?Id=${invoiceId}`)
-                .then(response => response.text())
-                .then(htmlContent => {
-                    var printWindow = window.open('', '', 'width=800,height=600');
-                    printWindow.document.open();
-                    printWindow.document.write(htmlContent);
-                    printWindow.document.close();
-                    printWindow.print();
-                })
-                .catch(error => console.error('Error fetching the invoice details:', error));
-        });
-    </script>
+
 }
 

@@ -959,8 +959,7 @@ function InvoiceSortTable() {
     });
 }
 
-function printInvoiceDiv()
-{
+function printInvoiceDiv() {
     var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
     var originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
@@ -1148,6 +1147,13 @@ function fn_OpenAddproductmodal() {
     }
 }
 
-function fn_PrintInvoicePage() {
-    window.print();
+function printinvoice() {
+
+    var divToPrint = document.getElementById('displayInvoiceDetail');
+
+    var newWin = window.open('', 'Print-Window');
+
+    newWin.document.open();
+
+    newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 }
