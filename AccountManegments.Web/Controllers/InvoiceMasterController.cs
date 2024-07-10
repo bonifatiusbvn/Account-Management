@@ -493,15 +493,12 @@ namespace AccountManegments.Web.Controllers
 
         }
 
-
-
-
         public async Task<IActionResult> InvoicePrintDetails(Guid Id)
         {
             try
             {
                 SupplierInvoiceMasterView order = new SupplierInvoiceMasterView();
-                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
+                ApiResponseModel response = await APIServices.GetAsync("", $"SupplierInvoice/GetSupplierInvoiceById?Id={Id}");
                 if (response.code == 200)
                 {
                     order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
@@ -520,27 +517,19 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
         public async Task<IActionResult> PrintInvoiceDetails(Guid Id)
         {
             try
             {
-                InvoicePrintDetails(Id);
-                SupplierInvoiceMasterView order = new SupplierInvoiceMasterView();
-                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
-                if (response.code == 200)
-                {
-                    order = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
-                    var number = order.TotalAmountInvoice;
-                    var totalAmountInWords = NumberToWords((decimal)number);
-                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
-                    var gstamt = order.TotalGstamount;
-                    var totalGstInWords = NumberToWords((decimal)gstamt);
-                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
-                }
+                IActionResult result = await InvoicePrintDetails(Id);
 
-                var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order, ViewData);
-                return Content(htmlContent, "text/html");
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as SupplierInvoiceMasterView;
+                    var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
             }
             catch (Exception ex)
             {
@@ -572,12 +561,9 @@ namespace AccountManegments.Web.Controllers
                     stringWriter,
                     new HtmlHelperOptions()
                 );
-
                 await viewResult.View.RenderAsync(viewContext);
                 return stringWriter.ToString();
             }
         }
-
-
     }
 }
