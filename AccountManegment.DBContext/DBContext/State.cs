@@ -9,6 +9,8 @@ public partial class State
 
     public string StatesName { get; set; } = null!;
 
+    public int? StateCode { get; set; }
+
     public int CountryId { get; set; }
 
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
