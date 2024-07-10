@@ -63,7 +63,6 @@ namespace AccountManegments.Web.Controllers
                     ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
                     if (res.code == 200)
                     {
-
                         SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
                     }
 
@@ -73,7 +72,6 @@ namespace AccountManegments.Web.Controllers
                         ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
                         if (response.code == 200)
                         {
-
                             SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
                         }
                         ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName;
@@ -149,7 +147,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -165,9 +162,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "SupplierInvoice/DeleteSupplierInvoice?Id=" + Id);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -202,20 +197,15 @@ namespace AccountManegments.Web.Controllers
                     {
                         return BadRequest("Failed to deserialize API response");
                     }
-
-
                     return new JsonResult(tupleResult);
-
                 }
                 else
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
         }
@@ -494,7 +484,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 return RedirectToAction("CreateInvoice", new { id = Id });
             }
             catch (Exception ex)
@@ -550,7 +539,7 @@ namespace AccountManegments.Web.Controllers
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
 
-                var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order);
+                var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order, ViewData);
                 return Content(htmlContent, "text/html");
             }
             catch (Exception ex)
@@ -559,11 +548,10 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        private async Task<string> RenderViewToStringAsync(string viewName, object model)
+        private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
         {
             var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
             var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
-            var viewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { Model = model };
             var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
             var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
 
