@@ -389,10 +389,16 @@ namespace AccountManegments.Web.Controllers
             }
             else
             {
-                if ((integerPart / 1000000) > 0)
+                if ((integerPart / 10000000) > 0)
                 {
-                    words += NumberToWords(integerPart / 1000000) + " Million ";
-                    integerPart %= 1000000;
+                    words += NumberToWords(integerPart / 10000000) + " Crore ";
+                    integerPart %= 10000000;
+                }
+
+                if ((integerPart / 100000) > 0)
+                {
+                    words += NumberToWords(integerPart / 100000) + " Lakh ";
+                    integerPart %= 100000;
                 }
 
                 if ((integerPart / 1000) > 0)
@@ -406,7 +412,6 @@ namespace AccountManegments.Web.Controllers
                     words += NumberToWords(integerPart / 100) + " Hundred ";
                     integerPart %= 100;
                 }
-
 
                 if (integerPart > 0)
                 {
