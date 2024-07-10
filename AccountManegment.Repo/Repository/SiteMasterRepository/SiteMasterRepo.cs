@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace AccountManagement.Repository.Repository.SiteMasterRepository
 {
@@ -128,6 +129,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 ShippingPincode = a.ShippingPincode,
                                 CreatedBy = a.CreatedBy,
                                 CreatedOn = a.CreatedOn,
+                                StateCode = shippingState != null ? shippingState.StateCode : null,
                             }).First();
 
 
@@ -439,16 +441,18 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
         {
             try
             {
-                var data = await Context.SiteAddresses
-                                       .Where(a => a.SiteId == SiteId && a.IsDeleted != true)
-                                       .Select(a => new SiteAddressModel
-                                       {
-                                           Aid = a.Aid,
-                                           SiteId = a.SiteId,
-                                           Address = a.Address,
-                                           IsDeleted = a.IsDeleted
-                                       })
-                                       .ToListAsync();
+                var data = await (from a in Context.SiteAddresses
+                                  join b in Context.Sites on a.SiteId equals b.SiteId
+                                  join c in Context.States on b.StateId equals c.StatesId
+                                  where (a.SiteId == SiteId && a.IsDeleted != true)
+                                  select new SiteAddressModel
+                                  {
+                                      Aid = a.Aid,
+                                      SiteId = a.SiteId,
+                                      Address = a.Address,
+                                      IsDeleted = a.IsDeleted,
+                                      StateCode = c.StateCode,
+                                  }).ToListAsync();
                 return data;
             }
             catch (Exception ex)

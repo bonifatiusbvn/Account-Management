@@ -1088,10 +1088,10 @@ function fn_GetInvoiceSiteAddressList(SiteId) {
             $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
             if (Array.isArray(result)) {
                 $.each(result, function (i, data) {
-                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + ', Code : ' + data.stateCode + '">' + data.address + ', Code :' + data.stateCode + '</option>');
                 });
             } else {
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
+                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ',Code : ' + result.stateCode);
             }
         }
     });

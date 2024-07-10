@@ -118,6 +118,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? DispatchBy { get; set; }
 
         public string? PaymentTerms { get; set; }
+        public int? StateCode{ get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
     }

@@ -159,8 +159,8 @@
                                 <p class="s1" style="padding-top: 2pt;padding-left: 2pt;padding-right: 159pt;text-indent: 0pt;text-align: left;">
                                     @firstItem.SupplierName <br />
                                     <span class="s2"> @firstItem.SupplierFullAddress </span><br />
-                                </p> <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;"> GSTIN / UIN: @firstItem.SupplierGstNo </p><br />
-                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name : @firstItem.SupplierState, PinCode : @firstItem.SupplierPincode</p>
+                                </p> <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;"> GSTIN / UIN: @firstItem.SupplierGstNo </p>
+                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name : @firstItem.SupplierState, Code : @firstItem.StateCode</p>
                             </td>
                             <td style="width:129pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
                                 <p class="s3" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">Invoice No. </p>
@@ -172,7 +172,7 @@
                                 colspan="2">
                                 <p class="s5"
                                    style="padding-left: 3pt;text-indent: 0pt;line-height: 10pt;text-align: left;"> Dated </p>
-                                <p class="s1" style="padding-top: 3pt;padding-left: 3pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@firstItem.Date?.ToString("dd/MM/yyyy")</p>
+                                <p class="s1" style="padding-top: 3pt;padding-left: 3pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@firstItem.Date?.ToString("dd-MMM-yy")</p>
                             </td>
                         </tr>
                         <tr style="height:26pt">
@@ -215,10 +215,19 @@
                                 <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Consignee (Ship to)</p>
                             </td>
                         </tr>
+                        @{
+                            string shippingAddress = firstItem.ShippingAddress;
+                            string[] addressParts = shippingAddress.Split(',');
+                            string SiteStateCode = addressParts[addressParts.Length - 1].Trim();
+                            string SiteState = addressParts[addressParts.Length - 3].Trim();
+                            string SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
+                        }
                         <tr style="height:10pt">
                             <td style="width:261pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2" rowspan="4">
                                 <p class="s1" style="padding-top: 1pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">@firstItem.SiteName</p>
-                                <p class="s2" style="padding-left: 2pt;padding-right: 163pt;text-indent: 0pt;text-align: left;">@firstItem.ShippingAddress</p>
+                                <p class="s2" style="padding-left: 2pt;padding-right: 163pt;text-indent: 0pt;text-align: left;">@SiteAddress</p>
+                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">GSTIN/UIN    : @firstItem.CompanyGstNo</p>
+                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @SiteState , @SiteStateCode</p>
                             </td>
                             <td style="width:129pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>
@@ -265,7 +274,7 @@
                                 <p class="s2" style="padding-left: 2pt;padding-right: 129pt;text-indent: 0pt;text-align: left;">@firstItem.CompanyAddress,@firstItem.CompanyArea</p>
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@firstItem.CompanyCityName</p>
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">GSTIN/UIN    : @firstItem.CompanyGstNo</p>
-                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @firstItem.CompanyStateName, Code : @firstItem.CompanyPincode</p>
+                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @firstItem.CompanyStateName, Code : @firstItem.StateCode</p>
                             </td>
                             <td style="width:259pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>

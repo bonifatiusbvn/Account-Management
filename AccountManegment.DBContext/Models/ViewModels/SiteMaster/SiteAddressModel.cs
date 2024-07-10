@@ -15,5 +15,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public string Address { get; set; } = null!;
 
         public bool? IsDeleted { get; set; }
+        public int? StateCode { get; set; }
     }
 }

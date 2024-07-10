@@ -63,6 +63,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public string? ShippingStateName { get; set; }
 
         public string? ShippingCountryName { get; set; }
+        public int? StateCode { get; set; }
 
         public List<SiteAddressModel>? SiteShippingAddresses { get; set; }
     }

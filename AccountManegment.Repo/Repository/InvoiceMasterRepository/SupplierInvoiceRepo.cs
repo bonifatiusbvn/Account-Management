@@ -226,6 +226,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     ContactName = a.ContactName,
                                     ContactNumber = a.ContactNumber,
                                     CreatedOn = a.CreatedOn,
+                                    StateCode = f.StateCode,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
                                 }).FirstOrDefault();
