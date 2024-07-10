@@ -135,7 +135,7 @@
 <div class=" adius-10 w-100">
     <div class="my-3 border-bottom"></div>
     <div class="row justify-content-center" id="displayInvoiceDetail">
-        <div class="card border">
+        <div class="card border" style="width:1270px;">
             <div class="card-title text-center"><h5>Tax Invoice</h5></div>
             <div class="card-body">
                 <table style="border-collapse:collapse;margin-left:6.06452pt;width:1200px" cellspacing="0">
@@ -262,7 +262,7 @@
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">GSTIN/UIN    : @firstItem.CompanyGstNo</p>
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @firstItem.CompanyStateName, Code : @firstItem.StateCode</p>
                             </td>
-                            <td style="width:259pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
+                            <td style="width:25pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>
                             </td>
                         </tr>
@@ -271,16 +271,16 @@
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Sl</p>
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">No.</p>
                             </td>
-                            <td style="width:246pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                            <td style="width:200pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s5" style="padding-left: 77pt;text-indent: 0pt;line-height: 9pt;text-align: left;">Description of Goods</p>
                             </td>
                             <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s5" style="padding-left: 5pt;text-indent: 0pt;line-height: 9pt;text-align: center;">HSN/SAC</p>
                             </td>
-                            <td style="width:180pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                            <td style="width:25pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s5" style="text-indent: 0pt;line-height: 9pt;text-align: center;">Quantity</p>
                             </td>
-                            <td style="width:80pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                            <td style="width:20pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s5" style="padding-left: 7pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Rate</p>
                             </td>
                             <td style="width:15pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -304,16 +304,16 @@
                                 <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                                     <p class="s2" style="padding-top: 5pt;padding-right: 3pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@index</p>
                                 </td>
-                                <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                                <td style="width:200pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                                     <p class="s1" style="padding-top: 5pt;padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@item.ItemName</p>
                                 </td>
                                 <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                                     <p class="s2" style="padding-top: 5pt;padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@item.Hsncode</p>
                                 </td>
-                                <td style="width:180pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                                <td style="width:20pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                                     <p class="s1" style="padding-top: 5pt;padding-right: 1pt;text-indent: 0pt;text-align: center;">@item.Quantity @trimmedUnitTypeName</p>
                                 </td>
-                                <td style="width:80pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                                <td style="width:20pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                                     <p class="s5" style="padding-top: 5pt;padding-left: 3pt;text-indent: 0pt;text-align: right;">@item.PricePerUnit</p>
                                 </td>
                                 <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -553,6 +553,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <h6>This is a Computer Generated Invoice</h6>
                 <div class="card d-print-none">
                     <div class="card-body">
                         <div class="d-lg-flex align-items-center gap-3">
@@ -561,7 +562,7 @@
                             {
                                 <a class="btn btn-primary btn-ecomm" href="EditInvoiceDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit Invoice</a>
                             }
-                            <a class="btn btn-primary btn-ecomm" onclick="printinvoice()"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
+                            <a class="btn btn-primary btn-ecomm" id="PrintInvoicePage"><i class="fadeIn animated bx bx-printer"></i>Print Invoice</a>
                         </div>
                     </div>
 
@@ -574,6 +575,21 @@
 
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('PrintInvoicePage').addEventListener('click', function () {
 
+            var invoiceId = '@firstItem.Id';
+            fetch(`/InvoiceMaster/PrintInvoiceDetails?Id=${invoiceId}`)
+                .then(response => response.text())
+                .then(htmlContent => {
+                    var printWindow = window.open('', '', 'width=800,height=600');
+                    printWindow.document.open();
+                    printWindow.document.write(htmlContent);
+                    printWindow.document.close();
+                    printWindow.print();
+                })
+                .catch(error => console.error('Error fetching the invoice details:', error));
+        });
+    </script>
 }
 
