@@ -1,160 +1,159 @@
 ﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceMasterView
-<html>
-<head>
-    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
+
+<link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
+<style type="text/css">
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+
+    .invoice-container {
+        width: 80%;
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .header h1 {
             margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
         }
 
-        .invoice-container {
-            width: 80%;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    h1 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 12pt;
+    }
 
-            .header h1 {
-                margin: 0;
-            }
+    .s1 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 10pt;
+    }
 
-        .details {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+    .s2 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 10pt;
+    }
 
-        h1 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 12pt;
-        }
+    .s3 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 9pt;
+        vertical-align: 1pt;
+    }
 
-        .s1 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 10pt;
-        }
+    .s4 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 10pt;
+    }
 
-        .s2 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 10pt;
-        }
+    .s5 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 9pt;
+    }
 
-        .s3 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 9pt;
-            vertical-align: 1pt;
-        }
+    .s6 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 10pt;
+    }
 
-        .s4 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 10pt;
-        }
+    .s7 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: italic;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 10pt;
+    }
 
-        .s5 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 9pt;
-        }
+    .s8 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 12pt;
+    }
 
-        .s6 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 10pt;
-        }
+    .s11 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 9pt;
+    }
 
-        .s7 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: italic;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 10pt;
-        }
+    .s12 {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: underline;
+        font-size: 9pt;
+    }
 
-        .s8 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 12pt;
-        }
+    p {
+        color: black;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: none;
+        font-size: 9pt;
+        margin: 0pt;
+    }
 
-        .s11 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 9pt;
-        }
-
-        .s12 {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: underline;
-            font-size: 9pt;
-        }
-
-        p {
-            color: black;
-            font-family: Arial, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: none;
-            font-size: 9pt;
-            margin: 0pt;
-        }
-
-        table, tbody {
-            vertical-align: top;
-            overflow: visible;
-        }
+    table, tbody {
+        vertical-align: top;
+        overflow: visible;
+    }
 
 </style>
 
 @{
     var firstItem = Model;
 }
-<table style="border-collapse:collapse;margin-left:6.06452pt"
-       cellspacing="0">
+
+<table style="border-collapse:collapse;margin-left:6.06452pt;" cellspacing="0">
     <tbody>
         <tr style="height:26pt">
             <td style="width:261pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2" rowspan="3">
@@ -278,7 +277,7 @@
                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">GSTIN/UIN    : @firstItem.CompanyGstNo</p>
                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @firstItem.CompanyStateName, Code : @firstItem.StateCode</p>
             </td>
-            <td style="width:259pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
+            <td style="width:25pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
         </tr>
@@ -287,16 +286,16 @@
                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Sl</p>
                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">No.</p>
             </td>
-            <td style="width:246pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+            <td style="width:200pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-left: 77pt;text-indent: 0pt;line-height: 9pt;text-align: left;">Description of Goods</p>
             </td>
             <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-left: 5pt;text-indent: 0pt;line-height: 9pt;text-align: center;">HSN/SAC</p>
             </td>
-            <td style="width:180pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+            <td style="width:25pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="text-indent: 0pt;line-height: 9pt;text-align: center;">Quantity</p>
             </td>
-            <td style="width:80pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+            <td style="width:20pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s5" style="padding-left: 7pt;text-indent: 0pt;line-height: 9pt;text-align: center;">Rate</p>
             </td>
             <td style="width:15pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -320,16 +319,16 @@
                 <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s2" style="padding-top: 5pt;padding-right: 3pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@index</p>
                 </td>
-                <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <td style="width:200pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s1" style="padding-top: 5pt;padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">@item.ItemName</p>
                 </td>
                 <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s2" style="padding-top: 5pt;padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;">@item.Hsncode</p>
                 </td>
-                <td style="width:180pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <td style="width:20pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s1" style="padding-top: 5pt;padding-right: 1pt;text-indent: 0pt;text-align: center;">@item.Quantity @trimmedUnitTypeName</p>
                 </td>
-                <td style="width:80pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <td style="width:20pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                     <p class="s5" style="padding-top: 5pt;padding-left: 3pt;text-indent: 0pt;text-align: right;">@item.PricePerUnit</p>
                 </td>
                 <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -405,7 +404,7 @@
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
             </td>
             <td style="width:246pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
-                <p class="s6" style="padding-top: 2pt;padding-left: 155pt;text-indent: 0pt;line-height: 11pt;text-align: right;">GST</p>
+                <p class="s6" style="padding-top: 2pt;padding-left: 155pt;text-indent: 0pt;line-height: 11pt;text-align: right;">GST </p>
             </td>
             <td style="width:23pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
                 <p class="s7" style="padding-top: 2pt;padding-right: 1pt;text-indent: 0pt;line-height: 11pt;text-align: right;"></p>
@@ -480,7 +479,9 @@
         </tr>
         <tr style="height:28pt">
             <td style="width:520pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="7">
-                <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Amount Chargeable (in words)                                             <i>E. &amp; O.E</i></p>
+                <p class="s5" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">
+                    Amount Chargeable (in words)<i style="margin-left: 550px" ;>E. &amp; O.E</i>
+                </p>
                 <p class="s1" style="padding-top: 3pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">INR @ViewData["TotalAmountInWords"]</p>
             </td>
         </tr>
@@ -562,8 +563,9 @@
             <td style="width:259pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="5">
                 <p class="s11" style="padding-right: 3pt;text-indent: 0pt;line-height: 10pt;text-align: right;">for @firstItem.SupplierName</p>
                 <p style="text-indent: 0pt;text-align: left;"><br></p>
-                <p class="s5" style="padding-right: 1pt;text-indent: 0pt;line-height: 10pt;text-align: right;">Authorised Signatory</p>
+                <p class="s5" style="padding-right: 1pt;text-indent: 0pt;line-height: 10pt;text-align: right;margin-top:14px;">Authorised Signatory</p>
             </td>
         </tr>
     </tbody>
 </table>
+<h6>This is a Computer Generated Invoice</h6>
