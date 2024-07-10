@@ -294,11 +294,13 @@
                             int index = 1;
                             decimal? subtotal = 0;
                             decimal? totalAmt = 0;
+                            decimal? TotalQty = 0;
                         }
                         @foreach (var item in Model.ItemList)
                         {
                             subtotal = (item.Quantity * item.PricePerUnit);
                             totalAmt += subtotal;
+                            TotalQty += item.Quantity;
                             var trimmedUnitTypeName = item.UnitTypeName.Split('-').First().Trim();
                             <tr style="height:18pt">
                                 <td style="width:15pt;border-left-style:solid;border-left-width:1pt;border-right-style:solid;border-right-width:1pt">
@@ -449,14 +451,15 @@
                             <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>
                             </td>
+                            
                             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                                <p style="text-indent: 0pt;text-align: left;"><br></p>
+                                <p style="text-indent: 0pt;text-align: center;"><b>@TotalQty</b></p>
                             </td>
                             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s1" style="padding-left: 1pt;text-indent: 0pt;line-height: 11pt;text-align: center;"></p>
                             </td>
                             <td style="width:75pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
-                                <p style="text-indent: 0pt;text-align: center;"> <b>₹@firstItem.TotalDiscount</b></p>
+                                <p style="text-indent: 0pt;text-align: center;"> <b></b></p>
                             </td>
                             <td style="width:77pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p class="s8" style="padding-left: 3pt;text-indent: 0pt;line-height: 13pt;text-align: center;"> <b>₹@firstItem.TotalAmountInvoice</b></p>
