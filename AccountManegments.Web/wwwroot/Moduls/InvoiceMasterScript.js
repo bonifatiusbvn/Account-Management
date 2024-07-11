@@ -538,7 +538,7 @@ function UpdateInvoiceDetails() {
 
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
-                SiteId: $("#txtsessionSiteName").val(),
+                SiteId: $("#txtModelSiteId").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),

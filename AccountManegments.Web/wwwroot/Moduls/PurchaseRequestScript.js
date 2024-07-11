@@ -1253,7 +1253,7 @@ function UpdateMultiplePurchaseOrderDetails() {
 
             var PORequest = {
                 Id: $("#RefPOid").val(),
-                SiteId: $("#positeid").val(),
+                SiteId: $("#poModelSiteId").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate2").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
