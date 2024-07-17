@@ -202,11 +202,18 @@
                             </td>
                         </tr>
                         @{
-                            string shippingAddress = firstItem.ShippingAddress;
-                            string[] addressParts = shippingAddress.Split(',');
-                            string SiteStateCode = addressParts[addressParts.Length - 1].Trim();
-                            string SiteState = addressParts[addressParts.Length - 3].Trim();
-                            string SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
+                            string SiteStateCode = "";
+                            string SiteState = "";
+                            string SiteAddress = "";
+
+                            if (!string.IsNullOrEmpty(firstItem.ShippingAddress))
+                            {
+                                string shippingAddress = firstItem.ShippingAddress;
+                                string[] addressParts = shippingAddress.Split(',');
+                                SiteStateCode = addressParts[addressParts.Length - 1].Trim();
+                                SiteState = addressParts[addressParts.Length - 3].Trim();
+                                SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
+                            }
                         }
                         <tr style="height:10pt">
                             <td style="width:261pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2" rowspan="4">

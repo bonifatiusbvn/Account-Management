@@ -432,6 +432,8 @@ function InsertMultipleSupplierItem() {
                 ItemDetails.push(objData);
             });
 
+            var shippingAddress = $("#shippingaddress").text() != "" ? $("#shippingaddress").text() : $("#textmdAddress").val();
+
             var InvoiceDetails = {
                 SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
@@ -444,7 +446,7 @@ function InsertMultipleSupplierItem() {
                 Description: $("#textDescription").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: $("#textmdAddress").val(),
+                ShippingAddress: shippingAddress,
                 ChallanNo: $("#txtchalanNo").val(),
                 Lrno: $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
@@ -1121,7 +1123,7 @@ function addShippingAddress() {
             '<label id="lblshprownum1">1</label>' +
             '</div>' +
             '<div class="col-5 col-sm-5 text-center">' +
-            '<p class="shippingaddress">' + address + '</p>' +
+            '<p id="addShippingAddress" class="shippingaddress">' + address + '</p>' +
             '</div>' +
             '<div class="col-2 col-sm-2">' +
             '<a id="remove" class="btn text-primary text-center" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +

@@ -74,7 +74,7 @@ namespace AccountManegments.Web.Controllers
                         {
                             SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
                         }
-                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName;
+                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName + ",Code : " + SiteDetails.StateCode;
                     }
                     else
                     {
