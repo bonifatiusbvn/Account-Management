@@ -9,20 +9,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Data;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.Extensions.Configuration;
+using AccountManagement.DBContext.Models.Common;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
     public class PurchaseOrderRepo : IPurchaseOrder
     {
-        public PurchaseOrderRepo(DbaccManegmentContext context)
+        public PurchaseOrderRepo(DbaccManegmentContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
         public DbaccManegmentContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<ApiResponseModel> AddPurchaseOrderDetails(PurchaseOrderView PurchaseOrderDetails)
         {
@@ -238,44 +245,47 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         {
             try
             {
-                var PurchaseOrder = (from a in Context.PurchaseOrders
-                                     join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                     join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                                     join d in Context.Sites on a.SiteId equals d.SiteId
-                                     orderby a.CreatedOn descending
-                                     where a.IsDeleted == false
-                                     select new PurchaseOrderView
-                                     {
-                                         Id = a.Id,
-                                         SiteId = a.SiteId,
-                                         SiteName = d.SiteName,
-                                         Poid = a.Poid,
-                                         FromSupplierId = a.FromSupplierId,
-                                         SupplierName = b.SupplierName,
-                                         ToCompanyId = a.ToCompanyId,
-                                         CompanyName = c.CompanyName,
-                                         TotalAmount = a.TotalAmount,
-                                         Description = a.Description,
-                                         DeliveryShedule = a.DeliveryShedule,
-                                         TotalDiscount = a.TotalDiscount,
-                                         TotalGstamount = a.TotalGstamount,
-                                         BillingAddress = a.BillingAddress,
-                                         CreatedBy = a.CreatedBy,
-                                         CreatedOn = a.CreatedOn,
-                                         Terms = a.Terms,
-                                     });
+                string dbConnectionStr = _configuration.GetConnectionString("ACCDbconn");
+                var dataSet = DbHelper.GetDataSet("[GetPurchaseOrderList]", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                var POList = new List<PurchaseOrderView>();
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var purchaseOrder = new PurchaseOrderView
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        SiteId = Guid.Parse(row["SiteId"].ToString()),
+                        SiteName = row["SiteName"]?.ToString(),
+                        Poid = row["Poid"]?.ToString(),
+                        FromSupplierId = Guid.Parse(row["FromSupplierId"].ToString()),
+                        SupplierName = row["SupplierName"]?.ToString(),
+                        ToCompanyId = Guid.Parse(row["ToCompanyId"].ToString()),
+                        CompanyName = row["CompanyName"]?.ToString(),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        Description = row["Description"]?.ToString(),
+                        DeliveryShedule = row["DeliveryShedule"]?.ToString(),
+                        TotalDiscount = Convert.ToInt32(row["TotalDiscount"]),
+                        TotalGstamount = Convert.ToInt32(row["TotalGstamount"]),
+                        BillingAddress = row["BillingAddress"]?.ToString(),
+                        CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+                        CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
+                        Terms = row["Terms"]?.ToString(),
+                    };
+                    POList.Add(purchaseOrder);
+                }
+
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
-                    PurchaseOrder = PurchaseOrder.Where(u =>
-                        u.SupplierName.ToLower().Contains(searchText) ||
+                    POList = POList.Where(u =>
+                        u.SupplierName?.ToLower().Contains(searchText) == true ||
                         u.TotalGstamount.ToString().Contains(searchText) ||
                         u.TotalAmount.ToString().Contains(searchText) ||
-                        u.CompanyName.ToLower().Contains(searchText) ||
-                        u.Poid.ToLower().Contains(searchText)
-                    );
+                        u.CompanyName?.ToLower().Contains(searchText) == true ||
+                        u.Poid?.ToLower().Contains(searchText) == true
+                    ).ToList();
                 }
-
 
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
                 {
@@ -283,25 +293,22 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     switch (searchBy.ToLower())
                     {
                         case "suppliername":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.SupplierName.ToLower().Contains(searchText));
+                            POList = POList.Where(u => u.SupplierName?.ToLower().Contains(searchText) == true).ToList();
                             break;
                         case "totalgstamount":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalGstamount.ToString().Contains(searchText));
+                            POList = POList.Where(u => u.TotalGstamount.ToString().Contains(searchText)).ToList();
                             break;
                         case "totalamount":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalAmount.ToString().Contains(searchText));
+                            POList = POList.Where(u => u.TotalAmount.ToString().Contains(searchText)).ToList();
                             break;
                         default:
-
                             break;
                     }
                 }
 
-
                 if (string.IsNullOrEmpty(sortBy))
                 {
-
-                    PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.CreatedOn);
+                    POList = POList.OrderByDescending(u => u.CreatedOn).ToList();
                 }
                 else
                 {
@@ -312,37 +319,37 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     {
                         case "suppliername":
                             if (sortOrder == "ascending")
-                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.SupplierName);
+                                POList = POList.OrderBy(u => u.SupplierName).ToList();
                             else if (sortOrder == "descending")
-                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.SupplierName);
+                                POList = POList.OrderByDescending(u => u.SupplierName).ToList();
                             break;
                         case "createdon":
                             if (sortOrder == "ascending")
-                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.CreatedOn);
+                                POList = POList.OrderBy(u => u.CreatedOn).ToList();
                             else if (sortOrder == "descending")
-                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.CreatedOn);
+                                POList = POList.OrderByDescending(u => u.CreatedOn).ToList();
                             break;
                         case "totalgstamount":
                             if (sortOrder == "ascending")
-                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.TotalGstamount);
+                                POList = POList.OrderBy(u => u.TotalGstamount).ToList();
                             else if (sortOrder == "descending")
-                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.TotalGstamount);
+                                POList = POList.OrderByDescending(u => u.TotalGstamount).ToList();
                             break;
                         case "totalamount":
                             if (sortOrder == "ascending")
-                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.TotalAmount);
+                                POList = POList.OrderBy(u => u.TotalAmount).ToList();
                             else if (sortOrder == "descending")
-                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.TotalAmount);
+                                POList = POList.OrderByDescending(u => u.TotalAmount).ToList();
                             break;
                         default:
                             break;
                     }
                 }
-                return PurchaseOrder;
+                return POList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
