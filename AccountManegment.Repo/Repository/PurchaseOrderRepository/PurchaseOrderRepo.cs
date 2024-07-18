@@ -155,84 +155,96 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 
         public async Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsById(Guid POId)
         {
-            PurchaseOrderMasterView PurchaseOrder = new PurchaseOrderMasterView();
             try
             {
-                PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
-                                 join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                 join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                                 join d in Context.Sites on a.SiteId equals d.SiteId
-                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
-                                 join e in Context.Cities on b.City equals e.CityId
-                                 join f in Context.States on b.State equals f.StatesId
-                                 select new PurchaseOrderMasterView
-                                 {
-                                     Id = a.Id,
-                                     SiteId = a.SiteId,
-                                     SiteName = d.SiteName,
-                                     Poid = a.Poid,
-                                     FromSupplierId = a.FromSupplierId,
-                                     Area = b.Area,
-                                     BuildingName = b.BuildingName,
-                                     SupplierName = b.SupplierName,
-                                     SupplierGstno = b.Gstno,
-                                     SupplierMobile = b.Mobile,
-                                     Cityname = e.CityName,
-                                     Statename = f.StatesName,
-                                     Pincode = b.PinCode,
-                                     ToCompanyId = a.ToCompanyId,
-                                     CompanyName = c.CompanyName,
-                                     CompanyGstno = c.Gstno,
-                                     TotalAmount = a.TotalAmount,
-                                     Description = a.Description,
-                                     DeliveryShedule = a.DeliveryShedule,
-                                     TotalDiscount = a.TotalDiscount,
-                                     TotalGstamount = a.TotalGstamount,
-                                     BillingAddress = a.BillingAddress,
-                                     ShippingAddress = g.Address,
-                                     Date = a.Date,
-                                     ContactName = a.ContactName,
-                                     ContactNumber = a.ContactNumber,
-                                     CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn,
-                                     Terms = a.Terms,
-                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName
-                                 }).First();
+                string dbConnectionStr = _configuration.GetConnectionString("ACCDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                      new SqlParameter("@POId", POId),
+                };
+                var DS = DbHelper.GetDataSet("GetPurchaseOrderDetailsById", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
-                List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
-                                                     join b in Context.ItemMasters on a.ItemId equals b.ItemId
-                                                     join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
-                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
-                                                     select new POItemDetailsModel
-                                                     {
-                                                         ItemName = i.ItemName,
-                                                         ItemId = a.ItemId,
-                                                         Quantity = a.Quantity,
-                                                         ItemAmount = a.ItemTotal,
-                                                         Gstamount = a.Gst,
-                                                         UnitType = a.UnitTypeId,
-                                                         UnitTypeName = c.UnitName,
-                                                         PricePerUnit = a.Price,
-                                                         GstPercentage = b.Gstper,
-                                                         Hsncode = b.Hsncode,
-                                                         TotalAmount = a.ItemTotal,
-                                                     }).ToList();
+                PurchaseOrderMasterView PODetails = new PurchaseOrderMasterView();
 
-                List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.Id)
-                                                            select new PODeliveryAddressModel
-                                                            {
-                                                                Aid = a.Aid,
-                                                                Poid = a.Poid,
-                                                                Quantity = a.Quantity,
-                                                                UnitTypeId = a.UnitTypeId,
-                                                                Address = a.Address,
-                                                                IsDeleted = a.IsDeleted,
-                                                            }).ToList();
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[2].Rows.Count > 0)
+                    {
+                        DataRow row = DS.Tables[2].Rows[0];
 
-                PurchaseOrder.ItemList = itemlist;
-                PurchaseOrder.AddressList = addresslist;
+                        PODetails.Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty;
+                        PODetails.SiteId = row["SiteId"] != DBNull.Value ? (Guid)row["SiteId"] : Guid.Empty;
+                        PODetails.SiteName = row["SiteName"]?.ToString();
+                        PODetails.Poid = row["Poid"]?.ToString();
+                        PODetails.FromSupplierId = row["FromSupplierId"] != DBNull.Value ? (Guid)row["FromSupplierId"] : Guid.Empty;
+                        PODetails.Area = row["Area"]?.ToString();
+                        PODetails.BuildingName = row["BuildingName"]?.ToString();
+                        PODetails.SupplierName = row["SupplierName"]?.ToString();
+                        PODetails.SupplierGstno = row["SupplierGstno"]?.ToString();
+                        PODetails.SupplierMobile = row["SupplierMobile"]?.ToString();
+                        PODetails.Cityname = row["Cityname"]?.ToString();
+                        PODetails.Statename = row["Statename"]?.ToString();
+                        PODetails.Pincode = row["Pincode"]?.ToString();
+                        PODetails.ToCompanyId = row["ToCompanyId"] != DBNull.Value ? (Guid)row["ToCompanyId"] : Guid.Empty;
+                        PODetails.CompanyName = row["CompanyName"]?.ToString();
+                        PODetails.CompanyGstno = row["CompanyGstno"]?.ToString();
+                        PODetails.TotalAmount = row["TotalAmount"] != DBNull.Value ? (decimal)row["TotalAmount"] : 0m;
+                        PODetails.Description = row["Description"]?.ToString();
+                        PODetails.DeliveryShedule = row["Description"]?.ToString();
+                        PODetails.TotalDiscount = row["TotalDiscount"] != DBNull.Value ? (decimal)row["TotalDiscount"] : 0m;
+                        PODetails.TotalGstamount = row["TotalGstamount"] != DBNull.Value ? (decimal)row["TotalGstamount"] : 0m;
+                        PODetails.BillingAddress = row["BillingAddress"]?.ToString();
+                        PODetails.ShippingAddress = row["ShippingAddress"]?.ToString();
+                        PODetails.Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue;
+                        PODetails.ContactName = row["ContactName"]?.ToString();
+                        PODetails.ContactNumber = row["ContactNumber"]?.ToString();
+                        PODetails.CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty;
+                        PODetails.CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue;
+                        PODetails.SupplierFullAddress = row["SupplierFullAddress"]?.ToString();
+                    }
 
-                return PurchaseOrder;
+                    PODetails.ItemList = new List<POItemDetailsModel>();
+
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var POListDetail = new POItemDetailsModel
+                        {
+                            ItemName = row["ItemName"]?.ToString(),
+                            ItemId = row["ItemId"] != DBNull.Value ? (Guid)row["ItemId"] : Guid.Empty,
+                            Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
+                            ItemAmount = row["ItemAmount"] != DBNull.Value ? (decimal)row["ItemAmount"] : 0m,
+                            Gstamount = row["ItemAmount"] != DBNull.Value ? (decimal)row["ItemAmount"] : 0m,
+                            UnitType = row["UnitType"] != DBNull.Value ? (int)row["UnitType"] : 0,
+                            UnitTypeName = row["UnitTypeName"]?.ToString(),
+                            PricePerUnit = row["PricePerUnit"] != DBNull.Value ? (decimal)row["PricePerUnit"] : 0,
+                            GstPercentage = row["GstPercentage"] != DBNull.Value ? (decimal)row["GstPercentage"] : 0m,
+                            Hsncode = row["Hsncode"]?.ToString(),
+                            TotalAmount = row["TotalAmount"] != DBNull.Value ? (decimal)row["TotalAmount"] : 0m,
+
+                        };
+
+                        PODetails.ItemList.Add(POListDetail);
+                    }
+
+                    PODetails.AddressList = new List<PODeliveryAddressModel>();
+
+                    foreach (DataRow row in DS.Tables[1].Rows)
+                    {
+                        var POAddressList = new PODeliveryAddressModel
+                        {
+                            Aid = row["Aid"] != DBNull.Value ? (int)row["Aid"] : 0,
+                            Poid = row["Poid"] != DBNull.Value ? (Guid)row["Poid"] : Guid.Empty,
+                            Quantity = row["Quantity"] != DBNull.Value ? (int)row["Quantity"] : 0,
+                            UnitTypeId = row["UnitTypeId"] != DBNull.Value ? (int)row["UnitTypeId"] : 0,
+                            Address = row["Address"]?.ToString(),
+                            IsDeleted = (bool)row["IsDeleted"],
+
+                        };
+
+                        PODetails.AddressList.Add(POAddressList);
+                    }
+                }
+                return PODetails;
             }
             catch (Exception)
             {
@@ -246,7 +258,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             try
             {
                 string dbConnectionStr = _configuration.GetConnectionString("ACCDbconn");
-                var dataSet = DbHelper.GetDataSet("[GetPurchaseOrderList]", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                var dataSet = DbHelper.GetDataSet("GetPurchaseOrderList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
                 var POList = new List<PurchaseOrderView>();
 
@@ -254,23 +266,23 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 {
                     var purchaseOrder = new PurchaseOrderView
                     {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        SiteId = Guid.Parse(row["SiteId"].ToString()),
+                        Id = row["Id"] != DBNull.Value ? Guid.Parse(row["Id"].ToString()) : Guid.Empty,
+                        SiteId = row["SiteId"] != DBNull.Value ? Guid.Parse(row["SiteId"].ToString()) : Guid.Empty,
                         SiteName = row["SiteName"]?.ToString(),
                         Poid = row["Poid"]?.ToString(),
-                        FromSupplierId = Guid.Parse(row["FromSupplierId"].ToString()),
+                        FromSupplierId = row["FromSupplierId"] != DBNull.Value ? Guid.Parse(row["FromSupplierId"].ToString()) : Guid.Empty,
                         SupplierName = row["SupplierName"]?.ToString(),
-                        ToCompanyId = Guid.Parse(row["ToCompanyId"].ToString()),
+                        ToCompanyId = row["ToCompanyId"] != DBNull.Value ? Guid.Parse(row["ToCompanyId"].ToString()) : Guid.Empty,
                         CompanyName = row["CompanyName"]?.ToString(),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        TotalAmount = row["TotalAmount"] != DBNull.Value ? Convert.ToDecimal(row["TotalAmount"]) : 0m,
                         Description = row["Description"]?.ToString(),
                         DeliveryShedule = row["DeliveryShedule"]?.ToString(),
-                        TotalDiscount = Convert.ToInt32(row["TotalDiscount"]),
-                        TotalGstamount = Convert.ToInt32(row["TotalGstamount"]),
+                        TotalDiscount = row["TotalDiscount"] != DBNull.Value ? Convert.ToInt32(row["TotalDiscount"]) : 0,
+                        TotalGstamount = row["TotalGstamount"] != DBNull.Value ? Convert.ToInt32(row["TotalGstamount"]) : 0,
                         BillingAddress = row["BillingAddress"]?.ToString(),
-                        CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
-                        CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
-                        Terms = row["Terms"]?.ToString(),
+                        CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : DateTime.MinValue,
+                        CreatedBy = row["CreatedBy"] != DBNull.Value ? Guid.Parse(row["CreatedBy"].ToString()) : Guid.Empty,
+                        Terms = row["Terms"]?.ToString()
                     };
                     POList.Add(purchaseOrder);
                 }
