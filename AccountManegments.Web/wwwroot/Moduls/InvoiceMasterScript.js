@@ -348,7 +348,7 @@ function DeleteSupplierInvoice(Id) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't delete site!");
+                    toastr.error("Can't delete Invoice!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {

@@ -71,12 +71,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             {
                 var SupplierInvoice = Context.SupplierInvoices.Where(a => a.Id == Id).FirstOrDefault();
                 var InvoiceItemList = Context.SupplierInvoiceDetails.Where(b => b.RefInvoiceId == Id).ToList();
-                if (SupplierInvoice != null)
-                {
-                    Context.SupplierInvoices.Remove(SupplierInvoice);
-                    response.message = "Supplierinvoice is removed successfully!";
-                    response.code = 200;
-                }
                 if (InvoiceItemList != null)
                 {
                     foreach (var item in InvoiceItemList)
@@ -84,6 +78,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         Context.SupplierInvoiceDetails.Remove(item);
                     }
                 }
+                if (SupplierInvoice != null)
+                {
+                    Context.SupplierInvoices.Remove(SupplierInvoice);
+                    response.message = "Supplierinvoice is removed successfully!";
+                    response.code = 200;
+                }
+
                 Context.SaveChanges();
             }
             catch (Exception ex)
