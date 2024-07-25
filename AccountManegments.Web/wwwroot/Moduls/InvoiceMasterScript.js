@@ -1159,3 +1159,133 @@ function printinvoice() {
 
     newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 }
+
+function ClearAddProductTextBox()
+{
+    ClearProductTextBox();
+    $('#addnewItemModal').modal('show');
+}
+
+$(document).ready(function () {
+    function GetUnitType() {
+        $.ajax({
+            url: '/ItemMaster/GetAllUnitType',
+            method: 'GET',
+            success: function (result) {
+                var unitTypes = result.map(function (data) {
+                    return {
+                        label: data.unitName,
+                        value: data.unitId
+                    };
+                });
+
+
+                $("#textUnitType").autocomplete({
+                    source: unitTypes,
+                    minLength: 0,
+                    select: function (event, ui) {
+
+                        event.preventDefault();
+                        $("#textUnitType").val(ui.item.label);
+                        $("#textUnitTypeHidden").val(ui.item.value);
+
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+
+    GetUnitType();
+});
+
+
+function CreateNewItem() {
+    siteloadershow();
+    if ($("#addnewItemForm").valid()) {
+        var objData = {
+            ItemName: $('#textItemName').val(),
+            UnitType: $('#textUnitTypeHidden').val(),
+            PricePerUnit: $('#textPricePerUnit').val(),
+            IsWithGst: $('#textIsWithGst').prop('checked'),
+            Gstamount: $('#textGstAmount').val(),
+            Gstper: $('#textGstPerUnit').val(),
+            Hsncode: $('#textHSNCode').val(),
+        };
+
+        $.ajax({
+            url: '/ItemMaster/CreateItem',
+            type: 'POST',
+            data: objData,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 200) {
+                    toastr.success(result.message);
+                    filterallItemTable();
+                    fn_OpenAddproductmodal();
+                    $('#addnewItemModal').modal('hide');
+                } else {
+                    toastr.warning(result.message);
+                }
+                siteloaderhide();
+            },
+            error: function (xhr, status, error) {
+
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+
+function ClearProductTextBox() {
+    resetNewItemForm();
+    $('#textItemName').val('');
+    $('#textUnitType').val('');
+    $('#textPricePerUnit').val('');
+    $('#textPriceWithGst').val('');
+    $('#textGstAmount').val('');
+    $('#textGstPerUnit').val('');
+    $('#textHSNCode').val('');
+    $('#textItemid').val('');
+}
+
+
+var AddNewItemForm;
+$(document).ready(function () {
+
+    AddNewItemForm = $("#addnewItemForm").validate({
+        rules: {
+            textItemName: "required",
+            textUnitType: "required",
+            textPricePerUnit: "required",
+            textGstAmount: "required",
+            textGstPerUnit: "required",
+        },
+        messages: {
+            textItemName: "Please Enter ItemName",
+            textUnitType: "Please Enter UnitType",
+            textPricePerUnit: "Please Enter PricePerUnit",
+            textGstAmount: "Please Enter GstAmount",
+            textGstPerUnit: "Please Enter GstPerUnit",
+        }
+    })
+});
+
+function resetNewItemForm() {
+    if (AddNewItemForm) {
+        AddNewItemForm.resetForm();
+    }
+}
+
+function clearItemtListSearchText() {
+    $('#mdProductSearch').val('');
+    filterallItemTable();
+}

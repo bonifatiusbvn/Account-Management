@@ -450,21 +450,91 @@
 <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearItemtListSearchText()"></button>
             </div>
-            <div class="modal-header">
-                <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <label class="form-label mb-0">Search Product</label>
+                    <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" style="width: 500px;" />
+                </div>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && a.Add))
+                {
+                    <button type="button" class="btn btn-primary" onclick="ClearAddProductTextBox()" style="width: 150px;">
+                        <i class="lni lni-circle-plus"></i> Item
+                    </button>
+                }
             </div>
 
-            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+            <div class="modal-body" id="mdlistofItem" style="max-height: 630px; overflow-y: auto;">
             </div>
         </div>
     </div>
 </div>
+
+
+<form id="addnewItemForm">
+    <div class="modal fade show" tabindex="-1" id="addnewItemModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="flipModalLabel">Add Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Item Name</label>
+                        <input type="text" class="form-control" placeholder="Item Name" id="textItemName" name="textItemName">
+                        <input type="hidden" id="txtItemid">
+                        <span id="spnItemName" class="text-danger"></span>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-4 col-12">
+                            <label class="form-label">Unit Type</label>
+                            <input type="text" id="textUnitType" name="textUnitType" class="form-control" placeholder="Unit Type">
+                            <span id="spnUnitType" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" id="textUnitTypeHidden" name="textUnitTypeHidden">
+                        <div class="col-lg-4 col-12">
+                            <label class="form-label">Price</label>
+                            <input type="number" class="form-control" placeholder="Price Per Unit" id="textPricePerUnit" name="textPricePerUnit">
+                            <span id="spnPricePerUnit" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <label class="form-label">With GST</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input font-22" id="textIsWithGst" type="checkbox" style="margin-left:-35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6 col-12">
+                            <label class="form-label">GST%</label>
+                            <input type="text" class="form-control" placeholder="GST%" id="textGstPerUnit" name="textGstPerUnit">
+                            <span id="spnGstPerUnit" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <label class="form-label">GST Amount</label>
+                            <input type="text" class="form-control" placeholder="Gst Amount" id="textGstAmount" name="textGstAmount" disabled>
+                            <span id="spnGstAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">HSN Code</label>
+                        <input type="text" class="form-control" placeholder="HSN Code" id="textHSNCode">
+                        <span id="spnHSNCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="CreateNewItem()" id="btnitem">Save</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+
 <!--end col-->
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

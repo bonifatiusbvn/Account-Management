@@ -190,7 +190,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         PODetails.CompanyGstno = row["CompanyGstno"]?.ToString();
                         PODetails.TotalAmount = row["TotalAmount"] != DBNull.Value ? (decimal)row["TotalAmount"] : 0m;
                         PODetails.Description = row["Description"]?.ToString();
-                        PODetails.DeliveryShedule = row["Description"]?.ToString();
+                        PODetails.DeliveryShedule = row["DeliveryShedule"]?.ToString();
                         PODetails.TotalDiscount = row["TotalDiscount"] != DBNull.Value ? (decimal)row["TotalDiscount"] : 0m;
                         PODetails.TotalGstamount = row["TotalGstamount"] != DBNull.Value ? (decimal)row["TotalGstamount"] : 0m;
                         PODetails.BillingAddress = row["BillingAddress"]?.ToString();
