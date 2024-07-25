@@ -286,6 +286,23 @@
                         }
 
                     }
+                    @if (group == "Reports" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    {
+                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                        {
+                            @if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="parent-icon">
+                                            <i class="lni lni-remove-file"></i>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
                 }
             </ul>
             <!--end navigation-->

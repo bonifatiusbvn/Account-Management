@@ -238,6 +238,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SupplierInvoiceDetails.CreatedOn = DS.Tables[0].Rows[0]["CreatedOn"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["CreatedOn"] : DateTime.MinValue; ;
                         SupplierInvoiceDetails.StateCode = DS.Tables[0].Rows[0]["StateCode"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["StateCode"] : 0;
                     }
+
                     SupplierInvoiceDetails.ItemList = new List<POItemDetailsModel>();
 
                     foreach (DataRow row in DS.Tables[1].Rows)
@@ -257,6 +258,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
                             DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
                         };
+
                         SupplierInvoiceDetails.ItemList.Add(InvoiceDetails);
                     }
                 }

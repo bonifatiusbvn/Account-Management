@@ -1,0 +1,159 @@
+﻿@using AccountManegments.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.PurchaseRequest.PurchaseRequestModel>
+@{
+    ViewData["Title"] = "ReportDetails";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+                <div class="row">
+                    <div class="col-12 col-lg-12 col-md-12 col-xl-12">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3 align-items-center">
+                                                    <div class="col-12 col-lg-2">
+                                                        <select class="form-select" id="SiteNameList">
+                                                            <option selected value="">Select Site</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2">
+                                                        <select class="form-select" id="ddlPOSearchBy" onchange="filterPOTable()">
+                                                            <option selected="selected">All</option>
+                                                            <option>SupplierName</option>
+                                                        </select>
+                                                        <input type="hidden" id="inputSiteId" value="@UserSession.SiteId" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-2">
+                                                        <select class="form-select" id="ddlPOSortBy" onchange="sortPOTable()">
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn">First Created</option>
+                                                            <option value="AscendingSupplierName">SupplierName(a-z)</option>
+                                                            <option value="DescendingSupplierName">SupplierName(z-a)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetUserCurrentMonthExpenseList" aria-selected="true">
+                                                        <label class="form-check-label" for="currentMonthRadio">
+                                                            Current Month
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="d-flex gap-2">
+                                                            <div>
+                                                                <input class="nav-radio form-check-input Returns active me-2" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
+                                                                <label class="form-check-label" for="betweenMonthRadio">
+                                                                    Between Date
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="startDate">
+                                                            </div>
+                                                            <div>
+                                                                <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="endDate">
+                                                            </div>
+                                                            <div>
+                                                                <a class="btn btn-primary nav-btn" id="addproduct-btn" data-bs-toggle="tab" role="tab" style="display: block;" aria-selected="false" tabindex="-1"><i class="ri-search-line"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!--end row-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end row-->
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light btn-primary">
+                                                    <tr>
+                                                        <th>Purchase Order Id</th>
+                                                        <th>Supplier Name</th>
+                                                        <th>Company Name</th>
+                                                        <th>GST Amount</th>
+                                                        <th>Total Amount</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="PurchaseOrderListbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        GetCompanyList();
+        function GetCompanyList() {
+            $.ajax({
+                url: '/Company/GetCompanyNameList',
+                success: function (result) {
+                    if (result.length > 0) {
+                        $.each(result, function (i, data) {
+                            $('#CompanyNameList').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+        }
+
+        $('#CompanyNameList').change(function () {
+            siteloadershow();
+            var Text = $("#CompanyNameList Option:Selected").text();
+            var CompanyId = $(this).val();
+            fn_ChangeCompany(CompanyId)
+        });
+
+        function fn_ChangeCompany(CompanyId) {
+
+            siteloadershow();
+            $.ajax({
+                url: '/Home/GetSupplierPendingDetailsList',
+                type: 'GET',
+                data: {
+                    CompanyId: CompanyId,
+                },
+                success: function (result) {
+                    siteloaderhide();
+                    $("#dashpaymentinfo").html(result);
+
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+
+        }
+    </script>
+}
