@@ -6,6 +6,7 @@ using AccountManagement.Repository.Interface.Services.InvoiceMaster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 using System.Net;
 
 namespace AccountManagement.API.Controllers
@@ -153,5 +154,13 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsById(SupplierId);
             return Ok(new { code = 200, data = supplierList.ToList() });
         }
+
+        [HttpPost]
+        [Route("GetSupplierInvoiceDetailsReport")]
+        public async Task<IActionResult> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        {
+            IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
+            return Ok(new { code = 200, data = supplierList.ToList() });
+        } 
     }
 }
