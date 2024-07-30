@@ -1,18 +1,14 @@
 ﻿@model List<AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceModel>
 
-@{
-decimal? yougavetotal = 0;
-decimal? yougettotal = 0;
-}
-
 @if (Model != null && Model.Any())
 {
-    @foreach (var item in Model)
+    decimal? youGaveTotal = 0;
+    decimal? youGetTotal = 0;
+
+    foreach (var item in Model)
     {
         if (item.InvoiceNo == "PayOut")
         {
-            yougavetotal += item.TotalAmount;
-
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
@@ -20,11 +16,8 @@ decimal? yougettotal = 0;
                 <td></td>
             </tr>
         }
-        else
+        else if (item.InvoiceNo != "Totals")
         {
-
-            yougettotal += item.TotalAmount;
-
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
@@ -32,6 +25,21 @@ decimal? yougettotal = 0;
                 <td class="text-success">@item.TotalAmount</td>
             </tr>
         }
+        if (item.InvoiceNo == "Totals")
+        {
+            youGaveTotal = item.youGaveTotal;
+            youGetTotal = item.youGetTotal;
+        }
+    }
+
+    if (youGaveTotal != 0 || youGetTotal != 0)
+    {
+        <tr style="height:55px;" class="sticky-footer">
+            <td><b>Total</b></td>
+            <td></td>
+            <td><b>@youGaveTotal</b></td>
+            <td><b>@youGetTotal</b></td>
+        </tr>
     }
 }
 else
@@ -40,9 +48,4 @@ else
         <td colspan="4" class="text-center">No data found for the selected criteria.</td>
     </tr>
 }
-<tr style="height:55px;" class="sticky-footer">
-    <td><b>Total</b></td>
-    <td></td>
-    <td><b>@yougavetotal</b></td>
-    <td><b>@yougettotal</b></td>
-</tr>
+

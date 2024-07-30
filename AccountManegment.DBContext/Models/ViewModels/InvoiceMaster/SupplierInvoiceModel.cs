@@ -55,6 +55,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SupplierName { get; set; }
 
         public string? CompanyName { get; set; }
+
+        public Decimal? youGaveTotal { get; set; }
+        public Decimal? youGetTotal { get; set; }
     }
     public class InvoiceTotalAmount
     {

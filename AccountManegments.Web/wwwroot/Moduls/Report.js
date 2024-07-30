@@ -86,11 +86,18 @@ function GetInvoiceReportData()
         }
         $.ajax({
             type: "post",
-            url: '/InvoiceMaster/GetSupplierInvoiceDetailsReport',
+            url: '/Report/GetSupplierInvoiceDetailsReport',
             data: objData,
             datatype: 'json',
             success: function (result) {
                 $("#reportInvoiceListbody").html(result);
+
+                if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+                    $("#downloadreportfile").hide();
+                } else {
+                    $("#downloadreportfile").show();
+                }
+                
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error: ', status, error);
@@ -112,11 +119,17 @@ function GetCurrentMonthInvoiceList() {
 
     $.ajax({
         type: "post",
-        url: '/InvoiceMaster/GetSupplierInvoiceDetailsReport',
+        url: '/Report/GetSupplierInvoiceDetailsReport',
         data: objData,
         datatype: 'json',
         success: function (result) {
             $("#reportInvoiceListbody").html(result);
+
+            if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+                $("#downloadreportfile").hide();
+            } else {
+                $("#downloadreportfile").show();
+            }
         },
         error: function (xhr, status, error) {
             console.error("AJAX Error: " + status + error);
@@ -151,15 +164,141 @@ function GetBetweenDateInvoiceList() {
         };
         $.ajax({
             type: "post",
-            url: '/InvoiceMaster/GetSupplierInvoiceDetailsReport',
+            url: '/Report/GetSupplierInvoiceDetailsReport',
             data: objData,
             datatype: 'json',
             success: function (result) {
                 $("#reportInvoiceListbody").html(result);
+
+                if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+                    $("#downloadreportfile").hide();
+                } else {
+                    $("#downloadreportfile").show();
+                }
             },
             error: function (xhr, status, error) {
                 console.error("AJAX Error: " + status + " - " + error);
             }
         });
     }
+}
+
+function ExportToPDF() {
+    siteloadershow();
+    var objData = {
+        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType,
+        startDate: selectedstartDate,
+        endDate: selectedendDate
+    };
+    $.ajax({
+        url: '/Report/ExportToPdf',
+        type: 'POST',
+        data: objData,
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
+
+function ExportToExcel() {
+    siteloadershow();
+    var objData = {
+        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType,
+        startDate: selectedstartDate,
+        endDate: selectedendDate
+    };
+    $.ajax({
+        url: '/Report/ExportToExcel',
+        type: 'GET',
+        data: objData,
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
 }

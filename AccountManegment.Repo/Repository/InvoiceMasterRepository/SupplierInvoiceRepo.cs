@@ -640,66 +640,71 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         {
             try
             {
-                string dbConnectionStr = Configuration.GetConnectionString("ACCDbconn");
-                var dataSet = DbHelper.GetDataSet("[GetSupplierInvoiceDetailsReport]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                List<SqlParameter> parameters = new List<SqlParameter>
+        {
+            new SqlParameter("@CompanyId", invoiceReport.CompanyId ?? (object)DBNull.Value),
+            new SqlParameter("@SiteId", invoiceReport.SiteId ?? (object)DBNull.Value),
+            new SqlParameter("@SupplierId", invoiceReport.SupplierId ?? (object)DBNull.Value),
+            new SqlParameter("@filterType", invoiceReport.filterType ?? (object)DBNull.Value),
+            new SqlParameter("@StartDate", invoiceReport.startDate ?? (object)DBNull.Value),
+            new SqlParameter("@EndDate", invoiceReport.endDate ?? (object)DBNull.Value)
+        };
 
-                var SupplierInvoiceList = new List<SupplierInvoiceModel>();
+                string dbConnectionStr = Configuration.GetConnectionString("ACCDbconn");
+                var dataSet = DbHelper.GetDataSet("GetSupplierInvoiceDetailsReport", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
+
+                List<SupplierInvoiceModel> SupplierInvoiceList = new List<SupplierInvoiceModel>();
+
+                decimal youGaveTotal = 0;
+                decimal youGetTotal = 0;
 
                 foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
-                    var InvoiceDetails = new SupplierInvoiceModel
+                    if (row["Id"] == DBNull.Value && row["InvoiceNo"] == DBNull.Value)
                     {
-                        Id = row["Id"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["Id"].ToString()),
-                        InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
-                        SiteId = row["SiteId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SiteId"].ToString()),
-                        SupplierId = row["SupplierId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SupplierId"].ToString()),
-                        CompanyId = row["CompanyId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["CompanyId"].ToString()),
-                        TotalAmount = row["TotalAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalAmount"]),
-                        TotalDiscount = row["TotalDiscount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalDiscount"]),
-                        TotalGstamount = row["TotalGSTAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalGSTAmount"]),
-                        Roundoff = row["Roundoff"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["Roundoff"]),
-                        Description = row["Description"]?.ToString() ?? string.Empty,
-                        CompanyName = row["CompanyName"]?.ToString() ?? string.Empty,
-                        SupplierName = row["SupplierName"]?.ToString() ?? string.Empty,
-                        PaymentStatus = row["PaymentStatus"]?.ToString() ?? string.Empty,
-                        IsPayOut = row["IsPayOut"] != DBNull.Value && (bool)row["IsPayOut"],
-                        SupplierInvoiceNo = row["SupplierInvoiceNo"]?.ToString() ?? string.Empty,
-                        Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
-                        CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"])
-                    };
-                    SupplierInvoiceList.Add(InvoiceDetails);
-                }
-                if (invoiceReport.CompanyId != null)
-                {
-                    SupplierInvoiceList = SupplierInvoiceList.Where(a => a.CompanyId == invoiceReport.CompanyId).ToList();
-                }
-                if (invoiceReport.SiteId != null)
-                {
-                    SupplierInvoiceList = SupplierInvoiceList.Where(a => a.SiteId == invoiceReport.SiteId).ToList();
-                }
-                if (invoiceReport.SupplierId != null)
-                {
-                    SupplierInvoiceList = SupplierInvoiceList.Where(a => a.SupplierId == invoiceReport.SupplierId).ToList();
-                }
-                if (!string.IsNullOrEmpty(invoiceReport.filterType))
-                {
-                    switch (invoiceReport.filterType.ToLower())
+                        youGaveTotal = row["youGaveTotal"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["youGaveTotal"]);
+                        youGetTotal = row["youGetTotal"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["youGetTotal"]);
+                    }
+                    else
                     {
-                        case "currentmonth":
-                            var currentYear = DateTime.Now.Year;
-                            var currentMonth = DateTime.Now.Month;
-                            SupplierInvoiceList = SupplierInvoiceList.Where(e => e.Date.HasValue && e.Date.Value.Year == currentYear && e.Date.Value.Month == currentMonth).ToList();
-                            break;
-                        case "daterange":
-                            if (invoiceReport.startDate.HasValue && invoiceReport.endDate.HasValue)
-                            {
-                                SupplierInvoiceList = SupplierInvoiceList.Where(e => e.Date >= invoiceReport.startDate.Value && e.Date <= invoiceReport.endDate.Value).ToList();
-                            }
-                            break;
-                        default:
-                            break;
+                        var InvoiceDetails = new SupplierInvoiceModel
+                        {
+                            Id = row["Id"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["Id"].ToString()),
+                            InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
+                            SiteId = row["SiteId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SiteId"].ToString()),
+                            SupplierId = row["SupplierId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SupplierId"].ToString()),
+                            CompanyId = row["CompanyId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["CompanyId"].ToString()),
+                            TotalAmount = row["TotalAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalAmount"]),
+                            TotalDiscount = row["TotalDiscount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalDiscount"]),
+                            TotalGstamount = row["TotalGSTAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalGSTAmount"]),
+                            Roundoff = row["Roundoff"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["Roundoff"]),
+                            Description = row["Description"]?.ToString() ?? string.Empty,
+                            CompanyName = row["CompanyName"]?.ToString() ?? string.Empty,
+                            SupplierName = row["SupplierName"]?.ToString() ?? string.Empty,
+                            PaymentStatus = row["PaymentStatus"]?.ToString() ?? string.Empty,
+                            IsPayOut = row["IsPayOut"] != DBNull.Value && (bool)row["IsPayOut"],
+                            SupplierInvoiceNo = row["SupplierInvoiceNo"]?.ToString() ?? string.Empty,
+                            Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
+                            CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
+                            youGaveTotal = 0,
+                            youGetTotal = 0 
+                        };
+
+                        SupplierInvoiceList.Add(InvoiceDetails);
                     }
                 }
+
+                if (youGaveTotal != 0 || youGetTotal != 0)
+                {
+                    SupplierInvoiceList.Add(new SupplierInvoiceModel
+                    {
+                        Id = Guid.Empty,
+                        InvoiceNo = "Totals",
+                        youGaveTotal = youGaveTotal,
+                        youGetTotal = youGetTotal
+                    });
+                }
+
                 return SupplierInvoiceList;
             }
             catch (Exception ex)

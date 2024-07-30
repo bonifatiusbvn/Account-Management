@@ -7,6 +7,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Aspose.Pdf;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Reflection;
 using System.Security.Permissions;
 
 namespace AccountManegments.Web.Controllers
@@ -569,25 +571,6 @@ namespace AccountManegments.Web.Controllers
                 );
                 await viewResult.View.RenderAsync(viewContext);
                 return stringWriter.ToString();
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
-        {
-            try
-            {
-                List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
-                if (response.code == 200)
-                {
-                    SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
-                }
-                return PartialView("~/Views/Report/_ReportDetailsPartial.cshtml", SupplierDetails);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
     }
