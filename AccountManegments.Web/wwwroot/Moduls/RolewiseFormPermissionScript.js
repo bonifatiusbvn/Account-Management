@@ -28,7 +28,7 @@ function AllRolewiseFormUserTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -107,7 +107,7 @@ function UpdateRolewiseFormPermission() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -150,7 +150,7 @@ function CreateRolewiseFormPermission() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }

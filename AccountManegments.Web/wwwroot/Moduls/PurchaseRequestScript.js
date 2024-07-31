@@ -117,7 +117,7 @@ function sortPurchaseRequestTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -150,7 +150,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 
@@ -542,7 +542,7 @@ function GetPurchaseOrderList() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 function filterPurchaseOrderTable() {
@@ -563,7 +563,7 @@ function filterPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -583,7 +583,7 @@ function sortPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -612,7 +612,7 @@ function EditPurchaseOrderDetails(Id) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -1524,7 +1524,7 @@ function GetPOList() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -1595,7 +1595,7 @@ function sortPOTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }

@@ -23,7 +23,7 @@ function AllItemInWordListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -45,7 +45,7 @@ function filterItemInWordTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -66,7 +66,7 @@ function sortItemInWordTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -254,7 +254,7 @@ function EditItemInWordDetails(InwordId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }

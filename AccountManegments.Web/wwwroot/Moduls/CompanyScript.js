@@ -12,7 +12,7 @@ function AllCompanyTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -34,7 +34,7 @@ function filterCompanyTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -54,7 +54,7 @@ function sortCompanyTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -169,7 +169,7 @@ function GetCompnaytById(CompanyId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -205,7 +205,7 @@ function SelectCompanyDetails(CompanyId, element) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }

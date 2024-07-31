@@ -112,7 +112,7 @@ function DisplayUserDetails(UserId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -146,7 +146,7 @@ function SelectUserDetails(UserId, element) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -161,7 +161,7 @@ function AllUserTable() {
             $("#Usertbody").html(result);
         })
         .fail(function (error) {
-            toastr.error(error);
+
         });
 }
 
@@ -183,7 +183,7 @@ function filterTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -203,7 +203,7 @@ function sortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }

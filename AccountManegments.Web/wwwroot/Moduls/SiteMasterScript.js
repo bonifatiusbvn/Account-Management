@@ -15,7 +15,7 @@ function AllSiteListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -37,7 +37,7 @@ function SitefilterTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -57,7 +57,7 @@ function sortSiteTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }

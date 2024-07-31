@@ -267,9 +267,8 @@ function AllSupplierInvoiceListTable() {
 
             $("#SupplierInvoicebody").html(result);
         })
-        .fail(function (error) {
+        .fail(function () {
             siteloaderhide();
-            toastr.error(error);
         });
 }
 
@@ -311,7 +310,7 @@ function SupplierInvoicesortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -914,7 +913,7 @@ function InvoiceListTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -936,7 +935,7 @@ function filterInvoiceTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -956,7 +955,7 @@ function InvoiceSortTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -1160,8 +1159,7 @@ function printinvoice() {
     newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 }
 
-function ClearAddProductTextBox()
-{
+function ClearAddProductTextBox() {
     ClearProductTextBox();
     $('#addnewItemModal').modal('show');
 }
