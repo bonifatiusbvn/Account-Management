@@ -33,7 +33,7 @@
 }
 else
 {
-    <tr>
+    <tr style="height:55px;">
         <td colspan="4" class="text-center">No data found for the selected criteria.</td>
     </tr>
 }
@@ -43,7 +43,7 @@ else
         var youGaveTotal = @youGaveTotal;
         var youGetTotal = @youGetTotal;
 
-        var footerContent = '<tr><td><b>Total</b></td><td></td>' +
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td>' +
             '<td><b>' + (youGaveTotal ? youGaveTotal.toFixed(2) : '0.00') + '</b></td>' +
             '<td><b>' + (youGetTotal ? youGetTotal.toFixed(2) : '0.00') + '</b></td></tr>';
         $('#reportInvoiceListFooter').html(footerContent);
