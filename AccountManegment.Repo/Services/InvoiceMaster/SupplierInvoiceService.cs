@@ -69,5 +69,10 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
         }
+
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsReportpdf(InvoiceReportModel invoiceReport)
+        {
+            return await SupplierInvoice.GetInvoiceDetailsReportpdf(invoiceReport);
+        }
     }
 }

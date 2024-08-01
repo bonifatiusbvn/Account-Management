@@ -161,6 +161,14 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
             return Ok(new { code = 200, data = supplierList.ToList() });
-        } 
+        }
+
+        [HttpPost]
+        [Route("GetInvoiceDetailsReportpdf")]
+        public async Task<IActionResult> GetInvoiceDetailsReportpdf(InvoiceReportModel invoiceReport)
+        {
+            IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetInvoiceDetailsReportpdf(invoiceReport);
+            return Ok(new { code = 200, data = supplierList.ToList() });
+        }
     }
 }

@@ -687,7 +687,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
                             CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
                             youGaveTotal = 0,
-                            youGetTotal = 0 
+                            youGetTotal = 0
                         };
 
                         SupplierInvoiceList.Add(InvoiceDetails);
@@ -710,6 +710,74 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsReportpdf(InvoiceReportModel invoiceReport)
+        {
+            try
+            {
+                var supplierInvoicesQuery = from a in Context.SupplierInvoices
+                                            join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                            join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                            select new SupplierInvoiceModel
+                                            {
+                                                Id = a.Id,
+                                                InvoiceNo = a.InvoiceNo,
+                                                SupplierId = a.SupplierId,
+                                                SupplierName = b.SupplierName,
+                                                CompanyId = a.CompanyId,
+                                                CompanyName = c.CompanyName,
+                                                Date = a.Date,
+                                                TotalAmount = a.TotalAmount,
+                                                TotalDiscount = a.TotalDiscount,
+                                                TotalGstamount = a.TotalGstamount,
+                                                Description = a.Description,
+                                                Roundoff = a.Roundoff,
+                                                IsPayOut = a.IsPayOut,
+                                                SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                                PaymentStatus = a.PaymentStatus,
+                                                SiteId = a.SiteId 
+                                            };
+
+                var InvoicesList = supplierInvoicesQuery.AsQueryable();
+
+                if (invoiceReport.CompanyId.HasValue)
+                {
+                    InvoicesList = InvoicesList.Where(a => a.CompanyId == invoiceReport.CompanyId.Value);
+                }
+                else if (invoiceReport.SiteId.HasValue)
+                {
+                    InvoicesList = InvoicesList.Where(a => a.SiteId == invoiceReport.SiteId.Value);
+                }
+                else if (invoiceReport.SupplierId.HasValue)
+                {
+                    InvoicesList = InvoicesList.Where(a => a.SupplierId == invoiceReport.SupplierId.Value);
+                }
+                if (!string.IsNullOrEmpty(invoiceReport.filterType))
+                {
+                    switch (invoiceReport.filterType.ToLower())
+                    {
+                        case "currentmonth":
+                            var currentYear = DateTime.Now.Year;
+                            var currentMonth = DateTime.Now.Month;
+                            InvoicesList = InvoicesList.Where(e => e.Date.HasValue && e.Date.Value.Year == currentYear && e.Date.Value.Month == currentMonth);
+                            break;
+                        case "daterange":
+                            if (invoiceReport.startDate.HasValue && invoiceReport.endDate.HasValue)
+                            {
+                                InvoicesList = InvoicesList.Where(e => e.Date >= invoiceReport.startDate.Value && e.Date <= invoiceReport.endDate.Value);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return await InvoicesList.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the invoice details report.", ex);
             }
         }
     }

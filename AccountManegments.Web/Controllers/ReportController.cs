@@ -55,7 +55,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsReportpdf");
 
                 if (response.data.Count != 0)
                 {
@@ -135,7 +135,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsReportpdf");
 
                 if (response.data.Count != 0)
                 {
