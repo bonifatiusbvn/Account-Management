@@ -45,12 +45,12 @@ var selectedfilterType = null;
 $(document).ready(function () {
     $('#textReportSupplierName').change(function () {
         selectedSupplierId = $(this).val();
-        GetInvoiceReportData(); 
+        GetInvoiceReportData();
     });
 
     $('#textReportSiteName').change(function () {
         selectedSiteId = $(this).val();
-        GetInvoiceReportData(); 
+        GetInvoiceReportData();
     });
 
     $('#textReportCompanyName').change(function () {
@@ -73,50 +73,7 @@ $(document).ready(function () {
     });
 });
 
-function GetInvoiceReportData()
-{
-    if (selectedSiteId || selectedCompanyId || selectedSupplierId) {
-        var objData = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate
-        }
-        $.ajax({
-            type: "post",
-            url: '/Report/GetSupplierInvoiceDetailsReport',
-            data: objData,
-            datatype: 'json',
-            success: function (result) {
-                $("#reportInvoiceListbody").html(result);
-
-                if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-                    $("#downloadreportfile").hide();
-                } else {
-                    $("#downloadreportfile").show();
-                }
-                
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error: ', status, error);
-            }
-        });
-    }
-}
-
-function GetCurrentMonthInvoiceList() {
-
-    selectedfilterType = "currentMonth";
-
-    var objData = {
-        SiteId: selectedSiteId,
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType
-    }
-
+function loadReportData(objData) {
     $.ajax({
         type: "post",
         url: '/Report/GetSupplierInvoiceDetailsReport',
@@ -132,28 +89,13 @@ function GetCurrentMonthInvoiceList() {
             }
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error: " + status + error);
+            console.error('AJAX Error: ', status, error);
         }
     });
 }
 
-function GetBetweenDateInvoiceList() {
-
-    selectedstartDate = $('#startDate').val();
-    selectedendDate = $('#endDate').val();
-    selectedfilterType = "dateRange";
-
-    if (!selectedstartDate && !selectedendDate) {
-        toastr.warning("Select dates");
-        return;
-    } else if (!selectedstartDate) {
-        toastr.warning("Select Start date");
-        return;
-    } else if (!selectedendDate) {
-        toastr.warning("Select End date");
-        return;
-    }
-    else {
+function GetInvoiceReportData() {
+    if (selectedSiteId || selectedCompanyId || selectedSupplierId) {
         var objData = {
             SiteId: selectedSiteId,
             CompanyId: selectedCompanyId,
@@ -162,29 +104,44 @@ function GetBetweenDateInvoiceList() {
             startDate: selectedstartDate,
             endDate: selectedendDate
         };
-        $.ajax({
-            type: "post",
-            url: '/Report/GetSupplierInvoiceDetailsReport',
-            data: objData,
-            datatype: 'json',
-            success: function (result) {
-                $("#reportInvoiceListbody").html(result);
-
-                if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-                    $("#downloadreportfile").hide();
-                } else {
-                    $("#downloadreportfile").show();
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error: " + status + " - " + error);
-            }
-        });
+        loadReportData(objData);
     }
 }
 
+function GetCurrentMonthInvoiceList() {
+    selectedfilterType = "currentMonth";
+    var objData = {
+        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType
+    };
+    loadReportData(objData);
+}
+
+function GetBetweenDateInvoiceList() {
+    selectedstartDate = $('#startDate').val();
+    selectedendDate = $('#endDate').val();
+    selectedfilterType = "dateRange";
+
+    if (!selectedstartDate || !selectedendDate) {
+        toastr.warning("Select dates");
+    } else {
+        var objData = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate
+        };
+        loadReportData(objData);
+    }
+}
+
+
 function ExportToPDF() {
-    debugger
+
     siteloadershow();
     var objData = {
         SiteId: selectedSiteId,
