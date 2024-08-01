@@ -185,7 +185,7 @@ function AllUserTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 
@@ -207,7 +207,7 @@ function filterSupplierTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -227,7 +227,7 @@ function sortSupplierTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }

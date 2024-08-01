@@ -12,7 +12,7 @@ function AllItemTable() {
         })
         .fail(function (error) {
             siteloaderhide();
-            toastr.error(error);
+
         });
 }
 function filterItemTable() {
@@ -33,7 +33,7 @@ function filterItemTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -53,7 +53,7 @@ function sortItemTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(error);
+
         }
     });
 }
@@ -86,7 +86,7 @@ function DisplayItemDetails(ItemId, element) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
@@ -231,7 +231,7 @@ function EditItemDetails(ItemId) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.error(xhr.responseText);
+
         }
     });
 }
