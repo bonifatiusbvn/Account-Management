@@ -1,14 +1,17 @@
 ﻿@model List<AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceModel>
 
-@if (Model != null && Model.Any())
-{
+@{
     decimal? youGaveTotal = 0;
     decimal? youGetTotal = 0;
+}
 
+@if (Model != null && Model.Any())
+{
     foreach (var item in Model)
     {
         if (item.InvoiceNo == "PayOut")
         {
+            youGaveTotal += item.TotalAmount;
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
@@ -16,8 +19,9 @@
                 <td></td>
             </tr>
         }
-        else if (item.InvoiceNo != "Totals")
+        else
         {
+            youGetTotal += item.TotalAmount;
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
@@ -25,21 +29,6 @@
                 <td class="text-success">@item.TotalAmount</td>
             </tr>
         }
-        if (item.InvoiceNo == "Totals")
-        {
-            youGaveTotal = item.youGaveTotal;
-            youGetTotal = item.youGetTotal;
-        }
-    }
-
-    if (youGaveTotal != 0 || youGetTotal != 0)
-    {
-        <tr style="height:55px;" class="sticky-footer">
-            <td><b>Total</b></td>
-            <td></td>
-            <td><b>@youGaveTotal</b></td>
-            <td><b>@youGetTotal</b></td>
-        </tr>
     }
 }
 else
@@ -49,3 +38,14 @@ else
     </tr>
 }
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        var youGaveTotal = @youGaveTotal;
+        var youGetTotal = @youGetTotal;
+
+        var footerContent = '<tr><td><b>Total</b></td><td></td>' +
+            '<td><b>' + (youGaveTotal ? youGaveTotal.toFixed(2) : '0.00') + '</b></td>' +
+            '<td><b>' + (youGetTotal ? youGetTotal.toFixed(2) : '0.00') + '</b></td></tr>';
+        $('#reportInvoiceListFooter').html(footerContent);
+    });
+</script>

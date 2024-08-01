@@ -1253,6 +1253,7 @@ function ClearProductTextBox() {
     $('#textGstPerUnit').val('');
     $('#textHSNCode').val('');
     $('#textItemid').val('');
+    $("#textIsWithGst").prop("checked", false);
 }
 
 
@@ -1287,3 +1288,44 @@ function clearItemtListSearchText() {
     $('#mdProductSearch').val('');
     filterallItemTable();
 }
+
+function WithGSTSelected() {
+    var isWithGstCheckbox = document.getElementById('textIsWithGst');
+    var gstAmountInput = document.getElementById('textGstAmount');
+    var gstPercentageInput = document.getElementById('textGstPerUnit');
+    var priceInput = document.getElementById('textPricePerUnit');
+
+    var price = parseFloat(priceInput.value);
+    var gstPercentage = parseFloat(gstPercentageInput.value);
+
+    if (isWithGstCheckbox.checked) {
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var totalAmount = 100 + gstPercentage;
+            var baseAmount = price - (price * gstPercentage / totalAmount);
+            var gstAmount = price - baseAmount;
+            gstAmountInput.value = gstAmount.toFixed(2);
+            priceInput.value = baseAmount.toFixed(2);
+        } else {
+            gstAmountInput.value = "";
+        }
+    } else {
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var Amount = (gstPercentage / 100) * price;
+            gstAmountInput.value = Amount.toFixed(2);
+        } else {
+            gstAmountInput.value = "";
+        }
+    }
+}
+
+document.getElementById('textGstPerUnit').addEventListener('input', function () {
+    WithGSTSelected();
+});
+document.getElementById('textPricePerUnit').addEventListener('input', function () {
+    WithGSTSelected();
+});
+document.getElementById('textIsWithGst').addEventListener('change', function () {
+    WithGSTSelected();
+});
