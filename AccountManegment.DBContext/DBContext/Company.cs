@@ -9,9 +9,9 @@ public partial class Company
 
     public string CompanyName { get; set; } = null!;
 
-    public string Gstno { get; set; } = null!;
-
     public string? InvoicePef { get; set; }
+
+    public string Gstno { get; set; } = null!;
 
     public string? PanNo { get; set; }
 

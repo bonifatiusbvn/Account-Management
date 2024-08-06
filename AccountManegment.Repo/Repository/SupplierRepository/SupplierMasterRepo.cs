@@ -83,6 +83,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                         existingSupplier.State = supplier.State;
                         existingSupplier.PinCode = supplier.PinCode;
                         existingSupplier.BankName = supplier.BankName;
+                        existingSupplier.BankBranch = supplier.BranchName;
                         existingSupplier.AccountNo = supplier.AccountNo;
                         existingSupplier.Iffccode = supplier.Iffccode;
                         existingSupplier.CreatedBy = supplier.CreatedBy;
@@ -117,6 +118,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                         State = supplier.State,
                         PinCode = supplier.PinCode,
                         BankName = supplier.BankName,
+                        BankBranch = supplier.BranchName,
                         AccountNo = supplier.AccountNo,
                         Iffccode = supplier.Iffccode,
                         CreatedBy = supplier.CreatedBy,
@@ -185,6 +187,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                 City = e.City,
                                 CityName = c.CityName,
                                 BankName = e.BankName,
+                                BranchName = e.BankBranch,
                                 AccountNo = e.AccountNo,
                                 Iffccode = e.Iffccode,
                                 FullAddress = e.BuildingName + "-" + e.Area + "," + c.CityName + "," + s.StatesName + "-" + e.PinCode
@@ -314,6 +317,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     Userdata.Email = UpdateSupplier.Email;
                     Userdata.Mobile = UpdateSupplier.Mobile;
                     Userdata.BankName = UpdateSupplier.BankName;
+                    Userdata.BankBranch = UpdateSupplier.BranchName;
                     Userdata.AccountNo = UpdateSupplier.AccountNo;
                     Userdata.Iffccode = UpdateSupplier.Iffccode;
                     Userdata.UpdatedBy = UpdateSupplier.CreatedBy;

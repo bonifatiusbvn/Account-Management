@@ -1,7 +1,7 @@
 ﻿GetAllSiteList();
 GetAllCompanyList();
 GetAllSupplierList();
-
+loadReportData();
 function GetAllSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
@@ -65,6 +65,13 @@ $(document).ready(function () {
         }
     });
 
+    $('.nav-radio').click(function () {
+        var targetTab = $(this).attr('href');
+        if (targetTab === '#GetCurrentYearInvoicelist') {
+            GetCurrentYearInvoiceList();
+        }
+    });
+
     $('.nav-btn').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetBetweenDatesList') {
@@ -95,9 +102,9 @@ function loadReportData(objData) {
 }
 
 function GetInvoiceReportData() {
-    if (selectedSiteId || selectedCompanyId || selectedSupplierId) {
+    debugger
+    if (selectedCompanyId || selectedSupplierId) {
         var objData = {
-            SiteId: selectedSiteId,
             CompanyId: selectedCompanyId,
             SupplierId: selectedSupplierId,
             filterType: selectedfilterType,
@@ -109,9 +116,20 @@ function GetInvoiceReportData() {
 }
 
 function GetCurrentMonthInvoiceList() {
+    debugger
     selectedfilterType = "currentMonth";
     var objData = {
-        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType
+    };
+    loadReportData(objData);
+}
+
+function GetCurrentYearInvoiceList() {
+    debugger
+    selectedfilterType = "currentYear";
+    var objData = {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
         filterType: selectedfilterType
@@ -128,7 +146,6 @@ function GetBetweenDateInvoiceList() {
         toastr.warning("Select dates");
     } else {
         var objData = {
-            SiteId: selectedSiteId,
             CompanyId: selectedCompanyId,
             SupplierId: selectedSupplierId,
             filterType: selectedfilterType,

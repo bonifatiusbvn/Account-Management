@@ -772,7 +772,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     string trimmedInvoicePef = CompanyDetails.InvoicePef.Trim();
                     if (lastInvoice == null)
                     {
-                        supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
+                        supplierInvoiceId = $"{trimmedInvoicePef}/{(lastYear % 100):D2}-{(currentYear % 100):D2}/001";
                     }
                     else
                     {
@@ -782,7 +782,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         {
                             int lastInvoiceNumberValue = int.Parse(match.Value);
                             int newInvoiceNumberValue = lastInvoiceNumberValue + 1;
-                            supplierInvoiceId = $"{trimmedInvoicePef}/Invoice/{(lastYear % 100):D2}-{(currentYear % 100):D2}/{newInvoiceNumberValue:D3}";
+                            supplierInvoiceId = $"{trimmedInvoicePef}/{(lastYear % 100):D2}-{(currentYear % 100):D2}/{newInvoiceNumberValue:D3}";
                         }
                         else
                         {
@@ -833,50 +833,147 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
+        //public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        //{
+        //    try
+        //    {
+        //        List<SqlParameter> parameters = new List<SqlParameter>
+        //{
+        //    new SqlParameter("@CompanyId", invoiceReport.CompanyId ?? (object)DBNull.Value),
+        //    new SqlParameter("@SiteId", invoiceReport.SiteId ?? (object)DBNull.Value),
+        //    new SqlParameter("@SupplierId", invoiceReport.SupplierId ?? (object)DBNull.Value),
+        //    new SqlParameter("@filterType", invoiceReport.filterType ?? (object)DBNull.Value),
+        //    new SqlParameter("@StartDate", invoiceReport.startDate ?? (object)DBNull.Value),
+        //    new SqlParameter("@EndDate", invoiceReport.endDate ?? (object)DBNull.Value)
+        //};
+
+        //        string dbConnectionStr = Configuration.GetConnectionString("ACCDbconn");
+        //        var dataSet = DbHelper.GetDataSet("GetSupplierInvoiceDetailsReport", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
+
+        //        List<SupplierInvoiceModel> SupplierInvoiceList = new List<SupplierInvoiceModel>();
+
+        //        foreach (DataRow row in dataSet.Tables[0].Rows)
+        //        {
+        //            var InvoiceDetails = new SupplierInvoiceModel
+        //            {
+        //                Id = row["Id"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["Id"].ToString()),
+        //                InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
+        //                SiteId = row["SiteId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SiteId"].ToString()),
+        //                SupplierId = row["SupplierId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SupplierId"].ToString()),
+        //                CompanyId = row["CompanyId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["CompanyId"].ToString()),
+        //                TotalAmount = row["TotalAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalAmount"]),
+        //                TotalDiscount = row["TotalDiscount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalDiscount"]),
+        //                TotalGstamount = row["TotalGSTAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalGSTAmount"]),
+        //                Roundoff = row["Roundoff"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["Roundoff"]),
+        //                Description = row["Description"]?.ToString() ?? string.Empty,
+        //                CompanyName = row["CompanyName"]?.ToString() ?? string.Empty,
+        //                SupplierName = row["SupplierName"]?.ToString() ?? string.Empty,
+        //                PaymentStatus = row["PaymentStatus"]?.ToString() ?? string.Empty,
+        //                IsPayOut = row["IsPayOut"] != DBNull.Value && (bool)row["IsPayOut"],
+        //                SupplierInvoiceNo = row["SupplierInvoiceNo"]?.ToString() ?? string.Empty,
+        //                Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
+        //                CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
+        //            };
+
+        //            SupplierInvoiceList.Add(InvoiceDetails);
+        //        }
+
+        //        return SupplierInvoiceList;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
         {
             try
             {
-                List<SqlParameter> parameters = new List<SqlParameter>
-        {
-            new SqlParameter("@CompanyId", invoiceReport.CompanyId ?? (object)DBNull.Value),
-            new SqlParameter("@SiteId", invoiceReport.SiteId ?? (object)DBNull.Value),
-            new SqlParameter("@SupplierId", invoiceReport.SupplierId ?? (object)DBNull.Value),
-            new SqlParameter("@filterType", invoiceReport.filterType ?? (object)DBNull.Value),
-            new SqlParameter("@StartDate", invoiceReport.startDate ?? (object)DBNull.Value),
-            new SqlParameter("@EndDate", invoiceReport.endDate ?? (object)DBNull.Value)
-        };
+                var query = (from s in Context.SupplierInvoices
+                             join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                             join c in Context.Companies on s.CompanyId equals c.CompanyId
+                             join d in Context.Sites on s.SiteId equals d.SiteId
+                             select new
+                             {
+                                 s,
+                                 SupplierName = b.SupplierName,
+                                 CompanyName = c.CompanyName,
+                                 SiteName = d.SiteName
+                             }).AsQueryable();
 
-                string dbConnectionStr = Configuration.GetConnectionString("ACCDbconn");
-                var dataSet = DbHelper.GetDataSet("GetSupplierInvoiceDetailsReport", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
 
-                List<SupplierInvoiceModel> SupplierInvoiceList = new List<SupplierInvoiceModel>();
-
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                if (invoiceReport.CompanyId.HasValue)
                 {
-                    var InvoiceDetails = new SupplierInvoiceModel
-                    {
-                        Id = row["Id"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["Id"].ToString()),
-                        InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
-                        SiteId = row["SiteId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SiteId"].ToString()),
-                        SupplierId = row["SupplierId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["SupplierId"].ToString()),
-                        CompanyId = row["CompanyId"] == DBNull.Value ? Guid.Empty : Guid.Parse(row["CompanyId"].ToString()),
-                        TotalAmount = row["TotalAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalAmount"]),
-                        TotalDiscount = row["TotalDiscount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalDiscount"]),
-                        TotalGstamount = row["TotalGSTAmount"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["TotalGSTAmount"]),
-                        Roundoff = row["Roundoff"] == DBNull.Value ? 0.0m : Convert.ToDecimal(row["Roundoff"]),
-                        Description = row["Description"]?.ToString() ?? string.Empty,
-                        CompanyName = row["CompanyName"]?.ToString() ?? string.Empty,
-                        SupplierName = row["SupplierName"]?.ToString() ?? string.Empty,
-                        PaymentStatus = row["PaymentStatus"]?.ToString() ?? string.Empty,
-                        IsPayOut = row["IsPayOut"] != DBNull.Value && (bool)row["IsPayOut"],
-                        SupplierInvoiceNo = row["SupplierInvoiceNo"]?.ToString() ?? string.Empty,
-                        Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
-                        CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
-                    };
-
-                    SupplierInvoiceList.Add(InvoiceDetails);
+                    query = query.Where(s => s.s.CompanyId == invoiceReport.CompanyId.Value);
                 }
+
+                if (invoiceReport.SiteId.HasValue)
+                {
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
+                }
+
+                if (invoiceReport.SupplierId.HasValue)
+                {
+                    query = query.Where(s => s.s.SupplierId == invoiceReport.SupplierId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(invoiceReport.filterType))
+                {
+                    if (invoiceReport.filterType == "currentMonth")
+                    {
+
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (invoiceReport.filterType == "currentYear")
+                    {
+
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                }
+
+                if (invoiceReport.startDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value);
+                }
+
+                if (invoiceReport.endDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value);
+                }
+
+                var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
+                {
+                    Id = s.s.Id,
+                    InvoiceNo = s.s.InvoiceNo,
+                    SiteId = s.s.SiteId,
+                    SupplierId = s.s.SupplierId,
+                    CompanyId = s.s.CompanyId,
+                    TotalAmount = s.s.TotalAmount,
+                    TotalDiscount = s.s.TotalDiscount,
+                    TotalGstamount = s.s.TotalGstamount,
+                    Roundoff = s.s.Roundoff,
+                    Description = s.s.Description,
+                    CompanyName = s.CompanyName,
+                    SupplierName = s.SupplierName,
+                    PaymentStatus = s.s.PaymentStatus,
+                    IsPayOut = s.s.IsPayOut,
+                    SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+                    Date = s.s.Date,
+                    CreatedOn = s.s.CreatedOn,
+                    SiteName = s.SiteName
+                }).ToListAsync();
 
                 return SupplierInvoiceList;
             }
@@ -885,5 +982,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+
+
+
     }
 }
