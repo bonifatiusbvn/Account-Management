@@ -19,9 +19,9 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         }
         public ISupplierInvoice SupplierInvoice { get; }
 
-        public async Task<ApiResponseModel> AddSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetails)
+        public async Task<ApiResponseModel> AddSupplierInvoice(List<SupplierInvoiceModel> supplierInvoiceDetails)
         {
-            return await SupplierInvoice.AddSupplierInvoice(SupplierInvoiceDetails);
+            return await SupplierInvoice.AddSupplierInvoice(supplierInvoiceDetails);
         }
 
         public async Task<ApiResponseModel> DeleteSupplierInvoice(Guid Id)

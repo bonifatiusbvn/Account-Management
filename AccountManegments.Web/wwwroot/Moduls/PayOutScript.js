@@ -83,72 +83,136 @@ $(document).ready(function () {
 
 function InsertPayOutDetails() {
     siteloadershow();
-    var objData = {
-        InvoiceNo: "PayOut",
-        SiteId: $("#txtSiteId").val(),
-        SupplierId: $("#txtSuppliername").val(),
-        CompanyId: $("#txtcompanyname").val(),
-        TotalAmount: $("#txtpayoutamount").val(),
-        TotalGstamount: $("#txtpayoutamount").val(),
-        PaymentStatus: $("input[name='paymenttype']:checked").val(),
-        Description: $("#txtdescription").val(),
-        CreatedBy: $("#txtUserId").val(),
-    };
+    if ($('.payoutinvoicerow').length >= 1) {
+        var PayoutDetails = [];
+        var isValidPayout = true;
 
-    var form_data = new FormData();
-    form_data.append("PAYOUTDETAILS", JSON.stringify(objData));
-    $.ajax({
-        url: '/InvoiceMaster/InsertPayOutDetails',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (result) {
-            if (result.code == 200) {
-                siteloaderhide();
-                toastr.success(result.message);
-                setTimeout(function () {
-                    window.location = '/InvoiceMaster/PayOutInvoice';
-                }, 2000);
+        $(".payoutinvoicerow").each(function () {
+            var orderRow = $(this);
+
+            var objData = {
+                InvoiceNo: "PayOut",
+                SiteId: $("#txtSiteId").val(),
+                SupplierId: $("#txtSuppliername").val(),
+                CompanyId: $("#txtcompanyname").val(),
+                PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
+                Description: orderRow.find("input[id^='txtdescription']").val(),
+                Date: orderRow.find("input[id^='txtdate']").val(),
+                CreatedBy: $("#txtUserId").val(),
+                TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
+            };
+            orderRow.find("input[id^='txtdate']").on('input', function () {
+                $(this).css("border", "1px solid #ced4da");
+            });
+
+            orderRow.find("input[id^='txtpayoutamount']").on('input', function () {
+                $(this).css("border", "1px solid #ced4da");
+            });
+
+            if (objData.Date === "" || objData.TotalAmount === "") {
+                isValidPayout = false;
+
+                if (objData.Date === "") {
+                    orderRow.find("input[id^='txtdate']").css("border", "2px solid red");
+                }
+
+                if (objData.TotalAmount === "") {
+                    orderRow.find("input[id^='txtpayoutamount']").css("border", "2px solid red");
+                }
+            } else {
+                PayoutDetails.push(objData);
             }
-            else {
-                siteloaderhide();
-                toastr.error(result.message);
-            }
-        },
-        error: function (xhr, status, error) {
+        });
+
+        if (isValidPayout) {
+            var form_data = new FormData();
+            form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
+
+            $.ajax({
+                url: '/InvoiceMaster/InsertPayOutDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    siteloaderhide();
+                    if (result.code == 200) {
+                        toastr.success(result.message);
+                        setTimeout(function () {
+                            window.location = '/InvoiceMaster/PayOutInvoice';
+                        }, 2000);
+                    } else {
+                        toastr.error(result.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        } else {
             siteloaderhide();
-            toastr.error('An error occurred while processing your request.'); 
+            toastr.warning("Kindly fill all data fields");
         }
-    });
+    } else {
+        siteloaderhide();
+        toastr.warning("Add payout details");
+    }
 }
 
-function validateAndInsertPayOutDetails() {
 
-    var payout = document.getElementById('txtpayoutamount').value.trim();
-    var company = document.getElementById('txtcompanyname').value.trim();
-    var supplier = document.getElementById('txtSuppliername').value.trim();
+let rowCounter = 0;
 
-    var isValid = true;
-
-    if (payout === "") {
-        document.getElementById("spnpayout").innerText = "Please Enter value for PayOut amount!!";
-        isValid = false;
+function AddNewRowforPayOutInvoicebtn() {
+    var siteId = $("#txtSiteId").val();
+    var supplierName = $("#txtSuppliername").val();
+    var companyName = $("#txtcompanyname").val();
+    if (siteId != "" && supplierName != null && companyName != null) {
+        $.ajax({
+            url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
+            type: 'Post',
+            datatype: 'json',
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                if (Result.statusText === "success" || Result.statusText === "OK") {
+                    rowCounter++;
+                    AddNewRow(Result.responseText, rowCounter);
+                } else {
+                    toastr.error("Error in display product");
+                }
+            }
+        });
+    } else {
+        toastr.warning("select site, company and supplier");
     }
+}
 
+function AddNewRow(resultHtml, rowNumber) {
 
-    if (company === "") {
-        document.getElementById("spncompany").innerText = "Please Select Company!";
-        isValid = false;
+    const rowHtml = resultHtml
+        .replace(/ROWID/g, rowNumber)
+        .replace(/ROWNUMBER/g, rowNumber);
+
+    $('#payoutpartialView').append(rowHtml);
+    $('#payoutsubmitbutton').show();
+}
+
+function removePayout(buttonElement) {
+    $(buttonElement).closest('tr').remove();
+    updatePayoutRowNumbers();
+
+    if ($('.payoutinvoicerow').length >= 1) {
+        $('#payoutsubmitbutton').show();
     }
-
-    if (supplier === "") {
-        document.getElementById("spnsupplier").innerText = "Please Select Supplier!";
-        isValid = false;
+    else {
+        $('#payoutsubmitbutton').hide();
     }
+}
 
-    if (isValid) {
-        InsertPayOutDetails();
-    }
+function updatePayoutRowNumbers() {
+    $('#payoutpartialView .payoutinvoicerow').each(function (index) {
+        $(this).find('.row-number').text(index + 1 + '.');
+    });
 }

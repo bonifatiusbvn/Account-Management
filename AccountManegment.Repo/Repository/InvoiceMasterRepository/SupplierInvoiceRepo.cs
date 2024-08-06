@@ -35,38 +35,50 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         public DbaccManegmentContext Context { get; }
         public IConfiguration Configuration { get; }
 
-        public async Task<ApiResponseModel> AddSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetail)
+        public async Task<ApiResponseModel> AddSupplierInvoice(List<SupplierInvoiceModel> supplierInvoiceDetails)
         {
-            ApiResponseModel response = new ApiResponseModel();
+            var response = new ApiResponseModel();
             try
             {
-                var SupplierInvoice = new SupplierInvoice()
+                if (supplierInvoiceDetails == null || !supplierInvoiceDetails.Any())
                 {
-                    Id = Guid.NewGuid(),
-                    InvoiceNo = SupplierInvoiceDetail.InvoiceNo,
-                    SiteId = SupplierInvoiceDetail.SiteId,
-                    SupplierId = SupplierInvoiceDetail.SupplierId,
-                    CompanyId = SupplierInvoiceDetail.CompanyId,
-                    TotalAmount = SupplierInvoiceDetail.TotalAmount,
-                    Description = SupplierInvoiceDetail.Description,
-                    Date = DateTime.Now,
-                    TotalDiscount = SupplierInvoiceDetail.TotalDiscount,
-                    TotalGstamount = SupplierInvoiceDetail.TotalGstamount,
-                    Roundoff = SupplierInvoiceDetail.Roundoff,
-                    IsPayOut = true,
-                    PaymentStatus = SupplierInvoiceDetail.PaymentStatus,
-                    CreatedBy = SupplierInvoiceDetail.CreatedBy,
-                    CreatedOn = DateTime.Now,
-                };
+                    response.code = (int)HttpStatusCode.BadRequest;
+                    response.message = "No data provided.";
+                    return response;
+                }
+                foreach (var invoiceDetail in supplierInvoiceDetails)
+                {
+                    var supplierInvoice = new SupplierInvoice
+                    {
+                        Id = Guid.NewGuid(),
+                        InvoiceNo = invoiceDetail.InvoiceNo,
+                        SiteId = invoiceDetail.SiteId,
+                        SupplierId = invoiceDetail.SupplierId,
+                        CompanyId = invoiceDetail.CompanyId,
+                        TotalAmount = invoiceDetail.TotalAmount,
+                        Description = invoiceDetail.Description,
+                        Date = DateTime.Now,
+                        TotalDiscount = invoiceDetail.TotalDiscount,
+                        TotalGstamount = invoiceDetail.TotalGstamount,
+                        Roundoff = invoiceDetail.Roundoff,
+                        IsPayOut = true,
+                        PaymentStatus = invoiceDetail.PaymentStatus,
+                        CreatedBy = invoiceDetail.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.SupplierInvoices.Add(supplierInvoice);
+                }
+                await Context.SaveChangesAsync();
+
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Payment out successfully.";
-                Context.SupplierInvoices.Add(SupplierInvoice);
-                Context.SaveChanges();
+                response.message = "Payments processed successfully.";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing your request.";
             }
+
             return response;
         }
 

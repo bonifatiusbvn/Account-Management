@@ -300,9 +300,9 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var payout = HttpContext.Request.Form["PAYOUTDETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceModel>(payout);
+                var payoutDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(payout);
 
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/AddSupplierInvoice");
+                ApiResponseModel postuser = await APIServices.PostAsync(payoutDetails, "SupplierInvoice/AddSupplierInvoice");
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -317,6 +317,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("Purchase  Invoice-View")]
         public IActionResult InvoiceListView()
         {
@@ -571,6 +572,23 @@ namespace AccountManegments.Web.Controllers
                 );
                 await viewResult.View.RenderAsync(viewContext);
                 return stringWriter.ToString();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayPayOutInvoicePayOutInvoice()
+        {
+            try
+            {
+                List<SupplierInvoiceModel> pauoutinvoice = new List<SupplierInvoiceModel>
+                {
+                    new SupplierInvoiceModel()
+                };
+                return PartialView("~/Views/InvoiceMaster/_PayOutInvoicePartial.cshtml", pauoutinvoice);
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }
