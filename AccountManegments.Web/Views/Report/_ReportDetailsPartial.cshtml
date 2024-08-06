@@ -15,6 +15,8 @@
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td>@item.CompanyName</td>
+                <td>@item.SupplierName</td>
                 <td class="text-danger">@item.TotalAmount</td>
                 <td></td>
             </tr>
@@ -25,6 +27,8 @@
             <tr style="height:55px;">
                 <td>@item.InvoiceNo</td>
                 <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td>@item.CompanyName</td>
+                <td>@item.SupplierName</td>
                 <td></td>
                 <td class="text-success">@item.TotalAmount</td>
             </tr>
@@ -34,18 +38,18 @@
 else
 {
     <tr style="height:55px;">
-        <td colspan="4" class="text-center">No data found for the selected criteria.</td>
+        <td colspan="6" class="text-center">No data found for the selected criteria.</td>
     </tr>
 }
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var youGaveTotal = @youGaveTotal;
-        var youGetTotal = @youGetTotal;
+        var youGaveTotal = @youGaveTotal ?? 0;
+        var youGetTotal = @youGetTotal ?? 0;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td>' +
-            '<td><b>' + (youGaveTotal ? youGaveTotal.toFixed(2) : '0.00') + '</b></td>' +
-            '<td><b>' + (youGetTotal ? youGetTotal.toFixed(2) : '0.00') + '</b></td></tr>';
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td>' +
+            '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
+            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td></tr>';
         $('#reportInvoiceListFooter').html(footerContent);
     });
 </script>

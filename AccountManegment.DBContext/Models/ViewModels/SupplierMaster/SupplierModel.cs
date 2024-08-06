@@ -31,6 +31,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public string PinCode { get; set; } = null!;
 
         public string? BankName { get; set; }
+        public string? BranchName { get; set; }
 
         public string? AccountNo { get; set; }
 

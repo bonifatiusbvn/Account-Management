@@ -14,12 +14,14 @@ namespace AccountManegments.Web.Controllers
     [Authorize]
     public class ReportController : Controller
     {
-        public ReportController(APIServices aPIServices)
+        public ReportController(APIServices aPIServices, UserSession userSession)
         {
             APIServices = aPIServices;
+            User_Session = aPIServices;
         }
 
         public APIServices APIServices { get; }
+        public APIServices User_Session { get; }
 
         public IActionResult ReportDetails()
         {
@@ -31,13 +33,25 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
-                TempData["SiteId"] = invoiceReport.SiteId;
+
+                TempData["SiteId"] = UserSession.SiteId;
                 TempData["CompanyId"] = invoiceReport.CompanyId;
                 TempData["SupplierId"] = invoiceReport.SupplierId;
                 TempData["filterType"] = invoiceReport.filterType;
                 TempData["startDate"] = invoiceReport.startDate;
                 TempData["endDate"] = invoiceReport.endDate;
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+
+                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
+                {
+                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
+                    CompanyId = invoiceReport.CompanyId,
+                    SupplierId = invoiceReport.SupplierId,
+                    filterType = invoiceReport.filterType,
+                    startDate = invoiceReport.startDate,
+                    endDate = invoiceReport.endDate
+                };
+
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
                 if (response.code == 200)
                 {
                     SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
@@ -49,6 +63,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ExportToPdf(InvoiceReportModel invoiceReport)
@@ -153,7 +168,7 @@ namespace AccountManegments.Web.Controllers
                         decimal yougavetotal = 0;
                         decimal yougettotal = 0;
 
-                        int row = 2; 
+                        int row = 2;
                         foreach (var item in SupplierDetails)
                         {
                             ws.Cell(row, 1).Value = item.InvoiceNo;
@@ -162,12 +177,12 @@ namespace AccountManegments.Web.Controllers
                             if (item.InvoiceNo == "PayOut")
                             {
                                 ws.Cell(row, 3).Value = item.TotalAmount;
-                                ws.Cell(row, 4).Value = ""; 
+                                ws.Cell(row, 4).Value = "";
                                 yougavetotal += item.TotalAmount;
                             }
                             else
                             {
-                                ws.Cell(row, 3).Value = ""; 
+                                ws.Cell(row, 3).Value = "";
                                 ws.Cell(row, 4).Value = item.TotalAmount;
                                 yougettotal += item.TotalAmount;
                             }
@@ -175,7 +190,7 @@ namespace AccountManegments.Web.Controllers
                         }
 
                         ws.Cell(row, 1).Value = "Total";
-                        ws.Cell(row, 2).Value = ""; 
+                        ws.Cell(row, 2).Value = "";
                         ws.Cell(row, 3).Value = yougavetotal;
                         ws.Cell(row, 4).Value = yougettotal;
 
@@ -183,7 +198,7 @@ namespace AccountManegments.Web.Controllers
                         var headerRange = ws.Range(1, 1, 1, 4);
                         headerRange.Style.Font.Bold = true;
                         headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
-                        headerRange.Style.Font.FontColor = XLColor.White; 
+                        headerRange.Style.Font.FontColor = XLColor.White;
                         headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                         var totalRange = ws.Range(row, 1, row, 4);
