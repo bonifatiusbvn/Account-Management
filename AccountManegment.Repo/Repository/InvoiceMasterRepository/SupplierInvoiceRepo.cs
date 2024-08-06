@@ -245,6 +245,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                      {
                                                          ItemId = a.ItemId,
                                                          ItemName = i.ItemName,
+                                                         ItemDescription=a.ItemDescription,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
@@ -613,6 +614,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         existingSupplierInvoice.RefInvoiceId = supplierInvoice.Id;
                         existingSupplierInvoice.ItemId = item.ItemId;
                         existingSupplierInvoice.ItemName = item.ItemName;
+                        existingSupplierInvoice.ItemDescription = item.ItemDescription;
                         existingSupplierInvoice.UnitTypeId = item.UnitType;
                         existingSupplierInvoice.Quantity = item.Quantity;
                         existingSupplierInvoice.Price = item.PricePerUnit;
@@ -635,6 +637,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             RefInvoiceId = supplierInvoice.Id,
                             ItemId = item.ItemId,
                             ItemName = item.ItemName,
+                            ItemDescription = item.ItemDescription,
                             UnitTypeId = item.UnitType,
                             Quantity = item.Quantity,
                             Price = item.PricePerUnit,
@@ -720,6 +723,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         RefInvoiceId = supplierInvoice.Id,
                         ItemId = item.ItemId,
                         ItemName = item.ItemName,
+                        ItemDescription = item.ItemDescription,
                         UnitTypeId = item.UnitType,
                         Quantity = item.Quantity,
                         Price = item.PricePerUnit,

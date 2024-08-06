@@ -411,6 +411,7 @@ function InsertMultipleSupplierItem() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
+                    ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
                     UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
@@ -510,6 +511,7 @@ function UpdateInvoiceDetails() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
+                    ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
                     UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
@@ -1319,3 +1321,18 @@ document.getElementById('textPricePerUnit').addEventListener('input', function (
 document.getElementById('textIsWithGst').addEventListener('change', function () {
     WithGSTSelected();
 });
+
+function fn_AddInvoiceProductDescription(element) {
+    var itemId = $(element).data('item-id');
+
+    var $productDesBtn = $(`div[data-item-id='${itemId}']#ProductDesBtn`);
+    var $productDesText = $(`div[data-item-id='${itemId}']#ProductDesText`);
+
+    if ($productDesText.is(':visible')) {
+        $productDesText.find('input').val('');
+    }
+
+    $productDesBtn.toggle();
+    $productDesText.toggle();
+}
+

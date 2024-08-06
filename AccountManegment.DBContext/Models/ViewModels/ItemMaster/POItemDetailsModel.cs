@@ -11,6 +11,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public Guid ItemId { get; set; }
         public int DetailId { get; set; }
         public string? ItemName { get; set; }
+        public string? ItemDescription { get; set; }
         public int UnitType { get; set; }
         public decimal PricePerUnit { get; set; }
         public decimal? DiscountPer { get; set; }

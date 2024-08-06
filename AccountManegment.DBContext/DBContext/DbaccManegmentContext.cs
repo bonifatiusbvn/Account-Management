@@ -58,7 +58,9 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    {
+
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -375,6 +377,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gstper)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTPer");
+            entity.Property(e => e.ItemDescription).HasMaxLength(100);
             entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
@@ -391,7 +394,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.SupplierId).ValueGeneratedNever();
             entity.Property(e => e.AccountNo).HasMaxLength(25);
             entity.Property(e => e.Area).HasMaxLength(250);
-            entity.Property(e => e.BankName).HasMaxLength(50);
+            entity.Property(e => e.BankBranch).HasMaxLength(100);
+            entity.Property(e => e.BankName).HasMaxLength(100);
             entity.Property(e => e.BuildingName).HasMaxLength(100);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
