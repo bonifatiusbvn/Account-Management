@@ -210,9 +210,13 @@
                             {
                                 string shippingAddress = firstItem.ShippingAddress;
                                 string[] addressParts = shippingAddress.Split(',');
-                                SiteStateCode = addressParts[addressParts.Length - 1].Trim();
-                                SiteState = addressParts[addressParts.Length - 3].Trim();
-                                SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
+                                if (addressParts.Length > 4)
+                                {
+                                    SiteStateCode = string.IsNullOrWhiteSpace(addressParts[addressParts.Length - 1].Trim()) ? "" : addressParts[addressParts.Length - 1].Trim();
+                                    SiteState = string.IsNullOrWhiteSpace(addressParts[addressParts.Length - 3].Trim()) ? "" : addressParts[addressParts.Length - 3].Trim();
+                                    SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
+                                }
+                                SiteAddress = firstItem.ShippingAddress;
                             }
                         }
                         <tr style="height:10pt">
@@ -220,7 +224,10 @@
                                 <p class="s1" style="padding-top: 1pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">@firstItem.SiteName</p>
                                 <p class="s2" style="padding-left: 2pt;padding-right: 163pt;text-indent: 0pt;text-align: left;">@SiteAddress</p>
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">GSTIN/UIN    : @firstItem.CompanyGstNo</p>
-                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @SiteState , @SiteStateCode</p>
+                                @if (SiteState != "" && SiteStateCode != "")
+                                {
+                                    <p class="s2" style="padding-left: 2pt;text-indent: 0pt;line-height: 11pt;text-align: left;">State Name    : @SiteState , @SiteStateCode</p>
+                                }
                             </td>
                             <td style="width:129pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="3">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>
@@ -458,7 +465,7 @@
                             <td style="width:23pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p style="text-indent: 0pt;text-align: left;"><br></p>
                             </td>
-                            
+
                             <td style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
                                 <p style="text-indent: 0pt;text-align: center;"><b>@TotalQty</b></p>
                             </td>

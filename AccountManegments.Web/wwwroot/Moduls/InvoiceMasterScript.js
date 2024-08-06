@@ -257,20 +257,18 @@ $(document).ready(function () {
 
 
 function AllSupplierInvoiceListTable() {
-
     var searchText = $('#txtSupplierInvoiceSearch').val();
     var searchBy = $('#SupplierInvoiceSearchBy').val();
 
     $.get("/InvoiceMaster/SupplierInvoiceListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
-
             $("#SupplierInvoicebody").html(result);
         })
-        .fail(function () {
-            siteloaderhide();
+        .fail(function (xhr, status, error) {
+
         });
 }
+
 
 function filterSupplierInvoiceTable() {
     siteloadershow();
@@ -288,10 +286,7 @@ function filterSupplierInvoiceTable() {
             siteloaderhide();
             $("#SupplierInvoicebody").html(result);
         },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            toastr.error(xhr.responseText);
-        }
+
     });
 }
 
@@ -308,10 +303,7 @@ function SupplierInvoicesortTable() {
             siteloaderhide();
             $("#SupplierInvoicebody").html(result);
         },
-        error: function (xhr, status, error) {
-            siteloaderhide();
 
-        }
     });
 }
 
@@ -907,14 +899,9 @@ function InvoiceListTable() {
 
     $.get("/InvoiceMaster/InvoiceListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
-
             $("#Invoicetbody").html(result);
         })
-        .fail(function (error) {
-            siteloaderhide();
 
-        });
 }
 
 function filterInvoiceTable() {
@@ -1083,14 +1070,17 @@ function fn_GetInvoiceSiteAddressList(SiteId) {
     $.ajax({
         url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
         success: function (result) {
+
             $('#drpInvoiceSiteAddress').empty();
             $('#textmdAddress').val('');
             $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
             if (Array.isArray(result)) {
                 $.each(result, function (i, data) {
+
                     $('#drpInvoiceSiteAddress').append('<option value="' + data.address + ', Code : ' + data.stateCode + '">' + data.address + ', Code :' + data.stateCode + '</option>');
                 });
             } else {
+
                 $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ',Code : ' + result.stateCode);
             }
         }
