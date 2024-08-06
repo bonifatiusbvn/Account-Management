@@ -15,6 +15,7 @@ function CreateSupplier() {
             State: $('#txtstate').val(),
             PinCode: $('#txtPinCode').val(),
             BankName: $('#txtBank').val(),
+            BranchName: $('#txtBranch').val(),
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             CreatedBy: $('#txtUserid').val(),
@@ -84,6 +85,7 @@ function ClearSupplierTextBox() {
     $('#dropState').val('');
     $('#txtPinCode').val('');
     $('#txtBank').val('');
+    $('#txtBranch').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
 
@@ -115,6 +117,7 @@ function DisplaySupplierDetails(SupplierId) {
             $('#dropState').val(response.state);
             $('#txtPinCode').val(response.pinCode);
             $('#txtBank').val(response.bankName);
+            $('#txtBranch').val(response.branchName);
             $('#txtAccount').val(response.accountNo);
             $('#txtIFFC').val(response.iffccode);
 
@@ -207,7 +210,6 @@ function filterSupplierTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
         }
     });
 }
@@ -232,8 +234,8 @@ function sortSupplierTable() {
     });
 }
 
-
 function UpdateSupplierDetails() {
+
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
@@ -248,6 +250,7 @@ function UpdateSupplierDetails() {
             State: $('#dropState').val(),
             PinCode: $('#txtPinCode').val(),
             BankName: $('#txtBank').val(),
+            BranchName: $('#txtBranch').val(),
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             UpdatedBy: $('#txtUserid').val(),

@@ -31,11 +31,6 @@
                                             <div class="card-body">
                                                 <div class="row g-4 align-items-center">
                                                     <div class="col-12 col-lg-2">
-                                                        <select class="form-select" id="textReportSiteName" name="textReportSiteName">
-                                                            <option selected disabled value="">Select Site</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12 col-lg-2">
                                                         <select class="form-select" id="textReportCompanyName" name="textReportCompanyName">
                                                             <option selected disabled value="">Select Company</option>
                                                         </select>
@@ -49,6 +44,12 @@
                                                         <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
                                                         <label class="form-check-label" for="currentMonthRadio">
                                                             This Month
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-12 col-lg-1 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentyearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
+                                                        <label class="form-check-label" for="currentyearRadio">
+                                                            This Year
                                                         </label>
                                                     </div>
                                                     <div class="col-12 col-lg-4">
@@ -84,8 +85,10 @@
                                                     <tr>
                                                         <th>Invoice No</th>
                                                         <th>Date</th>
-                                                        <th>You Gave</th>
-                                                        <th>You Get</th>
+                                                        <th>Company</th>
+                                                        <th>Supplier</th>
+                                                        <th>Debit</th>
+                                                        <th>Credit</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="reportInvoiceListbody">
@@ -93,7 +96,6 @@
                                                 <tfoot id="reportInvoiceListFooter" class="bg-light">
                                                 </tfoot>
                                             </table>
-                                            
                                         </div>
                                     </div>
 

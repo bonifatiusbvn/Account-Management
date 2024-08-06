@@ -73,8 +73,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Guid? SiteId { get; set; }
         public Guid? SupplierId { get; set; }
         public Guid? CompanyId { get; set; }
-        public string? filterType { get; set; }  
+        public string? filterType { get; set; }
         public DateTime? startDate { get; set; }
-        public DateTime? endDate { get; set;}
+        public DateTime? endDate { get; set; }
     }
 }
