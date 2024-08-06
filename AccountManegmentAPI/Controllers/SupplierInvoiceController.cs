@@ -45,7 +45,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("AddSupplierInvoice")]
-        public async Task<IActionResult> AddSupplierInvoice(SupplierInvoiceModel supplierInvoiceDetails)
+        public async Task<IActionResult> AddSupplierInvoice(List<SupplierInvoiceModel> supplierInvoiceDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var SupplierDetails = await SupplierInvoice.AddSupplierInvoice(supplierInvoiceDetails);

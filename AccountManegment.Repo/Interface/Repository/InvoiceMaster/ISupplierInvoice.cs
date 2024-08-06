@@ -12,7 +12,7 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
     public interface ISupplierInvoice
     {
         Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy);
-        Task<ApiResponseModel> AddSupplierInvoice(SupplierInvoiceModel SupplierInvoiceDetails);
+        Task<ApiResponseModel> AddSupplierInvoice(List<SupplierInvoiceModel> supplierInvoiceDetails);
         Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id);
         Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceMasterView SupplierInvoiceDetails);
         Task<ApiResponseModel> DeleteSupplierInvoice(Guid InvoiceId);
