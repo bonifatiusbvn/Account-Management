@@ -162,7 +162,7 @@ function GetInvoiceReportData() {
 }
 
 function GetCurrentMonthInvoiceList() {
-    
+
     selectedfilterType = "currentMonth";
     var objData = {
         CompanyId: selectedCompanyId,
@@ -173,7 +173,7 @@ function GetCurrentMonthInvoiceList() {
 }
 
 function GetCurrentYearInvoiceList() {
-    
+
     selectedfilterType = "currentYear";
     var objData = {
         CompanyId: selectedCompanyId,
