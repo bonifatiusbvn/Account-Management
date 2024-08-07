@@ -13,11 +13,11 @@
         {
             youGaveTotal += item.TotalAmount;
             <tr style="height:55px;">
-                <td>@item.InvoiceNo</td>
-                <td>@item.Date?.ToString("MM-dd-yyyy")</td>
-                <td>@item.CompanyName</td>
-                <td>@item.SupplierName</td>
-                <td class="text-danger">@item.TotalAmount</td>
+                <td style="width:150px;">@item.InvoiceNo</td>
+                <td style="width:120px;">@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td style="width:300px;">@item.CompanyName</td>
+                <td style="width:250px;">@item.SupplierName</td>
+                <td class="text-danger" style="width:200px;">@item.TotalAmount</td>
                 <td></td>
             </tr>
         }
@@ -25,12 +25,12 @@
         {
             youGetTotal += item.TotalAmount;
             <tr style="height:55px;">
-                <td>@item.InvoiceNo</td>
-                <td>@item.Date?.ToString("MM-dd-yyyy")</td>
-                <td>@item.CompanyName</td>
-                <td>@item.SupplierName</td>
+                <td style="width:150px;">@item.InvoiceNo</td>
+                <td style="width:120px;">@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td style="width:300px;">@item.CompanyName</td>
+                <td style="width:250px;">@item.SupplierName</td>
                 <td></td>
-                <td class="text-success">@item.TotalAmount</td>
+                <td class="text-success" style="width:200px;">@item.TotalAmount</td>
             </tr>
         }
     }
