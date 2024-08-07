@@ -69,5 +69,19 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
         }
+
+        public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
+        {
+            return await SupplierInvoice.DeletePayoutDetails(InvoiceId);
+        }
+
+        public async Task<SupplierInvoiceModel> GetPayoutDetailsbyId(Guid InvoiceId)
+        {
+            return await SupplierInvoice.GetPayoutDetailsbyId(InvoiceId);
+        }
+        public async Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
+        {
+            return await SupplierInvoice.UpdatePayoutDetails(updatepayoutDetails);
+        }
     }
 }

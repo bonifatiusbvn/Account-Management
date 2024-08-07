@@ -228,5 +228,68 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePayoutDetails(Guid InvoiceId)
+        {
+            try
+            {
+                ApiResponseModel payout = await APIServices.PostAsync("", "SupplierInvoice/DeletePayoutDetails?InvoiceId=" + InvoiceId);
+                if (payout.code == 200)
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPayoutDetailsbyId(Guid InvoiceId)
+        {
+            try
+            {
+                ApiResponseModel payout = await APIServices.PostAsync("", "SupplierInvoice/GetPayoutDetailsbyId?InvoiceId=" + InvoiceId);
+                if (payout.code == 200)
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
+        {
+            try
+            {
+                ApiResponseModel payout = await APIServices.PostAsync(updatepayoutDetails, "SupplierInvoice/UpdatePayoutDetails");
+                if (payout.code == 200)
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

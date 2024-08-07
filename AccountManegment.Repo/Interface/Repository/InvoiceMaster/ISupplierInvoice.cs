@@ -21,5 +21,8 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         string CheckSuppliersInvoiceNo(Guid? CompanyId);
         Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId);
         Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport);
+        Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId);
+        Task<SupplierInvoiceModel> GetPayoutDetailsbyId(Guid InvoiceId);
+        Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails);
     }
 }

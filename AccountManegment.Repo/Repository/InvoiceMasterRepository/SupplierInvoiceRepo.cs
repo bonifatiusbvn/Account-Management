@@ -57,7 +57,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         CompanyId = invoiceDetail.CompanyId,
                         TotalAmount = invoiceDetail.TotalAmount,
                         Description = invoiceDetail.Description,
-                        Date = DateTime.Now,
+                        Date = invoiceDetail.Date,
                         TotalDiscount = invoiceDetail.TotalDiscount,
                         TotalGstamount = invoiceDetail.TotalGstamount,
                         Roundoff = invoiceDetail.Roundoff,
@@ -999,8 +999,106 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
+        public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var payoutdetails = Context.SupplierInvoices.Where(a => a.Id == InvoiceId).FirstOrDefault();
+
+                if (payoutdetails != null)
+                {
+                    Context.SupplierInvoices.Remove(payoutdetails);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.message = "payout invoice is successfully deleted.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in deleting payout invoice.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error in deleting invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<SupplierInvoiceModel> GetPayoutDetailsbyId(Guid InvoiceId)
+        {
+            SupplierInvoiceModel payoutdetails = new SupplierInvoiceModel();
+            try
+            {
+                payoutdetails = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
+                                 join b in Context.Sites on a.SiteId equals b.SiteId
+                                 join c in Context.SupplierMasters on a.SupplierId equals c.SupplierId
+                                 join d in Context.Companies on a.CompanyId equals d.CompanyId
+                                 select new SupplierInvoiceModel
+                                 {
+                                     Id = a.Id,
+                                     InvoiceNo = a.InvoiceNo,
+                                     SiteId = a.SiteId,
+                                     SupplierId = a.SupplierId,
+                                     CompanyId = a.CompanyId,
+                                     SiteName = b.SiteName,
+                                     SupplierName = c.SupplierName,
+                                     CompanyName = d.CompanyName,
+                                     TotalAmount = a.TotalAmount,
+                                     Description = a.Description,
+                                     Date = a.Date,
+                                     IsPayOut = true,
+                                     PaymentStatus = a.PaymentStatus,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn
+                                 }).First(); 
+                 return payoutdetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var payoutdetails = Context.SupplierInvoices.Where(a => a.Id == updatepayoutDetails.Id).FirstOrDefault();
+
+                if (payoutdetails != null)
+                {
+                    payoutdetails.Id = updatepayoutDetails.Id;
+                    payoutdetails.SiteId = updatepayoutDetails.SiteId;
+                    payoutdetails.SupplierId = updatepayoutDetails.SupplierId;
+                    payoutdetails.CompanyId = updatepayoutDetails.CompanyId;
+                    payoutdetails.TotalAmount = updatepayoutDetails.TotalAmount;
+                    payoutdetails.Date =  updatepayoutDetails.Date;
+                    payoutdetails.Description = updatepayoutDetails.Description;
+                    payoutdetails.UpdatedBy = updatepayoutDetails.UpdatedBy;
+                    payoutdetails.UpdatedOn = DateTime.Now;
 
 
-
+                    Context.SupplierInvoices.Update(payoutdetails);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.message = "payout invoice is updated successfully.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in updating payout invoice.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error in updating invoice: " + ex.Message;
+            }
+            return response;
+        }
     }
 }
