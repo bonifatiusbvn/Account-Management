@@ -94,8 +94,10 @@ namespace AccountManegments.Web.Controllers
                     var headerRow = table.Rows.Add();
                     headerRow.Cells.Add("Invoice No");
                     headerRow.Cells.Add("Date");
-                    headerRow.Cells.Add("You Gave");
-                    headerRow.Cells.Add("You Get");
+                    headerRow.Cells.Add("Company");
+                    headerRow.Cells.Add("Supplier");
+                    headerRow.Cells.Add("Debit");
+                    headerRow.Cells.Add("Credit");
 
 
                     decimal yougavetotal = 0;
@@ -106,7 +108,8 @@ namespace AccountManegments.Web.Controllers
                         var row = table.Rows.Add();
                         row.Cells.Add(item.InvoiceNo);
                         row.Cells.Add(item.Date?.ToString("MM-dd-yyyy"));
-
+                        row.Cells.Add(item.CompanyName);
+                        row.Cells.Add(item.SupplierName);
                         if (item.InvoiceNo == "PayOut")
                         {
                             row.Cells.Add(item.TotalAmount.ToString());
@@ -162,8 +165,10 @@ namespace AccountManegments.Web.Controllers
 
                         ws.Cell(1, 1).Value = "Invoice No";
                         ws.Cell(1, 2).Value = "Date";
-                        ws.Cell(1, 3).Value = "You Gave";
-                        ws.Cell(1, 4).Value = "You Get";
+                        ws.Cell(1, 3).Value = "Company";
+                        ws.Cell(1, 4).Value = "Supplier";
+                        ws.Cell(1, 5).Value = "Debit";
+                        ws.Cell(1, 6).Value = "Credit";
 
                         decimal yougavetotal = 0;
                         decimal yougettotal = 0;
@@ -173,17 +178,18 @@ namespace AccountManegments.Web.Controllers
                         {
                             ws.Cell(row, 1).Value = item.InvoiceNo;
                             ws.Cell(row, 2).Value = item.Date?.ToString("MM-dd-yyyy");
-
+                            ws.Cell(row, 3).Value = item.CompanyName;
+                            ws.Cell(row, 4).Value = item.SupplierName;
                             if (item.InvoiceNo == "PayOut")
                             {
-                                ws.Cell(row, 3).Value = item.TotalAmount;
-                                ws.Cell(row, 4).Value = "";
+                                ws.Cell(row, 5).Value = item.TotalAmount;
+                                ws.Cell(row, 6).Value = "";
                                 yougavetotal += item.TotalAmount;
                             }
                             else
                             {
-                                ws.Cell(row, 3).Value = "";
-                                ws.Cell(row, 4).Value = item.TotalAmount;
+                                ws.Cell(row, 5).Value = "";
+                                ws.Cell(row, 6).Value = item.TotalAmount;
                                 yougettotal += item.TotalAmount;
                             }
                             row++;
@@ -191,17 +197,19 @@ namespace AccountManegments.Web.Controllers
 
                         ws.Cell(row, 1).Value = "Total";
                         ws.Cell(row, 2).Value = "";
-                        ws.Cell(row, 3).Value = yougavetotal;
-                        ws.Cell(row, 4).Value = yougettotal;
+                        ws.Cell(row, 3).Value = "";
+                        ws.Cell(row, 4).Value = "";
+                        ws.Cell(row, 5).Value = yougavetotal;
+                        ws.Cell(row, 6).Value = yougettotal;
 
 
-                        var headerRange = ws.Range(1, 1, 1, 4);
+                        var headerRange = ws.Range(1, 1, 1, 6);
                         headerRange.Style.Font.Bold = true;
                         headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange.Style.Font.FontColor = XLColor.White;
                         headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        var totalRange = ws.Range(row, 1, row, 4);
+                        var totalRange = ws.Range(row, 1, row, 6);
                         totalRange.Style.Font.Bold = true;
 
                         using (var stream = new MemoryStream())
