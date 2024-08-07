@@ -85,7 +85,7 @@ namespace AccountManegments.Web.Controllers
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "30% 20% 25% 25%",
+                        ColumnWidths = "18% 15% 23% 20% 12% 12%",
                         DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
