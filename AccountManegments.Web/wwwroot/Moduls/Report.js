@@ -33,9 +33,12 @@ function GetAllCompanyList() {
                     $("#textReportCompanyName").val(ui.item.label);
                     $("#textReportCompanyNameHidden").val(ui.item.value);
                     $("#textReportCompanyNameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
                 }
             }).focus(function () {
-                $(this).autocomplete("search");
+                $(this).autocomplete("search", "");
             });
         },
         error: function (err) {
@@ -64,9 +67,12 @@ function GetAllSupplierList() {
                     $("#textReportSupplierNameHidden").val(ui.item.value);
 
                     $("#textReportSupplierNameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
                 }
             }).focus(function () {
-                $(this).autocomplete("search");
+                $(this).autocomplete("search", "");
             });
         },
         error: function (err) {

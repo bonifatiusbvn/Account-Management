@@ -107,9 +107,12 @@ $(document).ready(function () {
                         $("#textSupplierNameHidden").val(ui.item.value);
 
                         $("#textSupplierNameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {
@@ -144,9 +147,12 @@ $(document).ready(function () {
                         $("#textCompanyNameHidden").val(ui.item.value);
 
                         $("#textCompanyNameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {
@@ -1180,9 +1186,12 @@ $(document).ready(function () {
                         $("#textUnitType").val(ui.item.label);
                         $("#textUnitTypeHidden").val(ui.item.value);
 
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {

@@ -152,9 +152,12 @@ function GetSiteList() {
                     $("#siteNameList").val(ui.item.label);
                     $("#siteNameListHidden").val(ui.item.value);
 
+                },
+                focus: function () {
+                    return false;
                 }
             }).focus(function () {
-                $(this).autocomplete("search");
+                $(this).autocomplete("search", "");
             });
         },
         error: function (err) {

@@ -24,9 +24,12 @@ function GetCompanyDetails() {
                     event.preventDefault();
                     $("#txtcompanyname").val(ui.item.label);
                     $("#txtcompanynameHidden").val(ui.item.value);
+                },
+                focus: function () {
+                    return false;
                 }
             }).focus(function () {
-                $(this).autocomplete("search");
+                $(this).autocomplete("search", "");
             });
         },
         error: function (err) {
@@ -56,9 +59,12 @@ function GetSupplierDetails() {
                     $("#txtSuppliernameHidden").val(ui.item.value);
 
                     $("#txtSuppliernameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
                 }
             }).focus(function () {
-                $(this).autocomplete("search");
+                $(this).autocomplete("search", "");
             });
         },
         error: function (err) {
@@ -66,6 +72,7 @@ function GetSupplierDetails() {
         }
     });
 }
+
 $(document).ready(function () {
 
     $("#totalAmount").html('₹' + 00);

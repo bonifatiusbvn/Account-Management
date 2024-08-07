@@ -663,9 +663,12 @@ $(document).ready(function () {
                         $("#txtcompanynameHidden").val(ui.item.value);
 
                         $("#txtcompanynameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {
@@ -1188,9 +1191,12 @@ $(document).ready(function () {
                         $("#txtSuppliernameHidden").val(ui.item.value);
 
                         $("#txtSuppliernameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {
