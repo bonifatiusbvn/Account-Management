@@ -2,8 +2,6 @@
 InvoiceListTable();
 GetItemDetailsList()
 GetSiteDetail();
-GetCompanyDetail();
-GetSupplierDetail();
 
 function filterallItemTable() {
     siteloadershow();
@@ -83,60 +81,87 @@ function GetItemDetailsList() {
         })
 }
 
-function GetCompanyDetail() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        success: function (result) {
-
-            var selectedValue = $('#textCompanyName').find('option:first').val();
-
-            $.each(result, function (i, data) {
-                if (data.companyId !== selectedValue) {
-                    $('#textCompanyName').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
-                }
-            });
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching company details:', error);
-        }
-    });
-}
-
-
-
-
 $(document).ready(function () {
-    $('#textCompanyName').change(function () {
+    $('#textSupplierNameHidden').change(function () {
+        getSupplierDetail($(this).val());
+    });
 
+    function GetSupplierDetail() {
+        $.ajax({
+            url: '/Supplier/GetSupplierNameList',
+            method: 'GET',
+            success: function (result) {
+                var supplierDetails = result.map(function (data) {
+                    return {
+                        label: data.supplierName,
+                        value: data.supplierId
+                    };
+                });
+
+                $("#textSupplierName").autocomplete({
+                    source: supplierDetails,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#textSupplierName").val(ui.item.label);
+                        $("#textSupplierNameHidden").val(ui.item.value);
+
+                        $("#textSupplierNameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetSupplierDetail();
+    $('#textCompanyNameHidden').change(function () {
         getCompanyDetail($(this).val());
         getInvoiceNumber($(this).val());
     });
+
+    function GetCompanyDetail() {
+        $.ajax({
+            url: '/Company/GetCompanyNameList',
+            method: 'GET',
+            success: function (result) {
+                var companyDetails = result.map(function (data) {
+                    return {
+                        label: data.companyName,
+                        value: data.companyId
+                    };
+                });
+
+                $("#textCompanyName").autocomplete({
+                    source: companyDetails,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#textCompanyName").val(ui.item.label);
+                        $("#textCompanyNameHidden").val(ui.item.value);
+
+                        $("#textCompanyNameHidden").trigger('change');
+                    },
+                    focus: function () {
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetCompanyDetail();
 });
-
-
-function GetSupplierDetail() {
-
-    $.ajax({
-        url: '/Supplier/GetSupplierNameList',
-        success: function (result) {
-            var selectedValue = $('#textSupplierName').find('option:first').val();
-
-            $.each(result, function (i, data) {
-
-                if (data.supplierId !== selectedValue) {
-                    $('#textSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
-                }
-            });
-        }
-    });
-}
-
-$(document).ready(function () {
-    $('#textSupplierName').change(function () {
-        getSupplierDetail($(this).val());
-    });
-});
-
 
 $(document).ready(function () {
     $(document).ready(function () {
@@ -430,8 +455,8 @@ function InsertMultipleSupplierItem() {
                 SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
-                SupplierId: $("#textSupplierName").val(),
-                CompanyId: $("#textCompanyName").val(),
+                SupplierId: $("#textSupplierNameHidden").val(),
+                CompanyId: $("#textCompanyNameHidden").val(),
                 TotalAmountInvoice: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 PaymentStatus: $("input[name='paymentStatus']:checked").val(),
@@ -449,7 +474,6 @@ function InsertMultipleSupplierItem() {
                 TotalDiscount: $('#cart-discount').val(),
                 ItemList: ItemDetails,
             }
-
             var form_data = new FormData();
             form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
             $.ajax({
@@ -536,8 +560,8 @@ function UpdateInvoiceDetails() {
                 SiteId: $("#txtModelSiteId").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
                 Date: $("#textOrderDate").val(),
-                SupplierId: $("#textSupplierName").val(),
-                CompanyId: $("#textCompanyName").val(),
+                SupplierId: $("#textSupplierNameHidden").val(),
+                CompanyId: $("#textCompanyNameHidden").val(),
                 TotalAmountInvoice: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 PaymentStatus: $("input[name='paymentStatus']:checked").val(),
@@ -957,23 +981,6 @@ function printInvoiceDiv() {
     document.body.innerHTML = originalContents;
 }
 
-//function printInvoiceDiv() {
-//    var printWindow = window.open('', '_blank');
-//    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
-//    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-//    var stylesheetHTML = '';
-
-//    stylesheets.forEach(function (stylesheet) {
-//        if (stylesheet.href.includes('~/assets/css/') || stylesheet.href.includes('https://')) {
-//            stylesheetHTML += '<link rel="stylesheet" type="text/css" href="' + stylesheet.href + '">';
-//        }
-//    });
-
-//    printWindow.document.write('<html><head>' + stylesheetHTML + '</head><body>' + printContents + '</body></html>');
-//    printWindow.document.close();
-//    printWindow.print();
-//}
-
 function getSupplierDetail(SupplierId) {
     siteloadershow();
     $.ajax({
@@ -1179,9 +1186,12 @@ $(document).ready(function () {
                         $("#textUnitType").val(ui.item.label);
                         $("#textUnitTypeHidden").val(ui.item.value);
 
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {

@@ -64,7 +64,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> ExportToPdf(InvoiceReportModel invoiceReport)
         {
@@ -85,7 +84,7 @@ namespace AccountManegments.Web.Controllers
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "18% 15% 23% 20% 12% 12%",
+                        ColumnWidths = "15% 12% 25% 20% 14% 14%",
                         DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
@@ -126,6 +125,8 @@ namespace AccountManegments.Web.Controllers
 
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
+                    footerRow.Cells.Add("");
+                    footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add(yougavetotal.ToString());
                     footerRow.Cells.Add(yougettotal.ToString());

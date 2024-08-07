@@ -113,9 +113,12 @@ $(document).ready(function () {
                         $("#txtUnitType").val(ui.item.label);
                         $("#txtUnitTypeHidden").val(ui.item.value);
 
+                    },
+                    focus: function () {
+                        return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             },
             error: function (err) {

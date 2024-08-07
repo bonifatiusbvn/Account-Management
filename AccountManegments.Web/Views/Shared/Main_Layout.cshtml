@@ -491,9 +491,12 @@
                             event.preventDefault();
                             $(element).val(ui.item.label);
                             $(hiddenField).val(ui.item.value);
+                        },
+                        focus: function () {
+                            return false;
                         }
                     }).focus(function () {
-                        $(this).autocomplete("search");
+                        $(this).autocomplete("search", "");
                     });
                 },
                 error: function (err) {

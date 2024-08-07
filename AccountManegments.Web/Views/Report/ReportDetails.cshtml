@@ -31,14 +31,12 @@
                                             <div class="card-body">
                                                 <div class="row g-4 align-items-center">
                                                     <div class="col-12 col-lg-2">
-                                                        <select class="form-select" id="textReportCompanyName" name="textReportCompanyName">
-                                                            <option selected disabled value="">Select Company</option>
-                                                        </select>
+                                                        <input type="text" id="textReportCompanyName" name="textReportCompanyName" class="form-control" placeholder="Company" />
+                                                        <input type="hidden" id="textReportCompanyNameHidden" name="textReportCompanyNameHidden" />
                                                     </div>
                                                     <div class="col-12 col-lg-2">
-                                                        <select class="form-select" id="textReportSupplierName" name="textReportSupplierName">
-                                                            <option selected disabled value="">Select Supplier</option>
-                                                        </select>
+                                                        <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
+                                                        <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
                                                     </div>
                                                     <div class="col-12 col-lg-1 d-flex align-items-center">
                                                         <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
@@ -161,6 +159,6 @@
     }
 
 </script>
-
-<script src="~/assets/js/jquery.min.js"></script>
-<script src="~/moduls/report.js" asp-append-version="true"></script>
+@section Scripts {
+    <script src="~/moduls/report.js" asp-append-version="true"></script>
+}

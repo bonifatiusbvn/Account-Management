@@ -8,12 +8,32 @@ GetSupplierDetails();
 function GetCompanyDetails() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
+        method: 'GET',
         success: function (result) {
-            if (result.length > 0) {
-                $.each(result, function (i, data) {
-                    $('#txtcompanyname').append('<Option value=' + data.companyId + '>' + data.companyName + '</Option>')
-                });
-            }
+            var companyDetails = result.map(function (data) {
+                return {
+                    label: data.companyName,
+                    value: data.companyId
+                };
+            });
+
+            $("#txtcompanyname").autocomplete({
+                source: companyDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#txtcompanyname").val(ui.item.label);
+                    $("#txtcompanynameHidden").val(ui.item.value);
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
@@ -21,12 +41,34 @@ function GetCompanyDetails() {
 function GetSupplierDetails() {
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
         success: function (result) {
-            if (result.length > 0) {
-                $.each(result, function (i, data) {
-                    $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
-                });
-            }
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+
+            $("#txtSuppliername").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#txtSuppliername").val(ui.item.label);
+                    $("#txtSuppliernameHidden").val(ui.item.value);
+
+                    $("#txtSuppliernameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
@@ -39,10 +81,9 @@ $(document).ready(function () {
     $("#txttotalpendingamount").html('₹' + 00);
     $("#txttotalpurchase").html('₹' + 00);
 
-
-    $('#txtSuppliername').change(function () {
+    $('#txtSuppliernameHidden').change(function () {
         siteloadershow();
-        var CompanyId = $('#txtcompanyname').val();
+        var CompanyId = $('#txtcompanynameHidden').val();
         var SupplierId = $(this).val();
         $.ajax({
             url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
@@ -93,8 +134,8 @@ function InsertPayOutDetails() {
             var objData = {
                 InvoiceNo: "PayOut",
                 SiteId: $("#txtSiteId").val(),
-                SupplierId: $("#txtSuppliername").val(),
-                CompanyId: $("#txtcompanyname").val(),
+                SupplierId: $("#txtSuppliernameHidden").val(),
+                CompanyId: $("#txtcompanynameHidden").val(),
                 PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
                 Description: orderRow.find("input[id^='txtdescription']").val(),
                 Date: orderRow.find("input[id^='txtdate']").val(),
