@@ -13,6 +13,10 @@
         background-color: white;
         z-index: 1;
     }
+
+    label.error {
+        color: red;
+    }
 </style>
 <div class="">
     <div class="">
@@ -125,6 +129,59 @@
         </div>
     </div>
 </div>
+
+<form id="updatePayoutForm">
+    <div class="modal fade show" tabindex="-1" id="updatePayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="flipModalLabel">Edit Payout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="EdittxtpayoutSiteId" hidden />
+                    <input type="text" class="form-control" id="EdittxtpayoutId" hidden />
+                    <input type="text" class="form-control" id="EdittxtpayoutUpdatedBy" value="@_userSession.UserId" hidden />
+                    <input type="hidden" id="EdittxtpayoutSupplierNameHidden" name="EdittxtpayoutSupplierNameHidden" />
+                    <input type="hidden" id="EdittxtpayoutCompanyNameHidden" name="EdittxtpayoutCompanyNameHidden" />
+                    <div class="row mb-3">
+                        <div class="col-lg-12 col-12">
+                            <label class="me-2">Payment Status : </label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="Online" value="Online" name="Editpayoutpaymenttype">
+                                <label class="form-check-label" for="Online">Online</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayoutpaymenttype">
+                                <label class="form-check-label" for="Cheque">Cheque</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-4 col-12">
+                            <label class="form-label">Description</label>
+                            <div class="form-label">
+                                <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-12">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
+                        </div>
+                        <div class="col-lg-3 col-12">
+                            <label class="form-label">Total Amount</label>
+                            <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
 
 <script type="text/javascript">
 

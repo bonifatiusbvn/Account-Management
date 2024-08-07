@@ -1076,6 +1076,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     payoutdetails.SupplierId = updatepayoutDetails.SupplierId;
                     payoutdetails.CompanyId = updatepayoutDetails.CompanyId;
                     payoutdetails.TotalAmount = updatepayoutDetails.TotalAmount;
+                    payoutdetails.PaymentStatus = updatepayoutDetails.PaymentStatus;
                     payoutdetails.Date =  updatepayoutDetails.Date;
                     payoutdetails.Description = updatepayoutDetails.Description;
                     payoutdetails.UpdatedBy = updatepayoutDetails.UpdatedBy;

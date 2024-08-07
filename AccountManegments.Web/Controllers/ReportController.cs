@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -252,19 +253,17 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPayoutDetailsbyId(Guid InvoiceId)
+        public async Task<JsonResult> GetPayoutDetailsbyId(Guid InvoiceId)
         {
             try
             {
-                ApiResponseModel payout = await APIServices.PostAsync("", "SupplierInvoice/GetPayoutDetailsbyId?InvoiceId=" + InvoiceId);
-                if (payout.code == 200)
+                SupplierInvoiceModel payoutDetails = new SupplierInvoiceModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetPayoutDetailsbyId?InvoiceId=" + InvoiceId);
+                if (response.code == 200)
                 {
-                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                    payoutDetails = JsonConvert.DeserializeObject<SupplierInvoiceModel>(response.data.ToString());
                 }
-                else
-                {
-                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
-                }
+                return new JsonResult(payoutDetails);
             }
             catch (Exception ex)
             {
@@ -272,7 +271,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
         {
             try

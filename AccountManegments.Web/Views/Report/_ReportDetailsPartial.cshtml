@@ -25,7 +25,7 @@
                     <td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true)))
                         {
-                            <a class="btn text-primary" onclick="EditItemDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                            <a class="btn text-primary" onclick="EditPayoutDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                         }
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Delete == true)))
                         {
@@ -63,7 +63,7 @@ else
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td>' +
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
             '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td></tr>';
         $('#reportInvoiceListFooter').html(footerContent);

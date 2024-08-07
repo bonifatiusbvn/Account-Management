@@ -26,23 +26,23 @@ function GetAllCompanyList() {
             });
 
             $("#textReportCompanyName").autocomplete({
-                source: companyDetails,
-                minLength: 0,
+                    source: companyDetails,
+                    minLength: 0,
                 select: function (event, ui) {
-                    event.preventDefault();
+                        event.preventDefault();
                     $("#textReportCompanyName").val(ui.item.label);
                     $("#textReportCompanyNameHidden").val(ui.item.value);
                     $("#textReportCompanyNameHidden").trigger('change');
-                },
+                    },
                 focus: function () {
                     return false;
-                }
-            }).focus(function () {
-                $(this).autocomplete("search", "");
-            });
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch company list: ", err);
         }
     });
 }
@@ -59,24 +59,24 @@ function GetAllSupplierList() {
             });
 
             $("#textReportSupplierName").autocomplete({
-                source: supplierDetails,
-                minLength: 0,
+                    source: supplierDetails,
+                    minLength: 0,
                 select: function (event, ui) {
-                    event.preventDefault();
+                        event.preventDefault();
                     $("#textReportSupplierName").val(ui.item.label);
                     $("#textReportSupplierNameHidden").val(ui.item.value);
 
                     $("#textReportSupplierNameHidden").trigger('change');
-                },
+                    },
                 focus: function () {
                     return false;
-                }
-            }).focus(function () {
-                $(this).autocomplete("search", "");
-            });
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch supplier list: ", err);
         }
     });
 }
@@ -325,8 +325,7 @@ function ExportToExcel() {
 }
 
 
-function deletePayoutDetails(InvoiceId)
-{
+function deletePayoutDetails(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
@@ -376,4 +375,118 @@ function deletePayoutDetails(InvoiceId)
             );
         }
     });
+}
+
+function EditPayoutDetails(InvoiceId) {
+    ClearPayoutTextBox();
+    siteloadershow();
+    $.ajax({
+        url: '/Report/GetPayoutDetailsbyId?InvoiceId=' + InvoiceId,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            $("#updatePayoutModal").modal('show');
+            $('#EdittxtpayoutId').val(response.id);
+            $('#EdittxtpayoutSupplierNameHidden').val(response.supplierId);
+            $('#EdittxtpayoutSiteId').val(response.siteId);
+            $('#EdittxtpayoutCompanyNameHidden').val(response.companyId);
+            $('#Edittxtpayoutdescription').val(response.description);
+            const formattedDate = formatDate(response.date);
+            $('#Edittxtpayoutdate').val(formattedDate);
+            $('#Edittxtpayoutamount').val(response.totalAmount);
+            $('input[name="Editpayoutpaymenttype"][value="' + response.paymentStatus + '"]').prop('checked', true);
+
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Data not found");
+        }
+    });
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function UpdatePayoutInvoice() {
+    if ($("#updatePayoutForm").valid()) {
+        siteloadershow();
+        var objData = {
+            Id: $('#EdittxtpayoutId').val(),
+            SiteId: $('#EdittxtpayoutSiteId').val(),
+            SupplierId: $('#EdittxtpayoutSupplierNameHidden').val(),
+            CompanyId: $('#EdittxtpayoutCompanyNameHidden').val(),
+            Description: $('#Edittxtpayoutdescription').val(),
+            Date: $('#Edittxtpayoutdate').val(),
+            TotalAmount: $('#Edittxtpayoutamount').val(),
+            PaymentStatus: $('input[name="Editpayoutpaymenttype"]:checked').val(),
+            UpdatedBy: $('#EdittxtpayoutUpdatedBy').val(),
+        }
+        $.ajax({
+            url: '/Report/UpdatePayoutDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    $("#updatePayoutModal").modal('hide');
+                    toastr.success(Result.message);
+                    loadReportData();
+                } else {
+                    toastr.error(Result.message);
+                }
+            }
+        })
+    }
+    else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+
+
+var UpdatePayoutForm;
+$(document).ready(function () {
+
+    UpdatePayoutForm = $("#updatePayoutForm").validate({
+        rules: {
+            Edittxtpayoutdate: "required",
+            Edittxtpayoutamount: {
+                required: true,
+                number: true,
+                min: 0 
+            }
+        },
+        messages: {
+            Edittxtpayoutdate: "Enter Date",
+            Edittxtpayoutamount: {
+                required: "Enter Total Amount",
+                number: "Enter a valid number",
+                min: "Total Amount must be greater than zero"
+            }
+        }
+    })
+});
+
+function resetPayoutForm() {
+    if (UpdatePayoutForm) {
+        UpdatePayoutForm.resetForm();
+    }
+}
+function ClearPayoutTextBox() {
+    resetPayoutForm();
+    $('#EdittxtpayoutSupplierName').val('');
+    $('#EdittxtpayoutCompanyName').val('');
+    $('#Edittxtpayoutamount').val('');
+    $('#Edittxtpayoutdate').val('');
+    $('#Edittxtpayoutdescription').val('');
+    $("#Editpayoutpaymenttype").prop("checked", false);
 }
