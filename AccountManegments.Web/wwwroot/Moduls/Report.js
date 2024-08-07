@@ -102,7 +102,7 @@ function loadReportData(objData) {
 }
 
 function GetInvoiceReportData() {
-    debugger
+
     if (selectedCompanyId || selectedSupplierId) {
         var objData = {
             CompanyId: selectedCompanyId,
@@ -116,7 +116,7 @@ function GetInvoiceReportData() {
 }
 
 function GetCurrentMonthInvoiceList() {
-    debugger
+
     selectedfilterType = "currentMonth";
     var objData = {
         CompanyId: selectedCompanyId,
@@ -127,7 +127,7 @@ function GetCurrentMonthInvoiceList() {
 }
 
 function GetCurrentYearInvoiceList() {
-    debugger
+
     selectedfilterType = "currentYear";
     var objData = {
         CompanyId: selectedCompanyId,
