@@ -8,56 +8,79 @@
 <input type="hidden" id="txtSiteId" value="@UserSession.SiteId" hidden />
 <input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden />
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="row justify-content-center">
-            <div class="col-xxl-12">
-                <div class="border-bottom border-bottom-dashed">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-fill me-3">
-                                        <div class="me-3">
-                                            <select class="form-select bg-light border-1" id="txtcompanyname" name="txtcompanyname">
-                                                <option selected disabled value="">--Company--</option>
-                                            </select>
-                                            <input type="hidden" id="txtcompany" />
-                                            <span id="spncompany" style="color: red;"></span>
-                                        </div>
-                                        <div class="me-3">
-                                            <select class="form-select bg-light border-1" id="txtSuppliername" name="txtSuppliername">
-                                                <option selected disabled value="">--Supplier--</option>
-                                            </select>
-                                            <span id="spnsupplier" style="color: red;"></span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
-                                            <i class="lni lni-circle-plus"></i> Add PayOut
-                                        </a>
-                                        <span id="spnitembutton" style="color:red;"></span>
-                                    </div>
-                                </div><!--end card-header-->
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive">
-                                        <table class="table align-middle mb-0">
-                                            <thead class="table-light btn-primary">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Payment Status</th>
-                                                    <th>Date</th>
-                                                    <th>Description</th>
-                                                    <th>Amount</th>
-                                                    <th>Action</th>
-                                            </thead>
 
-                                            <tbody id="payoutpartialView">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
-                                        <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetails()">Submit</button>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="d-flex align-items-center">
+            </div>
+            <div class="my-3 border-bottom"></div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-fill me-3">
+                                                <div class="me-3">
+                                                    <select class="form-select bg-light border-1" id="txtcompanyname" name="txtcompanyname">
+                                                        <option selected disabled value="">--Company--</option>
+                                                    </select>
+                                                    <input type="hidden" id="txtcompany" />
+                                                    <span id="spncompany" style="color: red;"></span>
+                                                </div>
+                                                <div class="me-3">
+                                                    <select class="form-select bg-light border-1" id="txtSuppliername" name="txtSuppliername">
+                                                        <option selected disabled value="">--Supplier--</option>
+                                                    </select>
+                                                    <span id="spnsupplier" style="color: red;"></span>
+                                                </div>
+                                                <div class="me-3">
+
+                                                    <h3 class="mb-2 d-inline" id="txttotalpurchase">₹<span class="counter-value">0</span><small class="text-muted fs-13"></small></h3>
+                                                    <h6 class="text-muted mb-0 text-center">Total Purchase</h6>
+
+                                                </div>
+                                                <div class="me-3">
+
+                                                    <h3 class="mb-2 d-inline text-success" id="txttotalcreditamount"></h3>
+                                                    <h6 class="text-muted mb-0 text-center">Credit Amount</h6>
+                                                </div>
+                                                <div class="me-3">
+                                                    <h3 class="mb-2 d-inline text-danger" id="txttotalpendingamount"></h3>
+                                                    <h6 class="text-muted mb-0 text-center">Pending Amount</h6>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
+                                                    <i class="lni lni-circle-plus"></i> Add PayOut
+                                                </a>
+                                                <span id="spnitembutton" style="color:red;"></span>
+                                            </div>
+                                        </div><!--end card-header-->
+                                        <div class="card-body pt-0">
+                                            <div class="table-responsive">
+                                                <table class="table align-middle mb-0">
+                                                    <thead class="table-light btn-primary">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Payment Status</th>
+                                                            <th>Date</th>
+                                                            <th>Description</th>
+                                                            <th>Amount</th>
+                                                            <th>Action</th>
+                                                    </thead>
+
+                                                    <tbody id="payoutpartialView">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
+                                                <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetails()">Submit</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -68,6 +91,7 @@
         </div>
     </div>
 </div>
+
 
 <!--end card-->
 @section Scripts {
