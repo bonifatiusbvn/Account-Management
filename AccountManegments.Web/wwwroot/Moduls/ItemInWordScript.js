@@ -130,20 +130,38 @@ $(document).ready(function () {
     fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
     fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
 });
-
-
 function GetSiteList() {
-
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
+        method: 'GET',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#siteNameList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+            var unitTypes = result.map(function (data) {
+                return {
+                    label: data.siteName,
+                    value: data.siteId
+                };
             });
+
+
+            $("#siteNameList").autocomplete({
+                source: unitTypes,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#siteNameList").val(ui.item.label);
+                    $("#siteNameListHidden").val(ui.item.value);
+
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
-
 function ClearItemInWordTextBox() {
     if ($("#txtInwardSiteid").val() == "") {
         toastr.warning("Select Site");
@@ -227,7 +245,8 @@ function EditItemInWordDetails(InwordId) {
             $('#txtQuantity').val(response.quantity);
             $("#txtVehicleNumber").val(response.vehicleNumber);
             $("#txtReceiverName").val(response.receiverName);
-            $("#siteNameList").val(response.siteId);
+            $("#siteNameList").val(response.siteName);
+            $("#siteNameListHidden").val(response.siteId);
             var date = response.date;
             var formattedDate = date.substr(0, 10);
             $('#txtIteminwordDate').val(formattedDate);
@@ -409,7 +428,7 @@ function InsertMultipleItemInWordDetails() {
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
         if ($("#siteNameList").val()) {
-            siteId = $("#siteNameList").val();
+            siteId = $("#siteNameListHidden").val();
         }
         else {
             siteId = $("#txtInwardSiteid").val();
@@ -478,7 +497,7 @@ function UpdateMultipleItemInWordDetails() {
     if ($("#itemInWordForm").valid()) {
         var siteId = null;
         if ($("#siteNameList").val()) {
-            siteId = $("#siteNameList").val();
+            siteId = $("#siteNameListHidden").val();
         }
         else {
             siteId = $("#txtInwardSiteid").val();
