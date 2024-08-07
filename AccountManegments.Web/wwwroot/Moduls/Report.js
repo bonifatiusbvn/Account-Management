@@ -16,21 +16,61 @@ function GetAllSiteList() {
 function GetAllCompanyList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
+        method: 'GET',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textReportCompanyName').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+            var companyDetails = result.map(function (data) {
+                return {
+                    label: data.companyName,
+                    value: data.companyId
+                };
             });
+
+            $("#textReportCompanyName").autocomplete({
+                source: companyDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textReportCompanyName").val(ui.item.label);
+                    $("#textReportCompanyNameHidden").val(ui.item.value);
+                    $("#textReportCompanyNameHidden").trigger('change');
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
-
 function GetAllSupplierList() {
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textReportSupplierName').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
             });
+
+            $("#textReportSupplierName").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textReportSupplierName").val(ui.item.label);
+                    $("#textReportSupplierNameHidden").val(ui.item.value);
+
+                    $("#textReportSupplierNameHidden").trigger('change');
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
@@ -43,7 +83,7 @@ var selectedendDate = null;
 var selectedfilterType = null;
 
 $(document).ready(function () {
-    $('#textReportSupplierName').change(function () {
+    $('#textReportSupplierNameHidden').change(function () {
         selectedSupplierId = $(this).val();
         GetInvoiceReportData();
     });
@@ -53,7 +93,7 @@ $(document).ready(function () {
         GetInvoiceReportData();
     });
 
-    $('#textReportCompanyName').change(function () {
+    $('#textReportCompanyNameHidden').change(function () {
         selectedCompanyId = $(this).val();
         GetInvoiceReportData();
     });
@@ -102,7 +142,7 @@ function loadReportData(objData) {
 }
 
 function GetInvoiceReportData() {
-    debugger
+
     if (selectedCompanyId || selectedSupplierId) {
         var objData = {
             CompanyId: selectedCompanyId,
@@ -116,7 +156,7 @@ function GetInvoiceReportData() {
 }
 
 function GetCurrentMonthInvoiceList() {
-    debugger
+    
     selectedfilterType = "currentMonth";
     var objData = {
         CompanyId: selectedCompanyId,
@@ -127,7 +167,7 @@ function GetCurrentMonthInvoiceList() {
 }
 
 function GetCurrentYearInvoiceList() {
-    debugger
+    
     selectedfilterType = "currentYear";
     var objData = {
         CompanyId: selectedCompanyId,

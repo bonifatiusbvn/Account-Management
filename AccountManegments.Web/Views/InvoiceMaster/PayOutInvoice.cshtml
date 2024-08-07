@@ -19,16 +19,13 @@
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="d-flex flex-fill me-3">
                                         <div class="me-3">
-                                            <select class="form-select bg-light border-1" id="txtcompanyname" name="txtcompanyname">
-                                                <option selected disabled value="">--Company--</option>
-                                            </select>
-                                            <input type="hidden" id="txtcompany" />
+                                            <input type="text" id="txtcompanyname" name="txtcompanyname" class="form-control" placeholder="Company" />
+                                            <input type="hidden" id="txtcompanynameHidden" name="txtcompanynameHidden" />
                                             <span id="spncompany" style="color: red;"></span>
                                         </div>
                                         <div class="me-3">
-                                            <select class="form-select bg-light border-1" id="txtSuppliername" name="txtSuppliername">
-                                                <option selected disabled value="">--Supplier--</option>
-                                            </select>
+                                            <input type="text" id="txtSuppliername" name="txtSuppliername" class="form-control" placeholder="Supplier" />
+                                            <input type="hidden" id="txtSuppliernameHidden" name="txtSuppliernameHidden" />
                                             <span id="spnsupplier" style="color: red;"></span>
                                         </div>
                                     </div>

@@ -46,15 +46,13 @@
                                                                                 <label for="textSupplierName" class="form-label">Supplier Name</label>
                                                                                 @if (Model.SupplierName != null)
                                                                                 {
-                                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName">
-                                                                                        <option selected value="@Model.SupplierId">@Model.SupplierName</option>
-                                                                                    </select>
+                                                                                    <input type="text" id="textSupplierName" name="textSupplierName" class="form-control" placeholder="Supplier" value="@Model.SupplierName"/>
+                                                                                    <input type="hidden" id="textSupplierNameHidden" name="textSupplierNameHidden" value="@Model.SupplierId" />
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <select class="form-select" id="textSupplierName" name="textSupplierName">
-                                                                                        <option selected disabled value="">Select Supplier</option>
-                                                                                    </select>
+                                                                                    <input type="text" id="textSupplierName" name="textSupplierName" class="form-control" placeholder="Supplier" />
+                                                                                    <input type="hidden" id="textSupplierNameHidden" name="textSupplierNameHidden" />
                                                                                 }
                                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                                             </div>
@@ -100,15 +98,13 @@
                                                                                 <div class="ms-auto">
                                                                                     @if (Model.CompanyName != null)
                                                                                     {
-                                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName">
-                                                                                            <option selected value="@Model.CompanyId">@Model.CompanyName</option>
-                                                                                        </select>
+                                                                                        <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company" value="@Model.CompanyName" />
+                                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" value="@Model.CompanyId" />
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName">
-                                                                                            <option selected disabled value="">Select Company</option>
-                                                                                        </select>
+                                                                                        <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company"/>
+                                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" />
                                                                                     }
                                                                                     <span id="spnCompanyName" class="text-danger"></span>
                                                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">

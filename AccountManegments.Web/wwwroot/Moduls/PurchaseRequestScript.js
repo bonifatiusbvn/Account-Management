@@ -7,8 +7,6 @@ var TotalPending = '';
 
 AllPurchaseRequestListTable();
 GetSiteDetail();
-GetCompanyName();
-GetSupplierDetails();
 GetPurchaseOrderList();
 GetPOList();
 checkAndDisableAddButton();
@@ -617,26 +615,6 @@ function EditPurchaseOrderDetails(Id) {
     });
 }
 
-function GetCompanyName() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        success: function (result) {
-            if (result.length > 0) {
-
-                var selectedValue = $('#txtcompanyname').find('option:first').val();
-                $.each(result, function (i, data) {
-                    if (data.companyId !== selectedValue) {
-                        $('#txtcompanyname').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
-                    }
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching company details:', error);
-        }
-    });
-}
-
 
 function getPONumber(CompanyId) {
 
@@ -659,15 +637,47 @@ function getPONumber(CompanyId) {
     });
 }
 
-
 $(document).ready(function () {
-    $('#txtcompanyname').change(function () {
+    $('#txtcompanynameHidden').change(function () {
         getPONumber($(this).val());
+        getCompanyDetails($(this).val());
     });
+    function GetCompanyName() {
+        $.ajax({
+            url: '/Company/GetCompanyNameList',
+            method: 'GET',
+            success: function (result) {
+                var companyDetails = result.map(function (data) {
+                    return {
+                        label: data.companyName,
+                        value: data.companyId
+                    };
+                });
+
+                $("#txtcompanyname").autocomplete({
+                    source: companyDetails,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#txtcompanyname").val(ui.item.label);
+                        $("#txtcompanynameHidden").val(ui.item.value);
+
+                        $("#txtcompanynameHidden").trigger('change');
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetCompanyName();
 });
 
 $(document).ready(function () {
-    $('#txtcompanyname').change(function () {
+    $('#txtcompanynameHidden').change(function () {
         siteloadershow();
         var Company = $(this).val();
         $('#txtcompany').val(Company);
@@ -726,23 +736,7 @@ $(document).ready(function () {
         $("#txtItemName").val(Text);
     });
 });
-function GetSupplierDetails() {
 
-    $.ajax({
-        url: '/Supplier/GetSupplierNameList',
-        success: function (result) {
-            if (result.length > 0) {
-                var selectedValue = $('#txtSuppliername').find('option:first').val();
-                $.each(result, function (i, data) {
-                    if (data.supplierId !== selectedValue) {
-                        $('#txtSuppliername').append('<Option value=' + data.supplierId + '>' + data.supplierName + '</Option>')
-                    }
-                });
-            }
-
-        }
-    });
-}
 
 function SerchItemDetailsById(Id, inputField) {
     siteloadershow();
@@ -956,8 +950,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 SiteId: $("#positeid").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate").val(),
-                FromSupplierId: $("#txtSuppliername").val(),
-                ToCompanyId: $("#txtcompanyname").val(),
+                FromSupplierId: $("#txtSuppliernameHidden").val(),
+                ToCompanyId: $("#txtcompanynameHidden").val(),
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
@@ -1169,10 +1163,42 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 
-    $('#txtSuppliername').change(function () {
+    $('#txtSuppliernameHidden').change(function () {
 
         getSupplierDetails($(this).val());
     });
+    function GetSupplierDetails() {
+        $.ajax({
+            url: '/Supplier/GetSupplierNameList',
+            method: 'GET',
+            success: function (result) {
+                var supplierDetails = result.map(function (data) {
+                    return {
+                        label: data.supplierName,
+                        value: data.supplierId
+                    };
+                });
+
+                $("#txtSuppliername").autocomplete({
+                    source: supplierDetails,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#txtSuppliername").val(ui.item.label);
+                        $("#txtSuppliernameHidden").val(ui.item.value);
+
+                        $("#txtSuppliernameHidden").trigger('change');
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetSupplierDetails();
 });
 
 function getSupplierDetails(SupplierId) {
@@ -1205,16 +1231,6 @@ function getSupplierDetails(SupplierId) {
         });
     }
 }
-
-$(document).ready(function () {
-
-    $('#txtcompanyname').change(function () {
-
-        getCompanyDetails($(this).val());
-    });
-
-
-});
 
 function getCompanyDetails(CompanyId) {
     siteloadershow();
@@ -1256,8 +1272,8 @@ function UpdateMultiplePurchaseOrderDetails() {
                 SiteId: $("#poModelSiteId").val(),
                 Poid: $("#textPOPrefix").val(),
                 Date: $("#orderdate2").val(),
-                FromSupplierId: $("#txtSuppliername").val(),
-                ToCompanyId: $("#txtcompanyname").val(),
+                FromSupplierId: $("#txtSuppliernameHidden").val(),
+                ToCompanyId: $("#txtcompanynameHidden").val(),
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
