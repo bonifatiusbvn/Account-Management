@@ -6,14 +6,14 @@
 {
     <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
         <td><a class="text-primary" href="/PurchaseMaster/DisplayPODetails?POId=@item.Id"><h6 class="product-name mb-2">@item.Poid</h6></a></td>
-        <td>@item.SupplierName</td>
-        <td>@item.CompanyName</td>
-        <td>@item.TotalGstamount</td>
-        <td>@item.TotalAmount</td>
+        <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
         @if (_userSession.UserRole == 3)
         {
             <td>@item.SiteName</td>
         }
+        <td>@item.SupplierName</td>
+        <td>@item.CompanyName</td>
+        <td>@item.TotalAmount</td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
         {
             <td>

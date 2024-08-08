@@ -48,5 +48,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? CompanyName { get; set; }
         
         public string? SiteName { get; set; }
+
+        public DateTime? Date { get; set; }
     }
 }

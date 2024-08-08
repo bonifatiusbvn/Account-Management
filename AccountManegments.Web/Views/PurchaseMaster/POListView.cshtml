@@ -58,14 +58,14 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Purchase Order Id</th>
-                                                        <th>Supplier Name</th>
-                                                        <th>Company Name</th>
-                                                        <th>GST Amount</th>
-                                                        <th>Total Amount</th>
+                                                        <th>Date</th>
                                                         @if (_userSession.UserRole == 3)
                                                         {
                                                             <th>Site Name</th>
                                                         }
+                                                        <th>Supplier Name</th>
+                                                        <th>Company Name</th>
+                                                        <th>Total Amount</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <th>Action</th>

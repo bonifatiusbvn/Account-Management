@@ -367,6 +367,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          CreatedBy = a.CreatedBy,
                                          CreatedOn = a.CreatedOn,
                                          Terms = a.Terms,
+                                         Date = a.Date,
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {
