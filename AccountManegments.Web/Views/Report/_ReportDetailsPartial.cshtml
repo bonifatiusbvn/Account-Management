@@ -13,24 +13,40 @@
         {
             youGaveTotal += item.TotalAmount;
             <tr style="height:55px;">
-                <td style="width:150px;">@item.InvoiceNo</td>
-                <td style="width:120px;">@item.Date?.ToString("MM-dd-yyyy")</td>
-                <td style="width:300px;">@item.CompanyName</td>
-                <td style="width:250px;">@item.SupplierName</td>
-                <td class="text-danger" style="width:200px;">@item.TotalAmount</td>
+                <td>@item.InvoiceNo</td>
+                <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td>@item.SiteName</td>
+                <td>@item.CompanyName</td>
+                <td>@item.SupplierName</td>
+                <td class="text-danger">@item.TotalAmount</td>
                 <td></td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
+                {
+                    <td>
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true)))
+                        {
+                            <a class="btn text-primary" onclick="EditPayoutDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        }
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Delete == true)))
+                        {
+                            <a href="javascript:;" class="btn text-primary" onclick="deletePayoutDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                        }
+                    </td>
+                }
             </tr>
         }
         else
         {
             youGetTotal += item.TotalAmount;
             <tr style="height:55px;">
-                <td style="width:150px;">@item.InvoiceNo</td>
-                <td style="width:120px;">@item.Date?.ToString("MM-dd-yyyy")</td>
-                <td style="width:300px;">@item.CompanyName</td>
-                <td style="width:250px;">@item.SupplierName</td>
+                <td>@item.InvoiceNo</td>
+                <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+                <td>@item.SiteName</td>
+                <td>@item.CompanyName</td>
+                <td>@item.SupplierName</td>
                 <td></td>
                 <td class="text-success" style="width:200px;">@item.TotalAmount</td>
+                <td></td>
             </tr>
         }
     }
@@ -47,7 +63,7 @@ else
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td>' +
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
             '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td></tr>';
         $('#reportInvoiceListFooter').html(footerContent);

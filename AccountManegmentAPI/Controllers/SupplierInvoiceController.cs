@@ -162,5 +162,65 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
             return Ok(new { code = 200, data = supplierList.ToList() });
         }
+
+        [HttpPost]
+        [Route("DeletePayoutDetails")]
+        public async Task<IActionResult> DeletePayoutDetails(Guid InvoiceId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var payout = await SupplierInvoice.DeletePayoutDetails(InvoiceId);
+            try
+            {
+                if (payout.code == 200)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = payout.message;
+                }
+                else
+                {
+                    responseModel.message = payout.message;
+                    responseModel.code = payout.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
+
+        [HttpGet]
+        [Route("GetPayoutDetailsbyId")]
+        public async Task<IActionResult> GetPayoutDetailsbyId(Guid InvoiceId)
+        {
+            var payout = await SupplierInvoice.GetPayoutDetailsbyId(InvoiceId);
+            return Ok(new { code = 200, data = payout });
+        }
+
+        [HttpPost]
+        [Route("UpdatePayoutDetails")]
+        public async Task<IActionResult> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var payout = await SupplierInvoice.UpdatePayoutDetails(updatepayoutDetails);
+            try
+            {
+                if (payout.code == 200)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = payout.message;
+                }
+                else
+                {
+                    responseModel.message = payout.message;
+                    responseModel.code = payout.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
     }
 }

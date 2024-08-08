@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -227,6 +228,67 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePayoutDetails(Guid InvoiceId)
+        {
+            try
+            {
+                ApiResponseModel payout = await APIServices.PostAsync("", "SupplierInvoice/DeletePayoutDetails?InvoiceId=" + InvoiceId);
+                if (payout.code == 200)
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetPayoutDetailsbyId(Guid InvoiceId)
+        {
+            try
+            {
+                SupplierInvoiceModel payoutDetails = new SupplierInvoiceModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetPayoutDetailsbyId?InvoiceId=" + InvoiceId);
+                if (response.code == 200)
+                {
+                    payoutDetails = JsonConvert.DeserializeObject<SupplierInvoiceModel>(response.data.ToString());
+                }
+                return new JsonResult(payoutDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
+        {
+            try
+            {
+                ApiResponseModel payout = await APIServices.PostAsync(updatepayoutDetails, "SupplierInvoice/UpdatePayoutDetails");
+                if (payout.code == 200)
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(payout.message), Code = payout.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
