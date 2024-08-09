@@ -258,7 +258,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                      {
                                                          ItemId = a.ItemId,
                                                          ItemName = i.ItemName,
-                                                         ItemDescription=a.ItemDescription,
+                                                         ItemDescription = a.ItemDescription,
                                                          Quantity = a.Quantity,
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
@@ -970,6 +970,18 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
                         query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
                     }
+
+                    else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
+                    {
+                        var years = invoiceReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+
+                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                    }
                 }
 
                 if (invoiceReport.startDate.HasValue)
@@ -1066,8 +1078,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                      PaymentStatus = a.PaymentStatus,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn
-                                 }).First(); 
-                 return payoutdetails;
+                                 }).First();
+                return payoutdetails;
             }
             catch (Exception ex)
             {
@@ -1090,7 +1102,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     payoutdetails.CompanyId = updatepayoutDetails.CompanyId;
                     payoutdetails.TotalAmount = updatepayoutDetails.TotalAmount;
                     payoutdetails.PaymentStatus = updatepayoutDetails.PaymentStatus;
-                    payoutdetails.Date =  updatepayoutDetails.Date;
+                    payoutdetails.Date = updatepayoutDetails.Date;
                     payoutdetails.Description = updatepayoutDetails.Description;
                     payoutdetails.UpdatedBy = updatepayoutDetails.UpdatedBy;
                     payoutdetails.UpdatedOn = DateTime.Now;
