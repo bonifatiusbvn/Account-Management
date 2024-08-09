@@ -34,32 +34,32 @@
                                         <div class="col-12">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center flex-wrap gap-2">
-                                                    <div class="col-lg-2 flex-grow-1">
+                                                    <div class="col-md-2">
                                                         <select id="textReportCompanyName" name="textReportCompanyName" class="form-control">
                                                             <option value="">Select Company</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-lg-2 flex-grow-1">
+                                                    <div class="col-md-2">
                                                         <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
                                                         <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
                                                     </div>
-                                                    <div class="col-lg-1 d-flex align-items-center">
+                                                    <div class="col-md-1">
                                                         <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
                                                         <label class="form-check-label" for="currentMonthRadio">This Month</label>
                                                     </div>
-                                                    <div class="col-lg-1 d-flex align-items-center">
+                                                    <div class="col-md-1">
                                                         <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentYearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
                                                         <label class="form-check-label" for="currentYearRadio">This Year</label>
                                                     </div>
-                                                    <div class="col-lg-2 d-flex align-items-center">
+                                                    <div class="col-md-1">
                                                         <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
                                                         <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
                                                     </div>
-                                                    <div class="col-lg-2 d-flex align-items-center">
+                                                    <div class="col-md-1">
                                                         <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
                                                         <label class="form-check-label" for="betweenYearRadio">Between Year</label>
                                                     </div>
-                                                    <div class="col-lg-4 d-flex align-items-center gap-2" id="dateYearControls">
+                                                    <div class="col-md-3 d-flex align-items-center gap-2" id="dateYearControls">
                                                         <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;">
                                                         <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;">
                                                         <select id="yearDropdown" class="form-control" style="display:none;">
@@ -182,12 +182,24 @@
 
 <script type="text/javascript">
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const BetweenMonth = document.getElementById('betweenMonthRadio');
-        const searchDateInputs = document.querySelectorAll('.date-input');
-        const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
-        const SearchButton = document.getElementById('searchBetweenDate');
-        const dropdowns = document.querySelectorAll('.form-select');
+    function clearDates() {
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+    }
+
+    document.getElementById('betweenYearRadio').addEventListener('change', function () {
+        document.getElementById('yearDropdown').style.display = 'block';
+        document.getElementById('startDate').style.display = 'none';
+        document.getElementById('endDate').style.display = 'none';
+        document.getElementById('searchBetweenDate').style.display = 'inline-block';
+        populateYearDropdown();
+    });
+
+    document.getElementById('betweenMonthRadio').addEventListener('change', function () {
+        document.getElementById('yearDropdown').style.display = 'none';
+        document.getElementById('startDate').style.display = 'block';
+        document.getElementById('endDate').style.display = 'block';
+        document.getElementById('searchBetweenDate').style.display = 'inline-block';
 
         function toggleDateInputs() {
             clearDates();
@@ -206,12 +218,6 @@
 
         toggleDateInputs();
     });
-
-    function clearDates() {
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-    }
-
 </script>
 @section Scripts {
     <script src="~/moduls/report.js" asp-append-version="true"></script>

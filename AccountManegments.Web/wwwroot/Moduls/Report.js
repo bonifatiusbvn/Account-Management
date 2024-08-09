@@ -91,7 +91,7 @@ $(document).ready(function () {
         GetInvoiceReportData();
     });
 
-    $('#textReportCompanyNameHidden').change(function () {
+    $('#textReportCompanyName').change(function () {
         selectedCompanyId = $(this).val();
         GetInvoiceReportData();
     });
