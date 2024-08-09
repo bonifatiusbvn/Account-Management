@@ -975,13 +975,25 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     {
                         var years = invoiceReport.SelectedYear.Split('-');
                         int startYear = int.Parse(years[0]);
-                        int endYear = int.Parse(years[1]);
+                        int endYear;
+
+                        if (years[1].Length == 2)
+                        {
+
+                            endYear = int.Parse(years[1]);
+                            endYear += (startYear / 100) * 100;
+                        }
+                        else
+                        {
+                            endYear = int.Parse(years[1]);
+                        }
 
                         var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
                         var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
 
                         query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
                     }
+
                 }
 
                 if (invoiceReport.startDate.HasValue)
