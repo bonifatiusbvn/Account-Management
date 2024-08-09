@@ -128,6 +128,37 @@ $(document).ready(function () {
     }
 
     GetAllUnitType();
+    function GetAllItemName() {
+        $.ajax({
+            url: '/ItemMaster/GetItemNameList',
+            method: 'GET',
+            success: function (result) {
+                var ItemName = result.map(function (data) {
+                    return {
+                        label: data.itemName,
+                    };
+                });
+
+                $("#txtItemName").autocomplete({
+                    source: ItemName,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#txtItemName").val(ui.item.label);
+                    },
+                    focus: function () {
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetAllItemName();
 });
 
 function ClearTextBox() {

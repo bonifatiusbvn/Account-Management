@@ -33,52 +33,50 @@
                                     <div class="row g-2">
                                         <div class="col-12">
                                             <div class="card-body">
-                                                <div class="row g-4 align-items-center">
-                                                    <div class="col-12 col-lg-2">
-                                                        <input type="text" id="textReportCompanyName" name="textReportCompanyName" class="form-control" placeholder="Company" />
-                                                        <input type="hidden" id="textReportCompanyNameHidden" name="textReportCompanyNameHidden" />
+                                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                                    <div class="col-lg-2 flex-grow-1">
+                                                        <select id="textReportCompanyName" name="textReportCompanyName" class="form-control">
+                                                            <option value="">Select Company</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-12 col-lg-2">
+                                                    <div class="col-lg-2 flex-grow-1">
                                                         <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
                                                         <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
                                                     </div>
-                                                    <div class="col-12 col-lg-1 d-flex align-items-center">
-                                                        <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
-                                                        <label class="form-check-label" for="currentMonthRadio">
-                                                            This Month
-                                                        </label>
+                                                    <div class="col-lg-1 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
+                                                        <label class="form-check-label" for="currentMonthRadio">This Month</label>
                                                     </div>
-                                                    <div class="col-12 col-lg-1 d-flex align-items-center">
-                                                        <input class="nav-radio form-check-input Returns active me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentyearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
-                                                        <label class="form-check-label" for="currentyearRadio">
-                                                            This Year
-                                                        </label>
+                                                    <div class="col-lg-1 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentYearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
+                                                        <label class="form-check-label" for="currentYearRadio">This Year</label>
                                                     </div>
-                                                    <div class="col-12 col-lg-4">
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <div class="d-flex align-items-center">
-                                                                <input class="nav-radio form-check-input Returns active me-2" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
-                                                                <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
-                                                            </div>
-                                                            <div>
-                                                                <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;">
-                                                            </div>
-                                                            <div>
-                                                                <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;">
-                                                            </div>
-                                                            <div>
-                                                                <a class="btn btn-primary nav-btn" id="searchBetweenDate" data-bs-toggle="tab" role="tab" href="#GetBetweenDatesList" style="display:none;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                                        <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col-lg-2 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
+                                                        <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
+                                                    </div>
+                                                    <div class="col-lg-2 d-flex align-items-center">
+                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
+                                                        <label class="form-check-label" for="betweenYearRadio">Between Year</label>
+                                                    </div>
+                                                    <div class="col-lg-4 d-flex align-items-center gap-2" id="dateYearControls">
+                                                        <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;">
+                                                        <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;">
+                                                        <select id="yearDropdown" class="form-control" style="display:none;">
+                                                            <option value="">Select Year</option>
+                                                        </select>
+                                                        <a class="btn btn-primary nav-btn" id="searchBetweenDate" data-bs-toggle="tab" role="tab" href="#GetBetweenDatesList" style="display:none;">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                                <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+                                                            </svg>
+                                                        </a>
                                                     </div>
                                                 </div><!--end row-->
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <!--end row-->
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -105,7 +103,6 @@
                                             </table>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="card-body d-flex justify-content-end sticky-buttons bg-light">
                                     <div id="downloadreportfile" class="col-12 text-end" style="display:none;">

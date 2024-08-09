@@ -46,6 +46,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             existingItem.CreatedOn = DateTime.Now;
 
                             Context.ItemMasters.Update(existingItem);
+                            Context.SaveChanges();
                             response.code = (int)HttpStatusCode.OK;
                             response.message = "Item successfully inserted.";
 
