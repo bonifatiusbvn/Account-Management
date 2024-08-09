@@ -18,34 +18,19 @@ function GetAllCompanyList() {
         url: '/Company/GetCompanyNameList',
         method: 'GET',
         success: function (result) {
-            var companyDetails = result.map(function (data) {
-                return {
-                    label: data.companyName,
-                    value: data.companyId
-                };
+            var $dropdown = $("#textReportCompanyName");
+            $dropdown.empty();
+            $dropdown.append('<option value="">Select Company</option>');
+            result.forEach(function (data) {
+                $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
             });
-
-            $("#textReportCompanyName").autocomplete({
-                    source: companyDetails,
-                    minLength: 0,
-                select: function (event, ui) {
-                        event.preventDefault();
-                    $("#textReportCompanyName").val(ui.item.label);
-                    $("#textReportCompanyNameHidden").val(ui.item.value);
-                    $("#textReportCompanyNameHidden").trigger('change');
-                    },
-                focus: function () {
-                    return false;
-                    }
-                }).focus(function () {
-                    $(this).autocomplete("search", "");
-                });
         },
         error: function (err) {
             console.error("Failed to fetch company list: ", err);
         }
     });
 }
+
 function GetAllSupplierList() {
     $.ajax({
         url: '/Supplier/GetSupplierNameList',
@@ -59,21 +44,21 @@ function GetAllSupplierList() {
             });
 
             $("#textReportSupplierName").autocomplete({
-                    source: supplierDetails,
-                    minLength: 0,
+                source: supplierDetails,
+                minLength: 0,
                 select: function (event, ui) {
-                        event.preventDefault();
+                    event.preventDefault();
                     $("#textReportSupplierName").val(ui.item.label);
                     $("#textReportSupplierNameHidden").val(ui.item.value);
 
                     $("#textReportSupplierNameHidden").trigger('change');
-                    },
+                },
                 focus: function () {
                     return false;
-                    }
-                }).focus(function () {
-                    $(this).autocomplete("search", "");
-                });
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
         },
         error: function (err) {
             console.error("Failed to fetch supplier list: ", err);
@@ -88,14 +73,21 @@ var selectedstartDate = null;
 var selectedendDate = null;
 var selectedfilterType = null;
 
+function populateYearDropdown() {
+    var currentYear = new Date().getFullYear();
+    var yearDropdown = $('#yearDropdown');
+    yearDropdown.empty().append('<option value="">Select Year</option>');
+
+    for (var year = currentYear - 20; year <= currentYear + 20; year++) {
+        var nextYear = (year + 1).toString().slice(-2); // Get last two digits of next year
+        var yearRange = year + '-' + nextYear;
+        yearDropdown.append('<option value="' + yearRange + '">' + yearRange + '</option>');
+    }
+}
+
 $(document).ready(function () {
     $('#textReportSupplierNameHidden').change(function () {
         selectedSupplierId = $(this).val();
-        GetInvoiceReportData();
-    });
-
-    $('#textReportSiteName').change(function () {
-        selectedSiteId = $(this).val();
         GetInvoiceReportData();
     });
 
@@ -108,13 +100,17 @@ $(document).ready(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetCurrentMonthInvoicelist') {
             GetCurrentMonthInvoiceList();
-        }
-    });
-
-    $('.nav-radio').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#GetCurrentYearInvoicelist') {
+            $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
+        } else if (targetTab === '#GetCurrentYearInvoicelist') {
             GetCurrentYearInvoiceList();
+            $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
+        } else if ($(this).attr('id') === 'betweenMonthRadio') {
+            $('#startDate, #endDate', '#searchBetweenDate').show();
+        } else if (targetTab === '#betweenYearRadio') {
+            debugger
+            $('#yearDropdown', '#searchBetweenDate').show();
+            $('#startDate, #endDate').hide();
+            populateYearDropdown();
         }
     });
 
@@ -122,9 +118,14 @@ $(document).ready(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetBetweenDatesList') {
             GetBetweenDateInvoiceList();
+        } else if (targetTab === '#betweenYearRadio') {
+            GetBetweenYearsInvoiceList();
         }
     });
 });
+
+
+
 
 function loadReportData(objData) {
     $.ajax({
@@ -462,7 +463,7 @@ $(document).ready(function () {
             Edittxtpayoutamount: {
                 required: true,
                 number: true,
-                min: 0 
+                min: 0
             }
         },
         messages: {
