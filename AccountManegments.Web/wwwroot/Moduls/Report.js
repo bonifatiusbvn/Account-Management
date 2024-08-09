@@ -86,25 +86,21 @@ function populateYearDropdown() {
 }
 
 $(document).ready(function () {
-    // Function to clear date inputs
+
     function clearDates() {
         $('#startDate').val('');
         $('#endDate').val('');
     }
-
-    // Handle supplier name change
     $('#textReportSupplierNameHidden').change(function () {
         selectedSupplierId = $(this).val();
         GetInvoiceReportData();
     });
 
-    // Handle company name change
     $('#textReportCompanyName').change(function () {
         selectedCompanyId = $(this).val();
         GetInvoiceReportData();
     });
 
-    // Handle radio button clicks for date/year controls
     $('.nav-radio').click(function () {
         var radioId = $(this).attr('id');
 
@@ -117,17 +113,16 @@ $(document).ready(function () {
         } else if (radioId === 'betweenMonthRadio') {
             $('#startDate, #endDate, #searchBetweenDate').show();
             $('#yearDropdown').hide();
-            clearDates();  // Clear dates when switching to Between Date
+            clearDates();
         } else if (radioId === 'betweenYearRadio') {
             $('#yearDropdown, #searchBetweenDate').show();
             $('#startDate, #endDate').hide();
-            populateYearDropdown();  // Populate year dropdown
+            populateYearDropdown();
         }
     });
 
-    // Handle search button click
     $('.nav-btn').click(function () {
-        debugger
+
         var buttonId = $(this).attr('id');
 
         if (buttonId === 'searchBetweenDate') {
