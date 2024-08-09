@@ -1175,6 +1175,37 @@ $(document).ready(function () {
     }
 
     GetUnitType();
+    function GetAllItemName() {
+        $.ajax({
+            url: '/ItemMaster/GetItemNameList',
+            method: 'GET',
+            success: function (result) {
+                var ItemName = result.map(function (data) {
+                    return {
+                        label: data.itemName,
+                    };
+                });
+
+                $("#textItemName").autocomplete({
+                    source: ItemName,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#textItemName").val(ui.item.label);
+                    },
+                    focus: function () {
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", "");
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch unit types: ", err);
+            }
+        });
+    }
+    GetAllItemName();
 });
 
 
