@@ -94,14 +94,16 @@ function GetCompanyDetail() {
                     $('#textCompanyName').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
                 }
             });
+
+            $.each(result, function (i, data) {
+                $('#ddlInvoiceCompanyName').append('<option value="' + data.companyName + '">' + data.companyName + '</option>');
+            });
         },
         error: function (xhr, status, error) {
             console.error('Error fetching company details:', error);
         }
     });
 }
-
-
 
 
 $(document).ready(function () {
@@ -112,6 +114,27 @@ $(document).ready(function () {
     });
 });
 
+
+function companyfilterSupplierInvoice() {
+    siteloadershow();
+    var searchText = $('#ddlInvoiceCompanyName').val();
+    var searchBy = "AscendingCompanyName";
+
+    $.ajax({
+        url: '/InvoiceMaster/SupplierInvoiceListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            debugger
+            siteloaderhide();
+            $("#SupplierInvoicebody").html(result);
+        },
+
+    });
+}
 
 function GetSupplierDetail() {
 

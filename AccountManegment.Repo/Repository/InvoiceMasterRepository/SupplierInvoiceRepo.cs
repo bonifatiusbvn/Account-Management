@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
@@ -503,7 +504,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         Description = a.Description,
                                         Roundoff = a.Roundoff,
                                         CompanyId = a.CompanyId,
-                                        Date = DateTime.Now,
+                                        Date = a.Date,
                                         CompanyName = c.CompanyName,
                                         SiteName = d.SiteName,
                                         SupplierName = b.SupplierName,
@@ -514,12 +515,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
-                    supplierList = supplierList.Where(u =>
-                        u.SiteName.ToLower().Contains(searchText) ||
-                        u.CompanyName.ToLower().Contains(searchText) ||
-                        u.SupplierName.ToLower().Contains(searchText) ||
-                        u.TotalAmount.ToString().Contains(searchText)
-                    );
+                    if (DateTime.TryParseExact(searchText, "dd/MM/yyyy",
+                                       CultureInfo.InvariantCulture,
+                                       DateTimeStyles.None,
+                                       out DateTime searchDate))
+                    {
+                        supplierList = supplierList.Where(u => u.Date.HasValue &&
+                                                               u.Date.Value.Date == searchDate.Date);
+                    }
+                    else
+                    {
+                        supplierList = supplierList.Where(u =>
+                            u.SiteName.ToLower().Contains(searchText) ||
+                            u.CompanyName.ToLower().Contains(searchText) ||
+                            u.SupplierName.ToLower().Contains(searchText) ||
+                            u.SupplierInvoiceNo.ToLower().Contains(searchText) ||
+                            u.TotalAmount.ToString().Contains(searchText)
+                        );
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
