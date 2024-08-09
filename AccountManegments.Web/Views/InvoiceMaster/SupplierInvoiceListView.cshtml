@@ -33,10 +33,8 @@
                                                         <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="filterSupplierInvoiceTable()" placeholder="Search">
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SupplierInvoiceSearchBy" onchange="filterSupplierInvoiceTable()">
-                                                            <option selected="selected">All</option>
-                                                            <option value="sitename">SiteName</option>
-                                                            <option value="companyname">Company</option>
+                                                        <select class="form-select" id="ddlInvoiceCompanyName" name="ddlInvoiceCompanyName" onchange="companyfilterSupplierInvoice()">
+                                                            <option selected disabled value="">Select Company</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-12 col-lg-4">
