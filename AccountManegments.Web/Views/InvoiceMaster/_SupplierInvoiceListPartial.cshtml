@@ -6,8 +6,8 @@
 *@
 @foreach (var item in Model)
 {
-    <tr id="userCard_@item.Id" class="" onclick="DisplayItemDetails('@item.Id', this)">
-        <td><a class="text-primary" href="/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
+    <tr id="userCard_@item.Id" class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'">
+        <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
         <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
         <td>@item.SiteName</td>
         <td>@item.SupplierName</td>
