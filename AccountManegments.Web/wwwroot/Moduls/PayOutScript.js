@@ -10,33 +10,28 @@ function GetCompanyDetails() {
         url: '/Company/GetCompanyNameList',
         method: 'GET',
         success: function (result) {
-            var companyDetails = result.map(function (data) {
-                return {
-                    label: data.companyName,
-                    value: data.companyId
-                };
+            var $dropdown = $("#txtcompanyname");
+            $dropdown.empty();
+            $dropdown.append('<option value="">Select Company</option>');
+
+            result.forEach(function (data) {
+                $dropdown.append($('<option>', {
+                    value: data.companyId,
+                    text: data.companyName
+                }));
             });
 
-            $("#txtcompanyname").autocomplete({
-                source: companyDetails,
-                minLength: 0,
-                select: function (event, ui) {
-                    event.preventDefault();
-                    $("#txtcompanyname").val(ui.item.label);
-                    $("#txtcompanynameHidden").val(ui.item.value);
-                },
-                focus: function () {
-                    return false;
-                }
-            }).focus(function () {
-                $(this).autocomplete("search", "");
+            $dropdown.change(function () {
+                var selectedCompany = $(this).val();
+                $("#txtcompanynameHidden").val(selectedCompany);
             });
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch company names: ", err);
         }
     });
 }
+
 
 function GetSupplierDetails() {
     $.ajax({
@@ -119,9 +114,6 @@ $(document).ready(function () {
 
 
 });
-
-
-
 function InsertPayOutDetails() {
     siteloadershow();
     if ($('.payoutinvoicerow').length >= 1) {
