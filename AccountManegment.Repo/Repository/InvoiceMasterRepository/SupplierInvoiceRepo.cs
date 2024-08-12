@@ -482,7 +482,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         //    }
         //}
 
-
         public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
         {
             try
@@ -1035,7 +1034,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
-
         public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
         {
             ApiResponseModel response = new ApiResponseModel();
