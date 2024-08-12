@@ -28,7 +28,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public int City { get; set; }
         public string? CityName { get; set; }
 
-        public string PinCode { get; set; } = null!;
+        public string? PinCode { get; set; }
 
         public string? BankName { get; set; }
         public string? BranchName { get; set; }

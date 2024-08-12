@@ -45,5 +45,11 @@ public partial class PurchaseOrder
 
     public DateTime? UpdatedOn { get; set; }
 
+    public string? DispatchBy { get; set; }
+
+    public string? BuyersPurchaseNo { get; set; }
+
+    public string? PaymentTerms { get; set; }
+
     public virtual SupplierMaster FromSupplier { get; set; } = null!;
 }

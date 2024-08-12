@@ -23,7 +23,7 @@ public partial class SupplierMaster
 
     public int City { get; set; }
 
-    public string PinCode { get; set; } = null!;
+    public string? PinCode { get; set; }
 
     public string? BankName { get; set; }
 
