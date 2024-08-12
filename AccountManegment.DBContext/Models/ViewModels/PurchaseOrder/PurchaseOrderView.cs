@@ -50,5 +50,11 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? SiteName { get; set; }
 
         public DateTime? Date { get; set; }
+
+        public string? DispatchBy { get; set; }
+
+        public string? BuyersPurchaseNo { get; set; }
+
+        public string? PaymentTerms { get; set; }
     }
 }

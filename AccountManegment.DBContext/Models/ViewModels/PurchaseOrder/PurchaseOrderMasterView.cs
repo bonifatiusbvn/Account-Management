@@ -61,8 +61,16 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? ShippingAddress { get; set; }
         public string? SupplierMobile { get; set; }
         public string? SupplierGstno { get; set; }
+        public string? SupplierStateName { get; set; }
+        public int? SupplierStateCode { get; set; }
         public string? SupplierFullAddress { get; set; }
         public string? CompanyGstno { get; set; }
+        public string? CompanyStateName { get; set; }
+        public int? CompanyStateCode { get; set; }
+        public string? DispatchBy { get; set; }
+        public string? BuyersPurchaseNo { get; set; }
+
+        public string? PaymentTerms { get; set; }
         public List<ItemOrderlist>? ItemOrderlist { get; set; }
         public List<OrderShippingAddress>? ShippingAddressList { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }

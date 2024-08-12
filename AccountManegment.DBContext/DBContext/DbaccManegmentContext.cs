@@ -57,10 +57,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -199,12 +197,14 @@ public partial class DbaccManegmentContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BillingAddress).HasMaxLength(500);
+            entity.Property(e => e.BuyersPurchaseNo).HasMaxLength(100);
             entity.Property(e => e.ContactName).HasMaxLength(50);
             entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.Poid)
                 .HasMaxLength(100)
                 .HasColumnName("POId");
@@ -403,7 +403,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("GSTNo");
             entity.Property(e => e.Iffccode)
-                .HasMaxLength(10)
+                .HasMaxLength(15)
                 .HasColumnName("IFFCCode");
             entity.Property(e => e.Mobile).HasMaxLength(15);
             entity.Property(e => e.PinCode).HasMaxLength(7);
