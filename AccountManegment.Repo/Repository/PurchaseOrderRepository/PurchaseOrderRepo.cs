@@ -163,6 +163,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  join g in Context.PodeliveryAddresses on a.Id equals g.Poid
                                  join e in Context.Cities on b.City equals e.CityId
                                  join f in Context.States on b.State equals f.StatesId
+                                 join cs in Context.States on c.StateId equals cs.StatesId
                                  select new PurchaseOrderMasterView
                                  {
                                      Id = a.Id,
@@ -194,6 +195,13 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                      Terms = a.Terms,
+                                     PaymentTerms = a.PaymentTerms,
+                                     BuyersPurchaseNo = a.BuyersPurchaseNo,
+                                     DispatchBy = a.DispatchBy,
+                                     CompanyStateName = cs.StatesName,
+                                     CompanyStateCode = cs.StateCode,
+                                     SupplierStateCode = f.StateCode,
+                                     SupplierStateName = f.StatesName,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName
                                  }).First();
 
@@ -368,6 +376,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          CreatedOn = a.CreatedOn,
                                          Terms = a.Terms,
                                          Date = a.Date,
+                                         BuyersPurchaseNo = a.BuyersPurchaseNo,
+                                         DispatchBy = a.DispatchBy,
+                                         PaymentTerms = a.PaymentTerms,
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -587,6 +598,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
                     Terms = PurchaseOrderDetails.Terms,
+                    DispatchBy = PurchaseOrderDetails.DispatchBy,
+                    PaymentTerms = PurchaseOrderDetails.PaymentTerms,
+                    BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -666,6 +680,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.ContactName = PurchaseOrderDetails.ContactName;
                 PurchaseOrder.ContactNumber = PurchaseOrderDetails.ContactNumber;
                 PurchaseOrder.Terms = PurchaseOrderDetails.Terms;
+                PurchaseOrder.DispatchBy = PurchaseOrderDetails.DispatchBy;
+                PurchaseOrder.BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo;
+                PurchaseOrder.PaymentTerms = PurchaseOrderDetails.PaymentTerms;
                 Context.PurchaseOrders.Update(PurchaseOrder);
 
                 foreach (var address in PurchaseOrderDetails.ShippingAddressList)

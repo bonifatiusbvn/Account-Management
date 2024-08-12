@@ -235,7 +235,6 @@ function sortSupplierTable() {
 }
 
 function UpdateSupplierDetails() {
-
     siteloadershow();
     if ($("#SupplierForm").valid()) {
         var objData = {
@@ -269,6 +268,7 @@ function UpdateSupplierDetails() {
                 datatype: 'json',
                 success: function (Result) {
                     if (Result.code == 200) {
+                        debugger
                         var offcanvasElement = document.getElementById('createSupplier');
                         var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
@@ -348,12 +348,6 @@ function validateAndCreateSupplier() {
             txtGST: "required",
             txtBuilding: "required",
             txtArea: "required",
-            txtPinCode: {
-                required: true,
-                digits: true,
-                minlength: 6,
-                maxlength: 6
-            },
             ddlCity: "required",
             dropState: "required",
             ddlCountry: "required"
@@ -363,12 +357,6 @@ function validateAndCreateSupplier() {
             txtGST: "Please Enter GST",
             txtBuilding: "Please Enter Building",
             txtArea: "Please Enter Area",
-            txtPinCode: {
-                required: "Please Enter Pin Code",
-                digits: "Pin code must contain only digits",
-                minlength: "Pin code must be 6 digits long",
-                maxlength: "Pin code must be 6 digits long"
-            },
             ddlCity: "Please Enter City",
             dropState: "Please Enter State",
             ddlCountry: "Please Enter Country"

@@ -21,6 +21,14 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using AccountManagement.API;
+using System.Security.Cryptography;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -809,6 +817,76 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 return Json(new { uploaded = false, error = ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> POPrintDetails(Guid POId)
+        {
+            try
+            {
+                PurchaseOrderMasterView order = new PurchaseOrderMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", $"PurchaseOrder/GetPurchaseOrderDetailsById?POId={POId}");
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
+                    var number = order.TotalAmount;
+                    var totalAmountInWords = NumberToWords(number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> PrintPODetails(Guid POId)
+        {
+            try
+            {
+                IActionResult result = await POPrintDetails(POId);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as PurchaseOrderMasterView;
+                    var htmlContent = await RenderViewToStringAsync("POPrintDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
+            var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
+
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"View '{viewName}' was not found.");
+                }
+
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewData,
+                    tempData,
+                    stringWriter,
+                    new HtmlHelperOptions()
+                );
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
             }
         }
     }

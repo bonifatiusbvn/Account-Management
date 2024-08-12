@@ -166,7 +166,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             {
                 var ItemList = (from a in Context.ItemMasters
                                 join b in Context.UnitMasters on a.UnitType equals b.UnitId
-                                where a.IsDeleted == false 
+                                where a.IsDeleted == false
                                 select new ItemMasterModel
                                 {
                                     ItemId = a.ItemId,
@@ -256,11 +256,15 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         {
             try
             {
-                IEnumerable<ItemMasterModel> ItemName = Context.ItemMasters.Where(e => e.IsDeleted == false && e.IsApproved == true).ToList().Select(a => new ItemMasterModel
-                {
-                    ItemId = a.ItemId,
-                    ItemName = a.ItemName,
-                });
+                IEnumerable<ItemMasterModel> ItemName = Context.ItemMasters
+                    .Where(e => e.IsDeleted == false && e.IsApproved == true)
+                    .OrderByDescending(e => e.CreatedOn)
+                    .Select(a => new ItemMasterModel
+                    {
+                        ItemId = a.ItemId,
+                        ItemName = a.ItemName,
+                    })
+                    .ToList();
                 return ItemName;
             }
             catch (Exception ex)
@@ -268,6 +272,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 throw ex;
             }
         }
+
 
         public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
         {
