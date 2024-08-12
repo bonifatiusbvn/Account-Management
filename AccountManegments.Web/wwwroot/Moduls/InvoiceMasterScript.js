@@ -846,7 +846,7 @@ function UpdateDiscountPercentage(that) {
 }
 
 function updateProductQuantity(row, increment) {
-    var quantityInput = parseInt(row.find(".product-quantity").val());
+    var quantityInput = parseFloat(row.find(".product-quantity").val());
     var newQuantity = quantityInput + increment;
     if (newQuantity >= 0) {
         row.find(".product-quantity").val(newQuantity);
