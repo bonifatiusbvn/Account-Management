@@ -777,7 +777,7 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
                 $.each(result, function (i, data) {
                     dropdown.append('<option class="site-dropdown-item-custom" data-value="' + data.siteId + '">' + data.siteName + '</option>');
                 });
-                dropdown.css("width", "300px");
+                dropdown.css("width", "550px");
                 dropdown.select2({
                     placeholder: 'Select Site',
                     closeOnSelect: false,
