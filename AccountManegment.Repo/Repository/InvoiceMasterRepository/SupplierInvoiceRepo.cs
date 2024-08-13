@@ -248,6 +248,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     ContactNumber = a.ContactNumber,
                                     CreatedOn = a.CreatedOn,
                                     StateCode = f.StateCode,
+                                    DiscountRoundoff = a.DiscountRoundoff,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
                                 }).FirstOrDefault();
@@ -626,6 +627,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     UpdatedOn = DateTime.Now,
                     UpdatedBy = SupplierInvoiceDetail.UpdatedBy,
                     CreatedOn = SupplierInvoiceDetail.CreatedOn,
+                    DiscountRoundoff = SupplierInvoiceDetail.DiscountRoundoff,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
@@ -733,6 +735,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     DispatchBy = SupplierItemDetails.DispatchBy,
                     PaymentTerms = SupplierItemDetails.PaymentTerms,
                     ShippingAddress = SupplierItemDetails.ShippingAddress,
+                    DiscountRoundoff = SupplierItemDetails.DiscountRoundoff,
                     IsPayOut = PayOut,
                     Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
@@ -851,7 +854,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                             Roundoff = a.Roundoff,
                                             IsPayOut = a.IsPayOut,
                                             SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                            PaymentStatus = a.PaymentStatus
+                                            PaymentStatus = a.PaymentStatus,
+                                            DiscountRoundoff = a.DiscountRoundoff,
                                         });
                 return (supplierInvoices);
             }
@@ -1087,7 +1091,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                      IsPayOut = true,
                                      PaymentStatus = a.PaymentStatus,
                                      CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn
+                                     CreatedOn = a.CreatedOn,
+                                     DiscountRoundoff = a.DiscountRoundoff,
                                  }).First();
                 return payoutdetails;
             }

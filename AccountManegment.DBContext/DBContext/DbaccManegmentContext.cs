@@ -358,6 +358,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.DiscountRoundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
             entity.Property(e => e.Lrno)
