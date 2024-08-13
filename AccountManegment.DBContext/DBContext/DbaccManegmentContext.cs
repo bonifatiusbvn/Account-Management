@@ -23,6 +23,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
 
+    public virtual DbSet<GroupMaster> GroupMasters { get; set; }
+
     public virtual DbSet<ItemInWordDocument> ItemInWordDocuments { get; set; }
 
     public virtual DbSet<ItemInword> ItemInwords { get; set; }
@@ -58,7 +60,6 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -121,6 +122,21 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Controller).HasMaxLength(50);
             entity.Property(e => e.FormGroup).HasMaxLength(50);
             entity.Property(e => e.FormName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<GroupMaster>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("GroupMaster");
+
+            entity.Property(e => e.GroupName).HasMaxLength(50);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.Site).WithMany()
+                .HasForeignKey(d => d.SiteId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_GroupMaster_Site");
         });
 
         modelBuilder.Entity<ItemInWordDocument>(entity =>

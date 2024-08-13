@@ -6,13 +6,20 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 @section HeaderButton {
-
-    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
-    {
-        <button type="button" class="btn btn-primary fixed-button" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
-    }
+    <div class="d-flex gap-2 ms-auto">
+        <button type="button" class="btn btn-primary" onclick="GetGroupSiteNameList()"><i class="lni lni-circle-plus"></i>Add Group</button>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
+        {
+            <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
+        }
+    </div>
 }
 
+<style>
+    .select2.select2-container {
+        width: 465px;
+    }
+</style>
 
 <div class="">
     <div class="">
@@ -277,6 +284,39 @@
         </div>
 
     </div>
+
+    <form id="AddSiteGroupForm">
+        <div class="modal fade show" tabindex="-1" id="AddSiteGroupModel" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary-subtle p-3">
+                        <h5 class="modal-title" id="flipModalLabel">Add Group</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Group Name</label>
+                            <input type="text" class="form-control" placeholder="Group Name" id="txtSiteGropuName" name="txtSiteGropuName">
+                            <span id="spnSiteGropuName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Select Site</label>
+                            <select class="multiple-select" data-placeholder="Select Site" multiple="multiple" id="textGroupSiteNameList"></select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Selected Sites</label>
+                            <textarea type="text" class="form-control" id="selectedSitesDisplay" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="CreateNewSiteGroup()" id="btnitem">Save</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+    </form>
 </div>
 
 <style>
@@ -295,7 +335,5 @@
 @section Scripts {
     <script src="~/moduls/masterlistscript.js" asp-append-version="true"></script>
     <script src="~/moduls/sitemasterscript.js" asp-append-version="true"></script>
-
 }
-
 

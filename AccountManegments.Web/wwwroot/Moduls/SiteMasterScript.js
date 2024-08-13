@@ -1,7 +1,6 @@
 ﻿AllSiteListTable();
 fn_getState('stateDropdown', 1);
 fn_getShippingState('ShippingState', 1);
-
 function AllSiteListTable() {
 
     var searchText = $('#txtSiteSearch').val();
@@ -721,10 +720,6 @@ $(document).ready(function () {
     }
 });
 
-
-
-
-
 function toggleShippingAddress() {
     var checkbox = document.getElementById("hideShippingAddress");
     var shippingFields = document.getElementById("shippingAddressFields");
@@ -735,3 +730,39 @@ function toggleShippingAddress() {
         shippingFields.style.display = "block";
     }
 }
+
+
+
+
+
+function GetGroupSiteNameList() {
+    $('#AddSiteGroupModel').modal('show');
+
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            var selectElement = $('#textGroupSiteNameList');
+            selectElement.empty();
+            $.each(result, function (i, data) {
+                selectElement.append(`<option value="${data.siteId}">${data.siteName}</option>`);
+            });
+
+            // Trigger change event to update the display of selected items
+            selectElement.change(function () {
+                var selectedOptions = $(this).find('option:selected');
+                var selectedSites = [];
+                selectedOptions.each(function () {
+                    selectedSites.push($(this).text());
+                });
+                $('#selectedSitesDisplay').val(selectedSites.join(', '));
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error in GetGroupSiteNameList:', error);
+        }
+    });
+}
+
+
+
+
