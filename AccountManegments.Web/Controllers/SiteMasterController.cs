@@ -246,5 +246,27 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> AddSiteGroupDetails()
+        {
+            try
+            {
+                var GroupList = HttpContext.Request.Form["GroupDetails"];
+                var GroupDetails = JsonConvert.DeserializeObject<GroupMasterModel>(GroupList);
+                ApiResponseModel postuser = await APIServices.PostAsync(GroupDetails, "SiteMaster/AddSiteGroupDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

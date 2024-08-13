@@ -764,5 +764,58 @@ function GetGroupSiteNameList() {
 }
 
 
+function AddSiteGroupDetails() {
+    var selectElement = document.getElementById('textGroupSiteNameList');
+    var SiteList = [];
 
+    $(selectElement.options).each(function () {
+        var option = this;
+        if (option.selected) {
+            var siteName = option.value.trim();
+
+            var objData = {
+                SiteId: siteName
+            };
+            SiteList.push(objData);
+        }
+    });
+    if (SiteList.length > 0) {
+
+        var groupName = $('#txtSiteGropuName').val();
+
+        var SiteData = {
+            GroupName: groupName,
+            UpdatedBy: UpdatedBy,
+            SiteList: SiteList,
+        }
+        var form_data = new FormData();
+        form_data.append("GroupDetails", JSON.stringify(SiteData));
+
+        $.ajax({
+            url: '/SiteMaster/AddSiteGroupDetails',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        AddSiteGroupDetails();
+                    });
+                }
+                else {
+                    toastr.warning(Result.message);
+                }
+            },
+        })
+    } else {
+        toastr.warning("Select member you want to add!");
+    }
+}
 

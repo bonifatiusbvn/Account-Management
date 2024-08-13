@@ -460,5 +460,41 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var item in GroupDetails.SiteList)
+                {
+                    bool isSiteAlreadyExists = Context.GroupMasters.Any(x => x.SiteId == item.SiteId);
+
+                    if (isSiteAlreadyExists)
+                    {
+                            response.message = item.SiteId + " already exists in group.";
+                            response.code = (int)HttpStatusCode.NotFound;
+                            return response;
+                    }
+                    else
+                    {
+                        var groupModel = new GroupMaster()
+                        {
+                           GroupName=GroupDetails.GroupName,
+                           SiteId=item.SiteId,
+                        };
+                        Context.GroupMasters.Add(groupModel);
+                        await Context.SaveChangesAsync();
+                        response.code = 200;
+                        response.message = "Group is added successfully!";
+                    }
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

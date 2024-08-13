@@ -56,5 +56,10 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetSiteAddressList(SiteId);
         }
+
+        public async Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        {
+            return await SiteMaster.AddSiteGroupDetails(GroupDetails);
+        }
     }
 }
