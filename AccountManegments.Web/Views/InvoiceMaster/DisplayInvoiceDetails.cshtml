@@ -3,7 +3,7 @@
     ViewData["Title"] = "Purchase Invoice";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 
-    }
+}
 <style>
     .VerticalBorder {
         border-left: 2px solid lightgray;
@@ -21,6 +21,7 @@
         height: 100%;
         transform: translateX(-50%);
     }
+
     .Address-Details {
         display: flex;
         align-items: stretch;
@@ -165,7 +166,7 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
-                            <thead class="btn-primary" >
+                            <thead class="btn-primary">
                                 <tr class="table-active" style="border: 1px solid;color:white;">
                                     <th>SINo.</th>
                                     <th>Description of Goods</th>
@@ -176,80 +177,80 @@
                                     <th>Amount</th>
                                 </tr>
                             </thead>
-                        <tbody>
-                            @{
-                                int index = 1;
-                                decimal? subtotal = 0;
-                                decimal? totalAmt = 0;
-                                decimal? TotalQty = 0;
-                                decimal? sgst = 0;
-                                decimal? cgst = 0;
-                                sgst = (Model.TotalGstamount / 2);
-                                sgst = Math.Round(sgst.Value, 2);
-                                cgst = (Model.TotalGstamount / 2);
-                                cgst = Math.Round(cgst.Value, 2);
+                            <tbody>
+                                @{
+                                    int index = 1;
+                                    decimal? subtotal = 0;
+                                    decimal? totalAmt = 0;
+                                    decimal? TotalQty = 0;
+                                    decimal? sgst = 0;
+                                    decimal? cgst = 0;
+                                    sgst = (Model.TotalGstamount / 2);
+                                    sgst = Math.Round(sgst.Value, 2);
+                                    cgst = (Model.TotalGstamount / 2);
+                                    cgst = Math.Round(cgst.Value, 2);
 
-                            }
-                            @foreach (var item in Model.ItemList)
-                            {
-                                subtotal = (item.Quantity * item.PricePerUnit);
-                                totalAmt += subtotal;
-                                TotalQty += item.Quantity;
-                                var trimmedUnitTypeName = item.UnitTypeName.Split('-').First().Trim();
+                                }
+                                @foreach (var item in Model.ItemList)
+                                {
+                                    subtotal = (item.Quantity * item.PricePerUnit);
+                                    totalAmt += subtotal;
+                                    TotalQty += item.Quantity;
+                                    var trimmedUnitTypeName = item.UnitTypeName.Split('-').First().Trim();
 
+                                    <tr style="border: 1px solid lightgray;">
+                                        <td class="border">@index</td>
+                                        <td class="text-start border">
+                                            <span class="fw-medium fw-semibold" id="txtproductname">@item.ItemName</span><br />
+                                            <span class="fw-medium text-muted" id="txtproductname">@item.ItemDescription</span>
+                                        </td>
+                                        <td class="border" id="txtper">@item.Hsncode</td>
+                                        <td class="border" id="txtquantity">@item.Quantity @trimmedUnitTypeName</td>
+                                        <td class="border" id="txtHSN">@item.PricePerUnit</td>
+                                        <td class="border" id="txtper">@trimmedUnitTypeName</td>
+                                        <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
+                                    </tr>
+                                    index++;
+                                }
                                 <tr style="border: 1px solid lightgray;">
-                                    <td class="border">@index</td>
-                                    <td class="text-start border">
-                                        <span class="fw-medium" id="txtproductname">@item.ItemName</span>
-                                        <span class="fw-medium" id="txtproductname">@item.ItemDescription</span>
-                                    </td>
-                                    <td class="border" id="txtper">@item.Hsncode</td>
-                                    <td class="border" id="txtquantity">@item.Quantity @trimmedUnitTypeName</td>
-                                    <td class="border" id="txtHSN">@item.PricePerUnit</td>
-                                    <td class="border" id="txtper">@trimmedUnitTypeName</td>
-                                    <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">SGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"><b>₹@sgst</b></td>
                                 </tr>
-                                index++;
-                            }
-                            <tr style="border: 1px solid lightgray;">
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">SGST</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"><b>₹@sgst</b></td>
-                            </tr>
-                            <tr style="border: 1px solid lightgray;">
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">CGST</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"><b>₹@cgst</b></td>
-                            </tr>
-                            <tr >
-                                <td class="border"></td>
-                                <td class="text-end border">Round Off</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border">@Model.Roundoff</td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">Total</td>
-                                <td class="border"></td>
-                                <td class="border">@TotalQty</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"><b>₹@Model.TotalAmountInvoice</b></td>
-                            </tr>
+                                <tr style="border: 1px solid lightgray;">
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">CGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"><b>₹@cgst</b></td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="text-end border">Round Off</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border">@Model.Roundoff</td>
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="text-end border">Total</td>
+                                    <td class="border"></td>
+                                    <td class="border">@TotalQty</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border"><b>₹@Model.TotalAmountInvoice</b></td>
+                                </tr>
 
-                        </tbody>
-                    </table><!--end table-->
+                            </tbody>
+                        </table><!--end table-->
                     </div>
                     <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">
                         <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 905px" ;>E. &amp; O.E</i></span><br />

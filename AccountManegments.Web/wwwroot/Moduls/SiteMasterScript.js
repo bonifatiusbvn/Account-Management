@@ -142,37 +142,37 @@ function DisplaySiteDetails(SiteId) {
     });
 }
 
-function SelectSiteDetails(SiteId, element) {
-    siteloadershow();
-    $('tr').removeClass('active');
-    $(element).closest('tr').addClass('active');
-    $('.ac-detail').removeClass('d-none');
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            siteloaderhide();
-            if (response) {
-                $('#dspSiteid').val(SiteId);
-                $('#dspSiteName').val(response.siteName);
-                $('#dspContactPersonName').val(response.contectPersonName);
-                $('#dspContactPersonPhoneNo').val(response.contectPersonPhoneNo);
-                $('#dspAddress').val(response.address);
-                $('#dspCity').val(response.cityName);
-                $('#dspPincode').val(response.pincode);
-            } else {
-                siteloaderhide();
-                toastr.error('Empty response received.');
-            }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            toastr.error(xhr.responseText);
-        }
-    });
-}
+//function SelectSiteDetails(SiteId, element) {
+//    siteloadershow();
+//    $('tr').removeClass('active');
+//    $(element).closest('tr').addClass('active');
+//    $('.ac-detail').removeClass('d-none');
+//    $.ajax({
+//        url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
+//        type: 'GET',
+//        contentType: 'application/json;charset=utf-8',
+//        dataType: 'json',
+//        success: function (response) {
+//            siteloaderhide();
+//            if (response) {
+//                $('#dspSiteid').val(SiteId);
+//                $('#dspSiteName').val(response.siteName);
+//                $('#dspContactPersonName').val(response.contectPersonName);
+//                $('#dspContactPersonPhoneNo').val(response.contectPersonPhoneNo);
+//                $('#dspAddress').val(response.address);
+//                $('#dspCity').val(response.cityName);
+//                $('#dspPincode').val(response.pincode);
+//            } else {
+//                siteloaderhide();
+//                toastr.error('Empty response received.');
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            siteloaderhide();
+//            toastr.error(xhr.responseText);
+//        }
+//    });
+//}
 
 function CreateSite() {
     siteloadershow();
@@ -731,36 +731,103 @@ function toggleShippingAddress() {
     }
 }
 
+//function GetGroupSiteNameList() {
+//    debugger
+//    $('#addgroupinfo').removeClass('d-none');
+//    $.ajax({
+//        url: '/SiteMaster/GetSiteNameList',
+//        success: function (result) {
 
+//            var dropdown = $('#textGroupSiteNameList');
+//            dropdown.empty();
 
+//            $.each(result, function (i, data) {
 
+//                dropdown.append('<option class="site-dropdown-item-custom" data-value="' + data.siteId + '">' + data.siteName + '</option>');
+//            });
+//            dropdown.css("width", "300px");
 
-function GetGroupSiteNameList() {
-    $('#AddSiteGroupModel').modal('show');
+//            dropdown.select2({
+//                placeholder: 'Select Site',
+//                closeOnSelect: false,
+//                allowClear: true,
+//                tags: false,
+//                tokenSeparators: [',', ' ']
+//            }).on('select2:select', function (e) {
+//                $(this).next('.select2-container').find('.select2-search__field').val('');
+//            });
+//        },
+//        error: function (xhr, status, error) {
+//            console.error('Error in GetGroupSiteNameList:', error);
+//        }
+//    });
+//}
 
-    $.ajax({
-        url: '/SiteMaster/GetSiteNameList',
-        success: function (result) {
-            var selectElement = $('#textGroupSiteNameList');
-            selectElement.empty();
-            $.each(result, function (i, data) {
-                selectElement.append(`<option value="${data.siteId}">${data.siteName}</option>`);
-            });
+function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
+    if (showGroupInfo) {
 
-            // Trigger change event to update the display of selected items
-            selectElement.change(function () {
-                var selectedOptions = $(this).find('option:selected');
-                var selectedSites = [];
-                selectedOptions.each(function () {
-                    selectedSites.push($(this).text());
+        $('#addgroupinfo').removeClass('d-none');
+        $('#siteinfo').addClass('d-none');
+
+        $.ajax({
+            url: '/SiteMaster/GetSiteNameList',
+            success: function (result) {
+                var dropdown = $('#textGroupSiteNameList');
+                dropdown.empty();
+                $.each(result, function (i, data) {
+                    dropdown.append('<option class="site-dropdown-item-custom" data-value="' + data.siteId + '">' + data.siteName + '</option>');
                 });
-                $('#selectedSitesDisplay').val(selectedSites.join(', '));
-            });
-        },
-        error: function (xhr, status, error) {
-            console.error('Error in GetGroupSiteNameList:', error);
-        }
-    });
+                dropdown.css("width", "300px");
+                dropdown.select2({
+                    placeholder: 'Select Site',
+                    closeOnSelect: false,
+                    allowClear: true,
+                    tags: false,
+                    tokenSeparators: [',', ' ']
+                }).on('select2:select', function (e) {
+                    $(this).next('.select2-container').find('.select2-search__field').val('');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error in GetGroupSiteNameList:', error);
+            }
+        });
+
+    } else {
+
+        $('#addgroupinfo').addClass('d-none');
+        $('#siteinfo').removeClass('d-none');
+
+        siteloadershow();
+        $('tr').removeClass('active');
+        $(element).closest('tr').addClass('active');
+
+        $.ajax({
+            url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                siteloaderhide();
+                if (response) {
+                    $('#dspSiteid').val(SiteId);
+                    $('#dspSiteName').val(response.siteName);
+                    $('#dspContactPersonName').val(response.contectPersonName);
+                    $('#dspContactPersonPhoneNo').val(response.contectPersonPhoneNo);
+                    $('#dspAddress').val(response.address);
+                    $('#dspCity').val(response.cityName);
+                    $('#dspPincode').val(response.pincode);
+                } else {
+                    siteloaderhide();
+                    toastr.error('Empty response received.');
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error(xhr.responseText);
+            }
+        });
+    }
 }
 
 
@@ -818,4 +885,8 @@ function AddSiteGroupDetails() {
         toastr.warning("Select member you want to add!");
     }
 }
+
+
+
+
 
