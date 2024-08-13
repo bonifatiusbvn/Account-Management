@@ -698,37 +698,17 @@ function isData() {
 
 var count = 0;
 function AddNewRow(Result) {
-
     var newProductRow = $(Result);
     var itemId = newProductRow.data('product-id');
-    UnitTypeDropdown(itemId)
-    var newProductId = newProductRow.attr('data-product-id');
-    var isDuplicate = false;
+    UnitTypeDropdown(itemId);
 
-    $('#addnewproductlink .product').each(function () {
-        var existingProductRow = $(this);
-        var existingProductId = existingProductRow.attr('data-product-id');
-        if (existingProductId === newProductId) {
-            isDuplicate = true;
-            return false;
-        }
-    });
 
-    if (!isDuplicate) {
-        count++;
-        $("#addnewproductlink").append(Result);
-        updateTotals();
-        updateRowNumbers();
-    } else {
-        Swal.fire({
-            title: "Product already added!",
-            text: "The selected product is already added.",
-            icon: "warning",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK"
-        });
-    }
+    count++;
+    $("#addnewproductlink").append(Result);
+    updateTotals();
+    updateRowNumbers();
 }
+
 
 
 

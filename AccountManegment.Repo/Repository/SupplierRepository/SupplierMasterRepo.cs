@@ -284,11 +284,15 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
         {
             try
             {
-                IEnumerable<SupplierModel> SupplierName = Context.SupplierMasters.Where(e => e.IsDelete == false).ToList().Select(a => new SupplierModel
-                {
-                    SupplierId = a.SupplierId,
-                    SupplierName = a.SupplierName,
-                });
+                IEnumerable<SupplierModel> SupplierName = Context.SupplierMasters
+                    .Where(e => e.IsDelete == false)
+                    .OrderBy(a => a.SupplierName)
+                    .Select(a => new SupplierModel
+                    {
+                        SupplierId = a.SupplierId,
+                        SupplierName = a.SupplierName,
+                    }).ToList();
+
                 return SupplierName;
             }
             catch (Exception ex)
@@ -296,6 +300,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 throw ex;
             }
         }
+
 
         public async Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateSupplier)
         {

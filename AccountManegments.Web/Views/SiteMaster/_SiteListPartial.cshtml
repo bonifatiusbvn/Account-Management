@@ -9,7 +9,7 @@
 @foreach (var item in Model)
 {
 
-    <tr id="siteCard_@item.SiteId" onclick="SelectSiteDetails('@item.SiteId', this)">
+    <tr id="siteCard_@item.SiteId" onclick=" toggleSiteDetailsAndGroupInfo(false,'@item.SiteId' ,this)">
         <td>@item.SiteName</td>
         <td>@item.ContectPersonName</td>
 
