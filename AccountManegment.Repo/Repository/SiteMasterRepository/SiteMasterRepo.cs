@@ -466,34 +466,50 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                foreach (var item in GroupDetails.SiteList)
+                bool isGroupAlreadyExists = Context.GroupMasters.Any(x => x.GroupName == GroupDetails.GroupName);
                 {
-                    bool isSiteAlreadyExists = Context.GroupMasters.Any(x => x.SiteId == item.SiteId);
-
-                    if (isSiteAlreadyExists)
+                    if (isGroupAlreadyExists)
                     {
-                            response.message = item.SiteId + " already exists in group.";
-                            response.code = (int)HttpStatusCode.NotFound;
-                            return response;
+                        response.message = "This group already exists.";
+                        response.code = (int)HttpStatusCode.NotFound;
                     }
                     else
                     {
-                        var groupModel = new GroupMaster()
+                        foreach (var item in GroupDetails.SiteList)
                         {
-                           GroupName=GroupDetails.GroupName,
-                           SiteId=item.SiteId,
-                        };
-                        Context.GroupMasters.Add(groupModel);
-                        await Context.SaveChangesAsync();
+                            var groupModel = new GroupMaster()
+                            {
+                                GroupName = GroupDetails.GroupName,
+                                SiteId = item.SiteId,
+                            };
+                            Context.GroupMasters.Add(groupModel);
+                            await Context.SaveChangesAsync();
+                        }
                         response.code = 200;
                         response.message = "Group is added successfully!";
                     }
+                    return response;
                 }
-                return response;
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId)
+        {
+            try
+            {
+                IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
+                {
+                    GroupName = a.GroupName,
+                });
+                return GroupList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

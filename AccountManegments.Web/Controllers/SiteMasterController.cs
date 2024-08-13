@@ -268,5 +268,25 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetGroupNameListBySiteId()
+        {
+            try
+            {
+                var SiteId = UserSession.SiteId;
+                List<GroupMasterModel> GroupList = new List<GroupMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupNameListBySiteId?SiteId=" + SiteId);
+                if (res.code == 200)
+                {
+                    GroupList = JsonConvert.DeserializeObject<List<GroupMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(GroupList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

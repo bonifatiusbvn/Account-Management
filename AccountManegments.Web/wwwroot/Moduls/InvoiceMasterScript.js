@@ -4,6 +4,7 @@ GetItemDetailsList()
 GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
+GetGroupList();
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -128,7 +129,6 @@ function companyfilterSupplierInvoice() {
             searchBy: searchBy
         },
         success: function (result) {
-            debugger
             siteloaderhide();
             $("#SupplierInvoicebody").html(result);
         },
@@ -469,6 +469,7 @@ function InsertMultipleSupplierItem() {
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
+                SiteGroup: $("#InvoiceGroupList").val(),
                 ItemList: ItemDetails,
             }
             var form_data = new FormData();
@@ -577,6 +578,7 @@ function UpdateInvoiceDetails() {
                 VehicleNo: $("#txtvehicleno").val(),
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
+                SiteGroup: $("#InvoiceGroupList").val(),
             }
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
@@ -1353,4 +1355,14 @@ function fn_AddInvoiceProductDescription(element) {
     $productDesBtn.toggle();
     $productDesText.toggle();
 }
+function GetGroupList() {
 
+    $.ajax({
+        url: '/SiteMaster/GetGroupNameListBySiteId',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#InvoiceGroupList').append('<Option value=' + data.groupName + '>' + data.groupName + '</Option>')
+            });
+        }
+    });
+}

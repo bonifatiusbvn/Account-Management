@@ -20,5 +20,6 @@ namespace AccountManagement.Repository.Interface.Services.SiteMaster
         Task<IEnumerable<SiteMasterModel>> GetSiteNameList();
         Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId);
         Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails);
+        Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId);
     }
 }

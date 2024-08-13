@@ -61,5 +61,10 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.AddSiteGroupDetails(GroupDetails);
         }
+
+        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId)
+        {
+            return await SiteMaster.GetGroupNameListBySiteId(SiteId);
+        }
     }
 }

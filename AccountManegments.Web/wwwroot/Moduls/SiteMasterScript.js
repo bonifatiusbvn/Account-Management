@@ -765,7 +765,7 @@ function toggleShippingAddress() {
 
 function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
     if (showGroupInfo) {
-
+        $('#SiteInfoHeading').text('Add Group Details');
         $('#addgroupinfo').removeClass('d-none');
         $('#siteinfo').addClass('d-none');
 
@@ -794,7 +794,7 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
         });
 
     } else {
-
+        $('#SiteInfoHeading').text('Site Information'); // Revert heading text
         $('#addgroupinfo').addClass('d-none');
         $('#siteinfo').removeClass('d-none');
 
@@ -831,30 +831,32 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
 }
 
 
-function AddSiteGroupDetails() {
+
+function AddSiteGroupDetails() {debugger
     var selectElement = document.getElementById('textGroupSiteNameList');
     var SiteList = [];
 
-    $(selectElement.options).each(function () {
-        var option = this;
-        if (option.selected) {
-            var siteName = option.value.trim();
+    $(selectElement.options).each(function () {debugger
+        var option = $(this);
+        if (option.is(':selected')) {debugger
+            // Retrieve the siteId from the data-value attribute
+            var siteId = option.data('value');
 
             var objData = {
-                SiteId: siteName
+                SiteId: siteId
             };
             SiteList.push(objData);
         }
     });
-    if (SiteList.length > 0) {
-
-        var groupName = $('#txtSiteGropuName').val();
+    debugger
+    var groupName = $('#txtSiteGropuName').val();
+    if (SiteList.length > 0 && groupName != "") {
 
         var SiteData = {
             GroupName: groupName,
-            UpdatedBy: UpdatedBy,
             SiteList: SiteList,
-        }
+        };
+        debugger
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
 
@@ -873,20 +875,14 @@ function AddSiteGroupDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        AddSiteGroupDetails();
+                        window.location ='/SiteMaster/SiteListView';
                     });
-                }
-                else {
+                } else {
                     toastr.warning(Result.message);
                 }
             },
-        })
+        });
     } else {
-        toastr.warning("Select member you want to add!");
+        toastr.warning("Please add groupname and select site!");
     }
 }
-
-
-
-
-

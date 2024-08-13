@@ -165,5 +165,12 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpGet]
+        [Route("GetGroupNameListBySiteId")]
+        public async Task<IActionResult> GetGroupNameListBySiteId(Guid SiteId)
+        {
+            IEnumerable<GroupMasterModel> GroupList = await SiteMaster.GetGroupNameListBySiteId(SiteId);
+            return Ok(new { code = 200, data = GroupList.ToList() });
+        }
     }
 }

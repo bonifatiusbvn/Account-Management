@@ -260,6 +260,23 @@
                                                                                     <input type="text" class="form-control" placeholder="Payment Terms" id="txtpayment" name="txtpayment" value="@Model.PaymentTerms">
 
                                                                                 </div>
+                                                                                <div class="input-group mb-3">
+                                                                                    <label class="input-group-text">
+                                                                                        Group
+                                                                                    </label>
+                                                                                    @if(Model.SiteGroup != null)
+                                                                                    {
+                                                                                        <select class="form-select" id="InvoiceGroupList" name="InvoiceGroupList">
+                                                                                            <option selected value="@Model.SiteGroup">@Model.SiteGroup</option>
+                                                                                        </select>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <select class="form-select" id="InvoiceGroupList" name="InvoiceGroupList">
+                                                                                            <option selected disabled value="">Select Group</option>
+                                                                                        </select>
+                                                                                    }
+                                                                                </div>
                                                                                 <div class="form-check form-check-inline" style="display:none">
                                                                                     <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" value="unpaid" name="paymentStatus" checked>
                                                                                     <label class="form-check-label" for="unpaidRadio">Unpaid</label>
