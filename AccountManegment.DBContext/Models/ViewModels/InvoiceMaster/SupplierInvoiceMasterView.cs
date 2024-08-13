@@ -120,6 +120,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? PaymentTerms { get; set; }
         public int? StateCode{ get; set; }
         public string? SiteGroup { get; set; }
+        public decimal? DiscountRoundoff { get; set; }
+
         public List<POItemDetailsModel>? ItemList { get; set; }
     }
 }

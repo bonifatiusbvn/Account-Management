@@ -272,6 +272,15 @@ $(document).ready(function () {
                 updateTotals();
             }
         }, 300));
+        $(document).on('input', '#IDiscountRoundOff', debounce(function () {
+            var Discountroundoff = $('#IDiscountRoundOff').val();
+            if (isNaN(Discountroundoff) || (Discountroundoff < -0.99 || Discountroundoff > 0.99)) {
+                toastr.warning("Value must be between -0.99 and 0.99");
+            }
+            else {
+                updateTotals();
+            }
+        }, 300));
     });
 
 
@@ -469,6 +478,7 @@ function InsertMultipleSupplierItem() {
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
                 Roundoff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
+                DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
                 ItemList: ItemDetails,
             }
@@ -579,6 +589,7 @@ function UpdateInvoiceDetails() {
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
+                DiscountRoundoff: $("#IDiscountRoundOff").val(),
             }
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
@@ -845,6 +856,7 @@ function updateTotals() {
     var TotalDiscount = 0;
 
     var roundoffvalue = $('#cart-roundOff').val();
+    var dicountRoundOff = $('#IDiscountRoundOff').val();
 
     $(".product").each(function () {
 
@@ -860,7 +872,6 @@ function updateTotals() {
         TotalDiscount += discountprice * totalquantity;
         totalAmount = totalSubtotal + totalGst;
     });
-
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-discount").val(TotalDiscount.toFixed(2));
@@ -870,10 +881,22 @@ function updateTotals() {
     $("#TotalProductGST").html(totalGst.toFixed(2));
     $("#TotalProductAmount").html(totalAmount.toFixed(2));
 
-    if (roundoffvalue != 0) {
+    var totalAmount = parseFloat(totalAmount) || 0;
+    var roundoffvalue = parseFloat(roundoffvalue) || 0;
+    var dicountRoundOff = parseFloat(dicountRoundOff) || 0;
 
-        var roundtotal = parseFloat(totalAmount) + parseFloat(roundoffvalue);
-        $("#cart-total").val(roundtotal.toFixed(2))
+    if (roundoffvalue !== 0 || dicountRoundOff !== 0) {
+        var roundtotal = totalAmount;
+
+        if (roundoffvalue !== 0) {
+            roundtotal += roundoffvalue;
+        }
+
+        if (dicountRoundOff !== 0) {
+            roundtotal -= dicountRoundOff;
+        }
+
+        $("#cart-total").val(roundtotal.toFixed(2));
     } else {
         $("#cart-total").val(totalAmount.toFixed(2));
     }

@@ -308,6 +308,21 @@
                                                                                         <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
                                                                                     </td>
                                                                                 </tr>
+                                                                                <tr class="border-top border-top-dashed">
+                                                                                    <th scope="row">Discount Round Off</th>
+                                                                                    @if (Model.DiscountRoundoff != null)
+                                                                                    {
+                                                                                        <td>
+                                                                                            <input type="text" class="form-control border-0" id="IDiscountRoundOff" value="@Model.DiscountRoundoff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td>
+                                                                                            <input type="text" class="form-control border-0" id="IDiscountRoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                                                        </td>
+                                                                                    }
+                                                                                </tr>
                                                                                 <tr>
                                                                                     <th>
                                                                                         Roundoff
