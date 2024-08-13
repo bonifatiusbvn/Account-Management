@@ -146,5 +146,31 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SiteAddressModel> SiteName = await SiteMaster.GetSiteAddressList(SiteId);
             return Ok(new { code = 200, data = SiteName.ToList() });
         }
+
+        [HttpPost]
+        [Route("AddSiteGroupDetails")]
+        public async Task<IActionResult> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var GroupDetail = await SiteMaster.AddSiteGroupDetails(GroupDetails);
+            if (GroupDetail.code == 200)
+            {
+                response.code = GroupDetail.code;
+                response.message = GroupDetail.message;
+            }
+            else
+            {
+                response.code = GroupDetail.code;
+                response.message = GroupDetail.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("GetGroupNameListBySiteId")]
+        public async Task<IActionResult> GetGroupNameListBySiteId(Guid SiteId)
+        {
+            IEnumerable<GroupMasterModel> GroupList = await SiteMaster.GetGroupNameListBySiteId(SiteId);
+            return Ok(new { code = 200, data = GroupList.ToList() });
+        }
     }
 }

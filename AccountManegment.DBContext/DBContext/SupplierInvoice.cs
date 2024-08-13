@@ -31,6 +31,8 @@ public partial class SupplierInvoice
 
     public string? Description { get; set; }
 
+    public string? SiteGroup { get; set; }
+
     public decimal TotalAmount { get; set; }
 
     public decimal TotalGstamount { get; set; }

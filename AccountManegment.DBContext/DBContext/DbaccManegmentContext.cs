@@ -126,14 +126,11 @@ public partial class DbaccManegmentContext : DbContext
 
         modelBuilder.Entity<GroupMaster>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("GroupMaster");
+            entity.ToTable("GroupMaster");
 
             entity.Property(e => e.GroupName).HasMaxLength(50);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            entity.HasOne(d => d.Site).WithMany()
+            entity.HasOne(d => d.Site).WithMany(p => p.GroupMasters)
                 .HasForeignKey(d => d.SiteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_GroupMaster_Site");
@@ -366,6 +363,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasColumnName("LRNo");
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.SiteGroup).HasMaxLength(50);
             entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");

@@ -244,6 +244,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     VehicleNo = a.VehicleNo,
                                     DispatchBy = a.DispatchBy,
                                     PaymentTerms = a.PaymentTerms,
+                                    SiteGroup=a.SiteGroup,
                                     ContactName = a.ContactName,
                                     ContactNumber = a.ContactNumber,
                                     CreatedOn = a.CreatedOn,
@@ -628,6 +629,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     UpdatedBy = SupplierInvoiceDetail.UpdatedBy,
                     CreatedOn = SupplierInvoiceDetail.CreatedOn,
                     DiscountRoundoff = SupplierInvoiceDetail.DiscountRoundoff,
+                    SiteGroup = SupplierInvoiceDetail.SiteGroup,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
@@ -740,6 +742,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
+                    SiteGroup= SupplierItemDetails.SiteGroup,
                 };
                 Context.SupplierInvoices.Add(supplierInvoice);
 
