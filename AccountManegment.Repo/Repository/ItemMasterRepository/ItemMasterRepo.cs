@@ -213,7 +213,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    ItemList = ItemList.OrderByDescending(u => u.CreatedOn);
+                    ItemList = ItemList.OrderBy(u => u.ItemName);
                 }
                 else
                 {
@@ -461,6 +461,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             var ItemList = (from a in Context.ItemMasters
                             join b in Context.UnitMasters on a.UnitType equals b.UnitId
                             where a.IsDeleted == false && a.IsApproved == true
+                            orderby a.CreatedOn descending
                             select new ItemMasterModel
                             {
                                 ItemId = a.ItemId,
@@ -475,6 +476,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                 IsApproved = a.IsApproved,
                                 CreatedOn = a.CreatedOn,
                             });
+
 
             if (!string.IsNullOrEmpty(searchText))
             {
