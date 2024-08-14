@@ -22,7 +22,6 @@ function filterallItemTable() {
 
     });
 }
-
 function SerchItemDetailsById(Id, inputField) {
     clearItemErrorMessage();
     siteloadershow();
@@ -106,7 +105,6 @@ function GetCompanyDetail() {
     });
 }
 
-
 $(document).ready(function () {
     $('#textCompanyName').change(function () {
 
@@ -114,7 +112,6 @@ $(document).ready(function () {
         getInvoiceNumber($(this).val());
     });
 });
-
 
 function companyfilterSupplierInvoice() {
     siteloadershow();
@@ -158,7 +155,6 @@ $(document).ready(function () {
         getSupplierDetail($(this).val());
     });
 });
-
 
 $(document).ready(function () {
     $(document).ready(function () {
@@ -286,7 +282,6 @@ $(document).ready(function () {
 
 });
 
-
 function AllSupplierInvoiceListTable() {
     var searchText = $('#txtSupplierInvoiceSearch').val();
     var searchBy = $('#SupplierInvoiceSearchBy').val();
@@ -299,7 +294,6 @@ function AllSupplierInvoiceListTable() {
 
         });
 }
-
 
 function filterSupplierInvoiceTable() {
     siteloadershow();
@@ -337,7 +331,6 @@ function SupplierInvoicesortTable() {
 
     });
 }
-
 function DeleteSupplierInvoice(Id) {
 
     Swal.fire({
@@ -383,7 +376,6 @@ function DeleteSupplierInvoice(Id) {
         }
     });
 }
-
 $(document).ready(function () {
     $("#shippingAddressForm").validate({
         rules: {
@@ -394,7 +386,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
@@ -428,8 +419,6 @@ $(document).ready(function () {
 function clearItemErrorMessage() {
     $("#spnitembutton").text("");
 }
-
-
 
 function InsertMultipleSupplierItem() {
     siteloadershow();
@@ -642,9 +631,6 @@ function UpdateInvoiceDetails() {
 
 
 }
-
-
-
 function UnitTypeDropdown(itemId) {
 
     if ($('#txtPOUnitType_' + itemId + ' option').length > 1) {
