@@ -40,11 +40,11 @@
 
         </td>
         <td class="text-start">
-            <input type="number" class="form-control border-0" id="txtgstAmount" value="@item.Gstamount" readonly style="width:130px;" />
+            <input type="number" class="form-control border-0" id="txtgstAmount" value="@(Convert.ToDecimal(item.Gstamount).ToString("F2"))" readonly style="width:130px;" />
         </td>
         <td class="text-start">
             <div>
-                <input type="number" class="form-control border-0" id="txtproducttotalamount" value="@item.TotalAmount" readonly style="width:130px;" />
+                <input type="number" class="form-control border-0" id="txtproducttotalamount" value="@(Convert.ToDecimal(item.TotalAmount).ToString("F2"))" readonly style="width:130px;" />
             </div>
         </td>
         <td class="product-removal">
