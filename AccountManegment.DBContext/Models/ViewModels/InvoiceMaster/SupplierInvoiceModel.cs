@@ -59,6 +59,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Decimal? youGaveTotal { get; set; }
         public Decimal? youGetTotal { get; set; }
         public decimal? DiscountRoundoff { get; set; }
+        public string? GroupName {  get; set; }
     }
     public class InvoiceTotalAmount
     {
@@ -79,5 +80,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
         public string? SelectedYear { get; set; }
+        public string? GroupName {  get; set; }
     }
 }
