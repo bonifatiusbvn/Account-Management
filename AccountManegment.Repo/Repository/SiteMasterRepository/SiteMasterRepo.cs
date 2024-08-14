@@ -512,5 +512,120 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<SiteGroupModel>> GetGroupNameList()
+        {
+            try
+            {
+                var SiteGroupList = (from a in Context.GroupMasters
+                                     group new { a } by new { a.GroupName } into g
+                                     select new SiteGroupModel
+                                     {
+                                         GroupName = g.Key.GroupName,
+                                     });
+                return SiteGroupList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var grouplist  =  Context.GroupMasters.Where(x=>x.GroupName == groupName).ToList();
+                if (grouplist.Count > 0)
+                {
+                    foreach (var group in grouplist)
+                    {
+                        Context.GroupMasters.Remove(group); 
+                        await Context.SaveChangesAsync();
+                    }
+                    response.code = 200;
+                    response.message = "Site group is deleted successfully.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = groupName + "groupname is not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "There is some error in deleting site group";
+            }
+            return response;
+        }
+
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        {
+            try
+            {
+                var groupDetails = await (from g in Context.GroupMasters
+                                          join s in Context.Sites on g.SiteId equals s.SiteId
+                                          where g.GroupName == groupName
+                                          group new { g, s } by g.GroupName into grouped
+                                          select new GroupMasterModel
+                                          {
+                                              GroupName = grouped.Key,
+                                              SiteList = grouped.Select(x => new SiteNameList
+                                              {
+                                                  SiteId = x.g.SiteId,
+                                                  SiteName = x.s.SiteName
+                                              }).ToList()
+                                          }).FirstOrDefaultAsync();
+                return groupDetails;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
+        {
+            ApiResponseModel model = new ApiResponseModel();
+
+            try
+            {
+                var existingRecords = Context.GroupMasters
+                    .Where(e => e.GroupName == groupDetails.GroupName)
+                    .ToList();
+
+                var existingSiteIds = existingRecords.Select(e => e.SiteId).ToHashSet();
+
+                var newSiteIds = groupDetails.SiteList
+                    .Where(s => !existingSiteIds.Contains(s.SiteId))
+                    .Select(s => s.SiteId)
+                    .ToList();
+
+                foreach (var siteId in newSiteIds)
+                {
+                    var newRecord = new GroupMaster
+                    {
+                        GroupName = groupDetails.GroupName,
+                        SiteId = siteId
+                    };
+                    Context.GroupMasters.Add(newRecord);
+                }
+
+                await Context.SaveChangesAsync();
+
+                model.code = 200;
+                model.message = "Site group master updated successfully.";
+            }
+            catch (Exception ex)
+            {
+                model.code = 500;
+                model.message = "An error occurred while updating site group details: " + ex.Message;
+            }
+
+            return model;
+        }
     }
 }

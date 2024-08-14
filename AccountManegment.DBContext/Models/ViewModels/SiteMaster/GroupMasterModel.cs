@@ -17,5 +17,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
     public class SiteNameList
     {
         public Guid SiteId { get; set; }
+        public string? SiteName { get; set; }
+    }
+    public class SiteGroupModel
+    {
+        public int Id { get; set; }
+
+        public string GroupName { get; set; } = null!;
+
+        public Guid SiteId { get; set; }
+        public string? SiteName { get; set; }
     }
 }

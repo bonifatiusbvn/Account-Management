@@ -7,6 +7,7 @@ using AccountManagement.Repository.Interface.Services.SiteMaster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,22 @@ namespace AccountManagement.Repository.Services.SiteMaster
         public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId)
         {
             return await SiteMaster.GetGroupNameListBySiteId(SiteId);
+        }
+        public async Task<IEnumerable<SiteGroupModel>> GetGroupNameList()
+        {
+            return await SiteMaster.GetGroupNameList();
+        }
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+        {
+            return await SiteMaster.DeleteSiteGroupDetails(groupName);
+        }
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        {
+            return await SiteMaster.GetGroupDetailsByGroupName(groupName);
+        }
+        public async Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
+        {
+            return await SiteMaster.UpdateSiteGroupMaster(groupDetails);
         }
     }
 }
