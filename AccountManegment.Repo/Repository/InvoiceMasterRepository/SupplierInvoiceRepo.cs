@@ -952,6 +952,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.Where(s => s.s.SupplierId == invoiceReport.SupplierId.Value);
                 }
+                if (!string.IsNullOrEmpty(invoiceReport.GroupName))
+                {
+                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
+                }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
                 {
