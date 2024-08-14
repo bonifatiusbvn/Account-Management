@@ -855,11 +855,7 @@ function updateTotals() {
     var TotalItemQuantity = 0;
     var TotalDiscount = 0;
 
-    var roundoffvalue = $('#cart-roundOff').val();
-    var dicountRoundOff = $('#IDiscountRoundOff').val();
-
     $(".product").each(function () {
-
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
@@ -870,8 +866,10 @@ function updateTotals() {
         totalGst += gst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice * totalquantity;
-        totalAmount = totalSubtotal + totalGst;
     });
+
+    totalAmount = totalSubtotal + totalGst;
+
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-discount").val(TotalDiscount.toFixed(2));
@@ -879,27 +877,18 @@ function updateTotals() {
     $("#TotalProductQuantity").text(TotalItemQuantity);
     $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
     $("#TotalProductGST").html(totalGst.toFixed(2));
-    $("#TotalProductAmount").html(totalAmount.toFixed(2));
 
-    var totalAmount = parseFloat(totalAmount) || 0;
-    var roundoffvalue = parseFloat(roundoffvalue) || 0;
-    var dicountRoundOff = parseFloat(dicountRoundOff) || 0;
 
-    if (roundoffvalue !== 0 || dicountRoundOff !== 0) {
-        var roundtotal = totalAmount;
+    var decimalPart = totalAmount - Math.floor(totalAmount);
 
-        if (roundoffvalue !== 0) {
-            roundtotal += roundoffvalue;
-        }
-
-        if (dicountRoundOff !== 0) {
-            roundtotal -= dicountRoundOff;
-        }
-
-        $("#cart-total").val(roundtotal.toFixed(2));
+    if (decimalPart <= 0.50) {
+        totalAmount = Math.floor(totalAmount);
     } else {
-        $("#cart-total").val(totalAmount.toFixed(2));
+        totalAmount = Math.ceil(totalAmount);
     }
+
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
+    $("#cart-total").val(totalAmount.toFixed(2));
 }
 function removeItem(btn) {
     $(btn).closest("tr").remove();

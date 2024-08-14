@@ -51,6 +51,7 @@ namespace AccountManegments.Web.Controllers
                     startDate = invoiceReport.startDate,
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
+                    GroupName = invoiceReport.GroupName,
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");

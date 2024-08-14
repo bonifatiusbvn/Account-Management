@@ -105,10 +105,10 @@
             <input type="text" class="product-Gstper form-control" id="txtgst" value="@item.GstPercentage" oninput="preventEmptyValue(this)" style="width:100px;" />
         </td>
         <td>
-            <input type="number" class="product-Gstamount form-control bg-light" id="txtgstAmount" value="@item.Gstamount" readonly style="width:130px;" />
+            <input type="number" class="product-Gstamount form-control bg-light" id="txtgstAmount" value="@(Convert.ToDecimal(item.Gstamount).ToString("F2"))" readonly style="width:130px;" />
         </td>
         <td class="text-start">
-            <input type="text" class="product-producttotalamount form-control bg-light" id="txtproducttotalamount" value="@item.TotalAmount" readonly style="width:130px;" />
+            <input type="text" class="product-producttotalamount form-control bg-light" id="txtproducttotalamount" value="@(Convert.ToDecimal(item.TotalAmount).ToString("F2"))" readonly style="width:130px;" />
         </td>
         <td class="product-removal">
             <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
