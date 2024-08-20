@@ -10,7 +10,7 @@
             <p id="pQtyType">@item.PricePerUnit</p>
         </div>
         <div class="col-2 col-sm-2 order2">
-            <input type="number" class="product-quantity form-control" id="inputproductquantity" value="1" min="1" oninput="preventEmptyValue(this)" style="width:80px;">
+            <input type="number" class="product-quantity form-control" id="inputproductquantity" value="1" style="width:80px;">
         </div>
         <div class="col-2 col-sm-2 font-22 order3">
             <div class="font-22">
@@ -20,6 +20,17 @@
     </div>
 }
 
+<script type="text/javascript">
+    document.getElementById('inputproductquantity').addEventListener('input', function () {
+        const value = parseFloat(this.value);
+        if (value < 0) {
+            toastr.warning('Please Enter value greater then zero.');
+            this.value = 0.1;
+        } else if (value === 0) {
+            toastr.warning('Quantity cannot be zero.');
+        }
+    });
+</script>
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }
