@@ -441,8 +441,6 @@ function InsertMultipleSupplierItem() {
                 ItemDetails.push(objData);
             });
 
-            var shippingAddress = $("#shippingaddress").text() != "" ? $("#shippingaddress").text() : $("#textmdAddress").val();
-
             var InvoiceDetails = {
                 SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
@@ -455,7 +453,7 @@ function InsertMultipleSupplierItem() {
                 Description: $("#textDescription").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: shippingAddress,
+                ShippingAddress: $('#selectedShippingAddress').val(),
                 ChallanNo: $("#txtchalanNo").val(),
                 Lrno: $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
@@ -541,13 +539,6 @@ function UpdateInvoiceDetails() {
                 };
                 ItemDetails.push(objData);
             });
-            var shippingAdd = $("#textmdAddress").val();
-            var Address = null;
-            if (shippingAdd != "") {
-                Address = shippingAdd;
-            } else {
-                Address = $(".ShippingAddress").find("#shippingaddress").text().trim();
-            }
 
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
@@ -568,7 +559,7 @@ function UpdateInvoiceDetails() {
                 TotalDiscount: $('#cart-discount').val(),
                 CreatedOn: $('#textCreatedOn').val(),
                 ItemList: ItemDetails,
-                ShippingAddress: Address,
+                ShippingAddress: $('#selectedShippingAddress').val(),
                 ChallanNo: $("#txtchalanNo").val(),
                 Lrno: $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
@@ -625,9 +616,13 @@ function UpdateInvoiceDetails() {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
-
-
 }
+$(document).ready(function () {
+    $('input[name="selectedAddress"]').change(function () {
+        var selectedAddress = $(this).data('address');
+        $('#selectedShippingAddress').val(selectedAddress);
+    });
+});
 function UnitTypeDropdown(itemId) {
 
     if ($('#txtPOUnitType_' + itemId + ' option').length > 1) {
@@ -1030,93 +1025,93 @@ function clearItemErrorMessages() {
     $("#spnitembutton").text("");
 }
 
-$(document).ready(function () {
-    var invoiceRoleUser = $('#UserRoleinInvoice').val();
-    var invoiceSiteId = $('#textInvoiceSiteName').val();
+//$(document).ready(function () {
+//    var invoiceRoleUser = $('#UserRoleinInvoice').val();
+//    var invoiceSiteId = $('#textInvoiceSiteName').val();
 
-    if (invoiceRoleUser == 8) {
-        fn_GetInvoiceSiteAddressList(invoiceSiteId);
-    }
-    else {
-        $('#textInvoiceSiteName').change(function () {
-            var Site = $(this).val();
-            fn_GetInvoiceSiteAddressList(Site);
-        });
-    }
-    $('#drpInvoiceSiteAddress').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#mdShippingAdd")
-    });
+//    if (invoiceRoleUser == 8) {
+//        fn_GetInvoiceSiteAddressList(invoiceSiteId);
+//    }
+//    else {
+//        $('#textInvoiceSiteName').change(function () {
+//            var Site = $(this).val();
+//            fn_GetInvoiceSiteAddressList(Site);
+//        });
+//    }
+//    $('#drpInvoiceSiteAddress').select2({
+//        theme: 'bootstrap4',
+//        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+//        placeholder: $(this).data('placeholder'),
+//        allowClear: Boolean($(this).data('allow-clear')),
+//        dropdownParent: $("#mdShippingAdd")
+//    });
 
-    $(document).on('click', '#removeAddress', function () {
-        $(this).closest('tr').remove();
-        $('.add-addresses').prop('disabled', false);
-    });
-});
+//    $(document).on('click', '#removeAddress', function () {
+//        $(this).closest('tr').remove();
+//        $('.add-addresses').prop('disabled', false);
+//    });
+//});
 
-function fn_GetInvoiceSiteAddressList(SiteId) {
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
-        success: function (result) {
+//function fn_GetInvoiceSiteAddressList(SiteId) {
+//    $.ajax({
+//        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+//        success: function (result) {
 
-            $('#drpInvoiceSiteAddress').empty();
-            $('#textmdAddress').val('');
-            $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
-            if (Array.isArray(result)) {
-                $.each(result, function (i, data) {
+//            $('#drpInvoiceSiteAddress').empty();
+//            $('#textmdAddress').val('');
+//            $('#drpInvoiceSiteAddress').append('<option value="">-- Select site address --</option>');
+//            if (Array.isArray(result)) {
+//                $.each(result, function (i, data) {
 
-                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + ', Code : ' + data.stateCode + '">' + data.address + ', Code :' + data.stateCode + '</option>');
-                });
-            } else {
+//                    $('#drpInvoiceSiteAddress').append('<option value="' + data.address + ', Code : ' + data.stateCode + '">' + data.address + ', Code :' + data.stateCode + '</option>');
+//                });
+//            } else {
 
-                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ',Code : ' + result.stateCode);
-            }
-        }
-    });
-}
-$('#drpInvoiceSiteAddress').on('change', function () {
-    var selectedInvoiceAddress = $(this).val();
-    $('#textmdAddress').val(selectedInvoiceAddress);
-});
-function addShippingAddress() {
-    siteloadershow();
-    if ($("#shippingAddressForm").valid()) {
-        var address = $("#textmdAddress").val();
+//                $('#textmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + ',Code : ' + result.stateCode);
+//            }
+//        }
+//    });
+//}
+//$('#drpInvoiceSiteAddress').on('change', function () {
+//    var selectedInvoiceAddress = $(this).val();
+//    $('#textmdAddress').val(selectedInvoiceAddress);
+//});
+//function addShippingAddress() {
+//    siteloadershow();
+//    if ($("#shippingAddressForm").valid()) {
+//        var address = $("#textmdAddress").val();
 
-        if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
-            siteloaderhide();
-            Swal.fire({
-                title: "Only one address allowed!",
-                text: "You can only add one shipping address.",
-                icon: "warning",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
+//        if ($('#dvShippingAddress .ac-invoice-shippingadd').length > 0) {
+//            siteloaderhide();
+//            Swal.fire({
+//                title: "Only one address allowed!",
+//                text: "You can only add one shipping address.",
+//                icon: "warning",
+//                confirmButtonColor: "#3085d6",
+//                confirmButtonText: "OK"
+//            });
+//            return;
+//        }
 
-        var newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
-            '<div class="col-1 col-sm-1">' +
-            '<label id="lblshprownum1">1</label>' +
-            '</div>' +
-            '<div class="col-5 col-sm-5 text-center">' +
-            '<p id="addShippingAddress" class="shippingaddress">' + address + '</p>' +
-            '</div>' +
-            '<div class="col-2 col-sm-2">' +
-            '<a id="remove" class="btn text-primary text-center" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
-            '</div>' +
-            '</div>';
+//        var newRow = '<div class="row ac-invoice-shippingadd ShippingAddress">' +
+//            '<div class="col-1 col-sm-1">' +
+//            '<label id="lblshprownum1">1</label>' +
+//            '</div>' +
+//            '<div class="col-5 col-sm-5 text-center">' +
+//            '<p id="addShippingAddress" class="shippingaddress">' + address + '</p>' +
+//            '</div>' +
+//            '<div class="col-2 col-sm-2">' +
+//            '<a id="remove" class="btn text-primary text-center" onclick="fn_removeShippingAdd(this)"><i class="lni lni-trash"></i></a>' +
+//            '</div>' +
+//            '</div>';
 
-        $('#dvShippingAddress').append(newRow);
-        siteloaderhide();
-    } else {
-        siteloaderhide();
-        toastr.warning('please select address!');
-    }
-}
+//        $('#dvShippingAddress').append(newRow);
+//        siteloaderhide();
+//    } else {
+//        siteloaderhide();
+//        toastr.warning('please select address!');
+//    }
+//}
 
 function fn_OpenAddproductmodal() {
     if ($("#drpSiteName").val() == "") {

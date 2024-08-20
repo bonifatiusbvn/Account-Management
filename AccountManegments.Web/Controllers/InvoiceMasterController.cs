@@ -53,6 +53,7 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
+                    ViewBag.EditShippingAddress = invoiceDetails.ShippingAddress;
                 }
 
                 var SiteId = UserSession.SiteId;
@@ -81,7 +82,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     else
                     {
-                        ViewBag.SiteAddress = SiteName[0].Address;
+                        ViewBag.SiteAddress = SiteName;
                     }
                 }
 
@@ -92,6 +93,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
 
 
         public async Task<IActionResult> CheckSuppliersInvoiceNo(Guid? CompanyId)
