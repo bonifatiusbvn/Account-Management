@@ -14,7 +14,7 @@
 
         <tr style="height:55px;">
             <td>@(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo)</td>
-            <td>@item.Date?.ToString("MM-dd-yyyy")</td>
+            <td>@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
             <td>@item.CompanyName</td>
@@ -68,7 +68,7 @@ else
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td>' +
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td><td></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
             '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>';
 

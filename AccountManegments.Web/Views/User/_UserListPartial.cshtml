@@ -7,6 +7,7 @@
     <tr id="userCard_@item.Id" onclick="SelectUserDetails('@item.Id', this)">
         <td>@item.FirstName  @item.LastName</td>
         <td>@item.UserName</td>
+        <td>@item.RoleName</td>
         @if (_userSession.UserRole == 3)
         {
             <td>@item.SiteName</td>

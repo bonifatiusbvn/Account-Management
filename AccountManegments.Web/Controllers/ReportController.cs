@@ -35,13 +35,6 @@ namespace AccountManegments.Web.Controllers
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
 
-                TempData["SiteId"] = UserSession.SiteId;
-                TempData["CompanyId"] = invoiceReport.CompanyId;
-                TempData["SupplierId"] = invoiceReport.SupplierId;
-                TempData["filterType"] = invoiceReport.filterType;
-                TempData["startDate"] = invoiceReport.startDate;
-                TempData["endDate"] = invoiceReport.endDate;
-
                 InvoiceReportModel invoiceReportModel = new InvoiceReportModel
                 {
                     SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
@@ -72,9 +65,22 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+               
+                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
+                {
+                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
+                    CompanyId = invoiceReport.CompanyId,
+                    SupplierId = invoiceReport.SupplierId,
+                    filterType = invoiceReport.filterType,
+                    startDate = invoiceReport.startDate,
+                    endDate = invoiceReport.endDate,
+                    SelectedYear = invoiceReport.SelectedYear,
+                    GroupName = invoiceReport.GroupName,
+                };
 
-                if (response.data.Count != 0)
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+
+                if (response.code == 200)
                 {
                     var SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
 
@@ -87,7 +93,7 @@ namespace AccountManegments.Web.Controllers
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "15% 12% 25% 20% 14% 14%",
+                        ColumnWidths = "10% 12% 12% 12% 12% 14% 14% 14%",
                         DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
@@ -96,6 +102,8 @@ namespace AccountManegments.Web.Controllers
                     var headerRow = table.Rows.Add();
                     headerRow.Cells.Add("Invoice No");
                     headerRow.Cells.Add("Date");
+                    headerRow.Cells.Add("Site");
+                    headerRow.Cells.Add("Group");
                     headerRow.Cells.Add("Company");
                     headerRow.Cells.Add("Supplier");
                     headerRow.Cells.Add("Debit");
@@ -108,19 +116,21 @@ namespace AccountManegments.Web.Controllers
                     foreach (var item in SupplierDetails)
                     {
                         var row = table.Rows.Add();
-                        row.Cells.Add(item.InvoiceNo);
-                        row.Cells.Add(item.Date?.ToString("MM-dd-yyyy"));
+                        row.Cells.Add(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo);
+                        row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
+                        row.Cells.Add(item.SiteName);
+                        row.Cells.Add(item.GroupName != null ? item.GroupName : "");
                         row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);
                         if (item.InvoiceNo == "PayOut")
                         {
                             row.Cells.Add(item.TotalAmount.ToString());
-                            row.Cells.Add("");
+                            row.Cells.Add("0.00");
                             yougavetotal += item.TotalAmount;
                         }
                         else
                         {
-                            row.Cells.Add("");
+                            row.Cells.Add("0.00");
                             row.Cells.Add(item.TotalAmount.ToString());
                             yougettotal += item.TotalAmount;
                         }
@@ -128,6 +138,8 @@ namespace AccountManegments.Web.Controllers
 
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
+                    footerRow.Cells.Add("");
+                    footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
@@ -157,7 +169,19 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
+                {
+                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
+                    CompanyId = invoiceReport.CompanyId,
+                    SupplierId = invoiceReport.SupplierId,
+                    filterType = invoiceReport.filterType,
+                    startDate = invoiceReport.startDate,
+                    endDate = invoiceReport.endDate,
+                    SelectedYear = invoiceReport.SelectedYear,
+                    GroupName = invoiceReport.GroupName,
+                };
+
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
 
                 if (response.data.Count != 0)
                 {
@@ -169,10 +193,12 @@ namespace AccountManegments.Web.Controllers
 
                         ws.Cell(1, 1).Value = "Invoice No";
                         ws.Cell(1, 2).Value = "Date";
-                        ws.Cell(1, 3).Value = "Company";
-                        ws.Cell(1, 4).Value = "Supplier";
-                        ws.Cell(1, 5).Value = "Debit";
-                        ws.Cell(1, 6).Value = "Credit";
+                        ws.Cell(1, 3).Value = "Site";
+                        ws.Cell(1, 4).Value = "Group";
+                        ws.Cell(1, 5).Value = "Company";
+                        ws.Cell(1, 6).Value = "Supplier";
+                        ws.Cell(1, 7).Value = "Debit";
+                        ws.Cell(1, 8).Value = "Credit";
 
                         decimal yougavetotal = 0;
                         decimal yougettotal = 0;
@@ -180,20 +206,22 @@ namespace AccountManegments.Web.Controllers
                         int row = 2;
                         foreach (var item in SupplierDetails)
                         {
-                            ws.Cell(row, 1).Value = item.InvoiceNo;
-                            ws.Cell(row, 2).Value = item.Date?.ToString("MM-dd-yyyy");
-                            ws.Cell(row, 3).Value = item.CompanyName;
-                            ws.Cell(row, 4).Value = item.SupplierName;
+                            ws.Cell(row, 1).Value = item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo;
+                            ws.Cell(row, 2).Value = item.Date?.ToString("dd-MM-yyyy");
+                            ws.Cell(row, 3).Value = item.SiteName;
+                            ws.Cell(row, 4).Value = item.GroupName != null ? item.GroupName : "";
+                            ws.Cell(row, 5).Value = item.CompanyName;
+                            ws.Cell(row, 6).Value = item.SupplierName;
                             if (item.InvoiceNo == "PayOut")
                             {
-                                ws.Cell(row, 5).Value = item.TotalAmount;
-                                ws.Cell(row, 6).Value = "";
+                                ws.Cell(row, 7).Value = item.TotalAmount;
+                                ws.Cell(row, 8).Value = "0.00";
                                 yougavetotal += item.TotalAmount;
                             }
                             else
                             {
-                                ws.Cell(row, 5).Value = "";
-                                ws.Cell(row, 6).Value = item.TotalAmount;
+                                ws.Cell(row, 7).Value = "0.00";
+                                ws.Cell(row, 8).Value = item.TotalAmount;
                                 yougettotal += item.TotalAmount;
                             }
                             row++;
@@ -203,8 +231,10 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 2).Value = "";
                         ws.Cell(row, 3).Value = "";
                         ws.Cell(row, 4).Value = "";
-                        ws.Cell(row, 5).Value = yougavetotal;
-                        ws.Cell(row, 6).Value = yougettotal;
+                        ws.Cell(row, 5).Value = "";
+                        ws.Cell(row, 6).Value = "";
+                        ws.Cell(row, 7).Value = yougavetotal;
+                        ws.Cell(row, 8).Value = yougettotal;
 
 
                         var headerRange = ws.Range(1, 1, 1, 6);

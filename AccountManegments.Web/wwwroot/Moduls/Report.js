@@ -89,15 +89,19 @@ var selectedGroupName = null;
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
+    var startYear = 2023;
     var yearDropdown = $('#yearDropdown');
+
     yearDropdown.empty().append('<option value="">Select Year</option>');
 
-    for (var year = currentYear - 20; year <= currentYear + 20; year++) {
+    for (var year = startYear; year <= currentYear; year++) {
         var nextYear = (year + 1).toString().slice(-2);
         var yearRange = year + '-' + nextYear;
         yearDropdown.append('<option value="' + yearRange + '">' + yearRange + '</option>');
     }
 }
+
+
 
 $(document).ready(function () {
 
@@ -123,7 +127,7 @@ $(document).ready(function () {
 
     $('.nav-radio').click(function () {
         var radioId = $(this).attr('id');
-       
+
         if (radioId === 'currentMonthRadio') {
             GetCurrentMonthInvoiceList();
             $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
