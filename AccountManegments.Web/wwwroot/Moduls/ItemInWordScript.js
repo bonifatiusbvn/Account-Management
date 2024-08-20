@@ -1,6 +1,7 @@
 ﻿AllItemInWordListTable();
 GetSiteList();
 toggleSiteList();
+ClearItemInWordTextBox();
 
 function toggleSiteList() {
     var roleuserId = $('#userRoleId').val();
@@ -12,13 +13,12 @@ function toggleSiteList() {
 }
 
 function AllItemInWordListTable() {
-
     var searchText = $('#txtItemInWordSearch').val();
     var searchBy = $('#ItemInWordSearchBy').val();
 
     $.get("/ItemInWord/ItemInWordListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
+            clearCreateInwardtext();
             $("#itemInWordtbody").html(result);
         })
         .fail(function (error) {
@@ -73,6 +73,11 @@ function sortItemInWordTable() {
 
 function SelectItemInWordDetails(InwordId, element) {
     siteloadershow();
+    $('#inwardheadingtxt').text('Item Inward Details');
+    $('#inwardInfo').removeClass('d-none');
+    $('#addInWordInfo').addClass('d-none');
+    $('#btnitemInWord').hide();
+    $('#updateitemInWord').hide();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -166,37 +171,39 @@ function GetSiteList() {
     });
 }
 function ClearItemInWordTextBox() {
-    if ($("#txtInwardSiteid").val() == "") {
-        toastr.warning("Select Site");
-    }
-    else {
-        resetErrorsMessages();
-        $('#changeName').html('Create Item Inword');
-        $('#searchItemnameInput').val('');
-        $('#txtItemInWordid').val('');
-        $('#txtItemId').val('');
-        $('#txtUnitType').val('');
-        $('#txtQuantity').val('');
-        $('#txtDocument').val('');
-        $('#txtVehicleNumber').val('');
-        $('#txtReceiverName').val('');
-        $('#siteNameList').val('');
-        $('#addNewImage').empty();
-        var button = document.getElementById("btnitemInWord");
-        if ($('#txtItemInWordid').val() == '') {
-            button.textContent = "Create";
-        }
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
-        offcanvas.show();
+    clearCreateInwardtext();
+    $('#inwardheadingtxt').text('Create Item Inword');
+    $('#addInWordInfo').removeClass('d-none');
+    $('#inwardInfo').addClass('d-none');
+    $('#btnitemInWord').show();
+    $('#updateitemInWord').hide();
+    var siteId = $("#txtInwardSiteid").val();
+    var siteName = $("#txtInWardSiteName").val();
+    $("#siteNameList").val(siteName);
+    $("#siteNameListHidden").val(siteId);
+}
 
-    }
+function clearCreateInwardtext() {
+    resetErrorsMessages();
+    $('#searchItemnameInput').val('');
+    $('#txtItemInWordid').val('');
+    $('#txtItemName').val('');
+    $('#txtUnitType').val('');
+    $('#txtQuantity').val('');
+    $('#txtDocument').val('');
+    $('#txtVehicleNumber').val('');
+    $('#txtReceiverName').val('');
+    $('#siteNameList').val('');
+    $('#addNewImage').empty();
 }
 
 var ItemInwordForm;
-function validateAndCreateItemInWord() {
+$(document).ready(function () {
+
     ItemInwordForm = $("#itemInWordForm").validate({
         rules: {
             txtUnitType: "required",
+            searchItemnameInput: "required",
             txtQuantity: "required",
             txtReceiverName: "required",
             txtVehicleNumber: "required",
@@ -204,24 +211,14 @@ function validateAndCreateItemInWord() {
         },
         messages: {
             txtUnitType: "Enter UnitType",
+            searchItemnameInput: "Enter Product",
             txtQuantity: "Enter Quantity",
             txtReceiverName: "Enter ReceiverName",
             txtVehicleNumber: "Enter VehicleNumber",
             txtItemId: "select item"
         }
     })
-    var isValid = true;
-
-    if (isValid) {
-        if ($("#txtItemInWordid").val() == '') {
-            InsertMultipleItemInWordDetails();
-        }
-        else {
-            UpdateMultipleItemInWordDetails();
-        }
-    }
-
-}
+});
 
 function resetErrorsMessages() {
     if (ItemInwordForm) {
@@ -230,6 +227,7 @@ function resetErrorsMessages() {
 }
 function EditItemInWordDetails(InwordId) {
     siteloadershow();
+    resetErrorsMessages();
     $('#addNewImage').empty();
     $.ajax({
         url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
@@ -237,9 +235,12 @@ function EditItemInWordDetails(InwordId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
             siteloaderhide();
-            $('#changeName').html('Update Item Inword');
+            $('#inwardheadingtxt').text('Edit Item Inword');
+            $('#addInWordInfo').removeClass('d-none');
+            $('#inwardInfo').addClass('d-none');
+            $('#btnitemInWord').hide();
+            $('#updateitemInWord').show();
             $('#txtItemInWordid').val(response.inwordId);
             $('#txtUnitType').val(response.unitName);
             $('#txtUnitTypeHidden').val(response.unitTypeId);
@@ -263,16 +264,6 @@ function EditItemInWordDetails(InwordId) {
                 });
                 $("#txtDocumentName").val(documentNames);
             }
-
-            var button = document.getElementById("btnitemInWord");
-            if ($('#txtItemInWordid').val() != '') {
-                button.textContent = "Update";
-            }
-
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreateItemInWord'));
-            resetErrorsMessages();
-            offcanvas.show();
-
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -380,12 +371,11 @@ function ItemInWordIsApproved(InwordId) {
 
 var additionalFiles = [];
 function CancelImage(documentName) {
-
     $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
 
     var currentDocumentNames = $("#txtDocumentName").val().split(';');
     var updatedDocumentNames = currentDocumentNames.filter(function (name) {
-        return name !== documentName;
+        return name.trim() !== documentName.trim();
     });
 
     $("#txtDocumentName").val(updatedDocumentNames.join(';'));
@@ -464,24 +454,14 @@ function InsertMultipleItemInWordDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
+                siteloaderhide();
                 if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('CreateItemInWord');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-                    if (offcanvas) {
-                        offcanvas.hide();
-                    } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
-                    }
-
                     AllItemInWordListTable();
                     toastr.success(Result.message);
                 } else {
                     toastr.error(Result.message);
                 }
-                siteloaderhide();
+
             },
             error: function (xhr, status, error) {
                 siteloaderhide();
@@ -539,17 +519,6 @@ function UpdateMultipleItemInWordDetails() {
             processData: false,
             success: function (Result) {
                 if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('CreateItemInWord');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-                    if (offcanvas) {
-                        offcanvas.hide();
-                    } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
-                    }
-
                     AllItemInWordListTable();
                     toastr.success(Result.message);
                 } else {
