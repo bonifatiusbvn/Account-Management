@@ -172,5 +172,76 @@ namespace AccountManagement.API.Controllers
             IEnumerable<GroupMasterModel> GroupList = await SiteMaster.GetGroupNameListBySiteId(SiteId);
             return Ok(new { code = 200, data = GroupList.ToList() });
         }
+
+        [HttpPost]
+        [Route("GetGroupNameList")]
+        public async Task<IActionResult> GetGroupNameList()
+        {
+            IEnumerable<SiteGroupModel> GroupList = await SiteMaster.GetGroupNameList();
+            return Ok(new { code = 200, data = GroupList.ToList() });
+        }
+
+        [HttpPost]
+        [Route("DeleteSiteGroupDetails")]
+        public async Task<IActionResult> DeleteSiteGroupDetails(string groupName)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+
+            var sitegroupName = await SiteMaster.DeleteSiteGroupDetails(groupName);
+            try
+            {
+
+                if (responseModel.code == 200)
+                {
+                    responseModel.code = sitegroupName.code;
+                    responseModel.message = sitegroupName.message;
+                }
+                else
+                {
+                    responseModel.message = sitegroupName.message;
+                    responseModel.code = sitegroupName.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
+
+        [HttpGet]
+        [Route("GetGroupDetailsByGroupName")]
+        public async Task<IActionResult> GetGroupDetailsByGroupName(string groupName)
+        {
+            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(groupName);
+            return Ok(new { code = 200, data = SiteGroupDetails });
+        }
+
+        [HttpPost]
+        [Route("UpdateSiteGroupMaster")]
+        public async Task<IActionResult> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var sitemaster = await SiteMaster.UpdateSiteGroupMaster(groupDetails);
+                if (sitemaster.code == 200)
+                {
+                    response.code = sitemaster.code;
+                    response.message = sitemaster.message;
+                }
+                else
+                {
+                    response.code = (int)HttpStatusCode.BadRequest;
+                    response.message = sitemaster.message;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

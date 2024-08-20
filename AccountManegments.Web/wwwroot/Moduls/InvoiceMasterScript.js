@@ -22,7 +22,6 @@ function filterallItemTable() {
 
     });
 }
-
 function SerchItemDetailsById(Id, inputField) {
     clearItemErrorMessage();
     siteloadershow();
@@ -106,7 +105,6 @@ function GetCompanyDetail() {
     });
 }
 
-
 $(document).ready(function () {
     $('#textCompanyName').change(function () {
 
@@ -114,7 +112,6 @@ $(document).ready(function () {
         getInvoiceNumber($(this).val());
     });
 });
-
 
 function companyfilterSupplierInvoice() {
     siteloadershow();
@@ -158,7 +155,6 @@ $(document).ready(function () {
         getSupplierDetail($(this).val());
     });
 });
-
 
 $(document).ready(function () {
     $(document).ready(function () {
@@ -273,19 +269,15 @@ $(document).ready(function () {
             }
         }, 300));
         $(document).on('input', '#IDiscountRoundOff', debounce(function () {
+
             var Discountroundoff = $('#IDiscountRoundOff').val();
-            if (isNaN(Discountroundoff) || (Discountroundoff < -0.99 || Discountroundoff > 0.99)) {
-                toastr.warning("Value must be between -0.99 and 0.99");
-            }
-            else {
-                updateTotals();
-            }
+            debugger
+            updateTotals();
         }, 300));
     });
 
 
 });
-
 
 function AllSupplierInvoiceListTable() {
     var searchText = $('#txtSupplierInvoiceSearch').val();
@@ -299,7 +291,6 @@ function AllSupplierInvoiceListTable() {
 
         });
 }
-
 
 function filterSupplierInvoiceTable() {
     siteloadershow();
@@ -337,7 +328,6 @@ function SupplierInvoicesortTable() {
 
     });
 }
-
 function DeleteSupplierInvoice(Id) {
 
     Swal.fire({
@@ -383,7 +373,6 @@ function DeleteSupplierInvoice(Id) {
         }
     });
 }
-
 $(document).ready(function () {
     $("#shippingAddressForm").validate({
         rules: {
@@ -394,7 +383,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
@@ -428,8 +416,6 @@ $(document).ready(function () {
 function clearItemErrorMessage() {
     $("#spnitembutton").text("");
 }
-
-
 
 function InsertMultipleSupplierItem() {
     siteloadershow();
@@ -642,9 +628,6 @@ function UpdateInvoiceDetails() {
 
 
 }
-
-
-
 function UnitTypeDropdown(itemId) {
 
     if ($('#txtPOUnitType_' + itemId + ' option').length > 1) {
@@ -857,10 +840,10 @@ function updateTotals() {
 
     $(".product").each(function () {
         var row = $(this);
-        var subtotal = parseFloat(row.find("#txtproductamount").val());
-        var gst = parseFloat(row.find("#txtgstAmount").val());
-        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
-        var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+        var subtotal = parseFloat(row.find("#txtproductamount").val()) || 0;
+        var gst = parseFloat(row.find("#txtgstAmount").val()) || 0;
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val()) || 0;
+        var discountprice = parseFloat(row.find("#txtdiscountamount").val()) || 0;
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
@@ -869,6 +852,12 @@ function updateTotals() {
     });
 
     totalAmount = totalSubtotal + totalGst;
+
+
+    var dicountRoundOff = parseFloat($('#IDiscountRoundOff').val()) || 0;
+
+
+    totalAmount += dicountRoundOff;
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
@@ -887,9 +876,11 @@ function updateTotals() {
         totalAmount = Math.ceil(totalAmount);
     }
 
-    $("#TotalProductAmount").html(totalAmount.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
 }
+
+
 function removeItem(btn) {
     $(btn).closest("tr").remove();
     updateRowNumbers();

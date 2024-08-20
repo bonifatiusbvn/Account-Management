@@ -70,7 +70,7 @@ builder.Services.AddScoped<IPurchaseRequest, PurchaseRequestRepo>();
 builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepo>();
 builder.Services.AddScoped<IPurchaseOrderDetails, PurchaseOrderDetailsRepo>();
 builder.Services.AddScoped<ISupplierInvoice, SupplierInvoiceRepo>();
-builder.Services.AddScoped<Iiteminword,ItemInWordRepo>();
+builder.Services.AddScoped<Iiteminword, ItemInWordRepo>();
 builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
@@ -87,7 +87,7 @@ builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>();
 builder.Services.AddScoped<IPurchaseOrderServices, PurchaseOrderServices>();
 builder.Services.AddScoped<IPurchaseOrderDetailsServices, PurchaseOrderDetailsServices>();
 builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
-builder.Services.AddScoped<IiteminwordService,ItemInWordService>();
+builder.Services.AddScoped<IiteminwordService, ItemInWordService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 
@@ -132,13 +132,19 @@ builder.Services.AddSwaggerGen(c =>
                      }
                 });
 });
+
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(160);
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
-
-
-
 
 app.UseSwagger();
 app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "Account"));

@@ -7,6 +7,7 @@ using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -84,7 +85,7 @@ namespace AccountManegments.Web.Controllers
 
             try
             {
-                
+
                 ApiResponseModel postUser = await APIServices.PostAsync(createSite, "SiteMaster/AddSiteDetails");
                 if (postUser.code == 200)
                 {
@@ -282,6 +283,95 @@ namespace AccountManegments.Web.Controllers
                     GroupList = JsonConvert.DeserializeObject<List<GroupMasterModel>>(res.data.ToString());
                 }
                 return new JsonResult(GroupList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GetGroupNameList()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.PostAsync("", "SiteMaster/GetGroupNameList");
+
+                if (res.code == 200)
+                {
+                    List<SiteGroupModel> GetSiteList = JsonConvert.DeserializeObject<List<SiteGroupModel>>(res.data.ToString());
+
+                    return PartialView("~/Views/SiteMaster/_SiteGroupMasterListPartial.cshtml", GetSiteList);
+                }
+                else
+                {
+                    return Ok(new { Message = "Failed to retrieve Site list.", StatusCode = 500 });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Ok(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSiteGroupDetails(string groupName)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSiteGroupDetails?groupName=" + groupName);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetGroupDetailsByGroupName(string groupName)
+        {
+            try
+            {
+                GroupMasterModel SiteDetails = new GroupMasterModel();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?groupName=" + groupName);
+                if (res.code == 200)
+                {
+                    SiteDetails = JsonConvert.DeserializeObject<GroupMasterModel>(res.data.ToString());
+                }
+                return new JsonResult(SiteDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSiteGroupMaster()
+        {
+            try
+            {
+                var GroupList = HttpContext.Request.Form["GroupDetails"];
+                var GroupDetails = JsonConvert.DeserializeObject<GroupMasterModel>(GroupList);
+                ApiResponseModel postUser = await APIServices.PostAsync(GroupDetails, "SiteMaster/UpdateSiteGroupMaster");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
             }
             catch (Exception ex)
             {
