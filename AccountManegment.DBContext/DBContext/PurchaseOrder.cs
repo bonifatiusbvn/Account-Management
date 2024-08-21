@@ -37,6 +37,8 @@ public partial class PurchaseOrder
 
     public bool? IsDeleted { get; set; }
 
+    public bool? IsApproved { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

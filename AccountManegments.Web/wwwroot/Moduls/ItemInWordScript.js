@@ -457,6 +457,7 @@ function InsertMultipleItemInWordDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     AllItemInWordListTable();
+                    ClearItemInWordTextBox();
                     toastr.success(Result.message);
                 } else {
                     toastr.error(Result.message);
@@ -520,6 +521,7 @@ function UpdateMultipleItemInWordDetails() {
             success: function (Result) {
                 if (Result.code == 200) {
                     AllItemInWordListTable();
+                    ClearItemInWordTextBox();
                     toastr.success(Result.message);
                 } else {
                     toastr.error(Result.message);

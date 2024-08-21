@@ -358,13 +358,16 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.DiscountRoundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.InvoiceType).HasMaxLength(50);
             entity.Property(e => e.Lrno)
                 .HasMaxLength(100)
                 .HasColumnName("LRNo");
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
-            entity.Property(e => e.Roundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.SiteGroup).HasMaxLength(50);
             entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.Tds)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("TDS");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGstamount)

@@ -26,6 +26,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Guid Id { get; set; }
 
         public string? InvoiceNo { get; set; }
+        public string? InvoiceType { get; set; }
 
         public Guid? SiteId { get; set; }
 
@@ -45,7 +46,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public decimal? TotalDiscount { get; set; }
 
-        public decimal? Roundoff { get; set; }
+        public decimal? Tds { get; set; }
 
         public string? PaymentStatus { get; set; }
 
