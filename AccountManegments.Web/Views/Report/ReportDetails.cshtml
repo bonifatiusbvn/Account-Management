@@ -45,12 +45,21 @@
                                                 <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
                                                 <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
                                             </li>
-                                            <li class="nav-item col-md-1" role="presentation">
+                                            <li class="nav-item col-md-2" role="presentation">
                                                 <select id="textReportGroupList" name="textReportGroupList" class="form-control">
                                                     <option value="">Select Group</option>
                                                 </select>
                                             </li>
-                                            <li class="nav-item col-md-1" role="presentation">
+                                            <li class="nav-item col-md-2" role="presentation">
+                                                <select id="timePeriodDropdown" name="timePeriodDropdown" class="form-control">
+                                                    <option value="" selected disabled>Search By</option>
+                                                    <option value="This Month">This Month</option>
+                                                    <option value="This Year">This Year</option>
+                                                    <option value="Between Date">Between Date</option>
+                                                    <option value="Between Year">Between Year</option>
+                                                </select>
+                                            </li>
+                                            @* <li class="nav-item col-md-1" role="presentation">
                                                 <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
                                                 <label class="form-check-label" for="currentMonthRadio">This Month</label>
                                             </li>
@@ -65,11 +74,11 @@
                                             <li class="nav-item col-md-1" role="presentation">
                                                 <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
                                                 <label class="form-check-label" for="betweenYearRadio">Between Year</label>
-                                            </li>
+                                            </li> *@
                                             <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls">
                                                 <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;width: 135px;">
                                                 <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;width: 135px;">
-                                                <select id="yearDropdown" class="form-control" style="display:none;">
+                                                <select id="yearDropdown" class="form-control" style="display:none; width: 110px;">
                                                     <option value="">Select Year</option>
                                                 </select>
                                                 <button class="btn btn-primary nav-btn" id="searchBetweenDate" data-bs-toggle="tab" role="tab" style="display:none;">
@@ -83,28 +92,30 @@
                                         <div class="tab-content" id="pills-tabContent">
                                             <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
                                                 <div class="p-3 border rounded">
-                                                    <table class="table align-middle mb-0">
-                                                        <thead class="table-light btn-primary">
-                                                            <tr>
-                                                                <th>Invoice No</th>
-                                                                <th>Date</th>
-                                                                <th>Site</th>
-                                                                <th>Group</th>
-                                                                <th>Company</th>
-                                                                <th>Supplier</th>
-                                                                <th>Debit</th>
-                                                                <th>Credit</th>
-                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
-                                                                {
-                                                                    <th>Action</th>
-                                                                }
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="reportInvoiceListbody">
-                                                        </tbody>
-                                                        <tfoot id="reportInvoiceListFooter" class="bg-light">
-                                                        </tfoot>
-                                                    </table>
+                                                    <div style=" overflow-y: auto; max-height: 450px;">
+                                                        <table class="table align-middle mb-0">
+                                                            <thead class="table-light text-center btn-primary">
+                                                                <tr>
+                                                                    <th>Invoice No</th>
+                                                                    <th style="width:86px;">Date</th>
+                                                                    <th>Site</th>
+                                                                    <th>Group</th>
+                                                                    <th>Company</th>
+                                                                    <th>Supplier</th>
+                                                                    <th>Debit</th>
+                                                                    <th>Credit</th>
+                                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
+                                                                    {
+                                                                        <th>Action</th>
+                                                                    }
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="reportInvoiceListbody">
+                                                            </tbody>
+                                                            <tfoot id="reportInvoiceListFooter" class="bg-light">
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
                                                     <div id="downloadreportfile" class="col-12 text-end" style="display:none;">
                                                         <a class="btn" onclick="ExportToExcel()" style="background-color:#018749;color:white;">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">

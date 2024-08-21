@@ -125,20 +125,20 @@ $(document).ready(function () {
         GetInvoiceGroupData();
     });
 
-    $('.nav-radio').click(function () {
-        var radioId = $(this).attr('id');
+    $('#timePeriodDropdown').change(function () {
+        var selectedValue = $(this).val();
 
-        if (radioId === 'currentMonthRadio') {
+        if (selectedValue === 'This Month') {
             GetCurrentMonthInvoiceList();
             $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
-        } else if (radioId === 'currentYearRadio') {
+        } else if (selectedValue === 'This Year') {
             GetCurrentYearInvoiceList();
             $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
-        } else if (radioId === 'betweenMonthRadio') {
+        } else if (selectedValue === 'Between Date') {
             $('#startDate, #endDate, #searchBetweenDate').show();
             $('#yearDropdown').hide();
             clearDates();
-        } else if (radioId === 'betweenYearRadio') {
+        } else if (selectedValue === 'Between Year') {
             $('#yearDropdown, #searchBetweenDate').show();
             $('#startDate, #endDate').hide();
             populateYearDropdown();
@@ -146,15 +146,12 @@ $(document).ready(function () {
     });
 
     $('.nav-btn').click(function () {
+        var selectedValue = $('#timePeriodDropdown').val();
 
-        var buttonId = $(this).attr('id');
-
-        if (buttonId === 'searchBetweenDate') {
-            if ($('#betweenMonthRadio').is(':checked')) {
-                GetBetweenDateInvoiceList();
-            } else if ($('#betweenYearRadio').is(':checked')) {
-                GetBetweenYearInvoiceList();
-            }
+        if (selectedValue === 'Between Date') {
+            GetBetweenDateInvoiceList();
+        } else if (selectedValue === 'Between Year') {
+            GetBetweenYearInvoiceList();
         }
     });
 });
