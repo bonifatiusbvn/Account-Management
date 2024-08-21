@@ -12,12 +12,12 @@
         youGaveTotal += item.InvoiceNo == "PayOut" ? item.TotalAmount : 0;
         youGetTotal += item.InvoiceNo != "PayOut" ? item.TotalAmount : 0;
 
-        <tr style="height:55px;">
+        <tr style="height:55px;" class="text-center">
             <td>@(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo)</td>
-            <td>@item.Date?.ToString("dd-MM-yyyy")</td>
+            <td style="width:86px;">@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
-            <td>@item.CompanyName</td>
+            <td style="width: 120px;">@item.CompanyName</td>
             <td>@item.SupplierName</td>
             <td class="text-danger">
                 @if (item.InvoiceNo == "PayOut")
@@ -42,16 +42,22 @@
 
             @if (item.InvoiceNo == "PayOut" && UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
             {
-                <td>
+                <td style="width:auto; white-space: nowrap; padding: 0;">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && a.Edit == true))
                     {
-                        <a class="btn text-primary" onclick="EditPayoutDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                        <a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails('@item.Id')" title="Edit" aria-label="Edit">
+                            <i class="fadeIn animated bx bx-edit"></i>
+                        </a>
                     }
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && a.Delete == true))
                     {
-                        <a href="javascript:;" class="btn text-primary" onclick="deletePayoutDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                        <a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
+                            <i class="lni lni-trash"></i>
+                        </a>
                     }
                 </td>
+
+
             }
         </tr>
     }
