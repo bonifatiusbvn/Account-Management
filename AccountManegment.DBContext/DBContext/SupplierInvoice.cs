@@ -43,7 +43,7 @@ public partial class SupplierInvoice
 
     public decimal? DiscountRoundoff { get; set; }
 
-    public decimal? Roundoff { get; set; }
+    public decimal? Tds { get; set; }
 
     public string? PaymentStatus { get; set; }
 

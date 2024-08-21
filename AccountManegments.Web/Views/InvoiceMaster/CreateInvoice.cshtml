@@ -39,7 +39,45 @@
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6">
                                                                 <div class="card">
-                                                                    <h5 class="card-header">Supplier Details</h5>
+                                                                    <div class="card-header">
+                                                                        <div class="row align-items-center">
+                                                                            <div class="col">
+                                                                                <h6 class="mb-0">Supplier Details</h6>
+                                                                            </div>
+                                                                            <div class="col" style="padding-left: 400px;">
+                                                                                @if (Model.InvoiceType != null)
+                                                                                {
+                                                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                                                        <option value="@Model.InvoiceType" selected>@Model.InvoiceType</option>
+                                                                                        @if (@Model.InvoiceType == "Purchase")
+                                                                                        {
+                                                                                            <option value="Purchase Return">Purchase Return</option>
+                                                                                            <option value="Credit Note">Credit Note</option>
+                                                                                        }
+                                                                                        @if (@Model.InvoiceType == "Purchase Return")
+                                                                                        {
+                                                                                            <option value="Purchase">Purchase</option>
+                                                                                            <option value="Credit Note">Credit Note</option>
+                                                                                        }
+                                                                                        @if (@Model.InvoiceType == "Credit Note")
+                                                                                        {
+                                                                                            <option value="Purchase">Purchase</option>
+                                                                                            <option value="Purchase Return">Purchase Return</option>
+                                                                                        }
+                                                                                    </select>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                                                        <option value="Purchase" selected>Purchase</option>
+                                                                                        <option value="Purchase Return">Purchase Return</option>
+                                                                                        <option value="Credit Note">Credit Note</option>
+                                                                                    </select>
+                                                                                }
+                                                                                <input type="hidden" id="txtinvoicetype" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="card-body">
                                                                         <div class="row">
                                                                             <div class="col-6 col-lg-6">
@@ -60,14 +98,14 @@
                                                                             </div>
                                                                             <div class="col-6 col-lg-6">
                                                                                 <label for="textSupplierMobile" class="form-label">Mobile No</label>
-                                                                                <input type="text" id="textSupplierMobile" name="textSupplierMobile" value="@Model.SupplierMobileNo" class="form-control" placeholder="Mobile No" />
+                                                                                <input type="text" id="textSupplierMobile" name="textSupplierMobile" value="@Model.SupplierMobileNo" class="form-control" placeholder="Mobile No" readonly/>
                                                                                 <span id="spnSupplierMobile" class="text-danger"></span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row mt-3">
                                                                             <div class="col-6 col-lg-6">
                                                                                 <label for="textSupplierAddress" class="form-label">Address</label>
-                                                                                <input type="text" id="textSupplierAddress" name="textSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" />
+                                                                                <input type="text" id="textSupplierAddress" name="textSupplierAddress" value="@Model.SupplierFullAddress" class="form-control" placeholder="Address" readonly/>
                                                                                 <span id="spnSupplierAddress" class="text-danger"></span>
                                                                             </div>
                                                                             <div class="col-6 col-lg-6">
@@ -303,6 +341,20 @@
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
+                                                                                    <th scope="row">TDS <small class="text-muted"></small></th>
+                                                                                    <td>
+                                                                                        @if(Model.Tds != null)
+                                                                                        {
+                                                                                            <input type="text" class="form-control border-0" id="cart-tds" placeholder="₹0.00" value="@Model.Tds" />
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <input type="text" class="form-control border-0" id="cart-tds" placeholder="₹0.00" />
+                                                                                        }
+                                                                                        
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
                                                                                     <th scope="row">Discount <small class="text-muted"></small></th>
                                                                                     <td>
                                                                                         <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
@@ -355,6 +407,7 @@
 
                                                                     bool isSingleAddress = siteAddresses is string;
                                                                     bool isAddressList = siteAddresses is IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.SiteAddressModel>;
+                                                                    bool isSelected = false;
                                                                 }
 
                                                                 @if (isSingleAddress)
@@ -376,6 +429,7 @@
                                                                                    type="radio"
                                                                                    id="AddressRadio_@counter"
                                                                                    data-address="@siteAddresses"
+                                                                                   checked
                                                                             @(selectedShippingAddress != null && siteAddresses == selectedShippingAddress ? "checked" : "") />
                                                                         </div>
                                                                     </div>
@@ -394,20 +448,44 @@
                                                                                 <p id="shippingaddress_@counter">@address.Address</p>
                                                                                 <input type="hidden" id="selectedShippingAddress" name="selectedShippingAddress" />
                                                                             </div>
-                                                                            <div class="col-2 col-sm-2">
-                                                                                <input class="nav-radio form-check-input"
-                                                                                       name="selectedAddress"
-                                                                                       data-bs-toggle="tab"
-                                                                                       role="tab"
-                                                                                       type="radio"
-                                                                                       id="AddressRadio_@counter"
-                                                                                       data-address="@address.Address"
-                                                                                @(selectedShippingAddress != null && address.Address == selectedShippingAddress ? "checked" : "") />
-                                                                            </div>
+                                                                            @if (selectedShippingAddress != null)
+                                                                            {
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <input class="nav-radio form-check-input"
+                                                                                           name="selectedAddress"
+                                                                                           data-bs-toggle="tab"
+                                                                                           role="tab"
+                                                                                           type="radio"
+                                                                                           id="AddressRadio_@counter"
+                                                                                           data-address="@address.Address"
+                                                                                    @(
+                                                                                        selectedShippingAddress != null && address.Address == selectedShippingAddress
+                                                                                        ? "checked"
+                                                                                        : !isSelected && selectedShippingAddress == null
+                                                                                        ? (isSelected = true).ToString()
+                                                                                        : ""
+                                                                                        ) />
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <input class="nav-radio form-check-input"
+                                                                                           name="selectedAddress"
+                                                                                           data-bs-toggle="tab"
+                                                                                           role="tab"
+                                                                                           type="radio"
+                                                                                           id="AddressRadio_@counter"
+                                                                                           data-address="@address.Address"
+                                                                                    @(counter == 1 ? "checked" : "") />
+                                                                                </div>
+                                                                            }
+
                                                                         </div>
                                                                         counter++;
                                                                     }
                                                                 }
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -617,4 +695,12 @@
         $(that).closest('.ac-invoice-shippingadd').remove();
     }
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const supplierNameDropdown = document.getElementById("textSupplierName");
+        const companyNameDropdown = document.getElementById("textCompanyName");
+
+        supplierNameDropdown.addEventListener("change", function () {
+            companyNameDropdown.focus();
+        });
+    });
 </script>
