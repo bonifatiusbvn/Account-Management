@@ -157,7 +157,6 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $(document).ready(function () {
         function handleFocus(event, selector) {
             if (event.keyCode == 13 || event.keyCode == 9) {
                 event.preventDefault();
@@ -274,8 +273,17 @@ $(document).ready(function () {
             debugger
             updateTotals();
         }, 300));
-    });
 
+    $(document).on('input', '#cart-tds', debounce(function () {
+        var roundoff = $('#cart-tds').val();
+        var subTotal = $('#cart-subtotal').val();
+        if (roundoff > subTotal) {
+            toastr.warning("Value can not be greater than subotal.");
+        }
+        else {
+            updateTotals();
+        }
+    }, 300));
 
 });
 
@@ -444,6 +452,7 @@ function InsertMultipleSupplierItem() {
             var InvoiceDetails = {
                 SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
+                InvoiceType: $('#ddlinvoicetype').val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
                 CompanyId: $("#textCompanyName").val(),
@@ -460,7 +469,7 @@ function InsertMultipleSupplierItem() {
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
-                Roundoff: $('#cart-roundOff').val(),
+                Tds: $('#cart-tds').val(),
                 TotalDiscount: $('#cart-discount').val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
@@ -544,6 +553,7 @@ function UpdateInvoiceDetails() {
                 Id: $('#textSupplierInvoiceId').val(),
                 SiteId: $("#txtModelSiteId").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
+                InvoiceType: $('#ddlinvoicetype').val(),
                 Date: $("#textOrderDate").val(),
                 SupplierId: $("#textSupplierName").val(),
                 CompanyId: $("#textCompanyName").val(),
@@ -555,7 +565,7 @@ function UpdateInvoiceDetails() {
                 Description: $("#textDescription").val(),
                 Terms: $("#textInvoiceTerms").val(),
                 SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
-                Roundoff: $('#cart-roundOff').val(),
+                Tds: $('#cart-tds').val(),
                 TotalDiscount: $('#cart-discount').val(),
                 CreatedOn: $('#textCreatedOn').val(),
                 ItemList: ItemDetails,
@@ -832,6 +842,7 @@ function updateTotals() {
     var totalAmount = 0;
     var TotalItemQuantity = 0;
     var TotalDiscount = 0;
+    var SubTotal = 0;
 
     $(".product").each(function () {
         var row = $(this);
@@ -845,8 +856,9 @@ function updateTotals() {
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice * totalquantity;
     });
-
+    var Tds = $('#cart-tds').val();
     totalAmount = totalSubtotal + totalGst;
+    SubTotal = totalSubtotal - Tds
 
 
     var dicountRoundOff = parseFloat($('#IDiscountRoundOff').val()) || 0;
@@ -854,7 +866,7 @@ function updateTotals() {
 
     totalAmount += dicountRoundOff;
 
-    $("#cart-subtotal").val(totalSubtotal.toFixed(2));
+    $("#cart-subtotal").val(SubTotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-discount").val(TotalDiscount.toFixed(2));
     $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
