@@ -552,3 +552,50 @@ function ClearPayoutTextBox() {
     $('#Edittxtpayoutdescription').val('');
     $("#Editpayoutpaymenttype").prop("checked", false);
 }
+
+$(document).ready(function () {
+
+    $("#totalAmount").html('₹' + 00);
+    $("#pendingamount").html('₹' + 00);
+    $("#txttotalcreditamount").html('₹' + 00);
+    $("#txttotalpendingamount").html('₹' + 00);
+    $("#txttotalpurchase").html('₹' + 00);
+
+    $('#txtSuppliernameHidden').change(function () {
+        siteloadershow();
+        var CompanyId = $('#txtcompanynameHidden').val();
+        var SupplierId = $(this).val();
+        $.ajax({
+            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+            type: 'GET',
+            success: function (result) {
+                siteloaderhide();
+                $("#invoicedetails").html(result);
+                $("#txttotalpendingamount").html('₹' + result.totalPending);
+                $("#pendingamount").html('₹' + result.totalPending);
+                $("#txttotalcreditamount").html('₹' + result.totalCreadit);
+                $("#totalAmount").html('₹' + result.totalOutstanding);
+                $("#txttotalpurchase").html('₹' + result.totalPurchase);
+                var totalpendingAmount = result.totalPending;
+                $('#txtpayoutamount').on('input', function () {
+                    var enteredAmount = parseFloat($(this).val());
+
+                    if (!isNaN(enteredAmount)) {
+                        var pendingAmount = totalpendingAmount - enteredAmount;
+
+                        if (enteredAmount > totalpendingAmount) {
+                            $('#spnpayout').text('Entered amount cannot exceed pending amount.');
+                        } else {
+                            $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                        }
+                    } else {
+                        $('#spnpayout').text('');
+                        $('#txtpendingamount').val('');
+                    }
+                });
+            },
+        });
+    });
+
+
+});

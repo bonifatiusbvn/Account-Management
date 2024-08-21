@@ -192,8 +192,57 @@
                                             <div class="card-body">
                                                 <p class="fs-5">Apply Discount Code</p>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="Enter discount code">
-                                                    <button class="btn btn-primary btn-ecomm" type="button">Apply</button>
+                                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-3 row-cols-xxl-3 g-3">
+                                                        <div class="col">
+                                                            <div class="card radius-10 shadow-none bg-light-success mb-0">
+                                                                <div class="card-body">
+
+                                                                    <div class="d-flex align-items-center mt-4">
+                                                                        <div class="">
+                                                                            <p class="mb-1 text-success">Total Credit</p>
+                                                                            <h4 class="mb-0 text-success" id="txttotalpurchase"></h4>
+                                                                        </div>
+                                                                        <div class="ms-auto">
+                                                                            <p class="mb-0 text-success">4.9 <ion-icon name="arrow-up-sharp" role="img" class="md hydrated" aria-label="arrow up sharp"></ion-icon></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card radius-10 shadow-none bg-light-primary mb-0">
+                                                                <div class="card-body">
+
+                                                                    <div class="d-flex align-items-center mt-4">
+                                                                        <div class="">
+                                                                            <p class="mb-1 text-primary">Total Debit</p>
+                                                                            <h4 class="mb-0 text-primary" id="txttotalcreditamount">895</h4>
+                                                                        </div>
+                                                                        <div class="ms-auto">
+                                                                            <p class="mb-0 text-primary">5.6 <ion-icon name="arrow-up-sharp" role="img" class="md hydrated" aria-label="arrow up sharp"></ion-icon></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="card radius-10 shadow-none bg-light-danger mb-0">
+                                                                <div class="card-body">
+
+                                                                    <div class="d-flex align-items-center mt-4">
+                                                                        <div class="">
+                                                                            <p class="mb-1 text-danger">Net Balance</p>
+                                                                            <h4 class="mb-0 text-danger" id="txttotalpendingamount">379</h4>
+                                                                        </div>
+                                                                        <div class="ms-auto">
+                                                                            <p class="mb-0 text-danger">8.7 <ion-icon name="arrow-up-sharp" role="img" class="md hydrated" aria-label="arrow up sharp"></ion-icon></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,53 +250,23 @@
                                             <div class="card-body">
                                                 <p class="fs-5">Order summary</p>
                                                 <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/01.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">White Polo T-Shirt</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$19.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/17.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Fancy Red Sneakers</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$16.<small>00</small></span><span class="">x 2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/04.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Yellow Shine Blazer</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$22.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/09.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Men Black Hat Cap</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$14.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                                                <table class="table align-middle mb-0">
+                                                    <thead class="table-light btn-primary">
+                                                        <tr>
+                                                            <th>Company</th>
+                                                            <th>Invoice No</th>
+                                                            <th>Credit</th>
+                                                            <th>Debit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="reportInvoicenet">
+                                                    </tbody>
+                                                    <tfoot id="reportInvoicenetFooter" class="bg-light">
+                                                    </tfoot>
+                                                </table>
+
+
                                             </div>
                                         </div>
                                         <div class="card mb-0">
