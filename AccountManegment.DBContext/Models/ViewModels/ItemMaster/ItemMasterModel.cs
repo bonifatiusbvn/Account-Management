@@ -42,4 +42,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemMaster
         public int RowNumber { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class ItemIsApprovedMasterModel
+    {
+        public List<ItemIsApprovedModel>? ItemList { get; set; }
+    }
+
+    public class ItemIsApprovedModel
+    {
+        public Guid ItemId { get; set; }
+        public bool? IsApproved { get; set; }
+    }
 }

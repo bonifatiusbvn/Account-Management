@@ -4,6 +4,7 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Services.ItemMaster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -175,6 +176,33 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<POItemDetailsModel> ItemList = await ItemMaster.GetItemDetailsListById(ItemId);
             return Ok(new { code = 200, data = ItemList });
+        }
+
+        [HttpPost]
+        [Route("MutipleItemsIsApproved")]
+        public async Task<IActionResult> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var isApproved = await ItemMaster.MutipleItemsIsApproved(ItemIdList);
+            try
+            {
+                if (isApproved.code != (int)HttpStatusCode.InternalServerError)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = isApproved.message;
+                }
+                else
+                {
+                    responseModel.message = isApproved.message;
+                    responseModel.code = isApproved.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+                responseModel.message = "An error occurred while processing the request.";
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

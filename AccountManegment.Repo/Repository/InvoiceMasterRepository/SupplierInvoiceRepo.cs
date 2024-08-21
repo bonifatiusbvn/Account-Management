@@ -511,6 +511,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         SiteName = d.SiteName,
                                         SupplierName = b.SupplierName,
                                         CreatedOn = a.CreatedOn,
+                                        IsApproved = a.IsApproved,
                                         SupplierInvoiceNo = a.SupplierInvoiceNo,
                                     });
 
@@ -742,6 +743,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     ShippingAddress = SupplierItemDetails.ShippingAddress,
                     DiscountRoundoff = SupplierItemDetails.DiscountRoundoff,
                     IsPayOut = PayOut,
+                    IsApproved = SupplierItemDetails.IsApproved,
                     Date = SupplierItemDetails.Date,
                     CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -862,6 +864,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                             SupplierInvoiceNo = a.SupplierInvoiceNo,
                                             PaymentStatus = a.PaymentStatus,
                                             DiscountRoundoff = a.DiscountRoundoff,
+                                            IsApproved = a.IsApproved,
                                         });
                 return (supplierInvoices);
             }
@@ -1104,6 +1107,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                      DiscountRoundoff = a.DiscountRoundoff,
+                                     IsApproved = a.IsApproved,
                                  }).First();
                 return payoutdetails;
             }
@@ -1149,6 +1153,36 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             {
                 response.code = 500;
                 response.message = "Error in updating invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allInvoices = await Context.SupplierInvoices.ToListAsync();
+                var approvalDict = InvoiceIdList.InvoiceList.ToDictionary(x => x.Id, x => x.IsApproved);
+
+                foreach (var invoice in allInvoices)
+                {
+                    if (approvalDict.TryGetValue(invoice.Id, out var isApproved))
+                    {
+                        invoice.IsApproved = isApproved;
+                    }
+
+                    Context.SupplierInvoices.Update(invoice);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.message = "Invoice approved/unapproved successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error approving the invoice: " + ex.Message;
             }
             return response;
         }

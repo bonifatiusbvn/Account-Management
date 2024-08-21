@@ -70,6 +70,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? DispatchBy { get; set; }
         public string? BuyersPurchaseNo { get; set; }
 
+        public bool? IsApproved { get; set; }
         public string? PaymentTerms { get; set; }
         public List<ItemOrderlist>? ItemOrderlist { get; set; }
         public List<OrderShippingAddress>? ShippingAddressList { get; set; }
@@ -101,5 +102,16 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string ShippingAddress { get; set; } = null!;
         public int? ShippingQuantity { get; set; }
         public int UnitTypeId { get; set; }
+    }
+
+    public class POIsApprovedMasterModel
+    {
+        public List<POIsApprovedModel>? POList { get; set; }
+    }
+
+    public class POIsApprovedModel
+    {
+        public Guid Id { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

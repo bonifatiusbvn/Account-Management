@@ -89,7 +89,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                bool isApproved = UserSession.FormPermisionData.Any(a => a.IsApproved == true);
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.IsApproved == true));
 
                 var item = new ItemMasterModel()
                 {

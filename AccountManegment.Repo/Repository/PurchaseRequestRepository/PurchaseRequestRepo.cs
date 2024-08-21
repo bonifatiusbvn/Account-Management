@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
@@ -309,6 +310,35 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     response.data = purchaseRequestData;
                     response.message = "Purchase request is successfully approved.";
                 }
+            }
+            return response;
+        }
+        public async Task<ApiResponseModel> MultiplePurchaseRequestIsApproved(PRIsApprovedMasterModel PRIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allPRData = await Context.PurchaseRequests.ToListAsync();
+                var approvalDict = PRIdList.PRList.ToDictionary(x => x.Pid, x => x.IsApproved);
+
+                foreach (var PR in allPRData)
+                {
+                    if (approvalDict.TryGetValue(PR.Pid, out var isApproved))
+                    {
+                        PR.IsApproved = isApproved;
+                    }
+
+                    Context.PurchaseRequests.Update(PR);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.message = "Purchase request approved/unapproved successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error approving the purchase requests: " + ex.Message;
             }
             return response;
         }

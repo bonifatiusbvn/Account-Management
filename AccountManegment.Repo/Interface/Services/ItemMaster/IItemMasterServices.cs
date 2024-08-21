@@ -1,6 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace AccountManagement.Repository.Interface.Services.ItemMaster
         Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList);
         Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText);
         Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId);
+        Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList);
     }
 }

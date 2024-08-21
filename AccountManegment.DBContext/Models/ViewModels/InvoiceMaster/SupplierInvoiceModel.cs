@@ -60,6 +60,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Decimal? youGetTotal { get; set; }
         public decimal? DiscountRoundoff { get; set; }
         public string? GroupName { get; set; }
+        public bool? IsApproved { get; set; }
     }
     public class InvoiceTotalAmount
     {

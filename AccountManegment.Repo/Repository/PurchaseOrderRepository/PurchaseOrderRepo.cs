@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using AccountManagement.DBContext.Models.Common;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
@@ -198,9 +199,11 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      PaymentTerms = a.PaymentTerms,
                                      BuyersPurchaseNo = a.BuyersPurchaseNo,
                                      DispatchBy = a.DispatchBy,
+                                     IsDeleted = a.IsDeleted,
                                      CompanyStateName = cs.StatesName,
                                      CompanyStateCode = cs.StateCode,
                                      SupplierStateCode = f.StateCode,
+                                     IsApproved = a.IsApproved,
                                      SupplierStateName = f.StatesName,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName
                                  }).First();
@@ -598,6 +601,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     ContactName = PurchaseOrderDetails.ContactName,
                     ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
+                    IsApproved = false,
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
                     PaymentTerms = PurchaseOrderDetails.PaymentTerms,
@@ -765,6 +769,36 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 throw ex;
             }
             return responseModel;
+        }
+
+        public async Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allPOData = await Context.PurchaseOrders.ToListAsync();
+                var approvalDict = POIdList.POList.ToDictionary(x => x.Id, x => x.IsApproved);
+
+                foreach (var PO in allPOData)
+                {
+                    if (approvalDict.TryGetValue(PO.Id, out var isApproved))
+                    {
+                        PO.IsApproved = isApproved;
+                    }
+
+                    Context.PurchaseOrders.Update(PO);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.message = "Purchase order approved/unapproved successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error approving the purchase orders: " + ex.Message;
+            }
+            return response;
         }
     }
 }

@@ -375,7 +375,7 @@ function DeleteSupplierInvoice(Id) {
 
             Swal.fire(
                 'Cancelled',
-                'Site have no changes.!!😊',
+                'Invoice have no changes.!!😊',
                 'error'
             );
         }

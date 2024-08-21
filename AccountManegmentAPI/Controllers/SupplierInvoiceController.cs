@@ -222,5 +222,31 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+
+        [HttpPost]
+        [Route("InvoiceIsApproved")]
+        public async Task<IActionResult> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var Invoice = await SupplierInvoice.InvoiceIsApproved(InvoiceIdList);
+                if (Invoice.code == 200)
+                {
+                    response.code =  Invoice.code;
+                    response.message = Invoice.message;
+                }
+                else
+                {
+                    response.message = Invoice.message;
+                    response.code = Invoice.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

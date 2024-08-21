@@ -1,7 +1,8 @@
 ﻿AllUserTable();
 GetSiteDetails();
-AllItemList();
+GetDashboardItemList();
 GetDashboardPurchaseOrderList();
+GetDashboardInvoiceList();
 function CreateUser() {
     siteloadershow();
     if ($("#userForm").valid()) {
@@ -582,7 +583,7 @@ function preventEmptyValue(input) {
 //});
 
 
-function AllItemList() {
+function GetDashboardItemList() {
     $.get("/Home/ItemListAction")
         .done(function (result) {
 
@@ -593,13 +594,9 @@ function AllItemList() {
 
         });
 }
-function dashboardItemIsApproved(ItemId) {
-
-    var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to approve this item?" : "Are you sure want to unapprove this item?";
-
+function dashboardItemIsApproved() {
     Swal.fire({
-        title: confirmationMessage,
+        title: "Are you sure you want to approve this item?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -611,18 +608,31 @@ function dashboardItemIsApproved(ItemId) {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            var formData = new FormData();
-            formData.append("ItemId", ItemId);
+            var approvalStatuses = [];
+            $('input[name="chk_child"]').each(function () {
+                var itemId = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ ItemId: itemId, IsApproved: isChecked });
+            });
+
+
+            var ItemDetails = {
+                ItemList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("ItemIsApproved", JSON.stringify(ItemDetails));
+
             $.ajax({
-                url: '/ItemMaster/ItemIsApproved?ItemId=' + ItemId,
+                url: '/Home/MutipleItemsIsApproved',
                 type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
+                processData: false,
+                contentType: false,
+                data: form_data,
                 success: function (Result) {
                     if (Result.code == 200) {
                         siteloaderhide();
                         Swal.fire({
-                            title: isChecked ? "Approved!" : "Unapproved!",
                             text: Result.message,
                             icon: "success",
                             confirmButtonClass: "btn btn-primary w-xs mt-2",
@@ -711,4 +721,292 @@ function GetDashboardPurchaseOrderList() {
             siteloaderhide();
 
         });
+}
+
+function dashboardPOIsApproved()
+{
+    Swal.fire({
+        title: "Are you sure you want to approve this purchase order?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var approvalStatuses = [];
+            $('input[name="chk_POchild"]').each(function () {
+                var Id = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ Id: Id, IsApproved: isChecked });
+            });
+
+            var PODetails = {
+                POList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("POIsApproved", JSON.stringify(PODetails));
+
+            $.ajax({
+                url: '/Home/PurchaseOrderIsApproved',
+                type: 'Post',
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/Home/Index';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Purchase Order have no changes.!!😊',
+                'error'
+            )
+        }
+    });
+}
+
+
+function dashboardDeletePODetails(POId) {
+
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/PurchaseMaster/DeletePurchaseOrderDetails?POId=' + POId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    })
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete purchaseorder!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Purchase Order have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
+function GetDashboardInvoiceList() {
+
+    $.get("/Home/SupplierInvoiceListAction")
+        .done(function (result) {
+            $("#dashboardInvoiceList").html(result);
+        })
+        .fail(function (xhr, status, error) {
+
+        });
+}
+
+function dashboardInvoiceIsApproved() {
+    Swal.fire({
+        title: "Are you sure you want to approve this invoice?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var approvalStatuses = [];
+            $('input[name="chk_invoicechild"]').each(function () {
+                var Id = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ Id: Id, IsApproved: isChecked });
+            });
+
+
+            var InvoiceDetails = {
+                InvoiceList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("InvoiceIsApproved", JSON.stringify(InvoiceDetails));
+
+            $.ajax({
+                url: '/Home/InvoiceIsApproved',
+                type: 'Post',
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/Home/Index';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Invoice have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/Home/Index';
+            });
+        }
+    });
+}
+
+function dashboardDeleteSupplierInvoice(Id) {
+
+    Swal.fire({
+        title: "Are you sure want to delete this invoice?",
+        text: "You won't be able to revert this invoice!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/InvoiceMaster/DeleteSupplierInvoice?Id=' + Id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    })
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete Invoice!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Invoice have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
+function MutiplePurchaseRequestIsApproved() {
+
+    Swal.fire({
+        title: "Are you sure you want to approve this purchase order?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var approvalStatuses = [];
+            $('input[name="chk_PRchild"]').each(function () {
+                var PId = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ Pid: PId, IsApproved: isChecked });
+            });
+
+            var PRDetails = {
+                PRList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("PRIsApproved", JSON.stringify(PRDetails));
+
+            $.ajax({
+                url: '/Home/MultiplePurchaseRequestIsApproved',
+                type: 'Post',
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (Result) {
+                    Swal.fire({
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Purchase request have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/Home/Index';
+            });
+        }
+    });
 }

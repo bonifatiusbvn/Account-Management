@@ -137,6 +137,8 @@ namespace AccountManegments.Web.Controllers
 
             try
             {
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.IsApproved == true));
+
                 var PurchaseRequest = new PurchaseRequestModel()
                 {
                     Pid = Guid.NewGuid(),
@@ -146,7 +148,7 @@ namespace AccountManegments.Web.Controllers
                     Quantity = PurchaseRequestDetails.Quantity,
                     CreatedBy = UserSession.UserId,
                     PrNo = PurchaseRequestDetails.PrNo,
-                    IsApproved = false,
+                    IsApproved = isApproved,
                     SiteAddress = PurchaseRequestDetails.SiteAddress,
                     SiteAddressId = PurchaseRequestDetails.SiteAddressId,
                     ItemName = PurchaseRequestDetails.ItemName,
@@ -270,9 +272,35 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.IsApproved == true));
                 var OrderDetails = HttpContext.Request.Form["PODETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
+                var PurchaseOrderDetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
+                var podetails = new PurchaseOrderMasterView
+                {
+                    Poid = PurchaseOrderDetails.Poid,
+                    SiteId = PurchaseOrderDetails.SiteId,
+                    Date = PurchaseOrderDetails.Date,
+                    FromSupplierId = PurchaseOrderDetails.FromSupplierId,
+                    ToCompanyId = PurchaseOrderDetails.ToCompanyId,
+                    TotalAmount = PurchaseOrderDetails.TotalAmount,
+                    Description = PurchaseOrderDetails.Description,
+                    DeliveryShedule = PurchaseOrderDetails.DeliveryShedule,
+                    TotalDiscount = PurchaseOrderDetails.TotalDiscount,
+                    TotalGstamount = PurchaseOrderDetails.TotalGstamount,
+                    BillingAddress = PurchaseOrderDetails.BillingAddress,
+                    ContactName = PurchaseOrderDetails.ContactName,
+                    ContactNumber = PurchaseOrderDetails.ContactNumber,
+                    IsDeleted = false,
+                    IsApproved = isApproved,
+                    Terms = PurchaseOrderDetails.Terms,
+                    DispatchBy = PurchaseOrderDetails.DispatchBy,
+                    PaymentTerms = PurchaseOrderDetails.PaymentTerms,
+                    BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
+                    CreatedBy = PurchaseOrderDetails.CreatedBy,
+                    ItemOrderlist =  PurchaseOrderDetails.ItemOrderlist,
+                    ShippingAddressList = PurchaseOrderDetails.ShippingAddressList,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(podetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.data, postuser.code });

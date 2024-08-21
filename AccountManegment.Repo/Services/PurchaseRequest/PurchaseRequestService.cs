@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.PurchaseRequest
 {
-    public class PurchaseRequestService:IPurchaseRequestService
+    public class PurchaseRequestService : IPurchaseRequestService
     {
         private readonly IPurchaseRequest PurchaseRequest;
         public PurchaseRequestService(IPurchaseRequest purchaseRequest)
         {
             PurchaseRequest = purchaseRequest;
-        }    
+        }
 
         public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
         {
@@ -36,9 +36,9 @@ namespace AccountManagement.Repository.Services.PurchaseRequest
             return await PurchaseRequest.GetPurchaseRequestDetailsById(PurchaseId);
         }
 
-        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy,Guid? siteId)
+        public async Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
         {
-            return await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy,siteId);
+            return await PurchaseRequest.GetPurchaseRequestList(searchText, searchBy, sortBy, siteId);
         }
 
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
@@ -53,7 +53,12 @@ namespace AccountManagement.Repository.Services.PurchaseRequest
 
         public string CheckPRNo()
         {
-            return PurchaseRequest.CheckPRNo();  
+            return PurchaseRequest.CheckPRNo();
+        }
+
+        public async Task<ApiResponseModel> MultiplePurchaseRequestIsApproved(PRIsApprovedMasterModel PRIdList)
+        {
+            return await PurchaseRequest.MultiplePurchaseRequestIsApproved(PRIdList);
         }
     }
 }

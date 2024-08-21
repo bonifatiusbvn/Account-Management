@@ -140,5 +140,31 @@ namespace AccountManagement.API.Controllers
             var checkPRNo = PurchaseRequest.CheckPRNo();
             return Ok(new { code = 200, data = checkPRNo.ToString() });
         }
+
+        [HttpPost]
+        [Route("MultiplePurchaseRequestIsApproved")]
+        public async Task<IActionResult> MultiplePurchaseRequestIsApproved(PRIsApprovedMasterModel PRIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var purchaseOrder = await PurchaseRequest.MultiplePurchaseRequestIsApproved(PRIdList);
+                if (purchaseOrder.code == 200)
+                {
+                    response.code =  purchaseOrder.code;
+                    response.message = purchaseOrder.message;
+                }
+                else
+                {
+                    response.message = purchaseOrder.message;
+                    response.code = purchaseOrder.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }
