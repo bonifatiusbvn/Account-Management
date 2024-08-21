@@ -73,6 +73,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                              IsViewAllow = e.IsViewAllow,
                              IsEditAllow = e.IsEditAllow,
                              IsDeleteAllow = e.IsDeleteAllow,
+                             IsApproved = e.IsApproved,
                              CreatedBy = e.CreatedBy,
                              CreatedOn = e.CreatedOn
 
@@ -106,6 +107,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                                                                   IsEditAllow = a.IsEditAllow,
                                                                                   IsDeleteAllow = a.IsDeleteAllow,
                                                                                   FullName = u.FirstName + " " + u.LastName,
+                                                                                  IsApproved = a.IsApproved,
                                                                                   CreatedBy = a.CreatedBy,
                                                                                   CreatedOn = a.CreatedOn
 
@@ -132,6 +134,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                     formPermissionData.IsViewAllow = updateFormPermission.IsViewAllow;
                     formPermissionData.IsEditAllow = updateFormPermission.IsEditAllow;
                     formPermissionData.IsDeleteAllow = updateFormPermission.IsDeleteAllow;
+                    formPermissionData.IsApproved = updateFormPermission.IsApproved;
                 }
                 Context.RolewiseFormPermissions.Update(formPermissionData);
                 Context.SaveChanges();
@@ -160,6 +163,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                         IsViewAllow = item.IsViewAllow,
                         IsEditAllow = item.IsEditAllow,
                         IsDeleteAllow = item.IsDeleteAllow,
+                        IsApproved = item.IsApproved,
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
@@ -199,6 +203,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                   IsAddAllow = e.IsAddAllow,
                                   CreatedBy = e.CreatedBy,
                                   CreatedOn = e.CreatedOn,
+                                  IsApproved = e.IsApproved,
                               }).ToListAsync();
 
 
@@ -228,6 +233,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                             Item.IsViewAllow = updatedPermission.IsViewAllow;
                             Item.IsEditAllow = updatedPermission.IsEditAllow;
                             Item.IsDeleteAllow = updatedPermission.IsDeleteAllow;
+                            Item.IsApproved = updatedPermission.IsApproved;
                             Context.Entry(Item).State = EntityState.Modified;
                         }
                     }

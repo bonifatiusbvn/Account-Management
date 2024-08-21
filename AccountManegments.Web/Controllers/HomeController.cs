@@ -1,5 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -114,6 +116,61 @@ namespace AccountManegments.Web.Controllers
         public IActionResult UnAuthorised()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ItemListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"ItemMaster/GetItemList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<ItemMasterModel> GetItemList = JsonConvert.DeserializeObject<List<ItemMasterModel>>(res.data.ToString());
+                    GetItemList = GetItemList.Where(a=>a.IsApproved == false).ToList();
+
+                    return PartialView("~/Views/Home/_DashboardItemList.cshtml", GetItemList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        public async Task<IActionResult> PurchaseOrderListView(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+                    return PartialView("~/Views/Home/_DashboardPOList.cshtml", GetPOList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
         }
     }
 }

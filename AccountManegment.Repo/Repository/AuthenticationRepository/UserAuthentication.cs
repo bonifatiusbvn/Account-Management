@@ -372,6 +372,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                                      View = rp.IsViewAllow,
                                                                                      Edit = rp.IsEditAllow,
                                                                                      Delete = rp.IsDeleteAllow,
+                                                                                     IsApproved = rp.IsApproved,
                                                                                  }).ToListAsync();
 
                                 userModel.FromPermissionData = fromPermissionData;

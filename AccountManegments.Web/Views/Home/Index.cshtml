@@ -7,6 +7,7 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+
 <div class="row">
     <div class="col-12 col-lg-4 col-xl-4 d-flex">
         <div class="card radius-10 w-100">
@@ -16,84 +17,131 @@
 
 <!--end breadcrumb-->
 
-<div class="">
-    <div class="">
-        <div class=" radius-10 w-100">
-            <div class="my-3 border-bottom"></div>
-            <div class="">
-                <div class="row">
-                    <div class="col-12 col-lg-8 col-xl-8 d-flex">
-                        <div class="card radius-10 w-100">
-                            <div class="card-header">
-                                <h5>Purchase Requests</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive mt-3" style="max-height:350px;">
-                                    <table class="table align-middle mb-0">
-                                        <thead class="table-light btn-primary">
-                                            <tr>
-                                                <th>Site</th>
-                                                <th>Item</th>
-                                                <th>Unit</th>
-                                                <th>Qty</th>
-                                                <th></th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbPndingApproval">
-                                            @foreach (var item in Model)
+<div class="container">
+    <div class="row">
+        <!-- Purchase Requests Table -->
+        <div class="col-md-6 mb-3">
+            <div class="card" style="max-width: 790px;margin-left: -152px;">
+                <div class="card-header">
+                    <h5>Purchase Requests</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive mt-3" style="max-height:350px;">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light btn-primary">
+                                <tr>
+                                    <th>Site</th>
+                                    <th>Item</th>
+                                    <th>Unit</th>
+                                    <th>Qty</th>
+                                    <th></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbPndingApproval">
+                                @if(Model.Any()){
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
+                                        <td>@item.SiteName</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.UnitName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>
+                                            @if (_userSession.UserRole == 3)
                                             {
-                                                <tr id="purchaseRequestCard_@item.Pid" class="" onclick="SelectPurchaseRequestDetails('@item.Pid', this)">
-                                                    <td>@item.SiteName</td>
-                                                    <td>@item.ItemName</td>
-                                                    <td>@item.UnitName</td>
-                                                    <td>@item.Quantity</td>
-                                                    <td>
-                                                        @if (_userSession.UserRole == 3)
-                                                        {
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.Pid" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="PurchaseRequestIsApproved('@item.Pid')" />
-                                                        }
-                                                        else
-                                                        {
-                                                            @if (item.IsApproved == true)
-                                                            {
-                                                                <span class="badge bg-light-success text-success w-100">Approved</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="badge bg-light-warning text-warning w-100">Pending</span>
-                                                            }
-                                                        }
-
-                                                    </td>
-
-                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
-                                                    {
-                                                        <td>
-
-                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Delete == true)))
-                                                            {
-                                                                <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-                                                            }
-
-                                                        </td>
-                                                    }
-                                                </tr>
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.Pid" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="PurchaseRequestIsApproved('@item.Pid')" />
                                             }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                            else
+                                            {
+                                                @if (item.IsApproved == true)
+                                                {
+                                                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                                                }
+                                            }
+                                        </td>
 
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <td>
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Delete == true)))
+                                                {
+                                                    <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                                                }
+                                            </td>
+                                        }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr style="height:55px;">
+                                        <td colspan="8" class="text-center">No data found for the selected criteria.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="max-width: 790px;margin-left: -152px;">
+                <div class="card-header">
+                    <h5>Purchase Order</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive mt-3" style="max-height:350px;">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light btn-primary">
+                                <tr>
+                                    <th>Purchase Order Id</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
+                                    <th>IsApproved</th>
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="dashboardPOList">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Purchase Order Table -->
+        <div class="col-md-6 mb-3">
+            <div class="card" style="max-width: 790px;margin-right: -152px;">
+                <div class="card-header">
+                    <h5>Item</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive mt-3" style="max-height:350px;">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light btn-primary">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Approved</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbItemsList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
+
 @section Scripts {
     <script type="text/javascript">
 

@@ -19,6 +19,8 @@ public partial class RolewiseFormPermission
 
     public bool IsDeleteAllow { get; set; }
 
+    public bool? IsApproved { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

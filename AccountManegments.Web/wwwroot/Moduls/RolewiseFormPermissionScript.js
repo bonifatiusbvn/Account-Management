@@ -77,6 +77,7 @@ function UpdateRolewiseFormPermission() {
             IsViewAllow: rolewiseformRow.find('#isView').prop('checked'),
             IsEditAllow: rolewiseformRow.find('#isEdit').prop('checked'),
             IsDeleteAllow: rolewiseformRow.find('#isDelete').prop('checked'),
+            IsApproved: rolewiseformRow.find('#isApproved').prop('checked'),
         };
 
         formPermissions.push(objData);

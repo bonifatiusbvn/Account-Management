@@ -14,29 +14,35 @@
                     <input type="text" id="formId" value="@item.FormId" hidden />
                 </div>
                 <div class="col-9">
-                    <div class="row">
-                        <div class="col-3">
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="d-flex align-items-center">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isAdd" name="isAdd" @(item.IsAddAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isAdd">Add</label>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="d-flex align-items-center">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isView" name="isView" @(item.IsViewAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isView">View</label>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="d-flex align-items-center">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isEdit" name="isEdit" @(item.IsEditAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isEdit">Edit</label>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="d-flex align-items-center">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isDelete" name="isDelete" @(item.IsDeleteAllow ? "checked" : "")>
                                 <label class="form-check-label" for="isDelete">Delete</label>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="isApproved" name="isApproved" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "")>
+                                <label class="form-check-label" for="isApproved">isApproved</label>
                             </div>
                         </div>
                     </div>

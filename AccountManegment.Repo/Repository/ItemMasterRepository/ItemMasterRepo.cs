@@ -41,7 +41,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             existingItem.Gstper = ItemDetails.Gstper;
                             existingItem.Hsncode = ItemDetails.Hsncode;
                             existingItem.IsDeleted = ItemDetails.IsDeleted;
-                            existingItem.IsApproved = true;
+                            existingItem.IsApproved = ItemDetails.IsApproved;
                             existingItem.CreatedBy = ItemDetails.CreatedBy;
                             existingItem.CreatedOn = DateTime.Now;
 
@@ -70,7 +70,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             Gstper = ItemDetails.Gstper,
                             Hsncode = ItemDetails.Hsncode,
                             IsDeleted = ItemDetails.IsDeleted,
-                            IsApproved = true,
+                            IsApproved = ItemDetails.IsApproved,
                             CreatedBy = ItemDetails.CreatedBy,
                             CreatedOn = DateTime.Now,
                         };

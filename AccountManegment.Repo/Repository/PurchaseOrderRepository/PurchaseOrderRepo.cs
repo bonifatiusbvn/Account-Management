@@ -379,6 +379,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          BuyersPurchaseNo = a.BuyersPurchaseNo,
                                          DispatchBy = a.DispatchBy,
                                          PaymentTerms = a.PaymentTerms,
+                                         IsApproved = a.IsApproved,
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {

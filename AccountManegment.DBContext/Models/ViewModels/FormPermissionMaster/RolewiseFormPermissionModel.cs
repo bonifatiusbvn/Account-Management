@@ -22,6 +22,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
         public bool IsEditAllow { get; set; }
 
         public bool IsDeleteAllow { get; set; }
+        public bool? IsApproved { get; set; }
 
         public Guid CreatedBy { get; set; }
 

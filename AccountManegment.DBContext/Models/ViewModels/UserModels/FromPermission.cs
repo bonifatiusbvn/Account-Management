@@ -10,5 +10,6 @@
         public bool View { get; set; }
         public bool Edit { get; set; }
         public bool Delete { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

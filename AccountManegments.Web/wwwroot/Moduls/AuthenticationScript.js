@@ -1,5 +1,7 @@
 ﻿AllUserTable();
 GetSiteDetails();
+AllItemList();
+GetDashboardPurchaseOrderList();
 function CreateUser() {
     siteloadershow();
     if ($("#userForm").valid()) {
@@ -580,4 +582,133 @@ function preventEmptyValue(input) {
 //});
 
 
+function AllItemList() {
+    $.get("/Home/ItemListAction")
+        .done(function (result) {
 
+            $("#tbItemsList").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+
+        });
+}
+function dashboardItemIsApproved(ItemId) {
+
+    var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to approve this item?" : "Are you sure want to unapprove this item?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("ItemId", ItemId);
+            $.ajax({
+                url: '/ItemMaster/ItemIsApproved?ItemId=' + ItemId,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: isChecked ? "Approved!" : "Unapproved!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/Home/Index';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Item have no changes.!!😊',
+                'error'
+            )
+        }
+    });
+}
+
+
+function dashboarddeleteItemDetails(ItemId) {
+
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ItemMaster/DeleteItemDetails?ItemId=' + ItemId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Home/Index';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete item!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Item have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
+function GetDashboardPurchaseOrderList() {
+    siteloadershow();
+
+    $.get("/Home/PurchaseOrderListView")
+        .done(function (result) {
+            siteloaderhide();
+            $("#dashboardPOList").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+
+        });
+}
