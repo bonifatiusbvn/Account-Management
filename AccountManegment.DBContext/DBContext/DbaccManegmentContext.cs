@@ -358,6 +358,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.DiscountRoundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.InvoiceType).HasMaxLength(50);
             entity.Property(e => e.Lrno)
                 .HasMaxLength(100)
                 .HasColumnName("LRNo");

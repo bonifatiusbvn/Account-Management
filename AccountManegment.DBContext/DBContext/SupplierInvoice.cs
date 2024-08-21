@@ -9,6 +9,8 @@ public partial class SupplierInvoice
 
     public string? InvoiceNo { get; set; }
 
+    public string? InvoiceType { get; set; }
+
     public Guid? SiteId { get; set; }
 
     public Guid SupplierId { get; set; }
@@ -52,6 +54,8 @@ public partial class SupplierInvoice
     public string? ContactNumber { get; set; }
 
     public string? ShippingAddress { get; set; }
+
+    public bool? IsApproved { get; set; }
 
     public Guid CreatedBy { get; set; }
 
