@@ -196,13 +196,13 @@ namespace AccountManegments.Web.Controllers
                 if (postuser.code == 200)
                 {
                     var jsonString = postuser.data.ToString();
-                    var tupleResult = JsonConvert.DeserializeObject<InvoiceTotalAmount>(jsonString);
+                    var invoiceTotalAmount = JsonConvert.DeserializeObject<InvoiceTotalAmount>(jsonString);
 
-                    if (tupleResult == null)
+                    if (invoiceTotalAmount == null)
                     {
                         return BadRequest("Failed to deserialize API response");
                     }
-                    return new JsonResult(tupleResult);
+                    return PartialView("~/Views/Report/_NetAmountPartial.cshtml", invoiceTotalAmount);
                 }
                 else
                 {
@@ -214,6 +214,7 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailById()

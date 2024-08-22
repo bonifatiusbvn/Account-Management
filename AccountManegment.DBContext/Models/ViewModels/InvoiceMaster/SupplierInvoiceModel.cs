@@ -59,7 +59,11 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Decimal? youGaveTotal { get; set; }
         public Decimal? youGetTotal { get; set; }
         public decimal? DiscountRoundoff { get; set; }
+        public decimal? PayOutTotalAmount { get; set; }
+        public decimal? NonPayOutTotalAmount { get; set; }
         public string? GroupName { get; set; }
+
+
     }
     public class InvoiceTotalAmount
     {

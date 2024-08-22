@@ -111,6 +111,7 @@ $(document).ready(function () {
     }
     $('#textReportSupplierNameHidden').change(function () {
         selectedSupplierId = $(this).val();
+        getnetamount();
         GetGroupList();
         GetInvoiceReportData();
     });
@@ -550,49 +551,98 @@ function ClearPayoutTextBox() {
     $("#Editpayoutpaymenttype").prop("checked", false);
 }
 
-$(document).ready(function () {
+function getnetamount() {
 
-    $("#totalAmount").html('₹' + 00);
-    $("#pendingamount").html('₹' + 00);
-    $("#txttotalcreditamount").html('₹' + 00);
-    $("#txttotalpendingamount").html('₹' + 00);
-    $("#txttotalpurchase").html('₹' + 00);
+    var CompanyId = selectedCompanyId;
+    var SupplierId = selectedSupplierId;
 
-    $('#txtSuppliernameHidden').change(function () {
-        siteloadershow();
-        var CompanyId = $('#txtcompanynameHidden').val();
-        var SupplierId = $(this).val();
-        $.ajax({
-            url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
-            type: 'GET',
-            success: function (result) {
-                siteloaderhide();
-                $("#invoicedetails").html(result);
-                $("#txttotalpendingamount").html('₹' + result.totalPending);
-                $("#pendingamount").html('₹' + result.totalPending);
-                $("#txttotalcreditamount").html('₹' + result.totalCreadit);
-                $("#totalAmount").html('₹' + result.totalOutstanding);
-                $("#txttotalpurchase").html('₹' + result.totalPurchase);
-                var totalpendingAmount = result.totalPending;
-                $('#txtpayoutamount').on('input', function () {
-                    var enteredAmount = parseFloat($(this).val());
+    $.ajax({
+        url: '/InvoiceMaster/GetInvoiceDetails?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+        type: 'GET',
+        success: function (result) {
 
-                    if (!isNaN(enteredAmount)) {
-                        var pendingAmount = totalpendingAmount - enteredAmount;
+            siteloaderhide();
+            $("#dispalybody").addClass('d-none');
+            $("#dispalynetamount").html(result);
 
-                        if (enteredAmount > totalpendingAmount) {
-                            $('#spnpayout').text('Entered amount cannot exceed pending amount.');
-                        } else {
-                            $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                        }
+            $('#txtpayoutamount').on('input', function () {
+                var enteredAmount = parseFloat($(this).val());
+
+                if (!isNaN(enteredAmount)) {
+                    var pendingAmount = totalpendingAmount - enteredAmount;
+
+                    if (enteredAmount > totalpendingAmount) {
+                        $('#spnpayout').text('Entered amount cannot exceed pending amount.');
                     } else {
-                        $('#spnpayout').text('');
-                        $('#txtpendingamount').val('');
+                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                        $('#spnpayout').text('');  // Clear error message
                     }
-                });
-            },
-        });
+                } else {
+                    $('#spnpayout').text('');
+                    $('#txtpendingamount').val('');
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            console.error("An error occurred: " + error);
+            // Handle the error (optional: display an error message to the user)
+        }
     });
+}
 
 
-});
+let rowCounter = 0;
+
+function AddNewRowforPayOutInvoicebtn() {
+    var siteId = $("#txtSiteId").val();
+    var CompanyId = selectedCompanyId;
+    var SupplierId = selectedSupplierId;
+    if (siteId != "" && SupplierId != null && CompanyId != null) {
+        $.ajax({
+            url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
+            type: 'Post',
+            datatype: 'json',
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                if (Result.statusText === "success" || Result.statusText === "OK") {
+                    rowCounter++;
+                    AddNewRow(Result.responseText, rowCounter);
+                } else {
+                    toastr.error("Error in display product");
+                }
+            }
+        });
+    } else {
+        toastr.warning("select site, company and supplier");
+    }
+}
+
+function AddNewRow(resultHtml, rowNumber) {
+
+    const rowHtml = resultHtml
+        .replace(/ROWID/g, rowNumber)
+        .replace(/ROWNUMBER/g, rowNumber);
+
+    $('#payoutpartialView').append(rowHtml);
+    $('#payoutsubmitbutton').show();
+}
+
+function removePayout(buttonElement) {
+    $(buttonElement).closest('tr').remove();
+    updatePayoutRowNumbers();
+
+    if ($('.payoutinvoicerow').length >= 1) {
+        $('#payoutsubmitbutton').show();
+    }
+    else {
+        $('#payoutsubmitbutton').hide();
+    }
+}
+
+function updatePayoutRowNumbers() {
+    $('#payoutpartialView .payoutinvoicerow').each(function (index) {
+        $(this).find('.row-number').text(index + 1 + '.');
+    });
+}
