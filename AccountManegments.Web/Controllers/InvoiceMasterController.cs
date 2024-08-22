@@ -259,7 +259,7 @@ namespace AccountManegments.Web.Controllers
                     Description = InsertDetails.Description,
                     TotalDiscount = InsertDetails.TotalDiscount,
                     TotalGstamount = InsertDetails.TotalGstamount,
-                    TotalAmount = InsertDetails.TotalAmountInvoice,
+                    TotalAmountInvoice = InsertDetails.TotalAmountInvoice,
                     PaymentStatus = InsertDetails.PaymentStatus,
                     Tds = InsertDetails.Tds,
                     ChallanNo = InsertDetails.ChallanNo,
