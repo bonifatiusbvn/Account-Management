@@ -25,5 +25,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
 
         Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList);
         Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId);
+        Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList);
     }
 }

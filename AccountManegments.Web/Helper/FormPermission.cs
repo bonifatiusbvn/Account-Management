@@ -55,7 +55,13 @@ namespace AccountManegments.Web.Helper
                             context.Result = new UnauthorizedResult();
                         }
                     }
-
+                    if (_FormnamewithPermisiion.Split("-")[1].ToString() == "IsApproved")
+                    {
+                        if (!UserSession.FormPermisionData.Any(a => a.FormName.Contains(_FormnamewithPermisiion.Split("-")[0].ToString()) && a.IsApproved == true && _FormnamewithPermisiion.Split("-")[1].ToString() == "isApproved"))
+                        {
+                            context.Result = new UnauthorizedResult();
+                        }
+                    }
                 }
             }
 

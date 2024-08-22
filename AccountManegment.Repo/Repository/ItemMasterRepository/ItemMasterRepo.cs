@@ -41,7 +41,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             existingItem.Gstper = ItemDetails.Gstper;
                             existingItem.Hsncode = ItemDetails.Hsncode;
                             existingItem.IsDeleted = ItemDetails.IsDeleted;
-                            existingItem.IsApproved = true;
+                            existingItem.IsApproved = ItemDetails.IsApproved;
                             existingItem.CreatedBy = ItemDetails.CreatedBy;
                             existingItem.CreatedOn = DateTime.Now;
 
@@ -70,7 +70,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                             Gstper = ItemDetails.Gstper,
                             Hsncode = ItemDetails.Hsncode,
                             IsDeleted = ItemDetails.IsDeleted,
-                            IsApproved = true,
+                            IsApproved = ItemDetails.IsApproved,
                             CreatedBy = ItemDetails.CreatedBy,
                             CreatedOn = DateTime.Now,
                         };
@@ -530,6 +530,35 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             {
                 throw ex;
             }
+        }
+        public async Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allItems = await Context.ItemMasters.ToListAsync();
+                var approvalDict = ItemIdList.ItemList.ToDictionary(x => x.ItemId, x => x.IsApproved);
+
+                foreach (var item in allItems)
+                {
+                    if (approvalDict.TryGetValue(item.ItemId, out var isApproved))
+                    {
+                        item.IsApproved = isApproved;
+                    }
+
+                    Context.ItemMasters.Update(item);
+                }
+                await Context.SaveChangesAsync();
+
+                response.message = "Item approved/unapproved successfully.";
+                response.code = (int)HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                response.message = "Error in approve - unapprove item.";
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return response;
         }
     }
 }

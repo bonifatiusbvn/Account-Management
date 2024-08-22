@@ -119,10 +119,23 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? DispatchBy { get; set; }
 
         public string? PaymentTerms { get; set; }
-        public int? StateCode{ get; set; }
+        public int? StateCode { get; set; }
         public string? SiteGroup { get; set; }
         public decimal? DiscountRoundoff { get; set; }
+        public bool? IsApproved { get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
+    }
+
+
+    public class InvoiceIsApprovedMasterModel
+    {
+        public List<InvoiceIsApprovedModel>? InvoiceList { get; set; }
+    }
+
+    public class InvoiceIsApprovedModel
+    {
+        public Guid Id { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

@@ -56,5 +56,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? BuyersPurchaseNo { get; set; }
 
         public string? PaymentTerms { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

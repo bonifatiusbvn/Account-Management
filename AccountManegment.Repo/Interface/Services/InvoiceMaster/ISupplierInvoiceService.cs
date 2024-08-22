@@ -24,5 +24,6 @@ namespace AccountManagement.Repository.Interface.Services.InvoiceMaster
         Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId);
         Task<SupplierInvoiceModel> GetPayoutDetailsbyId(Guid InvoiceId);
         Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails);
+        Task<ApiResponseModel> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList);
     }
 }

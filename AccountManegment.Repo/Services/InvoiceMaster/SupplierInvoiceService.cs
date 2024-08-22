@@ -83,5 +83,10 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.UpdatePayoutDetails(updatepayoutDetails);
         }
+
+        public async Task<ApiResponseModel> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList)
+        {
+            return await SupplierInvoice.InvoiceIsApproved(InvoiceIdList);
+        }
     }
 }

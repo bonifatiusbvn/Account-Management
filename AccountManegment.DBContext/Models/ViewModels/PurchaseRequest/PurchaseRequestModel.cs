@@ -42,4 +42,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
 
         public string? SiteName { get; set; }
     }
+    public class PRIsApprovedMasterModel
+    {
+        public List<PRIsApprovedModel>? PRList { get; set; }
+    }
+
+    public class PRIsApprovedModel
+    {
+        public Guid Pid { get; set; }
+        public bool? IsApproved { get; set; }
+    }
 }

@@ -9,6 +9,7 @@ using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Aspose.Pdf;
 using DocumentFormat.OpenXml.EMMA;
+using Irony.Parsing.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -245,9 +246,37 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.IsApproved == true));
                 var OrderDetails = HttpContext.Request.Form["SupplierItems"];
                 var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
+                var invoicedetails = new SupplierInvoiceMasterView
+                {
+                    InvoiceNo = InsertDetails.InvoiceNo,
+                    InvoiceType = InsertDetails.InvoiceType,
+                    SiteId = InsertDetails.SiteId,
+                    SupplierId = InsertDetails.SupplierId,
+                    CompanyId = InsertDetails.CompanyId,
+                    SupplierInvoiceNo = InsertDetails.SupplierInvoiceNo,
+                    Description = InsertDetails.Description,
+                    TotalDiscount = InsertDetails.TotalDiscount,
+                    TotalGstamount = InsertDetails.TotalGstamount,
+                    TotalAmountInvoice = InsertDetails.TotalAmountInvoice,
+                    PaymentStatus = InsertDetails.PaymentStatus,
+                    Tds = InsertDetails.Tds,
+                    ChallanNo = InsertDetails.ChallanNo,
+                    Lrno = InsertDetails.Lrno,
+                    VehicleNo = InsertDetails.VehicleNo,
+                    DispatchBy = InsertDetails.DispatchBy,
+                    PaymentTerms = InsertDetails.PaymentTerms,
+                    ShippingAddress = InsertDetails.ShippingAddress,
+                    DiscountRoundoff = InsertDetails.DiscountRoundoff,
+                    IsApproved = isApproved,
+                    Date = InsertDetails.Date,
+                    CreatedBy = InsertDetails.CreatedBy,
+                    SiteGroup = InsertDetails.SiteGroup,
+                    ItemList = InsertDetails.ItemList,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code, postuser.data });

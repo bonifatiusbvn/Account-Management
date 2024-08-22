@@ -57,5 +57,9 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         {
             return await PurchaseOrder.UpdatePurchaseOrderDetails(PurchaseOrderDetails);
         }
+        public async Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList)
+        {
+            return await PurchaseOrder.PurchaseOrderIsApproved(POIdList);
+        }
     }
 }

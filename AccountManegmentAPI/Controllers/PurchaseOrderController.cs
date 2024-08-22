@@ -146,5 +146,31 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpPost]
+        [Route("PurchaseOrderIsApproved")]
+        public async Task<IActionResult> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var purchaseOrder = await PurchaseOrder.PurchaseOrderIsApproved(POIdList);
+                if (purchaseOrder.code == 200)
+                {
+                    response.code =  purchaseOrder.code;
+                    response.message = purchaseOrder.message;
+                }
+                else
+                {
+                    response.message = purchaseOrder.message;
+                    response.code = purchaseOrder.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

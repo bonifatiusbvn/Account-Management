@@ -18,5 +18,6 @@ namespace AccountManagement.Repository.Interface.Services.PurchaseRequestService
         Task<ApiResponseModel> DeletePurchaseRequest(Guid PurchaseId);
         Task<ApiResponseModel> PurchaseRequestIsApproved(Guid PurchaseId);
         string CheckPRNo();
+        Task<ApiResponseModel> MultiplePurchaseRequestIsApproved(PRIsApprovedMasterModel PRIdList);
     }
 }

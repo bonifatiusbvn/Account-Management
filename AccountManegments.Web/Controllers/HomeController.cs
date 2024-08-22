@@ -1,5 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -114,6 +116,193 @@ namespace AccountManegments.Web.Controllers
         public IActionResult UnAuthorised()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ItemListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"ItemMaster/GetItemList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<ItemMasterModel> GetItemList = JsonConvert.DeserializeObject<List<ItemMasterModel>>(res.data.ToString());
+                    GetItemList = GetItemList.Where(a => a.IsApproved == false).ToList();
+
+                    return PartialView("~/Views/Home/_DashboardItemList.cshtml", GetItemList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        public async Task<IActionResult> PurchaseOrderListView(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+                    return PartialView("~/Views/Home/_DashboardPOList.cshtml", GetPOList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PurchaseOrderIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["POIsApproved"];
+                var POIdList = JsonConvert.DeserializeObject<POIsApprovedMasterModel>(isApprovedDetails);
+                ApiResponseModel postuser = await APIServices.PostAsync(POIdList, "PurchaseOrder/PurchaseOrderIsApproved");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> SupplierInvoiceListAction(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
+
+                string apiUrl = $"SupplierInvoice/GetSupplierInvoiceList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(res.data.ToString());
+                    if (SiteId != null)
+                    {
+                        GetInvoiceList = GetInvoiceList.Where(a => a.SiteId == SiteId).ToList();
+                    }
+
+                    return PartialView("~/Views/Home/_DashboardInvoiceList.cshtml", GetInvoiceList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Supplier Invoice list." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InvoiceIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["InvoiceIsApproved"];
+                var InvoiceIdList = JsonConvert.DeserializeObject<InvoiceIsApprovedMasterModel>(isApprovedDetails);
+                ApiResponseModel postuser = await APIServices.PostAsync(InvoiceIdList, "SupplierInvoice/InvoiceIsApproved");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MutipleItemsIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["ItemIsApproved"];
+                var ItemIdList = JsonConvert.DeserializeObject<ItemIsApprovedMasterModel>(isApprovedDetails);
+
+                ApiResponseModel response = await APIServices.PostAsync(ItemIdList, "ItemMaster/MutipleItemsIsApproved");
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+                else
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MultiplePurchaseRequestIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["PRIsApproved"];
+                var PRIdList = JsonConvert.DeserializeObject<PRIsApprovedMasterModel>(isApprovedDetails);
+
+                ApiResponseModel response = await APIServices.PostAsync(PRIdList, "PurchaseRequest/MultiplePurchaseRequestIsApproved");
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+                else
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
+            }
         }
     }
 }

@@ -64,6 +64,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? GroupName { get; set; }
 
 
+        public bool? IsApproved { get; set; }
     }
     public class InvoiceTotalAmount
     {

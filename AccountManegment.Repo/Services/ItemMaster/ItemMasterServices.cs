@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.ItemMaster;
 using AccountManagement.Repository.Interface.Services.ItemMaster;
 using System;
@@ -71,6 +72,10 @@ namespace AccountManagement.Repository.Services.ItemMaster
         public async Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId)
         {
             return await ItemMaster.GetItemDetailsListById(ItemId);
+        }
+        public async Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList)
+        {
+            return await ItemMaster.MutipleItemsIsApproved(ItemIdList);
         }
     }
 }

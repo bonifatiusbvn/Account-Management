@@ -87,9 +87,10 @@ namespace AccountManegments.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateItem(ItemMasterModel ItemDetails)
         {
-
             try
             {
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.IsApproved == true));
+
                 var item = new ItemMasterModel()
                 {
                     ItemId = Guid.NewGuid(),
@@ -101,7 +102,7 @@ namespace AccountManegments.Web.Controllers
                     Gstper = ItemDetails.Gstper,
                     Hsncode = ItemDetails.Hsncode,
                     IsDeleted = false,
-                    IsApproved = false,
+                    IsApproved = isApproved,
                     CreatedOn = DateTime.Now,
                     CreatedBy = _userSession.UserId,
                 };
@@ -121,6 +122,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<JsonResult> GetAllUnitType()
         {
