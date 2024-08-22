@@ -123,6 +123,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                               join c in Context.Companies on s.CompanyId equals c.CompanyId
                                               join d in Context.Sites on s.SiteId equals d.SiteId
                                               where s.SupplierId == SupplierId && s.CompanyId == CompanyId
+                                              orderby(s.Date)
                                               select new
                                               {
                                                   s,
@@ -971,6 +972,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (!string.IsNullOrEmpty(invoiceReport.GroupName))
                 {
                     query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
+                }
+
+                if (!string.IsNullOrEmpty(invoiceReport.sortDates))
+                {
+                    query = query.OrderBy(s => s.s.Date);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
