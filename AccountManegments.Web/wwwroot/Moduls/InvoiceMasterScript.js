@@ -274,10 +274,10 @@ $(document).ready(function () {
         }, 300));
 
     $(document).on('input', '#cart-tds', debounce(function () {
-        var roundoff = parseFloat($('#cart-tds').val()); 
-        var subTotal = parseFloat($('#cart-subtotal').val());
+        var tds = parseFloat($('#cart-tds').val()); 
+        var TotalAmount = parseFloat($('#cart-total').val());
 
-        if (roundoff > subTotal) {
+        if (tds > TotalAmount) {
             toastr.warning("Value cannot be greater than subtotal.");
         } else {
             updateTotals();
@@ -841,7 +841,6 @@ function updateTotals() {
     var totalAmount = 0;
     var TotalItemQuantity = 0;
     var TotalDiscount = 0;
-    var SubTotal = 0;
 
     $(".product").each(function () {
         var row = $(this);
@@ -856,8 +855,7 @@ function updateTotals() {
         TotalDiscount += discountprice * totalquantity;
     });
     var Tds = $('#cart-tds').val();
-    totalAmount = totalSubtotal + totalGst;
-    SubTotal = totalSubtotal - Tds
+    totalAmount = totalSubtotal + totalGst - Tds;
 
 
     var dicountRoundOff = parseFloat($('#IDiscountRoundOff').val()) || 0;
@@ -865,7 +863,7 @@ function updateTotals() {
 
     totalAmount += dicountRoundOff;
 
-    $("#cart-subtotal").val(SubTotal.toFixed(2));
+    $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-discount").val(TotalDiscount.toFixed(2));
     $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));

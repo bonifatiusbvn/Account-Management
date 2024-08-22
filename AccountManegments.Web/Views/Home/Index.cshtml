@@ -39,7 +39,7 @@
                                     <th>Qty</th>
                                     <th>
                                         <input class="form-check-input" type="checkbox" id="checkedAllPR" />
-                                        <span class="g-3">IsApproved</span>
+                                        <span class="g-3">Approve</span>
                                     </th>
                                     <th>Action</th>
                                 </tr>
@@ -107,12 +107,15 @@
                         <table class="table align-middle mb-0">
                             <thead class="table-light btn-primary">
                                 <tr>
-                                    <th>Purchase Order Id</th>
+                                    <th>Purchase-Id</th>
                                     <th>Date</th>
-                                    <th>Total Amount</th>
+                                    <th>Site</th>
+                                    <th>Supplier</th>
+                                    <th>Company</th>
+                                    <th>Amount</th>
                                     <th>
                                         <input class="form-check-input" type="checkbox" id="checkedAllPO" />
-                                        <span class="g-3">IsApproved</span>
+                                        <span class="g-3">Approve</span>
                                     </th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                                     {
@@ -146,7 +149,7 @@
                                     <th>Price</th>
                                     <th>
                                         <input class="form-check-input" type="checkbox" id="checkedAllItem" />
-                                        <span class="g-3">IsApproved</span>
+                                        <span class="g-3">Approve</span>
                                     </th>
                                     <th>Action</th>
                                 </tr>
@@ -169,12 +172,15 @@
                         <table class="table align-middle mb-0">
                             <thead class="table-light btn-primary">
                                 <tr>
-                                    <th>InvoiceNo</th>
+                                    <th>Invoice No</th>
                                     <th>Date</th>
-                                    <th>Total Amount</th>
+                                    <th>Site</th>
+                                    <th>Supplier</th>
+                                    <th>Company</th>                                  
+                                    <th>Amount</th>
                                     <th>
                                         <input class="form-check-input" type="checkbox" id="checkedAllInvoice" />
-                                        <span class="g-3">IsApproved</span>
+                                        <span class="g-3">Approve</span>
                                     </th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                     {

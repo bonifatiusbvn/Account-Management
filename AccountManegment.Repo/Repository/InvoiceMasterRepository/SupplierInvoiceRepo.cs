@@ -196,7 +196,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 var supplierInvoices = await supplierInvoicesQuery
-                    .GroupBy(g => g.s.CompanyId)
+                    .GroupBy(g => g.s.SupplierId)
                     .Select(group => new SupplierInvoiceModel
                     {
                         Id = group.FirstOrDefault().s.Id,

@@ -25,12 +25,17 @@ function GetAllCompanyList() {
             result.forEach(function (data) {
                 $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
             });
+
+            if (result.length > 0) {
+                $dropdown.val(result[0].companyId).trigger('change');
+            }
         },
         error: function (err) {
             console.error("Failed to fetch company list: ", err);
         }
     });
 }
+
 function GetGroupList() {
 
     $.ajax({
