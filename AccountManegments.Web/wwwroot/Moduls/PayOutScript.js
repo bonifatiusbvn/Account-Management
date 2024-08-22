@@ -195,57 +195,57 @@ function InsertPayOutDetails() {
 }
 
 
-let rowCounter = 0;
+//let rowCounter = 0;
 
-function AddNewRowforPayOutInvoicebtn() {
-    var siteId = $("#txtSiteId").val();
-    var supplierName = $("#txtSuppliername").val();
-    var companyName = $("#txtcompanyname").val();
-    if (siteId != "" && supplierName != null && companyName != null) {
-        $.ajax({
-            url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
-            type: 'Post',
-            datatype: 'json',
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-                if (Result.statusText === "success" || Result.statusText === "OK") {
-                    rowCounter++;
-                    AddNewRow(Result.responseText, rowCounter);
-                } else {
-                    toastr.error("Error in display product");
-                }
-            }
-        });
-    } else {
-        toastr.warning("select site, company and supplier");
-    }
-}
+//function AddNewRowforPayOutInvoicebtn() {
+//    var siteId = $("#txtSiteId").val();
+//    var supplierName = $("#txtSuppliername").val();
+//    var companyName = $("#txtcompanyname").val();
+//    if (siteId != "" && supplierName != null && companyName != null) {
+//        $.ajax({
+//            url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
+//            type: 'Post',
+//            datatype: 'json',
+//            processData: false,
+//            contentType: false,
+//            complete: function (Result) {
+//                if (Result.statusText === "success" || Result.statusText === "OK") {
+//                    rowCounter++;
+//                    AddNewRow(Result.responseText, rowCounter);
+//                } else {
+//                    toastr.error("Error in display product");
+//                }
+//            }
+//        });
+//    } else {
+//        toastr.warning("select site, company and supplier");
+//    }
+//}
 
-function AddNewRow(resultHtml, rowNumber) {
+//function AddNewRow(resultHtml, rowNumber) {
 
-    const rowHtml = resultHtml
-        .replace(/ROWID/g, rowNumber)
-        .replace(/ROWNUMBER/g, rowNumber);
+//    const rowHtml = resultHtml
+//        .replace(/ROWID/g, rowNumber)
+//        .replace(/ROWNUMBER/g, rowNumber);
 
-    $('#payoutpartialView').append(rowHtml);
-    $('#payoutsubmitbutton').show();
-}
+//    $('#payoutpartialView').append(rowHtml);
+//    $('#payoutsubmitbutton').show();
+//}
 
-function removePayout(buttonElement) {
-    $(buttonElement).closest('tr').remove();
-    updatePayoutRowNumbers();
+//function removePayout(buttonElement) {
+//    $(buttonElement).closest('tr').remove();
+//    updatePayoutRowNumbers();
 
-    if ($('.payoutinvoicerow').length >= 1) {
-        $('#payoutsubmitbutton').show();
-    }
-    else {
-        $('#payoutsubmitbutton').hide();
-    }
-}
+//    if ($('.payoutinvoicerow').length >= 1) {
+//        $('#payoutsubmitbutton').show();
+//    }
+//    else {
+//        $('#payoutsubmitbutton').hide();
+//    }
+//}
 
-function updatePayoutRowNumbers() {
-    $('#payoutpartialView .payoutinvoicerow').each(function (index) {
-        $(this).find('.row-number').text(index + 1 + '.');
-    });
-}
+//function updatePayoutRowNumbers() {
+//    $('#payoutpartialView .payoutinvoicerow').each(function (index) {
+//        $(this).find('.row-number').text(index + 1 + '.');
+//    });
+//}

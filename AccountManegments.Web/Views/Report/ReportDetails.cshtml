@@ -26,13 +26,9 @@
                     <div class="row">
                         <div class="col-12 col-xl-8">
                             <div class="checkout-details">
-                                <div class="card border-0">
-                                    <div class="card-body">
-                                    </div>
-                                </div>
                                 <div class="card">
                                     <div class="card-header border-bottom">
-                                        <h2 class="h5">Choose Payment Method</h2>
+                                        <h2 class="h5">Payment Report</h2>
                                     </div>
                                     <div class="card-body">
                                         <ul class="nav nav-pills mb-3 row" role="tablist">
@@ -60,20 +56,20 @@
                                                 </select>
                                             </li>
                                             @* <li class="nav-item col-md-1" role="presentation">
-                                                <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
-                                                <label class="form-check-label" for="currentMonthRadio">This Month</label>
+                                            <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
+                                            <label class="form-check-label" for="currentMonthRadio">This Month</label>
                                             </li>
                                             <li class="nav-item col-md-1" role="presentation">
-                                                <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentYearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
-                                                <label class="form-check-label" for="currentYearRadio">This Year</label>
+                                            <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentYearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
+                                            <label class="form-check-label" for="currentYearRadio">This Year</label>
                                             </li>
                                             <li class="nav-item col-md-1" role="presentation">
-                                                <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
-                                                <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
+                                            <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
+                                            <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
                                             </li>
                                             <li class="nav-item col-md-1" role="presentation">
-                                                <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
-                                                <label class="form-check-label" for="betweenYearRadio">Between Year</label>
+                                            <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
+                                            <label class="form-check-label" for="betweenYearRadio">Between Year</label>
                                             </li> *@
                                             <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls">
                                                 <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;width: 135px;">
@@ -130,64 +126,40 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="paypal-payment" role="tabpanel">
-                                                <div class="p-3 border rounded">
-                                                    <div class="mb-3">
-                                                        <p>Select your Paypal Account type</p>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                            <label class="form-check-label" for="inlineRadio1">Domestic</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                            <label class="form-check-label" for="inlineRadio2">International</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <div class="d-block">
-                                                            <a href="javscript:;" class="btn btn-light"><i class='bx bxl-paypal'></i>Login to my Paypal</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <p class="mb-0">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="net-banking" role="tabpanel">
-                                                <div class="p-3 border rounded">
-                                                    <div class="mb-3">
-                                                        <p>Select your Bank</p>
-                                                        <select class="form-select" aria-label="Default select example">
-                                                            <option selected>--Please Select Your Bank--</option>
-                                                            <option value="1">Bank Name 1</option>
-                                                            <option value="2">Bank Name 2</option>
-                                                            <option value="3">Bank Name 3</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <div class="d-block">
-                                                            <a href="javscript:;" class="btn btn-light"><i class='bx bxl-paypal'></i>Login to my Paypal</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <p class="mb-0">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="d-grid">
-                                                    <a href="javascript:;" class="btn btn-light btn-ecomm"><i class="bx bx-chevron-left"></i>Back to Shipping</a>
-                                                </div>
+                                        <div class="card border-0">
+                                            <div class="card-body">
+                                                <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
+                                                    <i class="lni lni-circle-plus"></i> Add PayOut
+                                                </a>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="d-grid">
-                                                    <a href="javascript:;" class="btn btn-white btn-ecomm">Review Your Order<i class="bx bx-chevron-right"></i></a>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="card-body pt-0">
+                                                <div class="table-responsive">
+                                                    <table class="table align-middle mb-0">
+                                                        <thead class="table-light btn-primary">
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Payment Status</th>
+                                                                <th>Date</th>
+                                                                <th>Description</th>
+                                                                <th>Amount</th>
+                                                                <th>Action</th>
+                                                        </thead>
+
+                                                        <tbody id="payoutpartialView">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
+                                                    <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetails()">Submit</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -199,86 +171,100 @@
                             <div class="order-summary">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <p class="fs-5">Apply Discount Code</p>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="Enter discount code">
-                                                    <button class="btn btn-primary btn-ecomm" type="button">Apply</button>
+                                        <div id="dispalynetamount">
+                                            <div id="dispalybody">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <p class="fs-5"></p>
+                                                        <div class="input-group">
+                                                            <div class="row row-cols-1 row-cols-lg-3">
+                                                                <div class="col">
+                                                                    <div class="card radius-10 shadow-none bg-light-success">
+                                                                        <div class="card-body">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div><p class="mb-0">Total Credit</p></div>
+                                                                            </div>
+                                                                            <div class="d-flex align-items-center mt-3">
+                                                                                <div>
+                                                                                    <h4 class="mb-0" id="txttotalpurchase"></h4>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="card radius-10 shadow-none bg-light-danger">
+                                                                        <div class="card-body">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div><p class="mb-0">Total Debit</p></div>
+                                                                            </div>
+                                                                            <div class="d-flex align-items-center mt-3">
+                                                                                <div>
+                                                                                    <h4 class="mb-0" id="txttotalcreditamount"></h4>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="card radius-10 shadow-none bg-light-primary">
+                                                                        <div class="card-body">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div><p class="mb-0">Net Balance</p></div>
+                                                                            </div>
+                                                                            <div class="d-flex align-items-center mt-3">
+                                                                                <div>
+                                                                                    <h4 class="mb-0" id="txttotalpendingamount"></h4>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <p class="fs-5">Order summary</p>
+                                                        <div class="my-3 border-top"></div>
+
+                                                        <table class="table align-middle mb-0">
+                                                            <thead class="table-light btn-primary">
+                                                                <tr>
+                                                                    <th>Company</th>
+                                                                    <th>Supplier</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Debit</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="reportInvoicenet">
+                                                            </tbody>
+                                                            <tfoot id="reportInvoicenetFooter" class="bg-light">
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <p class="fs-5">Order summary</p>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/01.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">White Polo T-Shirt</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$19.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/17.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Fancy Red Sneakers</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$16.<small>00</small></span><span class="">x 2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/04.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Yellow Shine Blazer</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$22.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="my-3 border-top"></div>
-                                                <div class="d-flex align-items-center">
-                                                    <a class="d-block flex-shrink-0" href="javascript:;">
-                                                        <img src="assets/images/products/09.png" width="75" alt="Product">
-                                                    </a>
-                                                    <div class="ps-2">
-                                                        <h6 class="mb-1">Men Black Hat Cap</h6>
-                                                        <div class="widget-product-meta">
-                                                            <span class="me-2">$14.<small>00</small></span><span class="">x 1</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        @* <div class="card mb-0">
+                                        <div class="card-body">
+                                        <p class="mb-2">
+                                        Subtotal: <span class="float-end">$198.00</span>
+                                        </p>
+                                        <p class="mb-2">
+                                        Shipping: <span class="float-end">--</span>
+                                        </p>
+                                        <p class="mb-2">
+                                        Taxes: <span class="float-end">$14.00</span>
+                                        </p>
+                                        <p class="mb-0">
+                                        Discount: <span class="float-end">--</span>
+                                        </p>
+                                        <div class="my-3 border-top"></div>
+                                        <h5 class="mb-0">Order Total: <span class="float-end">$212.00</span></h5>
                                         </div>
-                                        <div class="card mb-0">
-                                            <div class="card-body">
-                                                <p class="mb-2">
-                                                    Subtotal: <span class="float-end">$198.00</span>
-                                                </p>
-                                                <p class="mb-2">
-                                                    Shipping: <span class="float-end">--</span>
-                                                </p>
-                                                <p class="mb-2">
-                                                    Taxes: <span class="float-end">$14.00</span>
-                                                </p>
-                                                <p class="mb-0">
-                                                    Discount: <span class="float-end">--</span>
-                                                </p>
-                                                <div class="my-3 border-top"></div>
-                                                <h5 class="mb-0">Order Total: <span class="float-end">$212.00</span></h5>
-                                            </div>
-                                        </div>
+                                        </div> *@
                                     </div>
                                 </div>
                             </div>

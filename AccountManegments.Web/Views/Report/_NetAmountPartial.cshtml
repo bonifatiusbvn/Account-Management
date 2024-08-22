@@ -1,0 +1,118 @@
+﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.InvoiceTotalAmount
+
+<div class="card">
+    <div class="card-body">
+        <p class="fs-5"></p>
+        <div class="input-group">
+            <div class="row row-cols-1 row-cols-lg-3">
+                <div class="col">
+                    <div class="card radius-10 shadow-none bg-light-success">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2">
+                                <div><p class="mb-0">Total Credit</p></div>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <div>
+                                    <h6 class="mb-0" id="txttotalpurchase">@Model.TotalCreadit</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 shadow-none bg-light-danger">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2">
+                                <div><p class="mb-0">Total Debit</p></div>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <div>
+                                    <h6 class="mb-0" id="txttotalcreditamount">@Model.TotalPurchase</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card radius-10 shadow-none bg-light-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2">
+                                <div><p class="mb-0">Net Balance</p></div>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <div>
+                                    <h6 class="mb-0" id="txttotalpendingamount">@Model.TotalPending</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <p class="fs-5">Order summary</p>
+        <div class="my-3 border-top"></div>
+
+        <table class="table align-middle mb-0">
+            <thead class="table-light btn-primary">
+                <tr>
+                    <th>Company</th>
+                    <th>Supplier</th>
+                    <th>Credit</th>
+                    <th>Debit</th>
+                </tr>
+            </thead>
+            <tbody id="reportInvoicenet">
+                @if (Model != null && Model.InvoiceList.Any())
+                {
+                    foreach (var item in Model.InvoiceList)
+                    {
+                        <tr style="height:55px;" class="text-center">
+                            <td style="width: 120px;">@item.CompanyName</td>
+                            <td>@item.SupplierName</td>
+                            <td class="text-danger">
+                                @if (item.InvoiceNo == "PayOut")
+                                {
+                                    @item.NonPayOutTotalAmount
+                                }
+                                else
+                                {
+                                    @:0.00
+                                }
+                            </td>
+                            <td class="text-success">
+                                @if (item.InvoiceNo != "PayOut")
+                                {
+                                    @item.PayOutTotalAmount
+                                }
+                                else
+                                {
+                                    @:0.00
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr style="height:55px;">
+                        <td colspan="8" class="text-center">No data found for the selected criteria.</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot id="reportInvoicenetFooter" class="bg-light">
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+

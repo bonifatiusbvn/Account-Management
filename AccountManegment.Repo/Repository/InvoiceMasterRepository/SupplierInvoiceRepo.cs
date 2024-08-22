@@ -118,71 +118,81 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
 
+                var supplierInvoices = await (from s in Context.SupplierInvoices
+                                              join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                                              join c in Context.Companies on s.CompanyId equals c.CompanyId
+                                              join d in Context.Sites on s.SiteId equals d.SiteId
+                                              where s.SupplierId == SupplierId && s.CompanyId == CompanyId
+                                              select new
+                                              {
+                                                  s,
+                                                  SupplierName = b.SupplierName,
+                                                  CompanyName = c.CompanyName,
+                                                  SiteName = d.SiteName
+                                              })
+              .GroupBy(g => g.s.CompanyId)
+              .Select(group => new SupplierInvoiceModel
+              {
+                  // Aggregate or select the first item in the group
+                  Id = group.FirstOrDefault().s.Id,
+                  InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
+                  SiteId = group.FirstOrDefault().s.SiteId,
+                  SupplierId = group.FirstOrDefault().s.SupplierId,
+                  CompanyId = group.Key, // This is the CompanyId after grouping
+
+                  // Total Amounts based on InvoiceNo condition
+                  PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+                  NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
+
+                  GroupName = group.FirstOrDefault().s.SiteGroup,
+                  Description = string.Join(", ", group.Select(x => x.s.Description)),
+                  CompanyName = group.FirstOrDefault().CompanyName,
+                  SupplierName = group.FirstOrDefault().SupplierName,
+                  PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+                  IsPayOut = group.FirstOrDefault().s.IsPayOut,
+                  SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+                  Date = group.FirstOrDefault().s.Date,
+                  CreatedOn = group.FirstOrDefault().s.CreatedOn,
+                  SiteName = group.FirstOrDefault().SiteName
+              })
+              .ToListAsync();
+
+
+
 
                 var onlineCashSum = await Context.SupplierInvoices
-                 .Where(si => si.SupplierId == SupplierId &&
-                 si.CompanyId == CompanyId &&
-                 (si.PaymentStatus == "Online" || si.PaymentStatus == "Cash") &&
-                 si.InvoiceNo == "PayOut")
-                 .SumAsync(si => si.TotalAmount);
-
-                var unpaidSum = await Context.SupplierInvoices
-                    .Where(si => si.SupplierId == SupplierId &&
-                                 si.CompanyId == CompanyId &&
-                                 si.PaymentStatus == "Unpaid")
-                    .SumAsync(si => si.TotalAmount);
-
-                var totalPurchase = await Context.SupplierInvoices
                     .Where(si => si.SupplierId == SupplierId &&
                                  si.CompanyId == CompanyId &&
                                  si.InvoiceNo != "PayOut")
                     .SumAsync(si => si.TotalAmount);
 
-                var difference = unpaidSum - onlineCashSum;
+                var totalPurchase = await Context.SupplierInvoices
+                    .Where(si => si.SupplierId == SupplierId &&
+                                 si.CompanyId == CompanyId &&
+                                 si.InvoiceNo == "PayOut")
+                    .SumAsync(si => si.TotalAmount);
 
-                var supplierInvoices = await (from a in Context.SupplierInvoices
-                                              where a.CompanyId == CompanyId
-                                                  && a.SupplierId == SupplierId
-                                                  && a.IsPayOut == false
-                                                  && a.PaymentStatus == "Unpaid"
-                                              join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
-                                              join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                              select new SupplierInvoiceModel
-                                              {
-                                                  Id = a.Id,
-                                                  InvoiceNo = a.InvoiceNo,
-                                                  SupplierId = a.SupplierId,
-                                                  SupplierName = b.SupplierName,
-                                                  CompanyId = a.CompanyId,
-                                                  CompanyName = c.CompanyName,
-                                                  Date = DateTime.Now,
-                                                  TotalAmount = a.TotalAmount,
-                                                  TotalDiscount = a.TotalDiscount,
-                                                  TotalGstamount = a.TotalGstamount,
-                                                  Description = a.Description,
-                                                  Tds = a.Tds,
-                                                  IsPayOut = a.IsPayOut,
-                                                  SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                                  PaymentStatus = a.PaymentStatus
-                                              }).ToListAsync();
+
+                var difference = onlineCashSum - totalPurchase;
+
 
                 var invoiceTotalAmount = new InvoiceTotalAmount
                 {
-                    InvoiceList = supplierInvoices.ToList(),
+                    InvoiceList = supplierInvoices,
                     TotalPending = difference,
                     TotalCreadit = onlineCashSum,
-                    TotalOutstanding = unpaidSum,
                     TotalPurchase = totalPurchase
-
                 };
 
-                return (invoiceTotalAmount);
+                return invoiceTotalAmount;
             }
             catch (Exception ex)
             {
-                throw ex;
+
+                throw;
             }
         }
+
 
 
         public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id)
