@@ -188,12 +188,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Payment Out-View")]
-        [HttpGet]
-        public async Task<IActionResult> GetInvoiceDetails(Guid CompanyId, Guid SupplierId)
+        [HttpPost]
+        public async Task<IActionResult> GetInvoiceDetails(InvoiceReportModel PayOutReport)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync("", "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                ApiResponseModel postuser = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
                 if (postuser.code == 200)
                 {
                     var jsonString = postuser.data.ToString();
