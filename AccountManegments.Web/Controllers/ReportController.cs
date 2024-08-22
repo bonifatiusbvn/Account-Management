@@ -430,6 +430,7 @@ namespace AccountManegments.Web.Controllers
                     decimal yougavetotal = 0;
                     decimal yougettotal = 0;
                     decimal nettotal = 0;
+                    decimal netbalance = 0;
 
                     foreach (var item in NetInvoiceDetails.InvoiceList)
                     {
@@ -440,7 +441,8 @@ namespace AccountManegments.Web.Controllers
                         yougettotal += item.PayOutTotalAmount;
                         row.Cells.Add(item.NonPayOutTotalAmount.ToString("F2"));
                         yougavetotal += item.NonPayOutTotalAmount;
-                        row.Cells.Add(); 
+                        netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                        row.Cells.Add(netbalance.ToString("F2")); 
                     }
 
                     nettotal = yougavetotal - yougettotal;
@@ -541,6 +543,7 @@ namespace AccountManegments.Web.Controllers
                         decimal yougavetotal = 0;
                         decimal yougettotal = 0;
                         decimal nettotal = 0;
+                        decimal netbalance = 0;
 
                         row++;
                         foreach (var item in NetInvoiceDetails.InvoiceList)
@@ -549,10 +552,11 @@ namespace AccountManegments.Web.Controllers
                             ws.Cell(row, 2).Value = item.SupplierName;
                             ws.Cell(row, 3).Value = item.PayOutTotalAmount;
                             ws.Cell(row, 4).Value = item.NonPayOutTotalAmount;
-
+                          
                             yougavetotal += item.PayOutTotalAmount;
                             yougettotal += item.NonPayOutTotalAmount;
-
+                            netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                            ws.Cell(row, 5).Value = netbalance;
                             row++;
                         }
 
