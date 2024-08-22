@@ -728,3 +728,7 @@ function updatePayoutRowNumbers() {
         $(this).find('.row-number').text(index + 1 + '.');
     });
 }
+
+function fn_ResetAllDropdown() {
+    window.location = '/Report/ReportDetails';
+}
