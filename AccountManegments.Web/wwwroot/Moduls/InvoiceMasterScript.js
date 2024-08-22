@@ -270,17 +270,16 @@ $(document).ready(function () {
         $(document).on('input', '#IDiscountRoundOff', debounce(function () {
 
             var Discountroundoff = $('#IDiscountRoundOff').val();
-            debugger
             updateTotals();
         }, 300));
 
     $(document).on('input', '#cart-tds', debounce(function () {
-        var roundoff = $('#cart-tds').val();
-        var subTotal = $('#cart-subtotal').val();
+        var roundoff = parseFloat($('#cart-tds').val()); 
+        var subTotal = parseFloat($('#cart-subtotal').val());
+
         if (roundoff > subTotal) {
-            toastr.warning("Value can not be greater than subotal.");
-        }
-        else {
+            toastr.warning("Value cannot be greater than subtotal.");
+        } else {
             updateTotals();
         }
     }, 300));
