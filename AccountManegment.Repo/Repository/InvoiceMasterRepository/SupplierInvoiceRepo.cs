@@ -207,6 +207,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                         PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
                         NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
+                        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
 
                         GroupName = group.FirstOrDefault().s.SiteGroup,
                         Description = string.Join(", ", group.Select(x => x.s.Description)),

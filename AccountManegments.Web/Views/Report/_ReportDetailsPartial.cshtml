@@ -73,10 +73,12 @@ else
     $(document).ready(function () {
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
+        var Pending = youGetTotal - youGaveTotal;
 
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td><td></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>';
+            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>' +
+            '<td><b class="">' + Pending.toFixed(2) + '</b></td>';
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
     {

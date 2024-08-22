@@ -61,6 +61,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal? DiscountRoundoff { get; set; }
         public decimal? PayOutTotalAmount { get; set; }
         public decimal? NonPayOutTotalAmount { get; set; }
+        public decimal? NetAmount { get; set; }
         public string? GroupName { get; set; }
 
 

@@ -64,10 +64,10 @@
         <table class="table align-middle mb-0">
             <thead class="table-light btn-primary">
                 <tr>
-                    <th>Company</th>
                     <th>Supplier</th>
                     <th>Debit</th>
                     <th>Credit</th>
+                    <th>Net Amount</th>
                 </tr>
             </thead>
             <tbody id="reportInvoicenet">
@@ -79,7 +79,6 @@
                         youGetTotal += item.NonPayOutTotalAmount;
 
                         <tr style="height:55px;" class="text-center">
-                            <td style="width: 120px;">@item.CompanyName</td>
                             <td>@item.SupplierName</td>
                             <td class="text-danger">
                                 @item.PayOutTotalAmount
@@ -87,6 +86,7 @@
                             <td class="text-success">
                                 @item.NonPayOutTotalAmount
                             </td>
+                            <td>@item.NetAmount</td>
                         </tr>
                     }
                 }
@@ -119,10 +119,12 @@
     $(document).ready(function () {
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
+        var Pending = youGetTotal - youGaveTotal;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td>' +
+        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td></tr>';
+            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>'+
+            '<td><b class="">' + Pending.toFixed(2) + '</b></td></tr>';
 
         $('#reportInvoicenetFooter').html(footerContent);
     });
