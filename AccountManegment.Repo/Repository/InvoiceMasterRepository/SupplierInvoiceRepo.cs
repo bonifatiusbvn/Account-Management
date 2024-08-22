@@ -1021,6 +1021,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
                 }
 
+                if (!string.IsNullOrEmpty(invoiceReport.sortDates))
+                {
+                    query = query.OrderBy(s => s.s.Date);
+                }
+
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
                 {
                     if (invoiceReport.filterType == "currentMonth")

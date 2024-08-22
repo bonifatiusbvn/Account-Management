@@ -65,7 +65,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-               
+
                 InvoiceReportModel invoiceReportModel = new InvoiceReportModel
                 {
                     SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
@@ -76,6 +76,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
                     GroupName = invoiceReport.GroupName,
+                    sortDates = invoiceReport.sortDates,
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
@@ -86,15 +87,15 @@ namespace AccountManegments.Web.Controllers
 
                     var document = new Aspose.Pdf.Document
                     {
-                        PageInfo = new PageInfo { Margin = new MarginInfo(25, 25, 25, 40) }
+                        PageInfo = new PageInfo { Margin = new MarginInfo(20, 20, 20, 20) }
                     };
 
                     var pdfPage = document.Pages.Add();
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "10% 12% 12% 12% 12% 14% 14% 14%",
-                        DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
+                        ColumnWidths = "10% 11% 12% 8% 12% 12% 11% 11% 11%",
+                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
                     };
@@ -108,10 +109,12 @@ namespace AccountManegments.Web.Controllers
                     headerRow.Cells.Add("Supplier");
                     headerRow.Cells.Add("Debit");
                     headerRow.Cells.Add("Credit");
+                    headerRow.Cells.Add("Net Total");
 
 
                     decimal yougavetotal = 0;
                     decimal yougettotal = 0;
+                    decimal nettotal = 0;
 
                     foreach (var item in SupplierDetails)
                     {
@@ -134,8 +137,10 @@ namespace AccountManegments.Web.Controllers
                             row.Cells.Add(item.TotalAmount.ToString());
                             yougettotal += item.TotalAmount;
                         }
+                        row.Cells.Add();
                     }
 
+                    nettotal = yougettotal-yougavetotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
@@ -145,6 +150,7 @@ namespace AccountManegments.Web.Controllers
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add(yougavetotal.ToString());
                     footerRow.Cells.Add(yougettotal.ToString());
+                    footerRow.Cells.Add(nettotal.ToString());
 
                     pdfPage.Paragraphs.Add(table);
 
@@ -179,6 +185,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
                     GroupName = invoiceReport.GroupName,
+                    sortDates = invoiceReport.sortDates,
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
@@ -199,9 +206,11 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(1, 6).Value = "Supplier";
                         ws.Cell(1, 7).Value = "Debit";
                         ws.Cell(1, 8).Value = "Credit";
+                        ws.Cell(1, 9).Value = "Net Total";
 
                         decimal yougavetotal = 0;
                         decimal yougettotal = 0;
+                        decimal nettotal = 0;
 
                         int row = 2;
                         foreach (var item in SupplierDetails)
@@ -224,8 +233,11 @@ namespace AccountManegments.Web.Controllers
                                 ws.Cell(row, 8).Value = item.TotalAmount;
                                 yougettotal += item.TotalAmount;
                             }
+                            ws.Cell(row, 9).Value = "";
                             row++;
                         }
+
+                        nettotal = yougettotal-yougavetotal;
 
                         ws.Cell(row, 1).Value = "Total";
                         ws.Cell(row, 2).Value = "";
@@ -235,15 +247,16 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 6).Value = "";
                         ws.Cell(row, 7).Value = yougavetotal;
                         ws.Cell(row, 8).Value = yougettotal;
+                        ws.Cell(row, 9).Value = nettotal;
 
 
-                        var headerRange = ws.Range(1, 1, 1, 6);
+                        var headerRange = ws.Range(1, 1, 1, 9);
                         headerRange.Style.Font.Bold = true;
                         headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange.Style.Font.FontColor = XLColor.White;
                         headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        var totalRange = ws.Range(row, 1, row, 6);
+                        var totalRange = ws.Range(row, 1, row, 9);
                         totalRange.Style.Font.Bold = true;
 
                         using (var stream = new MemoryStream())
@@ -323,5 +336,157 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportNetReportToPDF(InvoiceReportModel PayOutReport)
+        {
+            try
+            {
+
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
+
+                if (response.code == 200)
+                {
+                    var NetInvoiceDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
+
+                    var document = new Aspose.Pdf.Document
+                    {
+                        PageInfo = new PageInfo { Margin = new MarginInfo(20, 20, 20, 20) }
+                    };
+
+                    var pdfPage = document.Pages.Add();
+
+                    Aspose.Pdf.Table table = new Aspose.Pdf.Table
+                    {
+                        ColumnWidths = "25% 25% 17% 17% 16%",
+                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
+                        Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
+                        DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
+                    };
+
+                    var headerRow = table.Rows.Add();
+                    headerRow.Cells.Add("Company");
+                    headerRow.Cells.Add("Supplier");
+                    headerRow.Cells.Add("Debit");
+                    headerRow.Cells.Add("Credit");
+                    headerRow.Cells.Add("Net Total");
+
+
+                    decimal yougavetotal = 0;
+                    decimal yougettotal = 0;
+                    decimal nettotal = 0;
+
+                    foreach (var item in NetInvoiceDetails.InvoiceList)
+                    {
+                        var row = table.Rows.Add();
+                        row.Cells.Add(item.CompanyName);
+                        row.Cells.Add(item.SupplierName);
+                        row.Cells.Add(item.PayOutTotalAmount.ToString());
+                        yougettotal += item.PayOutTotalAmount;
+                        row.Cells.Add(item.NonPayOutTotalAmount.ToString());
+                        yougavetotal += item.NonPayOutTotalAmount;
+                        row.Cells.Add();
+                    }
+
+                    nettotal = yougavetotal-yougettotal;
+                    var footerRow = table.Rows.Add();
+                    footerRow.Cells.Add("Total");
+                    footerRow.Cells.Add("");
+                    footerRow.Cells.Add(yougettotal.ToString());
+                    footerRow.Cells.Add(yougavetotal.ToString());
+                    footerRow.Cells.Add(nettotal.ToString());
+
+                    pdfPage.Paragraphs.Add(table);
+
+                    using (var streamout = new MemoryStream())
+                    {
+                        document.Save(streamout);
+                        return new FileContentResult(streamout.ToArray(), "application/pdf")
+                        {
+                            FileDownloadName = Guid.NewGuid() + "_NetReportList.pdf",
+                        };
+                    }
+                }
+                return RedirectToAction("ReportDetails");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> ExportNetReportToExcel(InvoiceReportModel PayOutReport)
+        {
+            try
+            {
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
+
+                if (response.code == 200)
+                {
+                    var NetInvoiceDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
+
+                    using (var wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("Report");
+
+                        ws.Cell(1, 1).Value = "Company";
+                        ws.Cell(1, 2).Value = "Supplier";
+                        ws.Cell(1, 3).Value = "Debit";
+                        ws.Cell(1, 4).Value = "Credit";
+                        ws.Cell(1, 5).Value = "Net Total";
+
+                        decimal yougavetotal = 0;
+                        decimal yougettotal = 0;
+                        decimal nettotal = 0;
+
+                        int row = 2;
+                        foreach (var item in NetInvoiceDetails.InvoiceList)
+                        {
+                            ws.Cell(row, 1).Value = item.CompanyName;
+                            ws.Cell(row, 2).Value = item.SupplierName;
+                            ws.Cell(row, 3).Value = item.PayOutTotalAmount;
+                            ws.Cell(row, 4).Value = item.NonPayOutTotalAmount;
+
+                            yougavetotal += item.PayOutTotalAmount;
+                            yougettotal += item.NonPayOutTotalAmount;
+
+                            row++;
+                        }
+
+                        nettotal = yougettotal-yougavetotal;
+
+                        ws.Cell(row, 1).Value = "Total";
+                        ws.Cell(row, 2).Value = "";
+                        ws.Cell(row, 4).Value = yougettotal;
+                        ws.Cell(row, 3).Value = yougavetotal;                     
+                        ws.Cell(row, 5).Value = nettotal;
+
+
+                        var headerRange = ws.Range(1, 1, 1, 5);
+                        headerRange.Style.Font.Bold = true;
+                        headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
+                        headerRange.Style.Font.FontColor = XLColor.White;
+                        headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        var totalRange = ws.Range(row, 1, row, 5);
+                        totalRange.Style.Font.Bold = true;
+
+                        using (var stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            stream.Seek(0, SeekOrigin.Begin);
+                            string fileName = Guid.NewGuid() + "_NetReportDetails.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        }
+                    }
+                }
+                return RedirectToAction("ReportDetails");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
     }
 }
+
