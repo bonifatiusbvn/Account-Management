@@ -61,8 +61,8 @@
                 <tr>
                     <th>Company</th>
                     <th>Supplier</th>
-                    <th>Credit</th>
                     <th>Debit</th>
+                    <th>Credit</th>
                 </tr>
             </thead>
             <tbody id="reportInvoicenet">
@@ -74,24 +74,10 @@
                             <td style="width: 120px;">@item.CompanyName</td>
                             <td>@item.SupplierName</td>
                             <td class="text-danger">
-                                @if (item.InvoiceNo == "PayOut")
-                                {
-                                    @item.NonPayOutTotalAmount
-                                }
-                                else
-                                {
-                                    @:0.00
-                                }
+                                @item.PayOutTotalAmount
                             </td>
                             <td class="text-success">
-                                @if (item.InvoiceNo != "PayOut")
-                                {
-                                    @item.PayOutTotalAmount
-                                }
-                                else
-                                {
-                                    @:0.00
-                                }
+                                @item.NonPayOutTotalAmount
                             </td>
                         </tr>
                     }

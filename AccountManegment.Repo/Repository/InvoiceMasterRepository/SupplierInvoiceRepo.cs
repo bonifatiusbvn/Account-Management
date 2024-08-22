@@ -22,6 +22,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 {
@@ -113,86 +114,133 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(InvoiceReportModel PayOutReport)
         {
             try
             {
+                var supplierInvoicesQuery = from s in Context.SupplierInvoices
+                                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                                            join d in Context.Sites on s.SiteId equals d.SiteId
+                                            select new
+                                            {
+                                                s,
+                                                SupplierName = b.SupplierName,
+                                                CompanyName = c.CompanyName,
+                                                SiteName = d.SiteName
+                                            };
 
-                var supplierInvoices = await (from s in Context.SupplierInvoices
-                                              join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
-                                              join c in Context.Companies on s.CompanyId equals c.CompanyId
-                                              join d in Context.Sites on s.SiteId equals d.SiteId
-                                              where s.SupplierId == SupplierId && s.CompanyId == CompanyId
-                                              select new
-                                              {
-                                                  s,
-                                                  SupplierName = b.SupplierName,
-                                                  CompanyName = c.CompanyName,
-                                                  SiteName = d.SiteName
-                                              })
-              .GroupBy(g => g.s.CompanyId)
-              .Select(group => new SupplierInvoiceModel
-              {
-                  // Aggregate or select the first item in the group
-                  Id = group.FirstOrDefault().s.Id,
-                  InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
-                  SiteId = group.FirstOrDefault().s.SiteId,
-                  SupplierId = group.FirstOrDefault().s.SupplierId,
-                  CompanyId = group.Key, // This is the CompanyId after grouping
+                if (PayOutReport.CompanyId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.CompanyId == PayOutReport.CompanyId.Value);
+                }
 
-                  // Total Amounts based on InvoiceNo condition
-                  PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                  NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
+                if (PayOutReport.SupplierId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SupplierId == PayOutReport.SupplierId.Value);
+                }
 
-                  GroupName = group.FirstOrDefault().s.SiteGroup,
-                  Description = string.Join(", ", group.Select(x => x.s.Description)),
-                  CompanyName = group.FirstOrDefault().CompanyName,
-                  SupplierName = group.FirstOrDefault().SupplierName,
-                  PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
-                  IsPayOut = group.FirstOrDefault().s.IsPayOut,
-                  SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
-                  Date = group.FirstOrDefault().s.Date,
-                  CreatedOn = group.FirstOrDefault().s.CreatedOn,
-                  SiteName = group.FirstOrDefault().SiteName
-              })
-              .ToListAsync();
+                if (PayOutReport.SiteId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
+                }
 
+                if (!string.IsNullOrEmpty(PayOutReport.GroupName))
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteGroup == PayOutReport.GroupName);
+                }
 
+                if (!string.IsNullOrEmpty(PayOutReport.filterType))
+                {
+                    if (PayOutReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (PayOutReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
 
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
 
-                var onlineCashSum = await Context.SupplierInvoices
-                    .Where(si => si.SupplierId == SupplierId &&
-                                 si.CompanyId == CompanyId &&
-                                 si.InvoiceNo != "PayOut")
-                    .SumAsync(si => si.TotalAmount);
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                    else if (PayOutReport.filterType == "betweenYear" && !string.IsNullOrEmpty(PayOutReport.SelectedYear))
+                    {
+                        var years = PayOutReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = years[1].Length == 2
+                            ? int.Parse(years[1]) + (startYear / 100) * 100
+                            : int.Parse(years[1]);
 
-                var totalPurchase = await Context.SupplierInvoices
-                    .Where(si => si.SupplierId == SupplierId &&
-                                 si.CompanyId == CompanyId &&
-                                 si.InvoiceNo == "PayOut")
-                    .SumAsync(si => si.TotalAmount);
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                    }
+                }
 
+                if (PayOutReport.startDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= PayOutReport.startDate.Value);
+                }
+
+                if (PayOutReport.endDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date <= PayOutReport.endDate.Value);
+                }
+
+                var supplierInvoices = await supplierInvoicesQuery
+                    .GroupBy(g => g.s.CompanyId)
+                    .Select(group => new SupplierInvoiceModel
+                    {
+                        Id = group.FirstOrDefault().s.Id,
+                        InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
+                        SiteId = group.FirstOrDefault().s.SiteId,
+                        SupplierId = group.FirstOrDefault().s.SupplierId,
+                        CompanyId = group.Key,
+
+                        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+                        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
+
+                        GroupName = group.FirstOrDefault().s.SiteGroup,
+                        Description = string.Join(", ", group.Select(x => x.s.Description)),
+                        CompanyName = group.FirstOrDefault().CompanyName,
+                        SupplierName = group.FirstOrDefault().SupplierName,
+                        PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+                        IsPayOut = group.FirstOrDefault().s.IsPayOut,
+                        SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+                        Date = group.FirstOrDefault().s.Date,
+                        CreatedOn = group.FirstOrDefault().s.CreatedOn,
+                        SiteName = group.FirstOrDefault().SiteName
+                    })
+                    .ToListAsync();
+
+                var totalPurchase = supplierInvoices.Sum(inv => inv.PayOutTotalAmount);
+                var onlineCashSum = supplierInvoices.Sum(inv => inv.NonPayOutTotalAmount);
 
                 var difference = onlineCashSum - totalPurchase;
 
-
-                var invoiceTotalAmount = new InvoiceTotalAmount
+                var PayOutDetails = new InvoiceTotalAmount
                 {
                     InvoiceList = supplierInvoices,
-                    TotalPending = difference,
-                    TotalCreadit = onlineCashSum,
-                    TotalPurchase = totalPurchase
+                    TotalPending = difference ?? 0,  
+                    TotalCreadit = onlineCashSum ?? 0, 
+                    TotalPurchase = totalPurchase ?? 0 
                 };
 
-                return invoiceTotalAmount;
+                return PayOutDetails;
             }
             catch (Exception ex)
             {
-
-                throw;
+                throw new Exception("An error occurred while fetching invoice details.", ex);
             }
         }
-
 
 
         public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id)

@@ -111,9 +111,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetInvoiceDetailsById")]
-        public async Task<IActionResult> GetInvoiceDetailsById(Guid CompanyId, Guid SupplierId)
+        public async Task<IActionResult> GetInvoiceDetailsById(InvoiceReportModel PayOutReport)
         {
-            var tupleResult = await SupplierInvoice.GetInvoiceDetailsById(CompanyId, SupplierId);
+            var tupleResult = await SupplierInvoice.GetInvoiceDetailsById(PayOutReport);
             return Ok(new { code = 200, data = tupleResult });
         }
 
