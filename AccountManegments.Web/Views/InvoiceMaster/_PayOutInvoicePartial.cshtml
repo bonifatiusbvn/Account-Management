@@ -23,7 +23,11 @@
         <input type="hidden" id="paymenttypeid-ROWID">
     </td>
     <td>
-        <input type="date" id="txtdate-ROWID" class="form-control" name="txtdate" />
+        @{
+            DateTime invoiceDate = DateTime.Now;
+            string formattedDate = invoiceDate.ToString("yyyy-MM-dd");
+        }
+        <input type="date" id="txtdate-ROWID" class="form-control" name="txtdate" value="@formattedDate" />
     </td>
     <td>
         <input type="text" class="form-control" id="txtdescription-ROWID" placeholder="Description" />
