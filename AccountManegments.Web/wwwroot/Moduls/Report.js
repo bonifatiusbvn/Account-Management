@@ -939,3 +939,7 @@ function InsertPayOutDetailsReport() {
         toastr.warning("Add payout details");
     }
 }
+
+function fn_ResetAllDropdown() {
+    window.location = '/Report/ReportDetails';
+}
