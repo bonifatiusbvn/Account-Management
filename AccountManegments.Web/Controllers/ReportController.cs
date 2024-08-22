@@ -65,7 +65,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-               
+
                 InvoiceReportModel invoiceReportModel = new InvoiceReportModel
                 {
                     SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
@@ -338,12 +338,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportNetReportToPDF(Guid CompanyId, Guid SupplierId)
+        public async Task<IActionResult> ExportNetReportToPDF(InvoiceReportModel PayOutReport)
         {
             try
             {
 
-                ApiResponseModel response = await APIServices.PostAsync("", "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
 
                 if (response.code == 200)
                 {
@@ -381,27 +381,19 @@ namespace AccountManegments.Web.Controllers
                         var row = table.Rows.Add();
                         row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);
-                        if (item.InvoiceNo == "PayOut")
-                        {
-                            row.Cells.Add(item.NonPayOutTotalAmount.ToString());
-                            row.Cells.Add("0.00");
-                            yougavetotal += item.NonPayOutTotalAmount;
-                        }
-                        else
-                        {
-                            row.Cells.Add("0.00");
-                            row.Cells.Add(item.PayOutTotalAmount.ToString());
-                            yougettotal += item.PayOutTotalAmount;
-                        }
+                        row.Cells.Add(item.PayOutTotalAmount.ToString());
+                        yougettotal += item.PayOutTotalAmount;
+                        row.Cells.Add(item.NonPayOutTotalAmount.ToString());
+                        yougavetotal += item.NonPayOutTotalAmount;
                         row.Cells.Add();
                     }
 
-                    nettotal = yougettotal-yougavetotal;
+                    nettotal = yougavetotal-yougettotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
-                    footerRow.Cells.Add(yougavetotal.ToString());
                     footerRow.Cells.Add(yougettotal.ToString());
+                    footerRow.Cells.Add(yougavetotal.ToString());
                     footerRow.Cells.Add(nettotal.ToString());
 
                     pdfPage.Paragraphs.Add(table);
@@ -423,12 +415,11 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> ExportNetReportToExcel(Guid CompanyId, Guid SupplierId)
+        public async Task<IActionResult> ExportNetReportToExcel(InvoiceReportModel PayOutReport)
         {
             try
             {
-
-                ApiResponseModel response = await APIServices.PostAsync("", "SupplierInvoice/GetInvoiceDetailsById?CompanyId=" + CompanyId + "&SupplierId=" + SupplierId);
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
 
                 if (response.code == 200)
                 {
@@ -453,19 +444,12 @@ namespace AccountManegments.Web.Controllers
                         {
                             ws.Cell(row, 1).Value = item.CompanyName;
                             ws.Cell(row, 2).Value = item.SupplierName;
-                            if (item.InvoiceNo == "PayOut")
-                            {
-                                ws.Cell(row, 3).Value = item.NonPayOutTotalAmount;
-                                ws.Cell(row, 4).Value = "0.00";
-                                yougavetotal += item.NonPayOutTotalAmount;
-                            }
-                            else
-                            {
-                                ws.Cell(row, 3).Value = "0.00";
-                                ws.Cell(row, 4).Value = item.PayOutTotalAmount;
-                                yougettotal += item.PayOutTotalAmount;
-                            }
-                            ws.Cell(row, 5).Value = "";
+                            ws.Cell(row, 3).Value = item.PayOutTotalAmount;
+                            ws.Cell(row, 4).Value = item.NonPayOutTotalAmount;
+
+                            yougavetotal += item.PayOutTotalAmount;
+                            yougettotal += item.NonPayOutTotalAmount;
+
                             row++;
                         }
 
@@ -473,8 +457,8 @@ namespace AccountManegments.Web.Controllers
 
                         ws.Cell(row, 1).Value = "Total";
                         ws.Cell(row, 2).Value = "";
-                        ws.Cell(row, 3).Value = yougavetotal;
                         ws.Cell(row, 4).Value = yougettotal;
+                        ws.Cell(row, 3).Value = yougavetotal;                     
                         ws.Cell(row, 5).Value = nettotal;
 
 
@@ -505,3 +489,4 @@ namespace AccountManegments.Web.Controllers
         }
     }
 }
+

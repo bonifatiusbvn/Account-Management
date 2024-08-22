@@ -75,8 +75,8 @@
                 {
                     foreach (var item in Model.InvoiceList)
                     {
-                        youGaveTotal += item.InvoiceNo == "PayOut" ? item.NonPayOutTotalAmount : 0;
-                        youGetTotal += item.InvoiceNo != "PayOut" ? item.PayOutTotalAmount : 0;
+                        youGaveTotal += item.PayOutTotalAmount;
+                        youGetTotal += item.NonPayOutTotalAmount;
 
                         <tr style="height:55px;" class="text-center">
                             <td style="width: 120px;">@item.CompanyName</td>

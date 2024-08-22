@@ -86,6 +86,7 @@ var selectedstartDate = null;
 var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
+var selectedYears = null;
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
@@ -253,7 +254,7 @@ function GetBetweenDateInvoiceList() {
 
 
 function GetBetweenYearInvoiceList() {
-    var selectedYears = $('#yearDropdown').val();
+    selectedYears = $('#yearDropdown').val();
     var selectedFilterType = "betweenYear";
 
     if (selectedYears) {
@@ -644,12 +645,12 @@ function getnetamount(PayOutReport) {
         type: 'POST',
         data: PayOutReport,
         datatype: 'json',
-        success: function (result) {debugger
+        success: function (result) {
 
             siteloaderhide();
             $("#dispalybody").addClass('d-none');
             $("#dispalynetamount").html(result);
-    
+
             $('#txtpayoutamount').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
 
@@ -660,7 +661,7 @@ function getnetamount(PayOutReport) {
                         $('#spnpayout').text('Entered amount cannot exceed pending amount.');
                     } else {
                         $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                        $('#spnpayout').text(''); 
+                        $('#spnpayout').text('');
                     }
                 } else {
                     $('#spnpayout').text('');
@@ -739,11 +740,19 @@ function updatePayoutRowNumbers() {
 
 function ExportNetReportToPDF() {
     siteloadershow();
-    var CompanyId = selectedCompanyId;
-    var SupplierId = selectedSupplierId;
+    var PayOutReport = {
+        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType,
+        startDate: selectedstartDate,
+        endDate: selectedendDate,
+        SelectedYear: selectedYears,
+    };
     $.ajax({
-        url: '/Report/ExportNetReportToPDF?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+        url: '/Report/ExportNetReportToPDF',
         type: 'POST',
+        data: PayOutReport,
         datatype: 'json',
         success: function (data, status, xhr) {
             siteloaderhide();
@@ -792,11 +801,19 @@ function ExportNetReportToPDF() {
 
 function ExportNetReportToExcel() {
     siteloadershow();
-    var CompanyId = selectedCompanyId;
-    var SupplierId = selectedSupplierId;
+    var PayOutReport = {
+        SiteId: selectedSiteId,
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType,
+        startDate: selectedstartDate,
+        endDate: selectedendDate,
+        SelectedYear: selectedYears,
+    };
     $.ajax({
-        url: '/Report/ExportNetReportToExcel?CompanyId=' + CompanyId + '&SupplierId=' + SupplierId,
+        url: '/Report/ExportNetReportToExcel',
         type: 'GET',
+        data: PayOutReport,
         datatype: 'json',
         success: function (data, status, xhr) {
             siteloaderhide();
