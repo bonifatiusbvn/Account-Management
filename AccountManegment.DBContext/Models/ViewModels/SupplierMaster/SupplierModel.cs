@@ -50,5 +50,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public DateTime? UpdatedOn { get; set; }
 
         public string? FullAddress { get; set; }
+
+        public decimal? OpeningBalance { get; set; }
+
+        public DateTime? OpeningBalanceDate { get; set; }
     }
 }

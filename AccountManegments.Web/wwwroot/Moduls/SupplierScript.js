@@ -19,6 +19,8 @@ function CreateSupplier() {
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             CreatedBy: $('#txtUserid').val(),
+            OpeningBalance: $("#txtSupplierOpeningBalance").val(),
+            OpeningBalanceDate: $("#txtSupplierOpeningBalanceDate").val(),
 
         }
 
@@ -88,10 +90,15 @@ function ClearSupplierTextBox() {
     $('#txtBranch').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
+    $('#txtSupplierOpeningBalanceDate').val('');
+    $('#txtSupplierOpeningBalance').val('');
 
     var button = document.getElementById("btnsupplier");
     if ($('#txtSupplierid').val() == '') {
         button.textContent = "Create";
+        const today = new Date(); 
+        const formattedDate = formatDate(today); 
+        $('#txtSupplierOpeningBalanceDate').val(formattedDate);
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
     offcanvas.show();
@@ -104,7 +111,6 @@ function DisplaySupplierDetails(SupplierId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-
             $('#changeName').html('Update Supplier');
             $('#txtSupplierid').val(response.supplierId);
             $('#txtSupplierName').val(response.supplierName);
@@ -120,6 +126,9 @@ function DisplaySupplierDetails(SupplierId) {
             $('#txtBranch').val(response.branchName);
             $('#txtAccount').val(response.accountNo);
             $('#txtIFFC').val(response.iffccode);
+            $('#txtSupplierOpeningBalance').val(response.openingBalance);
+            const formattedDate = formatDate(response.openingBalanceDate);
+            $('#txtSupplierOpeningBalanceDate').val(formattedDate);
 
             setTimeout(function () { $('#ddlCity').val(response.city); }, 100)
             var button = document.getElementById("btnsupplier");
@@ -135,6 +144,15 @@ function DisplaySupplierDetails(SupplierId) {
             toastr.error(xhr.responseText);
         }
     });
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function SelectSupplierDetails(SupplierId, element) {
@@ -163,6 +181,9 @@ function SelectSupplierDetails(SupplierId, element) {
                 $('#dspBankName').val(response.bankName);
                 $('#dspAccountNo').val(response.accountNo);
                 $('#dspIffccode').val(response.iffccode);
+                $('#dspOpeningBalance').val(response.openingBalance);
+                const formattedDate = formatDate(response.openingBalanceDate);
+                $('#dspOpeningBalanceDate').val(formattedDate);
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -253,6 +274,8 @@ function UpdateSupplierDetails() {
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             UpdatedBy: $('#txtUserid').val(),
+            OpeningBalance: $("#txtSupplierOpeningBalance").val(),
+            OpeningBalanceDate: $("#txtSupplierOpeningBalanceDate").val(),
         }
 
         if (objData.City == "--Select City--" || objData.State == "--Select State--") {
@@ -268,7 +291,6 @@ function UpdateSupplierDetails() {
                 datatype: 'json',
                 success: function (Result) {
                     if (Result.code == 200) {
-                        debugger
                         var offcanvasElement = document.getElementById('createSupplier');
                         var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
 

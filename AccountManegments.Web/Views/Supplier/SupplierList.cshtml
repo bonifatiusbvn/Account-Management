@@ -108,7 +108,7 @@
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
-                            <div class="card-body" style="height:650px">
+                            <div class="card-body" style="height:680px">
                                 <h5 class="mb-0 mt-4">Supplier Information</h5>
                                 <hr>
                                 <div class="row g-3 ac-detail d-none">
@@ -156,6 +156,14 @@
                                     <div class="col-6">
                                         <label class="form-label">Iffccode</label>
                                         <input type="text" class="form-control" id="dspIffccode" readonly>
+                                    </div>
+                                     <div class="col-6">
+                                        <label class="form-label">Opening Balance</label>
+                                        <input type="text" class="form-control" id="dspOpeningBalance" readonly>
+                                    </div>
+                                     <div class="col-6">
+                                        <label class="form-label">Opening Balance Date</label>
+                                        <input type="Date" class="form-control" id="dspOpeningBalanceDate" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -262,6 +270,14 @@
                                     </select>
                                     <input type="hidden" id="txtcity" value="" />
                                     <span class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <label class="form-label">Opening Balance</label>
+                                    <input type="number" class="form-control" id="txtSupplierOpeningBalance" placeholder="Opening Balance" name="txtSupplierOpeningBalance" />
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <label class="form-label">Opening Balance Date</label>
+                                    <input type="date" id="txtSupplierOpeningBalanceDate" class="form-control" name="txtSupplierOpeningBalanceDate" />
                                 </div>
                                 <div class="col-lg-12 col-12">
                                     <h5><b>Bank Details</b></h5>

@@ -425,6 +425,8 @@ public partial class DbaccManegmentContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("IFFCCode");
             entity.Property(e => e.Mobile).HasMaxLength(15);
+            entity.Property(e => e.OpeningBalance).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.OpeningBalanceDate).HasColumnType("date");
             entity.Property(e => e.PinCode).HasMaxLength(7);
             entity.Property(e => e.SupplierName).HasMaxLength(30);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");

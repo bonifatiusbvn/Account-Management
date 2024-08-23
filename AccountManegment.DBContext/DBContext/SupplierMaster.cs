@@ -35,6 +35,10 @@ public partial class SupplierMaster
 
     public bool IsApproved { get; set; }
 
+    public decimal? OpeningBalance { get; set; }
+
+    public DateTime? OpeningBalanceDate { get; set; }
+
     public bool? IsDelete { get; set; }
 
     public Guid CreatedBy { get; set; }
