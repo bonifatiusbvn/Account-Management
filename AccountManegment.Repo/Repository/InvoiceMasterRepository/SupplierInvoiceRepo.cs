@@ -230,9 +230,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var PayOutDetails = new InvoiceTotalAmount
                 {
                     InvoiceList = supplierInvoices,
-                    TotalPending = difference ?? 0,  
-                    TotalCreadit = onlineCashSum ?? 0, 
-                    TotalPurchase = totalPurchase ?? 0 
+                    TotalPending = difference ?? 0,
+                    TotalCreadit = onlineCashSum ?? 0,
+                    TotalPurchase = totalPurchase ?? 0
                 };
 
                 return PayOutDetails;
@@ -577,86 +577,39 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
-                    if (DateTime.TryParseExact(searchText, "dd/MM/yyyy",
-                                       CultureInfo.InvariantCulture,
-                                       DateTimeStyles.None,
-                                       out DateTime searchDate))
-                    {
-                        supplierList = supplierList.Where(u => u.Date.HasValue &&
-                                                               u.Date.Value.Date == searchDate.Date);
-                    }
-                    else
-                    {
-                        supplierList = supplierList.Where(u =>
-                            u.SiteName.ToLower().Contains(searchText) ||
-                            u.CompanyName.ToLower().Contains(searchText) ||
-                            u.SupplierName.ToLower().Contains(searchText) ||
-                            u.SupplierInvoiceNo.ToLower().Contains(searchText) ||
-                            u.TotalAmount.ToString().Contains(searchText)
-                        );
-                    }
+                    supplierList = supplierList.Where(u =>
+                        u.SiteName.ToLower().Contains(searchText) ||
+                        u.CompanyName.ToLower().Contains(searchText) ||
+                        u.SupplierName.ToLower().Contains(searchText) ||
+                        u.SupplierInvoiceNo.ToLower().Contains(searchText) ||
+                        u.TotalAmount.ToString().Contains(searchText)
+                    );
                 }
 
-                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
-                {
-                    searchText = searchText.ToLower();
-                    switch (searchBy.ToLower())
-                    {
-                        case "sitename":
-                            supplierList = supplierList.Where(u => u.SiteName.ToLower().Contains(searchText));
-                            break;
-                        case "companyname":
-                            supplierList = supplierList.Where(u => u.CompanyName.ToLower().Contains(searchText));
-                            break;
-                        default:
-
-                            break;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(sortBy))
-                {
-
-                    supplierList = supplierList.OrderByDescending(u => u.CreatedOn);
-                }
-                else
+                if (!string.IsNullOrEmpty(sortBy))
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
                     string field = sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
-                        case "companyname":
-                            if (sortOrder == "ascending")
-                                supplierList = supplierList.OrderBy(u => u.CompanyName);
-                            else if (sortOrder == "descending")
-                                supplierList = supplierList.OrderByDescending(u => u.CompanyName);
+                        case "date":
+                            supplierList = sortOrder == "ascending"
+                                ? supplierList.OrderBy(u => u.CreatedOn)
+                                : supplierList.OrderByDescending(u => u.CreatedOn);
                             break;
-                        case "invoiceno":
-                            if (sortOrder == "ascending")
-                                supplierList = supplierList.OrderBy(u => u.InvoiceNo);
-                            else if (sortOrder == "descending")
-                                supplierList = supplierList.OrderByDescending(u => u.InvoiceNo);
-                            break;
-                        case "createdon":
-                            if (sortOrder == "ascending")
-                                supplierList = supplierList.OrderBy(u => u.CreatedOn);
-                            else if (sortOrder == "descending")
-                                supplierList = supplierList.OrderByDescending(u => u.CreatedOn);
-                            break;
-                        default:
 
-                            break;
                     }
                 }
 
-                return supplierList;
+                return await supplierList.ToListAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
 
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceMasterView SupplierInvoiceDetail)
         {
