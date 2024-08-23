@@ -60,46 +60,47 @@
     <div class="card-body">
         <p class="fs-5">Supplier List Report</p>
         <div class="my-3 border-top"></div>
-
-        <table class="table align-middle mb-0">
-            <thead class="table-light btn-primary">
-                <tr>
-                    <th>Supplier</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th>Net Amount</th>
-                </tr>
-            </thead>
-            <tbody id="reportInvoicenet">
-                @if (Model != null && Model.InvoiceList.Any())
-                {
-                    foreach (var item in Model.InvoiceList)
+        <div style=" overflow-y: auto; max-height: 450px;">
+            <table class="table align-middle mb-0">
+                <thead class="table-light btn-primary">
+                    <tr>
+                        <th>Supplier</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Net Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="reportInvoicenet">
+                    @if (Model != null && Model.InvoiceList.Any())
                     {
-                        youGaveTotal += item.PayOutTotalAmount;
-                        youGetTotal += item.NonPayOutTotalAmount;
+                        foreach (var item in Model.InvoiceList)
+                        {
+                            youGaveTotal += item.PayOutTotalAmount;
+                            youGetTotal += item.NonPayOutTotalAmount;
 
-                        <tr style="height:55px;" class="text-center">
-                            <td>@item.SupplierName</td>
-                            <td class="text-danger">
-                                @item.PayOutTotalAmount
-                            </td>
-                            <td class="text-success">
-                                @item.NonPayOutTotalAmount
-                            </td>
-                            <td>@item.NetAmount</td>
+                            <tr style="height:55px;" class="text-center">
+                                <td>@item.SupplierName</td>
+                                <td class="text-danger">
+                                    @item.PayOutTotalAmount
+                                </td>
+                                <td class="text-success">
+                                    @item.NonPayOutTotalAmount
+                                </td>
+                                <td>@item.NetAmount</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr style="height:55px;">
+                            <td colspan="8" class="text-center">No data found for the selected criteria.</td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr style="height:55px;">
-                        <td colspan="8" class="text-center">No data found for the selected criteria.</td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot id="reportInvoicenetFooter" class="bg-light">
-            </tfoot>
-        </table>
+                </tbody>
+                <tfoot id="reportInvoicenetFooter" class="bg-light">
+                </tfoot>
+            </table>
+        </div>
     </div>
     <div id="downloadnetreportfile" class="col-12 text-end" style="display:none;">
         <a class="btn" onclick="ExportNetReportToExcel()" style="background-color:#018749;color:white;">
@@ -123,7 +124,7 @@
 
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>'+
+            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>' +
             '<td><b class="">' + Pending.toFixed(2) + '</b></td></tr>';
 
         $('#reportInvoicenetFooter').html(footerContent);
