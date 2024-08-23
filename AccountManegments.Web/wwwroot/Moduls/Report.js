@@ -144,7 +144,7 @@ var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
 var selectedYears = null;
-var selectedSortOrder = "AscendingDate";
+var selectedSortOrder = "DescendingDate";
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
