@@ -158,7 +158,7 @@ function sortTable(field) {
         currentSortOrder = 'Ascending' + field;
     }
 
-    siteloadershow(); // Display loading animation
+    siteloadershow();
 
     $.ajax({
         url: '/InvoiceMaster/SupplierInvoiceListAction',
@@ -167,8 +167,8 @@ function sortTable(field) {
             sortBy: currentSortOrder,
         },
         success: function (result) {
-            siteloaderhide(); // Hide loading animation
-            $("#SupplierInvoicebody").html(result); // Load partial view into the table body
+            siteloaderhide();
+            $("#SupplierInvoicebody").html(result);
         },
         error: function (xhr, status, error) {
             console.error("Error fetching sorted data:", error);

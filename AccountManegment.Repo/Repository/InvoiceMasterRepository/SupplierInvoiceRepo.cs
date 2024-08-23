@@ -595,8 +595,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     {
                         case "date":
                             supplierList = sortOrder == "ascending"
-                                ? supplierList.OrderBy(u => u.Date)
-                                : supplierList.OrderByDescending(u => u.Date);
+                                ? supplierList.OrderBy(u => u.CreatedOn)
+                                : supplierList.OrderByDescending(u => u.CreatedOn);
                             break;
 
                     }
