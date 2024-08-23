@@ -150,12 +150,14 @@ namespace AccountManegments.Web.Controllers
                 {
                     return BadRequest(new { Message = "Failed to retrieve Supplier Invoice list." });
                 }
+
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
 
 
         [FormPermissionAttribute("Purchase  Invoice-Delete")]

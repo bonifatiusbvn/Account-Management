@@ -149,6 +149,34 @@ function GetSupplierDetail() {
         }
     });
 }
+let currentSortOrder = 'AscendingDate';
+
+function sortTable(field) {
+    if (currentSortOrder === 'Ascending' + field) {
+        currentSortOrder = 'Descending' + field;
+    } else {
+        currentSortOrder = 'Ascending' + field;
+    }
+
+    siteloadershow(); // Display loading animation
+
+    $.ajax({
+        url: '/InvoiceMaster/SupplierInvoiceListAction',
+        type: 'GET',
+        data: {
+            sortBy: currentSortOrder,
+        },
+        success: function (result) {
+            siteloaderhide(); // Hide loading animation
+            $("#SupplierInvoicebody").html(result); // Load partial view into the table body
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching sorted data:", error);
+            siteloaderhide();
+        }
+    });
+}
+
 
 $(document).ready(function () {
     $('#textSupplierName').change(function () {
@@ -157,124 +185,124 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-        function handleFocus(event, selector) {
-            if (event.keyCode == 13 || event.keyCode == 9) {
-                event.preventDefault();
-                $(selector).focus();
-            }
+    function handleFocus(event, selector) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
+            event.preventDefault();
+            $(selector).focus();
         }
-        function showErrorMessage(selector, message) {
-            $(selector).text(message).show();
+    }
+    function showErrorMessage(selector, message) {
+        $(selector).text(message).show();
+    }
+    $(document).on('input', '#txtproductquantity', function () {
+        var productRow = $(this).closest(".product");
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    }).on('keydown', '#txtproductquantity', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtproductamount');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtgst', function () {
+        var productRow = $(this).closest(".product");
+        var gstvalue = $('#txtgst').val();
+        if (gstvalue > 100) {
+            toastr.warning("GST% cannot be greater than 100%");
+            $(this).val(100);
         }
-        $(document).on('input', '#txtproductquantity', function () {
-            var productRow = $(this).closest(".product");
-            updateProductTotalAmount(productRow);
-            updateTotals();
-        }).on('keydown', '#txtproductquantity', function (event) {
-            var productRow = $(this).closest(".product");
-            var productFocus = productRow.find('#txtproductamount');
-            handleFocus(event, productFocus);
-        });
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    })
 
-        $(document).on('input', '#txtgst', function () {
-            var productRow = $(this).closest(".product");
-            var gstvalue = $('#txtgst').val();
-            if (gstvalue > 100) {
-                toastr.warning("GST% cannot be greater than 100%");
-                $(this).val(100);
-            }
-            updateProductTotalAmount(productRow);
-            updateTotals();
-        })
+    function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
 
-        function debounce(func, delay) {
-            let timer;
-            return function (...args) {
-                clearTimeout(timer);
-                timer = setTimeout(() => func.apply(this, args), delay);
-            };
+    $(document).on('input', '#txtdiscountpercentage', debounce(function () {
+        var value = $(this).val();
+        var productRow = $(this).closest(".product");
+        if (value > 100) {
+            toastr.warning("Discount cannot be greater than 100%");
+            productRow.find("#txtdiscountpercentage").val(0);
+            productRow.find("#txtdiscountamount").val(0);
+        } else if (value <= 0 || value == "") {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+            updateProductTotalAmount(productRow);
+        } else {
+            UpdateDiscountPercentage(productRow);
+        }
+    }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
+        var productRow = $(this).closest(".product");
+        var gstFocus = productRow.find('#txtgst');
+        handleFocus(event, gstFocus);
+    });
+
+    $(document).on('input', '#txtdiscountamount', debounce(function () {
+        var productRow = $(this).closest(".product");
+        var discountAmount = parseFloat($(this).val());
+        var productAmount = parseFloat($(productRow).find("#productamount").val());
+
+        if (discountAmount > productAmount) {
+            toastr.warning("Amount cannot be greater than Item price");
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+        } else if (discountAmount <= 0 || discountAmount == "") {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+            updateProductTotalAmount(productRow);
+        } else {
+            updateDiscount(productRow);
+        }
+    }, 300)).on('keydown', '#txtdiscountamount', function (event) {
+        var productRow = $(this).closest(".product");
+        var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
+        handleFocus(event, discountPercentagefocus);
+    });
+
+    $(document).on('input', '#txtproductamount', function () {
+        var productRow = $(this).closest(".product");
+        var productAmount = parseFloat($(this).val());
+        var discountAmountfocus = productRow.find('#txtdiscountamount');
+
+        if (!isNaN(productAmount)) {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
         }
 
-        $(document).on('input', '#txtdiscountpercentage', debounce(function () {
-            var value = $(this).val();
-            var productRow = $(this).closest(".product");
-            if (value > 100) {
-                toastr.warning("Discount cannot be greater than 100%");
-                productRow.find("#txtdiscountpercentage").val(0);
-                productRow.find("#txtdiscountamount").val(0);
-            } else if (value <= 0 || value == "") {
-                productRow.find("#txtdiscountamount").val(0);
-                productRow.find("#txtdiscountpercentage").val(0);
-                updateProductTotalAmount(productRow);
-            } else {
-                UpdateDiscountPercentage(productRow);
-            }
-        }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
-            var productRow = $(this).closest(".product");
-            var gstFocus = productRow.find('#txtgst');
-            handleFocus(event, gstFocus);
-        });
+        productRow.find("#productamount").val(productAmount.toFixed(2));
+        updateProductTotalAmount(productRow);
+        updateTotals();
 
-        $(document).on('input', '#txtdiscountamount', debounce(function () {
-            var productRow = $(this).closest(".product");
-            var discountAmount = parseFloat($(this).val());
-            var productAmount = parseFloat($(productRow).find("#productamount").val());
+    }).on('keydown', '#txtproductamount', function (event) {
+        var productRow = $(this).closest(".product");
+        var discountAmountfocus = productRow.find('#txtdiscountamount');
+        handleFocus(event, discountAmountfocus);
+    });
 
-            if (discountAmount > productAmount) {
-                toastr.warning("Amount cannot be greater than Item price");
-                productRow.find("#txtdiscountamount").val(0);
-                productRow.find("#txtdiscountpercentage").val(0);
-            } else if (discountAmount <= 0 || discountAmount == "") {
-                productRow.find("#txtdiscountamount").val(0);
-                productRow.find("#txtdiscountpercentage").val(0);
-                updateProductTotalAmount(productRow);
-            } else {
-                updateDiscount(productRow);
-            }
-        }, 300)).on('keydown', '#txtdiscountamount', function (event) {
-            var productRow = $(this).closest(".product");
-            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
-            handleFocus(event, discountPercentagefocus);
-        });
 
-        $(document).on('input', '#txtproductamount', function () {
-            var productRow = $(this).closest(".product");
-            var productAmount = parseFloat($(this).val());
-            var discountAmountfocus = productRow.find('#txtdiscountamount');
-
-            if (!isNaN(productAmount)) {
-                productRow.find("#txtdiscountamount").val(0);
-                productRow.find("#txtdiscountpercentage").val(0);
-            }
-
-            productRow.find("#productamount").val(productAmount.toFixed(2));
-            updateProductTotalAmount(productRow);
+    $(document).on('input', '#cart-roundOff', debounce(function () {
+        var roundoff = $('#cart-roundOff').val();
+        if (isNaN(roundoff) || (roundoff < -0.99 || roundoff > 0.99)) {
+            toastr.warning("Value must be between -0.99 and 0.99");
+        }
+        else {
             updateTotals();
+        }
+    }, 300));
+    $(document).on('input', '#IDiscountRoundOff', debounce(function () {
 
-        }).on('keydown', '#txtproductamount', function (event) {
-            var productRow = $(this).closest(".product");
-            var discountAmountfocus = productRow.find('#txtdiscountamount');
-            handleFocus(event, discountAmountfocus);
-        });
-
-
-        $(document).on('input', '#cart-roundOff', debounce(function () {
-            var roundoff = $('#cart-roundOff').val();
-            if (isNaN(roundoff) || (roundoff < -0.99 || roundoff > 0.99)) {
-                toastr.warning("Value must be between -0.99 and 0.99");
-            }
-            else {
-                updateTotals();
-            }
-        }, 300));
-        $(document).on('input', '#IDiscountRoundOff', debounce(function () {
-
-            var Discountroundoff = $('#IDiscountRoundOff').val();
-            updateTotals();
-        }, 300));
+        var Discountroundoff = $('#IDiscountRoundOff').val();
+        updateTotals();
+    }, 300));
 
     $(document).on('input', '#cart-tds', debounce(function () {
-        var tds = parseFloat($('#cart-tds').val()); 
+        var tds = parseFloat($('#cart-tds').val());
         var TotalAmount = parseFloat($('#cart-total').val());
 
         if (tds > TotalAmount) {

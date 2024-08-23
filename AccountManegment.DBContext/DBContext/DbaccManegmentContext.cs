@@ -59,8 +59,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -425,6 +425,8 @@ public partial class DbaccManegmentContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("IFFCCode");
             entity.Property(e => e.Mobile).HasMaxLength(15);
+            entity.Property(e => e.OpningBalance).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.OpningBalanceDate).HasColumnType("date");
             entity.Property(e => e.PinCode).HasMaxLength(7);
             entity.Property(e => e.SupplierName).HasMaxLength(30);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
