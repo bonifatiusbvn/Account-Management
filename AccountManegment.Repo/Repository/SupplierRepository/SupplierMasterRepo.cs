@@ -90,8 +90,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                         existingSupplier.CreatedOn = DateTime.Now;
                         existingSupplier.IsApproved = true;
                         existingSupplier.IsDelete = false;
-                        existingSupplier.OpeningBalance = supplier.OpeningBalance;
-                        existingSupplier.OpeningBalanceDate = supplier.OpeningBalanceDate;
+
 
                         Context.SupplierMasters.Update(existingSupplier);
                         await Context.SaveChangesAsync();
@@ -127,8 +126,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                         CreatedOn = DateTime.Now,
                         IsApproved = true,
                         IsDelete = false,
-                        OpeningBalance = supplier.OpeningBalance,
-                        OpeningBalanceDate = supplier.OpeningBalanceDate,
+
                     };
 
                     Context.SupplierMasters.Add(supplierMaster);
@@ -194,8 +192,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                 BranchName = e.BankBranch,
                                 AccountNo = e.AccountNo,
                                 Iffccode = e.Iffccode,
-                                OpeningBalance = e.OpeningBalance,
-                                OpeningBalanceDate = e.OpeningBalanceDate,
+
                                 FullAddress = e.BuildingName + "-" + e.Area + "," + c.CityName + "," + s.StatesName + "-" + e.PinCode
                             }).First();
                 return Userdata;
@@ -224,8 +221,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                                                                IsApproved = e.IsApproved,
                                                                CityName = c.CityName,
                                                                CreatedOn = e.CreatedOn,
-                                                               OpeningBalance =  e.OpeningBalance,
-                                                               OpeningBalanceDate = e.OpeningBalanceDate,
+
                                                            });
 
 
@@ -334,8 +330,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     Userdata.AccountNo = UpdateSupplier.AccountNo;
                     Userdata.Iffccode = UpdateSupplier.Iffccode;
                     Userdata.UpdatedBy = UpdateSupplier.CreatedBy;
-                    Userdata.OpeningBalance = UpdateSupplier.OpeningBalance;
-                    Userdata.OpeningBalanceDate = UpdateSupplier.OpeningBalanceDate;
                     Userdata.UpdatedOn = DateTime.Now;
                     Userdata.IsApproved = true;
                     Context.SupplierMasters.Update(Userdata);

@@ -19,8 +19,6 @@ function CreateSupplier() {
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             CreatedBy: $('#txtUserid').val(),
-            OpeningBalance: $("#txtSupplierOpeningBalance").val(),
-            OpeningBalanceDate: $("#txtSupplierOpeningBalanceDate").val(),
 
         }
 
@@ -90,15 +88,13 @@ function ClearSupplierTextBox() {
     $('#txtBranch').val('');
     $('#txtAccount').val('');
     $('#txtIFFC').val('');
-    $('#txtSupplierOpeningBalanceDate').val('');
-    $('#txtSupplierOpeningBalance').val('');
 
     var button = document.getElementById("btnsupplier");
     if ($('#txtSupplierid').val() == '') {
         button.textContent = "Create";
-        const today = new Date(); 
-        const formattedDate = formatDate(today); 
-        $('#txtSupplierOpeningBalanceDate').val(formattedDate);
+        const today = new Date();
+        const formattedDate = formatDate(today);
+
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createSupplier'));
     offcanvas.show();
@@ -126,9 +122,6 @@ function DisplaySupplierDetails(SupplierId) {
             $('#txtBranch').val(response.branchName);
             $('#txtAccount').val(response.accountNo);
             $('#txtIFFC').val(response.iffccode);
-            $('#txtSupplierOpeningBalance').val(response.openingBalance);
-            const formattedDate = formatDate(response.openingBalanceDate);
-            $('#txtSupplierOpeningBalanceDate').val(formattedDate);
 
             setTimeout(function () { $('#ddlCity').val(response.city); }, 100)
             var button = document.getElementById("btnsupplier");
@@ -181,9 +174,7 @@ function SelectSupplierDetails(SupplierId, element) {
                 $('#dspBankName').val(response.bankName);
                 $('#dspAccountNo').val(response.accountNo);
                 $('#dspIffccode').val(response.iffccode);
-                $('#dspOpeningBalance').val(response.openingBalance);
-                const formattedDate = formatDate(response.openingBalanceDate);
-                $('#dspOpeningBalanceDate').val(formattedDate);
+
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -203,8 +194,6 @@ function AllUserTable() {
 
     $.get("/Supplier/SupplierListAction", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
-
-
             $("#Supplierbody").html(result);
         })
         .fail(function (error) {
@@ -274,8 +263,7 @@ function UpdateSupplierDetails() {
             AccountNo: $('#txtAccount').val(),
             Iffccode: $('#txtIFFC').val(),
             UpdatedBy: $('#txtUserid').val(),
-            OpeningBalance: $("#txtSupplierOpeningBalance").val(),
-            OpeningBalanceDate: $("#txtSupplierOpeningBalanceDate").val(),
+
         }
 
         if (objData.City == "--Select City--" || objData.State == "--Select State--") {

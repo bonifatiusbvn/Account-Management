@@ -3,7 +3,6 @@
 @{
     decimal? youGaveTotal = 0;
     decimal? youGetTotal = 0;
-    decimal? OpeningBalance = 0;
 
 }
 
@@ -126,7 +125,7 @@
 
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>'         +
+            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>'               +
             '<td><b class="">' + Pending.toFixed(2) + '</b></td></tr>';
 
         $('#reportInvoicenetFooter').html(footerContent);
