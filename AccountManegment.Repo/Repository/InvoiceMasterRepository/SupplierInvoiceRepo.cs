@@ -126,7 +126,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                             {
                                                 s,
                                                 SupplierName = b.SupplierName,
-                                                OpeningBalance = b.OpeningBalance,
                                                 CompanyName = c.CompanyName,
                                                 SiteName = d.SiteName
                                             };
@@ -210,10 +209,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SiteId = group.FirstOrDefault().s.SiteId,
                         SupplierId = group.FirstOrDefault().s.SupplierId,
                         CompanyId = group.Key,
-                        OpeningBalance = group.FirstOrDefault().OpeningBalance,
+                       
                         PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
                         NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
-                        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount) + group.FirstOrDefault().OpeningBalance,
+                        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
 
                         GroupName = group.FirstOrDefault().s.SiteGroup,
                         Description = string.Join(", ", group.Select(x => x.s.Description)),
@@ -227,10 +226,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SiteName = group.FirstOrDefault().SiteName
                     })
                     .ToListAsync();
-                var openingBalance = supplierInvoices.FirstOrDefault().OpeningBalance;
                 var totalPurchase = supplierInvoices.Sum(inv => inv.PayOutTotalAmount);
                 var onlineCashSum = supplierInvoices.Sum(inv => inv.NonPayOutTotalAmount);
-                var difference = (onlineCashSum - totalPurchase) + openingBalance;
+                var difference = onlineCashSum - totalPurchase ;
 
                 var PayOutDetails = new InvoiceTotalAmount
                 {
@@ -569,8 +567,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         TotalGstamount = a.TotalGstamount,
                                         Description = a.Description,
                                         Tds = a.Tds,
-                                        OpeningBalance = b.OpeningBalance,
-                                        OpeningBalanceDate = b.OpeningBalanceDate,
                                         CompanyId = a.CompanyId,
                                         Date = a.Date,
                                         CompanyName = c.CompanyName,
@@ -958,8 +954,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                              {
                                  s,
                                  SupplierName = b.SupplierName,
-                                 OpeningBalance = b.OpeningBalance,
-                                 OpeningBalanceDate = b.OpeningBalanceDate,
                                  CompanyName = c.CompanyName,
                                  SiteName = d.SiteName,
                                  Date = s.Date
@@ -1073,8 +1067,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     TotalDiscount = s.s.TotalDiscount,
                     TotalGstamount = s.s.TotalGstamount,
                     Tds = s.s.Tds,
-                    OpeningBalance = s.OpeningBalance,
-                    OpeningBalanceDate = s.OpeningBalanceDate,
                     Description = s.s.Description,
                     CompanyName = s.CompanyName,
                     SupplierName = s.SupplierName,

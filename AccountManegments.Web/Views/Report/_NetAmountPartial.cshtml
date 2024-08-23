@@ -79,7 +79,6 @@
                         {
                             youGaveTotal += item.PayOutTotalAmount;
                             youGetTotal += item.NonPayOutTotalAmount;
-                            OpeningBalance += item.NetAmount;
 
                             <tr style="height:55px;" class="text-center">
                                 <td>@item.SupplierName</td>
@@ -123,7 +122,7 @@
     $(document).ready(function () {
         var youGaveTotal = @youGaveTotal ?? 0;
         var youGetTotal = @youGetTotal ?? 0;
-        var Pending = @OpeningBalance?? 0;
+        var Pending = youGetTotal - youGaveTotal;
 
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td>' +
             '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
