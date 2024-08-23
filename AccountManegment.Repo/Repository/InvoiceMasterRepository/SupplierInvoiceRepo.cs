@@ -952,7 +952,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                  s,
                                  SupplierName = b.SupplierName,
                                  CompanyName = c.CompanyName,
-                                 SiteName = d.SiteName
+                                 SiteName = d.SiteName,
+                                 Date = s.Date
                              }).AsQueryable();
 
 
@@ -970,14 +971,26 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.Where(s => s.s.SupplierId == invoiceReport.SupplierId.Value);
                 }
+
                 if (!string.IsNullOrEmpty(invoiceReport.GroupName))
                 {
                     query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
                 }
 
-                if (!string.IsNullOrEmpty(invoiceReport.sortDates))
+                if (!string.IsNullOrEmpty(invoiceReport.sortBy))
                 {
-                    query = query.OrderBy(s => s.s.Date);
+                    string sortOrder = invoiceReport.sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = invoiceReport.sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "date":
+                            query = sortOrder == "ascending"
+                                ? query.OrderBy(u => u.Date)
+                                : query.OrderByDescending(u => u.Date);
+                            break;
+
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
