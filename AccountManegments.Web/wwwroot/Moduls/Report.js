@@ -84,6 +84,58 @@ function GetAllSupplierList() {
     });
 }
 
+let currentReportSortOrder = 'AscendingDate';
+function sortReportTable(field) {
+    if (currentReportSortOrder === 'Ascending' + field) {
+        currentReportSortOrder = 'Descending' + field;
+    } else {
+        currentReportSortOrder = 'Ascending' + field;
+    }
+
+    selectedSortOrder = currentReportSortOrder;
+
+    if (selectedGroupName) {
+        var objData = {
+            GroupName: selectedGroupName,
+            sortBy: selectedSortOrder,
+        };
+    }
+    else {
+        var objData = {
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            GroupName: selectedGroupName,
+            SelectedYear: selectedYears,
+            sortBy: selectedSortOrder,
+        };
+    }
+
+    siteloadershow();
+
+    $.ajax({
+        type: "post",
+        url: '/Report/GetSupplierInvoiceDetailsReport',
+        data: objData,
+        datatype: 'json',
+        success: function (result) {
+            siteloaderhide();
+            $("#reportInvoiceListbody").html(result);
+
+            if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+                $("#downloadreportfile").hide();
+            } else {
+                $("#downloadreportfile").show();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error: ', status, error);
+        }
+    });
+}
+
 var selectedSiteId = null;
 var selectedCompanyId = null;
 var selectedSupplierId = null;
@@ -92,6 +144,7 @@ var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
 var selectedYears = null;
+var selectedSortOrder = "AscendingDate";
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
@@ -203,6 +256,8 @@ function GetInvoiceReportData() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            sortBy: selectedSortOrder,
+            GroupName: null,
         };
         loadReportData(objData);
     }
@@ -211,7 +266,8 @@ function GetInvoiceGroupData() {
 
     if (selectedGroupName) {
         var objData = {
-            GroupName: selectedGroupName
+            GroupName: selectedGroupName,
+            sortBy: selectedSortOrder,
         };
         loadReportData(objData);
     }
@@ -219,10 +275,13 @@ function GetInvoiceGroupData() {
 function GetCurrentMonthInvoiceList() {
 
     selectedfilterType = "currentMonth";
+    selectedGroupName = null
     var objData = {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
-        filterType: selectedfilterType
+        filterType: selectedfilterType,
+        sortBy: selectedSortOrder,
+        GroupName: null,
     };
     loadReportData(objData);
 }
@@ -230,10 +289,13 @@ function GetCurrentMonthInvoiceList() {
 function GetCurrentYearInvoiceList() {
 
     selectedfilterType = "currentYear";
+    selectedGroupName = null
     var objData = {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
-        filterType: selectedfilterType
+        filterType: selectedfilterType,
+        sortBy: selectedSortOrder,
+        GroupName: null,
     };
     loadReportData(objData);
 }
@@ -242,6 +304,7 @@ function GetBetweenDateInvoiceList() {
     selectedstartDate = $('#startDate').val();
     selectedendDate = $('#endDate').val();
     selectedfilterType = "dateRange";
+    selectedGroupName = null
 
     if (!selectedstartDate || !selectedendDate) {
         toastr.warning("Select dates");
@@ -251,7 +314,9 @@ function GetBetweenDateInvoiceList() {
             SupplierId: selectedSupplierId,
             filterType: selectedfilterType,
             startDate: selectedstartDate,
-            endDate: selectedendDate
+            endDate: selectedendDate,
+            sortBy: selectedSortOrder,
+            selectedGroupName: null,
         };
         loadReportData(objData);
     }
@@ -261,6 +326,7 @@ function GetBetweenDateInvoiceList() {
 function GetBetweenYearInvoiceList() {
     selectedYears = $('#yearDropdown').val();
     var selectedFilterType = "betweenYear";
+    selectedGroupName = null
 
     if (selectedYears) {
         var objData = {
@@ -268,6 +334,7 @@ function GetBetweenYearInvoiceList() {
             SupplierId: selectedSupplierId,
             filterType: selectedFilterType,
             SelectedYear: selectedYears,
+            selectedGroupName: null,
         };
         loadReportData(objData);
     } else {
@@ -276,17 +343,26 @@ function GetBetweenYearInvoiceList() {
 }
 
 function ExportToPDF() {
-
     siteloadershow();
-    var objData = {
-        SiteId: selectedSiteId,
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        startDate: selectedstartDate,
-        endDate: selectedendDate,
-        sortDates: "sortAccordingToDates",
-    };
+    if (selectedGroupName) {
+        var objData = {
+            GroupName: selectedGroupName,
+            sortBy: "AscendingDate",
+        };
+    }
+    else {
+        var objData = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            GroupName: selectedGroupName,
+            SelectedYear: selectedYears,
+            sortBy: "AscendingDate",
+        };
+    }
     $.ajax({
         url: '/Report/ExportToPdf',
         type: 'POST',
@@ -339,15 +415,25 @@ function ExportToPDF() {
 
 function ExportToExcel() {
     siteloadershow();
-    var objData = {
-        SiteId: selectedSiteId,
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        startDate: selectedstartDate,
-        endDate: selectedendDate,
-        sortDates: "sortAccordingToDates",
-    };
+    if (selectedGroupName) {
+        var objData = {
+            GroupName: selectedGroupName,
+            sortBy: "AscendingDate",
+        };
+    }
+    else {
+        var objData = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            GroupName: selectedGroupName,
+            SelectedYear: selectedYears,
+            sortBy: "AscendingDate",
+        };
+    }
     $.ajax({
         url: '/Report/ExportToExcel',
         type: 'GET',
@@ -573,6 +659,7 @@ function GetPayoutReportData() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            GroupName: null,
         };
         getnetamount(PayOutReport);
     }
@@ -589,10 +676,12 @@ function GetPayoutGroupData() {
 function GetCurrentMonthPayoutInvoiceList() {
 
     selectedfilterType = "currentMonth";
+    selectedGroupName = null;
     var PayOutReport = {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
-        filterType: selectedfilterType
+        filterType: selectedfilterType,
+        GroupName: null,
     };
     getnetamount(PayOutReport);
 }
@@ -600,10 +689,12 @@ function GetCurrentMonthPayoutInvoiceList() {
 function GetCurrentYearPayoutInvoiceList() {
 
     selectedfilterType = "currentYear";
+    selectedGroupName = null;
     var PayOutReport = {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
-        filterType: selectedfilterType
+        filterType: selectedfilterType,
+        GroupName: null,
     };
     getnetamount(PayOutReport);
 }
@@ -612,6 +703,7 @@ function GetBetweenDatePayoutInvoiceList() {
     selectedstartDate = $('#startDate').val();
     selectedendDate = $('#endDate').val();
     selectedfilterType = "dateRange";
+    selectedGroupName = null;
 
     if (!selectedstartDate || !selectedendDate) {
         toastr.warning("Select dates");
@@ -621,7 +713,8 @@ function GetBetweenDatePayoutInvoiceList() {
             SupplierId: selectedSupplierId,
             filterType: selectedfilterType,
             startDate: selectedstartDate,
-            endDate: selectedendDate
+            endDate: selectedendDate,
+            GroupName: null,
         };
         getnetamount(PayOutReport);
     }
@@ -631,6 +724,7 @@ function GetBetweenDatePayoutInvoiceList() {
 function GetBetweenYearPayoutInvoiceList() {
     var selectedYears = $('#yearDropdown').val();
     var selectedFilterType = "betweenYear";
+    selectedGroupName = null;
 
     if (selectedYears) {
         var PayOutReport = {
@@ -638,6 +732,7 @@ function GetBetweenYearPayoutInvoiceList() {
             SupplierId: selectedSupplierId,
             filterType: selectedFilterType,
             SelectedYear: selectedYears,
+            GroupName: null,
         };
         getnetamount(PayOutReport);
     } else {
@@ -745,15 +840,22 @@ function updatePayoutRowNumbers() {
 
 function ExportNetReportToPDF() {
     siteloadershow();
-    var PayOutReport = {
-        SiteId: selectedSiteId,
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        startDate: selectedstartDate,
-        endDate: selectedendDate,
-        SelectedYear: selectedYears,
-    };
+    if (selectedGroupName) {
+        var PayOutReport = {
+            GroupName: selectedGroupName
+        };
+    }
+    else {
+        var PayOutReport = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            SelectedYear: selectedYears,
+        };
+    }
     $.ajax({
         url: '/Report/ExportNetReportToPDF',
         type: 'POST',
@@ -806,15 +908,22 @@ function ExportNetReportToPDF() {
 
 function ExportNetReportToExcel() {
     siteloadershow();
-    var PayOutReport = {
-        SiteId: selectedSiteId,
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        startDate: selectedstartDate,
-        endDate: selectedendDate,
-        SelectedYear: selectedYears,
-    };
+    if (selectedGroupName) {
+        var PayOutReport = {
+            GroupName: selectedGroupName
+        };
+    }
+    else {
+        var PayOutReport = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            SelectedYear: selectedYears,
+        };
+    }
     $.ajax({
         url: '/Report/ExportNetReportToExcel',
         type: 'GET',
@@ -923,9 +1032,9 @@ function InsertPayOutDetailsReport() {
                     siteloaderhide();
                     if (result.code == 200) {
                         toastr.success(result.message);
-                        setTimeout(function () {
-                            window.location = '/Report/ReportDetails';
-                        }, 2000);
+                        GetInvoiceReportData();
+                        GetPayoutReportData();
+                        $('#payoutpartialView').hide();
                     } else {
                         toastr.error(result.message);
                     }
