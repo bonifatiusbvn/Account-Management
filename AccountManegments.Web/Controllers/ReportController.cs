@@ -412,6 +412,25 @@ namespace AccountManegments.Web.Controllers
 
                     pdfPage.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment("\n\n"));
 
+                    //Add SiteName 
+                    var nameText = UserSession.SiteName;
+
+                    var textState = new TextState
+                    {
+                        FontSize = 14,
+                        FontStyle = FontStyles.Bold,
+                        ForegroundColor = Aspose.Pdf.Color.FromRgb(System.Drawing.Color.Black)
+                    };
+
+                    var nameFragment = new Aspose.Pdf.Text.TextFragment(nameText);
+
+                    nameFragment.TextState.FontSize = textState.FontSize;
+                    nameFragment.TextState.FontStyle = textState.FontStyle;
+                    nameFragment.TextState.ForegroundColor = textState.ForegroundColor;
+                    nameFragment.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    pdfPage.Paragraphs.Add(nameFragment);
+
                     // Table 2
                     var table = new Aspose.Pdf.Table
                     {
@@ -521,10 +540,21 @@ namespace AccountManegments.Web.Controllers
                         dataRange1.Style.Border.RightBorder = XLBorderStyleValues.Thin;
                         dataRange1.Style.Border.RightBorderColor = XLColor.Black;
 
-               
+                        // Add a text block between Table 1 and Table 2
                         row += 3;
+                        var nameText = UserSession.SiteName;
+                        ws.Cell(row, 1).Value = nameText;
+                        var textCell = ws.Cell(row, 1);
+                        textCell.Style.Font.Bold = true;
+                        textCell.Style.Font.FontSize = 14; 
+                        textCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        textCell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        ws.Row(row).Height = 30;
 
                         // Table-2
+
+                        row += 2;
+                      
                         ws.Cell(row, 1).Value = "Company";
                         ws.Cell(row, 2).Value = "Supplier";
                         ws.Cell(row, 3).Value = "Debit";
