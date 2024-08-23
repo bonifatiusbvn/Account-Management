@@ -209,11 +209,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SiteId = group.FirstOrDefault().s.SiteId,
                         SupplierId = group.FirstOrDefault().s.SupplierId,
                         CompanyId = group.Key,
-                       
+
                         PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
                         NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
                         NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-
                         GroupName = group.FirstOrDefault().s.SiteGroup,
                         Description = string.Join(", ", group.Select(x => x.s.Description)),
                         CompanyName = group.FirstOrDefault().CompanyName,
@@ -228,7 +227,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     .ToListAsync();
                 var totalPurchase = supplierInvoices.Sum(inv => inv.PayOutTotalAmount);
                 var onlineCashSum = supplierInvoices.Sum(inv => inv.NonPayOutTotalAmount);
-                var difference = onlineCashSum - totalPurchase ;
+                var difference = onlineCashSum - totalPurchase;
 
                 var PayOutDetails = new InvoiceTotalAmount
                 {
