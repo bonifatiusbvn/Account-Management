@@ -517,7 +517,7 @@ function InsertMultipleSupplierItem() {
                         siteloaderhide();
                         toastr.success(Result.message);
                         setTimeout(function () {
-                            window.location = '/InvoiceMaster/DisplayInvoiceDetails?Id=' + Result.data;
+                            window.location = '/InvoiceMaster/SupplierInvoiceListView';
                         }, 2000);
                     }
                     else {

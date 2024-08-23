@@ -971,7 +971,7 @@ function InsertMultiplePurchaseOrderDetails() {
                         siteloaderhide();
                         toastr.success(Result.message);
                         setTimeout(function () {
-                            window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
+                            window.location = '/PurchaseMaster/POListView';
                         }, 2000);
                     }
                     else {
