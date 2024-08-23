@@ -64,7 +64,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal? NetAmount { get; set; }
         public string? GroupName { get; set; }
 
+        public decimal? OpeningBalance { get; set; }
 
+        public DateTime? OpeningBalanceDate { get; set; }
         public bool? IsApproved { get; set; }
     }
     public class InvoiceTotalAmount
