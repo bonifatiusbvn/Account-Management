@@ -10,6 +10,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Reflection;
 
 namespace AccountManegments.Web.Controllers
@@ -47,6 +48,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
                     GroupName = invoiceReport.GroupName,
+                    sortBy = invoiceReport.sortBy
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
@@ -67,7 +69,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 InvoiceReportModel invoiceReportModel = new InvoiceReportModel
                 {
                     SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
@@ -78,7 +79,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
                     GroupName = invoiceReport.GroupName,
-                    sortDates = invoiceReport.sortDates,
+                    sortBy = invoiceReport.sortBy
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
@@ -187,7 +188,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = invoiceReport.endDate,
                     SelectedYear = invoiceReport.SelectedYear,
                     GroupName = invoiceReport.GroupName,
-                    sortDates = invoiceReport.sortDates,
+                    sortBy = invoiceReport.sortBy
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
