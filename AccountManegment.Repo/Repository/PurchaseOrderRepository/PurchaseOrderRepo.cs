@@ -454,6 +454,12 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                             else if (sortOrder == "descending")
                                 PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.TotalAmount);
                             break;
+                        case "date":
+                            if (sortOrder == "ascending")
+                                PurchaseOrder = PurchaseOrder.OrderBy(u => u.Date);
+                            else if (sortOrder == "descending")
+                                PurchaseOrder = PurchaseOrder.OrderByDescending(u => u.Date);
+                            break;
                         default:
                             break;
                     }
