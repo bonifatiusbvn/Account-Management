@@ -58,7 +58,9 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Purchase Order Id</th>
-                                                        <th>Date</th>
+                                                        <th>
+                                                            <a href="#" onclick="sortPOTableDate('Date')" class="white-text">Date</a>
+                                                        </th>
                                                         @if (_userSession.UserRole == 3)
                                                         {
                                                             <th>Site Name</th>
@@ -87,7 +89,9 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    let currentPOSortOrder = 'AscendingDate';
+</script>
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }

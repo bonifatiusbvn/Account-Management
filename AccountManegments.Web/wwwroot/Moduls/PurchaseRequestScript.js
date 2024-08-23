@@ -1833,3 +1833,33 @@ document.getElementById('textpoPricePerUnit').addEventListener('input', function
 document.getElementById('textpoIsWithGst').addEventListener('change', function () {
     WithGSTSelected();
 });
+
+
+
+currentPOSortOrder;
+function sortPOTableDate(field) {
+
+    if (currentPOSortOrder === 'Ascending' + field) {
+        currentPOSortOrder = 'Descending' + field;
+    } else {
+        currentPOSortOrder = 'Ascending' + field;
+    }
+
+    siteloadershow();
+
+    $.ajax({
+        url: '/PurchaseMaster/POListAction',
+        type: 'GET',
+        data: {
+            sortBy: currentPOSortOrder,
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#PurchaseOrderListbody").html(result);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching sorted data:", error);
+            siteloaderhide();
+        }
+    });
+}
