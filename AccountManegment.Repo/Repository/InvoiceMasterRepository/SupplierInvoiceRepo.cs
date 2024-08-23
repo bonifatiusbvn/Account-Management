@@ -135,6 +135,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.CompanyId == PayOutReport.CompanyId.Value);
                 }
 
+                if (PayOutReport.SiteId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
+                }
+
                 if (PayOutReport.SupplierId.HasValue)
                 {
                     supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SupplierId == PayOutReport.SupplierId.Value);
