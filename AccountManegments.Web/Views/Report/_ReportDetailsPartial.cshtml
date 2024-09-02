@@ -12,12 +12,12 @@
         youGaveTotal += item.InvoiceNo == "PayOut" ? item.TotalAmount : 0;
         youGetTotal += item.InvoiceNo != "PayOut" ? item.TotalAmount : 0;
 
-        <tr style="height:55px;" class="text-center">
+        <tr style="height:55px;">
             <td>@(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo)</td>
-            <td style="width:86px;">@item.Date?.ToString("dd-MM-yyyy")</td>
+            <td>@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
-            <td style="width: 120px;">@item.CompanyName</td>
+            <td>@item.CompanyName</td>
             <td>@item.SupplierName</td>
             <td class="text-danger">
                 @if (item.InvoiceNo == "PayOut")

@@ -38,20 +38,7 @@ namespace AccountManegments.Web.Controllers
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
 
-                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
-                {
-                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
-                    CompanyId = invoiceReport.CompanyId,
-                    SupplierId = invoiceReport.SupplierId,
-                    filterType = invoiceReport.filterType,
-                    startDate = invoiceReport.startDate,
-                    endDate = invoiceReport.endDate,
-                    SelectedYear = invoiceReport.SelectedYear,
-                    GroupName = invoiceReport.GroupName,
-                    sortBy = invoiceReport.sortBy
-                };
-
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
                 if (response.code == 200)
                 {
                     SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());

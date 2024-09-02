@@ -1054,6 +1054,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value);
                 }
 
+                if (!invoiceReport.CompanyId.HasValue && !invoiceReport.SiteId.HasValue && !invoiceReport.SupplierId.HasValue && string.IsNullOrEmpty(invoiceReport.GroupName) && string.IsNullOrEmpty(invoiceReport.sortBy) && string.IsNullOrEmpty(invoiceReport.filterType) && !invoiceReport.startDate.HasValue && !invoiceReport.endDate.HasValue)
+                {
+                    return null;
+                }
+
                 var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
                 {
                     Id = s.s.Id,

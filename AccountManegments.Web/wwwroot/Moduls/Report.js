@@ -1,7 +1,6 @@
 ﻿GetAllSiteList();
 GetAllCompanyList();
 GetAllSupplierList();
-loadReportData();
 GetGroupList();
 function GetAllSiteList() {
     $.ajax({
@@ -26,9 +25,6 @@ function GetAllCompanyList() {
                 $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
             });
 
-            if (result.length > 0) {
-                $dropdown.val(result[0].companyId).trigger('change');
-            }
         },
         error: function (err) {
             console.error("Failed to fetch company list: ", err);
@@ -41,8 +37,6 @@ function GetGroupList() {
     $.ajax({
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
-            $('#textReportGroupList').empty();
-            $('#textReportGroupList').append('<option value="">Select Group</option>');
             $.each(result, function (i, data) {
                 $('#textReportGroupList').append('<Option value=' + data.groupName + '>' + data.groupName + '</Option>')
             });
@@ -145,6 +139,7 @@ var selectedfilterType = null;
 var selectedGroupName = null;
 var selectedYears = null;
 var selectedSortOrder = "DescendingDate";
+var parsedSiteId = null;
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
@@ -168,62 +163,52 @@ $(document).ready(function () {
         $('#startDate').val('');
         $('#endDate').val('');
     }
-    $('#textReportSupplierNameHidden').change(function () {
-        selectedSupplierId = $(this).val();
-        GetPayoutReportData();
-        GetGroupList();
-        GetInvoiceReportData();
-    });
-
-    $('#textReportCompanyName').change(function () {
-        selectedCompanyId = $(this).val();
-        GetGroupList();
-        GetInvoiceReportData();
-        GetPayoutReportData();
-    });
-    $('#textReportGroupList').change(function () {
-        selectedGroupName = $(this).val();
-        GetInvoiceGroupData();
-        GetPayoutGroupData();
-    });
-
     $('#timePeriodDropdown').change(function () {
         var selectedValue = $(this).val();
 
-        if (selectedValue === 'This Month') {
-            GetCurrentMonthInvoiceList();
-            GetCurrentMonthPayoutInvoiceList();
-            $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
-        } else if (selectedValue === 'This Year') {
-            GetCurrentYearInvoiceList();
-            GetCurrentYearPayoutInvoiceList();
-            $('#startDate, #endDate, #yearDropdown, #searchBetweenDate').hide();
+        if (selectedValue === 'This Month' || selectedValue === 'This Year') {
+            $('#startDate, #endDate, #yearDropdown').hide();
         } else if (selectedValue === 'Between Date') {
-            $('#startDate, #endDate, #searchBetweenDate').show();
+            $('#startDate, #endDate, #searchReportButton').show();
             $('#yearDropdown').hide();
             clearDates();
         } else if (selectedValue === 'Between Year') {
-            $('#yearDropdown, #searchBetweenDate').show();
+            $('#yearDropdown, #searchReportButton').show();
             $('#startDate, #endDate').hide();
             populateYearDropdown();
-        }
-    });
-
-    $('.nav-btn').click(function () {
-        var selectedValue = $('#timePeriodDropdown').val();
-
-        if (selectedValue === 'Between Date') {
-            GetBetweenDateInvoiceList();
-            GetBetweenDatePayoutInvoiceList();
-        } else if (selectedValue === 'Between Year') {
-            GetBetweenYearInvoiceList();
-            GetBetweenYearPayoutInvoiceList();
         }
     });
 });
 
 
+function SearchReportData() {
+    var selectedValue = $('#timePeriodDropdown').val();
 
+    if (selectedValue === 'This Month') {
+        GetCurrentMonthInvoiceList();
+    } else if (selectedValue === 'This Year') {
+        GetCurrentYearInvoiceList();
+    } else if (selectedValue === 'Between Date') {
+        GetBetweenDateInvoiceList();
+    } else if (selectedValue === 'Between Year') {
+        GetBetweenYearInvoiceList();
+    }
+
+    selectedSupplierId = $('#textReportSupplierNameHidden').val();
+    selectedCompanyId = $('#textReportCompanyName').val();
+    selectedGroupName = $('#textReportGroupList').val();
+    selectedReportSiteName = $('#txtReportSiteId').val();
+
+
+    if (selectedSupplierId == "" && selectedCompanyId == "" && selectedGroupName == "" && parsedSiteId != null) {
+        toastr.warning("Select any compny, supplier or group!");
+    }
+
+    GetGroupList();
+    GetInvoiceReportData();
+    GetInvoiceGroupData();
+    GetInvoiceSiteData();
+}
 
 
 function loadReportData(objData) {
@@ -261,6 +246,21 @@ function GetInvoiceReportData() {
         };
         loadReportData(objData);
     }
+}
+function GetInvoiceSiteData() {
+
+    if (selectedReportSiteName && isValidGuid(selectedReportSiteName)) {
+        parsedSiteId = selectedReportSiteName;
+    }
+    var objData = {
+        SiteId: parsedSiteId,
+        sortBy: selectedSortOrder,
+    };
+    loadReportData(objData);
+}
+function isValidGuid(guid) {
+    var guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    return guidRegex.test(guid);
 }
 function GetInvoiceGroupData() {
 
@@ -512,7 +512,8 @@ function deletePayoutDetails(InvoiceId) {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(function () {
-                            window.location = '/Report/ReportDetails';
+                            GetInvoiceReportData();
+                            GetInvoiceGroupData();
                         })
                     }
                     else {
@@ -650,137 +651,8 @@ function ClearPayoutTextBox() {
     $('#Edittxtpayoutdescription').val('');
     $("#Editpayoutpaymenttype").prop("checked", false);
 }
-function GetPayoutReportData() {
-
-    if (selectedCompanyId || selectedSupplierId) {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    }
-}
-function GetPayoutGroupData() {
-
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-        getnetamount(PayOutReport);
-    }
-}
-function GetCurrentMonthPayoutInvoiceList() {
-
-    selectedfilterType = "currentMonth";
-    selectedGroupName = null;
-    var PayOutReport = {
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        GroupName: null,
-    };
-    getnetamount(PayOutReport);
-}
-
-function GetCurrentYearPayoutInvoiceList() {
-
-    selectedfilterType = "currentYear";
-    selectedGroupName = null;
-    var PayOutReport = {
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        GroupName: null,
-    };
-    getnetamount(PayOutReport);
-}
-
-function GetBetweenDatePayoutInvoiceList() {
-    selectedstartDate = $('#startDate').val();
-    selectedendDate = $('#endDate').val();
-    selectedfilterType = "dateRange";
-    selectedGroupName = null;
-
-    if (!selectedstartDate || !selectedendDate) {
-        toastr.warning("Select dates");
-    } else {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    }
-}
 
 
-function GetBetweenYearPayoutInvoiceList() {
-    var selectedYears = $('#yearDropdown').val();
-    var selectedFilterType = "betweenYear";
-    selectedGroupName = null;
-
-    if (selectedYears) {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedFilterType,
-            SelectedYear: selectedYears,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    } else {
-        alert('Please select a year.');
-    }
-}
-function getnetamount(PayOutReport) {
-    $.ajax({
-        url: '/InvoiceMaster/GetInvoiceDetails',
-        type: 'POST',
-        data: PayOutReport,
-        datatype: 'json',
-        success: function (result) {
-
-            siteloaderhide();
-            $("#dispalybody").addClass('d-none');
-            $("#dispalynetamount").html(result);
-
-            $('#txtpayoutamount').on('input', function () {
-                var enteredAmount = parseFloat($(this).val());
-
-                if (!isNaN(enteredAmount)) {
-                    var pendingAmount = totalpendingAmount - enteredAmount;
-
-                    if (enteredAmount > totalpendingAmount) {
-                        $('#spnpayout').text('Entered amount cannot exceed pending amount.');
-                    } else {
-                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                        $('#spnpayout').text('');
-                    }
-                } else {
-                    $('#spnpayout').text('');
-                    $('#txtpendingamount').val('');
-                }
-            });
-
-            if ($("#dispalynetamount").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-                $("#downloadnetreportfile").hide();
-            } else {
-                $("#downloadnetreportfile").show();
-            }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            console.error("An error occurred: " + error);
-        }
-    });
-}
 
 
 let rowCounter = 0;
@@ -835,142 +707,6 @@ function removePayout(buttonElement) {
 function updatePayoutRowNumbers() {
     $('#payoutpartialView .payoutinvoicerow').each(function (index) {
         $(this).find('.row-number').text(index + 1 + '.');
-    });
-}
-
-function ExportNetReportToPDF() {
-    siteloadershow();
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-    }
-    else {
-        var PayOutReport = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            SelectedYear: selectedYears,
-        };
-    }
-    $.ajax({
-        url: '/Report/ExportNetReportToPDF',
-        type: 'POST',
-        data: PayOutReport,
-        datatype: 'json',
-        success: function (data, status, xhr) {
-            siteloaderhide();
-            var filename = "";
-            var disposition = xhr.getResponseHeader('Content-Disposition');
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
-                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-            }
-
-            var type = xhr.getResponseHeader('Content-Type');
-            var blob = new Blob([data], { type: type });
-
-            if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                window.navigator.msSaveBlob(blob, filename);
-            } else {
-                var URL = window.URL || window.webkitURL;
-                var downloadUrl = URL.createObjectURL(blob);
-
-                if (filename) {
-                    var a = document.createElement("a");
-                    if (typeof a.download === 'undefined') {
-                        window.location = downloadUrl;
-                    } else {
-                        a.href = downloadUrl;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                    }
-                } else {
-                    window.location = downloadUrl;
-                }
-
-                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
-            }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            toastr.warning("No data found for the selected criteria.");
-        },
-        xhrFields: {
-            responseType: 'blob'
-        }
-    });
-}
-
-function ExportNetReportToExcel() {
-    siteloadershow();
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-    }
-    else {
-        var PayOutReport = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            SelectedYear: selectedYears,
-        };
-    }
-    $.ajax({
-        url: '/Report/ExportNetReportToExcel',
-        type: 'GET',
-        data: PayOutReport,
-        datatype: 'json',
-        success: function (data, status, xhr) {
-            siteloaderhide();
-            var filename = "";
-            var disposition = xhr.getResponseHeader('Content-Disposition');
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
-                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-            }
-
-            var type = xhr.getResponseHeader('Content-Type');
-            var blob = new Blob([data], { type: type });
-
-            if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                window.navigator.msSaveBlob(blob, filename);
-            } else {
-                var URL = window.URL || window.webkitURL;
-                var downloadUrl = URL.createObjectURL(blob);
-
-                if (filename) {
-                    var a = document.createElement("a");
-                    if (typeof a.download === 'undefined') {
-                        window.location = downloadUrl;
-                    } else {
-                        a.href = downloadUrl;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                    }
-                } else {
-                    window.location = downloadUrl;
-                }
-
-                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
-            }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            toastr.warning("No data found for the selected criteria.");
-        },
-        xhrFields: {
-            responseType: 'blob'
-        }
     });
 }
 
