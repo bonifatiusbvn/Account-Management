@@ -13,14 +13,27 @@
         youGetTotal += item.InvoiceNo != "PayOut" ? item.TotalAmount : 0;
 
         <tr style="height:55px;" class="text-center">
-            <td>@(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo)</td>
+            <td>
+                @if (item.InvoiceNo == "PayOut")
+                {
+                    @item.InvoiceNo
+                }
+                else if (item.InvoiceNo == "Outstanding")
+                {
+                    @item.InvoiceNo
+                }
+                else
+                {
+                    @item.SupplierInvoiceNo
+                }
+            </td>
             <td style="width:86px;">@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
             <td style="width: 120px;">@item.CompanyName</td>
             <td>@item.SupplierName</td>
             <td class="text-danger">
-                @if (item.InvoiceNo == "PayOut")
+                @if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Outstanding")
                 {
                     @item.TotalAmount
                 }
@@ -30,7 +43,7 @@
                 }
             </td>
             <td class="text-success">
-                @if (item.InvoiceNo != "PayOut")
+                @if (item.InvoiceNo != "PayOut" && item.InvoiceNo != "Outstanding")
                 {
                     @item.TotalAmount
                 }
@@ -40,7 +53,7 @@
                 }
             </td>
 
-            @if (item.InvoiceNo == "PayOut" && UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
+            @if (item.InvoiceNo == "PayOut"|| item.InvoiceNo == "Outstanding" && UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
             {
                 <td style="width:auto; white-space: nowrap; padding: 0;">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && a.Edit == true))
@@ -56,8 +69,6 @@
                         </a>
                     }
                 </td>
-
-
             }
         </tr>
     }
@@ -86,6 +97,6 @@ else
     }
 
             footerContent += '</tr>';
-            $('#reportInvoiceListFooter').html(footerContent);
-        });
+        $('#reportInvoiceListFooter').html(footerContent);
+    });
 </script>

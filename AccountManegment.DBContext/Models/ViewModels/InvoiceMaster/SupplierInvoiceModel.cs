@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountManagement.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,5 +89,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? sortBy { get; set; }
         public string? SupplierName { get; set; }
         public string? CompanyName { get; set; }
+    }
+
+    public class SupplierInvoiceQueryResult
+    {
+        public SupplierInvoice S { get; set; }
+        public string SupplierName { get; set; }
+        public string CompanyName { get; set; }
+        public DateTime? Date { get; set; }
+        public Guid? SiteId { get; set; }
+        public string SiteName { get; set; } 
     }
 }

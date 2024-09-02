@@ -1,7 +1,7 @@
 ﻿GetAllSiteList();
 GetAllCompanyList();
 GetAllSupplierList();
-loadReportData();
+LoadReport();
 GetGroupList();
 function GetAllSiteList() {
     $.ajax({
@@ -230,7 +230,18 @@ $(document).ready(function () {
 });
 
 
-
+function LoadReport() { 
+    var objData = {
+        CompanyId: selectedCompanyId,
+        SupplierId: selectedSupplierId,
+        filterType: selectedfilterType,
+        startDate: selectedstartDate,
+        endDate: selectedendDate,
+        sortBy: selectedSortOrder,
+        GroupName: null,
+    };
+    loadReportData(objData);
+}
 
 
 function loadReportData(objData) {
@@ -255,7 +266,6 @@ function loadReportData(objData) {
 }
 
 function GetInvoiceReportData() {
-
     if (selectedCompanyId || selectedSupplierId) {
         var objData = {
             CompanyId: selectedCompanyId,
@@ -669,6 +679,7 @@ function GetPayoutReportData() {
             SupplierId: selectedSupplierId,
             filterType: selectedfilterType,
             startDate: selectedstartDate,
+            sortBy: selectedSortOrder,
             endDate: selectedendDate,
             GroupName: null,
         };
@@ -679,7 +690,8 @@ function GetPayoutGroupData() {
 
     if (selectedGroupName) {
         var PayOutReport = {
-            GroupName: selectedGroupName
+            GroupName: selectedGroupName,
+            sortBy: selectedSortOrder,
         };
         getnetamount(PayOutReport);
     }
@@ -692,6 +704,7 @@ function GetCurrentMonthPayoutInvoiceList() {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
         filterType: selectedfilterType,
+        sortBy: selectedSortOrder,
         GroupName: null,
     };
     getnetamount(PayOutReport);
@@ -705,6 +718,7 @@ function GetCurrentYearPayoutInvoiceList() {
         CompanyId: selectedCompanyId,
         SupplierId: selectedSupplierId,
         filterType: selectedfilterType,
+        sortBy: selectedSortOrder,
         GroupName: null,
     };
     getnetamount(PayOutReport);
@@ -725,6 +739,7 @@ function GetBetweenDatePayoutInvoiceList() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            sortBy: selectedSortOrder,
             GroupName: null,
         };
         getnetamount(PayOutReport);
@@ -743,6 +758,7 @@ function GetBetweenYearPayoutInvoiceList() {
             SupplierId: selectedSupplierId,
             filterType: selectedFilterType,
             SelectedYear: selectedYears,
+            sortBy: selectedSortOrder,
             GroupName: null,
         };
         getnetamount(PayOutReport);
@@ -800,7 +816,7 @@ function AddNewRowforPayOutInvoicebtn() {
     var siteId = $("#txtSiteId").val();
     var CompanyId = selectedCompanyId;
     var SupplierId = selectedSupplierId;
-    if (siteId != "" && SupplierId != null && CompanyId != null) {
+    if (SupplierId != null && CompanyId != null) {
         $.ajax({
             url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
             type: 'Post',
@@ -997,18 +1013,31 @@ function InsertPayOutDetailsReport() {
 
         $(".payoutinvoicerow").each(function () {
             var orderRow = $(this);
-
-            var objData = {
-                InvoiceNo: "PayOut",
-                SiteId: $("#txtReportSiteId").val(),
-                SupplierId: selectedSupplierId,
-                CompanyId: selectedCompanyId,
-                PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
-                Description: orderRow.find("input[id^='txtdescription']").val(),
-                Date: orderRow.find("input[id^='txtdate']").val(),
-                CreatedBy: $("#txtReportUserId").val(),
-                TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
-            };
+            if ($("#txtReportSiteName").val() == "All Site") {
+                var objData = {
+                    InvoiceNo: "Outstanding",
+                    SupplierId: selectedSupplierId,
+                    CompanyId: selectedCompanyId,
+                    PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
+                    Description: orderRow.find("input[id^='txtdescription']").val(),
+                    Date: orderRow.find("input[id^='txtdate']").val(),
+                    CreatedBy: $("#txtReportUserId").val(),
+                    TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
+                };
+            }
+            else {
+                var objData = {
+                    InvoiceNo: "PayOut",
+                    SiteId: $("#txtReportSiteId").val(),
+                    SupplierId: selectedSupplierId,
+                    CompanyId: selectedCompanyId,
+                    PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
+                    Description: orderRow.find("input[id^='txtdescription']").val(),
+                    Date: orderRow.find("input[id^='txtdate']").val(),
+                    CreatedBy: $("#txtReportUserId").val(),
+                    TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
+                };
+            }
             orderRow.find("input[id^='txtdate']").on('input', function () {
                 $(this).css("border", "1px solid #ced4da");
             });
