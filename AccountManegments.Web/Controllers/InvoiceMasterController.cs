@@ -183,13 +183,13 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Payment Out-View")]
+        [FormPermissionAttribute("Report-View")]
         public IActionResult PayOutInvoice()
         {
             return View();
         }
 
-        [FormPermissionAttribute("Payment Out-View")]
+        [FormPermissionAttribute("Report-View")]
         [HttpPost]
         public async Task<IActionResult> GetInvoiceDetails(InvoiceReportModel PayOutReport)
         {
@@ -338,7 +338,7 @@ namespace AccountManegments.Web.Controllers
 
 
 
-        [FormPermissionAttribute("Payment Out-Add")]
+        [FormPermissionAttribute("Report-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertPayOutDetails()
         {
