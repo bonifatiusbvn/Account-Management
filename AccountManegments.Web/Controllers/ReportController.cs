@@ -175,7 +175,7 @@ namespace AccountManegments.Web.Controllers
                         row.Cells.Add();
                     }
 
-                    nettotal = yougettotal-yougavetotal;
+                    nettotal = yougettotal - yougavetotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
@@ -350,7 +350,6 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DeletePayoutDetails(Guid InvoiceId)
@@ -528,7 +527,7 @@ namespace AccountManegments.Web.Controllers
 
                     pdfPage.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment("\n\n"));
 
-                   
+
 
                     // Table 3
                     var table = new Aspose.Pdf.Table
@@ -560,7 +559,7 @@ namespace AccountManegments.Web.Controllers
                         yougettotal += item.PayOutTotalAmount;
                         row.Cells.Add(item.NonPayOutTotalAmount.ToString("F2"));
                         yougavetotal += item.NonPayOutTotalAmount;
-                        netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                        netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                         row.Cells.Add(netbalance.ToString("F2"));
                     }
 
@@ -711,7 +710,7 @@ namespace AccountManegments.Web.Controllers
 
                             yougavetotal += item.PayOutTotalAmount;
                             yougettotal += item.NonPayOutTotalAmount;
-                            netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                            netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                             ws.Cell(row, 5).Value = netbalance;
                             row++;
                         }

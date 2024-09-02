@@ -6,23 +6,6 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
-<style>
-    .table-wrapper {
-        width: 100%;
-    }
-
-    .table-body-wrapper {
-        max-height: 450px;
-        overflow-y: auto;
-    }
-
-        .table-body-wrapper table {
-            width: 100%;
-            table-layout: fixed;
-        }
-
-</style>
-
 <input type="hidden" id="txtSiteId" value="@UserSession.SiteId" hidden />
 <input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden />
 
@@ -41,42 +24,6 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            @* <div class="d-flex flex-fill me-3">
-                                            <div class="me-3">
-                                            <select id="txtcompanyname" name="txtcompanyname" class="form-control">
-                                            <option value="">Select Company</option>
-                                            </select>
-                                            <input type="hidden" id="txtcompanynameHidden" name="txtcompanynameHidden" />
-                                            <span id="spncompany" style="color: red;"></span>
-                                            </div>
-
-                                            <div class="me-3">
-                                            <input type="text" id="txtSuppliername" name="txtSuppliername" class="form-control" placeholder="Supplier" />
-                                            <input type="hidden" id="txtSuppliernameHidden" name="txtSuppliernameHidden" />
-                                            <span id="spnsupplier" style="color: red;"></span>
-                                            </div>
-                                            <div class="me-3">
-
-                                            <h3 class="mb-2 d-inline" id="txttotalpurchase">₹<span class="counter-value">0</span><small class="text-muted fs-13"></small></h3>
-                                            <h6 class="text-muted mb-0 text-center">Total Purchase</h6>
-
-                                            </div>
-                                            <div class="me-3">
-
-                                            <h3 class="mb-2 d-inline text-success" id="txttotalcreditamount"></h3>
-                                            <h6 class="text-muted mb-0 text-center">Credit Amount</h6>
-                                            </div>
-                                            <div class="me-3">
-                                            <h3 class="mb-2 d-inline text-danger" id="txttotalpendingamount"></h3>
-                                            <h6 class="text-muted mb-0 text-center">Pending Amount</h6>
-                                            </div>
-                                            </div>
-                                            <div>
-                                            <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
-                                            <i class="lni lni-circle-plus"></i> Add PayOut
-                                            </a>
-                                            <span id="spnitembutton" style="color:red;"></span>
-                                            </div> *@
                                             <ul class="nav nav-pills mb-3 row" role="tablist">
                                                 <li class="nav-item col-md-2" role="presentation">
                                                     <select id="textPayoutReportCompanyName" name="textPayoutReportCompanyName" class="form-control">
@@ -120,24 +67,23 @@
                                                         <div class="tab-pane fade show active" role="tabpanel">
                                                             <div class="p-3 border rounded">
                                                                 <div class="table-wrapper">
-                                                                    <table class="table align-middle mb-0">
+                                                                    <table class="table mb-0">
                                                                         <thead class="table-light btn-primary">
                                                                             <tr>
-                                                                                <th>Supplier</th>
-                                                                                <th>Credit</th>
-                                                                                <th>Debit</th>
-                                                                                <th>Net Amount</th>
+                                                                                <th style="width:360px">Supplier</th>
+                                                                                <th style="width:360px">Credit</th>
+                                                                                <th style="width:360px">Debit</th>
+                                                                                <th style="width:360px">Net Amount</th>
                                                                             </tr>
                                                                         </thead>
                                                                     </table>
                                                                     <div class="table-body-wrapper">
                                                                         <table class="table mb-0">
                                                                             <tbody id="reportInvoicenet">
-                                                                                <!-- Data will be populated here -->
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
-                                                                    <table class="table align-middle mb-0">
+                                                                    <table class="table mb-0">
                                                                         <tfoot id="reportInvoicenetFooter" class="bg-light">
                                                                             <tr style="height:55px;">
                                                                                 <td colspan="4"></td>

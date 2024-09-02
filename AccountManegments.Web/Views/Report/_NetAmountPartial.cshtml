@@ -14,21 +14,21 @@
         youGetTotal += item.NonPayOutTotalAmount;
 
         <tr style="height:55px;">
-            <td>@item.SupplierName</td>
-            <td class="text-danger">
+            <td style="width:360px">@item.SupplierName</td>
+            <td class="text-danger" style="width:360px">
                 @item.PayOutTotalAmount
             </td>
-            <td class="text-success">
+            <td class="text-success" style="width:360px">
                 @item.NonPayOutTotalAmount
             </td>
-            <td>@item.NetAmount</td>
+            <td style="width:360px">@item.NetAmount</td>
         </tr>
     }
 }
 else
 {
     <tr style="height:55px;">
-        <td colspan="8" class="text-center">No data found for the selected criteria.</td>
+        <td colspan="8" class="text-center" style="width:360px">No data found for the selected criteria.</td>
     </tr>
 }
 
@@ -39,10 +39,10 @@ else
         var youGetTotal = @youGetTotal ?? 0;
         var Pending = youGetTotal - youGaveTotal;
 
-        var footerContent = '<tr style="height:55px;"><td><b>Total</b></td>' +
-            '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="">' + Pending.toFixed(2) + '</b></td></tr>';
+        var footerContent = '<tr style="height:55px;"><td style="width:360px"><b>Total</b></td>' +
+            '<td style="width:360px"><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
+            '<td style="width:360px"><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>' +
+            '<td style="width:360px"><b class="">' + Pending.toFixed(2) + '</b></td></tr>';
 
         $('#reportInvoicenetFooter').html(footerContent);
     });
