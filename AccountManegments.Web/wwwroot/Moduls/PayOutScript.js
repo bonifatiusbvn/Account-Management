@@ -365,136 +365,62 @@ function populateYearDropdown() {
 }
 function SearchPayoutReportData() {
     var selectedValue = $('#timePeriodPayoutDropdown').val();
+    var selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
+    var selectedCompanyId = $('#textPayoutReportCompanyName').val();
+    var selectedGroupName = $('#textPayoutReportGroupList').val();
+    var selectedReportSiteName = $('#txtSiteId').val();
+    var selectedstartDate, selectedendDate, selectedYears;
 
-    if (selectedValue === 'This Month') {
-        GetCurrentMonthPayoutInvoiceList();
-    } else if (selectedValue === 'This Year') {
-        GetCurrentYearPayoutInvoiceList();
-    } else if (selectedValue === 'Between Date') {
-        GetBetweenDatePayoutInvoiceList();
-    } else if (selectedValue === 'Between Year') {
-        GetBetweenYearPayoutInvoiceList();
-    }
-
-    selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
-    selectedCompanyId = $('#textPayoutReportCompanyName').val();
-    selectedGroupName = $('#textPayoutReportGroupList').val();
-    selectedReportSiteName = $('#txtSiteId').val();
-
-
-    if (selectedSupplierId == "" && selectedCompanyId == "" && selectedGroupName == "" && parsedSiteId != null && selectedValue == "") {
-        toastr.warning("Select any compny, supplier or group!");
-    }
-
-    GetPayoutReportData();
-    GetGroupList();
-    GetPayoutGroupData();
-    GetPayoutSiteData();
-}
-function GetPayoutReportData() {
-
-    if (selectedCompanyId || selectedSupplierId) {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    }
-}
-function GetPayoutGroupData() {
-
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-        getnetamount(PayOutReport);
-    }
-}
-function GetPayoutSiteData() {
-
-    if (selectedReportSiteName && isValidGuid(selectedReportSiteName)) {
-        parsedSiteId = selectedReportSiteName;
-    }
+    // Initialize the PayOutReport object
     var PayOutReport = {
-        SiteId: parsedSiteId,
-        sortBy: selectedSortOrder,
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
     };
-    getnetamount(PayOutReport);
-}
-function isValidGuid(guid) {
-    var guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    return guidRegex.test(guid);
-}
-function GetCurrentMonthPayoutInvoiceList() {
 
-    selectedfilterType = "currentMonth";
-    selectedGroupName = null;
-    var PayOutReport = {
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        GroupName: null,
-    };
+    // Set filterType and other parameters based on selectedValue
+    switch (selectedValue) {
+        case 'This Month':
+            PayOutReport.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            PayOutReport.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            selectedstartDate = $('#PayoutstartDate').val();
+            selectedendDate = $('#PayoutendDate').val();
+            if (!selectedstartDate || !selectedendDate) {
+                toastr.warning("Select dates");
+                return;
+            }
+            PayOutReport.filterType = "dateRange";
+            PayOutReport.startDate = selectedstartDate;
+            PayOutReport.endDate = selectedendDate;
+            break;
+        case 'Between Year':
+            selectedYears = $('#PayoutyearDropdown').val();
+            if (!selectedYears) {
+                alert('Please select a year.');
+                return;
+            }
+            PayOutReport.filterType = "betweenYear";
+            PayOutReport.SelectedYear = selectedYears;
+            break;
+        default:
+            selectedValue = null;  // Explicitly set selectedValue to null
+            break;
+    }
+
+   
     getnetamount(PayOutReport);
 }
 
-function GetCurrentYearPayoutInvoiceList() {
 
-    selectedfilterType = "currentYear";
-    selectedGroupName = null;
-    var PayOutReport = {
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        GroupName: null,
-    };
-    getnetamount(PayOutReport);
-}
-
-function GetBetweenDatePayoutInvoiceList() {
-    selectedstartDate = $('#PayoutstartDate').val();
-    selectedendDate = $('#PayoutendDate').val();
-    selectedfilterType = "dateRange";
-    selectedGroupName = null;
-
-    if (!selectedstartDate || !selectedendDate) {
-        toastr.warning("Select dates");
-    } else {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    }
-}
-
-
-function GetBetweenYearPayoutInvoiceList() {
-    var selectedYears = $('#PayoutyearDropdown').val();
-    var selectedFilterType = "betweenYear";
-    selectedGroupName = null;
-
-    if (selectedYears) {
-        var PayOutReport = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedFilterType,
-            SelectedYear: selectedYears,
-            GroupName: null,
-        };
-        getnetamount(PayOutReport);
-    } else {
-        alert('Please select a year.');
-    }
-}
 function getnetamount(PayOutReport) {
     $.ajax({
         url: '/InvoiceMaster/GetInvoiceDetails',
@@ -505,24 +431,6 @@ function getnetamount(PayOutReport) {
 
             siteloaderhide();
             $("#reportInvoicenet").html(result);
-
-            //$('#txtpayoutamount').on('input', function () {
-            //    var enteredAmount = parseFloat($(this).val());
-
-            //    if (!isNaN(enteredAmount)) {
-            //        var pendingAmount = totalpendingAmount - enteredAmount;
-
-            //        if (enteredAmount > totalpendingAmount) {
-            //            $('#spnpayout').text('Entered amount cannot exceed pending amount.');
-            //        } else {
-            //            $('#txtpendingamount').val(pendingAmount.toFixed(2));
-            //            $('#spnpayout').text('');
-            //        }
-            //    } else {
-            //        $('#spnpayout').text('');
-            //        $('#txtpendingamount').val('');
-            //    }
-            //});
 
             if ($("#reportInvoicenet").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
                 $("#downloadnetreportfile").hide();
