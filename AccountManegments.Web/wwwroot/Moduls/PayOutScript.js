@@ -536,7 +536,9 @@ function getnetamount(PayOutReport) {
         }
     });
 }
-
+function fn_ResetAllPayoutDropdown() {
+    window.location = '/InvoiceMaster/PayOutInvoice';
+}
 function ExportNetReportToPDF() {
     siteloadershow();
     if (selectedGroupName) {
