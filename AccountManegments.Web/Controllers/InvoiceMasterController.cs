@@ -195,18 +195,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
-                {
-                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
-                    CompanyId = PayOutReport.CompanyId,
-                    SupplierId = PayOutReport.SupplierId,
-                    filterType = PayOutReport.filterType,
-                    startDate = PayOutReport.startDate,
-                    endDate = PayOutReport.endDate,
-                    SelectedYear = PayOutReport.SelectedYear,
-                    GroupName = PayOutReport.GroupName,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetInvoiceDetailsById");
+                ApiResponseModel postuser = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
                 if (postuser.code == 200)
                 {
                     var jsonString = postuser.data.ToString();
