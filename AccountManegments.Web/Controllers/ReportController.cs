@@ -38,20 +38,7 @@ namespace AccountManegments.Web.Controllers
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
 
-                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
-                {
-                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
-                    CompanyId = invoiceReport.CompanyId,
-                    SupplierId = invoiceReport.SupplierId,
-                    filterType = invoiceReport.filterType,
-                    startDate = invoiceReport.startDate,
-                    endDate = invoiceReport.endDate,
-                    SelectedYear = invoiceReport.SelectedYear,
-                    GroupName = invoiceReport.GroupName,
-                    sortBy = invoiceReport.sortBy
-                };
-
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
                 if (response.code == 200)
                 {
                     SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
@@ -188,7 +175,7 @@ namespace AccountManegments.Web.Controllers
                         row.Cells.Add();
                     }
 
-                    nettotal = yougettotal-yougavetotal;
+                    nettotal = yougettotal - yougavetotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
@@ -363,7 +350,6 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DeletePayoutDetails(Guid InvoiceId)
@@ -541,7 +527,7 @@ namespace AccountManegments.Web.Controllers
 
                     pdfPage.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment("\n\n"));
 
-                   
+
 
                     // Table 3
                     var table = new Aspose.Pdf.Table
@@ -573,7 +559,7 @@ namespace AccountManegments.Web.Controllers
                         yougettotal += item.PayOutTotalAmount;
                         row.Cells.Add(item.NonPayOutTotalAmount.ToString("F2"));
                         yougavetotal += item.NonPayOutTotalAmount;
-                        netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                        netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                         row.Cells.Add(netbalance.ToString("F2"));
                     }
 
@@ -724,7 +710,7 @@ namespace AccountManegments.Web.Controllers
 
                             yougavetotal += item.PayOutTotalAmount;
                             yougettotal += item.NonPayOutTotalAmount;
-                            netbalance = item.NonPayOutTotalAmount-item.PayOutTotalAmount;
+                            netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                             ws.Cell(row, 5).Value = netbalance;
                             row++;
                         }
