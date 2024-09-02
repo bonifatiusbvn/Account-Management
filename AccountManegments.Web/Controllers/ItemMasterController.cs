@@ -89,7 +89,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.IsApproved == true));
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.IsApproved == true));
 
                 var item = new ItemMasterModel()
                 {
@@ -309,7 +309,7 @@ namespace AccountManegments.Web.Controllers
                         {
                             ItemName = row["ItemName"].ToString(),
                             UnitTypeName = row["UnitType"].ToString(),
-                            PricePerUnit =Convert.ToDecimal(row["PricePerUnit"]),
+                            PricePerUnit = Convert.ToDecimal(row["PricePerUnit"]),
                             Gstamount = Convert.ToDecimal(row["GSTAmount"]),
                             Gstper = Convert.ToDecimal(row["GSTPer"]),
                             Hsncode = row["HSNCode"].ToString(),
