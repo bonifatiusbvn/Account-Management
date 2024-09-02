@@ -794,14 +794,14 @@ function getnetamount(PayOutReport) {
 
 let rowCounter = 0;
 
-function AddNewRowforPayOutInvoicebtn() {
-
+function AddNewRowforPayOutInvoicebtn()
+{
     selectedSupplierId = $('#textReportSupplierNameHidden').val();
     selectedCompanyId = $('#textReportCompanyName').val();
     selectedReportSiteName = $('#txtReportSiteId').val();
     var CompanyId = selectedCompanyId;
     var SupplierId = selectedSupplierId;
-    if (SupplierId != null && CompanyId != null) {
+    if (SupplierId != "" && CompanyId != "") {
         $.ajax({
             url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
             type: 'Post',
@@ -818,7 +818,7 @@ function AddNewRowforPayOutInvoicebtn() {
             }
         });
     } else {
-        toastr.warning("select site, company and supplier");
+        toastr.warning("select company and supplier");
     }
 }
 
