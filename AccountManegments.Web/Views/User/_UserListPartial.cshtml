@@ -35,7 +35,7 @@
                 {
                     <a class="btn text-primary" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 }
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Delete == true)))
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && a.Delete == true && item.RoleId != 3))
                 {
                     <a href="javascript:;" class="btn text-primary" onclick="deleteUserDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                 }
@@ -43,3 +43,5 @@
         }
     </tr>
 }
+
+
