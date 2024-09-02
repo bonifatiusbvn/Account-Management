@@ -382,7 +382,7 @@ function SearchPayoutReportData() {
     selectedReportSiteName = $('#txtSiteId').val();
 
 
-    if (selectedSupplierId == "" && selectedCompanyId == "" && selectedGroupName == "" && parsedSiteId != null) {
+    if (selectedSupplierId == "" && selectedCompanyId == "" && selectedGroupName == "" && parsedSiteId != null && selectedValue == "") {
         toastr.warning("Select any compny, supplier or group!");
     }
 
@@ -456,8 +456,8 @@ function GetCurrentYearPayoutInvoiceList() {
 }
 
 function GetBetweenDatePayoutInvoiceList() {
-    selectedstartDate = $('#startDate').val();
-    selectedendDate = $('#endDate').val();
+    selectedstartDate = $('#PayoutstartDate').val();
+    selectedendDate = $('#PayoutendDate').val();
     selectedfilterType = "dateRange";
     selectedGroupName = null;
 
@@ -478,7 +478,7 @@ function GetBetweenDatePayoutInvoiceList() {
 
 
 function GetBetweenYearPayoutInvoiceList() {
-    var selectedYears = $('#yearDropdown').val();
+    var selectedYears = $('#PayoutyearDropdown').val();
     var selectedFilterType = "betweenYear";
     selectedGroupName = null;
 
