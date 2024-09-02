@@ -795,7 +795,10 @@ function getnetamount(PayOutReport) {
 let rowCounter = 0;
 
 function AddNewRowforPayOutInvoicebtn() {
-    var siteId = $("#txtSiteId").val();
+
+    selectedSupplierId = $('#textReportSupplierNameHidden').val();
+    selectedCompanyId = $('#textReportCompanyName').val();
+    selectedReportSiteName = $('#txtReportSiteId').val();
     var CompanyId = selectedCompanyId;
     var SupplierId = selectedSupplierId;
     if (SupplierId != null && CompanyId != null) {
@@ -919,7 +922,6 @@ function InsertPayOutDetailsReport() {
                     if (result.code == 200) {
                         toastr.success(result.message);
                         GetInvoiceReportData();
-                        GetPayoutReportData();
                         clearPayoutPartialView();
                         $('#payoutpartialView').hide();
                     } else {
