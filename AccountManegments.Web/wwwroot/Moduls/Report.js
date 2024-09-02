@@ -22,7 +22,9 @@ function GetAllCompanyList() {
             $dropdown.empty();
             $dropdown.append('<option value="">Select Company</option>');
             result.forEach(function (data) {
-                $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                $dropdown.append(
+                    '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' +data.companyName +'</option>'
+                );
             });
 
         },
@@ -62,7 +64,7 @@ function GetAllSupplierList() {
                     event.preventDefault();
                     $("#textReportSupplierName").val(ui.item.label);
                     $("#textReportSupplierNameHidden").val(ui.item.value);
-
+                    selectedSupplierName = ui.item.label;
                     $("#textReportSupplierNameHidden").trigger('change');
                 },
                 focus: function () {
@@ -138,6 +140,8 @@ var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
 var selectedYears = null;
+var selectedCompanyName = null;
+var selectedSupplierName = null;
 var selectedSortOrder = "DescendingDate";
 var parsedSiteId = null;
 
@@ -163,6 +167,28 @@ $(document).ready(function () {
         $('#startDate').val('');
         $('#endDate').val('');
     }
+    $('#textReportSupplierNameHidden').change(function () {
+        selectedSupplierId = $(this).val();
+        GetPayoutReportData();
+        GetGroupList();
+        GetInvoiceReportData();
+    });
+
+    $('#textReportCompanyName').change(function () {
+        var selectedOption = $(this).find('option:selected');
+        selectedCompanyId = $(this).val();
+        selectedCompanyName = selectedOption.data('company-name');
+
+        GetGroupList();
+        GetInvoiceReportData();
+        GetPayoutReportData();
+    });
+    $('#textReportGroupList').change(function () {
+        selectedGroupName = $(this).val();
+        GetInvoiceGroupData();
+        GetPayoutGroupData();
+    });
+
     $('#timePeriodDropdown').change(function () {
         var selectedValue = $(this).val();
 
@@ -359,6 +385,8 @@ function ExportToPDF() {
             startDate: selectedstartDate,
             endDate: selectedendDate,
             GroupName: selectedGroupName,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             SelectedYear: selectedYears,
             sortBy: "AscendingDate",
         };
@@ -431,6 +459,8 @@ function ExportToExcel() {
             endDate: selectedendDate,
             GroupName: selectedGroupName,
             SelectedYear: selectedYears,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             sortBy: "AscendingDate",
         };
     }
@@ -683,11 +713,11 @@ function AddNewRowforPayOutInvoicebtn() {
 }
 
 function AddNewRow(resultHtml, rowNumber) {
-
     const rowHtml = resultHtml
         .replace(/ROWID/g, rowNumber)
         .replace(/ROWNUMBER/g, rowNumber);
 
+    $('#payoutpartialView').show();
     $('#payoutpartialView').append(rowHtml);
     $('#payoutsubmitbutton').show();
 }
@@ -707,6 +737,146 @@ function removePayout(buttonElement) {
 function updatePayoutRowNumbers() {
     $('#payoutpartialView .payoutinvoicerow').each(function (index) {
         $(this).find('.row-number').text(index + 1 + '.');
+    });
+}
+
+function ExportNetReportToPDF() {
+    siteloadershow();
+    if (selectedGroupName) {
+        var PayOutReport = {
+            GroupName: selectedGroupName
+        };
+    }
+    else {
+        var PayOutReport = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
+            SelectedYear: selectedYears,
+        };
+    }
+    $.ajax({
+        url: '/Report/ExportNetReportToPDF',
+        type: 'POST',
+        data: PayOutReport,
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
+
+function ExportNetReportToExcel() {
+    siteloadershow();
+    if (selectedGroupName) {
+        var PayOutReport = {
+            GroupName: selectedGroupName
+        };
+    }
+    else {
+        var PayOutReport = {
+            SiteId: selectedSiteId,
+            CompanyId: selectedCompanyId,
+            SupplierId: selectedSupplierId,
+            filterType: selectedfilterType,
+            startDate: selectedstartDate,
+            endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
+            SelectedYear: selectedYears,
+        };
+    }
+    $.ajax({
+        url: '/Report/ExportNetReportToExcel',
+        type: 'GET',
+        data: PayOutReport,
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
     });
 }
 
@@ -770,6 +940,7 @@ function InsertPayOutDetailsReport() {
                         toastr.success(result.message);
                         GetInvoiceReportData();
                         GetPayoutReportData();
+                        clearPayoutPartialView();
                         $('#payoutpartialView').hide();
                     } else {
                         toastr.error(result.message);
@@ -791,4 +962,9 @@ function InsertPayOutDetailsReport() {
 }
 function fn_ResetAllDropdown() {
     window.location = '/Report/ReportDetails';
+}
+
+function clearPayoutPartialView() {
+    $('.payoutinvoicerow').remove();
+    rowCounter = 0;
 }

@@ -11,5 +11,7 @@
         public bool Edit { get; set; }
         public bool Delete { get; set; }
         public bool? IsApproved { get; set; }
+
+
     }
 }

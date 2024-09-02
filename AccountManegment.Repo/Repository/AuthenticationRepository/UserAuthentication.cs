@@ -222,6 +222,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        PhoneNo = e.PhoneNo,
                                                        IsActive = e.IsActive,
                                                        RoleName = r.Role,
+                                                       RoleId = e.RoleId,
                                                        SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
                                                        CreatedOn = e.CreatedOn,
@@ -423,6 +424,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                                                      View = rp.IsViewAllow,
                                                                                      Edit = rp.IsEditAllow,
                                                                                      Delete = rp.IsDeleteAllow,
+                                                                                     IsApproved = rp.IsApproved,
                                                                                  }).ToListAsync();
                                 userModel.FromPermissionData = fromPermissionData;
 

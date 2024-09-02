@@ -560,6 +560,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                         Id = a.Id,
                                         InvoiceNo = a.InvoiceNo,
                                         SiteId = a.SiteId,
+                                        GroupName = a.SiteGroup,
                                         SupplierId = a.SupplierId,
                                         TotalAmount = a.TotalAmount,
                                         TotalDiscount = a.TotalDiscount,

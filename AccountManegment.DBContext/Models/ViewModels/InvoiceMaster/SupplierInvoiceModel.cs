@@ -86,5 +86,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SelectedYear { get; set; }
         public string? GroupName { get; set; }
         public string? sortBy { get; set; }
+        public string? SupplierName { get; set; }
+        public string? CompanyName { get; set; }
     }
 }
