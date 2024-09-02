@@ -949,13 +949,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var query = (from s in Context.SupplierInvoices
                              join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
                              join c in Context.Companies on s.CompanyId equals c.CompanyId
-                             join d in Context.Sites on s.SiteId equals d.SiteId
+                             join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
+                             from d in siteGroup.DefaultIfEmpty()
                              select new
                              {
                                  s,
                                  SupplierName = b.SupplierName,
                                  CompanyName = c.CompanyName,
-                                 SiteName = d.SiteName,
+                                 SiteName = d != null ? d.SiteName : null,
                                  Date = s.Date
                              }).AsQueryable();
 
@@ -1124,7 +1125,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
                 payoutdetails = (from a in Context.SupplierInvoices.Where(x => x.Id == InvoiceId)
-                                 join b in Context.Sites on a.SiteId equals b.SiteId
+                                 join b in Context.Sites on a.SiteId equals b.SiteId into siteGroup
+                                 from b in siteGroup.DefaultIfEmpty()
                                  join c in Context.SupplierMasters on a.SupplierId equals c.SupplierId
                                  join d in Context.Companies on a.CompanyId equals d.CompanyId
                                  select new SupplierInvoiceModel
@@ -1134,7 +1136,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                      SiteId = a.SiteId,
                                      SupplierId = a.SupplierId,
                                      CompanyId = a.CompanyId,
-                                     SiteName = b.SiteName,
+                                     SiteName = b != null ? b.SiteName : null,
                                      SupplierName = c.SupplierName,
                                      CompanyName = d.CompanyName,
                                      TotalAmount = a.TotalAmount,
