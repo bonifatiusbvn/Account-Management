@@ -822,11 +822,11 @@ function AddNewRowforPayOutInvoicebtn() {
 }
 
 function AddNewRow(resultHtml, rowNumber) {
-
     const rowHtml = resultHtml
         .replace(/ROWID/g, rowNumber)
         .replace(/ROWNUMBER/g, rowNumber);
 
+    $('#payoutpartialView').show();
     $('#payoutpartialView').append(rowHtml);
     $('#payoutsubmitbutton').show();
 }
@@ -1049,6 +1049,7 @@ function InsertPayOutDetailsReport() {
                         toastr.success(result.message);
                         GetInvoiceReportData();
                         GetPayoutReportData();
+                        clearPayoutPartialView();
                         $('#payoutpartialView').hide();
                     } else {
                         toastr.error(result.message);
@@ -1070,4 +1071,9 @@ function InsertPayOutDetailsReport() {
 }
 function fn_ResetAllDropdown() {
     window.location = '/Report/ReportDetails';
+}
+
+function clearPayoutPartialView() {
+    $('.payoutinvoicerow').remove();
+    rowCounter = 0;
 }
