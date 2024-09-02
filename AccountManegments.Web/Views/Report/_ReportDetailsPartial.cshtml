@@ -33,7 +33,7 @@
             <td>@item.CompanyName</td>
             <td>@item.SupplierName</td>
             <td class="text-danger">
-                @if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Outstanding")
+                @if (item.InvoiceNo == "PayOut")
                 {
                     @item.TotalAmount
                 }
@@ -43,7 +43,7 @@
                 }
             </td>
             <td class="text-success">
-                @if (item.InvoiceNo != "PayOut" && item.InvoiceNo != "Outstanding")
+                @if (item.InvoiceNo != "PayOut")
                 {
                     @item.TotalAmount
                 }
