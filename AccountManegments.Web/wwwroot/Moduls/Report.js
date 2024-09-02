@@ -1,7 +1,6 @@
 ﻿GetAllSiteList();
 GetAllCompanyList();
 GetAllSupplierList();
-LoadReport();
 GetGroupList();
 function GetAllSiteList() {
     $.ajax({
@@ -24,7 +23,7 @@ function GetAllCompanyList() {
             $dropdown.append('<option value="">Select Company</option>');
             result.forEach(function (data) {
                 $dropdown.append(
-                    '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' +data.companyName +'</option>'
+                    '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' + data.companyName + '</option>'
                 );
             });
 
@@ -81,12 +80,12 @@ function GetAllSupplierList() {
     });
 }
 
-let currentReportSortOrder = 'AscendingDate';
+let currentReportSortOrder = 'DescendingDate';
 function sortReportTable(field) {
-    if (currentReportSortOrder === 'Ascending' + field) {
-        currentReportSortOrder = 'Descending' + field;
-    } else {
+    if (currentReportSortOrder === 'Descending' + field) {
         currentReportSortOrder = 'Ascending' + field;
+    } else {
+        currentReportSortOrder = 'Descending' + field;
     }
 
     selectedSortOrder = currentReportSortOrder;
@@ -188,6 +187,7 @@ $(document).ready(function () {
 
 
 function SearchReportData() {
+    selectedSortOrder
     var selectedValue = $('#timePeriodDropdown').val();
 
     if (selectedValue === 'This Month') {
@@ -216,18 +216,6 @@ function SearchReportData() {
     GetInvoiceSiteData();
 }
 
-function LoadReport() {
-    var objData = {
-        CompanyId: selectedCompanyId,
-        SupplierId: selectedSupplierId,
-        filterType: selectedfilterType,
-        startDate: selectedstartDate,
-        endDate: selectedendDate,
-        sortBy: selectedSortOrder,
-        GroupName: null,
-    };
-    loadReportData(objData);
-}
 function loadReportData(objData) {
     $.ajax({
         type: "post",
@@ -376,7 +364,7 @@ function ExportToPDF() {
             endDate: selectedendDate,
             GroupName: selectedGroupName,
             CompanyName: selectedCompanyName,
-            SupplierName : selectedSupplierName,
+            SupplierName: selectedSupplierName,
             SelectedYear: selectedYears,
             sortBy: "AscendingDate",
         };
@@ -450,7 +438,7 @@ function ExportToExcel() {
             GroupName: selectedGroupName,
             SelectedYear: selectedYears,
             CompanyName: selectedCompanyName,
-            SupplierName : selectedSupplierName,
+            SupplierName: selectedSupplierName,
             sortBy: "AscendingDate",
         };
     }
@@ -768,6 +756,39 @@ function getnetamount(PayOutReport) {
         datatype: 'json',
         success: function (result) {
 
+            siteloaderhide();
+            $("#reportInvoicenet").html(result);
+
+            //$('#txtpayoutamount').on('input', function () {
+            //    var enteredAmount = parseFloat($(this).val());
+
+            //    if (!isNaN(enteredAmount)) {
+            //        var pendingAmount = totalpendingAmount - enteredAmount;
+
+            //        if (enteredAmount > totalpendingAmount) {
+            //            $('#spnpayout').text('Entered amount cannot exceed pending amount.');
+            //        } else {
+            //            $('#txtpendingamount').val(pendingAmount.toFixed(2));
+            //            $('#spnpayout').text('');
+            //        }
+            //    } else {
+            //        $('#spnpayout').text('');
+            //        $('#txtpendingamount').val('');
+            //    }
+            //});
+
+            if ($("#reportInvoicenet").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+                $("#downloadnetreportfile").hide();
+            } else {
+                $("#downloadnetreportfile").show();
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            console.error("An error occurred: " + error);
+        }
+    });
+}
 
 
 
