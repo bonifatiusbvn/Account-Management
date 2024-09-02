@@ -271,6 +271,8 @@ var selectedGroupName = null;
 var selectedYears = null;
 var selectedSortOrder = "DescendingDate";
 var parsedSiteId = null;
+var selectedCompanyName = null;
+var selectedSupplierName = null;
 
 let currentReportSortOrder = 'AscendingDate';
 function sortReportTable(field) {
@@ -535,7 +537,7 @@ function getnetamount(PayOutReport) {
     });
 }
 
-function ExportNetReportToExcel() {
+function ExportNetReportToPDF() {
     siteloadershow();
     if (selectedGroupName) {
         var PayOutReport = {
@@ -550,12 +552,14 @@ function ExportNetReportToExcel() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName: selectedSupplierName,
             SelectedYear: selectedYears,
         };
     }
     $.ajax({
-        url: '/Report/ExportNetReportToExcel',
-        type: 'GET',
+        url: '/Report/ExportNetReportToPDF',
+        type: 'POST',
         data: PayOutReport,
         datatype: 'json',
         success: function (data, status, xhr) {
@@ -602,7 +606,8 @@ function ExportNetReportToExcel() {
         }
     });
 }
-function ExportNetReportToPDF() {
+
+function ExportNetReportToExcel() {
     siteloadershow();
     if (selectedGroupName) {
         var PayOutReport = {
@@ -617,12 +622,14 @@ function ExportNetReportToPDF() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName: selectedSupplierName,
             SelectedYear: selectedYears,
         };
     }
     $.ajax({
-        url: '/Report/ExportNetReportToPDF',
-        type: 'POST',
+        url: '/Report/ExportNetReportToExcel',
+        type: 'GET',
         data: PayOutReport,
         datatype: 'json',
         success: function (data, status, xhr) {
