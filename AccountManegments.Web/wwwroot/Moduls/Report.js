@@ -23,7 +23,9 @@ function GetAllCompanyList() {
             $dropdown.empty();
             $dropdown.append('<option value="">Select Company</option>');
             result.forEach(function (data) {
-                $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                $dropdown.append(
+                    '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' +data.companyName +'</option>'
+                );
             });
 
             if (result.length > 0) {
@@ -68,7 +70,7 @@ function GetAllSupplierList() {
                     event.preventDefault();
                     $("#textReportSupplierName").val(ui.item.label);
                     $("#textReportSupplierNameHidden").val(ui.item.value);
-
+                    selectedSupplierName = ui.item.label;
                     $("#textReportSupplierNameHidden").trigger('change');
                 },
                 focus: function () {
@@ -144,6 +146,8 @@ var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
 var selectedYears = null;
+var selectedCompanyName = null;
+var selectedSupplierName = null;
 var selectedSortOrder = "DescendingDate";
 
 function populateYearDropdown() {
@@ -176,7 +180,10 @@ $(document).ready(function () {
     });
 
     $('#textReportCompanyName').change(function () {
+        var selectedOption = $(this).find('option:selected');
         selectedCompanyId = $(this).val();
+        selectedCompanyName = selectedOption.data('company-name');
+
         GetGroupList();
         GetInvoiceReportData();
         GetPayoutReportData();
@@ -359,6 +366,8 @@ function ExportToPDF() {
             startDate: selectedstartDate,
             endDate: selectedendDate,
             GroupName: selectedGroupName,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             SelectedYear: selectedYears,
             sortBy: "AscendingDate",
         };
@@ -431,6 +440,8 @@ function ExportToExcel() {
             endDate: selectedendDate,
             GroupName: selectedGroupName,
             SelectedYear: selectedYears,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             sortBy: "AscendingDate",
         };
     }
@@ -853,6 +864,8 @@ function ExportNetReportToPDF() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             SelectedYear: selectedYears,
         };
     }
@@ -921,6 +934,8 @@ function ExportNetReportToExcel() {
             filterType: selectedfilterType,
             startDate: selectedstartDate,
             endDate: selectedendDate,
+            CompanyName: selectedCompanyName,
+            SupplierName : selectedSupplierName,
             SelectedYear: selectedYears,
         };
     }
