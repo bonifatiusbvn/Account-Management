@@ -18,7 +18,7 @@
                 {
                     @item.InvoiceNo
                 }
-                else if (item.InvoiceNo == "Outstanding")
+                else if (item.InvoiceNo == "Opening Balance")
                 {
                     @item.InvoiceNo
                 }
@@ -30,7 +30,6 @@
             <td>@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
-            <td>@item.CompanyName</td>
             <td>@item.SupplierName</td>
             <td class="text-danger">
                 @if (item.InvoiceNo == "PayOut")
@@ -53,7 +52,7 @@
                 }
             </td>
 
-            @if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Outstanding" && UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+            @if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Opening Balance" && UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
             {
                 <td style="width:auto; white-space: nowrap; padding: 0;">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Edit == true))

@@ -804,7 +804,7 @@ function InsertPayOutDetailsReport() {
             var orderRow = $(this);
             if ($("#txtReportSiteName").val() == "All Site") {
                 var objData = {
-                    InvoiceNo: "Outstanding",
+                    InvoiceNo: "Opening Balance",
                     SupplierId: selectedSupplierId,
                     CompanyId: selectedCompanyId,
                     PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
@@ -865,9 +865,9 @@ function InsertPayOutDetailsReport() {
                     siteloaderhide();
                     if (result.code == 200) {
                         toastr.success(result.message);
-                        GetInvoiceReportData();
                         clearPayoutPartialView();
                         $('#payoutpartialView').hide();
+                        SearchReportData();                       
                     } else {
                         toastr.error(result.message);
                     }
