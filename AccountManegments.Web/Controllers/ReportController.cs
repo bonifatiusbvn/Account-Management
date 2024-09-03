@@ -56,20 +56,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                InvoiceReportModel invoiceReportModel = new InvoiceReportModel
-                {
-                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out Guid parsedSiteId) ? (Guid?)parsedSiteId : null,
-                    CompanyId = invoiceReport.CompanyId,
-                    SupplierId = invoiceReport.SupplierId,
-                    filterType = invoiceReport.filterType,
-                    startDate = invoiceReport.startDate,
-                    endDate = invoiceReport.endDate,
-                    SelectedYear = invoiceReport.SelectedYear,
-                    GroupName = invoiceReport.GroupName,
-                    sortBy = invoiceReport.sortBy
-                };
-
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
 
                 var document = new Aspose.Pdf.Document
                 {
@@ -125,7 +113,7 @@ namespace AccountManegments.Web.Controllers
 
                 if (response.code == 200)
                 {
-                    var SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
+                    SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
@@ -156,7 +144,7 @@ namespace AccountManegments.Web.Controllers
                         var row = table.Rows.Add();
                         row.Cells.Add(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo);
                         row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
-                        row.Cells.Add(item.SiteName);
+                        row.Cells.Add(item.SiteName != null ? item.SiteName : "");
                         row.Cells.Add(item.GroupName != null ? item.GroupName : "");
                         row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);

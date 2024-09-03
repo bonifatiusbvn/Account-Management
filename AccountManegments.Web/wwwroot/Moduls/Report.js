@@ -259,28 +259,68 @@ function loadReportData(objData) {
     });
 }
 
+$(document).ready(function () {
+    $("#textReportCompanyName").on('change', function () {
+        var selectedOption = $(this).find('option:selected');
+        selectedCompanyName = selectedOption.data('company-name');
+    });
+});
+
 function ExportToPDF() {
     siteloadershow();
-    if (selectedGroupName) {
-        var objData = {
-            GroupName: selectedGroupName,
-            sortBy: "AscendingDate",
-        };
-    }
-    else {
-        var objData = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: selectedGroupName,
-            CompanyName: selectedCompanyName,
-            SupplierName: selectedSupplierName,
-            SelectedYear: selectedYears,
-            sortBy: "AscendingDate",
-        };
+    var selectedValue = $('#timePeriodDropdown').val();
+    var selectedSupplierId = $('#textReportSupplierNameHidden').val();
+    var selectedSupplierName = $('#textReportSupplierName').val();
+    var selectedCompanyId = $('#textReportCompanyName').val();
+    var selectedGroupName = $('#textReportGroupList').val();
+    var selectedReportSiteName = $('#txtReportSiteId').val();
+    var selectedSortOrder = "AscendingDate";
+    var selectedstartDate, selectedendDate, selectedYears;
+
+    var objData = {
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
+        CompanyName :selectedCompanyName || null,
+        SupplierName: selectedSupplierName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
+    };
+
+    switch (selectedValue) {
+        case 'This Month':
+            objData.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            objData.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            selectedstartDate = $('#startDate').val();
+            selectedendDate = $('#endDate').val();
+            if (!selectedstartDate || !selectedendDate) {
+                toastr.warning("Select dates");
+                return;
+            }
+            objData.filterType = "dateRange";
+            objData.startDate = selectedstartDate;
+            objData.endDate = selectedendDate;
+            break;
+        case 'Between Year':
+            selectedYears = $('#yearDropdown').val();
+            if (!selectedYears) {
+                alert('Please select a year.');
+                return;
+            }
+            objData.filterType = "betweenYear";
+            objData.SelectedYear = selectedYears;
+            break;
+        default:
+            selectedValue = null;
+            break;
     }
     $.ajax({
         url: '/Report/ExportToPdf',
@@ -334,26 +374,59 @@ function ExportToPDF() {
 
 function ExportToExcel() {
     siteloadershow();
-    if (selectedGroupName) {
-        var objData = {
-            GroupName: selectedGroupName,
-            sortBy: "AscendingDate",
-        };
-    }
-    else {
-        var objData = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            GroupName: selectedGroupName,
-            SelectedYear: selectedYears,
-            CompanyName: selectedCompanyName,
-            SupplierName: selectedSupplierName,
-            sortBy: "AscendingDate",
-        };
+    var selectedValue = $('#timePeriodDropdown').val();
+    var selectedSupplierId = $('#textReportSupplierNameHidden').val();
+    var selectedSupplierName = $('#textReportSupplierName').val();
+    var selectedCompanyId = $('#textReportCompanyName').val();
+    var selectedGroupName = $('#textReportGroupList').val();
+    var selectedReportSiteName = $('#txtReportSiteId').val();
+    var selectedSortOrder = "AscendingDate";
+    var selectedstartDate, selectedendDate, selectedYears;
+
+    var objData = {
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
+        CompanyName: selectedCompanyName || null,
+        SupplierName : selectedSupplierName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
+    };
+
+    switch (selectedValue) {
+        case 'This Month':
+            objData.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            objData.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            selectedstartDate = $('#startDate').val();
+            selectedendDate = $('#endDate').val();
+            if (!selectedstartDate || !selectedendDate) {
+                toastr.warning("Select dates");
+                return;
+            }
+            objData.filterType = "dateRange";
+            objData.startDate = selectedstartDate;
+            objData.endDate = selectedendDate;
+            break;
+        case 'Between Year':
+            selectedYears = $('#yearDropdown').val();
+            if (!selectedYears) {
+                alert('Please select a year.');
+                return;
+            }
+            objData.filterType = "betweenYear";
+            objData.SelectedYear = selectedYears;
+            break;
+        default:
+            selectedValue = null;
+            break;
     }
     $.ajax({
         url: '/Report/ExportToExcel',

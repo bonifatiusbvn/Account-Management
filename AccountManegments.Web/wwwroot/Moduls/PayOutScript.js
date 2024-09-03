@@ -205,7 +205,7 @@ function GetAllCompanyList() {
             $dropdown.empty();
             $dropdown.append('<option value="">Select Company</option>');
             result.forEach(function (data) {
-                $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                $dropdown.append('<option value="' + data.companyId + '" data-payoutcompany-name="' + data.companyName + '">' + data.companyName + '</option>');
             });
 
         },
@@ -245,7 +245,6 @@ function GetAllSupplierList() {
                     event.preventDefault();
                     $("#textPayoutReportSupplierName").val(ui.item.label);
                     $("#textPayoutReportSupplierNameHidden").val(ui.item.value);
-
                     $("#textPayoutReportSupplierNameHidden").trigger('change');
                 },
                 focus: function () {
@@ -369,21 +368,21 @@ function SearchPayoutReportData() {
     var selectedCompanyId = $('#textPayoutReportCompanyName').val();
     var selectedGroupName = $('#textPayoutReportGroupList').val();
     var selectedReportSiteName = $('#txtSiteId').val();
+    var selectedSortOrder = "AscendingDate";
     var selectedstartDate, selectedendDate, selectedYears;
 
-    // Initialize the PayOutReport object
     var PayOutReport = {
         SiteId: selectedReportSiteName || null,
         CompanyId: selectedCompanyId || null,
         SupplierId: selectedSupplierId || null,
         GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
         filterType: null,
         startDate: null,
         endDate: null,
         SelectedYear: null,
     };
 
-    // Set filterType and other parameters based on selectedValue
     switch (selectedValue) {
         case 'This Month':
             PayOutReport.filterType = "currentMonth";
@@ -447,25 +446,69 @@ function getnetamount(PayOutReport) {
 function fn_ResetAllPayoutDropdown() {
     window.location = '/InvoiceMaster/PayOutInvoice';
 }
+
+$(document).ready(function () {
+    $("#textPayoutReportCompanyName").on('change', function () {
+        var selectedOption = $(this).find('option:selected');
+        selectedCompanyName = selectedOption.data('payoutcompany-name');
+    });
+});
+
 function ExportNetReportToPDF() {
     siteloadershow();
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-    }
-    else {
-        var PayOutReport = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            CompanyName: selectedCompanyName,
-            SupplierName: selectedSupplierName,
-            SelectedYear: selectedYears,
-        };
+    var selectedValue = $('#timePeriodPayoutDropdown').val();
+    var selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
+    var selectedSupplierName = $('#textPayoutReportSupplierName').val();
+    var selectedCompanyId = $('#textPayoutReportCompanyName').val();
+    var selectedGroupName = $('#textPayoutReportGroupList').val();
+    var selectedReportSiteName = $('#txtSiteId').val();
+    var selectedSortOrder = "AscendingDate";
+    var selectedstartDate, selectedendDate, selectedYears;
+
+    var PayOutReport = {
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
+        CompanyName: selectedCompanyName || null,
+        SupplierName: selectedSupplierName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
+    };
+
+    switch (selectedValue) {
+        case 'This Month':
+            PayOutReport.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            PayOutReport.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            selectedstartDate = $('#PayoutstartDate').val();
+            selectedendDate = $('#PayoutendDate').val();
+            if (!selectedstartDate || !selectedendDate) {
+                toastr.warning("Select dates");
+                return;
+            }
+            PayOutReport.filterType = "dateRange";
+            PayOutReport.startDate = selectedstartDate;
+            PayOutReport.endDate = selectedendDate;
+            break;
+        case 'Between Year':
+            selectedYears = $('#PayoutyearDropdown').val();
+            if (!selectedYears) {
+                alert('Please select a year.');
+                return;
+            }
+            PayOutReport.filterType = "betweenYear";
+            PayOutReport.SelectedYear = selectedYears;
+            break;
+        default:
+            selectedValue = null;  
+            break;
     }
     $.ajax({
         url: '/Report/ExportNetReportToPDF',
@@ -519,23 +562,59 @@ function ExportNetReportToPDF() {
 
 function ExportNetReportToExcel() {
     siteloadershow();
-    if (selectedGroupName) {
-        var PayOutReport = {
-            GroupName: selectedGroupName
-        };
-    }
-    else {
-        var PayOutReport = {
-            SiteId: selectedSiteId,
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            startDate: selectedstartDate,
-            endDate: selectedendDate,
-            CompanyName: selectedCompanyName,
-            SupplierName: selectedSupplierName,
-            SelectedYear: selectedYears,
-        };
+    var selectedValue = $('#timePeriodPayoutDropdown').val();
+    var selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
+    var selectedSupplierName = $('#textPayoutReportSupplierName').val();
+    var selectedCompanyId = $('#textPayoutReportCompanyName').val();
+    var selectedGroupName = $('#textPayoutReportGroupList').val();
+    var selectedReportSiteName = $('#txtSiteId').val();
+    var selectedSortOrder = "AscendingDate";
+    var selectedstartDate, selectedendDate, selectedYears;
+
+    var PayOutReport = {
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
+        CompanyName: selectedCompanyName || null,
+        SupplierName: selectedSupplierName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
+    };
+
+    switch (selectedValue) {
+        case 'This Month':
+            PayOutReport.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            PayOutReport.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            selectedstartDate = $('#PayoutstartDate').val();
+            selectedendDate = $('#PayoutendDate').val();
+            if (!selectedstartDate || !selectedendDate) {
+                toastr.warning("Select dates");
+                return;
+            }
+            PayOutReport.filterType = "dateRange";
+            PayOutReport.startDate = selectedstartDate;
+            PayOutReport.endDate = selectedendDate;
+            break;
+        case 'Between Year':
+            selectedYears = $('#PayoutyearDropdown').val();
+            if (!selectedYears) {
+                alert('Please select a year.');
+                return;
+            }
+            PayOutReport.filterType = "betweenYear";
+            PayOutReport.SelectedYear = selectedYears;
+            break;
+        default:
+            selectedValue = null;  
+            break;
     }
     $.ajax({
         url: '/Report/ExportNetReportToExcel',
