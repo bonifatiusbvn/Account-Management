@@ -40,8 +40,7 @@
 
     <!--datatable css-->
     <!--datatable responsive css-->
-    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
-    <link rel="stylesheet" href="~/assets/js/cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <link href="~/assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="~/assets/css/style.css" rel="stylesheet" />
     <style>
         .fixed-button {
@@ -282,7 +281,7 @@
                                     <a asp-action="@item.Action" asp-controller="@item.Controller">
                                         <div class="font-22">
                                             <i class="lni lni-remove-file"></i>
-                                            
+
                                         </div>
                                         <div class="menu-title">@item.FormName</div>
                                     </a>
@@ -467,9 +466,10 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <!--datatable js-->
-    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="~/assets/js/cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="~/assets/js/cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/assets/js/table-datatable.js"></script>
+
 
     <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
     <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>

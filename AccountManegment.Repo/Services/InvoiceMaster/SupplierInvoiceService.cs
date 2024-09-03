@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Interface.Services.InvoiceMaster;
@@ -65,7 +66,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.GetSupplierInvoiceDetailsById(SupplierId);
         }
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        public async Task<jsonData> GetSupplierInvoiceDetailsReport(DataTableRequstModel invoiceReport)
         {
             return await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
         }

@@ -1,6 +1,7 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.Common;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
@@ -22,6 +23,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Linq.Dynamic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
@@ -942,10 +944,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         //    }
         //}
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        public async Task<jsonData> GetSupplierInvoiceDetailsReport(DataTableRequstModel invoiceReport)
         {
             try
             {
+
                 var query = (from s in Context.SupplierInvoices
                              join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
                              join c in Context.Companies on s.CompanyId equals c.CompanyId
@@ -955,6 +958,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                              {
                                  s,
                                  SupplierName = b.SupplierName,
+                                 InvoiceNo = s.InvoiceNo,
+                                 Group = s.SiteGroup,
                                  CompanyName = c.CompanyName,
                                  SiteName = d != null ? d.SiteName : null,
                                  Date = s.Date
@@ -965,50 +970,63 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.Where(s => s.s.CompanyId == invoiceReport.CompanyId.Value);
                 }
-
                 if (invoiceReport.SiteId.HasValue)
                 {
                     query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
                 }
-
                 if (invoiceReport.SupplierId.HasValue)
                 {
                     query = query.Where(s => s.s.SupplierId == invoiceReport.SupplierId.Value);
                 }
-
                 if (!string.IsNullOrEmpty(invoiceReport.GroupName))
                 {
                     query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
                 }
 
-                if (!string.IsNullOrEmpty(invoiceReport.sortBy))
+
+                if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
                 {
-                    string sortOrder = invoiceReport.sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = invoiceReport.sortBy.Substring(sortOrder.Length);
-
-                    switch (field.ToLower())
+                    switch (invoiceReport.sortColumn.ToLower())
                     {
-                        case "date":
-                            query = sortOrder == "ascending"
-                                ? query.OrderBy(u => u.Date)
-                                : query.OrderByDescending(u => u.Date);
+                        case "suppliername":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.SupplierName) : query.OrderByDescending(s => s.SupplierName);
                             break;
-
+                        case "companyname":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.CompanyName) : query.OrderByDescending(s => s.CompanyName);
+                            break;
+                        case "invoiceno":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.InvoiceNo) : query.OrderByDescending(s => s.InvoiceNo);
+                            break;
+                        case "groupname":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.Group) : query.OrderByDescending(s => s.Group);
+                            break;
+                        case "sitename":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.SiteName) : query.OrderByDescending(s => s.SiteName);
+                            break;
+                        case "date":
+                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.Date) : query.OrderByDescending(s => s.Date);
+                            break;
+                        default:
+                            query = query.OrderByDescending(s => s.s.CreatedOn);
+                            break;
                     }
                 }
+                else
+                {
+                    query = query.OrderByDescending(s => s.s.CreatedOn);
+                }
+
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
                 {
                     if (invoiceReport.filterType == "currentMonth")
                     {
-
                         var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                         var endDate = startDate.AddMonths(1).AddDays(-1);
                         query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
                     }
                     else if (invoiceReport.filterType == "currentYear")
                     {
-
                         var currentYear = DateTime.Now.Year;
                         var startOfFinancialYear = new DateTime(currentYear, 4, 1);
 
@@ -1020,30 +1038,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
                         query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
                     }
-
                     else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
                     {
                         var years = invoiceReport.SelectedYear.Split('-');
                         int startYear = int.Parse(years[0]);
-                        int endYear;
-
-                        if (years[1].Length == 2)
-                        {
-
-                            endYear = int.Parse(years[1]);
-                            endYear += (startYear / 100) * 100;
-                        }
-                        else
-                        {
-                            endYear = int.Parse(years[1]);
-                        }
+                        int endYear = int.Parse(years[1]);
 
                         var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
                         var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
 
                         query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
                     }
-
                 }
 
                 if (invoiceReport.startDate.HasValue)
@@ -1056,36 +1061,52 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value);
                 }
 
-                var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
-                {
-                    Id = s.s.Id,
-                    InvoiceNo = s.s.InvoiceNo,
-                    SiteId = s.s.SiteId,
-                    SupplierId = s.s.SupplierId,
-                    CompanyId = s.s.CompanyId,
-                    TotalAmount = s.s.TotalAmount,
-                    GroupName = s.s.SiteGroup,
-                    TotalDiscount = s.s.TotalDiscount,
-                    TotalGstamount = s.s.TotalGstamount,
-                    Tds = s.s.Tds,
-                    Description = s.s.Description,
-                    CompanyName = s.CompanyName,
-                    SupplierName = s.SupplierName,
-                    PaymentStatus = s.s.PaymentStatus,
-                    IsPayOut = s.s.IsPayOut,
-                    SupplierInvoiceNo = s.s.SupplierInvoiceNo,
-                    Date = s.s.Date,
-                    CreatedOn = s.s.CreatedOn,
-                    SiteName = s.SiteName
-                }).ToListAsync();
 
-                return SupplierInvoiceList;
+                var totalRecords = await query.CountAsync();
+
+
+                var filteredData = await query
+                    .Select(s => new SupplierInvoiceModel
+                    {
+                        Id = s.s.Id,
+                        InvoiceNo = s.s.InvoiceNo,
+                        SiteId = s.s.SiteId,
+                        SupplierId = s.s.SupplierId,
+                        CompanyId = s.s.CompanyId,
+                        TotalAmount = s.s.TotalAmount,
+                        GroupName = s.s.SiteGroup,
+                        TotalDiscount = s.s.TotalDiscount,
+                        TotalGstamount = s.s.TotalGstamount,
+                        Tds = s.s.Tds,
+                        Description = s.s.Description,
+                        CompanyName = s.CompanyName,
+                        SupplierName = s.SupplierName,
+                        PaymentStatus = s.s.PaymentStatus,
+                        IsPayOut = s.s.IsPayOut,
+                        SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+                        Date = s.s.Date,
+                        CreatedOn = s.s.CreatedOn,
+                        SiteName = s.SiteName
+                    }).ToListAsync();
+
+
+                var jsonData = new jsonData
+                {
+                    draw = invoiceReport.draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = filteredData
+                };
+
+                return jsonData;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+
         public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
         {
             ApiResponseModel response = new ApiResponseModel();

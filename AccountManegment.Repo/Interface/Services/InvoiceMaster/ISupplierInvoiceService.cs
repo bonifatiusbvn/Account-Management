@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using System;
@@ -20,7 +21,8 @@ namespace AccountManagement.Repository.Interface.Services.InvoiceMaster
         Task<ApiResponseModel> InsertMultipleSupplierItemDetails(SupplierInvoiceMasterView SupplierItemDetails);
         string CheckSuppliersInvoiceNo(Guid? CompanyId);
         Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsById(Guid SupplierId);
-        Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport);
+        Task<jsonData> GetSupplierInvoiceDetailsReport(DataTableRequstModel invoiceReport);
+
         Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId);
         Task<SupplierInvoiceModel> GetPayoutDetailsbyId(Guid InvoiceId);
         Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails);

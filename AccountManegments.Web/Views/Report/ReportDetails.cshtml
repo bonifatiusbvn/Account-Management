@@ -7,15 +7,24 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 <style>
-    tfoot.bg-light {
+    /* Container to wrap the table */
+    .table-container {
+        position: relative;
+        height: 450px;
+        overflow: auto;
+    }
+
+    /* Fix the header */
+    .dataTables_scrollHeadInner {
+        overflow: hidden;
+    }
+
+    /* Sticky footer */
+    .table-container tfoot {
         position: sticky;
         bottom: 0;
         background-color: white;
         z-index: 1;
-    }
-
-    label.error {
-        color: red;
     }
 </style>
 <input type="hidden" id="txtReportSiteId" value="@UserSession.SiteId" hidden />
@@ -68,62 +77,49 @@
                                                                 <option value="Between Year">Between Year</option>
                                                             </select>
                                                         </li>
-                                                        @* <li class="nav-item col-md-1" role="presentation">
-                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetCurrentMonthInvoicelist" aria-selected="true">
-                                                        <label class="form-check-label" for="currentMonthRadio">This Month</label>
-                                                        </li>
-                                                        <li class="nav-item col-md-1" role="presentation">
-                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentYearRadio" href="#GetCurrentYearInvoicelist" aria-selected="true">
-                                                        <label class="form-check-label" for="currentYearRadio">This Year</label>
-                                                        </li>
-                                                        <li class="nav-item col-md-1" role="presentation">
-                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenMonthRadio" aria-selected="true">
-                                                        <label class="form-check-label" for="betweenMonthRadio">Between Date</label>
-                                                        </li>
-                                                        <li class="nav-item col-md-1" role="presentation">
-                                                        <input class="nav-radio form-check-input me-2" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="betweenYearRadio" href="#GetBetweenYearsList" aria-selected="true">
-                                                        <label class="form-check-label" for="betweenYearRadio">Between Year</label>
-                                                        </li> *@
+
                                                         <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls">
                                                             <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;width: 135px;">
                                                             <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;width: 135px;">
                                                             <select id="yearDropdown" class="form-control" style="display:none; width: 110px;">
                                                                 <option value="">Select Year</option>
                                                             </select>
-                                                            <button class="btn btn-primary nav-btn" id="searchReportButton" onclick="SearchReportData()" data-bs-toggle="tab" role="tab">
+                                                            <button class="btn btn-primary nav-btn" id="searchReportButton" data-bs-toggle="tab" role="tab">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                                                     <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
                                                                 </svg>
                                                             </button>
                                                             <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="fn_ResetAllDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
                                                         </li>
+                                                        <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation">
+                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab">Opening Balance</button>
+                                                        </li>
                                                     </ul>
 
                                                     <div class="tab-content" id="pills-tabContent">
                                                         <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
                                                             <div class="p-3 border rounded">
-                                                                <div style=" overflow-y: auto; max-height: 450px;">
-                                                                    <table class="table align-middle mb-0">
-                                                                        <thead class="table-light btn-primary">
+                                                                <div class="table-container">
+                                                                    <table id="tblinvoice" class="table table-bordered dt-responsive table-striped align-middle dataTable dtr-inline" aria-describedby="example_info">
+                                                                        <thead class="text-center table-primary">
                                                                             <tr>
-                                                                                <th>Invoice No</th>
-                                                                                <th>
-                                                                                    <a href="#" onclick="sortReportTable('Date')" class="white-text">Date</a>
-                                                                                </th>
+                                                                                <th>InvoiceNo</th>
+                                                                                <th>Date</th>
                                                                                 <th>Site</th>
                                                                                 <th>Group</th>
                                                                                 <th>Supplier</th>
-                                                                                <th>Debit</th>
                                                                                 <th>Credit</th>
-                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
-                                                                                {
-                                                                                    <th>Action</th>
-                                                                                }
+                                                                                <th>Debit</th>
                                                                             </tr>
                                                                         </thead>
-                                                                        <tbody id="reportInvoiceListbody">
+                                                                        <tbody>
                                                                         </tbody>
-                                                                        <tfoot id="reportInvoiceListFooter" class="bg-light">
+                                                                        <tfoot>
+                                                                            <tr>
+                                                                                <th colspan="5" style="text-align:right">Total:</th>
+                                                                                <th id="totalCredit"></th>
+                                                                                <th id="totalDebit"></th>
+                                                                            </tr>
                                                                         </tfoot>
                                                                     </table>
                                                                 </div>
@@ -219,6 +215,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row mb-3">
+                                    <div class="col-lg-4 col-12">
+                                        <label class="form-label">Description</label>
+                                        <div class="form-label">
+                                            <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-12">
+                                        <label class="form-label">Date</label>
+                                        <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
+                                    </div>
+                                    <div class="col-lg-3 col-12">
+                                        <label class="form-label">Total Amount</label>
+                                        <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </form>
+            <form id="OPBalanceForm">
+                <div class="modal fade" tabindex="-1" id="OBPayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary-subtle p-3">
+                                <h5 class="modal-title" id="flipModalLabel">Add Operning Balance</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
                                 <div class="row mb-3">
                                     <div class="col-lg-4 col-12">
                                         <label class="form-label">Description</label>

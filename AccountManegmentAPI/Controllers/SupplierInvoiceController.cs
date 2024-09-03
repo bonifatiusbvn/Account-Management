@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
@@ -157,11 +158,12 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("GetSupplierInvoiceDetailsReport")]
-        public async Task<IActionResult> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        public async Task<IActionResult> GetSupplierInvoiceDetailsReport(DataTableRequstModel invoiceReport)
         {
-            IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
-            return Ok(new { code = 200, data = supplierList.ToList() });
+            var supplierList = await SupplierInvoice.GetSupplierInvoiceDetailsReport(invoiceReport);
+            return Ok(new { code = 200, data = supplierList });
         }
+
 
         [HttpPost]
         [Route("DeletePayoutDetails")]
@@ -233,7 +235,7 @@ namespace AccountManagement.API.Controllers
                 var Invoice = await SupplierInvoice.InvoiceIsApproved(InvoiceIdList);
                 if (Invoice.code == 200)
                 {
-                    response.code =  Invoice.code;
+                    response.code = Invoice.code;
                     response.message = Invoice.message;
                 }
                 else

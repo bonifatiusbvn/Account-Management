@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.CompanyModels;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManegments.Web.Helper;
@@ -31,25 +32,88 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+        //[HttpPost]
+        //public async Task<IActionResult> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
+        //{
+        //    try
+        //    {
+        //        List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
+
+        //        ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+        //        if (response.code == 200)
+        //        {
+        //            SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
+        //        }
+        //        return PartialView("~/Views/Report/_ReportDetailsPartial.cshtml", SupplierDetails);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
         [HttpPost]
         public async Task<IActionResult> GetSupplierInvoiceDetailsReport(InvoiceReportModel invoiceReport)
         {
             try
             {
-                List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
 
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir,
+                    SiteId = invoiceReport.SiteId,
+                    CompanyId = invoiceReport.CompanyId,
+                    GroupName = invoiceReport.GroupName,
+                    SelectedYear = invoiceReport.SelectedYear,
+                    startDate = invoiceReport.startDate,
+                    endDate = invoiceReport.endDate,
+                    SupplierName = invoiceReport.SupplierName,
+                    CompanyName = invoiceReport.CompanyName,
+                };
+                List<SupplierInvoiceModel> supplierDetails = new List<SupplierInvoiceModel>();
+                var jsonData = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
                 if (response.code == 200)
                 {
-                    SupplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(response.data.ToString());
+                    jsonData = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    supplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(jsonData.data.ToString());
+
+                    var result = new
+                    {
+                        draw = jsonData.draw,
+                        recordsFiltered = jsonData.recordsFiltered,
+                        recordsTotal = jsonData.recordsTotal,
+                        data = supplierDetails
+                    };
+
+                    return new JsonResult(result);
                 }
-                return PartialView("~/Views/Report/_ReportDetailsPartial.cshtml", SupplierDetails);
+                else
+                {
+                    return BadRequest(new { message = "Failed to retrieve data from the API." });
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(new { message = ex.Message });
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ExportToPdf(InvoiceReportModel invoiceReport)

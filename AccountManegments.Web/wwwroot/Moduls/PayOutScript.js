@@ -415,7 +415,7 @@ function SearchPayoutReportData() {
             break;
     }
 
-   
+
     getnetamount(PayOutReport);
 }
 
@@ -507,7 +507,7 @@ function ExportNetReportToPDF() {
             PayOutReport.SelectedYear = selectedYears;
             break;
         default:
-            selectedValue = null;  
+            selectedValue = null;
             break;
     }
     $.ajax({
@@ -613,7 +613,7 @@ function ExportNetReportToExcel() {
             PayOutReport.SelectedYear = selectedYears;
             break;
         default:
-            selectedValue = null;  
+            selectedValue = null;
             break;
     }
     $.ajax({
