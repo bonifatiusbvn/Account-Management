@@ -12,7 +12,7 @@
         youGaveTotal += item.InvoiceNo == "PayOut" ? item.TotalAmount : 0;
         youGetTotal += item.InvoiceNo != "PayOut" ? item.TotalAmount : 0;
 
-        <tr style="height:55px;" class="text-center">
+        <tr style="height:55px;">
             <td>
                 @if (item.InvoiceNo == "PayOut")
                 {
