@@ -27,7 +27,7 @@
                     @item.SupplierInvoiceNo
                 }
             </td>
-            <td style="width:86px;">@item.Date?.ToString("dd-MM-yyyy")</td>
+            <td>@item.Date?.ToString("dd-MM-yyyy")</td>
             <td>@item.SiteName</td>
             <td>@item.GroupName</td>
             <td>@item.CompanyName</td>
@@ -53,7 +53,7 @@
                 }
             </td>
 
-            @if (item.InvoiceNo == "PayOut"|| item.InvoiceNo == "Outstanding" && UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+            @if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Outstanding" && UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
             {
                 <td style="width:auto; white-space: nowrap; padding: 0;">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Edit == true))
@@ -86,17 +86,30 @@ else
         var youGetTotal = @youGetTotal ?? 0;
         var Pending = youGetTotal - youGaveTotal;
 
+
+        function formatNumberWithIndianCommas(x) {
+            x = x.toFixed(2);
+            var parts = x.split(".");
+            var lastThree = parts[0].slice(-3);
+            var otherNumbers = parts[0].slice(0, -3);
+            if (otherNumbers !== '') {
+                lastThree = ',' + lastThree;
+            }
+            var formattedNumber = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+            return formattedNumber + "." + parts[1];
+        }
+
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td><td></td>' +
-            '<td><b class="text-danger">' + youGaveTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="text-success">' + youGetTotal.toFixed(2) + '</b></td>' +
-            '<td><b class="">' + Pending.toFixed(2) + '</b></td>';
+            '<td><b class="text-danger">' + formatNumberWithIndianCommas(youGaveTotal) + '</b></td>' +
+            '<td><b class="text-success">' + formatNumberWithIndianCommas(youGetTotal) + '</b></td>' +
+            '<td><b class="">' + formatNumberWithIndianCommas(Pending) + '</b></td>';
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
     {
         @:footerContent += '<td></td>';
     }
-
             footerContent += '</tr>';
         $('#reportInvoiceListFooter').html(footerContent);
     });
 </script>
+
