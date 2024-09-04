@@ -972,7 +972,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (invoiceReport.SiteId.HasValue)
                 {
-                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
                 }
                 if (invoiceReport.SupplierId.HasValue)
                 {
