@@ -898,18 +898,26 @@ $(document).ready(function () {
             processing: false,
             serverSide: true,
             filter: true,
-            paging: true, // Enable pagination
-            pageLength: 15, // Show 15 entries per page
-            lengthChange: false, // Disable the option to change the number of entries shown per page
+            paging: true,
+            pageLength: 15,
+            lengthChange: false,
             destroy: true,
             ajax: {
                 url: '/Report/GetSupplierInvoiceDetailsReport',
                 type: 'POST',
                 data: function (d) {
+                    d.draw = d.draw;
+                    d.start = d.start;
+                    d.length = d.length;
+                    d.order = d.order;
+                    d.columns = d.columns;
+                    d.search = d.search.value;
+
                     d.SiteId = $('#txtReportSiteId').val() || null;
                     d.CompanyId = $('#textReportCompanyName').val() || null;
                     d.SupplierId = $('#textReportSupplierNameHidden').val() || null;
                     d.GroupName = $('#textReportGroupList').val() || null;
+
                     var selectedValue = $('#timePeriodDropdown').val();
                     switch (selectedValue) {
                         case 'This Month':
@@ -973,30 +981,22 @@ $(document).ready(function () {
                     }
                 }
             ],
-            scrollX: true, // Enable horizontal scrolling
-            scrollY: '350px', // Set the height for vertical scrolling
-            scrollCollapse: true, // Allow the table to reduce in height if there are fewer records
+            scrollX: true,
+            scrollY: '350px',
+            scrollCollapse: true,
             fixedHeader: {
                 header: true,
-                footer: false // Footer is handled manually
+                footer: false
             },
             autoWidth: false,
-            drawCallback: function () {
+            drawCallback: function (settings) {
                 var api = this.api();
 
-                // Calculate the total for the Credit column
-                var totalCredit = api.column(5, { page: 'current' }).data().reduce(function (a, b) {
-                    return a + (b ? parseFloat(b) : 0);
-                }, 0);
-
-                // Calculate the total for the Debit column
-                var totalDebit = api.column(6, { page: 'current' }).data().reduce(function (a, b) {
-                    return a + (b ? parseFloat(b) : 0);
-                }, 0);
-
-                // Update footer with the totals
-                $('#totalCredit').html(totalCredit.toFixed(2));
-                $('#totalDebit').html(totalDebit.toFixed(2));
+                var totalCredit = settings.json.totalCredit;
+                var totalDebit = settings.json.totalDebit;
+                
+                $(api.table().footer()).find('#totalCredit').html(totalCredit.toFixed(2));
+                $(api.table().footer()).find('#totalDebit').html(totalDebit.toFixed(2));
             },
             columnDefs: [{
                 defaultContent: "",
@@ -1006,6 +1006,7 @@ $(document).ready(function () {
         });
     });
 });
+
 
 
 function openOB() {

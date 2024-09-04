@@ -60,7 +60,7 @@ namespace AccountManegments.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns"].FirstOrDefault();
+                var sortColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -74,7 +74,7 @@ namespace AccountManegments.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = sortColumn,
+                    sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault(),
                     sortColumnDir = sortColumnDir,
                     SiteId = invoiceReport.SiteId,
                     CompanyId = invoiceReport.CompanyId,
@@ -95,6 +95,8 @@ namespace AccountManegments.Web.Controllers
 
                     var result = new
                     {
+                        TotalCredit = jsonData.TotalCredit,
+                        TotalDebit = jsonData.TotalDebit,
                         draw = jsonData.draw,
                         recordsFiltered = jsonData.recordsFiltered,
                         recordsTotal = jsonData.recordsTotal,

@@ -949,22 +949,21 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             try
             {
 
-                var query = (from s in Context.SupplierInvoices
-                             join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
-                             join c in Context.Companies on s.CompanyId equals c.CompanyId
-                             join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
-                             from d in siteGroup.DefaultIfEmpty()
-                             select new
-                             {
-                                 s,
-                                 SupplierName = b.SupplierName,
-                                 InvoiceNo = s.InvoiceNo,
-                                 Group = s.SiteGroup,
-                                 CompanyName = c.CompanyName,
-                                 SiteName = d != null ? d.SiteName : null,
-                                 Date = s.Date
-                             }).AsQueryable();
-
+                var query = from s in Context.SupplierInvoices
+                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                            join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
+                            from d in siteGroup.DefaultIfEmpty()
+                            select new
+                            {
+                                s,
+                                SupplierName = b.SupplierName,
+                                InvoiceNo = s.InvoiceNo,
+                                Group = s.SiteGroup,
+                                CompanyName = c.CompanyName,
+                                SiteName = d != null ? d.SiteName : null,
+                                Date = s.Date
+                            };
 
                 if (invoiceReport.CompanyId.HasValue)
                 {
@@ -986,25 +985,40 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
                 {
+                    // Specify the anonymous type explicitly if needed
+                    var queryType = query.FirstOrDefault().GetType();
+
                     switch (invoiceReport.sortColumn.ToLower())
                     {
                         case "suppliername":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.SupplierName) : query.OrderByDescending(s => s.SupplierName);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.SupplierName)
+                                : query.OrderByDescending(s => s.SupplierName);
                             break;
                         case "companyname":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.CompanyName) : query.OrderByDescending(s => s.CompanyName);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.CompanyName)
+                                : query.OrderByDescending(s => s.CompanyName);
                             break;
                         case "invoiceno":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.InvoiceNo) : query.OrderByDescending(s => s.InvoiceNo);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.InvoiceNo)
+                                : query.OrderByDescending(s => s.InvoiceNo);
                             break;
                         case "groupname":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.Group) : query.OrderByDescending(s => s.Group);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.Group)
+                                : query.OrderByDescending(s => s.Group);
                             break;
                         case "sitename":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.SiteName) : query.OrderByDescending(s => s.SiteName);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.SiteName)
+                                : query.OrderByDescending(s => s.SiteName);
                             break;
                         case "date":
-                            query = invoiceReport.sortColumnDir == "asc" ? query.OrderBy(s => s.Date) : query.OrderByDescending(s => s.Date);
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.Date)
+                                : query.OrderByDescending(s => s.Date);
                             break;
                         default:
                             query = query.OrderByDescending(s => s.s.CreatedOn);
@@ -1015,6 +1029,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.OrderByDescending(s => s.s.CreatedOn);
                 }
+
 
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
@@ -1060,7 +1075,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value);
                 }
-
+                if (!string.IsNullOrEmpty(invoiceReport.searchValue))
+                {
+                    query = query.Where(s => s.SupplierName.Contains(invoiceReport.searchValue) ||
+                                             s.InvoiceNo.Contains(invoiceReport.searchValue) ||
+                                             s.CompanyName.Contains(invoiceReport.searchValue));
+                }
 
                 var totalRecords = await query.CountAsync();
 
@@ -1087,15 +1107,47 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         Date = s.s.Date,
                         CreatedOn = s.s.CreatedOn,
                         SiteName = s.SiteName
-                    }).ToListAsync();
+                    })
+                    .Skip(invoiceReport.skip)
+                    .Take(invoiceReport.pageSize)
+                    .ToListAsync();
 
+
+                var CountTotalData = await query
+           .Select(s => new SupplierInvoiceModel
+           {
+               Id = s.s.Id,
+               InvoiceNo = s.s.InvoiceNo,
+               SiteId = s.s.SiteId,
+               SupplierId = s.s.SupplierId,
+               CompanyId = s.s.CompanyId,
+               TotalAmount = s.s.TotalAmount,
+               GroupName = s.s.SiteGroup,
+               TotalDiscount = s.s.TotalDiscount,
+               TotalGstamount = s.s.TotalGstamount,
+               Tds = s.s.Tds,
+               Description = s.s.Description,
+               CompanyName = s.CompanyName,
+               SupplierName = s.SupplierName,
+               PaymentStatus = s.s.PaymentStatus,
+               IsPayOut = s.s.IsPayOut,
+               SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+               Date = s.s.Date,
+               CreatedOn = s.s.CreatedOn,
+               SiteName = s.SiteName
+           }).ToListAsync();
+
+                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" ? i.TotalAmount : 0);
+                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
 
                 var jsonData = new jsonData
                 {
                     draw = invoiceReport.draw,
                     recordsFiltered = totalRecords,
                     recordsTotal = totalRecords,
-                    data = filteredData
+                    data = filteredData,
+                    TotalCredit = TotalCredit,
+                    TotalDebit = TotalDebit,
                 };
 
                 return jsonData;

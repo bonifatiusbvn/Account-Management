@@ -40,6 +40,8 @@ namespace AccountManagement.DBContext.Models.DataTableParameters
         public int recordsFiltered { get; set; }
         public int recordsTotal { get; set; }
         public dynamic data { get; set; }
+        public dynamic? TotalCredit { get; set; }
+        public dynamic? TotalDebit { get; set; }
 
 
     }
