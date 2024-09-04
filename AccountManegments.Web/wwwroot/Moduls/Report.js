@@ -1010,7 +1010,7 @@ $(document).ready(function () {
                     "name": "Credit",
                     "render": function (data, type, row) {
                         if (row.invoiceNo !== 'PayOut') {
-                            return '<span style="color:green">' + data + '</span>';
+                            return '<span style="color:green">' + '₹'+ data + '</span>';
                         } else {
                             return '';
                         }
@@ -1021,7 +1021,7 @@ $(document).ready(function () {
                     "name": "Debit",
                     "render": function (data, type, row) {
                         if (row.invoiceNo === 'PayOut') {
-                            return '<span style="color:red">' + data + '</span>';
+                            return '<span style="color:red">' + '₹' + data + '</span>';
                         } else {
                             return '';
                         }
@@ -1050,8 +1050,8 @@ $(document).ready(function () {
                 }, 0);
 
                 // Update footer with the totals
-                $('#totalCredit').html(totalCredit.toFixed(2));
-                $('#totalDebit').html(totalDebit.toFixed(2));
+                $('#totalCredit').html('₹' +totalCredit.toFixed(2));
+                $('#totalDebit').html('₹' +totalDebit.toFixed(2));
             },
             columnDefs: [{
                 defaultContent: "",
