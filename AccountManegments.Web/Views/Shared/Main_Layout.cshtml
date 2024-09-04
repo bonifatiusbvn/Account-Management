@@ -40,8 +40,10 @@
 
     <!--datatable css-->
     <!--datatable responsive css-->
-    <link href="~/assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
     <link href="~/assets/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
     <style>
         .fixed-button {
             position: fixed;
@@ -91,12 +93,9 @@
                     <ion-icon name="menu-sharp"></ion-icon>
                 </div>
             </div>
-            <!--navigation-->
-
             <ul class="metismenu" id="menu">
                 @foreach (var group in UserSession.FormPermisionData.Select(a => a.GroupName).Distinct())
-                {
-                    @if (group == "Dashboard" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                {   @if (group == "Dashboard" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
                         {
@@ -288,7 +287,6 @@
                                 </li>
                             }
                         }
-
                     }
                     @if (group == "Reports" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
@@ -318,7 +316,6 @@
                 @{
                     var userSites = UserSession.SiteData;
                 }
-
                 <form id="frmdrpdashbord">
                     @if (_userSession.UserRole == 3)
                     {
@@ -336,14 +333,12 @@
                                     if (selected == "selected")
                                     {
                                         <option value="@site.SiteId" selected>@site.SiteName</option>
-
                                     }
                                     else
                                     {
                                         <option value="@site.SiteId">@site.SiteName</option>
 
                                     }
-
                                 }
                             }
                         </select>
@@ -355,9 +350,6 @@
                         </select>
                     }
                 </form>
-
-
-
                 <h5 id="siteErrorMesssage">
                 </h5>
                 <div class="top-navbar-right ms-auto">
@@ -466,18 +458,17 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <!--datatable js-->
-    <script src="~/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
-    <script src="~/assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
-    <script src="~/assets/js/table-datatable.js"></script>
+    <script src="~/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
 
 
-    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="~/assets/js/cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="~/assets/js/cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="~/moduls/authenticationscript.js" asp-append-version="true"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>

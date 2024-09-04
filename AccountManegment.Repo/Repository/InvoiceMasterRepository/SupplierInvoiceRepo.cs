@@ -247,10 +247,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
         public async Task<SupplierInvoiceMasterView> GetSupplierInvoiceById(Guid Id)
         {
-
             SupplierInvoiceMasterView supplierList = new SupplierInvoiceMasterView();
             try
             {
@@ -615,13 +613,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
         public async Task<ApiResponseModel> UpdateSupplierInvoice(SupplierInvoiceMasterView SupplierInvoiceDetail)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-
                 var supplierInvoice = new SupplierInvoice()
                 {
                     Id = SupplierInvoiceDetail.Id,
@@ -982,7 +978,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName);
                 }
-
 
                 if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
                 {

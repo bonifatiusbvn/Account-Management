@@ -13,21 +13,21 @@
         youGaveTotal += item.PayOutTotalAmount;
         youGetTotal += item.NonPayOutTotalAmount;
 
-        <tr style="height:55px;">
-            <td style="width:360px">@item.SupplierName</td>
-            <td class="text-success" style="width:360px">
+        <tr style="height:30px;">
+            <td style="width:360px" class="border-1">@item.SupplierName</td>
+            <td class="text-success border-1" style="width:360px">
                 @item.NonPayOutTotalAmount
             </td>
-            <td class="text-danger" style="width:360px">
+            <td class="text-danger border-1" style="width:360px">
                 @item.PayOutTotalAmount
             </td>
-            <td style="width:360px">@item.NetAmount</td>
+            <td style="width:360px" class="border-1">@item.NetAmount</td>
         </tr>
     }
 }
 else
 {
-    <tr style="height:55px;">
+    <tr style="height:30px;">
         <td colspan="8" class="text-center" style="width:360px">No data found for the selected criteria.</td>
     </tr>
 }
@@ -52,10 +52,10 @@ else
             return formattedNumber + "." + parts[1];
         }
 
-        var footerContent = '<tr style="height:55px;"><td style="width:360px"><b>Total</b></td>' +
-            '<td style="width:360px"><b class="text-success">' + formatNumberWithIndianCommas(youGetTotal) + '</b></td>' +
-            '<td style="width:360px"><b class="text-danger">' + formatNumberWithIndianCommas(youGaveTotal) + '</b></td>' +
-            '<td style="width:360px"><b class="">' + formatNumberWithIndianCommas(Pending) + '</b></td></tr>';
+        var footerContent = '<tr style="height:30px;" class="border-1"><td style="width:360px" class="border-1"><b>Total</b></td>' +
+            '<td style="width:360px" class="border-1"><b class="text-success">' + formatNumberWithIndianCommas(youGetTotal) + '</b></td>' +
+            '<td style="width:360px" class="border-1"><b class="text-danger">' + formatNumberWithIndianCommas(youGaveTotal) + '</b></td>' +
+            '<td style="width:360px" class="border-1"><b class="">' + formatNumberWithIndianCommas(Pending) + '</b></td></tr>';
 
         $('#reportInvoicenetFooter').html(footerContent);
     });

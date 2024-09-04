@@ -12,7 +12,6 @@ function GetAllSiteList() {
         }
     });
 }
-
 function GetAllCompanyList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
@@ -33,7 +32,6 @@ function GetAllCompanyList() {
         }
     });
 }
-
 function GetGroupList() {
 
     $.ajax({
@@ -182,7 +180,6 @@ $(document).ready(function () {
         }
     });
 });
-
 function SearchReportData() {
     var selectedValue = $('#timePeriodDropdown').val();
     var selectedSupplierId = $('#textReportSupplierNameHidden').val();
@@ -369,7 +366,6 @@ function ExportToPDF() {
         }
     });
 }
-
 function ExportToExcel() {
     siteloadershow();
     var selectedValue = $('#timePeriodDropdown').val();
@@ -475,7 +471,6 @@ function ExportToExcel() {
         }
     });
 }
-
 function deletePayoutDetails(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -528,7 +523,6 @@ function deletePayoutDetails(InvoiceId) {
         }
     });
 }
-
 function EditPayoutDetails(InvoiceId) {
     ClearPayoutTextBox();
     siteloadershow();
@@ -557,7 +551,6 @@ function EditPayoutDetails(InvoiceId) {
         }
     });
 }
-
 function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -566,7 +559,6 @@ function formatDate(dateString) {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
-
 function UpdatePayoutInvoice() {
     if ($("#updatePayoutForm").valid()) {
         siteloadershow();
@@ -675,7 +667,6 @@ function GetCurrentMonthPayoutInvoiceList() {
     };
     getnetamount(PayOutReport);
 }
-
 function GetCurrentYearPayoutInvoiceList() {
 
     selectedfilterType = "currentYear";
@@ -688,7 +679,6 @@ function GetCurrentYearPayoutInvoiceList() {
     };
     getnetamount(PayOutReport);
 }
-
 function GetBetweenDatePayoutInvoiceList() {
     selectedstartDate = $('#startDate').val();
     selectedendDate = $('#endDate').val();
@@ -755,7 +745,6 @@ function AddNewRowforPayOutInvoicebtn() {
         toastr.warning("select company and supplier");
     }
 }
-
 function AddNewRow(resultHtml, rowNumber) {
     const rowHtml = resultHtml
         .replace(/ROWID/g, rowNumber)
@@ -765,7 +754,6 @@ function AddNewRow(resultHtml, rowNumber) {
     $('#payoutpartialView').append(rowHtml);
     $('#payoutsubmitbutton').show();
 }
-
 function removePayout(buttonElement) {
     $(buttonElement).closest('tr').remove();
     updatePayoutRowNumbers();
@@ -777,13 +765,11 @@ function removePayout(buttonElement) {
         $('#payoutsubmitbutton').hide();
     }
 }
-
 function updatePayoutRowNumbers() {
     $('#payoutpartialView .payoutinvoicerow').each(function (index) {
         $(this).find('.row-number').text(index + 1 + '.');
     });
 }
-
 function InsertPayOutDetailsReport() {
     siteloadershow();
     if ($('.payoutinvoicerow').length >= 1) {
@@ -879,7 +865,6 @@ function InsertPayOutDetailsReport() {
 function fn_ResetAllDropdown() {
     window.location = '/Report/ReportDetails';
 }
-
 function clearPayoutPartialView() {
     $('.payoutinvoicerow').remove();
     rowCounter = 0;
@@ -898,9 +883,9 @@ $(document).ready(function () {
             processing: false,
             serverSide: true,
             filter: true,
-            paging: true, // Enable pagination
-            pageLength: 15, // Show 15 entries per page
-            lengthChange: false, // Disable the option to change the number of entries shown per page
+            paging: true,
+            pageLength: 15,
+            lengthChange: false,
             destroy: true,
             ajax: {
                 url: '/Report/GetSupplierInvoiceDetailsReport',
@@ -954,31 +939,23 @@ $(document).ready(function () {
                     "data": "totalAmount",
                     "name": "Credit",
                     "render": function (data, type, row) {
-                        if (row.invoiceNo !== 'PayOut') {
-                            return '<span style="color:green">' + data + '</span>';
-                        } else {
-                            return '';
-                        }
+                        return row.invoiceNo !== 'PayOut' ? '<span style="color:green">' + data + '</span>' : '';
                     }
                 },
                 {
                     "data": "totalAmount",
                     "name": "Debit",
                     "render": function (data, type, row) {
-                        if (row.invoiceNo === 'PayOut') {
-                            return '<span style="color:red">' + data + '</span>';
-                        } else {
-                            return '';
-                        }
+                        return row.invoiceNo === 'PayOut' ? '<span style="color:red">' + data + '</span>' : '';
                     }
                 }
             ],
-            scrollX: true, // Enable horizontal scrolling
-            scrollY: '350px', // Set the height for vertical scrolling
-            scrollCollapse: true, // Allow the table to reduce in height if there are fewer records
+            scrollX: true,
+            scrollY: '350px',
+            scrollCollapse: true,
             fixedHeader: {
                 header: true,
-                footer: false // Footer is handled manually
+                footer: false
             },
             autoWidth: false,
             drawCallback: function () {
@@ -1002,18 +979,32 @@ $(document).ready(function () {
                 defaultContent: "",
                 targets: "_all",
                 width: 'auto'
-            }]
+            }],
+            dom: 'Bfrtip', // This enables the buttons
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Excel',
+                    titleAttr: 'Export to Excel',
+                    className: 'btn btn-outline-secondary',
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    titleAttr: 'Export to PDF',
+                    className: 'btn btn-outline-secondary',
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn btn-outline-secondary',
+                }
+            ]
         });
     });
 });
-
-
 function openOB() {
     var modal = new bootstrap.Modal(document.getElementById('OBPayoutModal'));
     modal.show();
 }
-
-
-
-
-

@@ -411,15 +411,13 @@ function SearchPayoutReportData() {
             PayOutReport.SelectedYear = selectedYears;
             break;
         default:
-            selectedValue = null;  // Explicitly set selectedValue to null
+            selectedValue = null;
             break;
     }
 
 
     getnetamount(PayOutReport);
 }
-
-
 function getnetamount(PayOutReport) {
     $.ajax({
         url: '/InvoiceMaster/GetInvoiceDetails',
