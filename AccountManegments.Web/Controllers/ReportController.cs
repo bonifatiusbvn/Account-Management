@@ -132,7 +132,7 @@ namespace AccountManegments.Web.Controllers
 
                 var pdfPage = document.Pages.Add();
 
-                //Add Supplier,Company,Site
+
                 Aspose.Pdf.Table secondTable = new Aspose.Pdf.Table
                 {
                     ColumnWidths = "33% 33% 34%",

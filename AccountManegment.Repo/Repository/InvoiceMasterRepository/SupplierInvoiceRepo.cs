@@ -944,7 +944,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         {
             try
             {
-
                 var query = from s in Context.SupplierInvoices
                             join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
                             join c in Context.Companies on s.CompanyId equals c.CompanyId
@@ -1024,8 +1023,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     query = query.OrderByDescending(s => s.s.CreatedOn);
                 }
-
-
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
                 {
