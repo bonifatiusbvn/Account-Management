@@ -89,5 +89,10 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.InvoiceIsApproved(InvoiceIdList);
         }
+
+        public async Task<ApiResponseModel> CheckOpeningBalance(Guid SupplierId, Guid CompanyId)
+        {
+            return await SupplierInvoice.CheckOpeningBalance(SupplierId, CompanyId);
+        }
     }
 }

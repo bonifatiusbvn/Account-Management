@@ -13,7 +13,7 @@
         <td>@item.GroupName</td>
         <td>@item.SupplierName</td>
         <td>@item.CompanyName</td>
-        <td>@item.TotalAmount</td>
+        <td>₹@item.TotalAmount</td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
         {
             <td>

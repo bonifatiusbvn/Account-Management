@@ -971,7 +971,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (invoiceReport.SiteId.HasValue)
                 {
-                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
                 }
                 if (invoiceReport.SupplierId.HasValue)
                 {
@@ -1291,6 +1291,31 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             {
                 response.code = 500;
                 response.message = "Error approving the invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> CheckOpeningBalance(Guid SupplierId, Guid CompanyId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var existingOB = Context.SupplierInvoices.FirstOrDefault(x => x.SupplierId == SupplierId && x.CompanyId == CompanyId && x.InvoiceNo == "Opening Balance");
+                if (existingOB != null)
+                {
+                    response.code = 400;
+                    response.message = "Already had opening balance.";
+                }
+                else
+                {
+                    response.code = 200;
+                    response.message = "No record of Opening balance found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error checking the opening balance.";
             }
             return response;
         }
