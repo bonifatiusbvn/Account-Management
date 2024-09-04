@@ -6,7 +6,13 @@
     ViewData["Title"] = "ReportDetails";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
+<style>
+    a.paginate_button.current {
+        color: #fff !important;
+        background-color: #923EB9 !important;
+        border-color: #923eb9 !important;
+    }
+</style>
 <input type="hidden" id="txtReportSiteId" value="@UserSession.SiteId" hidden />
 <input type="hidden" id="txtReportUserId" value="@_userSession.UserId" hidden />
 <input type="hidden" id="txtReportSiteName" value="@UserSession.SiteName" hidden />

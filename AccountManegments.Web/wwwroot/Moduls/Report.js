@@ -262,7 +262,7 @@ $(document).ready(function () {
 });
 
 function ExportToPDF() {
-    
+
     siteloadershow();
     var selectedValue = $('#timePeriodDropdown').val();
     var selectedSupplierId = $('#textReportSupplierNameHidden').val();
@@ -305,7 +305,7 @@ function ExportToPDF() {
         default:
             objData.filterType = null;
             break;
-    }    
+    }
     $.ajax({
         url: '/Report/ExportToPdf',
         type: 'POST',
@@ -397,7 +397,7 @@ function ExportToExcel() {
         default:
             objData.filterType = null;
             break;
-    }  
+    }
     $.ajax({
         url: '/Report/ExportToExcel',
         type: 'GET',
@@ -913,9 +913,9 @@ $(document).ready(function () {
         table = $('#tblinvoice').DataTable({
             processing: false,
             serverSide: true,
-            filter: true,
+            filter: false,
             paging: true,
-            pageLength: 15, 
+            pageLength: 15,
             lengthChange: true,
             lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
             destroy: true,
@@ -929,8 +929,6 @@ $(document).ready(function () {
                     d.length = d.length;
                     d.order = d.order;
                     d.columns = d.columns;
-                    d.search = d.search.value;
-
                     d.SiteId = $('#txtReportSiteId').val() || null;
                     d.CompanyId = $('#textReportCompanyName').val() || null;
                     d.SupplierId = $('#textReportSupplierNameHidden').val() || null;
@@ -957,7 +955,6 @@ $(document).ready(function () {
                             d.filterType = null;
                             break;
                     }
-                    d.searchBy = $('#txtSupplierInvoiceSearch').val();
                 }
             },
             columns: [
@@ -1010,23 +1007,24 @@ $(document).ready(function () {
             drawCallback: function (settings) {
                 var api = this.api();
 
-                var totalCredit = settings.json.totalCredit;
-                var totalDebit = settings.json.totalDebit;
+                var totalCredit = settings.json.totalCredit || 0;
+                var totalDebit = settings.json.totalDebit || 0;
 
                 $(api.table().footer()).find('#totalCredit').html(totalCredit.toFixed(2));
                 $(api.table().footer()).find('#totalDebit').html(totalDebit.toFixed(2));
+
+                // Replace classes for pagination buttons
+                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
+                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
             },
             columnDefs: [{
                 defaultContent: "",
                 targets: "_all",
                 width: 'auto'
-            }],
+            }]
         });
     });
 });
-
-
-
 
 
 function openOB() {
