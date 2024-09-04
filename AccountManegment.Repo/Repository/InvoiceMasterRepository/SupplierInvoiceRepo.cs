@@ -1311,5 +1311,120 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
             return response;
         }
+
+        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
+        {
+            try
+            {
+                var query = from s in Context.SupplierInvoices
+                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                            join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
+                            from d in siteGroup.DefaultIfEmpty()
+                            select new
+                            {
+                                s,
+                                SupplierName = b.SupplierName,
+                                InvoiceNo = s.InvoiceNo,
+                                Group = s.SiteGroup,
+                                CompanyName = c.CompanyName,
+                                SiteName = d != null ? d.SiteName : null,
+                                Date = s.Date
+                            };
+
+                if (invoiceReport.CompanyId.HasValue)
+                {
+                    query = query.Where(s => s.s.CompanyId == invoiceReport.CompanyId.Value).OrderBy(s => s.s.CreatedOn);
+                }
+                if (invoiceReport.SiteId.HasValue)
+                {
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance").OrderBy(s => s.s.CreatedOn);
+                }
+                if (invoiceReport.SupplierId.HasValue)
+                {
+                    query = query.Where(s => s.s.SupplierId == invoiceReport.SupplierId.Value).OrderBy(s => s.s.CreatedOn);
+                }
+                if (!string.IsNullOrEmpty(invoiceReport.GroupName))
+                {
+                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName).OrderBy(s=>s.s.CreatedOn);
+                }
+
+                if (!string.IsNullOrEmpty(invoiceReport.filterType))
+                {
+                    if (invoiceReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate).OrderBy(s => s.s.CreatedOn);
+                    }
+                    else if (invoiceReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                    }
+                    else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
+                    {
+                        var years = invoiceReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+
+                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                    }
+                }
+
+                if (invoiceReport.startDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn); 
+                }
+
+                if (invoiceReport.endDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value).OrderBy(s => s.s.CreatedOn);
+                }
+
+                var totalRecords = await query.CountAsync();
+
+                var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
+                {
+                    Id = s.s.Id,
+                    InvoiceNo = s.s.InvoiceNo,
+                    SiteId = s.s.SiteId,
+                    SupplierId = s.s.SupplierId,
+                    CompanyId = s.s.CompanyId,
+                    TotalAmount = s.s.TotalAmount,
+                    GroupName = s.s.SiteGroup,
+                    TotalDiscount = s.s.TotalDiscount,
+                    TotalGstamount = s.s.TotalGstamount,
+                    Tds = s.s.Tds,
+                    Description = s.s.Description,
+                    CompanyName = s.CompanyName,
+                    SupplierName = s.SupplierName,
+                    PaymentStatus = s.s.PaymentStatus,
+                    IsPayOut = s.s.IsPayOut,
+                    SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+                    Date = s.s.Date,
+                    CreatedOn = s.s.CreatedOn,
+                    SiteName = s.SiteName
+                }).ToListAsync();
+
+                return SupplierInvoiceList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
+

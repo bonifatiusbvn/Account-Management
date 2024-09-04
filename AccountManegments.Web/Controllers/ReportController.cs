@@ -11,6 +11,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 
@@ -124,7 +125,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 List<SupplierInvoiceModel> SupplierDetails = new List<SupplierInvoiceModel>();
-                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsPdfReport");
 
                 var document = new Aspose.Pdf.Document
                 {
@@ -137,7 +138,7 @@ namespace AccountManegments.Web.Controllers
                 Aspose.Pdf.Table secondTable = new Aspose.Pdf.Table
                 {
                     ColumnWidths = "33% 33% 34%",
-                    DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
+                    DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                     Border = new BorderInfo(BorderSide.All, 1f),
                     DefaultCellBorder = new BorderInfo(BorderSide.None),
                 };
@@ -184,10 +185,10 @@ namespace AccountManegments.Web.Controllers
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "10% 11% 12% 8% 12% 12% 11% 11% 11%",
-                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
-                        Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
-                        DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
+                        ColumnWidths = "15% 11% 15% 7% 17% 11% 12% 11%",
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                        Border = new BorderInfo(BorderSide.None),
+                        DefaultCellBorder = new BorderInfo(BorderSide.None),
                     };
 
                     var headerRow = table.Rows.Add();
@@ -195,12 +196,21 @@ namespace AccountManegments.Web.Controllers
                     headerRow.Cells.Add("Date");
                     headerRow.Cells.Add("Site");
                     headerRow.Cells.Add("Group");
-                    headerRow.Cells.Add("Company");
                     headerRow.Cells.Add("Supplier");
                     headerRow.Cells.Add("Debit");
                     headerRow.Cells.Add("Credit");
                     headerRow.Cells.Add("Net Total");
 
+                    foreach (var cell in headerRow.Cells)
+                    {
+                        cell.BackgroundColor = Aspose.Pdf.Color.Black;
+                        var fragment = cell.Paragraphs[0] as TextFragment;
+                        if (fragment != null)
+                        {
+                            fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                            fragment.TextState.HorizontalAlignment = HorizontalAlignment.Center;
+                        }
+                    }
 
                     decimal yougavetotal = 0;
                     decimal yougettotal = 0;
@@ -209,25 +219,39 @@ namespace AccountManegments.Web.Controllers
                     foreach (var item in SupplierDetails)
                     {
                         var row = table.Rows.Add();
-                        row.Cells.Add(item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo);
+                        string cellValue;
+
+                        if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Opening Balance")
+                        {
+                            cellValue = item.InvoiceNo;
+                        }
+                        else
+                        {
+                            cellValue = item.SupplierInvoiceNo;
+                        }
+                        row.Cells.Add(cellValue);
                         row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
                         row.Cells.Add(item.SiteName != null ? item.SiteName : "");
                         row.Cells.Add(item.GroupName != null ? item.GroupName : "");
-                        row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);
                         if (item.InvoiceNo == "PayOut")
                         {
-                            row.Cells.Add(item.TotalAmount.ToString());
-                            row.Cells.Add("0.00");
+                            row.Cells.Add("₹" +item.TotalAmount.ToString());
+                            row.Cells.Add("");
                             yougavetotal += item.TotalAmount;
                         }
                         else
                         {
-                            row.Cells.Add("0.00");
-                            row.Cells.Add(item.TotalAmount.ToString());
+                            row.Cells.Add("");
+                            row.Cells.Add("₹" +item.TotalAmount.ToString());
                             yougettotal += item.TotalAmount;
                         }
                         row.Cells.Add();
+                        var backgroundColor = table.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                        foreach (var cell in row.Cells)
+                        {
+                            cell.BackgroundColor = backgroundColor;
+                        }
                     }
 
                     nettotal = yougettotal - yougavetotal;
@@ -237,10 +261,19 @@ namespace AccountManegments.Web.Controllers
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
                     footerRow.Cells.Add("");
-                    footerRow.Cells.Add("");
-                    footerRow.Cells.Add(yougavetotal.ToString());
-                    footerRow.Cells.Add(yougettotal.ToString());
-                    footerRow.Cells.Add(nettotal.ToString());
+                    footerRow.Cells.Add("₹" +yougavetotal.ToString());
+                    footerRow.Cells.Add("₹" +yougettotal.ToString());
+                    footerRow.Cells.Add("₹" +nettotal.ToString());
+
+                    TextState boldTextState = new TextState
+                    {
+                        FontStyle = FontStyles.Bold
+                    };
+
+                    foreach (var cell in footerRow.Cells)
+                    {
+                        cell.DefaultCellTextState = boldTextState;
+                    }
 
                     pdfPage.Paragraphs.Add(table);
 
@@ -265,20 +298,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                var invoiceReportModel = new InvoiceReportModel
-                {
-                    SiteId = !string.IsNullOrEmpty(UserSession.SiteId) && Guid.TryParse(UserSession.SiteId, out var parsedSiteId) ? (Guid?)parsedSiteId : null,
-                    CompanyId = invoiceReport.CompanyId,
-                    SupplierId = invoiceReport.SupplierId,
-                    filterType = invoiceReport.filterType,
-                    startDate = invoiceReport.startDate,
-                    endDate = invoiceReport.endDate,
-                    SelectedYear = invoiceReport.SelectedYear,
-                    GroupName = invoiceReport.GroupName,
-                    sortBy = invoiceReport.sortBy
-                };
-
-                var response = await APIServices.PostAsync(invoiceReportModel, "SupplierInvoice/GetSupplierInvoiceDetailsReport");
+                var response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsPdfReport");
 
                 if (response.code == 200)
                 {
@@ -298,8 +318,8 @@ namespace AccountManegments.Web.Controllers
 
                         var headerRange1 = ws.Range(row, 1, row, 3);
                         headerRange1.Style.Font.Bold = true;
-                        headerRange1.Style.Fill.BackgroundColor = XLColor.Gray;
-                        headerRange1.Style.Font.FontColor = XLColor.Black;
+                        headerRange1.Style.Fill.BackgroundColor = XLColor.Black;
+                        headerRange1.Style.Font.FontColor = XLColor.White;
                         headerRange1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                         headerRange1.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                         headerRange1.Style.Border.BottomBorderColor = XLColor.Black;
@@ -328,16 +348,15 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 2).Value = "Date";
                         ws.Cell(row, 3).Value = "Site";
                         ws.Cell(row, 4).Value = "Group";
-                        ws.Cell(row, 5).Value = "Company";
-                        ws.Cell(row, 6).Value = "Supplier";
-                        ws.Cell(row, 7).Value = "Debit";
-                        ws.Cell(row, 8).Value = "Credit";
-                        ws.Cell(row, 9).Value = "Net Total";
+                        ws.Cell(row, 5).Value = "Supplier";
+                        ws.Cell(row, 6).Value = "Debit";
+                        ws.Cell(row, 7).Value = "Credit";
+                        ws.Cell(row, 8).Value = "Net Total";
 
-                        var headerRange2 = ws.Range(row, 1, row, 9);
+                        var headerRange2 = ws.Range(row, 1, row, 8);
                         headerRange2.Style.Font.Bold = true;
-                        headerRange2.Style.Fill.BackgroundColor = XLColor.Gray;
-                        headerRange2.Style.Font.FontColor = XLColor.Black;
+                        headerRange2.Style.Fill.BackgroundColor = XLColor.Black;
+                        headerRange2.Style.Font.FontColor = XLColor.White;
                         headerRange2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                         row++;
@@ -348,25 +367,33 @@ namespace AccountManegments.Web.Controllers
 
                         foreach (var item in supplierDetails)
                         {
-                            ws.Cell(row, 1).Value = item.InvoiceNo == "PayOut" ? item.InvoiceNo : item.SupplierInvoiceNo;
+                            string cellValue;
+                            if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Opening Balance")
+                            {
+                                cellValue = item.InvoiceNo;
+                            }
+                            else
+                            {
+                                cellValue = item.SupplierInvoiceNo;
+                            }
+                            ws.Cell(row, 1).Value = cellValue;
                             ws.Cell(row, 2).Value = item.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
                             ws.Cell(row, 3).Value = item.SiteName ?? string.Empty;
                             ws.Cell(row, 4).Value = item.GroupName ?? string.Empty;
-                            ws.Cell(row, 5).Value = item.CompanyName ?? string.Empty;
-                            ws.Cell(row, 6).Value = item.SupplierName ?? string.Empty;
+                            ws.Cell(row, 5).Value = item.SupplierName ?? string.Empty;
                             if (item.InvoiceNo == "PayOut")
                             {
-                                ws.Cell(row, 7).Value = item.TotalAmount;
-                                ws.Cell(row, 8).Value = "0.00";
+                                ws.Cell(row, 6).Value = "₹" +item.TotalAmount;
+                                ws.Cell(row, 7).Value = "";
                                 youGaveTotal += item.TotalAmount;
                             }
                             else
                             {
-                                ws.Cell(row, 7).Value = "0.00";
-                                ws.Cell(row, 8).Value = item.TotalAmount;
+                                ws.Cell(row, 6).Value = "";
+                                ws.Cell(row, 7).Value = "₹" +item.TotalAmount;
                                 youGetTotal += item.TotalAmount;
                             }
-                            ws.Cell(row, 9).Value = string.Empty;
+                            ws.Cell(row, 8).Value = string.Empty;
                             row++;
                         }
 
@@ -378,16 +405,9 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 3).Value = string.Empty;
                         ws.Cell(row, 4).Value = string.Empty;
                         ws.Cell(row, 5).Value = string.Empty;
-                        ws.Cell(row, 6).Value = string.Empty;
-                        ws.Cell(row, 7).Value = youGaveTotal;
-                        ws.Cell(row, 8).Value = youGetTotal;
-                        ws.Cell(row, 9).Value = netTotal;
-
-                        var totalRange = ws.Range(row, 1, row, 9);
-                        totalRange.Style.Font.Bold = true;
-                        totalRange.Style.Fill.BackgroundColor = XLColor.Gray;
-                        totalRange.Style.Font.FontColor = XLColor.Black;
-                        totalRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Cell(row, 6).Value = "₹" + youGaveTotal;
+                        ws.Cell(row, 7).Value = "₹" + youGetTotal;
+                        ws.Cell(row, 8).Value = "₹" + netTotal;
 
                         using (var stream = new MemoryStream())
                         {
@@ -489,7 +509,7 @@ namespace AccountManegments.Web.Controllers
                     Aspose.Pdf.Table secondTable = new Aspose.Pdf.Table
                     {
                         ColumnWidths = "33% 33% 34%",
-                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                         Border = new BorderInfo(BorderSide.All, 1f),
                         DefaultCellBorder = new BorderInfo(BorderSide.None),
                     };
@@ -532,7 +552,7 @@ namespace AccountManegments.Web.Controllers
                     Aspose.Pdf.Table newTable = new Aspose.Pdf.Table
                     {
                         ColumnWidths = "33% 33% 34%",
-                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                         Border = new BorderInfo(BorderSide.All, 1f),
                         DefaultCellBorder = new BorderInfo(BorderSide.None),
                     };
@@ -587,18 +607,27 @@ namespace AccountManegments.Web.Controllers
                     // Table 3
                     var table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "25% 25% 17% 17% 16%",
-                        DefaultCellPadding = new MarginInfo(3, 3, 3, 3),
-                        Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
-                        DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
+                        ColumnWidths = "40% 20% 20% 20%",
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                        Border = new BorderInfo(BorderSide.None),
+                        DefaultCellBorder = new BorderInfo(BorderSide.None),
                     };
 
                     var headerRow = table.Rows.Add();
-                    headerRow.Cells.Add("Company");
                     headerRow.Cells.Add("Supplier");
                     headerRow.Cells.Add("Debit");
                     headerRow.Cells.Add("Credit");
                     headerRow.Cells.Add("Net Total");
+
+                    foreach (var cell in headerRow.Cells)
+                    {
+                        cell.BackgroundColor = Aspose.Pdf.Color.Black;
+                        var fragment = cell.Paragraphs[0] as TextFragment;
+                        if (fragment != null)
+                        {
+                            fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                        }
+                    }
 
                     decimal yougavetotal = 0;
                     decimal yougettotal = 0;
@@ -608,7 +637,6 @@ namespace AccountManegments.Web.Controllers
                     foreach (var item in NetInvoiceDetails.InvoiceList)
                     {
                         var row = table.Rows.Add();
-                        row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);
                         row.Cells.Add("₹" + item.PayOutTotalAmount.ToString("F2"));
                         yougettotal += item.PayOutTotalAmount;
@@ -616,15 +644,30 @@ namespace AccountManegments.Web.Controllers
                         yougavetotal += item.NonPayOutTotalAmount;
                         netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                         row.Cells.Add("₹" + netbalance.ToString("F2"));
+
+                        var backgroundColor = table.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                        foreach (var cell in row.Cells)
+                        {
+                            cell.BackgroundColor = backgroundColor;
+                        }
                     }
 
                     nettotal = yougavetotal - yougettotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
-                    footerRow.Cells.Add("");
                     footerRow.Cells.Add("₹" + yougettotal.ToString("F2"));
                     footerRow.Cells.Add("₹" + yougavetotal.ToString("F2"));
                     footerRow.Cells.Add("₹" + nettotal.ToString("F2"));
+
+                    TextState boldTextState = new TextState
+                    {
+                        FontStyle = FontStyles.Bold
+                    };
+
+                    foreach (var cell in footerRow.Cells)
+                    {
+                        cell.DefaultCellTextState = boldTextState;
+                    }
 
                     pdfPage.Paragraphs.Add(table);
 
@@ -734,13 +777,12 @@ namespace AccountManegments.Web.Controllers
 
                         row += 2;
 
-                        ws.Cell(row, 1).Value = "Company";
-                        ws.Cell(row, 2).Value = "Supplier";
-                        ws.Cell(row, 3).Value = "Debit";
-                        ws.Cell(row, 4).Value = "Credit";
-                        ws.Cell(row, 5).Value = "Net Total";
+                        ws.Cell(row, 1).Value = "Supplier";
+                        ws.Cell(row, 2).Value = "Debit";
+                        ws.Cell(row, 3).Value = "Credit";
+                        ws.Cell(row, 4).Value = "Net Total";
 
-                        var headerRange3 = ws.Range(row, 1, row, 5);
+                        var headerRange3 = ws.Range(row, 1, row, 4);
                         headerRange3.Style.Font.Bold = true;
                         headerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange3.Style.Font.FontColor = XLColor.White;
@@ -758,25 +800,23 @@ namespace AccountManegments.Web.Controllers
                         row++;
                         foreach (var item in NetInvoiceDetails.InvoiceList)
                         {
-                            ws.Cell(row, 1).Value = item.CompanyName;
-                            ws.Cell(row, 2).Value = item.SupplierName;
-                            ws.Cell(row, 3).Value = "₹" + item.PayOutTotalAmount;
-                            ws.Cell(row, 4).Value = "₹" + item.NonPayOutTotalAmount;
+                            ws.Cell(row, 1).Value = item.SupplierName;
+                            ws.Cell(row, 2).Value = "₹" + item.PayOutTotalAmount;
+                            ws.Cell(row, 3).Value = "₹" + item.NonPayOutTotalAmount;
 
                             yougavetotal += item.PayOutTotalAmount;
                             yougettotal += item.NonPayOutTotalAmount;
                             netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                            ws.Cell(row, 5).Value = "₹" + netbalance;
+                            ws.Cell(row, 4).Value = "₹" + netbalance;
                             row++;
                         }
 
                         nettotal = yougettotal - yougavetotal;
 
                         ws.Cell(row, 1).Value = "Total";
-                        ws.Cell(row, 2).Value = "";
-                        ws.Cell(row, 3).Value = "₹" + yougavetotal;
-                        ws.Cell(row, 4).Value = "₹" + yougettotal;
-                        ws.Cell(row, 5).Value = "₹" + nettotal;
+                        ws.Cell(row, 2).Value = "₹" + yougavetotal;
+                        ws.Cell(row, 3).Value = "₹" + yougettotal;
+                        ws.Cell(row, 4).Value = "₹" + nettotal;
 
                         ws.Columns().AdjustToContents();
 

@@ -262,6 +262,7 @@ $(document).ready(function () {
 });
 
 function ExportToPDF() {
+    
     siteloadershow();
     var selectedValue = $('#timePeriodDropdown').val();
     var selectedSupplierId = $('#textReportSupplierNameHidden').val();
@@ -270,7 +271,6 @@ function ExportToPDF() {
     var selectedGroupName = $('#textReportGroupList').val();
     var selectedReportSiteName = $('#txtReportSiteId').val();
     var selectedSortOrder = "AscendingDate";
-    var selectedstartDate, selectedendDate, selectedYears;
 
     var objData = {
         SiteId: selectedReportSiteName || null,
@@ -285,7 +285,7 @@ function ExportToPDF() {
         endDate: null,
         SelectedYear: null,
     };
-
+    var selectedValue = $('#timePeriodDropdown').val();
     switch (selectedValue) {
         case 'This Month':
             objData.filterType = "currentMonth";
@@ -294,29 +294,18 @@ function ExportToPDF() {
             objData.filterType = "currentYear";
             break;
         case 'Between Date':
-            selectedstartDate = $('#startDate').val();
-            selectedendDate = $('#endDate').val();
-            if (!selectedstartDate || !selectedendDate) {
-                toastr.warning("Select dates");
-                return;
-            }
             objData.filterType = "dateRange";
-            objData.startDate = selectedstartDate;
-            objData.endDate = selectedendDate;
+            objData.filterType = $('#startDate').val();
+            objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
-            selectedYears = $('#yearDropdown').val();
-            if (!selectedYears) {
-                alert('Please select a year.');
-                return;
-            }
             objData.filterType = "betweenYear";
-            objData.SelectedYear = selectedYears;
+            objData.filterType = $('#yearDropdown').val();
             break;
         default:
-            selectedValue = null;
+            objData.filterType = null;
             break;
-    }
+    }    
     $.ajax({
         url: '/Report/ExportToPdf',
         type: 'POST',
@@ -375,8 +364,6 @@ function ExportToExcel() {
     var selectedGroupName = $('#textReportGroupList').val();
     var selectedReportSiteName = $('#txtReportSiteId').val();
     var selectedSortOrder = "AscendingDate";
-    var selectedstartDate, selectedendDate, selectedYears;
-
     var objData = {
         SiteId: selectedReportSiteName || null,
         CompanyId: selectedCompanyId || null,
@@ -390,7 +377,7 @@ function ExportToExcel() {
         endDate: null,
         SelectedYear: null,
     };
-
+    var selectedValue = $('#timePeriodDropdown').val();
     switch (selectedValue) {
         case 'This Month':
             objData.filterType = "currentMonth";
@@ -399,29 +386,18 @@ function ExportToExcel() {
             objData.filterType = "currentYear";
             break;
         case 'Between Date':
-            selectedstartDate = $('#startDate').val();
-            selectedendDate = $('#endDate').val();
-            if (!selectedstartDate || !selectedendDate) {
-                toastr.warning("Select dates");
-                return;
-            }
             objData.filterType = "dateRange";
-            objData.startDate = selectedstartDate;
-            objData.endDate = selectedendDate;
+            objData.filterType = $('#startDate').val();
+            objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
-            selectedYears = $('#yearDropdown').val();
-            if (!selectedYears) {
-                alert('Please select a year.');
-                return;
-            }
             objData.filterType = "betweenYear";
-            objData.SelectedYear = selectedYears;
+            objData.filterType = $('#yearDropdown').val();
             break;
         default:
-            selectedValue = null;
+            objData.filterType = null;
             break;
-    }
+    }  
     $.ajax({
         url: '/Report/ExportToExcel',
         type: 'GET',
