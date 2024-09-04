@@ -77,6 +77,7 @@ namespace AccountManegments.Web.Controllers
                     sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault(),
                     sortColumnDir = sortColumnDir,
                     SiteId = invoiceReport.SiteId,
+                    SupplierId = invoiceReport.SupplierId,
                     CompanyId = invoiceReport.CompanyId,
                     GroupName = invoiceReport.GroupName,
                     SelectedYear = invoiceReport.SelectedYear,

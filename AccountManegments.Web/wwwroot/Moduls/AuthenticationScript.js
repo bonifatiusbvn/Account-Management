@@ -524,8 +524,6 @@ function preventEmptyValue(input) {
     }
 }
 
-
-
 //$(document).ready(function () {
 
 //    bindEventListeners();
@@ -581,7 +579,6 @@ function preventEmptyValue(input) {
 
 
 //});
-
 
 function GetDashboardItemList() {
     $.get("/Home/ItemListAction")
@@ -656,7 +653,6 @@ function dashboardItemIsApproved() {
     });
 }
 
-
 function dashboarddeleteItemDetails(ItemId) {
 
     Swal.fire({
@@ -708,7 +704,6 @@ function dashboarddeleteItemDetails(ItemId) {
         }
     });
 }
-
 function GetDashboardPurchaseOrderList() {
     siteloadershow();
 
@@ -722,9 +717,7 @@ function GetDashboardPurchaseOrderList() {
 
         });
 }
-
-function dashboardPOIsApproved()
-{
+function dashboardPOIsApproved() {
     Swal.fire({
         title: "Are you sure you want to approve this purchase order?",
         text: "You won't be able to revert this!",
@@ -784,8 +777,6 @@ function dashboardPOIsApproved()
         }
     });
 }
-
-
 function dashboardDeletePODetails(POId) {
 
     Swal.fire({
@@ -831,7 +822,6 @@ function dashboardDeletePODetails(POId) {
         }
     });
 }
-
 function GetDashboardInvoiceList() {
 
     $.get("/Home/SupplierInvoiceListAction")
