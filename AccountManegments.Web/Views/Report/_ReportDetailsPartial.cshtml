@@ -34,7 +34,7 @@
             <td class="text-danger">
                 @if (item.InvoiceNo == "PayOut")
                 {
-                    @item.TotalAmount
+                    @($"₹{item.TotalAmount}")
                 }
                 else
                 {
@@ -44,7 +44,8 @@
             <td class="text-success">
                 @if (item.InvoiceNo != "PayOut")
                 {
-                    @item.TotalAmount
+                    @($"₹{@item.TotalAmount}")
+                    ;
                 }
                 else
                 {
@@ -99,9 +100,9 @@ else
         }
 
         var footerContent = '<tr style="height:55px;"><td><b>Total</b></td><td></td><td></td><td></td><td></td><td></td>' +
-            '<td><b class="text-danger">' + formatNumberWithIndianCommas(youGaveTotal) + '</b></td>' +
-            '<td><b class="text-success">' + formatNumberWithIndianCommas(youGetTotal) + '</b></td>' +
-            '<td><b class="">' + formatNumberWithIndianCommas(Pending) + '</b></td>';
+            '<td><b class="text-danger">' + '₹' + formatNumberWithIndianCommas(youGaveTotal) + '</b></td>' +
+            '<td><b class="text-success">' + '₹' + formatNumberWithIndianCommas(youGetTotal) + '</b></td>' +
+            '<td><b class="">' + '₹' + formatNumberWithIndianCommas(Pending) + '</b></td>';
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports" && (a.Edit == true || a.Delete == true)))
     {

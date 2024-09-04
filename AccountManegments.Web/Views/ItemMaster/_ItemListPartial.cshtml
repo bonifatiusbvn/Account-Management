@@ -7,7 +7,7 @@
 
     <tr id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">
         <td>@item.ItemName</td>
-        <td>@item.PricePerUnit</td>
+        <td>₹@item.PricePerUnit</td>
         <td>
             @if (_userSession.UserRole == 3)
             {

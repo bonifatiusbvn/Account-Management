@@ -60,7 +60,7 @@ namespace AccountManegments.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns"].FirstOrDefault();
+                var sortColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -74,7 +74,7 @@ namespace AccountManegments.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = sortColumn,
+                    sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault(),
                     sortColumnDir = sortColumnDir,
                     SiteId = invoiceReport.SiteId,
                     CompanyId = invoiceReport.CompanyId,
@@ -95,6 +95,8 @@ namespace AccountManegments.Web.Controllers
 
                     var result = new
                     {
+                        TotalCredit = jsonData.TotalCredit,
+                        TotalDebit = jsonData.TotalDebit,
                         draw = jsonData.draw,
                         recordsFiltered = jsonData.recordsFiltered,
                         recordsTotal = jsonData.recordsTotal,
@@ -607,21 +609,21 @@ namespace AccountManegments.Web.Controllers
                         var row = table.Rows.Add();
                         row.Cells.Add(item.CompanyName);
                         row.Cells.Add(item.SupplierName);
-                        row.Cells.Add(item.PayOutTotalAmount.ToString("F2"));
+                        row.Cells.Add("₹" + item.PayOutTotalAmount.ToString("F2"));
                         yougettotal += item.PayOutTotalAmount;
-                        row.Cells.Add(item.NonPayOutTotalAmount.ToString("F2"));
+                        row.Cells.Add("₹" + item.NonPayOutTotalAmount.ToString("F2"));
                         yougavetotal += item.NonPayOutTotalAmount;
                         netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                        row.Cells.Add(netbalance.ToString("F2"));
+                        row.Cells.Add("₹" + netbalance.ToString("F2"));
                     }
 
                     nettotal = yougavetotal - yougettotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
-                    footerRow.Cells.Add(yougettotal.ToString("F2"));
-                    footerRow.Cells.Add(yougavetotal.ToString("F2"));
-                    footerRow.Cells.Add(nettotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" +yougettotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" +yougavetotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" +nettotal.ToString("F2"));
 
                     pdfPage.Paragraphs.Add(table);
 
@@ -757,13 +759,13 @@ namespace AccountManegments.Web.Controllers
                         {
                             ws.Cell(row, 1).Value = item.CompanyName;
                             ws.Cell(row, 2).Value = item.SupplierName;
-                            ws.Cell(row, 3).Value = item.PayOutTotalAmount;
-                            ws.Cell(row, 4).Value = item.NonPayOutTotalAmount;
+                            ws.Cell(row, 3).Value = "₹" + item.PayOutTotalAmount;
+                            ws.Cell(row, 4).Value = "₹" + item.NonPayOutTotalAmount;
 
                             yougavetotal += item.PayOutTotalAmount;
                             yougettotal += item.NonPayOutTotalAmount;
                             netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                            ws.Cell(row, 5).Value = netbalance;
+                            ws.Cell(row, 5).Value = "₹" + netbalance;
                             row++;
                         }
 
@@ -771,9 +773,9 @@ namespace AccountManegments.Web.Controllers
 
                         ws.Cell(row, 1).Value = "Total";
                         ws.Cell(row, 2).Value = "";
-                        ws.Cell(row, 3).Value = yougavetotal;
-                        ws.Cell(row, 4).Value = yougettotal;
-                        ws.Cell(row, 5).Value = nettotal;
+                        ws.Cell(row, 3).Value = "₹" + yougavetotal;
+                        ws.Cell(row, 4).Value = "₹" + yougettotal;
+                        ws.Cell(row, 5).Value = "₹" + nettotal;
 
                         ws.Columns().AdjustToContents();
 
