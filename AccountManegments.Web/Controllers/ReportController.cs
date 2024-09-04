@@ -621,9 +621,9 @@ namespace AccountManegments.Web.Controllers
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
-                    footerRow.Cells.Add("₹" +yougettotal.ToString("F2"));
-                    footerRow.Cells.Add("₹" +yougavetotal.ToString("F2"));
-                    footerRow.Cells.Add("₹" +nettotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" + yougettotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" + yougavetotal.ToString("F2"));
+                    footerRow.Cells.Add("₹" + nettotal.ToString("F2"));
 
                     pdfPage.Paragraphs.Add(table);
 

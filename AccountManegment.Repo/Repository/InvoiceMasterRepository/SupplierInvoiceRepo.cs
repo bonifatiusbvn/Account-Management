@@ -980,7 +980,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
                 {
-                    // Specify the anonymous type explicitly if needed
+
                     var queryType = query.FirstOrDefault().GetType();
 
                     switch (invoiceReport.sortColumn.ToLower())

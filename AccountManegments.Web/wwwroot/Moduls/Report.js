@@ -942,6 +942,7 @@ $(document).ready(function () {
             pageLength: 15,
             lengthChange: false,
             destroy: true,
+            order: [],
             ajax: {
                 url: '/Report/GetSupplierInvoiceDetailsReport',
                 type: 'POST',
@@ -1003,7 +1004,7 @@ $(document).ready(function () {
                     "name": "Credit",
                     "render": function (data, type, row) {
                         if (row.invoiceNo !== 'PayOut') {
-                            return '<span style="color:green">' + '₹'+ data + '</span>';
+                            return '<span style="color:green">' + '₹' + data + '</span>';
                         } else {
                             return '';
                         }
@@ -1034,7 +1035,7 @@ $(document).ready(function () {
 
                 var totalCredit = settings.json.totalCredit;
                 var totalDebit = settings.json.totalDebit;
-                
+
                 $(api.table().footer()).find('#totalCredit').html(totalCredit.toFixed(2));
                 $(api.table().footer()).find('#totalDebit').html(totalDebit.toFixed(2));
             },
@@ -1076,8 +1077,7 @@ function openOB() {
     var supplierId = $('#textReportSupplierNameHidden').val();
     var companyId = $('#textReportCompanyName').val();
 
-    if (supplierId !== "" && companyId !== "")
-    {
+    if (supplierId !== "" && companyId !== "") {
         var objData = {
             SupplierId: supplierId,
             CompanyId: companyId,
