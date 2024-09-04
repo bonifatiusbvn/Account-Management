@@ -250,5 +250,31 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpGet]
+        [Route("CheckOpeningBalance")]
+        public async Task<IActionResult> CheckOpeningBalance(Guid SupplierId, Guid CompanyId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var OBDetails = await SupplierInvoice.CheckOpeningBalance(SupplierId, CompanyId);
+                if (OBDetails.code == 200)
+                {
+                    response.code = OBDetails.code;
+                    response.message = OBDetails.message;
+                }
+                else
+                {
+                    response.message = OBDetails.message;
+                    response.code = OBDetails.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

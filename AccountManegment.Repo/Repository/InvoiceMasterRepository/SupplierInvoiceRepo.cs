@@ -1242,5 +1242,30 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
             return response;
         }
+
+        public async Task<ApiResponseModel> CheckOpeningBalance(Guid SupplierId, Guid CompanyId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var existingOB = Context.SupplierInvoices.FirstOrDefault(x => x.SupplierId == SupplierId && x.CompanyId == CompanyId && x.InvoiceNo == "Opening Balance");
+                if (existingOB != null)
+                {
+                    response.code = 400;
+                    response.message = "Already had opening balance.";
+                }
+                else
+                {
+                    response.code = 200;
+                    response.message = "No record of Opening balance found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error checking the opening balance.";
+            }
+            return response;
+        }
     }
 }

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Reflection;
 using System.Security.Permissions;
 
@@ -623,6 +624,28 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        public async Task<IActionResult> CheckOpeningBalance(Guid SupplierId, Guid CompanyId)
+        {
+            try
+            {
+                string apiUrl = $"SupplierInvoice/CheckOpeningBalance?SupplierId={SupplierId}&CompanyId={CompanyId}";
+
+                ApiResponseModel postuser = await APIServices.GetAsync("", apiUrl);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
         }
     }

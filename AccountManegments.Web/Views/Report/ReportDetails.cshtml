@@ -245,7 +245,7 @@
                     <div class="modal-dialog modal-md modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-primary-subtle p-3">
-                                <h5 class="modal-title" id="flipModalLabel">Add Operning Balance</h5>
+                                <h5 class="modal-title" id="flipModalLabel">Add Opening Balance</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -253,22 +253,22 @@
                                     <div class="col-lg-4 col-12">
                                         <label class="form-label">Description</label>
                                         <div class="form-label">
-                                            <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
+                                            <input type="text" class="form-control" id="txtOBdescription" placeholder="Description" />
                                         </div>
                                     </div>
                                     <div class="col-lg-5 col-12">
                                         <label class="form-label">Date</label>
-                                        <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
+                                        <input type="date" id="txtOBdate" class="form-control" name="txtOBdate" />
                                     </div>
                                     <div class="col-lg-3 col-12">
                                         <label class="form-label">Total Amount</label>
-                                        <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
+                                        <input type="text" class="form-control" id="txtOBamount" name="txtOBamount">
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
+                                <button type="button" class="btn btn-primary" onclick="saveOpeningBalanceInvoice()">Save</button>
                             </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

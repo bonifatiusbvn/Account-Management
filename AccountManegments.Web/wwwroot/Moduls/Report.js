@@ -603,43 +603,6 @@ function UpdatePayoutInvoice() {
         toastr.error("Kindly fill all details");
     }
 }
-
-var UpdatePayoutForm;
-$(document).ready(function () {
-
-    UpdatePayoutForm = $("#updatePayoutForm").validate({
-        rules: {
-            Edittxtpayoutdate: "required",
-            Edittxtpayoutamount: {
-                required: true,
-                number: true,
-                min: 0
-            }
-        },
-        messages: {
-            Edittxtpayoutdate: "Enter Date",
-            Edittxtpayoutamount: {
-                required: "Enter Total Amount",
-                number: "Enter a valid number",
-                min: "Total Amount must be greater than zero"
-            }
-        }
-    })
-});
-function resetPayoutForm() {
-    if (UpdatePayoutForm) {
-        UpdatePayoutForm.resetForm();
-    }
-}
-function ClearPayoutTextBox() {
-    resetPayoutForm();
-    $('#EdittxtpayoutSupplierName').val('');
-    $('#EdittxtpayoutCompanyName').val('');
-    $('#Edittxtpayoutamount').val('');
-    $('#Edittxtpayoutdate').val('');
-    $('#Edittxtpayoutdescription').val('');
-    $("#Editpayoutpaymenttype").prop("checked", false);
-}
 function GetPayoutReportData() {
 
     if (selectedCompanyId || selectedSupplierId) {
@@ -735,7 +698,8 @@ function AddNewRowforPayOutInvoicebtn() {
     selectedReportSiteName = $('#txtReportSiteId').val();
     var CompanyId = selectedCompanyId;
     var SupplierId = selectedSupplierId;
-    if (SupplierId != "" && CompanyId != "") {
+    var SiteId = selectedReportSiteName;
+    if (SiteId != "" && SupplierId != "" && CompanyId != "") {
         $.ajax({
             url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
             type: 'Post',
@@ -752,7 +716,7 @@ function AddNewRowforPayOutInvoicebtn() {
             }
         });
     } else {
-        toastr.warning("select company and supplier");
+        toastr.warning("select site, company and supplier");
     }
 }
 
@@ -792,31 +756,19 @@ function InsertPayOutDetailsReport() {
 
         $(".payoutinvoicerow").each(function () {
             var orderRow = $(this);
-            if ($("#txtReportSiteName").val() == "All Site") {
-                var objData = {
-                    InvoiceNo: "Opening Balance",
-                    SupplierId: selectedSupplierId,
-                    CompanyId: selectedCompanyId,
-                    PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
-                    Description: orderRow.find("input[id^='txtdescription']").val(),
-                    Date: orderRow.find("input[id^='txtdate']").val(),
-                    CreatedBy: $("#txtReportUserId").val(),
-                    TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
-                };
-            }
-            else {
-                var objData = {
-                    InvoiceNo: "PayOut",
-                    SiteId: $("#txtReportSiteId").val(),
-                    SupplierId: selectedSupplierId,
-                    CompanyId: selectedCompanyId,
-                    PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
-                    Description: orderRow.find("input[id^='txtdescription']").val(),
-                    Date: orderRow.find("input[id^='txtdate']").val(),
-                    CreatedBy: $("#txtReportUserId").val(),
-                    TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
-                };
-            }
+
+            var objData = {
+                InvoiceNo: "PayOut",
+                SiteId: $("#txtReportSiteId").val(),
+                SupplierId: $('#textReportSupplierNameHidden').val(),
+                CompanyId: $('#textReportCompanyName').val(),
+                PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
+                Description: orderRow.find("input[id^='txtdescription']").val(),
+                Date: orderRow.find("input[id^='txtdate']").val(),
+                CreatedBy: $("#txtReportUserId").val(),
+                TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
+            };
+
             orderRow.find("input[id^='txtdate']").on('input', function () {
                 $(this).css("border", "1px solid #ced4da");
             });
@@ -876,6 +828,7 @@ function InsertPayOutDetailsReport() {
         toastr.warning("Add payout details");
     }
 }
+
 function fn_ResetAllDropdown() {
     window.location = '/Report/ReportDetails';
 }
@@ -883,6 +836,70 @@ function fn_ResetAllDropdown() {
 function clearPayoutPartialView() {
     $('.payoutinvoicerow').remove();
     rowCounter = 0;
+}
+
+function saveOpeningBalanceInvoice() {
+    siteloadershow();
+    var PayoutDetails = [];
+    var isValidPayout = true;
+
+    var objData = {
+        InvoiceNo: "Opening Balance",
+        SupplierId: $('#textReportSupplierNameHidden').val(),
+        CompanyId: $('#textReportCompanyName').val(),
+        Description: $('#txtOBdescription').val(),
+        Date: $('#txtOBdate').val(),
+        CreatedBy: $("#txtReportUserId").val(),
+        TotalAmount: $('#txtOBamount').val(),
+    };
+    $('#txtOBamount').on('input', function () {
+        $('#txtOBamount').css("border", "1px solid #ced4da");
+    });
+
+    if (objData.TotalAmount === "") {
+        isValidPayout = false;
+        $('#txtOBamount').css("border", "2px solid red");
+    } else {
+        PayoutDetails.push(objData);
+        $('#txtOBamount').css("border", "");
+    }
+
+    if (isValidPayout) {
+        var form_data = new FormData();
+        form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
+
+        $.ajax({
+            url: '/InvoiceMaster/InsertPayOutDetails',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                siteloaderhide();
+                if (result.code === 200) {
+                    $("#OBPayoutModal").modal('hide');
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.warning("Kindly fill all data fields");
+    }
+}
+
+function ClearOBTextBox() {
+    $('#txtOBdescription').val('');
+    $('#txtOBdate').val('');
+    $('#txtOBamount').val('');
+    $('#txtOBamount').css("border", "1px solid #ced4da");
 }
 
 $(document).ready(function () {
@@ -1009,8 +1026,41 @@ $(document).ready(function () {
 
 
 function openOB() {
-    var modal = new bootstrap.Modal(document.getElementById('OBPayoutModal'));
-    modal.show();
+    siteloadershow();
+    ClearOBTextBox();
+    var supplierId = $('#textReportSupplierNameHidden').val();
+    var companyId = $('#textReportCompanyName').val();
+
+    if (supplierId !== "" && companyId !== "")
+    {
+        var objData = {
+            SupplierId: supplierId,
+            CompanyId: companyId,
+        };
+
+        $.ajax({
+            url: '/InvoiceMaster/CheckOpeningBalance',
+            type: 'GET',
+            data: objData,
+            datatype: 'json',
+            success: function (result) {
+                siteloaderhide();
+                if (result.code == 200) {
+                    var modal = new bootstrap.Modal(document.getElementById('OBPayoutModal'));
+                    modal.show();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.warning("Select company and supplier");
+    }
 }
 
 
