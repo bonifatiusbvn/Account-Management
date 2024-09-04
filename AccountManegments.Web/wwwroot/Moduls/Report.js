@@ -603,6 +603,44 @@ function UpdatePayoutInvoice() {
         toastr.error("Kindly fill all details");
     }
 }
+
+var UpdatePayoutForm;
+$(document).ready(function () {
+
+    UpdatePayoutForm = $("#updatePayoutForm").validate({
+        rules: {
+            Edittxtpayoutdate: "required",
+            Edittxtpayoutamount: {
+                required: true,
+                number: true,
+                min: 0
+            }
+        },
+        messages: {
+            Edittxtpayoutdate: "Enter Date",
+            Edittxtpayoutamount: {
+                required: "Enter Total Amount",
+                number: "Enter a valid number",
+                min: "Total Amount must be greater than zero"
+            }
+        }
+    })
+});
+function resetPayoutForm() {
+    if (UpdatePayoutForm) {
+        UpdatePayoutForm.resetForm();
+    }
+}
+function ClearPayoutTextBox() {
+    resetPayoutForm();
+    $('#EdittxtpayoutSupplierName').val('');
+    $('#EdittxtpayoutCompanyName').val('');
+    $('#Edittxtpayoutamount').val('');
+    $('#Edittxtpayoutdate').val('');
+    $('#Edittxtpayoutdescription').val('');
+    $("#Editpayoutpaymenttype").prop("checked", false);
+}
+
 function GetPayoutReportData() {
 
     if (selectedCompanyId || selectedSupplierId) {
