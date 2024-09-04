@@ -939,8 +939,9 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             paging: true,
-            pageLength: 15,
-            lengthChange: false,
+            pageLength: 15, 
+            lengthChange: true,
+            lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
             destroy: true,
             order: [],
             ajax: {
@@ -1044,30 +1045,11 @@ $(document).ready(function () {
                 targets: "_all",
                 width: 'auto'
             }],
-            dom: 'Bfrtip', // This enables the buttons
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Excel',
-                    titleAttr: 'Export to Excel',
-                    className: 'btn btn-outline-secondary',
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: 'PDF',
-                    titleAttr: 'Export to PDF',
-                    className: 'btn btn-outline-secondary',
-                },
-                {
-                    extend: 'print',
-                    text: 'Print',
-                    titleAttr: 'Print Table',
-                    className: 'btn btn-outline-secondary',
-                }
-            ]
         });
     });
 });
+
+
 
 
 
