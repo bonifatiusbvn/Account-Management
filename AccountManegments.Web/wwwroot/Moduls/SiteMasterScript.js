@@ -747,7 +747,7 @@ function toggleShippingAddress() {
 }
 
 //function GetGroupSiteNameList() {
-//    debugger
+//    
 //    $('#addgroupinfo').removeClass('d-none');
 //    $.ajax({
 //        url: '/SiteMaster/GetSiteNameList',
@@ -853,7 +853,7 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
 function AddSiteGroupDetails() {
     var selectElement = document.getElementById('textGroupSiteNameList');
     var SiteList = [];
-    
+
     $(selectElement.options).each(function () {
         var option = $(this);
         if (option.is(':selected')) {
@@ -1014,18 +1014,17 @@ function DisplaySiteGroup(groupName) {
     });
 }
 
-function UpdateSiteGroupDetails()
-{
+function UpdateSiteGroupDetails() {
     var siteIdsText = $("#txtgroupsiteIdlist").val();
     var siteIds = siteIdsText.split(',').map(id => id.trim()).filter(id => id !== "");
 
     var SiteList = [];
-    var existingSiteIds = new Set(); 
+    var existingSiteIds = new Set();
 
     siteIds.forEach(function (siteId) {
         var objData = { SiteId: siteId };
         SiteList.push(objData);
-        existingSiteIds.add(siteId); 
+        existingSiteIds.add(siteId);
     });
 
     var selectElement = document.getElementById('textGroupSiteNameList');
@@ -1038,9 +1037,9 @@ function UpdateSiteGroupDetails()
             var siteId = option.data('value');
 
             if (existingSiteIds.has(siteId)) {
-                hasDuplicates = true; 
+                hasDuplicates = true;
             } else {
-                newSiteIds.push(siteId); 
+                newSiteIds.push(siteId);
             }
         }
     });

@@ -428,7 +428,7 @@ $(document).ready(function () {
             textSupplierMobile: {
                 digits: true,
                 minlength: 10,
-                maxlength: 10
+                maxlength: 15
             },
 
             textSupplierAddress: "required",

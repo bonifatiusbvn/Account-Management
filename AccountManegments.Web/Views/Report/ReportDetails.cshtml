@@ -80,7 +80,7 @@
                                                     <div class="tab-content" id="pills-tabContent">
                                                         <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
                                                             <div class="table-container">
-                                                                <table id="tblinvoice" class="table table-bordered table-striped align-middle dataTable dtr-inline" aria-describedby="example_info">
+                                                                <table id="tblinvoice" class="table table-bordered table-striped align-middle dataTable dtr-inline">
                                                                     <thead class="text-center table-light btn-primary">
                                                                         <tr>
                                                                             <th>Invoice No</th>
@@ -264,10 +264,9 @@
 </div>
 
 
-
-<script type="text/javascript">
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
-    </script>
 @section Scripts {
+    <script type="text/javascript">
+        var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    </script>
     <script src="~/moduls/report.js" asp-append-version="true"></script>
 }
