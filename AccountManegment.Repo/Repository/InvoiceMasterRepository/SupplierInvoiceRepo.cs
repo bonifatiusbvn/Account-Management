@@ -1312,7 +1312,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
         {
             try
             {
@@ -1346,7 +1346,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (!string.IsNullOrEmpty(invoiceReport.GroupName))
                 {
-                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName).OrderBy(s=>s.s.CreatedOn);
+                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName).OrderBy(s => s.s.CreatedOn);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
@@ -1368,7 +1368,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         }
 
                         var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
-                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
                     else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
                     {
@@ -1379,19 +1379,30 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
                         var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
 
-                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
                 }
 
                 if (invoiceReport.startDate.HasValue)
                 {
-                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn); 
+                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
 
                 if (invoiceReport.endDate.HasValue)
                 {
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
+
+                var CreditTotalAmount = await Context.SupplierInvoices
+            .Where(s => s.InvoiceNo != "Payout" && query.Any(q => q.s.Id == s.Id))
+            .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
+
+                var DebitTotalAmount = await Context.SupplierInvoices
+                    .Where(s => s.InvoiceNo == "Payout" && query.Any(q => q.s.Id == s.Id))
+                    .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
+
+                var PendingTotalAmount = CreditTotalAmount - DebitTotalAmount;
+
 
                 var totalRecords = await query.CountAsync();
 
@@ -1418,7 +1429,15 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SiteName = s.SiteName
                 }).ToListAsync();
 
-                return SupplierInvoiceList;
+                var PayOutDetails = new InvoiceTotalAmount
+                {
+                    InvoiceList = SupplierInvoiceList,
+                    TotalPending = PendingTotalAmount,
+                    TotalCreadit = CreditTotalAmount,
+                    TotalPurchase = DebitTotalAmount
+                };
+
+                return PayOutDetails;
             }
             catch (Exception ex)
             {
