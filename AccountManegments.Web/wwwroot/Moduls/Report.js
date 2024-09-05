@@ -1010,8 +1010,8 @@ $(document).ready(function () {
                 var totalCredit = settings.json.totalCredit || 0;
                 var totalDebit = settings.json.totalDebit || 0;
 
-                $(api.table().footer()).find('#totalCredit').html(totalCredit.toFixed(2));
-                $(api.table().footer()).find('#totalDebit').html(totalDebit.toFixed(2));
+                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span style="margin-left : -30px;">' + '₹' + totalDebit.toFixed(2) + '</span>');
 
                 // Replace classes for pagination buttons
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');

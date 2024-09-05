@@ -6,13 +6,7 @@
     ViewData["Title"] = "ReportDetails";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-<style>
-    a.paginate_button.current {
-        color: #fff !important;
-        background-color: #923EB9 !important;
-        border-color: #923eb9 !important;
-    }
-</style>
+
 <input type="hidden" id="txtReportSiteId" value="@UserSession.SiteId" hidden />
 <input type="hidden" id="txtReportUserId" value="@_userSession.UserId" hidden />
 <input type="hidden" id="txtReportSiteName" value="@UserSession.SiteName" hidden />
@@ -33,7 +27,14 @@
                                         <div class="checkout-details">
                                             <div class="card">
                                                 <div class="card-header border-bottom">
-                                                    <h2 class="h5">Payment Report</h2>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <h2 class="h5">Payment Report</h2>
+                                                        </div>
+                                                        <div class="col-6 text-end">
+                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab"><i class="lni lni-circle-plus"></i>Opening Balance</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="card-body">
                                                     <ul class="nav nav-pills mb-3 row" role="tablist">
@@ -74,9 +75,6 @@
                                                             </button>
                                                             <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="fn_ResetAllDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
                                                         </li>
-                                                        <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation">
-                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab">Opening Balance</button>
-                                                        </li>
                                                     </ul>
 
                                                     <div class="tab-content" id="pills-tabContent">
@@ -97,7 +95,7 @@
                                                                     <tbody>
                                                                     </tbody>
                                                                     <tfoot>
-                                                                        <tr>
+                                                                        <tr class="table-light btn-primary">
                                                                             <th colspan="5" style="text-align:right">Total:</th>
                                                                             <th id="totalCredit"></th>
                                                                             <th id="totalDebit"></th>
