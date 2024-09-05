@@ -27,6 +27,6 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails);
         Task<ApiResponseModel> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList);
         Task<ApiResponseModel> CheckOpeningBalance(Guid SupplierId, Guid CompanyId);
-        Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
+        Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
     }
 }

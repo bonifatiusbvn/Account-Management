@@ -281,8 +281,8 @@ namespace AccountManagement.API.Controllers
         [Route("GetInvoiceDetailsPdfReport")]
         public async Task<IActionResult> GetInvoiceDetailsReportpdf(InvoiceReportModel invoiceReport)
         {
-            IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetInvoiceDetailsPdfReport(invoiceReport);
-            return Ok(new { code = 200, data = supplierList.ToList() });
+            var supplierList = await SupplierInvoice.GetInvoiceDetailsPdfReport(invoiceReport);
+            return Ok(new { code = 200, data = supplierList});
         }
     }
 }
