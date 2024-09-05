@@ -942,44 +942,44 @@ var dtcoulms = [
 ]
 $(document).ready(function () {
     var table;
+    var userPermissionArray = JSON.parse(datas);
+    var canEdit = false;
+    var canDelete = false;
 
-    $('#searchReportButton').click(function () {
-        var userPermissionArray = JSON.parse(datas);
-        var canEdit = false;
-        var canDelete = false;
-
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName == "Details Report & Payout") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
+    for (var i = 0; i < userPermissionArray.length; i++) {
+        var permission = userPermissionArray[i];
+        if (permission.formName == "Details Report & Payout") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
         }
-        if (canEdit || canDelete) {
-            dtcoulms.push({
-                "data": null,
-                "render": function (data, type, row) {
+    }
+    if (canEdit || canDelete) {
+        dtcoulms.push({
+            "data": null,
+            "render": function (data, type, row) {
 
-                    if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
-                        var buttons = '';
-                        if (canEdit) {
-                            buttons +=
-                                '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
-                                '<i class="fadeIn animated bx bx-edit"></i>' +
-                                '</a>';
-                        }
-
-                        if (canDelete) {
-                            buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
-                                '<i class="lni lni-trash"></i>' +
-                                '</a>';
-                        }
-                        return buttons;
+                if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
+                    var buttons = '';
+                    if (canEdit) {
+                        buttons +=
+                            '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
+                            '<i class="fadeIn animated bx bx-edit"></i>' +
+                            '</a>';
                     }
-                },
-            });
-        }
+
+                    if (canDelete) {
+                        buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
+                            '<i class="lni lni-trash"></i>' +
+                            '</a>';
+                    }
+                    return buttons;
+                }
+            },
+        });
+    }
+    $('#searchReportButton').click(function () {
+        
 
         if ($.fn.DataTable.isDataTable('#tblinvoice')) {
             table.destroy();
@@ -1046,9 +1046,11 @@ $(document).ready(function () {
 
                 var totalCredit = settings.json.totalCredit || 0;
                 var totalDebit = settings.json.totalDebit || 0;
+                var NetAmount = totalCredit - totalDebit;
 
                 $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
-                $(api.table().footer()).find('#totalDebit').html('<span style="margin-left : -30px;">' + '₹' + totalDebit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + totalDebit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + NetAmount.toFixed(2) + '</span>');
 
                 // Replace classes for pagination buttons
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
