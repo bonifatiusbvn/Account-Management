@@ -1032,6 +1032,7 @@ $(document).ready(function () {
             },
             columns: columns,
             scrollX: true,
+            scrollY: '550px',
             scrollCollapse: true,
             fixedHeader: {
                 header: true,
