@@ -88,6 +88,7 @@ namespace AccountManegments.Web.Controllers
                     searchValue = searchValue,
                     sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir,
+                    filterType = invoiceReport.filterType,
                     SiteId = invoiceReport.SiteId,
                     SupplierId = invoiceReport.SupplierId,
                     CompanyId = invoiceReport.CompanyId,
@@ -138,7 +139,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsPdfReport");
                 if (response.code == 200)
                 {
-                   var SupplierDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
+                    var SupplierDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
 
                     var document = new Aspose.Pdf.Document
                     {
@@ -443,7 +444,7 @@ namespace AccountManegments.Web.Controllers
 
                         // Header Row 3
                         row += 2;
-                 
+
                         ws.Cell(row, 1).Value = "Invoice No";
                         ws.Cell(row, 2).Value = "Date";
                         ws.Cell(row, 3).Value = "Site";

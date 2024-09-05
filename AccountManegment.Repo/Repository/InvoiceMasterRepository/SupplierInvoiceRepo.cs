@@ -1055,15 +1055,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     }
                     else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
                     {
+                        // Assuming the SelectedYear is in the format "2024-25"
                         var years = invoiceReport.SelectedYear.Split('-');
-                        int startYear = int.Parse(years[0]);
-                        int endYear = int.Parse(years[1]);
 
-                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
-                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+                        if (years.Length == 2)
+                        {
+                            // Parse the start year and end year
+                            int startYear = int.Parse(years[0]); // 2024
+                            int endYear = int.Parse("20" + years[1]); // 2025
 
-                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                            // Create DateTime objects for the start and end of the fiscal year
+                            var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1); // April 1, 2024
+                            var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31); // March 31, 2025
+
+                            // Apply the date filter based on the fiscal year range
+                            query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                        }
                     }
+
                 }
 
                 if (invoiceReport.startDate.HasValue)

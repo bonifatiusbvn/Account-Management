@@ -157,29 +157,29 @@ function populateYearDropdown() {
     }
 }
 
-//$(document).ready(function () {
+$(document).ready(function () {
 
-//    function clearDates() {
-//        $('#startDate').val('');
-//        $('#endDate').val('');
-//    }
+    function clearDates() {
+        $('#startDate').val('');
+        $('#endDate').val('');
+    }
 
-//    $('#timePeriodDropdown').change(function () {
-//        var selectedValue = $(this).val();
+    $('#timePeriodDropdown').change(function () {
+        var selectedValue = $(this).val();
 
-//        if (selectedValue === 'This Month' || selectedValue === 'This Year') {
-//            $('#startDate, #endDate, #yearDropdown').hide();
-//        } else if (selectedValue === 'Between Date') {
-//            $('#startDate, #endDate, #searchReportButton').show();
-//            $('#yearDropdown').hide();
-//            clearDates();
-//        } else if (selectedValue === 'Between Year') {
-//            $('#yearDropdown, #searchReportButton').show();
-//            $('#startDate, #endDate').hide();
-//            populateYearDropdown();
-//        }
-//    });
-//});
+        if (selectedValue === 'This Month' || selectedValue === 'This Year') {
+            $('#startDate, #endDate, #yearDropdown').hide();
+        } else if (selectedValue === 'Between Date') {
+            $('#startDate, #endDate, #searchReportButton').show();
+            $('#yearDropdown').hide();
+            clearDates();
+        } else if (selectedValue === 'Between Year') {
+            $('#yearDropdown, #searchReportButton').show();
+            $('#startDate, #endDate').hide();
+            populateYearDropdown();
+        }
+    });
+});
 //function SearchReportData() {
 //    var selectedValue = $('#timePeriodDropdown').val();
 //    var selectedSupplierId = $('#textReportSupplierNameHidden').val();
