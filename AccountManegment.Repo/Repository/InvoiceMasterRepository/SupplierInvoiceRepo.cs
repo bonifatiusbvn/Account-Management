@@ -123,13 +123,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var supplierInvoicesQuery = from s in Context.SupplierInvoices
                                             join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
                                             join c in Context.Companies on s.CompanyId equals c.CompanyId
-                                            join d in Context.Sites on s.SiteId equals d.SiteId
+                                            join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
+                                            from d in siteGroup.DefaultIfEmpty()
                                             select new
                                             {
                                                 s,
                                                 SupplierName = b.SupplierName,
                                                 CompanyName = c.CompanyName,
-                                                SiteName = d.SiteName
+                                                SiteName = d != null ? d.SiteName : null,
+                                                Group = s.SiteGroup,
+                                                Date = s.Date
                                             };
 
                 if (PayOutReport.CompanyId.HasValue)
@@ -139,17 +142,12 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (PayOutReport.SiteId.HasValue)
                 {
-                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
                 }
 
                 if (PayOutReport.SupplierId.HasValue)
                 {
                     supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SupplierId == PayOutReport.SupplierId.Value);
-                }
-
-                if (PayOutReport.SiteId.HasValue)
-                {
-                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
                 }
 
                 if (!string.IsNullOrEmpty(PayOutReport.GroupName))
@@ -211,9 +209,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SiteId = group.FirstOrDefault().s.SiteId,
                         SupplierId = group.FirstOrDefault().s.SupplierId,
                         CompanyId = group.Key,
-
                         PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount),
+                        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
                         NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
                         GroupName = group.FirstOrDefault().s.SiteGroup,
                         Description = string.Join(", ", group.Select(x => x.s.Description)),
@@ -1140,8 +1137,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                SiteName = s.SiteName
            }).ToListAsync();
 
-                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
-                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" ? i.TotalAmount : 0);
+                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" || i.InvoiceNo == "Opening Balance" ? i.TotalAmount : 0);
+                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
 
                 var jsonData = new jsonData
                 {
@@ -1323,7 +1320,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
         {
             try
             {
@@ -1404,6 +1401,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
 
+                var CreditTotalAmount = await Context.SupplierInvoices
+            .Where(s => s.InvoiceNo != "Payout" && query.Any(q => q.s.Id == s.Id))
+            .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
+
+                var DebitTotalAmount = await Context.SupplierInvoices
+                    .Where(s => s.InvoiceNo == "Payout" && query.Any(q => q.s.Id == s.Id))
+                    .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
+
+                var PendingTotalAmount = CreditTotalAmount - DebitTotalAmount;
+
+
                 var totalRecords = await query.CountAsync();
 
                 var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
@@ -1429,7 +1437,15 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SiteName = s.SiteName
                 }).ToListAsync();
 
-                return SupplierInvoiceList;
+                var PayOutDetails = new InvoiceTotalAmount
+                {
+                    InvoiceList = SupplierInvoiceList,
+                    TotalPending = PendingTotalAmount,
+                    TotalCreadit = CreditTotalAmount,
+                    TotalPurchase = DebitTotalAmount
+                };
+
+                return PayOutDetails;
             }
             catch (Exception ex)
             {

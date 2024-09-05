@@ -94,7 +94,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.CheckOpeningBalance(SupplierId, CompanyId);
         }
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
+        public async Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
         {
             return await SupplierInvoice.GetInvoiceDetailsPdfReport(invoiceReport);
         }

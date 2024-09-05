@@ -90,15 +90,23 @@
                                                                             <th>Supplier</th>
                                                                             <th>Credit</th>
                                                                             <th>Debit</th>
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                            {
+                                                                                <th>Action</th>
+                                                                            }
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
+                                                                    <tbody class="text-center">
                                                                     </tbody>
                                                                     <tfoot>
-                                                                        <tr class="table-light btn-primary">
+                                                                        <tr class="text-center table-light btn-primary">
                                                                             <th colspan="5" style="text-align:right">Total:</th>
                                                                             <th id="totalCredit"></th>
                                                                             <th id="totalDebit"></th>
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                            {
+                                                                                <th></th>
+                                                                            }
                                                                         </tr>
                                                                     </tfoot>
                                                                 </table>
@@ -257,7 +265,9 @@
 
 
 
-
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    </script>
 @section Scripts {
     <script src="~/moduls/report.js" asp-append-version="true"></script>
 }

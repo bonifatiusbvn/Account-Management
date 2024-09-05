@@ -474,8 +474,7 @@ function deletePayoutDetails(InvoiceId) {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(function () {
-                            GetInvoiceReportData();
-                            GetInvoiceGroupData();
+                            $("#searchReportButton").click();
                         })
                     }
                     else {
@@ -559,7 +558,7 @@ function UpdatePayoutInvoice() {
                 if (Result.code == 200) {
                     $("#updatePayoutModal").modal('hide');
                     toastr.success(Result.message);
-                    loadReportData();
+                    $("#searchReportButton").click();
                 } else {
                     toastr.error(Result.message);
                 }
@@ -899,12 +898,87 @@ function ClearOBTextBox() {
     $('#txtOBamount').val('');
     $('#txtOBamount').css("border", "1px solid #ced4da");
 }
-
+var datas = userPermissions
 $(document).ready(function () {
     var table;
 
     $('#searchReportButton').click(function () {
 
+        var userPermissionArray = JSON.parse(datas);
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
+            if (permission.formName == "Details Report & Payout") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+        var columns = [
+            { "data": "invoiceNo", "name": "InvoiceNo" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, row) {
+                    if (data) {
+                        var date = new Date(data);
+                        return date.toLocaleDateString('en-GB');
+                    }
+                    return data;
+                }
+            },
+            { "data": "siteName", "name": "SiteName" },
+            { "data": "groupName", "name": "GroupName" },
+            { "data": "supplierName", "name": "SupplierName" },
+            {
+                "data": "totalAmount",
+                "name": "Credit",
+                "render": function (data, type, row) {
+                    if (row.invoiceNo !== 'PayOut') {
+                        return '<span style="color:green">' + '₹' + data + '</span>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "Debit",
+                "render": function (data, type, row) {
+                    if (row.invoiceNo === 'PayOut') {
+                        return '<span style="color:red">' + '₹' + data + '</span>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+        ];
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "render": function (data, type, row) {
+
+                    if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
+                        var buttons = '';
+                        if (canEdit) {
+                            buttons +=
+                                '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
+                                '<i class="fadeIn animated bx bx-edit"></i>' +
+                                '</a>';
+                        }
+
+                        if (canDelete) {
+                            buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
+                                '<i class="lni lni-trash"></i>' +
+                                '</a>';
+                        }
+                        return buttons;
+                    }
+                },
+            });
+        }
         if ($.fn.DataTable.isDataTable('#tblinvoice')) {
             table.destroy();
         }
@@ -956,45 +1030,7 @@ $(document).ready(function () {
                     }
                 }
             },
-            columns: [
-                { "data": "invoiceNo", "name": "InvoiceNo" },
-                {
-                    "data": "date",
-                    "name": "Date",
-                    "render": function (data, type, row) {
-                        if (data) {
-                            var date = new Date(data);
-                            return date.toLocaleDateString('en-GB');
-                        }
-                        return data;
-                    }
-                },
-                { "data": "siteName", "name": "SiteName" },
-                { "data": "groupName", "name": "GroupName" },
-                { "data": "supplierName", "name": "SupplierName" },
-                {
-                    "data": "totalAmount",
-                    "name": "Credit",
-                    "render": function (data, type, row) {
-                        if (row.invoiceNo !== 'PayOut') {
-                            return '<span style="color:green">' + '₹' + data + '</span>';
-                        } else {
-                            return '';
-                        }
-                    }
-                },
-                {
-                    "data": "totalAmount",
-                    "name": "Debit",
-                    "render": function (data, type, row) {
-                        if (row.invoiceNo === 'PayOut') {
-                            return '<span style="color:red">' + '₹' + data + '</span>';
-                        } else {
-                            return '';
-                        }
-                    }
-                }
-            ],
+            columns: columns,
             scrollX: true,
             scrollY: '350px',
             scrollCollapse: true,
@@ -1010,7 +1046,7 @@ $(document).ready(function () {
                 var totalDebit = settings.json.totalDebit || 0;
 
                 $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
-                $(api.table().footer()).find('#totalDebit').html('<span style="margin-left : -30px;">' + '₹' + totalDebit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + totalDebit.toFixed(2) + '</span>');
 
             },
             columnDefs: [{
