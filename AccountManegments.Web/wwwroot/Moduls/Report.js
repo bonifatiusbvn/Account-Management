@@ -893,7 +893,6 @@ function saveOpeningBalanceInvoice() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 function ClearOBTextBox() {
     $('#txtOBdescription').val('');
     $('#txtOBdate').val('');
@@ -1013,9 +1012,6 @@ $(document).ready(function () {
                 $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
                 $(api.table().footer()).find('#totalDebit').html('<span style="margin-left : -30px;">' + '₹' + totalDebit.toFixed(2) + '</span>');
 
-                // Replace classes for pagination buttons
-                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
-                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
             },
             columnDefs: [{
                 defaultContent: "",
@@ -1025,7 +1021,6 @@ $(document).ready(function () {
         });
     });
 });
-
 
 function openOB() {
     siteloadershow();
