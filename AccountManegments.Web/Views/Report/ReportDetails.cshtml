@@ -33,7 +33,14 @@
                                         <div class="checkout-details">
                                             <div class="card">
                                                 <div class="card-header border-bottom">
-                                                    <h2 class="h5">Payment Report</h2>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <h2 class="h5">Payment Report</h2>
+                                                        </div>
+                                                        <div class="col-6 text-end">
+                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab"><i class="lni lni-circle-plus"></i>Opening Balance</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="card-body">
                                                     <ul class="nav nav-pills mb-3 row" role="tablist">
@@ -73,9 +80,6 @@
                                                                 </svg>
                                                             </button>
                                                             <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="fn_ResetAllDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
-                                                        </li>
-                                                        <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation">
-                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab">Opening Balance</button>
                                                         </li>
                                                     </ul>
 

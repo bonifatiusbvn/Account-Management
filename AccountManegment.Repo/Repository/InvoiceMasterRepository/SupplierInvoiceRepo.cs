@@ -1129,8 +1129,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                SiteName = s.SiteName
            }).ToListAsync();
 
-                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" ? i.TotalAmount : 0);
-                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
+                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
+                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" ? i.TotalAmount : 0);
 
                 var jsonData = new jsonData
                 {
