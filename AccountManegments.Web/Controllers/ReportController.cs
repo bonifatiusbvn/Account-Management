@@ -66,6 +66,17 @@ namespace AccountManegments.Web.Controllers
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
+                var sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault();
+                if (sortColumnIndex == "5")
+                {
+
+                    sortColumn = "credit";
+                }
+                if (sortColumnIndex == "6")
+                {
+
+                    sortColumn = "debit";
+                }
 
                 var dataTable = new DataTableRequstModel
                 {
@@ -75,7 +86,7 @@ namespace AccountManegments.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault(),
+                    sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir,
                     SiteId = invoiceReport.SiteId,
                     SupplierId = invoiceReport.SupplierId,
@@ -710,7 +721,7 @@ namespace AccountManegments.Web.Controllers
 
 
                     // Table 3
-
+                    string currencyFormat = "#,##,##0.00";
                     var table = new Aspose.Pdf.Table
                     {
                         ColumnWidths = "40% 20% 20% 20%",

@@ -952,6 +952,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 SupplierName = b.SupplierName,
                                 InvoiceNo = s.InvoiceNo,
                                 Group = s.SiteGroup,
+                                TotalAmount = s.TotalAmount,
                                 CompanyName = c.CompanyName,
                                 SiteName = d != null ? d.SiteName : null,
                                 Date = s.Date
@@ -1005,6 +1006,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             query = invoiceReport.sortColumnDir == "asc"
                                 ? query.OrderBy(s => s.SiteName)
                                 : query.OrderByDescending(s => s.SiteName);
+                            break;
+                        case "credit":
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
+                        case "debit":
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
                             break;
                         case "date":
                             query = invoiceReport.sortColumnDir == "asc"
