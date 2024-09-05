@@ -809,7 +809,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 else
                 {
                     var lastInvoice = Context.SupplierInvoices
-                        .Where(a => a.InvoiceNo != "PayOut" && a.CompanyId == CompanyId)
+                        .Where(a => a.InvoiceNo != "PayOut" && a.InvoiceNo != "Opening Balance" && a.CompanyId == CompanyId)
                         .OrderByDescending(e => e.CreatedOn)
                         .FirstOrDefault();
 

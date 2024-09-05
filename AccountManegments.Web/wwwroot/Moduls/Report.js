@@ -1032,7 +1032,6 @@ $(document).ready(function () {
             },
             columns: columns,
             scrollX: true,
-            scrollY: '350px',
             scrollCollapse: true,
             fixedHeader: {
                 header: true,
@@ -1044,9 +1043,11 @@ $(document).ready(function () {
 
                 var totalCredit = settings.json.totalCredit || 0;
                 var totalDebit = settings.json.totalDebit || 0;
+                var netAmount = totalCredit - totalDebit;
 
                 $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
                 $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + totalDebit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + netAmount.toFixed(2) + '</span>');
 
             },
             columnDefs: [{
