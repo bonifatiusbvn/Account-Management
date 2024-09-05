@@ -955,6 +955,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 SupplierName = b.SupplierName,
                                 InvoiceNo = s.InvoiceNo,
                                 Group = s.SiteGroup,
+                                TotalAmount = s.TotalAmount,
                                 CompanyName = c.CompanyName,
                                 SiteName = d != null ? d.SiteName : null,
                                 Date = s.Date
@@ -1008,6 +1009,16 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             query = invoiceReport.sortColumnDir == "asc"
                                 ? query.OrderBy(s => s.SiteName)
                                 : query.OrderByDescending(s => s.SiteName);
+                            break;
+                        case "credit":
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
+                        case "debit":
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
                             break;
                         case "date":
                             query = invoiceReport.sortColumnDir == "asc"
@@ -1346,7 +1357,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (!string.IsNullOrEmpty(invoiceReport.GroupName))
                 {
-                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName).OrderBy(s=>s.s.CreatedOn);
+                    query = query.Where(s => s.s.SiteGroup == invoiceReport.GroupName).OrderBy(s => s.s.CreatedOn);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
@@ -1368,7 +1379,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         }
 
                         var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
-                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
                     else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
                     {
@@ -1379,13 +1390,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
                         var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
 
-                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn); 
+                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
                 }
 
                 if (invoiceReport.startDate.HasValue)
                 {
-                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn); 
+                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
 
                 if (invoiceReport.endDate.HasValue)

@@ -66,6 +66,17 @@ namespace AccountManegments.Web.Controllers
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
+                var sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault();
+                if (sortColumnIndex == "5")
+                {
+
+                    sortColumn = "credit";
+                }
+                if (sortColumnIndex == "6")
+                {
+
+                    sortColumn = "debit";
+                }
 
                 var dataTable = new DataTableRequstModel
                 {
@@ -75,7 +86,7 @@ namespace AccountManegments.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault(),
+                    sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir,
                     SiteId = invoiceReport.SiteId,
                     SupplierId = invoiceReport.SupplierId,
@@ -249,7 +260,7 @@ namespace AccountManegments.Web.Controllers
                         if (item.InvoiceNo == "PayOut")
                         {
                             row.Cells.Add("");
-                            row.Cells.Add(FormatIndianCurrency(item.TotalAmount));                       
+                            row.Cells.Add(FormatIndianCurrency(item.TotalAmount));
                             yougavetotal += item.TotalAmount;
                         }
                         else
@@ -644,7 +655,7 @@ namespace AccountManegments.Web.Controllers
 
 
                     // Table 3
-                     string currencyFormat = "#,##,##0.00";
+                    string currencyFormat = "#,##,##0.00";
                     var table = new Aspose.Pdf.Table
                     {
                         ColumnWidths = "40% 20% 20% 20%",
@@ -692,7 +703,7 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
 
-                    nettotal = yougettotal- yougavetotal;
+                    nettotal = yougettotal - yougavetotal;
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add(FormatIndianCurrency(yougettotal));
@@ -814,7 +825,7 @@ namespace AccountManegments.Web.Controllers
                         dataRange1.Style.Border.RightBorderColor = XLColor.Black;
 
                         // Table-3
-                        
+
                         row += 2;
 
                         ws.Cell(row, 1).Value = "Supplier";
