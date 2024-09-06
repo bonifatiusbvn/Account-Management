@@ -475,5 +475,35 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             }
             return response;
         }
+
+        public async Task<ApiResponseModel> MultipleSupplierIsApproved(SupplierIsApprovedMasterModel SupplierList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allSupplierData = await Context.SupplierMasters.ToListAsync();
+                var approvalDict = SupplierList.SupplierList.ToDictionary(x => x.SupplierId, x => x.IsApproved);
+
+                foreach (var Supplier in allSupplierData)
+                {
+                    if (approvalDict.TryGetValue(Supplier.SupplierId, out var isApproved))
+                    {
+                        Supplier.IsApproved = isApproved ?? false;
+                    }
+
+                    Context.SupplierMasters.Update(Supplier);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.message = "Supplier approved successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error approving the supplier: " + ex.Message;
+            }
+            return response;
+        }
     }
 }

@@ -57,5 +57,10 @@ namespace AccountManagement.Repository.Services.ItemInWord
         {
             return await itemInWord.UpdatetMultipleItemInWordDetails(UpdateInWordDetails);
         }
+
+        public async Task<ApiResponseModel> MultipleInwardIsApproved(InwardIsApprovedMasterModel InwardList)
+        {
+            return await itemInWord.MultipleInwardIsApproved(InwardList);
+        }
     }
 }

@@ -69,4 +69,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public DateTime CreatedOn { get; set; }
 
     }
+    public class InwardIsApprovedMasterModel
+    {
+        public List<InwardIsApprovedModel>? InwardList { get; set; }
+    }
+
+    public class InwardIsApprovedModel
+    {
+        public Guid InwardId { get; set; }
+        public bool? IsApproved { get; set; }
+    }
 }

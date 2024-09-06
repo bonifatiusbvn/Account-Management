@@ -880,6 +880,7 @@ function saveOpeningBalanceInvoice() {
                 if (result.code === 200) {
                     $("#OBPayoutModal").modal('hide');
                     toastr.success(result.message);
+                    $("#searchReportButton").click();
                 } else {
                     toastr.error(result.message);
                 }

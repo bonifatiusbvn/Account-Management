@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
 using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
@@ -171,6 +172,31 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = itemInword.code;
                 response.message = itemInword.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("MultipleInwardIsApproved")]
+        public async Task<IActionResult> MultipleInwardIsApproved(InwardIsApprovedMasterModel InwardList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var inward = await ItemInWord.MultipleInwardIsApproved(InwardList);
+                if (inward.code == 200)
+                {
+                    response.code = inward.code;
+                    response.message = inward.message;
+                }
+                else
+                {
+                    response.message = inward.message;
+                    response.code = inward.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(response.code, response);
         }

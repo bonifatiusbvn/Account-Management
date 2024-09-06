@@ -55,4 +55,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
 
         public DateTime? OpeningBalanceDate { get; set; }
     }
+    public class SupplierIsApprovedMasterModel
+    {
+        public List<SupplierIsApprovedModel>? SupplierList { get; set; }
+    }
+
+    public class SupplierIsApprovedModel
+    {
+        public Guid SupplierId { get; set; }
+        public bool? IsApproved { get; set; }
+    }
 }

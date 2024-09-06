@@ -59,5 +59,10 @@ namespace AccountManagement.Repository.Services.Supplier
         {
             return await Supplier.ImportSupplierListFromExcel(supplierList);
         }
+
+        public async Task<ApiResponseModel> MultipleSupplierIsApproved(SupplierIsApprovedMasterModel SupplierList)
+        {
+            return await Supplier.MultipleSupplierIsApproved(SupplierList);
+        }
     }
 }

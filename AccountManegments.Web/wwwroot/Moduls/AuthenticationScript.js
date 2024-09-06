@@ -3,6 +3,8 @@ GetSiteDetails();
 GetDashboardItemList();
 GetDashboardPurchaseOrderList();
 GetDashboardInvoiceList();
+GetDashboardSupplierList();
+GetDashboardInwardList();
 function CreateUser() {
     siteloadershow();
     if ($("#userForm").valid()) {
@@ -705,7 +707,7 @@ function dashboarddeleteItemDetails(ItemId) {
     });
 }
 function GetDashboardPurchaseOrderList() {
-    siteloadershow();
+    //siteloadershow();
 
     $.get("/Home/PurchaseOrderListView")
         .done(function (result) {
@@ -993,6 +995,148 @@ function MutiplePurchaseRequestIsApproved() {
             Swal.fire(
                 'Cancelled',
                 'Purchase request have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/Home/Index';
+            });
+        }
+    });
+}
+
+function GetDashboardSupplierList() {
+    //siteloadershow();
+
+    $.get("/Home/SupplierListView")
+        .done(function (result) {
+            siteloaderhide();
+            $("#dashboardSupplierList").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+
+        });
+}
+function GetDashboardInwardList() {
+    //siteloadershow();
+
+    $.get("/Home/ItemInWordListView")
+        .done(function (result) {
+            siteloaderhide();
+            $("#dashboardInwardList").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+        });
+}
+
+function MutipleSupplierIsApproved() {
+
+    Swal.fire({
+        title: "Are you sure you want to approve this Supplier?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var approvalStatuses = [];
+            $('input[name="chk_Supplierchild"]').each(function () {
+                var SupplierId = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ SupplierId: SupplierId, IsApproved: isChecked });
+            });
+
+            var SupplierDetails = {
+                SupplierList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("SupplierIsApproved", JSON.stringify(SupplierDetails));
+
+            $.ajax({
+                url: '/Home/MultipleSupplierIsApproved',
+                type: 'Post',
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (Result) {
+                    Swal.fire({
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Supplier have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/Home/Index';
+            });
+        }
+    });
+}
+
+function MutipleInwardIsApproved() {
+
+    Swal.fire({
+        title: "Are you sure you want to approve this inward?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var approvalStatuses = [];
+            $('input[name="chk_Inwardchild"]').each(function () {
+                var InwardId = $(this).attr('id').split('_')[1];
+                var isChecked = $(this).is(':checked');
+                approvalStatuses.push({ InwardId: InwardId, IsApproved: isChecked });
+            });
+
+            var InwardDetails = {
+                InwardList: approvalStatuses
+            };
+
+            var form_data = new FormData();
+            form_data.append("InwardIsApproved", JSON.stringify(InwardDetails));
+
+            $.ajax({
+                url: '/Home/MultipleInwardIsApproved',
+                type: 'Post',
+                processData: false,
+                contentType: false,
+                data: form_data,
+                success: function (Result) {
+                    Swal.fire({
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Inward have no changes.!!😊',
                 'error'
             ).then(function () {
                 window.location = '/Home/Index';

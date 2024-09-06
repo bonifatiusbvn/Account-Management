@@ -1,8 +1,10 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -177,7 +179,62 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+        public async Task<IActionResult> SupplierListView(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
 
+                string apiUrl = $"SupplierMaster/GetAllSupplierList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<SupplierModel> GetSupplierList = JsonConvert.DeserializeObject<List<SupplierModel>>(res.data.ToString());
+                    GetSupplierList = GetSupplierList.Where(a => a.IsApproved == false).ToList();
+                    return PartialView("~/Views/Home/_DashboardSupplierListPartial.cshtml", GetSupplierList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<IActionResult> ItemInWordListView(string? searchText, string? searchBy, string? sortBy, Guid? SiteId)
+        {
+            try
+            {
+                if (SiteId != null)
+                {
+                    UserSession.SiteId = SiteId.ToString();
+                }
+                Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<ItemInWordModel> GetInwardList = JsonConvert.DeserializeObject<List<ItemInWordModel>>(res.data.ToString());
+                    GetInwardList = GetInwardList.Where(a => a.IsApproved == false).ToList();
+                    return PartialView("~/Views/Home/_DashboardInwardListPartial.cshtml", GetInwardList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Item In Word list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> PurchaseOrderIsApproved()
         {
@@ -234,6 +291,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> InvoiceIsApproved()
@@ -294,6 +352,54 @@ namespace AccountManegments.Web.Controllers
                 var PRIdList = JsonConvert.DeserializeObject<PRIsApprovedMasterModel>(isApprovedDetails);
 
                 ApiResponseModel response = await APIServices.PostAsync(PRIdList, "PurchaseRequest/MultiplePurchaseRequestIsApproved");
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+                else
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> MultipleSupplierIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["SupplierIsApproved"];
+                var SupplierList = JsonConvert.DeserializeObject<SupplierIsApprovedMasterModel>(isApprovedDetails);
+
+                ApiResponseModel response = await APIServices.PostAsync(SupplierList, "SupplierMaster/MultipleSupplierIsApproved");
+
+                if (response.code == 200)
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+                else
+                {
+                    return Ok(new { Message = response.message, Code = response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> MultipleInwardIsApproved()
+        {
+            try
+            {
+                var isApprovedDetails = HttpContext.Request.Form["InwardIsApproved"];
+                var InwardList = JsonConvert.DeserializeObject<InwardIsApprovedMasterModel>(isApprovedDetails);
+
+                ApiResponseModel response = await APIServices.PostAsync(InwardList, "ItemInWord/MultipleInwardIsApproved");
 
                 if (response.code == 200)
                 {

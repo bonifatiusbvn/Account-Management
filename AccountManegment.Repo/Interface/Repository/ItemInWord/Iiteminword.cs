@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemInWord
         Task<ApiResponseModel> DeleteItemInWord(Guid InwordId);
         Task<ApiResponseModel> InsertMultipleItemInWordDetails(ItemInWordMasterView ItemInWordDetails);
         Task<ApiResponseModel> UpdatetMultipleItemInWordDetails(ItemInWordMasterView UpdateInWordDetails);
+        Task<ApiResponseModel> MultipleInwardIsApproved(InwardIsApprovedMasterModel InwardList);
     }
 }

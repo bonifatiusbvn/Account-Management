@@ -5,6 +5,7 @@ using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -380,6 +381,36 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             {
                 response.code = 400;
                 response.message = "Error updating item inward: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> MultipleInwardIsApproved(InwardIsApprovedMasterModel InwardList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var allInwardData = await Context.ItemInwords.ToListAsync();
+                var approvalDict = InwardList.InwardList.ToDictionary(x => x.InwardId, x => x.IsApproved);
+
+                foreach (var Inward in allInwardData)
+                {
+                    if (approvalDict.TryGetValue(Inward.InwordId, out var isApproved))
+                    {
+                        Inward.IsApproved = isApproved ?? false;
+                    }
+
+                    Context.ItemInwords.Update(Inward);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.message = "Inward approved successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error approving the Inward: " + ex.Message;
             }
             return response;
         }
