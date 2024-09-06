@@ -249,7 +249,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Create Invoice" && (a.IsApproved == true));
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.IsApproved == true));
                 var OrderDetails = HttpContext.Request.Form["SupplierItems"];
                 var InsertDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(OrderDetails.ToString());
                 var invoicedetails = new SupplierInvoiceMasterView
