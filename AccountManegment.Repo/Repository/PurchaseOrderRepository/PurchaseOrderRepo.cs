@@ -607,7 +607,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     ContactName = PurchaseOrderDetails.ContactName,
                     ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
-                    IsApproved = false,
+                    IsApproved = PurchaseOrderDetails.IsApproved,
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
                     PaymentTerms = PurchaseOrderDetails.PaymentTerms,

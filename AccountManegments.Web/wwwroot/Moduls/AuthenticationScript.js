@@ -707,17 +707,11 @@ function dashboarddeleteItemDetails(ItemId) {
     });
 }
 function GetDashboardPurchaseOrderList() {
-    //siteloadershow();
 
     $.get("/Home/PurchaseOrderListView")
         .done(function (result) {
-            siteloaderhide();
             $("#dashboardPOList").html(result);
         })
-        .fail(function (error) {
-            siteloaderhide();
-
-        });
 }
 function dashboardPOIsApproved() {
     Swal.fire({

@@ -213,7 +213,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
 
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    ItemList = ItemList.OrderBy(u => u.CreatedOn);
+                    ItemList = ItemList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
