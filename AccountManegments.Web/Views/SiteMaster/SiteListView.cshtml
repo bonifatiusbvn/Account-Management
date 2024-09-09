@@ -16,6 +16,17 @@
 }
 
 <style>
+    #txtSiteName-error, #txtContectPersonName-error, #txtContectPersonPhoneNo-error, #txtAddress-error,
+    #txtArea-error, #txtPincode-error, #ddlCountry-error, #stateDropdown-error, #ddlCity-error,
+    #txtShippingAddress-error, #txtShippingArea-error, #txtShippingPincode-error, #ShippingCity-error,
+    #ShippingState-error, #shippingCountry-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+
     .select2.select2-container {
         width: 465px;
     }
@@ -172,7 +183,6 @@
             </div>
         </div>
     </div>
-
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createSite">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white" id="changeName"></h5>
@@ -320,22 +330,9 @@
         </div>
 
     </div>
-
-
 </div>
 
-<style>
-    #txtSiteName-error, #txtContectPersonName-error, #txtContectPersonPhoneNo-error, #txtAddress-error,
-    #txtArea-error, #txtPincode-error, #ddlCountry-error, #stateDropdown-error, #ddlCity-error,
-    #txtShippingAddress-error, #txtShippingArea-error, #txtShippingPincode-error, #ShippingCity-error,
-    #ShippingState-error, #shippingCountry-error {
-        color: red;
-    }
 
-    label.failed {
-        color: red;
-    }
-</style>
 
 @section Scripts {
 

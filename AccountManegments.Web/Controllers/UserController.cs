@@ -84,7 +84,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
         [FormPermissionAttribute("User List-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserViewModel CreatUser)
@@ -359,7 +358,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("User List-Delete")]
+        [FormPermissionAttribute("User Permission-Delete")]
         [HttpGet]
         public async Task<IActionResult> DeleteRole(int roleId)
         {
