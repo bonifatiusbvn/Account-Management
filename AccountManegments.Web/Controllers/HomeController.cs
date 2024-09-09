@@ -273,10 +273,20 @@ namespace AccountManegments.Web.Controllers
 
                 if (res.code == 200)
                 {
-                    List<SupplierInvoiceModel> GetInvoiceList = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(res.data.ToString());
-                    if (SiteId != null)
+                    SupplierInvoiceList GetInvoiceList = JsonConvert.DeserializeObject<SupplierInvoiceList>(res.data.ToString());
+
+                    if (SiteId.HasValue)
                     {
-                        GetInvoiceList = GetInvoiceList.Where(a => a.SiteId == SiteId).ToList();
+                        GetInvoiceList.InvoiceList = GetInvoiceList.InvoiceList
+                            .Where(invoice => invoice.SiteId == SiteId.Value)
+                            .ToList();
+
+                        GetInvoiceList.InvoiceItemList = GetInvoiceList.InvoiceItemList
+                            .Where(item => GetInvoiceList.InvoiceList.Any(invoice => invoice.Id == item.Key))
+                            .ToDictionary(
+                                item => item.Key,
+                                item => item.Value
+                            );
                     }
 
                     return PartialView("~/Views/Home/_DashboardInvoiceList.cshtml", GetInvoiceList);

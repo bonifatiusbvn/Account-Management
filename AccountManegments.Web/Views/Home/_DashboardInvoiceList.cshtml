@@ -1,11 +1,10 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceModel>
-@inject IHttpContextAccessor Accessor;
+﻿@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceList
 @inject UserSession _userSession
 
 
-@if (Model.Any())
+@if (Model.InvoiceList.Any())
 {
-    @foreach (var item in Model)
+    @foreach (var item in Model.InvoiceList)
     {
         @if (item.IsApproved == false || item.IsApproved == null)
         {

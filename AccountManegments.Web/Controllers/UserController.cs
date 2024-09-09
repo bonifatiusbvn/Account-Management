@@ -337,7 +337,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/ActiveDeactiveRole?RoleId=" + roleId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/ActiveDeactiveRole?roleId=" + roleId);
                 if (postuser.code == 200)
                 {
 
@@ -361,7 +361,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/DeleteRole?RoleId=" + roleId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/DeleteRole?roleId=" + roleId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

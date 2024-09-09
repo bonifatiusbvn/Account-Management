@@ -208,6 +208,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                bool isApproved = UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.IsApproved == true));
                 var inWordDetails = HttpContext.Request.Form["InWordsDetails"];
                 var InsertDetails = JsonConvert.DeserializeObject<ItemInWordMasterView>(inWordDetails);
 
@@ -244,6 +245,7 @@ namespace AccountManegments.Web.Controllers
                     VehicleNumber = InsertDetails.VehicleNumber,
                     Date = InsertDetails.Date,
                     CreatedOn = DateTime.Now,
+                    IsApproved = isApproved,
                     DocumentLists = documentList,
 
                 };

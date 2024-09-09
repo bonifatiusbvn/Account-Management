@@ -296,7 +296,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     Date = firstItemInWordDetail.Date,
                     VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
                     ReceiverName = firstItemInWordDetail.ReceiverName,
-                    IsApproved = false,
+                    IsApproved = firstItemInWordDetail.IsApproved,
                     IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,

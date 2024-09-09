@@ -311,6 +311,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                             IsViewAllow = true,
                             IsEditAllow = true,
                             IsDeleteAllow = true,
+                            IsApproved = true,
                             CreatedOn = DateTime.Now,
                             CreatedBy = roleDetails.CreatedBy,
                         };
@@ -332,14 +333,86 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             return response;
         }
 
-        public Task<UserResponceModel> ActiveDeactiveRole(int roleId)
+        public async Task<UserResponceModel> ActiveDeactiveRole(int roleId)
         {
-            throw new NotImplementedException();
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetRoleData = Context.UserRoles.Where(a => a.RoleId == roleId).FirstOrDefault();
+
+                if (GetRoleData.IsActive == true)
+                {
+                    GetRoleData.IsActive = false;
+                    Context.UserRoles.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role + " " + "is deactive succesfully";
+                }
+                else
+                {
+                    GetRoleData.IsActive = true;
+                    Context.UserRoles.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role+ " " + "is active succesfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while active-deactive the role";
+            }
+            return response;
         }
 
-        public Task<UserResponceModel> DeleteRole(int roleId)
+        public async Task<UserResponceModel> DeleteRole(int roleId)
         {
-            throw new NotImplementedException();
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetRoledata = Context.UserRoles.Where(a => a.RoleId == roleId).FirstOrDefault();
+                var GetFormPermissionDetails = Context.RolewiseFormPermissions.Where(a => a.RoleId == roleId).ToList();
+
+                if (GetRoledata != null)
+                {
+                    if (GetRoledata.IsActive == false)
+                    {
+                        Context.UserRoles.Remove(GetRoledata);
+                        Context.SaveChanges();
+                        if (GetFormPermissionDetails.Any())
+                        {
+
+                            foreach (var form in GetFormPermissionDetails)
+                            {
+                                Context.RolewiseFormPermissions.Remove(form);
+                                Context.SaveChanges();
+                            }
+                        }                       
+                        response.Code = 200;
+                        response.Message = "Role is successfully deleted.";
+                    }
+                    else
+                    {
+                        response.Code = 500;
+                        response.Message = "Can't delete the role as it is active.";
+                    }
+
+                }
+                else
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = "No related records found to delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in deleting role";
+            }
+            return response;
         }
     }
 }
+
