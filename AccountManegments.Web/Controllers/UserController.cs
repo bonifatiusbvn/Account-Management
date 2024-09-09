@@ -84,6 +84,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+
         [FormPermissionAttribute("User List-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserViewModel CreatUser)
@@ -120,6 +121,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
@@ -142,6 +144,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UserActiveDecative(Guid UserId)
@@ -212,6 +215,7 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+
         [FormPermissionAttribute("User Permission-Edit")]
         public async Task<IActionResult> RolewisePermissionListAction()
         {

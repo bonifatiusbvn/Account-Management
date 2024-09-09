@@ -21,7 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-
+#nullable disable
 namespace AccountManagement.Repository.Repository.AuthenticationRepository
 {
     public class UserAuthentication : IAuthentication
@@ -202,7 +202,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 throw ex;
             }
         }
-
 
         public async Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy)
         {
@@ -468,17 +467,14 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             return response;
         }
 
-
         public async Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission)
         {
             ApiResponseModel response = new ApiResponseModel();
 
             try
             {
-
                 var model = new RolewiseFormPermission()
                 {
-
                     RoleId = RolePermission.RoleId,
                     FormId = RolePermission.FormId,
                     IsViewAllow = RolePermission.IsViewAllow,
@@ -497,7 +493,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
             catch (Exception ex)
             {
-
                 response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "An error occurred while creating the permissions to user";
             }
