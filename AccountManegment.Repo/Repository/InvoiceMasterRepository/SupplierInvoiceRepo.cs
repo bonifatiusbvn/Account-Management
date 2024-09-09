@@ -1167,7 +1167,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
         public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -1233,7 +1232,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
-
         public async Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
         {
             ApiResponseModel response = new ApiResponseModel();

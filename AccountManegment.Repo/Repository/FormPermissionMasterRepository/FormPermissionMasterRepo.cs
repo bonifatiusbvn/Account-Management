@@ -256,5 +256,81 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             }
             return response;
         }
+
+        public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                bool isRoleAlreadyExists = Context.UserRoles.Any(x => x.Role == roleDetails.Role);
+                if (isRoleAlreadyExists)
+                {
+                    var RoleDetail = await Context.UserRoles.SingleOrDefaultAsync(x => x.Role == roleDetails.Role);
+                    if (RoleDetail.IsDelete == null || RoleDetail.IsDelete == false)
+                    {
+                        response.message = "Role already exists";
+                        response.code = (int)HttpStatusCode.NotFound;
+                    }
+                    else
+                    {
+                        var GetRoledata = Context.UserRoles.Where(a => a.Role == roleDetails.Role).FirstOrDefault();
+                        GetRoledata.IsDelete = false;
+                        Context.UserRoles.Update(GetRoledata);
+                        await Context.SaveChangesAsync();
+                        response.data = roleDetails;
+                        response.message = "Role added successfully!";
+                    }
+                }
+                else
+                {
+
+                    var rolemodel = new UserRole()
+                    {
+                        Role = roleDetails.Role,
+                        IsActive = true,
+                        IsDelete = false,
+                        CreatedBy = roleDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+
+                    Context.UserRoles.Add(rolemodel);
+                    await Context.SaveChangesAsync();
+
+
+                    var forms = Context.Forms.ToList();
+                    var roleWiseFormPermissions = new List<RolewiseFormPermission>();
+
+                    foreach (var form in forms)
+                    {
+                        var permissions = new RolewiseFormPermission
+                        {
+                            RoleId = rolemodel.RoleId,
+                            FormId = form.FormId,
+                            IsAddAllow = true,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = roleDetails.CreatedBy,
+                        };
+                        roleWiseFormPermissions.Add(permissions);
+                    }
+
+                    Context.RolewiseFormPermissions.AddRange(roleWiseFormPermissions);
+                    await Context.SaveChangesAsync();
+
+                    response.message = "Role added successfully!";
+                    response.data = rolemodel;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "Error in creating role: " + ex.Message;
+            }
+            return response;
+        }
+
     }
 }

@@ -9,6 +9,10 @@ public partial class UserRole
 
     public string Role { get; set; } = null!;
 
+    public bool? IsActive { get; set; }
+
+    public bool? IsDelete { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
