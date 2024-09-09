@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
@@ -24,5 +25,6 @@ namespace AccountManagement.Repository.Interface.Repository.Supplier
         Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId);
         Task<IEnumerable<SupplierModel>> GetSupplierNameList();
         Task<ApiResponseModel> ImportSupplierListFromExcel(List<SupplierModel> supplierList);
+        Task<ApiResponseModel> MultipleSupplierIsApproved(SupplierIsApprovedMasterModel SupplierList);
     }
 }

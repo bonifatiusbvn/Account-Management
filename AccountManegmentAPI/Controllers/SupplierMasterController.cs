@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
@@ -156,6 +157,31 @@ namespace AccountManagement.API.Controllers
             {
                 response.code = addSupplierList.code;
                 response.message = addSupplierList.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("MultipleSupplierIsApproved")]
+        public async Task<IActionResult> MultipleSupplierIsApproved(SupplierIsApprovedMasterModel SupplierList)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var supplier = await _Supplier.MultipleSupplierIsApproved(SupplierList);
+                if (supplier.code == 200)
+                {
+                    response.code = supplier.code;
+                    response.message = supplier.message;
+                }
+                else
+                {
+                    response.message = supplier.message;
+                    response.code = supplier.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(response.code, response);
         }
