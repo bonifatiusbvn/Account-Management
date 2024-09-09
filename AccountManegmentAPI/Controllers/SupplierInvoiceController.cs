@@ -284,5 +284,12 @@ namespace AccountManagement.API.Controllers
             var supplierList = await SupplierInvoice.GetInvoiceDetailsPdfReport(invoiceReport);
             return Ok(new { code = 200, data = supplierList});
         }
+        [HttpPost]
+        [Route("GetPayoutInvoiceDetailsPdfReport")]
+        public async Task<IActionResult> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
+        {
+            var supplierList = await SupplierInvoice.GetPayoutInvoiceDetailsPdfReport(invoiceReport);
+            return Ok(new { code = 200, data = supplierList });
+        }
     }
 }

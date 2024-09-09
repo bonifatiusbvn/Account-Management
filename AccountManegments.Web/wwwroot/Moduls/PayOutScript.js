@@ -620,7 +620,7 @@ function ExportNetReportToExcel() {
         type: 'GET',
         data: PayOutReport,
         datatype: 'json',
-        success: function (data, status, xhr) {
+        success: function (data, status, xhr) {debugger
             siteloaderhide();
             var filename = "";
             var disposition = xhr.getResponseHeader('Content-Disposition');
@@ -696,7 +696,7 @@ var dtcoulms = [
         "orderable": true,
         "render": function (data, type, row) {
             var netAmount = row.nonPayOutTotalAmount - row.payOutTotalAmount;
-            return '<span>' + '₹' + netAmount + '</span>';
+            return '<span>' + '₹' + netAmount.toFixed(2) + '</span>';
         }
     }
 ];

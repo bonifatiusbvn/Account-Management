@@ -597,7 +597,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetPayoutInvoiceDetailsPdfReport");
 
                 if (response.code == 200)
                 {
@@ -769,7 +769,21 @@ namespace AccountManegments.Web.Controllers
                             cell.BackgroundColor = backgroundColor;
                         }
                     }
+                    var footerRow = table.Rows.Add();
+                    footerRow.Cells.Add("Total");
+                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalCreadit));
+                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPurchase));
+                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
 
+                    TextState boldTextState = new TextState
+                    {
+                        FontStyle = FontStyles.Bold
+                    };
+
+                    foreach (var cell in footerRow.Cells)
+                    {
+                        cell.DefaultCellTextState = boldTextState;
+                    }
                     pdfPage.Paragraphs.Add(table);
 
                     using (var streamout = new MemoryStream())
@@ -793,7 +807,7 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
+                ApiResponseModel response = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetPayoutInvoiceDetailsPdfReport");
 
                 if (response.code == 200)
                 {

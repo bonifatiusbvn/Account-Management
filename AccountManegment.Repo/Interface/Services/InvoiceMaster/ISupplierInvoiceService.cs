@@ -29,5 +29,6 @@ namespace AccountManagement.Repository.Interface.Services.InvoiceMaster
         Task<ApiResponseModel> InvoiceIsApproved(InvoiceIsApprovedMasterModel InvoiceIdList);
         Task<ApiResponseModel> CheckOpeningBalance(Guid SupplierId, Guid CompanyId);
         Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
+        Task<InvoiceTotalAmount> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
     }
 }

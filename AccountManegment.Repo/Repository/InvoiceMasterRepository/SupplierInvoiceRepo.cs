@@ -1537,6 +1537,136 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<InvoiceTotalAmount> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel PayOutReport)
+        {
+            try
+            {
+                var supplierInvoicesQuery = from s in Context.SupplierInvoices
+                                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                                            join d in Context.Sites on s.SiteId equals d.SiteId into siteGroup
+                                            from d in siteGroup.DefaultIfEmpty()
+                                            select new
+                                            {
+                                                s,
+                                                SupplierName = b.SupplierName,
+                                                CompanyName = c.CompanyName,
+                                                SiteName = d != null ? d.SiteName : null,
+                                                Group = s.SiteGroup,
+                                                Date = s.Date,
+                                                TotalAmount = s.TotalAmount,
+
+                                            };
+
+                if (PayOutReport.CompanyId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.CompanyId == PayOutReport.CompanyId.Value);
+                }
+
+                if (PayOutReport.SiteId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
+                }
+
+                if (PayOutReport.SupplierId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SupplierId == PayOutReport.SupplierId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(PayOutReport.GroupName))
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteGroup == PayOutReport.GroupName);
+                }
+
+                if (!string.IsNullOrEmpty(PayOutReport.filterType))
+                {
+                    if (PayOutReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (PayOutReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                    else if (PayOutReport.filterType == "betweenYear" && !string.IsNullOrEmpty(PayOutReport.SelectedYear))
+                    {
+                        var years = PayOutReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = years[1].Length == 2
+                            ? int.Parse(years[1]) + (startYear / 100) * 100
+                            : int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                    }
+                }
+
+                if (PayOutReport.startDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= PayOutReport.startDate.Value);
+                }
+
+                if (PayOutReport.endDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date <= PayOutReport.endDate.Value);
+                }
+
+                var CountTotalData = await supplierInvoicesQuery
+                    .GroupBy(g => g.s.SupplierId)
+                    .Select(group => new SupplierInvoiceModel
+                    {
+                        Id = group.FirstOrDefault().s.Id,
+                        InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
+                        SiteId = group.FirstOrDefault().s.SiteId,
+                        SupplierId = group.FirstOrDefault().s.SupplierId,
+                        CompanyId = group.Key,
+                        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+                        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
+                        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+                        GroupName = group.FirstOrDefault().s.SiteGroup,
+                        Description = string.Join(", ", group.Select(x => x.s.Description)),
+                        CompanyName = group.FirstOrDefault().CompanyName,
+                        SupplierName = group.FirstOrDefault().SupplierName,
+                        PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+                        IsPayOut = group.FirstOrDefault().s.IsPayOut,
+                        SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+                        Date = group.FirstOrDefault().s.Date,
+                        CreatedOn = group.FirstOrDefault().s.CreatedOn,
+                        SiteName = group.FirstOrDefault().SiteName
+                    })
+                    .ToListAsync();
+                var TotalCredit = CountTotalData.Sum(i => i.NonPayOutTotalAmount);
+                var TotalDebit = CountTotalData.Sum(i => i.PayOutTotalAmount);
+                var TotalPending = CountTotalData.Sum(i => i.NetAmount);
+
+                var PayOutDetails = new InvoiceTotalAmount
+                {
+                    InvoiceList = CountTotalData,
+                    TotalPending = TotalPending ?? 0m,
+                    TotalCreadit = TotalCredit ?? 0m,
+                    TotalPurchase = TotalDebit ?? 0m
+                };
+
+                return PayOutDetails;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching invoice details.", ex);
+            }
+        }
     }
 }
 
