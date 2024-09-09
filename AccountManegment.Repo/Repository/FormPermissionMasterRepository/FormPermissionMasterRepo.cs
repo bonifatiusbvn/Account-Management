@@ -332,5 +332,14 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             return response;
         }
 
+        public Task<UserResponceModel> ActiveDeactiveRole(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserResponceModel> DeleteRole(int roleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
