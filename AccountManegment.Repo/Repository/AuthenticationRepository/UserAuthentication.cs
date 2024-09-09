@@ -179,7 +179,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
-                            join r in Context.UserRoles on e.RoleId equals r.RoleId
+                            join r in Context.UserRoles on e.RoleId equals r.RoleId into roleGroup
+                            from r in roleGroup.DefaultIfEmpty()
                             select new LoginView
                             {
                                 Id = e.Id,
@@ -191,7 +192,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
                                 RoleId = e.RoleId,
-                                RoleName = r.Role,
+                                RoleName = r != null ? r.Role : null,
                                 SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                 SiteId = e.SiteId,
                             }).First();
@@ -208,8 +209,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 IEnumerable<LoginView> userList = (from e in Context.Users
-                                                   join r in Context.UserRoles on e.RoleId equals r.RoleId
-
+                                                   join r in Context.UserRoles on e.RoleId equals r.RoleId into roleGroup
+                                                   from r in roleGroup.DefaultIfEmpty()
                                                    where e.IsDeleted == false
                                                    select new LoginView
                                                    {
@@ -220,13 +221,12 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        Email = e.Email,
                                                        PhoneNo = e.PhoneNo,
                                                        IsActive = e.IsActive,
-                                                       RoleName = r.Role,
+                                                       RoleName = r != null ? r.Role : null,
                                                        RoleId = e.RoleId,
                                                        SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                                        SiteId = e.SiteId,
                                                        CreatedOn = e.CreatedOn,
                                                    });
-
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -237,7 +237,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         u.PhoneNo.ToLower().Contains(searchText) ||
                         u.FirstName.ToLower().Contains(searchText) ||
                         u.LastName.ToLower().Contains(searchText)
-
                     );
                 }
 
@@ -256,7 +255,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                             userList = userList.Where(u => u.PhoneNo.ToLower().Contains(searchText));
                             break;
                         default:
-
                             break;
                     }
                 }
@@ -273,25 +271,21 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     switch (field.ToLower())
                     {
                         case "username":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.UserName);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.UserName);
+                            userList = sortOrder == "ascending"
+                                ? userList.OrderBy(u => u.UserName)
+                                : userList.OrderByDescending(u => u.UserName);
                             break;
                         case "firstname":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.FirstName);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.FirstName);
+                            userList = sortOrder == "ascending"
+                                ? userList.OrderBy(u => u.FirstName)
+                                : userList.OrderByDescending(u => u.FirstName);
                             break;
                         case "createdon":
-                            if (sortOrder == "ascending")
-                                userList = userList.OrderBy(u => u.CreatedOn);
-                            else if (sortOrder == "descending")
-                                userList = userList.OrderByDescending(u => u.CreatedOn);
+                            userList = sortOrder == "ascending"
+                                ? userList.OrderBy(u => u.CreatedOn)
+                                : userList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
-
                             break;
                     }
                 }
@@ -303,6 +297,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 throw ex;
             }
         }
+
 
         public async Task<LoginResponseModel> LoginUser(LoginRequest loginRequest)
         {
