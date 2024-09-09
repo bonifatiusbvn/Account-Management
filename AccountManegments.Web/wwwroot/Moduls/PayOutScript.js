@@ -362,85 +362,86 @@ function populateYearDropdown() {
         yearDropdown.append('<option value="' + yearRange + '">' + yearRange + '</option>');
     }
 }
-function SearchPayoutReportData() {
-    var selectedValue = $('#timePeriodPayoutDropdown').val();
-    var selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
-    var selectedCompanyId = $('#textPayoutReportCompanyName').val();
-    var selectedGroupName = $('#textPayoutReportGroupList').val();
-    var selectedReportSiteName = $('#txtSiteId').val();
-    var selectedSortOrder = "AscendingDate";
-    var selectedstartDate, selectedendDate, selectedYears;
+//function SearchPayoutReportData() {
+//    var selectedValue = $('#timePeriodPayoutDropdown').val();
+//    var selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
+//    var selectedCompanyId = $('#textPayoutReportCompanyName').val();
+//    var selectedGroupName = $('#textPayoutReportGroupList').val();
+//    var selectedReportSiteName = $('#txtSiteId').val();
+//    var selectedSortOrder = "AscendingDate";
+//    var selectedstartDate, selectedendDate, selectedYears;
 
-    var PayOutReport = {
-        SiteId: selectedReportSiteName || null,
-        CompanyId: selectedCompanyId || null,
-        SupplierId: selectedSupplierId || null,
-        GroupName: selectedGroupName || null,
-        sortBy: selectedSortOrder,
-        filterType: null,
-        startDate: null,
-        endDate: null,
-        SelectedYear: null,
-    };
+//    var PayOutReport = {
+//        SiteId: selectedReportSiteName || null,
+//        CompanyId: selectedCompanyId || null,
+//        SupplierId: selectedSupplierId || null,
+//        GroupName: selectedGroupName || null,
+//        sortBy: selectedSortOrder,
+//        filterType: null,
+//        startDate: null,
+//        endDate: null,
+//        SelectedYear: null,
+//    };
 
-    switch (selectedValue) {
-        case 'This Month':
-            PayOutReport.filterType = "currentMonth";
-            break;
-        case 'This Year':
-            PayOutReport.filterType = "currentYear";
-            break;
-        case 'Between Date':
-            selectedstartDate = $('#PayoutstartDate').val();
-            selectedendDate = $('#PayoutendDate').val();
-            if (!selectedstartDate || !selectedendDate) {
-                toastr.warning("Select dates");
-                return;
-            }
-            PayOutReport.filterType = "dateRange";
-            PayOutReport.startDate = selectedstartDate;
-            PayOutReport.endDate = selectedendDate;
-            break;
-        case 'Between Year':
-            selectedYears = $('#PayoutyearDropdown').val();
-            if (!selectedYears) {
-                alert('Please select a year.');
-                return;
-            }
-            PayOutReport.filterType = "betweenYear";
-            PayOutReport.SelectedYear = selectedYears;
-            break;
-        default:
-            selectedValue = null;
-            break;
-    }
+//    switch (selectedValue) {
+//        case 'This Month':
+//            PayOutReport.filterType = "currentMonth";
+//            break;
+//        case 'This Year':
+//            PayOutReport.filterType = "currentYear";
+//            break;
+//        case 'Between Date':
+//            selectedstartDate = $('#PayoutstartDate').val();
+//            selectedendDate = $('#PayoutendDate').val();
+//            if (!selectedstartDate || !selectedendDate) {
+//                toastr.warning("Select dates");
+//                return;
+//            }
+//            PayOutReport.filterType = "dateRange";
+//            PayOutReport.startDate = selectedstartDate;
+//            PayOutReport.endDate = selectedendDate;
+//            break;
+//        case 'Between Year':
+//            selectedYears = $('#PayoutyearDropdown').val();
+//            if (!selectedYears) {
+//                alert('Please select a year.');
+//                return;
+//            }
+//            PayOutReport.filterType = "betweenYear";
+//            PayOutReport.SelectedYear = selectedYears;
+//            break;
+//        default:
+//            selectedValue = null;
+//            break;
+//    }
 
 
-    getnetamount(PayOutReport);
-}
-function getnetamount(PayOutReport) {
-    $.ajax({
-        url: '/InvoiceMaster/GetInvoiceDetails',
-        type: 'POST',
-        data: PayOutReport,
-        datatype: 'json',
-        success: function (result) {
+//    getnetamount(PayOutReport);
+//}
 
-            siteloaderhide();
-            $("#reportInvoicenet").html(result);
+//function getnetamount(PayOutReport) {
+//    $.ajax({
+//        url: '/InvoiceMaster/GetInvoiceDetails',
+//        type: 'POST',
+//        data: PayOutReport,
+//        datatype: 'json',
+//        success: function (result) {
 
-            if ($("#reportInvoicenet").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-                $("#downloadnetreportfile").hide();
-            } else {
-                $("#downloadnetreportfile").show();
-            }
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-            console.error("An error occurred: " + error);
-        }
-    });
-}
+//            siteloaderhide();
+//            $("#reportInvoicenet").html(result);
+
+//            if ($("#reportInvoicenet").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
+//                $("#downloadnetreportfile").hide();
+//            } else {
+//                $("#downloadnetreportfile").show();
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            siteloaderhide();
+//            console.error("An error occurred: " + error);
+//        }
+//    });
+//}
 function fn_ResetAllPayoutDropdown() {
     window.location = '/InvoiceMaster/PayOutInvoice';
 }
@@ -663,6 +664,128 @@ function ExportNetReportToExcel() {
         }
     });
 }
+
+var dtcoulms = [
+    {
+        "data": "supplierName",
+        "name": "SupplierName",
+        "orderable": true,
+        "render": function (data, type, row) {
+            return row.supplierName;
+        }
+    },
+    {
+        "data": "nonPayOutTotalAmount",
+        "name": "NonPayOutTotalAmount",
+        "orderable": true,
+        "render": function (data, type, row) {
+            return '<span style="color:green">' + '₹' + row.nonPayOutTotalAmount + '</span>';
+        }
+    },
+    {
+        "data": "payOutTotalAmount",
+        "name": "PayOutTotalAmount",
+        "orderable": true,
+        "render": function (data, type, row) {
+            return '<span style="color:red">' + '₹' + row.payOutTotalAmount + '</span>';
+        }
+    },
+    {
+        "data": "netAmount",
+        "name": "NetAmount",
+        "orderable": true,
+        "render": function (data, type, row) {
+            var netAmount = row.nonPayOutTotalAmount - row.payOutTotalAmount;
+            return '<span>' + '₹' + netAmount + '</span>';
+        }
+    }
+];
+$(document).ready(function () {
+    var table;
+    $('#searchPayoutReportButton').click(function () {
+
+        if ($.fn.DataTable.isDataTable('#tblPayoutReport')) {
+            table.destroy();
+        }
+        table = $('#tblPayoutReport').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: false,
+            paging: true,
+            pageLength: 15,
+            lengthChange: true,
+            lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
+            destroy: true,
+            order: [],
+            ajax: {
+                url: '/InvoiceMaster/GetInvoiceDetails',
+                type: 'POST',
+                data: function (d) {
+                    d.draw = d.draw;
+                    d.start = d.start;
+                    d.length = d.length;
+                    d.order = d.order;
+                    d.columns = d.columns;
+                    d.SiteId = $('#txtSiteId').val() || null;
+                    d.CompanyId = $('#textPayoutReportCompanyName').val() || null;
+                    d.SupplierId = $('#textPayoutReportSupplierNameHidden').val() || null;
+                    d.GroupName = $('#textPayoutReportGroupList').val() || null;
+
+                    var selectedValue = $('#timePeriodPayoutDropdown').val();
+                    switch (selectedValue) {
+                        case 'This Month':
+                            d.filterType = "currentMonth";
+                            break;
+                        case 'This Year':
+                            d.filterType = "currentYear";
+                            break;
+                        case 'Between Date':
+                            d.filterType = "dateRange";
+                            d.startDate = $('#PayoutstartDate').val();
+                            d.endDate = $('#PayoutendDate').val();
+                            break;
+                        case 'Between Year':
+                            d.filterType = "betweenYear";
+                            d.SelectedYear = $('#PayoutyearDropdown').val();
+                            break;
+                        default:
+                            d.filterType = null;
+                            break;
+                    }
+                }
+            },
+            columns: dtcoulms,
+            scrollX: true,
+            scrollY: '350px',
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: false
+            },
+            autoWidth: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+
+                var totalCredit = settings.json.totalCredit || 0;
+                var totalDebit = settings.json.totalDebit || 0;
+                var NetAmount = totalCredit - totalDebit;
+
+                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + totalDebit.toFixed(2) + '</span>');
+                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + NetAmount.toFixed(2) + '</span>');
+
+                // Replace classes for pagination buttons
+                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
+                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
+            },
+            columnDefs: [{
+                defaultContent: "",
+                targets: "_all",
+                width: 'auto'
+            }]
+        });
+    });
+});
 
 //let rowCounter = 0;
 

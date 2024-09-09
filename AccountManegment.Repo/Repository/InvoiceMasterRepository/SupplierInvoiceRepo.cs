@@ -116,7 +116,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(InvoiceReportModel PayOutReport)
+        public async Task<jsonData> GetInvoiceDetailsById(DataTableRequstModel PayOutReport)
         {
             try
             {
@@ -132,7 +132,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                 CompanyName = c.CompanyName,
                                                 SiteName = d != null ? d.SiteName : null,
                                                 Group = s.SiteGroup,
-                                                Date = s.Date
+                                                Date = s.Date,
+                                                TotalAmount = s.TotalAmount,
+
                                             };
 
                 if (PayOutReport.CompanyId.HasValue)
@@ -200,7 +202,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date <= PayOutReport.endDate.Value);
                 }
 
-                var supplierInvoices = await supplierInvoicesQuery
+                var CountTotalData = await supplierInvoicesQuery
                     .GroupBy(g => g.s.SupplierId)
                     .Select(group => new SupplierInvoiceModel
                     {
@@ -224,19 +226,60 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         SiteName = group.FirstOrDefault().SiteName
                     })
                     .ToListAsync();
-                var totalPurchase = supplierInvoices.Sum(inv => inv.PayOutTotalAmount);
-                var onlineCashSum = supplierInvoices.Sum(inv => inv.NonPayOutTotalAmount);
-                var difference = onlineCashSum - totalPurchase;
+                var TotalCredit = CountTotalData.Sum(i => i.NonPayOutTotalAmount);
+                var TotalDebit = CountTotalData.Sum(i => i.PayOutTotalAmount);
 
-                var PayOutDetails = new InvoiceTotalAmount
+                if (!string.IsNullOrEmpty(PayOutReport.sortColumn) && !string.IsNullOrEmpty(PayOutReport.sortColumnDir))
                 {
-                    InvoiceList = supplierInvoices,
-                    TotalPending = difference ?? 0,
-                    TotalCreadit = onlineCashSum ?? 0,
-                    TotalPurchase = totalPurchase ?? 0
+                    switch (PayOutReport.sortColumn.ToLower())
+                    {
+                        case "suppliername":
+                            CountTotalData = PayOutReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.SupplierName).ToList()
+                                : CountTotalData.OrderByDescending(s => s.SupplierName).ToList();
+                            break;
+
+                        case "nonpayouttotalamount":
+                            CountTotalData = PayOutReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.NonPayOutTotalAmount).ToList()
+                                : CountTotalData.OrderByDescending(s => s.NonPayOutTotalAmount).ToList();
+                            break;
+
+                        case "payouttotalamount":
+                            CountTotalData = PayOutReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.PayOutTotalAmount).ToList()
+                                : CountTotalData.OrderByDescending(s => s.PayOutTotalAmount).ToList();
+                            break;
+
+                        case "netamount":
+                            CountTotalData = PayOutReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.NetAmount).ToList()
+                                : CountTotalData.OrderByDescending(s => s.NetAmount).ToList();
+                            break;
+
+                    }
+                }
+
+                // Pagination after sorting
+                var paginatedResults = CountTotalData
+                    .Skip(PayOutReport.skip)
+                    .Take(PayOutReport.pageSize)
+                    .ToList();
+                var totalRecords = await supplierInvoicesQuery
+            .GroupBy(g => g.s.SupplierId)
+            .CountAsync();
+
+                var jsonData = new jsonData
+                {
+                    draw = PayOutReport.draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = paginatedResults,
+                    TotalCredit = TotalCredit,
+                    TotalDebit = TotalDebit,
                 };
 
-                return PayOutDetails;
+                return jsonData;
             }
             catch (Exception ex)
             {

@@ -30,7 +30,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.DeleteSupplierInvoice(Id);
         }
 
-        public async Task<InvoiceTotalAmount> GetInvoiceDetailsById(InvoiceReportModel PayOutReport)
+        public async Task<jsonData> GetInvoiceDetailsById(DataTableRequstModel PayOutReport)
         {
             return await SupplierInvoice.GetInvoiceDetailsById(PayOutReport);
         }
