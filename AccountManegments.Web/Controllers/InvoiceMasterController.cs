@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
@@ -206,26 +207,73 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(PayOutReport, "SupplierInvoice/GetInvoiceDetailsById");
-                if (postuser.code == 200)
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                var sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault();
+                if (sortColumnIndex == "5")
                 {
-                    var jsonString = postuser.data.ToString();
-                    var invoiceTotalAmount = JsonConvert.DeserializeObject<InvoiceTotalAmount>(jsonString);
+                    sortColumn = "credit";
+                }
+                if (sortColumnIndex == "6")
+                {
+                    sortColumn = "debit";
+                }
 
-                    if (invoiceTotalAmount == null)
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir,
+                    filterType = PayOutReport.filterType,
+                    SiteId = PayOutReport.SiteId,
+                    SupplierId = PayOutReport.SupplierId,
+                    CompanyId = PayOutReport.CompanyId,
+                    GroupName = PayOutReport.GroupName,
+                    SelectedYear = PayOutReport.SelectedYear,
+                    startDate = PayOutReport.startDate,
+                    endDate = PayOutReport.endDate,
+                    SupplierName = PayOutReport.SupplierName,
+                    CompanyName = PayOutReport.CompanyName,
+                };
+                List<SupplierInvoiceModel> supplierDetails = new List<SupplierInvoiceModel>();
+                var jsonData = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "SupplierInvoice/GetInvoiceDetailsById");
+                if (response.code == 200)
+                {
+                    jsonData = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    supplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(jsonData.data.ToString());
+
+                    var result = new
                     {
-                        return BadRequest("Failed to deserialize API response");
-                    }
-                    return PartialView("~/Views/Report/_NetAmountPartial.cshtml", invoiceTotalAmount);
+                        TotalCredit = jsonData.TotalCredit,
+                        TotalDebit = jsonData.TotalDebit,
+                        draw = jsonData.draw,
+                        recordsFiltered = jsonData.recordsFiltered,
+                        recordsTotal = jsonData.recordsTotal,
+                        data = supplierDetails
+                    };
+
+                    return new JsonResult(result);
                 }
                 else
                 {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { message = "Failed to retrieve data from the API." });
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
