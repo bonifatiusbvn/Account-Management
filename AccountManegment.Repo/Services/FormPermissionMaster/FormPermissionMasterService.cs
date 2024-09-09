@@ -48,9 +48,24 @@ namespace AccountManagement.Repository.Services.FormPermissionMaster
         {
             return await FormPermissionMaster.GetRolewiseFormListById(RoleId);
         }
-       public async Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
+        public async Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
         {
             return await FormPermissionMaster.UpdateMultipleRolewiseFormPermission(UpdatedRolewiseFormPermissions);
+        }
+
+        public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
+        {
+            return await FormPermissionMaster.CreateUserRole(roleDetails);
+        }
+
+        public async Task<UserResponceModel> ActiveDeactiveRole(int roleId)
+        {
+            return await FormPermissionMaster.ActiveDeactiveRole(roleId);
+        }
+
+        public async Task<UserResponceModel> DeleteRole(int roleId)
+        {
+            return await FormPermissionMaster.DeleteRole(roleId);
         }
     }
 }

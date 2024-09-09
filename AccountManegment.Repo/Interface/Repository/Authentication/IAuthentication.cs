@@ -14,15 +14,11 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
     {
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
         Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy);
-
         Task<LoginView> GetUserById(Guid UserId);
-
         Task<UserResponceModel> CreateUser(UserViewModel CreateUser);
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
-
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
         Task<UserResponceModel> DeleteUserDetails(Guid UserId);
-
         Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission);
         string GenerateToken(LoginRequest model);
     }

@@ -32,8 +32,8 @@ namespace AccountManagement.API.Controllers
         [Route("GetSupplierInvoiceList")]
         public async Task<IActionResult> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
         {
-            IEnumerable<SupplierInvoiceModel> supplierList = await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
-            return Ok(new { code = 200, data = supplierList.ToList() });
+            var  supplierList = await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = supplierList});
         }
 
         [HttpGet]

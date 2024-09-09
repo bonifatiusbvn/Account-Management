@@ -166,5 +166,87 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpPost]
+        [Route("CreateUserRole")]
+        public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var RoleData = RolewisePermissionMaster.CreateUserRole(roleDetails);
+                if (RoleData.Result.code != (int)HttpStatusCode.NotFound && RoleData.Result.code != (int)HttpStatusCode.InternalServerError)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = RoleData.Result.message;
+                }
+                else
+                {
+                    response.message = RoleData.Result.message;
+                    response.code = RoleData.Result.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.code, response);
+        }
+
+        [HttpPost]
+        [Route("ActiveDeactiveRole")]
+        [Authorize]
+        public async Task<IActionResult> ActiveDeactiveRole(int roleId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var roleData = await RolewisePermissionMaster.ActiveDeactiveRole(roleId);
+            try
+            {
+                if (roleData.Code == 200)
+                {
+                    responseModel.Code = roleData.Code;
+                    responseModel.Message = roleData.Message;
+                }
+                else
+                {
+                    responseModel.Message = roleData.Message;
+                    responseModel.Code = roleData.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
+        [HttpPost]
+        [Route("DeleteRole")]
+        [Authorize]
+        public async Task<IActionResult> DeleteRole(int roleId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var roleData = await RolewisePermissionMaster.DeleteRole(roleId);
+            try
+            {
+                if (responseModel.Code == 200)
+                {
+                    responseModel.Code = roleData.Code;
+                    responseModel.Message = roleData.Message;
+                }
+                else
+                {
+                    responseModel.Message = roleData.Message;
+                    responseModel.Code = roleData.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

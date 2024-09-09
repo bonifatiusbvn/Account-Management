@@ -155,8 +155,176 @@ function CreateRolewiseFormPermission() {
         }
     });
 }
+var UserRoleForm;
+function validateAndCreateRole() {
+    UserRoleForm = $("#addUserRole").validate({
+        rules: {
+            textRoleName: "required",
+        },
+        messages: {
+            textRoleName: "Please enter role",
+        }
+    })
+    var isValid = true;
+
+    if (isValid) {
+        createRole();
+    }
+}
+
+function createRole() {
+    if ($("#addUserRole").valid()) {
+        var formData = new FormData();
+        formData.append("Role", $("#textRoleName").val());
+        formData.append("CreatedBy", $("#txtUserId").val());
+
+        $.ajax({
+            url: '/User/CreateUserRole',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/User/RolewisePermission';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            }
+        });
+    }
+    else {
+        toastr.warning("Kindly fill role");
+    }
+}
 
 
+function clearTextRoleName() {
+    ResetUserRoleForm();
+    document.getElementById("textRoleName").value = "";
+    $('#createRoleModal').modal('show');
+}
 
+function ResetUserRoleForm() {
+    if (UserRoleForm) {
+        UserRoleForm.resetForm();
+    }
+}
+function RoleActiveDecative(roleId) {
 
+    var isChecked = $('#flexSwitchCheckChecked_' + roleId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to active this role?" : "Are you sure want to deactive this role?";
 
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("RoleId", roleId);
+
+            $.ajax({
+                url: '/User/RoleActiveDecative?RoleId=' + roleId,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: isChecked ? "Active!" : "Deactive!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/User/RolewisePermission';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Role have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/User/RolewisePermission';
+            });;
+        }
+    });
+}
+
+function DeleteRole(roleId) {
+    Swal.fire({
+        title: "Are you sure want to delete this role?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/User/DeleteRole?RoleId=' + roleId,
+                type: 'Get',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/User/RolewisePermission';
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete role!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Role have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}

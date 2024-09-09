@@ -40,7 +40,7 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.GetSupplierInvoiceById(Id);
         }
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<SupplierInvoiceList> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
         {
             return await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
         }

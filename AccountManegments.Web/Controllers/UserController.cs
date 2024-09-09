@@ -84,6 +84,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+
         [FormPermissionAttribute("User List-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserViewModel CreatUser)
@@ -112,7 +113,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return  Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -120,6 +121,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
@@ -142,6 +144,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UserActiveDecative(Guid UserId)
@@ -212,6 +215,7 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+
         [FormPermissionAttribute("User Permission-Edit")]
         public async Task<IActionResult> RolewisePermissionListAction()
         {
@@ -300,6 +304,75 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("User Permission-Add")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(roleDetails, "FormPermissionMaster/CreateUserRole");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("User Permission-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> RoleActiveDecative(int roleId)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/ActiveDeactiveRole?roleId=" + roleId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("User List-Delete")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteRole(int roleId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/DeleteRole?roleId=" + roleId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

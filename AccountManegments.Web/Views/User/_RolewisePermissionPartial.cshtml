@@ -1,18 +1,46 @@
-﻿@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.UserModels.UserRoleModel>
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.UserModels.UserRoleModel>
 
 @foreach (var item in Model)
 {
-
-    <tr id="siteCard_@item.RoleId" onclick="EditRoleWiseFormDetails('@item.RoleId',this)">
+    <tr>
         <td>@item.Role</td>
         <td>
-            <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+            @if (_userSession.UserRole == 3)
+            {
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.RoleId"
+                @(item.IsActive ?? false ? "checked" : "")
+                       onclick="RoleActiveDecative('@item.RoleId')" />
+            }
+            else
+            {
+                <input class="form-check-input" type="checkbox" disabled id="flexSwitchCheckChecked_@item.RoleId"
+                @(item.IsActive ?? false ? "checked" : "") />
+            }
         </td>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && (a.Edit || a.Delete)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Edit))
+                {
+                    <a class="btn text-primary" id="siteCard_@item.RoleId" onclick="EditRoleWiseFormDetails('@item.RoleId', this)" title="Edit" aria-label="Edit">
+                        <i class="fadeIn animated bx bx-edit"></i>
+                    </a>
+                }
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Delete && item.RoleId != 3))
+                {
+                    <a href="javascript:;" class="btn text-primary" onclick="DeleteRole('@item.RoleId')"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
+                        <i class="lni lni-trash"></i>
+                    </a>
+                }
+            </td>
+        }
     </tr>
 }
+
+
 @section Scripts {
 
     <script src="~/moduls/rolewiseformpermissionscript.js" asp-append-version="true"></script>

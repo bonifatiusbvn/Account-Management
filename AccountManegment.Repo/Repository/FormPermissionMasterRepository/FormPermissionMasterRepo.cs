@@ -256,5 +256,163 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
             }
             return response;
         }
+
+        public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                bool isRoleAlreadyExists = Context.UserRoles.Any(x => x.Role == roleDetails.Role);
+                if (isRoleAlreadyExists)
+                {
+                    var RoleDetail = await Context.UserRoles.SingleOrDefaultAsync(x => x.Role == roleDetails.Role);
+                    if (RoleDetail.IsDelete == null || RoleDetail.IsDelete == false)
+                    {
+                        response.message = "Role already exists";
+                        response.code = (int)HttpStatusCode.NotFound;
+                    }
+                    else
+                    {
+                        var GetRoledata = Context.UserRoles.Where(a => a.Role == roleDetails.Role).FirstOrDefault();
+                        GetRoledata.IsDelete = false;
+                        Context.UserRoles.Update(GetRoledata);
+                        await Context.SaveChangesAsync();
+                        response.data = roleDetails;
+                        response.message = "Role added successfully!";
+                    }
+                }
+                else
+                {
+
+                    var rolemodel = new UserRole()
+                    {
+                        Role = roleDetails.Role,
+                        IsActive = true,
+                        IsDelete = false,
+                        CreatedBy = roleDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+
+                    Context.UserRoles.Add(rolemodel);
+                    await Context.SaveChangesAsync();
+
+
+                    var forms = Context.Forms.ToList();
+                    var roleWiseFormPermissions = new List<RolewiseFormPermission>();
+
+                    foreach (var form in forms)
+                    {
+                        var permissions = new RolewiseFormPermission
+                        {
+                            RoleId = rolemodel.RoleId,
+                            FormId = form.FormId,
+                            IsAddAllow = true,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            IsApproved = true,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = roleDetails.CreatedBy,
+                        };
+                        roleWiseFormPermissions.Add(permissions);
+                    }
+
+                    Context.RolewiseFormPermissions.AddRange(roleWiseFormPermissions);
+                    await Context.SaveChangesAsync();
+
+                    response.message = "Role added successfully!";
+                    response.data = rolemodel;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "Error in creating role: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<UserResponceModel> ActiveDeactiveRole(int roleId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetRoleData = Context.UserRoles.Where(a => a.RoleId == roleId).FirstOrDefault();
+
+                if (GetRoleData.IsActive == true)
+                {
+                    GetRoleData.IsActive = false;
+                    Context.UserRoles.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role + " " + "is deactive succesfully";
+                }
+                else
+                {
+                    GetRoleData.IsActive = true;
+                    Context.UserRoles.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role+ " " + "is active succesfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while active-deactive the role";
+            }
+            return response;
+        }
+
+        public async Task<UserResponceModel> DeleteRole(int roleId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetRoledata = Context.UserRoles.Where(a => a.RoleId == roleId).FirstOrDefault();
+                var GetFormPermissionDetails = Context.RolewiseFormPermissions.Where(a => a.RoleId == roleId).ToList();
+
+                if (GetRoledata != null)
+                {
+                    if (GetRoledata.IsActive == false)
+                    {
+                        Context.UserRoles.Remove(GetRoledata);
+                        Context.SaveChanges();
+                        if (GetFormPermissionDetails.Any())
+                        {
+
+                            foreach (var form in GetFormPermissionDetails)
+                            {
+                                Context.RolewiseFormPermissions.Remove(form);
+                                Context.SaveChanges();
+                            }
+                        }                       
+                        response.Code = 200;
+                        response.Message = "Role is successfully deleted.";
+                    }
+                    else
+                    {
+                        response.Code = 500;
+                        response.Message = "Can't delete the role as it is active.";
+                    }
+
+                }
+                else
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = "No related records found to delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in deleting role";
+            }
+            return response;
+        }
     }
 }
+

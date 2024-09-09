@@ -98,6 +98,12 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string CompanyName { get; set; }
         public DateTime? Date { get; set; }
         public Guid? SiteId { get; set; }
-        public string SiteName { get; set; } 
+        public string SiteName { get; set; }
+    }
+
+    public class SupplierInvoiceList
+    {
+        public IEnumerable<SupplierInvoiceModel>? InvoiceList { get; set; }
+        public IDictionary<Guid, IEnumerable<SupplierInvoiceDetailsModel>>? InvoiceItemList { get; set; }
     }
 }

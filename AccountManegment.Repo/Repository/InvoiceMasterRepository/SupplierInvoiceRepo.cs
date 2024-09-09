@@ -144,7 +144,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (PayOutReport.SiteId.HasValue)
                 {
-                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
                 }
 
                 if (PayOutReport.SupplierId.HasValue)
@@ -586,46 +586,58 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         //    }
         //}
 
-        public async Task<IEnumerable<SupplierInvoiceModel>> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<SupplierInvoiceList> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
-                var supplierList = (from a in Context.SupplierInvoices
-                                    join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
-                                    join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                    join d in Context.Sites on a.SiteId equals d.SiteId
-                                    where a.InvoiceNo != "PayOut"
-                                    select new SupplierInvoiceModel
-                                    {
-                                        Id = a.Id,
-                                        InvoiceNo = a.InvoiceNo,
-                                        SiteId = a.SiteId,
-                                        GroupName = a.SiteGroup,
-                                        SupplierId = a.SupplierId,
-                                        TotalAmount = a.TotalAmount,
-                                        TotalDiscount = a.TotalDiscount,
-                                        TotalGstamount = a.TotalGstamount,
-                                        Description = a.Description,
-                                        Tds = a.Tds,
-                                        CompanyId = a.CompanyId,
-                                        Date = a.Date,
-                                        CompanyName = c.CompanyName,
-                                        SiteName = d.SiteName,
-                                        SupplierName = b.SupplierName,
-                                        CreatedOn = a.CreatedOn,
-                                        IsApproved = a.IsApproved,
-                                        SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                    });
+                var supplierDataQuery = from a in Context.SupplierInvoices
+                                        join e in Context.SupplierInvoiceDetails on a.Id equals e.RefInvoiceId
+                                        join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                        join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                        join d in Context.Sites on a.SiteId equals d.SiteId
+                                        join f in Context.ItemMasters on e.ItemId equals f.ItemId
+                                        where a.InvoiceNo != "PayOut"
+                                        select new
+                                        {
+                                            Invoice = new SupplierInvoiceModel
+                                            {
+                                                Id = a.Id,
+                                                InvoiceNo = a.InvoiceNo,
+                                                SiteId = a.SiteId,
+                                                GroupName = a.SiteGroup,
+                                                SupplierId = a.SupplierId,
+                                                TotalAmount = a.TotalAmount,
+                                                TotalDiscount = a.TotalDiscount,
+                                                TotalGstamount = a.TotalGstamount,
+                                                Description = a.Description,
+                                                Tds = a.Tds,
+                                                CompanyId = a.CompanyId,
+                                                Date = a.Date,
+                                                CompanyName = c.CompanyName,
+                                                SiteName = d.SiteName,
+                                                SupplierName = b.SupplierName,
+                                                CreatedOn = a.CreatedOn,
+                                                IsApproved = a.IsApproved,
+                                                SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                            },
+                                            Item = new SupplierInvoiceDetailsModel
+                                            {
+                                                RefInvoiceId = e.RefInvoiceId,
+                                                ItemId = e.ItemId,
+                                                ItemName = f.ItemName
+                                            }
+                                        };
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
-                    supplierList = supplierList.Where(u =>
-                        u.SiteName.ToLower().Contains(searchText) ||
-                        u.CompanyName.ToLower().Contains(searchText) ||
-                        u.SupplierName.ToLower().Contains(searchText) ||
-                        u.SupplierInvoiceNo.ToLower().Contains(searchText) ||
-                        u.TotalAmount.ToString().Contains(searchText)
+                    supplierDataQuery = supplierDataQuery.Where(u =>
+                        u.Invoice.SiteName.ToLower().Contains(searchText) ||
+                        u.Invoice.CompanyName.ToLower().Contains(searchText) ||
+                        u.Invoice.SupplierName.ToLower().Contains(searchText) ||
+                        u.Invoice.SupplierInvoiceNo.ToLower().Contains(searchText) ||
+                        u.Invoice.TotalAmount.ToString().Contains(searchText) ||
+                        u.Item.ItemName.ToLower().Contains(searchText)
                     );
                 }
 
@@ -637,15 +649,38 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     switch (field.ToLower())
                     {
                         case "date":
-                            supplierList = sortOrder == "ascending"
-                                ? supplierList.OrderBy(u => u.Date)
-                                : supplierList.OrderByDescending(u => u.Date);
+                            supplierDataQuery = sortOrder == "ascending"
+                                ? supplierDataQuery.OrderBy(u => u.Invoice.Date)
+                                : supplierDataQuery.OrderByDescending(u => u.Invoice.Date);
                             break;
-
                     }
                 }
 
-                return await supplierList.ToListAsync();
+                var supplierData = await supplierDataQuery.ToListAsync();
+
+                var groupedByRefInvoiceId = supplierData
+                    .GroupBy(x => x.Item.RefInvoiceId)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(x => x.Item).ToList()
+                    );
+
+                var invoicesGroupedById = supplierData
+                    .GroupBy(x => x.Invoice.Id)
+                    .Select(g => new
+                    {
+                        Invoice = g.First().Invoice,
+                        Items = groupedByRefInvoiceId.ContainsKey(g.Key)
+                            ? groupedByRefInvoiceId[g.Key]
+                            : new List<SupplierInvoiceDetailsModel>()
+                    })
+                    .ToList();
+
+                return new SupplierInvoiceList
+                {
+                    InvoiceList = invoicesGroupedById.Select(g => g.Invoice).ToList(),
+                    InvoiceItemList = invoicesGroupedById.ToDictionary(g => g.Invoice.Id, g => g.Items.AsEnumerable())
+                };
             }
             catch (Exception ex)
             {
@@ -1007,7 +1042,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (invoiceReport.SiteId.HasValue)
                 {
-                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
                 }
                 if (invoiceReport.SupplierId.HasValue)
                 {
@@ -1210,7 +1245,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
         public async Task<ApiResponseModel> DeletePayoutDetails(Guid InvoiceId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -1276,7 +1310,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
-
         public async Task<ApiResponseModel> UpdatePayoutDetails(SupplierInvoiceModel updatepayoutDetails)
         {
             ApiResponseModel response = new ApiResponseModel();

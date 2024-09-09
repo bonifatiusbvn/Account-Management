@@ -4,6 +4,11 @@
     ViewData["Title"] = "User Permission";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<style>
+    #textRoleName-error {
+    color:red;
+}
+</style>
 
 <div class="">
     <div class="">
@@ -16,46 +21,16 @@
             </div>
             <div class="my-3 border-bottom"></div>
             <div class="">
-
                 <div class="row">
                     <div class="col-12 col-lg-7 col-md-7 col-xl-7">
                         <div class="card radius-10 w-100">
                             <div class="card-body">
-
-
                                 <div class="row w-100 ac-view-list card radius-10 w-100">
-
                                     <div class="row ">
                                         <div class="col-12">
-                                            <div class="card-body">
-                                                <div class="row g-3">
-
-                                                    <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSiteSearch" onkeyup="RolefilterTable()" placeholder="Search" hidden>
-                                                    </div>
-                                                    <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteSearchBy" onchange="RolefilterTable()" hidden>
-                                                            <option selected="selected">All</option>
-                                                            <option>Role</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteDataSortBy" onchange="RoleSiteTable()" hidden>
-                                                            <option value="DescendingCreatedOn" selected="selected">Last Created</option>
-                                                            <option value="AscendingCreatedOn">First Created</option>
-                                                            <option value="AscendingRole">Role (A-Z)</option>
-                                                            <option value="DescendingRole">Role (Z-A)</option>
-                                                        </select>
-                                                    </div>
-                                                </div><!--end row-->
-
-                                            </div>
-
+                                            <button type="button" class="btn btn-primary nav-btn" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="lni lni-circle-plus"></i>New Role</button>
                                         </div>
-
                                     </div>
-
 
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -63,7 +38,11 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Role</th>
-                                                        <th>Action</th>
+                                                        <th>Active</th>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && (a.Edit == true || a.Delete == true)))
+                                                        {
+                                                            <th>Action</th>
+                                                        }
                                                     </tr>
                                                 </thead>
                                                 <tbody id="UserRoletbody">
@@ -73,8 +52,33 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--end row-->
+                        </div>
 
+                        <div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="addUserRole">
+                                        <div class="modal-header bg-primary-subtle p-3">
+                                            <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="hstack gap-3 align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <label for="textRoleName" class="form-label">Role <span class="text-danger">*</span></label>
+                                                    <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
+                                                    <input type="text" class="form-control" id="textRoleName" placeholder="Enter Role" name="textRoleName" />
+                                                    <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="validateAndCreateRole()">Create</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                             <div class="card radius-10">
