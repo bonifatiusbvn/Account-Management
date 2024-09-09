@@ -810,7 +810,7 @@ function InsertPayOutDetailsReport() {
                         toastr.success(result.message);
                         clearPayoutPartialView();
                         $('#payoutpartialView').hide();
-                        SearchReportData();
+                        $("#searchReportButton").click();
                     } else {
                         toastr.error(result.message);
                     }

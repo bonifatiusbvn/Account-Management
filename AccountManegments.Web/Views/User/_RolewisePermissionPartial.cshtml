@@ -4,13 +4,8 @@
 
 @foreach (var item in Model)
 {
-    <tr id="siteCard_@item.RoleId" onclick="EditRoleWiseFormDetails('@item.RoleId', this)">
+    <tr>
         <td>@item.Role</td>
-        <td>
-            <a class="btn text-primary" title="Edit" aria-label="Edit">
-                <i class="fadeIn animated bx bx-edit"></i>
-            </a>
-        </td>
         <td>
             @if (_userSession.UserRole == 3)
             {
@@ -29,13 +24,13 @@
             <td>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Edit))
                 {
-                    <a class="btn text-primary" onclick="DisplayUserDetails('@item.RoleId')" title="Edit" aria-label="Edit">
+                    <a class="btn text-primary" id="siteCard_@item.RoleId" onclick="EditRoleWiseFormDetails('@item.RoleId', this)" title="Edit" aria-label="Edit">
                         <i class="fadeIn animated bx bx-edit"></i>
                     </a>
                 }
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Delete && item.RoleId != 3))
                 {
-                    <a href="javascript:;" class="btn text-primary" onclick="deleteUserDetails('@item.RoleId')"
+                    <a href="javascript:;" class="btn text-primary" onclick="DeleteRole('@item.RoleId')"
                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
                         <i class="lni lni-trash"></i>
                     </a>

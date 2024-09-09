@@ -197,22 +197,22 @@ namespace AccountManagement.API.Controllers
         [HttpPost]
         [Route("ActiveDeactiveRole")]
         [Authorize]
-        public async Task<IActionResult> ActiveDeactiveUsers(int roleId)
+        public async Task<IActionResult> ActiveDeactiveRole(int roleId)
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var userName = await RolewisePermissionMaster.ActiveDeactiveRole(roleId);
+            var roleData = await RolewisePermissionMaster.ActiveDeactiveRole(roleId);
             try
             {
-                if (responseModel.Code == 200)
+                if (roleData.Code == 200)
                 {
-                    responseModel.Code = userName.Code;
-                    responseModel.Message = userName.Message;
+                    responseModel.Code = roleData.Code;
+                    responseModel.Message = roleData.Message;
                 }
                 else
                 {
-                    responseModel.Message = userName.Message;
-                    responseModel.Code = userName.Code;
+                    responseModel.Message = roleData.Message;
+                    responseModel.Code = roleData.Code;
                 }
             }
             catch (Exception ex)
@@ -224,22 +224,22 @@ namespace AccountManagement.API.Controllers
         [HttpPost]
         [Route("DeleteRole")]
         [Authorize]
-        public async Task<IActionResult> DeleteUserDetails(int roleId)
+        public async Task<IActionResult> DeleteRole(int roleId)
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var User = await RolewisePermissionMaster.DeleteRole(roleId);
+            var roleData = await RolewisePermissionMaster.DeleteRole(roleId);
             try
             {
                 if (responseModel.Code == 200)
                 {
-                    responseModel.Code = User.Code;
-                    responseModel.Message = User.Message;
+                    responseModel.Code = roleData.Code;
+                    responseModel.Message = roleData.Message;
                 }
                 else
                 {
-                    responseModel.Message = User.Message;
-                    responseModel.Code = User.Code;
+                    responseModel.Message = roleData.Message;
+                    responseModel.Code = roleData.Code;
                 }
             }
             catch (Exception ex)

@@ -4,6 +4,11 @@
     ViewData["Title"] = "User Permission";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+<style>
+    #textRoleName-error {
+    color:red;
+}
+</style>
 
 <div class="">
     <div class="">
@@ -33,7 +38,6 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Role</th>
-                                                        <th>Action</th>
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && (a.Edit == true || a.Delete == true)))
                                                         {
@@ -70,7 +74,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-success" onclick="validateAndCreateRole()">Create</button>
+                                            <button type="button" class="btn btn-primary" onclick="validateAndCreateRole()">Create</button>
                                         </div>
                                     </form>
                                 </div>
