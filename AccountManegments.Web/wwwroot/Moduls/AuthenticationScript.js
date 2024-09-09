@@ -1138,3 +1138,90 @@ function MutipleInwardIsApproved() {
         }
     });
 }
+
+function DeleteSupplierDetails(SupplierId) {
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Supplier/DeleteSupplierDetails?SupplierId=' + SupplierId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    })
+                },
+                error: function () {
+                    toastr.error("Can't delete supplier!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Supplier have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
+function DeleteItemInWord(InwordId) {
+
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ItemInWord/DeleteItemInWord?InwordId=' + InwordId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Home/Index';
+                    })
+                },
+                error: function () {
+                    toastr.error("Can't delete iteminward!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Iteminward have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
