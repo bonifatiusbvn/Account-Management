@@ -142,7 +142,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 if (PayOutReport.SiteId.HasValue)
                 {
-                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SiteId == PayOutReport.SiteId.Value);
                 }
 
                 if (PayOutReport.SupplierId.HasValue)
@@ -999,7 +999,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (invoiceReport.SiteId.HasValue)
                 {
-                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance");
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value);
                 }
                 if (invoiceReport.SupplierId.HasValue)
                 {
