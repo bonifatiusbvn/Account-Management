@@ -903,7 +903,17 @@ function ClearOBTextBox() {
 }
 var datas = userPermissions;
 var dtcoulms = [
-    { "data": "invoiceNo", "name": "InvoiceNo" },
+    {
+        "data": "invoiceNo",
+        "name": "InvoiceNo",
+        "render": function (data, type, row) {
+            if (data === 'Opening Balance') {
+                var description = row.description ? ' (' + row.description + ')' : '';
+                return data + description;
+            }
+            return data;
+        }
+    },
     {
         "data": "date",
         "name": "Date",
@@ -940,7 +950,8 @@ var dtcoulms = [
             }
         }
     }
-]
+];
+
 $(document).ready(function () {
     var table;
     var userPermissionArray = JSON.parse(datas);
@@ -980,7 +991,7 @@ $(document).ready(function () {
         });
     }
     $('#searchReportButton').click(function () {
-        
+
 
         if ($.fn.DataTable.isDataTable('#tblinvoice')) {
             table.destroy();

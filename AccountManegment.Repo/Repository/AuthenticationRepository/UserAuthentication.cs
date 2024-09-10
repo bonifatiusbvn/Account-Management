@@ -130,25 +130,16 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         {
             UserResponceModel response = new UserResponceModel();
             var GetUserdata = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
-            var Activesite = Context.Sites.Where(a => a.SiteId == GetUserdata.SiteId && a.IsActive == false).FirstOrDefault();
+
 
             if (GetUserdata != null && GetUserdata.IsActive == false)
             {
-                if (Activesite != null)
-                {
-                    GetUserdata.IsDeleted = true;
-                    Context.Users.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "User is deleted successfully";
-                }
-                else
-                {
-                    response.Message = "This user's site is active so user can't delete.";
-                    response.Code = 400;
-                }
-
+                GetUserdata.IsDeleted = true;
+                Context.Users.Update(GetUserdata);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Data = GetUserdata;
+                response.Message = "User is deleted successfully";
             }
             else
             {
