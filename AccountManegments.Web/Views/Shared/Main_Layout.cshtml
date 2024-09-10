@@ -317,7 +317,7 @@
                     var userSites = UserSession.SiteData;
                 }
                 <form id="frmdrpdashbord">
-                    @if (UserSession.SiteId == "")
+                    @if (_userSession.UserRole == 3)
                     {
                         <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
                             <option value="">All Site</option>
