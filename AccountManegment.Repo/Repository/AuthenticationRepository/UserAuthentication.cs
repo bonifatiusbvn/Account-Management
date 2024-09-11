@@ -289,7 +289,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             }
         }
 
-
         public async Task<LoginResponseModel> LoginUser(LoginRequest loginRequest)
         {
             LoginResponseModel response = new LoginResponseModel();

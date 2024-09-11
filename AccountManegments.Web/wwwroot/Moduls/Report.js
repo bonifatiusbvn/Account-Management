@@ -904,14 +904,14 @@ function ClearOBTextBox() {
 var datas = userPermissions;
 var dtcoulms = [
     {
-        "data": "invoiceNo",
+        "data": "supplierInvoiceNo",
         "name": "InvoiceNo",
         "render": function (data, type, row) {
-            if (data === 'Opening Balance') {
+            if (row.invoiceNo === 'Opening Balance') {
                 var description = row.description ? ' (' + row.description + ')' : '';
-                return data + description;
+                return row.invoiceNo + description; // Display 'Opening Balance' and description if available
             }
-            return data;
+            return data; // Return supplierInvoiceNo for all other cases
         }
     },
     {
@@ -951,6 +951,7 @@ var dtcoulms = [
         }
     }
 ];
+
 
 $(document).ready(function () {
     var table;

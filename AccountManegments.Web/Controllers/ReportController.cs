@@ -69,12 +69,10 @@ namespace AccountManegments.Web.Controllers
                 var sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault();
                 if (sortColumnIndex == "5")
                 {
-
                     sortColumn = "credit";
                 }
                 if (sortColumnIndex == "6")
                 {
-
                     sortColumn = "debit";
                 }
 
