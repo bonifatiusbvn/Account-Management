@@ -296,9 +296,9 @@ namespace AccountManegments.Web.Controllers
                         }
                         else
                         {
-                            cellValue = item.SupplierInvoiceNo;
+                            cellValue = item.SupplierInvoiceNo != null ? item.SupplierInvoiceNo :"";
                         }
-                        row.Cells.Add(cellValue);
+                        row.Cells.Add(cellValue != "" ? cellValue : "");
                         row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
                         row.Cells.Add(item.SiteName != null ? item.SiteName : "");
                         row.Cells.Add(item.GroupName != null ? item.GroupName : "");
