@@ -290,9 +290,9 @@ namespace AccountManegments.Web.Controllers
                         var row = table.Rows.Add();
                         string cellValue;
 
-                        if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Opening Balance")
+                        if (item.InvoiceNo == "Opening Balance")
                         {
-                            cellValue = item.InvoiceNo;
+                            cellValue = item.Description != null ? $"{item.InvoiceNo} ({item.Description})" : item.InvoiceNo;
                         }
                         else
                         {
@@ -474,9 +474,9 @@ namespace AccountManegments.Web.Controllers
                         foreach (var item in SupplierDetails.InvoiceList)
                         {
                             string cellValue;
-                            if (item.InvoiceNo == "PayOut" || item.InvoiceNo == "Opening Balance")
+                            if (item.InvoiceNo == "Opening Balance")
                             {
-                                cellValue = item.InvoiceNo;
+                                cellValue = item.Description != null ? $"{item.InvoiceNo} ({item.Description})" : item.InvoiceNo;
                             }
                             else
                             {
