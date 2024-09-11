@@ -909,9 +909,9 @@ var dtcoulms = [
         "render": function (data, type, row) {
             if (row.invoiceNo === 'Opening Balance') {
                 var description = row.description ? ' (' + row.description + ')' : '';
-                return row.invoiceNo + description; // Display 'Opening Balance' and description if available
+                return row.invoiceNo + description;
             }
-            return data; // Return supplierInvoiceNo for all other cases
+            return data;
         }
     },
     {
