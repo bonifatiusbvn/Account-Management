@@ -604,6 +604,7 @@ function UpdateInvoiceDetails() {
                 PaymentTerms: $("#txtpayment").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
+                IsApproved: $("#txtInvoiceIsApproved").val(),
             }
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));

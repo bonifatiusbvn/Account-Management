@@ -351,6 +351,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     ContactNumber = a.ContactNumber,
                                     CreatedOn = a.CreatedOn,
                                     StateCode = f.StateCode,
+                                    IsApproved = a.IsApproved,
                                     DiscountRoundoff = a.DiscountRoundoff,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
@@ -721,6 +722,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = SupplierInvoiceDetail.CreatedOn,
                     DiscountRoundoff = SupplierInvoiceDetail.DiscountRoundoff,
                     SiteGroup = SupplierInvoiceDetail.SiteGroup,
+                    IsApproved = SupplierInvoiceDetail.IsApproved,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
