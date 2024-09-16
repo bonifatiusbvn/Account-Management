@@ -1,5 +1,6 @@
 ﻿using AccountManagement.API;
 using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
@@ -7,6 +8,7 @@ using AccountManagement.Repository.Interface.Repository.ItemMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -273,7 +275,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
         }
 
-
         public async Task<ApiResponseModel> ItemIsApproved(Guid ItemId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -454,8 +455,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             return response;
         }
 
-
-
         public async Task<IEnumerable<ItemMasterModel>> GetAllItemDetailsList(string? searchText)
         {
             var ItemList = (from a in Context.ItemMasters
@@ -531,6 +530,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 throw ex;
             }
         }
+
         public async Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -559,6 +559,47 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 response.code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
+        }
+
+        public Task<SupplierInvoiceList> GetItemHistory(Guid ItemId)
+        {
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var supplierDataQuery = (from a in Context.SupplierInvoices
+            //                             join e in Context.SupplierInvoiceDetails on a.Id equals e.RefInvoiceId
+            //                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+            //                             join c in Context.Companies on a.CompanyId equals c.CompanyId
+            //                             join d in Context.Sites on a.SiteId equals d.SiteId
+            //                             join f in Context.ItemMasters on ItemId equals f.ItemId
+            //                             where a.InvoiceNo != "PayOut"
+            //                             select new SupplierInvoiceModel
+            //                             {
+            //                                 Id = a.Id,
+            //                                 InvoiceNo = a.InvoiceNo,
+            //                                 SiteId = a.SiteId,
+            //                                 GroupName = a.SiteGroup,
+            //                                 SupplierId = a.SupplierId,
+            //                                 TotalAmount = a.TotalAmount,
+            //                                 TotalDiscount = a.TotalDiscount,
+            //                                 TotalGstamount = a.TotalGstamount,
+            //                                 Description = a.Description,
+            //                                 Tds = a.Tds,
+            //                                 CompanyId = a.CompanyId,
+            //                                 Date = a.Date,
+            //                                 CompanyName = c.CompanyName,
+            //                                 SiteName = d.SiteName,
+            //                                 SupplierName = b.SupplierName,
+            //                                 CreatedOn = a.CreatedOn,
+            //                                 IsApproved = a.IsApproved,
+            //                                 SupplierInvoiceNo = a.SupplierInvoiceNo
+            //                             }).ToListAsync();
+            //    return supplierDataQuery;
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
     }
 }
