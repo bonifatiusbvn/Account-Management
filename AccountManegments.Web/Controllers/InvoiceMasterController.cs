@@ -706,5 +706,26 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(InvoiceData, "SupplierInvoice/CheckSupplierInvoiceNo");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Data = postuser.data, Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
+            }
+        }
     }
 }

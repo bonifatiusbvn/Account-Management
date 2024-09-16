@@ -101,7 +101,12 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
 
         public async Task<InvoiceTotalAmount> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport)
         {
-           return await SupplierInvoice.GetPayoutInvoiceDetailsPdfReport(invoiceReport);
+            return await SupplierInvoice.GetPayoutInvoiceDetailsPdfReport(invoiceReport);
+        }
+
+        public async Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
+        {
+            return await SupplierInvoice.CheckSupplierInvoiceNo(InvoiceData);
         }
     }
 }

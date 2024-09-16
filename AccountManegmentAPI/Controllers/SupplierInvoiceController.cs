@@ -32,8 +32,8 @@ namespace AccountManagement.API.Controllers
         [Route("GetSupplierInvoiceList")]
         public async Task<IActionResult> GetSupplierInvoiceList(string? searchText, string? searchBy, string? sortBy)
         {
-            var  supplierList = await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
-            return Ok(new { code = 200, data = supplierList});
+            var supplierList = await SupplierInvoice.GetSupplierInvoiceList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = supplierList });
         }
 
         [HttpGet]
@@ -282,7 +282,7 @@ namespace AccountManagement.API.Controllers
         public async Task<IActionResult> GetInvoiceDetailsReportpdf(InvoiceReportModel invoiceReport)
         {
             var supplierList = await SupplierInvoice.GetInvoiceDetailsPdfReport(invoiceReport);
-            return Ok(new { code = 200, data = supplierList});
+            return Ok(new { code = 200, data = supplierList });
         }
         [HttpPost]
         [Route("GetPayoutInvoiceDetailsPdfReport")]
@@ -290,6 +290,14 @@ namespace AccountManagement.API.Controllers
         {
             var supplierList = await SupplierInvoice.GetPayoutInvoiceDetailsPdfReport(invoiceReport);
             return Ok(new { code = 200, data = supplierList });
+        }
+
+        [HttpPost]
+        [Route("CheckSupplierInvoiceNo")]
+        public async Task<IActionResult> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
+        {
+            var invoicenoexists = await SupplierInvoice.CheckSupplierInvoiceNo(InvoiceData);
+            return Ok(new {code = 200, data = invoicenoexists });
         }
     }
 }
