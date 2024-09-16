@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.ItemMaster;
@@ -76,6 +77,11 @@ namespace AccountManagement.Repository.Services.ItemMaster
         public async Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList)
         {
             return await ItemMaster.MutipleItemsIsApproved(ItemIdList);
+        }
+
+        public async Task<SupplierInvoiceList> GetItemHistory(Guid ItemId)
+        {
+            return await ItemMaster.GetItemHistory(ItemId);
         }
     }
 }

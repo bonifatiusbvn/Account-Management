@@ -1149,17 +1149,94 @@ function clearItemErrorMessages() {
 //        siteloaderhide();
 //        toastr.warning('please select address!');
 //    }
-//}
+//
 
 function fn_OpenAddproductmodal() {
-    if ($("#drpSiteName").val() == "") {
+    const supplierName = $("#textSupplierName").val();
+    const companyName = $("#textCompanyName").val();
+    const siteName = $("#drpSiteName").val();
+    const invoiceNo = $("#textSupplierInvoiceNo").val();
+
+    let hasError = false;
+
+    // Clear previous error states
+    $("#frmdrpdashbord").css("border", "none");
+    $("#siteErrorMesssage").html("");
+    $("#textSupplierName-error").html("");
+    $("#textCompanyName-error").html("");
+
+    // Validate Site Name
+    if (siteName === "") {
         $("#frmdrpdashbord").css("border", "2px solid red");
         $("#siteErrorMesssage").html("Select Site").css("color", "red");
+        hasError = true;
     }
-    else {
-        $('#mdProductSearch').val('');
-        $('#mdPoproductModal').modal('show');
+
+    // Validate Supplier and Company Names
+    if (!supplierName) {
+        $("#textSupplierName-error").html("Select Supplier Name");
+        hasError = true;
     }
+    if (!companyName) {
+        $("#textCompanyName-error").html("Select Company Name");
+        hasError = true;
+    }
+
+    // Handle errors and display warnings
+    if (hasError) {
+        toastr.warning("Fill in all required fields (Site, Supplier, Company) to proceed.");
+    } else {
+        if (invoiceNoExists != true) {
+            // If no errors, show the modal
+            $('#mdProductSearch').val('');
+            $('#mdPoproductModal').modal('show');
+        }
+    }
+}
+
+
+var invoiceNoExists = null;
+$(document).ready(function () {
+    $('#textSupplierInvoiceNo').on('input', function () {
+        checkSupplierInoiveNoExits();
+    });
+});
+
+function checkSupplierInoiveNoExits() {
+    if ($("#textSupplierName").val() != null && $("#textCompanyName").val() != null && $("#textSupplierInvoiceNo").val() != "") {
+        var compnayid = $("#textCompanyName").val();
+        var supplierid = $("#textSupplierName").val();
+        var SupplierInvoiceNo = $("#textSupplierInvoiceNo").val();
+        var formData = new FormData();
+
+        formData.append('CompanyId', $("#textCompanyName").val());
+        formData.append('SupplierId', $("#textSupplierName").val());
+        formData.append('SupplierInvoiceNo', $("#textSupplierInvoiceNo").val());
+        $.ajax({
+            url: '/InvoiceMaster/CheckSupplierInvoiceNo',
+            type: 'Post',
+            datatype: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.data == true) {
+                    invoiceNoExists = true;
+                    $("#textSupplierInvoiceNo").css("border", "2px solid red");
+                    $("#InvoicenoErrorMesssage").show();
+                    $("#InvoicenoErrorMesssage").html("invoice no already exist").css("color", "red");
+                } else {
+                    invoiceNoExists = false;
+                    $("#textSupplierInvoiceNo").css("border", "2px solid lightgrey");
+                    $("#InvoicenoErrorMesssage").hide();
+                }
+            }
+        });
+    } else {
+        toastr.warning("Enter supplier, company and invoice no.")
+    }
+
 }
 
 function printinvoice() {

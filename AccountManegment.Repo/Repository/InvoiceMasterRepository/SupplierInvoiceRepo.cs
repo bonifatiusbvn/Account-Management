@@ -1669,6 +1669,23 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw new Exception("An error occurred while fetching invoice details.", ex);
             }
         }
+
+
+        public async Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
+        {
+            try
+            {
+                bool supplierInvoiceExists = await Context.SupplierInvoices
+                    .AnyAsync(x => x.CompanyId == InvoiceData.CompanyId &&
+                          x.SupplierInvoiceNo == InvoiceData.SupplierInvoiceNo &&
+                          x.SupplierId == InvoiceData.SupplierId);
+                return supplierInvoiceExists;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

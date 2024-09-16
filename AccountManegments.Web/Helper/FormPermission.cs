@@ -36,7 +36,7 @@ namespace AccountManegments.Web.Helper
                     }
                     if (_FormnamewithPermisiion.Split("-")[1].ToString() == "Add")
                     {
-                        if (!UserSession.FormPermisionData.Any(a => a.FormName.Contains(_FormnamewithPermisiion.Split("-")[0].ToString()) && a.Edit == true && _FormnamewithPermisiion.Split("-")[1].ToString() == "Add"))
+                        if (!UserSession.FormPermisionData.Any(a => a.FormName.Contains(_FormnamewithPermisiion.Split("-")[0].ToString()) && a.Add == true && _FormnamewithPermisiion.Split("-")[1].ToString() == "Add"))
                         {
                             context.Result = new UnauthorizedResult();
                         }

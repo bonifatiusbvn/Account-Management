@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
@@ -26,5 +27,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
         Task<ApiResponseModel> InsertItemDetailsFromExcel(List<ItemMasterModel> itemDetailsList);
         Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId);
         Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList);
+        Task<SupplierInvoiceList> GetItemHistory(Guid ItemId);
     }
 }

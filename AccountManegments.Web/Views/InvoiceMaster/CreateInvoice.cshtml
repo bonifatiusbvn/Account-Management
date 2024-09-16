@@ -94,6 +94,7 @@
                                                                                         <option selected disabled value="">Select Supplier</option>
                                                                                     </select>
                                                                                 }
+                                                                                <label id="textSupplierName-error" class="error" for="textSupplierName"></label>
                                                                                 <span id="spnsuppliername" class="text-danger"></span>
                                                                             </div>
                                                                             <div class="col-6 col-lg-6">
@@ -148,6 +149,7 @@
                                                                                             <option selected disabled value="">Select Company</option>
                                                                                         </select>
                                                                                     }
+                                                                                    <label id="textCompanyName-error" class="error" for="textCompanyName"></label>
                                                                                     <span id="spnCompanyName" class="text-danger"></span>
                                                                                     <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
                                                                                     <input type="hidden" class="form-control" id="textSupplierInvoiceId" value="@Model.Id">
@@ -162,6 +164,7 @@
                                                                             <div class="col-5 col-lg-5">
                                                                                 <label for="SupplierInvoiceNo" class="form-label">Supplier Invoice No</label>
                                                                                 <input type="text" id="textSupplierInvoiceNo" value="@Model.SupplierInvoiceNo" class="form-control" name="textSupplierInvoiceNo" placeholder="Supplier Invoice No" />
+                                                                                <span id="InvoicenoErrorMesssage"></span>
                                                                             </div>
                                                                             <div class="col-3 col-lg-3">
                                                                                 <label for="textOrderDate" class="form-label">Order Date</label>
