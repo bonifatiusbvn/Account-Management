@@ -907,7 +907,7 @@ var dtcoulms = [
         "data": "supplierInvoiceNo",
         "name": "InvoiceNo",
         "render": function (data, type, row) {
-            if (row.invoiceNo === 'Opening Balance') {
+            if (row.invoiceNo === 'Opening Balance' || row.invoiceNo === 'PayOut') {
                 var description = row.description ? ' (' + row.description + ')' : '';
                 return row.invoiceNo + description;
             }
