@@ -1225,3 +1225,497 @@ function DeleteItemInWord(InwordId) {
         }
     });
 }
+$(document).ready(function () {
+    fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
+    fn_autoselect('#txtInwardUnitType', '/ItemMaster/GetAllUnitType', '#txtInwardUnitTypeHidden');
+    fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
+});
+var additionalFiles = [];
+function CancelImage(documentName) {
+    $("#addNewImage").find("img[src$='" + documentName + "']").closest('.DocumentName').remove();
+
+    var currentDocumentNames = $("#txtDocumentName").val().split(';');
+    var updatedDocumentNames = currentDocumentNames.filter(function (name) {
+        return name.trim() !== documentName.trim();
+    });
+
+    $("#txtDocumentName").val(updatedDocumentNames.join(';'));
+}
+function removenewaddImage() {
+
+    $(document).on('click', '.img-remove', function () {
+        var row = $(this).closest('.DocumentName');
+        var documentName = row.find('img').data('document');
+        row.remove();
+
+        additionalFiles = additionalFiles.filter(function (item) {
+            return item.name !== documentName;
+        });
+    });
+}
+function showpictures() {
+
+    var files = $("#txtDocument")[0].files;
+    if (files.length > 0) {
+        if ($("#addNewImage .DocumentName").length + files.length > 5) {
+            toastr.error("You can only add a maximum of 5 images.");
+            return;
+        }
+        for (var i = 0; i < files.length; i++) {
+            const file = files[i];
+            let reader = new FileReader();
+            reader.onload = (function (fileName) {
+                return function (event) {
+                    var documentName = fileName;
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div id='showimages'><div onclick='removenewaddImage()' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='" + event.target.result + "' class='displayImage' data-document='" + documentName + "'></div></div></div>";
+                    $("#addNewImage").append(newRow);
+                };
+            })(file.name);
+            reader.readAsDataURL(file);
+            additionalFiles.push(file);
+        }
+    }
+}
+function EditDashboardItemInWordDetails(InwordId) {
+    $('#addNewImage').empty();
+
+
+    $('#EditDashboardItemInwardModal').modal('show');
+
+    $.ajax({
+        url: '/ItemInWord/DisplayItemInWordDetails?InwordId=' + InwordId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#txtItemInWordid').val(response.inwordId);
+            $('#txtInwardUnitType').val(response.unitName);
+            $('#txtInwardUnitTypeHidden').val(response.unitTypeId);
+            $('#txtItemName').val(response.itemId);
+            $('#searchItemnameInput').val(response.item);
+            $('#txtQuantity').val(response.quantity);
+            $("#txtVehicleNumber").val(response.vehicleNumber);
+            $("#txtReceiverName").val(response.receiverName);
+            $("#siteNameList").val(response.siteName);
+            $("#siteNameListHidden").val(response.siteId);
+
+            var date = response.date;
+            var formattedDate = date.substr(0, 10);
+            $('#txtIteminwordDate').val(formattedDate);
+
+            if (response.documentLists && response.documentLists.length > 0) {
+                var documentNames = "";
+                $.each(response.documentLists, function (index, document) {
+                    documentNames += document.documentName + ";";
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName' id='itemInWordId_" + document.id + "'>" +
+                        "<div>" +
+                        "<div id='showimages'>" +
+                        "<div onclick='CancelImage(\"" + document.documentName + "\")' class='img-remove'>" +
+                        "<div class='font-22'><i class='lni lni-close'></i></div></div>" +
+                        "<img src='/Content/InWordDocument/" + document.documentName + "' class='displayImage'></div>" +
+                        "</div></div>";
+                    $("#addNewImage").append(newRow);
+                });
+                $("#txtDocumentName").val(documentNames);
+            }
+        },
+        error: function (xhr, status, error) {
+        }
+    });
+}
+$(document).ready(function () {
+
+    $("#itemInWordForm").validate({
+        rules: {
+            txtInwardUnitType: "required",
+            searchItemnameInput: "required",
+            txtQuantity: "required",
+            txtReceiverName: "required",
+            txtVehicleNumber: "required",
+            txtItemId: "required"
+        },
+        messages: {
+            txtInwardUnitType: "Enter UnitType",
+            searchItemnameInput: "Enter Product",
+            txtQuantity: "Enter Quantity",
+            txtReceiverName: "Enter ReceiverName",
+            txtVehicleNumber: "Enter VehicleNumber",
+            txtItemId: "select item"
+        }
+    })
+});
+function UpdateMultipleItemInWordDetails() {
+
+    if ($("#itemInWordForm").valid()) {
+        var siteId = null;
+        if ($("#siteNameList").val()) {
+            siteId = $("#siteNameListHidden").val();
+        }
+        else {
+            siteId = $("#txtInwardSiteid").val();
+        }
+        var documentName = $("#txtDocumentName").val();
+
+
+        var UpdateItemInWord = {
+            InwordId: $('#txtItemInWordid').val(),
+            UnitTypeId: $("#txtInwardUnitTypeHidden").val(),
+            ItemId: $("#txtItemName").val(),
+            Item: $("#searchItemnameInput").val(),
+            Quantity: $("#txtQuantity").val(),
+            VehicleNumber: $("#txtVehicleNumber").val(),
+            ReceiverName: $("#txtReceiverName").val(),
+            Date: $("#txtIteminwordDate").val(),
+            DocumentName: documentName,
+            SiteId: siteId,
+        };
+
+        var form_data = new FormData();
+        form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
+
+        if (additionalFiles.length > 0) {
+            for (var i = 0; i < additionalFiles.length; i++) {
+                form_data.append("DocDetails", additionalFiles[i]);
+            }
+        }
+
+        $.ajax({
+            url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    $('#EditDashboardItemInwardModal').modal('hide');
+                    toastr.success(Result.message);
+                    GetDashboardItemList();
+                    GetDashboardPurchaseOrderList();
+                    GetDashboardInvoiceList();
+                    GetDashboardSupplierList();
+                    GetDashboardInwardList();
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    }
+    else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+
+function EditItemDetails(ItemId) {
+
+    $('#EditDashboardItemModal').modal('show');
+
+    $.ajax({
+        url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#txtItemid').val(response.itemId);
+            $('#txtItemName').val(response.itemName);
+            $('#txtUnitTypeHidden').val(response.unitType);
+            $('#txtUnitType').val(response.unitTypeName);
+            $('#txtPricePerUnit').val(response.pricePerUnit);
+            $('#txtIsWithGst').prop('checked', response.isWithGst);
+            $('#txtGstAmount').val(response.gstamount);
+            $('#txtGstPerUnit').val(response.gstper);
+            $('#txtHSNCode').val(response.hsncode);
+            $('#txtIsApproved').val(response.isApproved);
+
+        },
+        error: function (xhr, status, error) {
+           
+        }
+    });
+}
+function UpdateItemDetails() {
+
+    if ($("#DashboardItemMsterForm").valid()) {
+        var objData = {
+            ItemId: $('#txtItemid').val(),
+            ItemName: $('#txtItemName').val(),
+            UnitType: $('#txtUnitTypeHidden').val(),
+            PricePerUnit: $('#txtPricePerUnit').val(),
+            Gstamount: $('#txtGstAmount').val(),
+            IsWithGst: $('#txtIsWithGst').prop('checked'),
+            Gstper: $('#txtGstPerUnit').val(),
+            Hsncode: $('#txtHSNCode').val(),
+            IsApproved: $('#txtIsApproved').val(),
+        };
+
+        $.ajax({
+            url: '/ItemMaster/UpdateItemDetails',
+            type: 'post',
+            data: objData,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 200) {
+                    $('#EditDashboardItemModal').modal('hide');
+                    toastr.success(result.message);
+                    GetDashboardItemList();
+                    GetDashboardPurchaseOrderList();
+                    GetDashboardInvoiceList();
+                    GetDashboardSupplierList();
+                    GetDashboardInwardList();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
+        toastr.error("Kindly fill all details");
+    }
+}
+
+function EditPurchaseRequestDetails(PurchaseId) {
+    $('#EditPurchaseRequestModal').modal('show');
+    $.ajax({
+        url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#changeName').html('Update PurchaseRequest');
+            $('#PurchaseRequestId').val(response.pid);
+            $('#txtUnitTypeHidden').val(response.unitTypeId);
+            $('#prNo').val(response.prNo);
+            $('#txtItemName').val(response.itemId);
+            $('#searchItemnameInput').val(response.itemName);
+            $('#txtQuantity').val(response.quantity);
+            $('#txtPoSiteName').val(response.siteId);
+            $('#txtUnitType').val(response.unitName);
+
+            fn_getPRSiteDetail(response.siteId, function () {
+                $('#drpPRSiteAddress').val(response.siteAddressId);
+            });
+
+            var button = document.getElementById("btnpurchaseRequest");
+            if ($('#PurchaseRequestId').val() != '') {
+                button.textContent = "Update";
+            }
+            resetPRForm()
+            offcanvas.show();
+            $('#searchItemname').select2({
+                maximumSelectionLength: 1,
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
+
+
+            $('#drpPRSiteAddress').select2({
+
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#CreatePurchaseRequest")
+            });
+        },
+        error: function (xhr, status, error) {
+            toastr.error(xhr.responseText);
+        }
+    });
+}
+function UpdatePurchaseRequestDetails() {
+
+    if ($("#PurchaseRequestForm").valid()) {
+
+        var siteName = null;
+        siteId = $("#SiteIdinPR").val();
+        PRsiteId = $("#txtPoSiteName").val();
+        if (PRsiteId != undefined) {
+            siteName = PRsiteId;
+        }
+        else {
+            siteName = siteId
+        }
+        var siteAddressId = $('#drpPRSiteAddress').val();
+        var siteAddress = $('#drpPRSiteAddress option:selected').text();
+
+        var objData = {
+            SiteAddressId: siteAddressId,
+            SiteAddress: siteAddress,
+            Pid: $('#PurchaseRequestId').val(),
+            CreatedBy: $('#txtcreatedby').val(),
+            UnitTypeId: $('#txtUnitTypeHidden').val(),
+            ItemId: $('#txtItemName').val(),
+            ItemName: $('#searchItemnameInput').val(),
+            SiteId: siteName,
+            Quantity: $('#txtQuantity').val(),
+            PrNo: $('#prNo').val(),
+        }
+        $.ajax({
+            url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    $('#EditPurchaseRequestModal').modal('hide');
+                    GetDashboardItemList();
+                    GetDashboardPurchaseOrderList();
+                    GetDashboardInvoiceList();
+                    GetDashboardSupplierList();
+                    GetDashboardInwardList();
+                    toastr.success(Result.message);
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+        })
+    }
+    else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+function GetCountry() {
+
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
+
+            });
+        }
+    });
+}
+fn_getState('dropState', 1);
+GetCountry();
+function EditSupplierDetails(SupplierId) {
+
+    $('#EditSupplierModal').modal('show');
+
+    $.ajax({
+        url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            $('#txtSupplierid').val(response.supplierId);
+            $('#txtSupplierName').val(response.supplierName);
+            $('#txtEmail').val(response.email);
+            $('#txtPhoneNo').val(response.mobile);
+            $('#txtGST').val(response.gstno);
+            $('#txtArea').val(response.area);
+            $('#txtBuilding').val(response.buildingName);
+            $('#dropState').val(response.state);
+            $('#txtPinCode').val(response.pinCode);
+            $('#txtBank').val(response.bankName);
+            $('#txtBranch').val(response.branchName);
+            $('#txtAccount').val(response.accountNo);
+            $('#txtIFFC').val(response.iffccode);
+
+            fn_getcitiesbystateId('ddlCity', response.state);
+
+            setTimeout(function () { $('#ddlCity').val(response.city); }, 100);
+
+            var button = document.getElementById("btnitem");
+            if ($('#txtSupplierid').val() !== '') {
+                button.textContent = "Update";
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error(xhr.responseText);
+        }
+    });
+}
+
+$(document).ready(function () {
+    $("#EditSupplierForm").validate({
+        rules: {
+            txtSupplierName: "required",
+            txtGST: "required",
+            txtBuilding: "required",
+            txtArea: "required",
+            ddlCity: "required",
+            dropState: "required",
+            ddlCountry: "required"
+        },
+        messages: {
+            txtSupplierName: "Please Enter SupplierName",
+            txtGST: "Please Enter GST",
+            txtBuilding: "Please Enter Building",
+            txtArea: "Please Enter Area",
+            ddlCity: "Please Enter City",
+            dropState: "Please Enter State",
+            ddlCountry: "Please Enter Country"
+        }
+    });
+})
+
+function UpdateSupplierDetails() {
+    
+    if ($("#EditSupplierForm").valid()) {
+        var objData = {
+            SupplierId: $('#txtSupplierid').val(),
+            SupplierName: $('#txtSupplierName').val(),
+            Email: $('#txtEmail').val(),
+            Mobile: $('#txtPhoneNo').val(),
+            Gstno: $('#txtGST').val(),
+            BuildingName: $('#txtBuilding').val(),
+            Area: $('#txtArea').val(),
+            City: $('#ddlCity').val(),
+            State: $('#dropState').val(),
+            PinCode: $('#txtPinCode').val(),
+            BankName: $('#txtBank').val(),
+            BranchName: $('#txtBranch').val(),
+            AccountNo: $('#txtAccount').val(),
+            Iffccode: $('#txtIFFC').val(),
+            UpdatedBy: $('#txtUserid').val(),
+
+        }
+
+        if (objData.City == "--Select City--" || objData.State == "--Select State--") {
+            toastr.error("Kindly fill all details");
+        }
+
+        else {
+            $.ajax({
+                url: '/Supplier/UpdateSupplierDetails',
+                type: 'post',
+                data: objData,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        $('#EditSupplierModal').modal('hide');
+                        GetDashboardItemList();
+                        GetDashboardPurchaseOrderList();
+                        GetDashboardInvoiceList();
+                        GetDashboardSupplierList();
+                        GetDashboardInwardList();
+                        toastr.success(Result.message);
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                },
+            })
+        }
+
+    }
+    else {
+        toastr.error("Kindly fill all details");
+    }
+}

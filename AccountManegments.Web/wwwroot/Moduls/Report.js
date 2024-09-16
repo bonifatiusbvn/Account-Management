@@ -159,11 +159,21 @@ function populateYearDropdown() {
 
 $(document).ready(function () {
 
+    // Clear date fields
     function clearDates() {
         $('#startDate').val('');
         $('#endDate').val('');
     }
 
+    // Set today's date in both startDate and endDate
+    function setTodaysDate() {
+        var today = new Date();
+        var formattedDate = today.toISOString().substr(0, 10);
+        $('#startDate').val(formattedDate);
+        $('#endDate').val(formattedDate);
+    }
+
+    // Handle dropdown selection
     $('#timePeriodDropdown').change(function () {
         var selectedValue = $(this).val();
 
@@ -172,7 +182,7 @@ $(document).ready(function () {
         } else if (selectedValue === 'Between Date') {
             $('#startDate, #endDate, #searchReportButton').show();
             $('#yearDropdown').hide();
-            clearDates();
+            setTodaysDate();  // Automatically set today's date when "Between Date" is selected
         } else if (selectedValue === 'Between Year') {
             $('#yearDropdown, #searchReportButton').show();
             $('#startDate, #endDate').hide();
@@ -180,6 +190,7 @@ $(document).ready(function () {
         }
     });
 });
+
 //function SearchReportData() {
 //    var selectedValue = $('#timePeriodDropdown').val();
 //    var selectedSupplierId = $('#textReportSupplierNameHidden').val();

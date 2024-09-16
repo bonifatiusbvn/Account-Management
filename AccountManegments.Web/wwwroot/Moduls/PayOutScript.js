@@ -332,6 +332,15 @@ $(document).ready(function () {
         $('#PayoutstartDate').val('');
         $('#PayoutendDate').val('');
     }
+
+    // Function to set today's date in the Payout start and end date fields
+    function setTodaysPayoutDate() {
+        var today = new Date();
+        var formattedDate = today.toISOString().substr(0, 10); // Format date as yyyy-mm-dd
+        $('#PayoutstartDate').val(formattedDate);
+        $('#PayoutendDate').val(formattedDate);
+    }
+
     $('#timePeriodPayoutDropdown').change(function () {
         var selectedValue = $(this).val();
 
@@ -340,14 +349,16 @@ $(document).ready(function () {
         } else if (selectedValue === 'Between Date') {
             $('#PayoutstartDate, #PayoutendDate, #searchPayoutReportButton').show();
             $('#PayoutyearDropdown').hide();
-            clearDates();
+            clearDates(); // Clear previous values
+            setTodaysPayoutDate(); // Set today's date
         } else if (selectedValue === 'Between Year') {
             $('#PayoutyearDropdown, #searchPayoutReportButton').show();
             $('#PayoutstartDate, #PayoutendDate').hide();
-            populateYearDropdown();
+            populateYearDropdown(); // Assuming you have a function to populate the year dropdown
         }
     });
 });
+
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();

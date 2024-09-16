@@ -331,7 +331,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                     Userdata.Iffccode = UpdateSupplier.Iffccode;
                     Userdata.UpdatedBy = UpdateSupplier.CreatedBy;
                     Userdata.UpdatedOn = DateTime.Now;
-                    Userdata.IsApproved = true;
                     Context.SupplierMasters.Update(Userdata);
                     Context.SaveChanges();
                 }
