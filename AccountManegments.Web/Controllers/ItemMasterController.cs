@@ -245,17 +245,16 @@ namespace AccountManegments.Web.Controllers
                 {
                     FormFile.CopyTo(stream);
                 }
-                var filename = Guid.NewGuid + "_" + FormFile.FileName;
+                var filename = Guid.NewGuid().ToString() + "_" + FormFile.FileName; // Fixing incorrect usage of Guid
                 string extension = Path.GetExtension(filename);
                 string excelConString = string.Empty;
                 switch (extension)
                 {
                     case ".xls":
-                        excelConString = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
+                        excelConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
                         break;
-
                     case ".xlsx":
-                        excelConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR = YES'";
+                        excelConString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties='Excel 8.0; HDR=Yes'";
                         break;
                 }
 
@@ -263,11 +262,9 @@ namespace AccountManegments.Web.Controllers
                 dt.Columns.Add("ItemName", typeof(string));
                 dt.Columns.Add("UnitType", typeof(string));
                 dt.Columns.Add("PricePerUnit", typeof(decimal));
-                dt.Columns.Add("GSTAmount", typeof(decimal));
                 dt.Columns.Add("GSTPer", typeof(decimal));
                 dt.Columns.Add("HSNCode", typeof(string));
 
-                excelConString = string.Format(excelConString, filepath);
                 using (OleDbConnection conExcel = new OleDbConnection(excelConString))
                 {
                     using (OleDbCommand cmdExcel = new OleDbCommand())
@@ -300,18 +297,21 @@ namespace AccountManegments.Web.Controllers
                 }
 
                 var items = new List<ItemMasterModel>();
-
                 foreach (DataRow row in dt.Rows)
                 {
                     try
                     {
+                        decimal pricePerUnit = Convert.ToDecimal(row["PricePerUnit"]);
+                        decimal gstper = Convert.ToDecimal(row["GSTPer"]);
+                        decimal gstamount = pricePerUnit / 100 * gstper;
+
                         var item = new ItemMasterModel
                         {
                             ItemName = row["ItemName"].ToString(),
                             UnitTypeName = row["UnitType"].ToString(),
-                            PricePerUnit = Convert.ToDecimal(row["PricePerUnit"]),
-                            Gstamount = Convert.ToDecimal(row["GSTAmount"]),
-                            Gstper = Convert.ToDecimal(row["GSTPer"]),
+                            PricePerUnit = pricePerUnit,
+                            Gstper = gstper,
+                            Gstamount = gstamount,
                             Hsncode = row["HSNCode"].ToString(),
                             CreatedBy = _userSession.UserId,
                             CreatedOn = DateTime.Now,
@@ -345,6 +345,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
         [FormPermissionAttribute("PurchaseMaster-View")]
         [HttpPost]
         public async Task<IActionResult> DisplayItemDetailsById()
