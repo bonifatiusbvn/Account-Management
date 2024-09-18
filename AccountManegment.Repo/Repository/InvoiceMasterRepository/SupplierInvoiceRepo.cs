@@ -656,6 +656,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                             break;
                     }
                 }
+                else
+                {
+                    supplierDataQuery = supplierDataQuery.OrderByDescending(u=> u.Invoice.CreatedOn);
+                }
 
                 var supplierData = await supplierDataQuery.ToListAsync();
 

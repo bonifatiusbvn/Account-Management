@@ -7,7 +7,17 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+<style>
+    .table tbody tr {
+        border-bottom: 1px solid #ddd;
+        height: 50px;
+    }
 
+    .table tbody td {
+        vertical-align: middle;
+        padding: 5px;
+    }
+</style>
 @section HeaderButton {
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Add == true)))
