@@ -28,13 +28,13 @@
                         <i class="fadeIn animated bx bx-edit"></i>
                     </a>
                 }
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Delete && item.RoleId != 3))
-                {
-                    <a href="javascript:;" class="btn text-primary" onclick="DeleteRole('@item.RoleId')"
-                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
-                        <i class="lni lni-trash"></i>
-                    </a>
-                }
+                @* @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Delete && item.RoleId != 3))
+        {
+        <a href="javascript:;" class="btn text-primary" onclick="DeleteRole('@item.RoleId')"
+        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
+        <i class="lni lni-trash"></i>
+        </a>
+        } *@
             </td>
         }
     </tr>
