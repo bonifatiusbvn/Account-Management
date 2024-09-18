@@ -16,7 +16,7 @@
         <td>@item.UnitName</td>
         <td>@item.Quantity</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.Pid" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="PurchaseRequestIsApproved('@item.Pid')" />
             }

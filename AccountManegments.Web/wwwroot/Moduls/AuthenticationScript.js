@@ -1227,8 +1227,10 @@ function DeleteItemInWord(InwordId) {
 }
 $(document).ready(function () {
     fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
+    fn_autoselect('#txtPRUnitType', '/ItemMaster/GetAllUnitType', '#txtPRUnitTypeHidden');
     fn_autoselect('#txtInwardUnitType', '/ItemMaster/GetAllUnitType', '#txtInwardUnitTypeHidden');
     fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
+    fn_autoselect('#searchPRItemnameInput', '/ItemMaster/GetItemNameList', '#txtPRItemName');
 });
 var additionalFiles = [];
 function CancelImage(documentName) {
@@ -1275,6 +1277,19 @@ function showpictures() {
             additionalFiles.push(file);
         }
     }
+}
+GetSiteDetail()
+function GetSiteDetail() {
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#txtPRSiteName').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+                });
+            }
+        }
+    });
 }
 function EditDashboardItemInWordDetails(InwordId) {
     $('#addNewImage').empty();
@@ -1436,7 +1451,7 @@ function EditItemDetails(ItemId) {
 
         },
         error: function (xhr, status, error) {
-           
+
         }
     });
 }
@@ -1482,7 +1497,26 @@ function UpdateItemDetails() {
         toastr.error("Kindly fill all details");
     }
 }
-
+function fn_getDashboardPRSiteDetail(SiteId, callback) {
+    $('#drpPRSiteAddress').empty();
+    $.ajax({
+        url: '/SiteMaster/GetSiteAddressList?SiteId=' + SiteId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            $('#drpPRSiteAddress').append('<option value="" selected disabled>--Select Site Address--</option>')
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#drpPRSiteAddress').append('<option value=' + data.aid + '>' + data.address + '</option>')
+                });
+            }
+            if (callback && typeof callback === "function") {
+                callback();
+            }
+        },
+    });
+}
 function EditPurchaseRequestDetails(PurchaseId) {
     $('#EditPurchaseRequestModal').modal('show');
     $.ajax({
@@ -1492,43 +1526,16 @@ function EditPurchaseRequestDetails(PurchaseId) {
         dataType: 'json',
         success: function (response) {
 
-            $('#changeName').html('Update PurchaseRequest');
             $('#PurchaseRequestId').val(response.pid);
-            $('#txtUnitTypeHidden').val(response.unitTypeId);
+            $('#txtPRUnitTypeHidden').val(response.unitTypeId);
             $('#prNo').val(response.prNo);
-            $('#txtItemName').val(response.itemId);
-            $('#searchItemnameInput').val(response.itemName);
-            $('#txtQuantity').val(response.quantity);
-            $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitName);
-
-            fn_getPRSiteDetail(response.siteId, function () {
+            $('#txtPRItemName').val(response.itemId);
+            $('#searchPRItemnameInput').val(response.itemName);
+            $('#txtPRQuantity').val(response.quantity);
+            $('#txtPRSiteName').val(response.siteId);
+            $('#txtPRUnitType').val(response.unitName);
+            fn_getDashboardPRSiteDetail(response.siteId, function () {
                 $('#drpPRSiteAddress').val(response.siteAddressId);
-            });
-
-            var button = document.getElementById("btnpurchaseRequest");
-            if ($('#PurchaseRequestId').val() != '') {
-                button.textContent = "Update";
-            }
-            resetPRForm()
-            offcanvas.show();
-            $('#searchItemname').select2({
-                maximumSelectionLength: 1,
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreatePurchaseRequest")
-            });
-
-
-            $('#drpPRSiteAddress').select2({
-
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreatePurchaseRequest")
             });
         },
         error: function (xhr, status, error) {
@@ -1538,57 +1545,51 @@ function EditPurchaseRequestDetails(PurchaseId) {
 }
 function UpdatePurchaseRequestDetails() {
 
-    if ($("#PurchaseRequestForm").valid()) {
-
-        var siteName = null;
-        siteId = $("#SiteIdinPR").val();
-        PRsiteId = $("#txtPoSiteName").val();
-        if (PRsiteId != undefined) {
-            siteName = PRsiteId;
-        }
-        else {
-            siteName = siteId
-        }
-        var siteAddressId = $('#drpPRSiteAddress').val();
-        var siteAddress = $('#drpPRSiteAddress option:selected').text();
-
-        var objData = {
-            SiteAddressId: siteAddressId,
-            SiteAddress: siteAddress,
-            Pid: $('#PurchaseRequestId').val(),
-            CreatedBy: $('#txtcreatedby').val(),
-            UnitTypeId: $('#txtUnitTypeHidden').val(),
-            ItemId: $('#txtItemName').val(),
-            ItemName: $('#searchItemnameInput').val(),
-            SiteId: siteName,
-            Quantity: $('#txtQuantity').val(),
-            PrNo: $('#prNo').val(),
-        }
-        $.ajax({
-            url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    $('#EditPurchaseRequestModal').modal('hide');
-                    GetDashboardItemList();
-                    GetDashboardPurchaseOrderList();
-                    GetDashboardInvoiceList();
-                    GetDashboardSupplierList();
-                    GetDashboardInwardList();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-            },
-        })
+    var siteName = null;
+    siteId = $("#SiteIdinPR").val();
+    PRsiteId = $("#txtPRSiteName").val();
+    if (PRsiteId != undefined) {
+        siteName = PRsiteId;
     }
     else {
-        siteloaderhide();
-        toastr.error("Kindly fill all details");
+        siteName = siteId
     }
+    var siteAddressId = $('#drpPRSiteAddress').val();
+    var siteAddress = $('#drpPRSiteAddress option:selected').text();
+
+    var objData = {
+        SiteAddressId: siteAddressId,
+        SiteAddress: siteAddress,
+        Pid: $('#PurchaseRequestId').val(),
+        CreatedBy: $('#txtcreatedby').val(),
+        UnitTypeId: $('#txtPRUnitTypeHidden').val(),
+        ItemId: $('#txtPRItemName').val(),
+        ItemName: $('#searchPRItemnameInput').val(),
+        SiteId: siteName,
+        Quantity: $('#txtPRQuantity').val(),
+        PrNo: $('#prNo').val(),
+    }
+
+    $.ajax({
+        url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
+        type: 'post',
+        data: objData,
+        datatype: 'json',
+        success: function (Result) {
+            siteloaderhide();
+            if (Result.code == 200) {
+                $('#EditPurchaseRequestModal').modal('hide');
+                toastr.success(Result.message);
+                GetDashboardItemList();
+                GetDashboardPurchaseOrderList();
+                GetDashboardInvoiceList();
+                GetDashboardSupplierList();
+                GetDashboardInwardList();
+            } else {
+                toastr.error(Result.message);
+            }
+        },
+    })
 }
 function GetCountry() {
 
@@ -1667,7 +1668,7 @@ $(document).ready(function () {
 })
 
 function UpdateSupplierDetails() {
-    
+
     if ($("#EditSupplierForm").valid()) {
         var objData = {
             SupplierId: $('#txtSupplierid').val(),
@@ -1701,12 +1702,12 @@ function UpdateSupplierDetails() {
                 success: function (Result) {
                     if (Result.code == 200) {
                         $('#EditSupplierModal').modal('hide');
+                        toastr.success(Result.message);
                         GetDashboardItemList();
                         GetDashboardPurchaseOrderList();
                         GetDashboardInvoiceList();
                         GetDashboardSupplierList();
                         GetDashboardInwardList();
-                        toastr.success(Result.message);
                     } else {
                         toastr.error(Result.message);
                     }

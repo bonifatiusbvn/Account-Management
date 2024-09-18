@@ -9,7 +9,7 @@
         <td>@item.Item</td>
         <td>@item.Quantity</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
             {
                 <input class="form-check-input" type="checkbox" name="chk_Inwardchild" id="Inward_@item.InwordId" />
             }

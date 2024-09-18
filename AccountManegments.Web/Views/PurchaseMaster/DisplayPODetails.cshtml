@@ -23,7 +23,6 @@
         text-align: center;
     }
 
-
 </style>
 
 @{
@@ -31,227 +30,240 @@
     decimal? totalAmount = 0;
     decimal? totalGst = 0;
 }
-<div class="row justify-content-center">
-    <div class="col-xxl-9">
-        <div class="card">
-            <div class="row">
-                <div class="d-flex">
-                    <p style="margin-left: 455px; font-size:22px;"><b>Purchase Order</b></p>
-                </div>
-                <div class="card-body" id="cardbody1">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
-                            <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.CompanyName</b></span> <br />
-                                <span class="text-muted" style="padding-left: 5px; display: block;">@firstItem.BillingAddress</span>
-                                <span class="text-muted text-uppercase" style="padding-left: 5px;">GSTIN/UIN: @firstItem.CompanyGstno</span> <br />
-                                <span style="padding-left: 5px;">State Name: @firstItem.CompanyStateName, Code: @firstItem.CompanyStateCode</span>
-                            </div>
-
-                            <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
-                            <br />
-                            <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                <p class="text-muted" style="padding-left: 5px;"><b>Consigner :</b></p>
-                                <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.SupplierName</b></span><br />
-                                <span class="text-muted" style="padding-left: 5px;display: block;">@firstItem.SupplierFullAddress</span>
-                                <span class="text-muted text-uppercase" style="padding-left: 5px;">GSTIN/UIN :@firstItem.SupplierGstno</span><br />
-                                <span class="text-muted" style="padding-left: 5px;">State Name :@firstItem.SupplierStateName, Code  :@firstItem.SupplierStateCode</span>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
-                            <div class="row" style="position: relative;">
-                                <div class="col-6">
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="height: 15px;padding-left: 5px;">Purchase Order No.</p>
-                                        <p class="text-muted text-uppercase" style="height: 5px;padding-left: 5px;"><b>@Model.Poid</b></p>
-                                    </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:106%;"></div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="padding:4px;padding-left: 5px;height: 15px;">Contact Name</p>
-                                        <p class="text-muted text-uppercase" style="height: 5px;padding-left: 5px;"><b>@Model.ContactName</b></p>
-                                    </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:106%;"></div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="padding:4px;padding-left: 5px;height: 15px;">Dispatched By</p>
-                                        <p class="text-muted text-uppercase" style="height: 25px;padding-left: 5px;"><b>@Model.SupplierName</b></p>
-                                    </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:105%;"></div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="padding-left: 5px;">Mode / Terms of Payment</p>
-                                        <p class="text-muted text-uppercase" style="padding-left: 5px; height:35px;"><b>@firstItem.PaymentTerms</b></p>
-                                    </div>
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="d-flex align-items-center">
+    </div>
+</div>
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-9">
+                        <div class="card">
+                            <div class="row">
+                                <div class="d-flex">
+                                    <p style="margin-left: 455px; font-size:22px;"><b>Purchase Order</b></p>
                                 </div>
+                                <div class="card-body" id="cardbody1">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.CompanyName</b></span> <br />
+                                                <span class="text-muted" style="padding-left: 5px; display: block;">@firstItem.BillingAddress</span>
+                                                <span class="text-muted text-uppercase" style="padding-left: 5px;">GSTIN/UIN: @firstItem.CompanyGstno</span> <br />
+                                                <span style="padding-left: 5px;">State Name: @firstItem.CompanyStateName, Code: @firstItem.CompanyStateCode</span>
+                                            </div>
 
-                                <!-- Vertical line -->
-                                <div style="border-left: 2px solid lightgray; position: absolute; top: 0; bottom: 0; left: 50%;"></div>
+                                            <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
+                                            <br />
+                                            <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                <p class="text-muted" style="padding-left: 5px;"><b>Consigner :</b></p>
+                                                <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.SupplierName</b></span><br />
+                                                <span class="text-muted" style="padding-left: 5px;display: block;">@firstItem.SupplierFullAddress</span>
+                                                <span class="text-muted text-uppercase" style="padding-left: 5px;">GSTIN/UIN :@firstItem.SupplierGstno</span><br />
+                                                <span class="text-muted" style="padding-left: 5px;">State Name :@firstItem.SupplierStateName, Code  :@firstItem.SupplierStateCode</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
+                                            <div class="row" style="position: relative;">
+                                                <div class="col-6">
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="height: 15px;padding-left: 5px;">Purchase Order No.</p>
+                                                        <p class="text-muted text-uppercase" style="height: 5px;padding-left: 5px;"><b>@Model.Poid</b></p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:106%;"></div>
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="padding:4px;padding-left: 5px;height: 15px;">Contact Name</p>
+                                                        <p class="text-muted text-uppercase" style="height: 5px;padding-left: 5px;"><b>@Model.ContactName</b></p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:106%;"></div>
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="padding:4px;padding-left: 5px;height: 15px;">Dispatched By</p>
+                                                        <p class="text-muted text-uppercase" style="height: 25px;padding-left: 5px;"><b>@Model.SupplierName</b></p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:105%;"></div>
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="padding-left: 5px;">Mode / Terms of Payment</p>
+                                                        <p class="text-muted text-uppercase" style="padding-left: 5px; height:35px;"><b>@firstItem.PaymentTerms</b></p>
+                                                    </div>
+                                                </div>
 
-                                <div class="col-6">
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="height: 15px;">Dated</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;">
+                                                <!-- Vertical line -->
+                                                <div style="border-left: 2px solid lightgray; position: absolute; top: 0; bottom: 0; left: 50%;"></div>
+
+                                                <div class="col-6">
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="height: 15px;">Dated</p>
+                                                        <p class="text-muted text-uppercase" style="height: 15px;">
+                                                            @{
+                                                                string formattedDate = string.Empty;
+                                                                if (!Model.Date.HasValue || Model.Date.Value == DateTime.MinValue)
+                                                                {
+                                                                    formattedDate = "";
+                                                                }
+                                                                else
+                                                                {
+                                                                    formattedDate = firstItem.Date?.ToString("dd-MMM-yy");
+                                                                }
+                                                            }
+                                                            <b>@formattedDate</b>
+                                                        </p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;margin-top:10px;">Contact Number</p>
+                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@firstItem.ContactNumber</b></p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
+                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;margin-top:10px;">Dispatched Through</p>
+                                                        <p class="text-muted text-uppercase" style="height: 35px;"><b>@Model.DispatchBy</b></p>
+                                                    </div>
+                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex Address-Details">
+                                        <div class="flex-grow-1 col-6">
+                                            <p class="text-muted" style="padding-left: 5px;"><b>Consignee (Ship to):</b></p>
+                                            <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.SiteName</b></span><br />
+                                            @foreach (var item in Model.AddressList)
+                                            {
+                                                <span class="text-muted" style="padding-left: 5px; display: block;">@firstItem.SupplierFullAddress</span>
+                                            }
+                                        </div>
+
+                                        <div class="VerticalBorder"></div>
+
+                                        <div class="flex-grow-1 col-6 no-top-border">
+                                            @* <p class="text-muted" style="padding-left: 5px;">Mode / Terms of Payment</p>
+                                            <p class="text-muted" style="padding-left: 5px;">@firstItem.PaymentTerms</p> *@
+                                        </div>
+                                    </div>
+
+                                    <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray; margin: 0;">
+                                        <thead class="btn-primary text-muted">
+                                            <tr class="table-active" style="border: 1px solid lightgray;">
+                                                <th class="border" style="color:white;">Sr No.</th>
+                                                <th class="border" style="color:white;">Product Details</th>
+                                                <th class="border" style="color:white;">Quantity</th>
+                                                <th class="border" style="color:white;">Rate</th>
+                                                <th class="border" style="color:white;">GST</th>
+                                                <th class="border" style="color:white;">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             @{
-                                                string formattedDate = string.Empty;
-                                                if (!Model.Date.HasValue || Model.Date.Value == DateTime.MinValue)
+                                                int index = 1;
+                                                decimal? totalprice = 0;
+                                                decimal? totalAmt = 0;
+                                                decimal? TotalQty = 0;
+                                                decimal? cgst = 0;
+                                                decimal? sgst = 0;
+                                            }
+
+                                            @foreach (var item in Model.ItemList)
+                                            {
+                                                totalprice = (item.Quantity * item.PricePerUnit);
+                                                totalAmt += totalprice;
+                                                TotalQty += item.Quantity;
+                                                cgst = firstItem.TotalGstamount / 2;
+                                                sgst = firstItem.TotalGstamount / 2;
+
+                                                <tr>
+                                                    <td class="border">@index</td>
+                                                    <td class="text-center border">
+                                                        <span class="fw-medium fw-semibold" id="txtproductname">@item.ItemName</span><br />
+                                                        <span class="fw-medium text-muted" style="font-size:12px;">@item.ItemDescription</span>
+                                                    </td>
+                                                    <td class="border" id="txtper">@item.Quantity</td>
+                                                    <td class="border" id="txtHSN">@item.PricePerUnit</td>
+                                                    <td class="border" id="txtper">@item.GstPercentage</td>
+                                                    <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
+                                                </tr>
+                                                index++;
+                                            }
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="border" style="text-align: end;">CGST</td>
+                                                <td class="border"></td>
+                                                <td class="border" style="text-align: end;"></td>
+                                                <td class="border" style="text-align: start;"></td>
+                                                <td class="border"><b>₹@($"{cgst:F2}")</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="border" style="text-align: end;">SGST</td>
+                                                <td class="border"></td>
+                                                <td class="border" style="text-align: end;"></td>
+                                                <td class="border" style="text-align: start;"></td>
+                                                <td class="border"><b>₹@($"{sgst:F2}")</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border"></td>
+                                                <td class="text-end border">Total</td>
+                                                <td class="border">@TotalQty</td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"><b>₹@firstItem.TotalAmount</b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table><!--end table-->
+
+                                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray; margin: 0;">
+                                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 870px;">E. &amp; O.E</i></span><br />
+                                        <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
+
+                                        <div class="row d-flex" style="position: relative;">
+                                            <div class="col-6">
+                                                @if (firstItem.Terms != null && firstItem.Terms != "")
                                                 {
-                                                    formattedDate = "";
+                                                    <span class="text-muted"><u>Terms & Conditions</u></span>
+                                                    <div style="border: 1px solid lightgray; padding: 10px; margin-top: 10px;">
+                                                        <span class="text-muted">@Html.Raw(firstItem.Terms)</span>
+                                                    </div>
                                                 }
                                                 else
                                                 {
-                                                    formattedDate = firstItem.Date?.ToString("dd-MMM-yy");
+                                                    <span class="text-muted"><u></u></span>
+                                                    <span class="text-muted"></span>
                                                 }
-                                            }
-                                            <b>@formattedDate</b>
-                                        </p>
+                                            </div>
+
+                                            <div class="col-6 d-flex align-items-end">
+                                                <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:578px;">
+                                                    <p class="text-muted"><b>for @firstItem.SupplierName</b></p>
+                                                    <p class="text-muted" style="margin-top:45px;">Authorised Signatory</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;margin-top:10px;">Contact Number</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@firstItem.ContactNumber</b></p>
-                                    </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;margin-top:10px;">Dispatched Through</p>
-                                        <p class="text-muted text-uppercase" style="height: 35px;"><b>@Model.DispatchBy</b></p>
-                                    </div>
-                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-10px;width:104%;"></div>
+
+                                </div>
+                                <div class="d-flex">
+                                    <p style="margin-left: 400px;">This is a Computer Generated Purchase Order</p>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-
-                    <div class="d-flex Address-Details">
-                        <div class="flex-grow-1 col-6">
-                            <p class="text-muted" style="padding-left: 5px;"><b>Consignee (Ship to):</b></p>
-                            <span class="text-muted" style="padding-left: 5px;"><b>@firstItem.SiteName</b></span><br />
-                            @foreach (var item in Model.AddressList)
-                            {
-                                <span class="text-muted" style="padding-left: 5px; display: block;">@firstItem.SupplierFullAddress</span>
-                            }
                         </div>
 
-                        <div class="VerticalBorder"></div>
+                        <div class="card d-print-none">
+                            <div class="card-body">
+                                <div class="d-lg-flex align-items-center gap-3">
 
-                        <div class="flex-grow-1 col-6 no-top-border">
-                            @* <p class="text-muted" style="padding-left: 5px;">Mode / Terms of Payment</p>
-                            <p class="text-muted" style="padding-left: 5px;">@firstItem.PaymentTerms</p> *@
-                        </div>
-                    </div>
-
-                    <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray; margin: 0;">
-                        <thead class="btn-primary text-muted">
-                            <tr class="table-active" style="border: 1px solid lightgray;">
-                                <th class="border" style="color:white;">Sr No.</th>
-                                <th class="border" style="color:white;">Product Details</th>
-                                <th class="border" style="color:white;">Quantity</th>
-                                <th class="border" style="color:white;">Rate</th>
-                                <th class="border" style="color:white;">GST</th>
-                                <th class="border" style="color:white;">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int index = 1;
-                                decimal? totalprice = 0;
-                                decimal? totalAmt = 0;
-                                decimal? TotalQty = 0;
-                                decimal? cgst = 0;
-                                decimal? sgst = 0;
-                            }
-
-                            @foreach (var item in Model.ItemList)
-                            {
-                                totalprice = (item.Quantity * item.PricePerUnit);
-                                totalAmt += totalprice;
-                                TotalQty += item.Quantity;
-                                cgst = firstItem.TotalGstamount / 2;
-                                sgst = firstItem.TotalGstamount / 2;
-
-                                <tr>
-                                    <td class="border">@index</td>
-                                    <td class="text-center border">
-                                        <span class="fw-medium fw-semibold" id="txtproductname">@item.ItemName</span><br />
-                                        <span class="fw-medium text-muted" style="font-size:12px;">@item.ItemDescription</span>
-                                    </td>
-                                    <td class="border" id="txtper">@item.Quantity</td>
-                                    <td class="border" id="txtHSN">@item.PricePerUnit</td>
-                                    <td class="border" id="txtper">@item.GstPercentage</td>
-                                    <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
-                                </tr>
-                                index++;
-                            }
-                            <tr>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">CGST</td>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;"></td>
-                                <td class="border" style="text-align: start;"></td>
-                                <td class="border"><b>₹@($"{cgst:F2}")</b></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">SGST</td>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;"></td>
-                                <td class="border" style="text-align: start;"></td>
-                                <td class="border"><b>₹@($"{sgst:F2}")</b></td>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">Total</td>
-                                <td class="border">@TotalQty</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"><b>₹@firstItem.TotalAmount</b></td>
-                            </tr>
-                        </tbody>
-                    </table><!--end table-->
-
-                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray; margin: 0;">
-                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 870px;">E. &amp; O.E</i></span><br />
-                        <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
-
-                        <div class="row d-flex" style="position: relative;">
-                            <div class="col-6">
-                                @if (firstItem.Terms != null && firstItem.Terms != "")
-                                {
-                                    <span class="text-muted"><u>Terms & Conditions</u></span>
-                                    <div style="border: 1px solid lightgray; padding: 10px; margin-top: 10px;">
-                                        <span class="text-muted">@Html.Raw(firstItem.Terms)</span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-muted"><u></u></span>
-                                    <span class="text-muted"></span>
-                                }
-                            </div>
-
-                            <div class="col-6 d-flex align-items-end">
-                                <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:578px;">
-                                    <p class="text-muted"><b>for @firstItem.SupplierName</b></p>
-                                    <p class="text-muted" style="margin-top:45px;">Authorised Signatory</p>
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
+                                    {
+                                        <a class="btn btn-primary btn-ecomm" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit</a>
+                                    }
+                                    <a class="btn btn-primary btn-ecomm" id="PrintPOPage"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
-                <div class="d-flex">
-                    <p style="margin-left: 400px;">This is a Computer Generated Purchase Order</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card d-print-none">
-            <div class="card-body">
-                <div class="d-lg-flex align-items-center gap-3">
-
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
-                    {
-                        <a class="btn btn-primary btn-ecomm" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@Model.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i>Edit</a>
-                    }
-                    <a class="btn btn-primary btn-ecomm" id="PrintPOPage"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                 </div>
             </div>
         </div>

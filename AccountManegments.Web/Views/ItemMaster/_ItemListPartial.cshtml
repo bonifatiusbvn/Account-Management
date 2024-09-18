@@ -9,7 +9,7 @@
         <td id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">@item.ItemName</td>
         <td id ="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">₹@item.PricePerUnit</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.ItemId" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="ItemIsApproved('@item.ItemId')" />
             }

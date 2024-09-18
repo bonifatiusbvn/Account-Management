@@ -14,7 +14,7 @@
         <td>@item.ContectPersonName</td>
 
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.SiteId" @if (item.IsActive)
                 {
