@@ -1579,12 +1579,12 @@ function UpdatePurchaseRequestDetails() {
             siteloaderhide();
             if (Result.code == 200) {
                 $('#EditPurchaseRequestModal').modal('hide');
+                toastr.success(Result.message);
                 GetDashboardItemList();
                 GetDashboardPurchaseOrderList();
                 GetDashboardInvoiceList();
                 GetDashboardSupplierList();
                 GetDashboardInwardList();
-                toastr.success(Result.message);
             } else {
                 toastr.error(Result.message);
             }
@@ -1702,12 +1702,12 @@ function UpdateSupplierDetails() {
                 success: function (Result) {
                     if (Result.code == 200) {
                         $('#EditSupplierModal').modal('hide');
+                        toastr.success(Result.message);
                         GetDashboardItemList();
                         GetDashboardPurchaseOrderList();
                         GetDashboardInvoiceList();
                         GetDashboardSupplierList();
                         GetDashboardInwardList();
-                        toastr.success(Result.message);
                     } else {
                         toastr.error(Result.message);
                     }
