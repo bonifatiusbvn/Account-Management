@@ -169,7 +169,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Purchase Request-Edit")]
+
         [HttpPost]
         public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel updatePurchaseRequest)
         {
@@ -191,7 +191,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Purchase Request-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseRequest(Guid PurchaseId)
         {

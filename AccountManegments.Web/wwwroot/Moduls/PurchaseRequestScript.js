@@ -389,6 +389,7 @@ function UpdatePurchaseRequestDetails() {
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
         }
+        
         $.ajax({
             url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
             type: 'post',

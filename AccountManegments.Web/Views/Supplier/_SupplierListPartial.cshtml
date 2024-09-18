@@ -32,7 +32,14 @@
                 }
             }
         </td>
-        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Edit == true || a.Delete == true)))
+        @if (item.IsApproved == false)
+        {
+            <td>
+                <a class="btn text-primary" onclick="DisplaySupplierDetails('@item.SupplierId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierDetails('@item.SupplierId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            </td> 
+        }
+        else if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Edit == true || a.Delete == true)))
         {
             <td>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Edit == true)))

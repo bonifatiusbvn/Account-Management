@@ -105,7 +105,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Supplier-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateSupplierDetails(SupplierModel UpdateSupplier)
         {
@@ -128,7 +127,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Supplier-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSupplierDetails(Guid SupplierId)
         {
