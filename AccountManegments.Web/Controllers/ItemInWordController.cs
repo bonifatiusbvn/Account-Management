@@ -114,7 +114,7 @@ namespace AccountManegments.Web.Controllers
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
         }
-        [FormPermissionAttribute("Inward Challan-Delete")]
+
         [HttpPost]
         public async Task<IActionResult> DeleteItemInWord(Guid InwordId)
         {
@@ -179,7 +179,7 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Inward Challan-Edit")]
+
         [HttpPost]
         public async Task<IActionResult> UpdateItemInWordDetails()
         {
@@ -266,7 +266,7 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-        [FormPermissionAttribute("Inward Challan-Edit")]
+
         public async Task<IActionResult> UpdatetMultipleItemInWordDetails(List<IFormFile> DocDetails)
         {
             try

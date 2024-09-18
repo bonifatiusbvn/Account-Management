@@ -6,16 +6,17 @@
 *@
 @foreach (var item in Model.InvoiceList)
 {
-    if (item.IsApproved == true)
-    {
-        <tr id="userCard_@item.Id" class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
-            <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
-            <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
-            <td>@item.SiteName</td>
-            <td>@item.GroupName</td>
-            <td>@item.SupplierName</td>
-            <td>@item.CompanyName</td>
-            <td>₹@item.TotalAmount</td>
+
+    <tr id="userCard_@item.Id" class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
+        <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
+        <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+        <td>@item.SiteName</td>
+        <td>@item.GroupName</td>
+        <td>@item.SupplierName</td>
+        <td>@item.CompanyName</td>
+        <td>₹@item.TotalAmount</td>
+        @if (item.IsApproved == true)
+        {
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
             {
                 <td>
@@ -29,6 +30,15 @@
                     }
                 </td>
             }
-        </tr>
-    }
+
+        }
+        else
+        {
+            <td>
+                <a class="btn text-primary" href="EditInvoiceDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+
+                <a href="javascript:;" class="btn text-primary" onclick="DeleteSupplierInvoice('@item.Id'); event.stopPropagation();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+            </td>
+        }
+    </tr>
 }

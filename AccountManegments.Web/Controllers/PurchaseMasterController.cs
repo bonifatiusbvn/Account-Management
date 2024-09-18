@@ -237,7 +237,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Purchase Orders-Edit")]
         public async Task<IActionResult> CreatePurchaseOrder(Guid? id)
         {
             try
@@ -361,7 +360,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Purchase Orders-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateMultiplePurchaseOrderDetails()
         {
@@ -385,7 +383,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Purchase Orders-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseOrderDetails(Guid POId)
         {

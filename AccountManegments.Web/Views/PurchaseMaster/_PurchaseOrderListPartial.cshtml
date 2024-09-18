@@ -8,17 +8,28 @@
         <td><a class="text-primary" onclick="GetSupplierInvoiceDetailsById('@item.FromSupplierId')">@item.SupplierName</a></td>
         <td>@item.TotalGstamount</td>
         <td>@item.TotalAmount</td>
-        <td>
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+        @if (item.IsApproved == true)
+        {
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
             {
-                <a class="btn text-primary" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                <td>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
+                    {
+                        <a class="btn text-primary" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                    }
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
+                    {
+                        <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    }
+                </td>
             }
-            else
-            {
-                <a class="btn text-primary" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
-                <a href="javascript:;" class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
-            }
-        </td>
+
+        }
+        else
+        {
+            <a class="btn text-primary" id="EditPOButton" href="DisplayPurchaseOrderDetails?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+
+            <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+        }
     </tr>
 }
