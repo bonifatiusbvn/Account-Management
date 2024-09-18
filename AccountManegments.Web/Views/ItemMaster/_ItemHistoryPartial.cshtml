@@ -1,0 +1,46 @@
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model AccountManagement.DBContext.Models.ViewModels.InvoiceMaster.SupplierInvoiceList
+
+
+<div class="table-responsive">
+    <table class="table align-middle mb-0">
+        <thead class="table-light btn-primary">
+            <tr>
+                <th>InvoiceNo</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>TotalAmount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.InvoiceList.Any())
+            {
+                foreach (var item in Model.InvoiceList)
+                {
+                    <tr>
+                        <td>@item.SupplierInvoiceNo</td>
+                        <td>@item.Date?.ToString("dd/MM/yyyy")</td>
+
+                        @if (Model.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
+                        {
+                            foreach (var itemDetail in itemDetails)
+                            {
+                                <td>
+                                    @itemDetail.Quantity
+                                </td>
+                            }
+                        }
+                        <td>@item.TotalAmount</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">No invoices found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
