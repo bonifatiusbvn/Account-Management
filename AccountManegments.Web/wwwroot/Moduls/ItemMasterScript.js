@@ -57,6 +57,28 @@ function sortItemTable() {
         }
     });
 }
+
+function ItemHistory(ItemId) {
+    siteloadershow();
+    $.ajax({
+        url: '/ItemMaster/GetItemHistory',
+        type: 'Post',
+        data: {
+            ItemId: ItemId
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#ItemDetailsView").hide();
+            $("#ItemDetailsView").hide();
+            $("#ItemHistoryView").html(result).removeClass('d-none').show();
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+
+        }
+    });
+}
+
 function DisplayItemDetails(ItemId, element) {
     siteloadershow();
     $('tr').removeClass('active');
@@ -70,6 +92,8 @@ function DisplayItemDetails(ItemId, element) {
         success: function (response) {
             siteloaderhide();
             if (response) {
+                $("#ItemDetailsView").removeClass('d-none').show();
+                $("#ItemHistoryView").hide();
                 $('#dspItemId').val(response.itemId);
                 $('#dspItemName').val(response.itemName);
                 $('#dspUnitName').val(response.unitTypeName);

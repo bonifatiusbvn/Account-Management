@@ -204,5 +204,14 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(responseModel.code, responseModel);
         }
+
+        [HttpPost]
+        [Route("GetItemHistory")]
+        public async Task<IActionResult> GetItemHistory(Guid ItemId)
+        {
+            var ItemDetails = await ItemMaster.GetItemHistory(ItemId);
+            return Ok(new { code = 200, data = ItemDetails });
+        }
+
     }
 }

@@ -563,43 +563,80 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
 
         public Task<SupplierInvoiceList> GetItemHistory(Guid ItemId)
         {
-            throw new NotImplementedException();
-            //try
-            //{
-            //    var supplierDataQuery = (from a in Context.SupplierInvoices
-            //                             join e in Context.SupplierInvoiceDetails on a.Id equals e.RefInvoiceId
-            //                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
-            //                             join c in Context.Companies on a.CompanyId equals c.CompanyId
-            //                             join d in Context.Sites on a.SiteId equals d.SiteId
-            //                             join f in Context.ItemMasters on ItemId equals f.ItemId
-            //                             where a.InvoiceNo != "PayOut"
-            //                             select new SupplierInvoiceModel
-            //                             {
-            //                                 Id = a.Id,
-            //                                 InvoiceNo = a.InvoiceNo,
-            //                                 SiteId = a.SiteId,
-            //                                 GroupName = a.SiteGroup,
-            //                                 SupplierId = a.SupplierId,
-            //                                 TotalAmount = a.TotalAmount,
-            //                                 TotalDiscount = a.TotalDiscount,
-            //                                 TotalGstamount = a.TotalGstamount,
-            //                                 Description = a.Description,
-            //                                 Tds = a.Tds,
-            //                                 CompanyId = a.CompanyId,
-            //                                 Date = a.Date,
-            //                                 CompanyName = c.CompanyName,
-            //                                 SiteName = d.SiteName,
-            //                                 SupplierName = b.SupplierName,
-            //                                 CreatedOn = a.CreatedOn,
-            //                                 IsApproved = a.IsApproved,
-            //                                 SupplierInvoiceNo = a.SupplierInvoiceNo
-            //                             }).ToListAsync();
-            //    return supplierDataQuery;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+            try
+            {
+                var supplierDataQuery = from a in Context.SupplierInvoices
+                                        join e in Context.SupplierInvoiceDetails on a.Id equals e.RefInvoiceId
+                                        join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                        join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                        join d in Context.Sites on a.SiteId equals d.SiteId
+                                        join f in Context.ItemMasters on e.ItemId equals f.ItemId
+                                        where a.InvoiceNo != "PayOut" && e.ItemId == ItemId
+                                        select new
+                                        {
+                                            Invoice = new SupplierInvoiceModel
+                                            {
+                                                Id = a.Id,
+                                                InvoiceNo = a.InvoiceNo,
+                                                SiteId = a.SiteId,
+                                                GroupName = a.SiteGroup,
+                                                SupplierId = a.SupplierId,
+                                                TotalAmount = a.TotalAmount,
+                                                TotalDiscount = a.TotalDiscount,
+                                                TotalGstamount = a.TotalGstamount,
+                                                Description = a.Description,
+                                                Tds = a.Tds,
+                                                CompanyId = a.CompanyId,
+                                                Date = a.Date,
+                                                CompanyName = c.CompanyName,
+                                                SiteName = d.SiteName,
+                                                SupplierName = b.SupplierName,
+                                                CreatedOn = a.CreatedOn,
+                                                IsApproved = a.IsApproved,
+                                                SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                            },
+                                            Item = new SupplierInvoiceDetailsModel
+                                            {
+                                                RefInvoiceId = e.RefInvoiceId,
+                                                ItemId = e.ItemId,
+                                                ItemName = f.ItemName,
+                                                Quantity = e.Quantity,
+                                                TotalAmount = e.Quantity * f.PricePerUnit,
+                                            }
+                                        };
+
+                var invoiceData = supplierDataQuery
+             .ToList()
+             .GroupBy(g => g.Invoice.Id)
+             .Select(group => new
+             {
+                 Invoice = group.First().Invoice,
+                 Items = group.GroupBy(g => g.Item.ItemName)
+                              .Select(itemGroup => new SupplierInvoiceDetailsModel
+                              {
+                                  RefInvoiceId = itemGroup.First().Item.RefInvoiceId,
+                                  ItemId = itemGroup.First().Item.ItemId,
+                                  ItemName = itemGroup.Key,
+                                  Quantity = itemGroup.Sum(i => i.Item.Quantity),
+                                  TotalAmount = itemGroup.Sum(i => i.Item.TotalAmount)
+                              })
+                              .ToList()
+             })
+             .ToList();
+
+                var invoiceList = invoiceData.Select(g => g.Invoice).ToList();
+                var invoiceItemList = invoiceData.ToDictionary(g => g.Invoice.Id, g => g.Items.AsEnumerable());
+
+                return Task.FromResult(new SupplierInvoiceList
+                {
+                    InvoiceList = invoiceList,
+                    InvoiceItemList = invoiceItemList
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
