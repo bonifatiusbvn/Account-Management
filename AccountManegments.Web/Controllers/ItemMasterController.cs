@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
@@ -438,6 +439,25 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
                 return PartialView("~/Views/InvoiceMaster/_DisplayInvoiceItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetItemHistory(Guid ItemId)
+        {
+            try
+            {             
+                SupplierInvoiceList Items = new SupplierInvoiceList();
+                ApiResponseModel response = await APIServices.PostAsync("", "ItemMaster/GetItemHistory?ItemId=" + ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<SupplierInvoiceList>(response.data.ToString());
+                }
+                return PartialView("~/Views/ItemMaster/_ItemHistoryPartial.cshtml", Items);
             }
             catch (Exception ex)
             {

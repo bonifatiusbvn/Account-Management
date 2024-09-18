@@ -5,9 +5,9 @@
 @foreach (var item in Model)
 {
 
-    <tr id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">
-        <td>@item.ItemName</td>
-        <td>₹@item.PricePerUnit</td>
+    <tr>
+        <td id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">@item.ItemName</td>
+        <td id ="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">₹@item.PricePerUnit</td>
         <td>
             @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
             {
@@ -38,7 +38,7 @@
                 {
                     <a href="javascript:;" class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                 }
-                @* <a class="btn text-primary" onclick="deleteItemDetails('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="History" aria-label="History"><i class="fadeIn animated bx bx-history"></i></a> *@
+                <a class="btn text-primary" onclick="ItemHistory('@item.ItemId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="History" aria-label="History"><i class="fadeIn animated bx bx-history"></i></a>
             </td>
         }
     </tr>
