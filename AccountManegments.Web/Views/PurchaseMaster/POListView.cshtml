@@ -61,7 +61,7 @@
                                                         <th>
                                                             <a href="#" onclick="sortPOTableDate('Date')" class="white-text">Date</a>
                                                         </th>
-                                                        @if (_userSession.UserRole == 3)
+                                                        @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
                                                         {
                                                             <th>Site Name</th>
                                                         }

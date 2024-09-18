@@ -16,7 +16,7 @@
                 <td>@item.CompanyName</td>
                 <td>@item.TotalAmount</td>
                 <td>
-                    @if (_userSession.UserRole == 3)
+                    @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
                     {
                         <input class="form-check-input" type="checkbox" name="chk_invoicechild" id="invoice_@item.Id" />
                     }

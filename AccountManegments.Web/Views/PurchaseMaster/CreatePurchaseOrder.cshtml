@@ -446,7 +446,7 @@
                         <div class="row">
                             <div class="col-10 col-sm-10 ">
                                 <label class="form-lable">Select Site</label>
-                                @if (_userSession.UserRole == 3)
+                                @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
                                 {
                                     <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName">
                                         <option selected value="">--Select Site--</option>
@@ -598,7 +598,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');
