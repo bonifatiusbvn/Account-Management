@@ -251,6 +251,7 @@ function EditItemInWordDetails(InwordId) {
             $("#txtReceiverName").val(response.receiverName);
             $("#siteNameList").val(response.siteName);
             $("#siteNameListHidden").val(response.siteId);
+            additionalFiles.length = 0;
             var date = response.date;
             var formattedDate = date.substr(0, 10);
             $('#txtIteminwordDate').val(formattedDate);
@@ -377,23 +378,23 @@ function CancelImage(documentName) {
     var updatedDocumentNames = currentDocumentNames.filter(function (name) {
         return name.trim() !== documentName.trim();
     });
-
     $("#txtDocumentName").val(updatedDocumentNames.join(';'));
 }
-function removenewaddImage() {
+function removenewaddImage(element) {
+    var row = $(element).closest('.DocumentName');
+    var documentName = row.find('img').data('document');
+    var fileIndex = row.find('img').data('file-index');
+    row.remove();
 
-    $(document).on('click', '.img-remove', function () {
-        var row = $(this).closest('.DocumentName');
-        var documentName = row.find('img').data('document');
-        row.remove();
+    if (fileIndex !== undefined) {
+        additionalFiles.splice(fileIndex, 1); 
+    }
 
-        additionalFiles = additionalFiles.filter(function (item) {
-            return item.name !== documentName;
-        });
+    additionalFiles.forEach((file, index) => {
+        $('#addNewImage .DocumentName img[data-file-index="' + (index + 1) + '"]').data('file-index', index);
     });
 }
 function showpictures() {
-
     var files = $("#txtDocument")[0].files;
     if (files.length > 0) {
         if ($("#addNewImage .DocumentName").length + files.length > 5) {
@@ -403,15 +404,14 @@ function showpictures() {
         for (var i = 0; i < files.length; i++) {
             const file = files[i];
             let reader = new FileReader();
-            reader.onload = (function (fileName) {
+            reader.onload = (function (file) {
                 return function (event) {
-                    var documentName = fileName;
-                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div id='showimages'><div onclick='removenewaddImage()' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='" + event.target.result + "' class='displayImage' data-document='" + documentName + "'></div></div></div>";
+                    var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div id='showimages'><div onclick='removenewaddImage(this)' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='" + event.target.result + "' class='displayImage' data-document='" + file.name + "' data-file-index='" + additionalFiles.length + "'></div></div></div>";
                     $("#addNewImage").append(newRow);
+                    additionalFiles.push(file); 
                 };
-            })(file.name);
+            })(file);
             reader.readAsDataURL(file);
-            additionalFiles.push(file);
         }
     }
 }
@@ -487,7 +487,6 @@ function UpdateMultipleItemInWordDetails() {
             siteId = $("#txtInwardSiteid").val();
         }
         var documentName = $("#txtDocumentName").val();
-
 
         var UpdateItemInWord = {
             InwordId: $('#txtItemInWordid').val(),

@@ -730,71 +730,50 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
+                var existingItems = Context.SupplierInvoiceDetails
+             .Where(e => e.RefInvoiceId == supplierInvoice.Id)
+             .ToList();
+
+                Context.SupplierInvoiceDetails.RemoveRange(existingItems);
+                await Context.SaveChangesAsync();
+
                 foreach (var item in SupplierInvoiceDetail.ItemList)
                 {
-                    var existingSupplierInvoice = Context.SupplierInvoiceDetails.FirstOrDefault(e => e.RefInvoiceId == supplierInvoice.Id && e.ItemId == item.ItemId);
-
-                    if (existingSupplierInvoice != null)
+                    var newSupplierInvoice = new SupplierInvoiceDetail()
                     {
-                        existingSupplierInvoice.RefInvoiceId = supplierInvoice.Id;
-                        existingSupplierInvoice.ItemId = item.ItemId;
-                        existingSupplierInvoice.ItemName = item.ItemName;
-                        existingSupplierInvoice.ItemDescription = item.ItemDescription;
-                        existingSupplierInvoice.UnitTypeId = item.UnitType;
-                        existingSupplierInvoice.Quantity = item.Quantity;
-                        existingSupplierInvoice.Price = item.PricePerUnit;
-                        existingSupplierInvoice.DiscountAmount = item.DiscountAmount;
-                        existingSupplierInvoice.DiscountPer = item.DiscountPer;
-                        existingSupplierInvoice.Gst = item.Gstamount;
-                        existingSupplierInvoice.Gstper = item.GstPercentage;
-                        existingSupplierInvoice.TotalAmount = item.TotalAmount;
-                        existingSupplierInvoice.Date = supplierInvoice.Date;
-                        existingSupplierInvoice.UpdatedOn = DateTime.Now;
-                        existingSupplierInvoice.UpdatedBy = supplierInvoice.UpdatedBy;
-                        existingSupplierInvoice.CreatedOn = supplierInvoice.CreatedOn;
+                        RefInvoiceId = supplierInvoice.Id,
+                        ItemId = item.ItemId,
+                        ItemName = item.ItemName,
+                        ItemDescription = item.ItemDescription,
+                        UnitTypeId = item.UnitType,
+                        Quantity = item.Quantity,
+                        Price = item.PricePerUnit,
+                        DiscountAmount = item.DiscountAmount,
+                        DiscountPer = item.DiscountPer,
+                        Gst = item.Gstamount,
+                        Gstper = item.GstPercentage,
+                        TotalAmount = item.TotalAmount,
+                        Date = supplierInvoice.Date,
+                        CreatedOn = DateTime.Now,
+                    };
 
-                        Context.SupplierInvoiceDetails.Update(existingSupplierInvoice);
-                    }
-                    else
-                    {
-                        var newSupplierInvoice = new SupplierInvoiceDetail()
-                        {
-                            RefInvoiceId = supplierInvoice.Id,
-                            ItemId = item.ItemId,
-                            ItemName = item.ItemName,
-                            ItemDescription = item.ItemDescription,
-                            UnitTypeId = item.UnitType,
-                            Quantity = item.Quantity,
-                            Price = item.PricePerUnit,
-                            DiscountAmount = item.DiscountAmount,
-                            DiscountPer = item.DiscountPer,
-                            Gst = item.Gstamount,
-                            Gstper = item.GstPercentage,
-                            TotalAmount = item.TotalAmount,
-                            Date = supplierInvoice.Date,
-                            CreatedOn = DateTime.Now,
-                        };
-
-                        Context.SupplierInvoiceDetails.Add(newSupplierInvoice);
-                    }
+                    Context.SupplierInvoiceDetails.Add(newSupplierInvoice);
                 }
 
-                var deletedSupplierInvoice = SupplierInvoiceDetail.ItemList.Select(a => a.ItemId).ToList();
-
-                var SupplierInvoiceToRemove = Context.SupplierInvoiceDetails
-                    .Where(e => e.RefInvoiceId == SupplierInvoiceDetail.Id && !deletedSupplierInvoice.Contains(e.ItemId))
-                    .ToList();
-
-                Context.SupplierInvoiceDetails.RemoveRange(SupplierInvoiceToRemove);
                 await Context.SaveChangesAsync();
+
                 response.code = (int)HttpStatusCode.OK;
-                response.message = "Invoice Update successfully.";
-                response.data = supplierInvoice.Id;
+                response.message = "Invoice updated successfully.";
+                response.data = new
+                {
+                    InvoiceId = supplierInvoice.Id,
+                    NewItemsCount = SupplierInvoiceDetail.ItemList.Count,
+                };
             }
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating invoice: " + ex.Message;
+                response.message = "Error updating invoice: " + ex.Message;
             }
             return response;
         }
