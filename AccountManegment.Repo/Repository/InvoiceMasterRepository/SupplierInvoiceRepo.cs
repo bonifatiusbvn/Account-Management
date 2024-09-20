@@ -1647,7 +1647,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
             }
         }
 
-
         public async Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
         {
             try
