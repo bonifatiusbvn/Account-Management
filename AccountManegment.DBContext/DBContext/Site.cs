@@ -49,8 +49,6 @@ public partial class Site
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual ICollection<GroupMaster> GroupMasters { get; set; } = new List<GroupMaster>();
-
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
 
     public virtual ICollection<SiteAddress> SiteAddresses { get; set; } = new List<SiteAddress>();

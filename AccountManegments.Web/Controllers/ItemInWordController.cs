@@ -308,7 +308,7 @@ namespace AccountManegments.Web.Controllers
                     DocumentName = UpdateDetails.DocumentName,
                     DocumentLists = documentList,
                     SiteId = UpdateDetails.SiteId,
-                    SupplierId = UpdateDetails.SupplierId,
+                    //SupplierId = UpdateDetails.SupplierId,
 
                 };
 
