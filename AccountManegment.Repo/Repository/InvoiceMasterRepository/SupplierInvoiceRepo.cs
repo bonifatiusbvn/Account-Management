@@ -165,6 +165,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var endDate = startDate.AddMonths(1).AddDays(-1);
                         supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
                     }
+                    else if (PayOutReport.filterType == "tillMonth")
+                    {
+                        var tillMonth = PayOutReport.TillMonth.Value;
+                        int year = tillMonth.Year;
+                        int month = tillMonth.Month;
+
+                        var startDate = new DateTime(year, 1, 1);
+                        var endDate = new DateTime(year, month, 1).AddDays(-1);
+
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }               
                     else if (PayOutReport.filterType == "currentYear")
                     {
                         var currentYear = DateTime.Now.Year;
@@ -1564,6 +1575,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     {
                         var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                         var endDate = startDate.AddMonths(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (PayOutReport.filterType == "tillMonth")
+                    {
+                        var tillMonth = PayOutReport.TillMonth.Value;
+                        int year = tillMonth.Year;
+                        int month = tillMonth.Month;
+
+                        var startDate = new DateTime(year, 1, 1);
+                        var endDate = new DateTime(year, month, 1).AddDays(-1);
+
                         supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
                     }
                     else if (PayOutReport.filterType == "currentYear")
