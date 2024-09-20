@@ -338,12 +338,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetGroupDetailsByGroupName(string groupName)
+        public async Task<JsonResult> GetGroupDetailsByGroupName(int Id)
         {
             try
             {
                 GroupMasterModel SiteDetails = new GroupMasterModel();
-                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?groupName=" + groupName);
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?Id=" + Id);
                 if (res.code == 200)
                 {
                     SiteDetails = JsonConvert.DeserializeObject<GroupMasterModel>(res.data.ToString());

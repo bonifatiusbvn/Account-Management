@@ -658,7 +658,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    supplierDataQuery = supplierDataQuery.OrderByDescending(u=> u.Invoice.CreatedOn);
+                    supplierDataQuery = supplierDataQuery.OrderByDescending(u => u.Invoice.Date);
                 }
 
                 var supplierData = await supplierDataQuery.ToListAsync();
@@ -1138,10 +1138,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 }
 
-                if (invoiceReport.startDate.HasValue)
-                {
-                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value);
-                }
+
 
                 if (invoiceReport.endDate.HasValue)
                 {
@@ -1459,11 +1456,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                         query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
-                }
-
-                if (invoiceReport.startDate.HasValue)
-                {
-                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
 
                 if (invoiceReport.endDate.HasValue)

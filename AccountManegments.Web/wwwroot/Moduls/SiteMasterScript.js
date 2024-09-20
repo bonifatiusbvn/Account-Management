@@ -903,7 +903,7 @@ function AddSiteGroupDetails() {
     }
 }
 
-function DeleteSiteGroup(groupName) {
+function DeleteSiteGroup(id) {
     Swal.fire({
         title: "If you want to delete this site group,delete all data related this site!",
         icon: "warning",
@@ -917,7 +917,7 @@ function DeleteSiteGroup(groupName) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/SiteMaster/DeleteSiteGroupDetails?groupName=' + groupName,
+                url: '/SiteMaster/DeleteSiteGroupDetails?id=' + id,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
@@ -955,11 +955,12 @@ function DeleteSiteGroup(groupName) {
     });
 }
 
-function DisplaySiteGroup(groupName) {
+function DisplaySiteGroup(Id) {
+    debugger
     cleargrouplisttext();
     siteloadershow();
     $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupName?groupName=' + groupName,
+        url: '/SiteMaster/GetGroupDetailsByGroupName?Id=' + Id,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',

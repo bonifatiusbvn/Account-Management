@@ -68,8 +68,10 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Item Name</th>
+                                                        <th>Date</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
+                                                        <th>Supplier</th>
                                                         @if (UserSession.SiteId == "")
                                                         {
                                                             <th>SiteName</th>
@@ -137,72 +139,77 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="offcanvas-body p-0">
-                                    <div data-simplebar class="h-100">
-                                        <div class="p-4">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div id="addInWordInfo" class="card d-none">
-                                                        <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
-                                                            <input type="hidden" id="txtItemInWordid">
-                                                            <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
-                                                            <input type="hidden" id="txtInwardSiteid" value="@UserSession.SiteId">
-                                                            <input type="hidden" id="txtInWardSiteName" value="@UserSession.SiteName">
-                                                            <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
-                                                            <div class="col-12">
-                                                                <label class="form-label">Product Names</label>
-                                                                <input type="text" id="searchItemnameInput" name="searchItemnameInput" class="form-control" placeholder="Product Names">
-                                                                <input type="hidden" id="txtItemName" name="txtItemName">
-                                                                <span id="searchItemnameInput" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <label class="form-label">Product Description</label>
-                                                                <input type="text" id="PRItemDescription" name="PRItemDescription" class="form-control" placeholder="Product Description">
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <label class="form-label">Unit Type</label>
-                                                                <input type="text" id="txtUnitType" name="txtUnitType" class="form-control" placeholder="Unit Type">
-                                                                <span id="spnUnitType" class="text-danger"></span>
-                                                            </div>
-                                                            <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
-                                                            <div class="col-lg-6 col-12">
-                                                                <label class="form-label">Quantity</label>
-                                                                <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
-                                                                <span id="spnQuantity" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <label class="form-label">Receiver Name</label>
-                                                                <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName">
-                                                                <span id="spnReceiverName" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <label class="form-label">Vehicle Number</label>
-                                                                <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber">
-                                                                <span id="spnVehicleNumber" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <label class="form-label">Date</label>
-                                                                <input type="date" id="txtIteminwordDate" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                                                                <span id="spnDate" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12" id="siteSection" style="display: none;">
-                                                                <label class="form-label">Site</label>
-                                                                <input type="text" id="siteNameList" name="siteNameList" class="form-control" placeholder="Site">
-                                                                <input type="hidden" id="siteNameListHidden" name="siteNameListHidden">
-                                                                <span id="spnInWardSiteName" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="container">
-                                                                <div id="MultipleImageContainer">
-                                                                    <div class="row multiple-images">
-                                                                        <div class="col-12">
-                                                                            <label>Document</label>
-                                                                            <input type="text" id="txtDocumentName" class="form-control" hidden>
-                                                                            <input type="file" id="txtDocument" name="txtDocument" class="form-control" onchange="showpictures()" multiple>
-                                                                            <span id="spnDocument" class="text-danger"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                <div id="addInWordInfo" class="card d-none">
+                                    <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
+                                        <input type="hidden" id="txtItemInWordid">
+                                        <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
+                                        <input type="hidden" id="txtInwardSiteid" value="@UserSession.SiteId">
+                                        <input type="hidden" id="txtInWardSiteName" value="@UserSession.SiteName">
+                                        <input type="hidden" id="txtCreatedBy" value="@_userSession.UserId">
+                                        <div class="col-12">
+                                            <label class="form-label">Product Names</label>
+                                            <input type="text" id="searchItemnameInput" name="searchItemnameInput" class="form-control" placeholder="Product Names">
+                                            <input type="hidden" id="txtItemName" name="txtItemName">
+                                            <span id="searchItemnameInput" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Unit Type</label>
+                                            <input type="text" id="txtUnitType" name="txtUnitType" class="form-control" placeholder="Unit Type">
+                                            <span id="spnUnitType" class="text-danger"></span>
+                                        </div>
+                                        <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="text" class="form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity">
+                                            <span id="spnQuantity" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Receiver Name</label>
+                                            <input type="text" class="form-control" placeholder="Receiver Name" id="txtReceiverName" name="txtReceiverName">
+                                            <span id="spnReceiverName" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Vehicle Number</label>
+                                            <input type="text" class="form-control text-uppercase" placeholder="Vehicle Number" id="txtVehicleNumber" name="txtVehicleNumber">
+                                            <span id="spnVehicleNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Date</label>
+                                            <input type="date" id="txtIteminwordDate" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                            <span id="spnDate" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Site</label>
+                                            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
+                                            {
+                                                <input type="text" id="siteNameList" name="siteNameList" class="form-control" placeholder="Site">
+                                                <input type="hidden" id="siteNameListHidden" name="siteNameListHidden">
+                                                <span id="spnInWardSiteName" class="text-danger"></span>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="siteName" class="form-control" value="@UserSession.SiteName" readonly>
+                                                <input type="hidden" id="siteNameIdHidden" value="@UserSession.SiteId">
+                                            }
+                                        </div>
+                                        <div class="col-lg-12 col-12">
+                                            <label class="form-label">Supplier</label>
+                                            <input type="text" id="inwardSupplierList" name="inwardSupplierList" class="form-control" placeholder="Supplier">
+                                            <input type="hidden" id="inwardSupplierListHidden" name="inwardSupplierListHidden">
+                                            <span id="inwardSupplierList" class="text-danger"></span>
+                                        </div>
+                                        <div class="container">
+                                            <div id="MultipleImageContainer">
+                                                <div class="row multiple-images">
+                                                    <div class="col-12">
+                                                        <label>Document</label>
+                                                        <input type="text" id="txtDocumentName" class="form-control" hidden>
+                                                        <input type="file" id="txtDocument" name="txtDocument" class="form-control" onchange="showpictures()" multiple>
+                                                        <span id="spnDocument" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                                             <div id="dvDisplayImages" class="col-lg-12">
                                                                 <div class="row" id="addNewImage">

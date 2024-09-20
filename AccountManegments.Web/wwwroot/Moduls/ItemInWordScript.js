@@ -1,16 +1,7 @@
 ﻿AllItemInWordListTable();
 GetSiteList();
-toggleSiteList();
 ClearItemInWordTextBox();
-
-function toggleSiteList() {
-    var roleuserId = $('#userRoleId').val();
-    if (roleuserId == 3) {
-        document.getElementById("siteSection").style.display = "block";
-    } else {
-        document.getElementById("siteSection").style.display = "none";
-    }
-}
+GetSupplierList();
 
 function AllItemInWordListTable() {
     var searchText = $('#txtItemInWordSearch').val();
@@ -164,12 +155,57 @@ function GetSiteList() {
             }).focus(function () {
                 $(this).autocomplete("search", "");
             });
+            $("#siteNameList").on('input', function () {
+                if ($(this).val().trim() === "") {
+                    $("#siteNameListHidden").val("");
+                }
+            });
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch site list: ", err);
         }
     });
 }
+
+function GetSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplier = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+            $("#inwardSupplierList").autocomplete({
+                source: supplier,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#inwardSupplierList").val(ui.item.label);
+                    $("#inwardSupplierListHidden").val(ui.item.value);
+
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+            $("#inwardSupplierList").on('input', function () {
+                if ($(this).val().trim() === "") {
+                    $("#inwardSupplierListHidden").val("");
+                }
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+
 function ClearItemInWordTextBox() {
     clearCreateInwardtext();
     $('#inwardheadingtxt').text('Create Item Inword');
@@ -181,6 +217,9 @@ function ClearItemInWordTextBox() {
     var siteName = $("#txtInWardSiteName").val();
     $("#siteNameList").val(siteName);
     $("#siteNameListHidden").val(siteId);
+    $("#inwardSupplierListHidden").val('');
+    $("#inwardSupplierList").val('');
+    $("#spnInWardSiteName").hide();
 }
 
 function clearCreateInwardtext() {
@@ -194,6 +233,7 @@ function clearCreateInwardtext() {
     $('#txtVehicleNumber').val('');
     $('#txtReceiverName').val('');
     $('#siteNameList').val('');
+    $('#siteNameListHidden').val('');
     $('#addNewImage').empty();
 }
 
@@ -204,18 +244,20 @@ $(document).ready(function () {
         rules: {
             txtUnitType: "required",
             searchItemnameInput: "required",
+            inwardSupplierList: "required",
             txtQuantity: "required",
             txtReceiverName: "required",
             txtVehicleNumber: "required",
-            txtItemId: "required"
+            txtItemId: "required",
         },
         messages: {
             txtUnitType: "Enter UnitType",
             searchItemnameInput: "Enter Product",
+            inwardSupplierList: "Enter Supplier",
             txtQuantity: "Enter Quantity",
             txtReceiverName: "Enter ReceiverName",
             txtVehicleNumber: "Enter VehicleNumber",
-            txtItemId: "select item"
+            txtItemId: "select item",
         }
     })
 });
@@ -251,6 +293,8 @@ function EditItemInWordDetails(InwordId) {
             $("#txtReceiverName").val(response.receiverName);
             $("#siteNameList").val(response.siteName);
             $("#siteNameListHidden").val(response.siteId);
+            $("#inwardSupplierListHidden").val(response.supplierId);
+            $("#inwardSupplierList").val(response.supplierName);
             additionalFiles.length = 0;
             var date = response.date;
             var formattedDate = date.substr(0, 10);
@@ -274,7 +318,6 @@ function EditItemInWordDetails(InwordId) {
 }
 
 function DeleteItemInWord(InwordId) {
-
     Swal.fire({
         title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
@@ -419,56 +462,62 @@ function showpictures() {
 function InsertMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
-        var siteId = null;
-        if ($("#siteNameList").val()) {
-            siteId = $("#siteNameListHidden").val();
+        var siteId = $("#siteNameListHidden").val();
+        if (siteId == undefined)
+        {
+            siteId = $("#siteNameIdHidden").val();
         }
-        else {
-            siteId = $("#txtInwardSiteid").val();
-        }
+        if (siteId != "") {
+            var ItemInWordRequest = {
+                UnitTypeId: $("#txtUnitTypeHidden").val(),
+                ItemId: $("#txtItemName").val(),
+                Item: $("#searchItemnameInput").val(),
+                Quantity: $("#txtQuantity").val(),
+                SiteId: siteId,
+                CreatedBy: $("#txtCreatedBy").val(),
+                VehicleNumber: $("#txtVehicleNumber").val(),
+                ReceiverName: $("#txtReceiverName").val(),
+                Date: $("#txtIteminwordDate").val(),
+                SupplierId: $("#inwardSupplierListHidden").val(),
+            };
 
-        var ItemInWordRequest = {
-            UnitTypeId: $("#txtUnitTypeHidden").val(),
-            ItemId: $("#txtItemName").val(),
-            Item: $("#searchItemnameInput").val(),
-            Quantity: $("#txtQuantity").val(),
-            SiteId: siteId,
-            CreatedBy: $("#txtCreatedBy").val(),
-            VehicleNumber: $("#txtVehicleNumber").val(),
-            ReceiverName: $("#txtReceiverName").val(),
-            Date: $("#txtIteminwordDate").val(),
-        };
+            var form_data = new FormData();
+            form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 
-        var form_data = new FormData();
-        form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
-
-        for (var i = 0; i < additionalFiles.length; i++) {
-            form_data.append("DocDetails", additionalFiles[i]);
-        }
-
-        $.ajax({
-            url: '/ItemInWord/InsertMultipleItemInWordDetail',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    AllItemInWordListTable();
-                    ClearItemInWordTextBox();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
+            for (var i = 0; i < additionalFiles.length; i++) {
+                form_data.append("DocDetails", additionalFiles[i]);
             }
-        });
+
+            $.ajax({
+                url: '/ItemInWord/InsertMultipleItemInWordDetail',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        AllItemInWordListTable();
+                        ClearItemInWordTextBox();
+                        toastr.success(Result.message);
+                    } else {
+                        toastr.error(Result.message);
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else
+        {
+            siteloaderhide();
+            $("#spnInWardSiteName").show().text('select the site');
+            toastr.error("Kindly select the site");
+        }
     }
     else {
         siteloaderhide();
@@ -479,59 +528,65 @@ function InsertMultipleItemInWordDetails() {
 function UpdateMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
-        var siteId = null;
-        if ($("#siteNameList").val()) {
-            siteId = $("#siteNameListHidden").val();
+        var siteId = $("#siteNameListHidden").val();
+        if (siteId == undefined) {
+            siteId = $("#siteNameIdHidden").val();
         }
-        else {
-            siteId = $("#txtInwardSiteid").val();
-        }
-        var documentName = $("#txtDocumentName").val();
+        if (siteId != "") {
+            var documentName = $("#txtDocumentName").val();
 
-        var UpdateItemInWord = {
-            InwordId: $('#txtItemInWordid').val(),
-            UnitTypeId: $("#txtUnitTypeHidden").val(),
-            ItemId: $("#txtItemName").val(),
-            Item: $("#searchItemnameInput").val(),
-            Quantity: $("#txtQuantity").val(),
-            VehicleNumber: $("#txtVehicleNumber").val(),
-            ReceiverName: $("#txtReceiverName").val(),
-            Date: $("#txtIteminwordDate").val(),
-            DocumentName: documentName,
-            SiteId: siteId,
-        };
+            var UpdateItemInWord = {
+                InwordId: $('#txtItemInWordid').val(),
+                UnitTypeId: $("#txtUnitTypeHidden").val(),
+                ItemId: $("#txtItemName").val(),
+                Item: $("#searchItemnameInput").val(),
+                Quantity: $("#txtQuantity").val(),
+                VehicleNumber: $("#txtVehicleNumber").val(),
+                ReceiverName: $("#txtReceiverName").val(),
+                Date: $("#txtIteminwordDate").val(),
+                SupplierId: $("#inwardSupplierListHidden").val(),
+                DocumentName: documentName,
+                SiteId: siteId,
+            };
 
-        var form_data = new FormData();
-        form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
+            var form_data = new FormData();
+            form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 
-        if (additionalFiles.length > 0) {
-            for (var i = 0; i < additionalFiles.length; i++) {
-                form_data.append("DocDetails", additionalFiles[i]);
-            }
-        }
-
-        $.ajax({
-            url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.code == 200) {
-                    AllItemInWordListTable();
-                    ClearItemInWordTextBox();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
+            if (additionalFiles.length > 0) {
+                for (var i = 0; i < additionalFiles.length; i++) {
+                    form_data.append("DocDetails", additionalFiles[i]);
                 }
-                siteloaderhide();
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
             }
-        });
+
+            $.ajax({
+                url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        AllItemInWordListTable();
+                        ClearItemInWordTextBox();
+                        toastr.success(Result.message);
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                    siteloaderhide();
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else
+        {
+            siteloaderhide();
+            $("#spnInWardSiteName").show().text('select the site');
+            toastr.error("Kindly select the site");
+        }
     }
     else {
         siteloaderhide();

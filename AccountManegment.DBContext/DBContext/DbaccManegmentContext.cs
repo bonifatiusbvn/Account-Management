@@ -59,8 +59,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -130,11 +130,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("GroupMaster");
 
             entity.Property(e => e.GroupName).HasMaxLength(50);
-
-            entity.HasOne(d => d.Site).WithMany(p => p.GroupMasters)
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_GroupMaster_Site");
         });
 
         modelBuilder.Entity<ItemInWordDocument>(entity =>
@@ -250,6 +245,11 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseOrderDetails)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseOrderDetails_UnitMaster");
         });
 
         modelBuilder.Entity<PurchaseRequest>(entity =>
@@ -402,6 +402,11 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.SupplierInvoiceDetails)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SupplierInvoiceDetails_UnitMaster");
         });
 
         modelBuilder.Entity<SupplierMaster>(entity =>
@@ -475,7 +480,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("UserRole");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Role).HasMaxLength(10);
+            entity.Property(e => e.Role).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 

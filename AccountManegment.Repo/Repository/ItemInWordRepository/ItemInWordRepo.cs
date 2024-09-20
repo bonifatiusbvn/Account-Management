@@ -95,7 +95,9 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                       join c in Context.Sites on a.SiteId equals c.SiteId
                                       join i in Context.ItemMasters on a.ItemId equals i.ItemId
-                                      where a.IsDeleted == false && (siteId == null || a.SiteId == siteId) 
+                                      join j in Context.SupplierMasters on a.SupplierId equals j.SupplierId into supplierGroup
+                                      from j in supplierGroup.DefaultIfEmpty()
+                                      where a.IsDeleted == false && (siteId == null || a.SiteId == siteId)
                                       select new ItemInWordModel
                                       {
                                           InwordId = a.InwordId,
@@ -112,6 +114,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                           CreatedBy = a.CreatedBy,
                                           CreatedOn = a.CreatedOn,
                                           IsApproved = a.IsApproved,
+                                          SupplierId = a.SupplierId,
+                                          SupplierName = j != null ? j.SupplierName : null,
                                       });
 
                 if (!string.IsNullOrEmpty(searchText))
@@ -183,6 +187,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                   join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                   join c in Context.Sites on a.SiteId equals c.SiteId
                                   join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                  join s in Context.SupplierMasters on a.SupplierId equals s.SupplierId into supplierGroup
+                                  from s in supplierGroup.DefaultIfEmpty()
                                   select new ItemInWordMasterView
                                   {
                                       InwordId = a.InwordId,
@@ -200,6 +206,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       IsApproved = a.IsApproved,
                                       CreatedBy = a.CreatedBy,
                                       CreatedOn = a.CreatedOn,
+                                      SupplierId = a.SupplierId,
+                                      SupplierName = s != null ? s.SupplierName : null,
                                   }).First();
 
                 List<ItemInWordDocumentModel> documentList = (from a in Context.ItemInWordDocuments.Where(a => a.RefInWordId == itemInWordList.InwordId)
@@ -297,6 +305,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
                     ReceiverName = firstItemInWordDetail.ReceiverName,
                     IsApproved = firstItemInWordDetail.IsApproved,
+                    SupplierId = firstItemInWordDetail.SupplierId,
                     IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -347,6 +356,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.VehicleNumber = UpdateInWordDetails.VehicleNumber;
                     ItemInWordData.Date = UpdateInWordDetails.Date;
                     ItemInWordData.SiteId = UpdateInWordDetails.SiteId;
+                    ItemInWordData.SupplierId = UpdateInWordDetails.SupplierId;
 
                     Context.ItemInwords.Update(ItemInWordData);
                 }
