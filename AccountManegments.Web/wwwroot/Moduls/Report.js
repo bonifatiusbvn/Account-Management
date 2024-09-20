@@ -78,62 +78,12 @@ function GetAllSupplierList() {
     });
 }
 
-//let currentReportSortOrder = 'DescendingDate';
-//function sortReportTable(field) {
-//    if (currentReportSortOrder === 'Descending' + field) {
-//        currentReportSortOrder = 'Ascending' + field;
-//    } else {
-//        currentReportSortOrder = 'Descending' + field;
-//    }
 
-//    selectedSortOrder = currentReportSortOrder;
-
-//    if (selectedGroupName) {
-//        var objData = {
-//            GroupName: selectedGroupName,
-//            sortBy: selectedSortOrder,
-//        };
-//    }
-//    else {
-//        var objData = {
-//            CompanyId: selectedCompanyId,
-//            SupplierId: selectedSupplierId,
-//            filterType: selectedfilterType,
-//            startDate: selectedstartDate,
-//            endDate: selectedendDate,
-//            GroupName: selectedGroupName,
-//            SelectedYear: selectedYears,
-//            sortBy: selectedSortOrder,
-//        };
-//    }
-
-//    siteloadershow();
-
-//    $.ajax({
-//        type: "post",
-//        url: '/Report/GetSupplierInvoiceDetailsReport',
-//        data: objData,
-//        datatype: 'json',
-//        success: function (result) {
-//            siteloaderhide();
-//            $("#reportInvoiceListbody").html(result);
-
-//            if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-//                $("#downloadreportfile").hide();
-//            } else {
-//                $("#downloadreportfile").show();
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            console.error('AJAX Error: ', status, error);
-//        }
-//    });
-//}
 
 var selectedSiteId = null;
 var selectedCompanyId = null;
 var selectedSupplierId = null;
-var selectedstartDate = null;
+
 var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
@@ -161,109 +111,37 @@ $(document).ready(function () {
 
     // Clear date fields
     function clearDates() {
-        $('#startDate').val('');
+
         $('#endDate').val('');
     }
 
-    // Set today's date in both startDate and endDate
+
     function setTodaysDate() {
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
-        $('#startDate').val(formattedDate);
+
         $('#endDate').val(formattedDate);
     }
 
-    // Handle dropdown selection
+
     $('#timePeriodDropdown').change(function () {
         var selectedValue = $(this).val();
 
         if (selectedValue === 'This Month' || selectedValue === 'This Year') {
-            $('#startDate, #endDate, #yearDropdown').hide();
+            $('#endDate, #yearDropdown').hide();
         } else if (selectedValue === 'Between Date') {
-            $('#startDate, #endDate, #searchReportButton').show();
+            $('#endDate, #searchReportButton').show();
             $('#yearDropdown').hide();
             setTodaysDate();  // Automatically set today's date when "Between Date" is selected
         } else if (selectedValue === 'Between Year') {
             $('#yearDropdown, #searchReportButton').show();
-            $('#startDate, #endDate').hide();
+            $('#endDate').hide();
             populateYearDropdown();
         }
     });
 });
 
-//function SearchReportData() {
-//    var selectedValue = $('#timePeriodDropdown').val();
-//    var selectedSupplierId = $('#textReportSupplierNameHidden').val();
-//    var selectedCompanyId = $('#textReportCompanyName').val();
-//    var selectedGroupName = $('#textReportGroupList').val();
-//    var selectedReportSiteName = $('#txtReportSiteId').val();
-//    var selectedstartDate, selectedendDate, selectedYears;
 
-//    var objData = {
-//        SiteId: selectedReportSiteName || null,
-//        CompanyId: selectedCompanyId || null,
-//        SupplierId: selectedSupplierId || null,
-//        GroupName: selectedGroupName || null,
-//        filterType: null,
-//        startDate: null,
-//        endDate: null,
-//        SelectedYear: null,
-//    };
-
-//    switch (selectedValue) {
-//        case 'This Month':
-//            objData.filterType = "currentMonth";
-//            break;
-//        case 'This Year':
-//            objData.filterType = "currentYear";
-//            break;
-//        case 'Between Date':
-//            selectedstartDate = $('#startDate').val();
-//            selectedendDate = $('#endDate').val();
-//            if (!selectedstartDate || !selectedendDate) {
-//                toastr.warning("Select dates");
-//                return;
-//            }
-//            objData.filterType = "dateRange";
-//            objData.startDate = selectedstartDate;
-//            objData.endDate = selectedendDate;
-//            break;
-//        case 'Between Year':
-//            selectedYears = $('#yearDropdown').val();
-//            if (!selectedYears) {
-//                alert('Please select a year.');
-//                return;
-//            }
-//            objData.filterType = "betweenYear";
-//            objData.SelectedYear = selectedYears;
-//            break;
-//        default:
-//            selectedValue = null;
-//            break;
-//    }
-
-//    loadReportData(objData);
-//}
-//function loadReportData(objData) {
-//    $.ajax({
-//        type: "post",
-//        url: '/Report/GetSupplierInvoiceDetailsReport',
-//        data: objData,
-//        datatype: 'json',
-//        success: function (result) {
-//            $("#reportInvoiceListbody").html(result);
-
-//            if ($("#reportInvoiceListbody").find(".text-center:contains('No data found for the selected criteria.')").length > 0) {
-//                $("#downloadreportfile").hide();
-//            } else {
-//                $("#downloadreportfile").show();
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            console.error('AJAX Error: ', status, error);
-//        }
-//    });
-//}
 
 $(document).ready(function () {
 
@@ -294,7 +172,6 @@ function ExportToPDF() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
-        startDate: null,
         endDate: null,
         SelectedYear: null,
     };
@@ -308,7 +185,6 @@ function ExportToPDF() {
             break;
         case 'Between Date':
             objData.filterType = "dateRange";
-            objData.filterType = $('#startDate').val();
             objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
@@ -386,7 +262,6 @@ function ExportToExcel() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
-        startDate: null,
         endDate: null,
         SelectedYear: null,
     };
@@ -400,7 +275,6 @@ function ExportToExcel() {
             break;
         case 'Between Date':
             objData.filterType = "dateRange";
-            objData.filterType = $('#startDate').val();
             objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
@@ -621,91 +495,7 @@ function ClearPayoutTextBox() {
     $("#Editpayoutpaymenttype").prop("checked", false);
 }
 
-//function GetPayoutReportData() {
 
-//    if (selectedCompanyId || selectedSupplierId) {
-//        var PayOutReport = {
-//            CompanyId: selectedCompanyId,
-//            SupplierId: selectedSupplierId,
-//            filterType: selectedfilterType,
-//            startDate: selectedstartDate,
-//            endDate: selectedendDate,
-//            GroupName: null,
-//        };
-//        getnetamount(PayOutReport);
-//    }
-//}
-//function GetPayoutGroupData() {
-
-//    if (selectedGroupName) {
-//        var PayOutReport = {
-//            GroupName: selectedGroupName
-//        };
-//        getnetamount(PayOutReport);
-//    }
-//}
-//function GetCurrentMonthPayoutInvoiceList() {
-
-//    selectedfilterType = "currentMonth";
-//    selectedGroupName = null;
-//    var PayOutReport = {
-//        CompanyId: selectedCompanyId,
-//        SupplierId: selectedSupplierId,
-//        filterType: selectedfilterType,
-//        GroupName: null,
-//    };
-//    getnetamount(PayOutReport);
-//}
-//function GetCurrentYearPayoutInvoiceList() {
-
-//    selectedfilterType = "currentYear";
-//    selectedGroupName = null;
-//    var PayOutReport = {
-//        CompanyId: selectedCompanyId,
-//        SupplierId: selectedSupplierId,
-//        filterType: selectedfilterType,
-//        GroupName: null,
-//    };
-//    getnetamount(PayOutReport);
-//}
-//function GetBetweenDatePayoutInvoiceList() {
-//    selectedstartDate = $('#startDate').val();
-//    selectedendDate = $('#endDate').val();
-//    selectedfilterType = "dateRange";
-//    selectedGroupName = null;
-
-//    if (!selectedstartDate || !selectedendDate) {
-//        toastr.warning("Select dates");
-//    } else {
-//        var PayOutReport = {
-//            CompanyId: selectedCompanyId,
-//            SupplierId: selectedSupplierId,
-//            filterType: selectedfilterType,
-//            startDate: selectedstartDate,
-//            endDate: selectedendDate,
-//            GroupName: null,
-//        };
-//        getnetamount(PayOutReport);
-//    }
-//}
-//function GetBetweenYearPayoutInvoiceList() {
-//    var selectedYears = $('#yearDropdown').val();
-//    var selectedFilterType = "betweenYear";
-//    selectedGroupName = null;
-
-//    if (selectedYears) {
-//        var PayOutReport = {
-//            CompanyId: selectedCompanyId,
-//            SupplierId: selectedSupplierId,
-//            filterType: selectedFilterType,
-//            SelectedYear: selectedYears,
-//            GroupName: null,
-//        };
-//        getnetamount(PayOutReport);
-//    } else {
-//        alert('Please select a year.');
-//    }
-//}
 
 let rowCounter = 0;
 function AddNewRowforPayOutInvoicebtn() {
@@ -1043,7 +833,6 @@ $(document).ready(function () {
                             break;
                         case 'Between Date':
                             d.filterType = "dateRange";
-                            d.startDate = $('#startDate').val();
                             d.endDate = $('#endDate').val();
                             break;
                         case 'Between Year':
