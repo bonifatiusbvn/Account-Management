@@ -124,6 +124,9 @@ function sortPurchaseRequestTable() {
 
 function SelectPurchaseRequestDetails(PurchaseId, element) {
     siteloadershow();
+    $('#PRheadingtxt').text('Item Inward Details');
+    $('#PRInfo').removeClass('d-none');
+    $('#addPRInfo').addClass('d-none');
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -213,9 +216,9 @@ function CreatePurchaseRequest() {
         toastr.error("Kindly fill all details");
     }
 }
-
+ClearPurchaseRequestTextBox();
 function ClearPurchaseRequestTextBox() {
-
+    clearCreatePRText();
     $('#prNo').val('');
     $.ajax({
         url: '/PurchaseMaster/CheckPRNo',
@@ -231,21 +234,10 @@ function ClearPurchaseRequestTextBox() {
         }
     });
     resetPRForm();
-    $('#changeName').html('Create PurchaseRequest');
-    $('#searchItemnameInput').val('');
-    $('#txtUnitType').val('');
-    $('#searchItemname').val('');
-    $('#txtQuantity').val('');
-    $('#txtPoSiteName').val('');
-    $('#drpPRSiteAddress').val('');
-    $('#PurchaseRequestId').val('');
-
-    var button = document.getElementById("btnpurchaseRequest");
-    if ($('#PurchaseRequestId').val() == '') {
-        button.textContent = "Create";
-    }
-    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-    offcanvas.show();
+    $('#PRheadingtext').html('Create PurchaseRequest');
+    $('#addPRInfo').removeClass('d-none');
+    $('#PRInfo').addClass('d-none');
+ 
     $('#searchItemname').select2({
         maximumSelectionLength: 1,
         theme: 'bootstrap4',
@@ -265,6 +257,15 @@ function ClearPurchaseRequestTextBox() {
         allowClear: Boolean($(this).data('allow-clear')),
         dropdownParent: $("#CreatePurchaseRequest")
     });
+}
+function clearCreatePRText() {
+    $('#searchItemnameInput').val('');
+    $('#txtUnitType').val('');
+    $('#searchItemname').val('');
+    $('#txtQuantity').val('');
+    $('#txtPoSiteName').val('');
+    $('#drpPRSiteAddress').val('');
+    $('#PurchaseRequestId').val('');
 }
 
 var PRForm;
