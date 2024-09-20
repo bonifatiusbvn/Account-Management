@@ -114,8 +114,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                           CreatedBy = a.CreatedBy,
                                           CreatedOn = a.CreatedOn,
                                           IsApproved = a.IsApproved,
-                                          //SupplierId = a.SupplierId,
-                                          //SupplierName = j != null ? j.SupplierName : null,
+                                          SupplierId = a.SupplierId,
+                                          SupplierName = j != null ? j.SupplierName : null,
                                       });
 
                 if (!string.IsNullOrEmpty(searchText))
@@ -206,8 +206,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       IsApproved = a.IsApproved,
                                       CreatedBy = a.CreatedBy,
                                       CreatedOn = a.CreatedOn,
-                                      //SupplierId = a.SupplierId,
-                                      //SupplierName = s != null ? s.SupplierName : null,
+                                      SupplierId = a.SupplierId,
+                                      SupplierName = s != null ? s.SupplierName : null,
                                   }).First();
 
                 List<ItemInWordDocumentModel> documentList = (from a in Context.ItemInWordDocuments.Where(a => a.RefInWordId == itemInWordList.InwordId)
@@ -305,7 +305,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     VehicleNumber = firstItemInWordDetail.VehicleNumber.ToUpper(),
                     ReceiverName = firstItemInWordDetail.ReceiverName,
                     IsApproved = firstItemInWordDetail.IsApproved,
-                    //SupplierId = firstItemInWordDetail.SupplierId,
+                    SupplierId = firstItemInWordDetail.SupplierId,
                     IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,

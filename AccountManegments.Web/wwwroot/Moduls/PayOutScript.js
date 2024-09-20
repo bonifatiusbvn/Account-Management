@@ -139,14 +139,14 @@ $(document).ready(function () {
 
     function clearDates() {
 
-        $('#PayoutendDate').val('');
+        $('#txtPayoutmonth').val('');
     }
 
     // Function to set today's date in the Payout start and end date fields
     function setTodaysPayoutDate() {
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10); // Format date as yyyy-mm-dd
-        $('#PayoutendDate').val(formattedDate);
+        $('#txtPayoutmonth').val(formattedDate);
     }
 
     $('#timePeriodPayoutDropdown').change(function () {
@@ -154,14 +154,14 @@ $(document).ready(function () {
 
         if (selectedValue === 'This Month' || selectedValue === 'This Year') {
             $('#PayoutendDate, #PayoutyearDropdown').hide();
-        } else if (selectedValue === 'Between Date') {
-            $('#PayoutendDate, #searchPayoutReportButton').show();
+        } else if (selectedValue === 'Till Month') {
+            $('#txtPayoutmonth, #searchPayoutReportButton').show();
             $('#PayoutyearDropdown').hide();
             clearDates(); // Clear previous values
             setTodaysPayoutDate(); // Set today's date
         } else if (selectedValue === 'Between Year') {
             $('#PayoutyearDropdown, #searchPayoutReportButton').show();
-            $('#PayoutendDate').hide();
+            $('#txtPayoutmonth').hide();
             populateYearDropdown(); // Assuming you have a function to populate the year dropdown
         }
     });
@@ -224,14 +224,9 @@ function ExportNetReportToPDF() {
         case 'This Year':
             PayOutReport.filterType = "currentYear";
             break;
-        case 'Between Date':
-            selectedendDate = $('#PayoutendDate').val();
-            if (!selectedendDate) {
-                toastr.warning("Select dates");
-                return;
-            }
-            PayOutReport.filterType = "dateRange";
-            PayOutReport.endDate = selectedendDate;
+        case 'Till Month':
+            PayOutReport.filterType = "tillMonth";
+            PayOutReport.TillMonth = $('#txtPayoutmonth').val();
             break;
         case 'Between Year':
             selectedYears = $('#PayoutyearDropdown').val();
@@ -328,15 +323,9 @@ function ExportNetReportToExcel() {
         case 'This Year':
             PayOutReport.filterType = "currentYear";
             break;
-        case 'Between Date':
-
-            selectedendDate = $('#PayoutendDate').val();
-            if (!selectedendDate) {
-                toastr.warning("Select dates");
-                return;
-            }
-            PayOutReport.filterType = "dateRange";
-            PayOutReport.endDate = selectedendDate;
+        case 'Till Month':
+            PayOutReport.filterType = "tillMonth";
+            PayOutReport.TillMonth = $('#txtPayoutmonth').val();
             break;
         case 'Between Year':
             selectedYears = $('#PayoutyearDropdown').val();
@@ -357,7 +346,6 @@ function ExportNetReportToExcel() {
         data: PayOutReport,
         datatype: 'json',
         success: function (data, status, xhr) {
-            debugger
             siteloaderhide();
             var filename = "";
             var disposition = xhr.getResponseHeader('Content-Disposition');
@@ -476,10 +464,9 @@ $(document).ready(function () {
                         case 'This Year':
                             d.filterType = "currentYear";
                             break;
-                        case 'Between Date':
-                            d.filterType = "dateRange";
-
-                            d.endDate = $('#PayoutendDate').val();
+                        case 'Till Month':
+                            d.filterType = "tillMonth";
+                            d.TillMonth = $('#txtPayoutmonth').val();
                             break;
                         case 'Between Year':
                             d.filterType = "betweenYear";
