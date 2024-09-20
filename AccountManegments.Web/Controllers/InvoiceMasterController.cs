@@ -218,6 +218,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     sortColumn = "credit";
                 }
+
                 if (sortColumnIndex == "6")
                 {
                     sortColumn = "debit";
@@ -243,6 +244,7 @@ namespace AccountManegments.Web.Controllers
                     endDate = PayOutReport.endDate,
                     SupplierName = PayOutReport.SupplierName,
                     CompanyName = PayOutReport.CompanyName,
+                    TillMonth = PayOutReport.TillMonth,
                 };
                 List<SupplierInvoiceModel> supplierDetails = new List<SupplierInvoiceModel>();
                 var jsonData = new jsonData();

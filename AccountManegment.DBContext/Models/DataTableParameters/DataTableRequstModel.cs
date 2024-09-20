@@ -24,6 +24,7 @@ namespace AccountManagement.DBContext.Models.DataTableParameters
         public string? filterType { get; set; }
 
         public DateTime? startDate { get; set; }
+        public DateTime? TillMonth { get; set; }
         public DateTime? endDate { get; set; }
         public string? SelectedYear { get; set; }
         public string? GroupName { get; set; }

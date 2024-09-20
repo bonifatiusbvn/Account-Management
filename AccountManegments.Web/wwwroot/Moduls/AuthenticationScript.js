@@ -998,28 +998,22 @@ function MutiplePurchaseRequestIsApproved() {
 }
 
 function GetDashboardSupplierList() {
-    //siteloadershow();
 
     $.get("/Home/SupplierListView")
         .done(function (result) {
-            siteloaderhide();
             $("#dashboardSupplierList").html(result);
         })
         .fail(function (error) {
-            siteloaderhide();
 
         });
 }
 function GetDashboardInwardList() {
-    //siteloadershow();
 
     $.get("/Home/ItemInWordListView")
         .done(function (result) {
-            siteloaderhide();
             $("#dashboardInwardList").html(result);
         })
         .fail(function (error) {
-            siteloaderhide();
         });
 }
 
