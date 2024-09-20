@@ -89,6 +89,7 @@ function SelectItemInWordDetails(InwordId, element) {
                 $('#dspIsApproved').prop('checked', response.isApproved);
                 $('#dspVehicleNumber').val(response.vehicleNumber);
                 $('#dspReceiverName').val(response.receiverName);
+                $('#dspinwardSupplier').val(response.supplierName);
                 var date = new Date(response.date);
                 var formattedDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
                 $('#dspDate').val(formattedDate);

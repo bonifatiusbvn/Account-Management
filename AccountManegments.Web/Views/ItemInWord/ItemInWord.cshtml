@@ -110,9 +110,13 @@
                                         <label class="form-label">Site Name</label>
                                         <input type="text" class="form-control" id="dspSiteId" readonly>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-4">
                                         <label class="form-label">Quantity</label>
                                         <input type="text" class="form-control" id="dspQuantity" readonly>
+                                    </div>
+                                    <div class="col-8">
+                                        <label class="form-label">Supplier</label>
+                                        <input type="text" class="form-control" id="dspinwardSupplier" readonly>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">IsApproved</label>
@@ -139,7 +143,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="addInWordInfo" class="card d-none">
+                                <div id="addInWordInfo">
                                     <form class="row g-3" id="itemInWordForm" enctype="multipart/form-data">
                                         <input type="hidden" id="txtItemInWordid">
                                         <input type="hidden" id="userRoleId" value="@_userSession.UserRole">
