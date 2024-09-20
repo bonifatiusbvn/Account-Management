@@ -83,7 +83,7 @@ function GetAllSupplierList() {
 var selectedSiteId = null;
 var selectedCompanyId = null;
 var selectedSupplierId = null;
-
+var selectedstartDate = null;
 var selectedendDate = null;
 var selectedfilterType = null;
 var selectedGroupName = null;
@@ -111,7 +111,7 @@ $(document).ready(function () {
 
     // Clear date fields
     function clearDates() {
-
+        $('#startDate').val('');
         $('#endDate').val('');
     }
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
     function setTodaysDate() {
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
-
+        $('#startDate').val(formattedDate);
         $('#endDate').val(formattedDate);
     }
 
@@ -128,14 +128,14 @@ $(document).ready(function () {
         var selectedValue = $(this).val();
 
         if (selectedValue === 'This Month' || selectedValue === 'This Year') {
-            $('#endDate, #yearDropdown').hide();
+            $('#startDate,#endDate, #yearDropdown').hide();
         } else if (selectedValue === 'Between Date') {
-            $('#endDate, #searchReportButton').show();
+            $('#startDate,#endDate, #searchReportButton').show();
             $('#yearDropdown').hide();
             setTodaysDate();  // Automatically set today's date when "Between Date" is selected
         } else if (selectedValue === 'Between Year') {
             $('#yearDropdown, #searchReportButton').show();
-            $('#endDate').hide();
+            $('#startDate,#endDate').hide();
             populateYearDropdown();
         }
     });
@@ -172,6 +172,7 @@ function ExportToPDF() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
+        startDate: null,
         endDate: null,
         SelectedYear: null,
     };
@@ -185,6 +186,7 @@ function ExportToPDF() {
             break;
         case 'Between Date':
             objData.filterType = "dateRange";
+            objData.filterType = $('#startDate').val();
             objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
@@ -262,6 +264,7 @@ function ExportToExcel() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
+        startDate: null,
         endDate: null,
         SelectedYear: null,
     };
@@ -275,6 +278,7 @@ function ExportToExcel() {
             break;
         case 'Between Date':
             objData.filterType = "dateRange";
+            objData.filterType = $('#startDate').val();
             objData.filterType = $('#endDate').val();
             break;
         case 'Between Year':
@@ -833,6 +837,7 @@ $(document).ready(function () {
                             break;
                         case 'Between Date':
                             d.filterType = "dateRange";
+                            d.startDate = $('#startDate').val();
                             d.endDate = $('#endDate').val();
                             break;
                         case 'Between Year':
