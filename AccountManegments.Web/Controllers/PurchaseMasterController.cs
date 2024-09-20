@@ -143,6 +143,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     Pid = Guid.NewGuid(),
                     ItemId = PurchaseRequestDetails.ItemId,
+                    ItemDescription = PurchaseRequestDetails.ItemDescription,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     SiteId = PurchaseRequestDetails.SiteId,
                     Quantity = PurchaseRequestDetails.Quantity,

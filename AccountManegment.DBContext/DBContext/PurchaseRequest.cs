@@ -13,6 +13,8 @@ public partial class PurchaseRequest
 
     public string? ItemName { get; set; }
 
+    public string? ItemDescription { get; set; }
+
     public int UnitTypeId { get; set; }
 
     public decimal Quantity { get; set; }

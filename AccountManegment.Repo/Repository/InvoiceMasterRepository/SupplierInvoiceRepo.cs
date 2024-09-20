@@ -1149,8 +1149,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 }
 
-
-
+                if (invoiceReport.startDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date >= invoiceReport.startDate.Value);
+                }
                 if (invoiceReport.endDate.HasValue)
                 {
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value);

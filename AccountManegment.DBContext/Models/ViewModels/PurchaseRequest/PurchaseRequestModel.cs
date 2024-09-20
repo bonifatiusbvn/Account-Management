@@ -13,6 +13,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
         public Guid? ItemId { get; set; }
 
         public string? ItemName { get; set; }
+        public string? ItemDescription { get; set; }
 
         public int UnitTypeId { get; set; }
 
