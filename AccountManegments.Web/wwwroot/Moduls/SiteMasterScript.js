@@ -903,7 +903,7 @@ function AddSiteGroupDetails() {
     }
 }
 
-function DeleteSiteGroup(groupName) {
+function DeleteSiteGroup(GroupId) {
     Swal.fire({
         title: "If you want to delete this site group,delete all data related this site!",
         icon: "warning",
@@ -917,7 +917,7 @@ function DeleteSiteGroup(groupName) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/SiteMaster/DeleteSiteGroupDetails?groupName=' + groupName,
+                url: '/SiteMaster/DeleteSiteGroupDetails?GroupId=' + GroupId,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
@@ -955,11 +955,11 @@ function DeleteSiteGroup(groupName) {
     });
 }
 
-function DisplaySiteGroup(groupName) {
+function DisplaySiteGroup(GroupId) {
     cleargrouplisttext();
     siteloadershow();
     $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupName?groupName=' + groupName,
+        url: '/SiteMaster/GetGroupDetailsByGroupName?GroupId=' + GroupId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
@@ -969,6 +969,7 @@ function DisplaySiteGroup(groupName) {
             $("#siteinfo").addClass('d-none');
             $('#SiteInfoHeading').text('Edit Group Details');
             $("#txtSiteGropuName").val(response.groupName).prop('readonly', true);
+            $("#txtSiteGroupId").val(response.groupId);
             $('#addsitegroupbtn').hide();
             $('#updatesitegroupbtn').show();
 
@@ -1043,15 +1044,16 @@ function UpdateSiteGroupDetails() {
             }
         }
     });
-
     if (!hasDuplicates) {
         newSiteIds.forEach(function (siteId) {
             SiteList.push({ SiteId: siteId });
         });
         var groupName = $('#txtSiteGropuName').val().trim();
+        var groupId = $('#txtSiteGroupId').val();
 
         if (SiteList.length > 0 && groupName !== "") {
             var SiteData = {
+                GroupId: groupId,
                 GroupName: groupName,
                 SiteList: SiteList,
             };

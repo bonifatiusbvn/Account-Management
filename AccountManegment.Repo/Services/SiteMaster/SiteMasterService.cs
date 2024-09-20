@@ -71,13 +71,13 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetGroupNameList();
         }
-        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId)
         {
-            return await SiteMaster.DeleteSiteGroupDetails(groupName);
+            return await SiteMaster.DeleteSiteGroupDetails(GroupId);
         }
-        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(Guid GroupId)
         {
-            return await SiteMaster.GetGroupDetailsByGroupName(groupName);
+            return await SiteMaster.GetGroupDetailsByGroupName(GroupId);
         }
         public async Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
         {

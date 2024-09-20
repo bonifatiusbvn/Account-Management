@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
@@ -466,6 +467,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
+                Guid groupId = Guid.NewGuid();
                 bool isGroupAlreadyExists = Context.GroupMasters.Any(x => x.GroupName == GroupDetails.GroupName);
                 {
                     if (isGroupAlreadyExists)
@@ -479,6 +481,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         {
                             var groupModel = new GroupMaster()
                             {
+                                GroupId = groupId,
                                 GroupName = GroupDetails.GroupName,
                                 SiteId = item.SiteId,
                             };
@@ -504,6 +507,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
                 {
                     GroupName = a.GroupName,
+                    GroupId = a.GroupId,
                 });
                 return GroupList;
             }
@@ -518,10 +522,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var SiteGroupList = (from a in Context.GroupMasters
-                                     group new { a } by new { a.GroupName } into g
+                                     group new { a } by new { a.GroupName,a.GroupId } into g
                                      select new SiteGroupModel
                                      {
                                          GroupName = g.Key.GroupName,
+                                         GroupId = g.Key.GroupId,
                                      });
                 return SiteGroupList;
             }
@@ -531,12 +536,12 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var grouplist  =  Context.GroupMasters.Where(x=>x.GroupName == groupName).ToList();
+                var grouplist  =  Context.GroupMasters.Where(x=>x.GroupId == GroupId).ToList();
                 if (grouplist.Count > 0)
                 {
                     foreach (var group in grouplist)
@@ -550,7 +555,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 else
                 {
                     response.code = 400;
-                    response.message = groupName + "groupname is not found.";
+                    response.message = "Site group is not found.";
                 }
             }
             catch (Exception ex)
@@ -561,26 +566,26 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             return response;
         }
 
-        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(Guid GroupId)
         {
             try
             {
                 var groupDetails = await (from g in Context.GroupMasters
                                           join s in Context.Sites on g.SiteId equals s.SiteId
-                                          where g.GroupName == groupName
-                                          group new { g, s } by g.GroupName into grouped
+                                          where g.GroupId == GroupId
+                                          group new { g, s } by new { g.GroupName, g.GroupId } into grouped
                                           select new GroupMasterModel
                                           {
-                                              GroupName = grouped.Key,
+                                              GroupName = grouped.Key.GroupName,
+                                              GroupId = grouped.Key.GroupId,
                                               SiteList = grouped.Select(x => new SiteNameList
                                               {
                                                   SiteId = x.g.SiteId,
                                                   SiteName = x.s.SiteName
                                               }).ToList()
                                           }).FirstOrDefaultAsync();
+
                 return groupDetails;
-
-
             }
             catch (Exception ex)
             {
@@ -594,7 +599,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var existingRecords = Context.GroupMasters
-                    .Where(e => e.GroupName == groupDetails.GroupName)
+                    .Where(e => e.GroupId == groupDetails.GroupId)
                     .ToList();
 
                 var existingSiteIds = existingRecords.Select(e => e.SiteId).ToHashSet();
@@ -608,6 +613,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 {
                     var newRecord = new GroupMaster
                     {
+                        GroupId = groupDetails.GroupId,
                         GroupName = groupDetails.GroupName,
                         SiteId = siteId
                     };

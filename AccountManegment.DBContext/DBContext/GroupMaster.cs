@@ -7,6 +7,8 @@ public partial class GroupMaster
 {
     public int Id { get; set; }
 
+    public Guid GroupId { get; set; }
+
     public string GroupName { get; set; } = null!;
 
     public Guid SiteId { get; set; }

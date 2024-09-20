@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace AccountManagement.API.Controllers
 {
@@ -183,11 +184,11 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("DeleteSiteGroupDetails")]
-        public async Task<IActionResult> DeleteSiteGroupDetails(string groupName)
+        public async Task<IActionResult> DeleteSiteGroupDetails(Guid GroupId)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
 
-            var sitegroupName = await SiteMaster.DeleteSiteGroupDetails(groupName);
+            var sitegroupName = await SiteMaster.DeleteSiteGroupDetails(GroupId);
             try
             {
 
@@ -211,9 +212,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetGroupDetailsByGroupName")]
-        public async Task<IActionResult> GetGroupDetailsByGroupName(string groupName)
+        public async Task<IActionResult> GetGroupDetailsByGroupName(Guid GroupId)
         {
-            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(groupName);
+            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(GroupId);
             return Ok(new { code = 200, data = SiteGroupDetails });
         }
 
