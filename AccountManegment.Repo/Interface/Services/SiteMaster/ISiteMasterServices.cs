@@ -22,8 +22,8 @@ namespace AccountManagement.Repository.Interface.Services.SiteMaster
         Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails);
         Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId);
         Task<IEnumerable<SiteGroupModel>> GetGroupNameList();
-        Task<ApiResponseModel> DeleteSiteGroupDetails(int id);
-        Task<GroupMasterModel> GetGroupDetailsByGroupName(int id);
+        Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId);
+        Task<GroupMasterModel> GetGroupDetailsByGroupName(Guid GroupId);
         Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails);
     }
 }

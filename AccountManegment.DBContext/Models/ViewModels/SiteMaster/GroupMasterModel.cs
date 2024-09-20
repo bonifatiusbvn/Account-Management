@@ -11,6 +11,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public int Id { get; set; }
 
         public string GroupName { get; set; } = null!;
+        public Guid GroupId { get; set; }
 
         public List<SiteNameList>? SiteList { get; set; }
     }
@@ -22,7 +23,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
     public class SiteGroupModel
     {
         public int Id { get; set; }
-
+        public Guid GroupId { get; set; }
         public string GroupName { get; set; } = null!;
 
         public Guid SiteId { get; set; }

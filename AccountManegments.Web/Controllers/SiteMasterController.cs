@@ -315,11 +315,11 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSiteGroupDetails(string groupName)
+        public async Task<IActionResult> DeleteSiteGroupDetails(Guid GroupId)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSiteGroupDetails?groupName=" + groupName);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSiteGroupDetails?GroupId=" + GroupId);
                 if (postuser.code == 200)
                 {
 
@@ -338,12 +338,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetGroupDetailsByGroupName(int Id)
+        public async Task<JsonResult> GetGroupDetailsByGroupName(Guid GroupId)
         {
             try
             {
                 GroupMasterModel SiteDetails = new GroupMasterModel();
-                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?Id=" + Id);
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupId=" + GroupId);
                 if (res.code == 200)
                 {
                     SiteDetails = JsonConvert.DeserializeObject<GroupMasterModel>(res.data.ToString());
