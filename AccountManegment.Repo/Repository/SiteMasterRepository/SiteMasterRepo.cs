@@ -506,6 +506,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             {
                 IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
                 {
+                    Id = a.Id,
                     GroupName = a.GroupName,
                     GroupId = a.GroupId,
                 });
@@ -546,7 +547,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 {
                     foreach (var group in grouplist)
                     {
-                        Context.GroupMasters.Remove(group); 
+                        Context.GroupMasters.Remove(group);
                         await Context.SaveChangesAsync();
                     }
                     response.code = 200;

@@ -53,7 +53,7 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetSiteNameList();
         }
-       public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
+        public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
         {
             return await SiteMaster.GetSiteAddressList(SiteId);
         }
