@@ -118,9 +118,9 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:658px;">
-                                <h5 class="mb-0 mt-4">Purchase Request Details</h5>
+                                <h5 class="mb-0 mt-4" id="PRheadingtext"></h5>
                                 <hr>
-                                <div class="row g-3 ac-detail d-none">
+                                <div class="row g-3 ac-detail d-none" id="PRInfo">
                                     <div class="col-12">
                                         <label class="form-label">Purchase Request No</label>
                                         <input type="text" class="form-control" id="dspPrNo" readonly>
@@ -128,6 +128,11 @@
                                     <div class="col-12">
                                         <label class="form-label">Item Name</label>
                                         <input type="text" class="form-control" id="dspItem" readonly>
+                                        <input type="hidden" class="form-control" id="dspPId" readonly>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Item Description</label>
+                                        <input type="text" class="form-control" id="dspItemDescription" readonly>
                                         <input type="hidden" class="form-control" id="dspPId" readonly>
                                     </div>
                                     <div class="col-6">
@@ -153,75 +158,63 @@
                                         <textarea type="text" class="form-control" row="3" id="dspPrSiteAddress" readonly></textarea>
                                     </div>
                                 </div>
+
+                                <div id="addPRInfo" class="card d-none">
+                                    <form class="row g-3" id="purchaseRequestForm" enctype="multipart/form-data">
+                                        <div class="col-lg-12 col-12">
+                                            <label class="form-label">Purchase Request No</label>
+                                            <input type="text" class="form-control form-control" id="prNo" readonly />
+                                            <input type="hidden" class="form-control form-control" id="PurchaseRequestId" readonly />
+                                            <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
+                                            <input type="hidden" id="RoleIdinPR" value="@_userSession.UserRole">
+                                            <input type="hidden" id="SiteIdinPR" value="@UserSession.SiteId" />
+                                        </div>
+                                        <div class="col-lg-12 col-12">
+                                            <label class="form-label">Product Names</label>
+                                            <input type="text" id="searchItemnameInput" name="searchItemnameInput" placeholder="Product Names" class="form-control">
+                                            <input type="hidden" id="txtItemName" name="txtItemName">
+                                            <span id="searchItemnameInput" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-12 col-12">
+                                            <label class="form-label">Product Description</label>
+                                            <input type="text" id="PRItemDescription" name="PRItemDescription" placeholder="Product Description" class="form-control">
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Unit Type</label>
+                                            <input type="text" id="txtUnitType" name="txtUnitType" placeholder="Unit Type" class="form-control">
+                                            <span id="spnUnitType" class="text-danger"></span>
+                                        </div>
+                                        <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" value="1" min="1" oninput="preventEmptyValue(this)">
+                                            <span id="spnQuantity" class="text-danger"></span>
+                                        </div>
+                                        @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
+                                        {
+                                            <div class="col-lg-12 col-12" id="siteDetails">
+                                                <label class="form-label">Site</label>
+                                                <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
+                                                    <option value="" selected>--Select Site--</option>
+                                                </select>
+                                                <span id="spnSiteName" class="text-danger"></span>
+                                            </div>
+                                        }
+                                        <input type="hidden" id="txtPRsiteid" value="@UserSession.SiteId" />
+                                        <input type="hidden" id="txtPRRoleId" value="@_userSession.UserRole" />
+
+                                        <div class="col-lg-12 col-12">
+                                            <label class="form-label">Where To Ship</label>
+                                            <select class="single-select form-select" id="drpPRSiteAddress" name="drpPRSiteAddress">
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary" onclick="CreatePurchaseRequest()" id="addbtnpurchaseRequest" style="margin-left:560px;">Save</button>
+                                            <button type="button" class="btn btn-primary" onclick="UpdatePurchaseRequestDetails()" id="updatebtnpurchaseRequest" style="display:none; margin-left:550px;">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            @* </form> *@
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" id="CreatePurchaseRequest">
-        <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
-            <h5 class="m-0 me-2 text-white" id="changeName"></h5>
-
-            <button type="button" class="btn-close btn-close-white ms-auto" id="customizerclose-btn" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <div data-simplebar class="h-100">
-                <div class="p-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <form class="row g-3" id="purchaseRequestForm">
-                                <div class="col-lg-12 col-12">
-                                    <label class="form-label">Purchase Request No</label>
-                                    <input type="text" class="form-control form-control" id="prNo" readonly />
-                                    <input type="hidden" class="form-control form-control" id="PurchaseRequestId" readonly />
-                                    <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
-                                    <input type="hidden" id="RoleIdinPR" value="@_userSession.UserRole">
-                                    <input type="hidden" id="SiteIdinPR" value="@UserSession.SiteId" />
-                                </div>
-                                <div class="col-lg-12 col-12">
-                                    <label class="form-label">Product Names</label>
-                                    <input type="text" id="searchItemnameInput" name="searchItemnameInput" placeholder="Product Names" class="form-control">
-                                    <input type="hidden" id="txtItemName" name="txtItemName">
-                                    <span id="searchItemnameInput" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-lg-6 col-12">
-                                    <label class="form-label">Unit Type</label>
-                                    <input type="text" id="txtUnitType" name="txtUnitType" placeholder="Unit Type" class="form-control">
-                                    <span id="spnUnitType" class="text-danger"></span>
-                                </div>
-                                <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
-                                <div class="col-lg-6 col-12">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" value="1" min="1" oninput="preventEmptyValue(this)">
-                                    <span id="spnQuantity" class="text-danger"></span>
-                                </div>
-                                @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
-                                {
-                                    <div class="col-lg-12 col-12" id="siteDetails">
-                                        <label class="form-label">Site</label>
-                                        <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
-                                            <option value="" selected>--Select Site--</option>
-                                        </select>
-                                        <span id="spnSiteName" class="text-danger"></span>
-                                    </div>
-                                }
-                                <input type="hidden" id="txtPRsiteid" value="@UserSession.SiteId" />
-                                <input type="hidden" id="txtPRRoleId" value="@_userSession.UserRole" />
-
-                                <div class="col-lg-12 col-12">
-                                    <label class="form-label">Where To Ship</label>
-                                    <select class="single-select form-select" id="drpPRSiteAddress" name="drpPRSiteAddress">
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="validateAndCreatePurchaseRequest()" id="btnpurchaseRequest"></button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>

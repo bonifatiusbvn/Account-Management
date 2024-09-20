@@ -124,6 +124,9 @@ function sortPurchaseRequestTable() {
 
 function SelectPurchaseRequestDetails(PurchaseId, element) {
     siteloadershow();
+    $('#PRheadingtxt').text('Item Inward Details');
+    $('#PRInfo').removeClass('d-none');
+    $('#addPRInfo').addClass('d-none');
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -138,6 +141,7 @@ function SelectPurchaseRequestDetails(PurchaseId, element) {
                 $('#dspPrNo').val(response.prNo);
                 $('#dspPId').val(PurchaseId);
                 $('#dspItem').val(response.itemName);
+                $('#dspItemDescription').val(response.itemDescription);
                 $('#dspUnitName').val(response.unitName);
                 $('#dspQuantity').val(response.quantity);
                 $('#dspSiteName').val(response.siteName);
@@ -176,6 +180,7 @@ function CreatePurchaseRequest() {
             UnitTypeId: $('#txtUnitTypeHidden').val(),
             ItemId: $('#txtItemName').val(),
             ItemName: $('#searchItemnameInput').val(),
+            ItemDescription: $('#PRItemDescription').val(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
@@ -188,16 +193,6 @@ function CreatePurchaseRequest() {
             datatype: 'json',
             success: function (Result) {
                 if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('CreatePurchaseRequest');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-                    if (offcanvas) {
-                        offcanvas.hide();
-                    } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
-                    }
 
                     AllPurchaseRequestListTable();
                     toastr.success(Result.message);
@@ -213,9 +208,9 @@ function CreatePurchaseRequest() {
         toastr.error("Kindly fill all details");
     }
 }
-
+ClearPurchaseRequestTextBox();
 function ClearPurchaseRequestTextBox() {
-
+    clearCreatePRText();
     $('#prNo').val('');
     $.ajax({
         url: '/PurchaseMaster/CheckPRNo',
@@ -231,21 +226,12 @@ function ClearPurchaseRequestTextBox() {
         }
     });
     resetPRForm();
-    $('#changeName').html('Create PurchaseRequest');
-    $('#searchItemnameInput').val('');
-    $('#txtUnitType').val('');
-    $('#searchItemname').val('');
-    $('#txtQuantity').val('');
-    $('#txtPoSiteName').val('');
-    $('#drpPRSiteAddress').val('');
-    $('#PurchaseRequestId').val('');
+    $('#PRheadingtext').html('Create PurchaseRequest');
+    $('#addPRInfo').removeClass('d-none');
+    $('#PRInfo').addClass('d-none');
+    $('#addbtnpurchaseRequest').show();
+    $('#updatebtnpurchaseRequest').hide();
 
-    var button = document.getElementById("btnpurchaseRequest");
-    if ($('#PurchaseRequestId').val() == '') {
-        button.textContent = "Create";
-    }
-    var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
-    offcanvas.show();
     $('#searchItemname').select2({
         maximumSelectionLength: 1,
         theme: 'bootstrap4',
@@ -266,10 +252,20 @@ function ClearPurchaseRequestTextBox() {
         dropdownParent: $("#CreatePurchaseRequest")
     });
 }
+function clearCreatePRText() {
+    $('#searchItemnameInput').val('');
+    $('#txtUnitType').val('');
+    $('#searchItemname').val('');
+    $('#txtQuantity').val('');
+    $('#txtPoSiteName').val('');
+    $('#drpPRSiteAddress').val('');
+    $('#PurchaseRequestId').val('');
+    $('#PRItemDescription').val('');
+}
 
 var PRForm;
-function validateAndCreatePurchaseRequest() {
-    PRForm = $("#purchaseRequestForm").validate({
+$(document).ready(function () {
+    $("#purchaseRequestForm").validate({
         rules: {
             searchItemnameInput: "required",
             txtUnitType: "required",
@@ -283,18 +279,7 @@ function validateAndCreatePurchaseRequest() {
             txtPoSiteName: "Select Site",
         }
     });
-    var isValid = true;
-
-
-    if (isValid) {
-        if ($("#PurchaseRequestId").val() == '') {
-            CreatePurchaseRequest();
-        }
-        else {
-            UpdatePurchaseRequestDetails();
-        }
-    }
-}
+});
 
 function resetPRForm() {
     if (PRForm) {
@@ -313,12 +298,17 @@ function EditPurchaseRequestDetails(PurchaseId) {
         success: function (response) {
 
             siteloaderhide();
-            $('#changeName').html('Update PurchaseRequest');
+            $('#PRheadingtext').html('Edit PurchaseRequest');
+            $('#addPRInfo').removeClass('d-none');
+            $('#PRInfo').addClass('d-none');
+            $('#addbtnpurchaseRequest').hide();
+            $('#updatebtnpurchaseRequest').show();
             $('#PurchaseRequestId').val(response.pid);
             $('#txtUnitTypeHidden').val(response.unitTypeId);
             $('#prNo').val(response.prNo);
             $('#txtItemName').val(response.itemId);
             $('#searchItemnameInput').val(response.itemName);
+            $('#PRItemDescription').val(response.itemDescription);
             $('#txtQuantity').val(response.quantity);
             $('#txtPoSiteName').val(response.siteId);
             $('#txtUnitType').val(response.unitName);
@@ -327,13 +317,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
                 $('#drpPRSiteAddress').val(response.siteAddressId);
             });
 
-            var button = document.getElementById("btnpurchaseRequest");
-            if ($('#PurchaseRequestId').val() != '') {
-                button.textContent = "Update";
-            }
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('CreatePurchaseRequest'));
             resetPRForm()
-            offcanvas.show();
             $('#searchItemname').select2({
                 maximumSelectionLength: 1,
                 theme: 'bootstrap4',
@@ -345,7 +329,6 @@ function EditPurchaseRequestDetails(PurchaseId) {
 
 
             $('#drpPRSiteAddress').select2({
-
                 theme: 'bootstrap4',
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                 placeholder: $(this).data('placeholder'),
@@ -385,11 +368,12 @@ function UpdatePurchaseRequestDetails() {
             UnitTypeId: $('#txtUnitTypeHidden').val(),
             ItemId: $('#txtItemName').val(),
             ItemName: $('#searchItemnameInput').val(),
+            ItemDescription: $('#PRItemDescription').val(),
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
         }
-        
+
         $.ajax({
             url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
             type: 'post',
@@ -398,19 +382,10 @@ function UpdatePurchaseRequestDetails() {
             success: function (Result) {
                 siteloaderhide();
                 if (Result.code == 200) {
-                    var offcanvasElement = document.getElementById('CreatePurchaseRequest');
-                    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-                    if (offcanvas) {
-                        offcanvas.hide();
-                    } else {
-
-                        offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.hide();
-                    }
-
                     AllPurchaseRequestListTable();
+                    
                     toastr.success(Result.message);
+                    ClearPurchaseRequestTextBox();
                     siteloaderhide();
                 } else {
                     toastr.error(Result.message);

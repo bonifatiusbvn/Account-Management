@@ -84,6 +84,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PrNo = PurchaseRequestDetails.PrNo,
                     ItemId = PurchaseRequestDetails.ItemId,
                     ItemName = PurchaseRequestDetails.ItemName,
+                    ItemDescription= PurchaseRequestDetails.ItemDescription,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
@@ -144,6 +145,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                            PrNo = a.PrNo,
                                            ItemId = a.ItemId,
                                            ItemName = i.ItemName,
+                                           ItemDescription=a.ItemDescription,
                                            UnitTypeId = a.UnitTypeId,
                                            Quantity = a.Quantity,
                                            UnitName = b.UnitName,
@@ -182,6 +184,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                               Quantity = a.Quantity,
                                               UnitTypeId = a.UnitTypeId,
                                               UnitName = b.UnitName,
+                                              ItemDescription=a.ItemDescription,
                                               SiteId = a.SiteId,
                                               SiteName = c.SiteName,
                                               CreatedBy = a.CreatedBy,
@@ -263,6 +266,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.Pid = PurchaseRequestDetails.Pid;
                     PurchaseRequestData.PrNo = PurchaseRequestDetails.PrNo;
                     PurchaseRequestData.ItemId = PurchaseRequestDetails.ItemId;
+                    PurchaseRequestData.ItemDescription = PurchaseRequestDetails.ItemDescription;
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
