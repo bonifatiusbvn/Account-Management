@@ -7,6 +7,7 @@
 {
     <tr id="userCard_@item.InwordId" class="" onclick="SelectItemInWordDetails('@item.InwordId', this)">
         <td>@item.Item</td>
+        <td>@item.Date?.ToString("dd/MM/yyyy")</td>
         <td>@item.Quantity</td>
         <td>
             @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
@@ -26,6 +27,7 @@
                 }
             }
         </td>
+        <td>@item.SupplierName</td>
         @if (UserSession.SiteId == "")
         {
             <td>@item.SiteName</td>
@@ -35,7 +37,7 @@
         {
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true || a.Delete == true)))
             {
-                <td>
+                <td style="width:131px;">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true)))
                     {
                         <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
@@ -50,7 +52,7 @@
         }
         else
         {
-            <td>
+            <td style="width:131px;">
                 <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
 
                 <a href="javascript:;" class="btn text-primary" onclick="DeleteItemInWord('@item.InwordId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>

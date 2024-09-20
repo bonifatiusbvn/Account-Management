@@ -13,6 +13,8 @@ public partial class ItemInword
 
     public string Item { get; set; } = null!;
 
+    public Guid? SupplierId { get; set; }
+
     public int UnitTypeId { get; set; }
 
     public decimal Quantity { get; set; }

@@ -247,6 +247,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedOn = DateTime.Now,
                     IsApproved = isApproved,
                     DocumentLists = documentList,
+                    SupplierId = InsertDetails.SupplierId,
 
                 };
 
@@ -307,6 +308,7 @@ namespace AccountManegments.Web.Controllers
                     DocumentName = UpdateDetails.DocumentName,
                     DocumentLists = documentList,
                     SiteId = UpdateDetails.SiteId,
+                    SupplierId = UpdateDetails.SupplierId,
 
                 };
 

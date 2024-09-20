@@ -2,6 +2,7 @@
 GetSiteList();
 toggleSiteList();
 ClearItemInWordTextBox();
+GetSupplierList();
 
 function toggleSiteList() {
     var roleuserId = $('#userRoleId').val();
@@ -166,10 +167,50 @@ function GetSiteList() {
             });
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch site list: ", err);
         }
     });
 }
+
+function GetSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplier = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+            $("#inwardSupplierList").autocomplete({
+                source: supplier,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#inwardSupplierList").val(ui.item.label);
+                    $("#inwardSupplierListHidden").val(ui.item.value);
+
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+            $("#inwardSupplierList").on('input', function () {
+                if ($(this).val().trim() === "") {
+                    $("#inwardSupplierListHidden").val("");
+                }
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+
 function ClearItemInWordTextBox() {
     clearCreateInwardtext();
     $('#inwardheadingtxt').text('Create Item Inword');
@@ -181,6 +222,8 @@ function ClearItemInWordTextBox() {
     var siteName = $("#txtInWardSiteName").val();
     $("#siteNameList").val(siteName);
     $("#siteNameListHidden").val(siteId);
+    $("#inwardSupplierListHidden").val('');
+    $("#inwardSupplierList").val('');
 }
 
 function clearCreateInwardtext() {
@@ -194,6 +237,7 @@ function clearCreateInwardtext() {
     $('#txtVehicleNumber').val('');
     $('#txtReceiverName').val('');
     $('#siteNameList').val('');
+    $('#siteNameListHidden').val('');
     $('#addNewImage').empty();
 }
 
@@ -204,18 +248,20 @@ $(document).ready(function () {
         rules: {
             txtUnitType: "required",
             searchItemnameInput: "required",
+            inwardSupplierList: "required",
             txtQuantity: "required",
             txtReceiverName: "required",
             txtVehicleNumber: "required",
-            txtItemId: "required"
+            txtItemId: "required",
         },
         messages: {
             txtUnitType: "Enter UnitType",
             searchItemnameInput: "Enter Product",
+            inwardSupplierList: "Enter Supplier",
             txtQuantity: "Enter Quantity",
             txtReceiverName: "Enter ReceiverName",
             txtVehicleNumber: "Enter VehicleNumber",
-            txtItemId: "select item"
+            txtItemId: "select item",
         }
     })
 });
@@ -251,6 +297,8 @@ function EditItemInWordDetails(InwordId) {
             $("#txtReceiverName").val(response.receiverName);
             $("#siteNameList").val(response.siteName);
             $("#siteNameListHidden").val(response.siteId);
+            $("#inwardSupplierListHidden").val(response.supplierId);
+            $("#inwardSupplierList").val(response.supplierName);
             additionalFiles.length = 0;
             var date = response.date;
             var formattedDate = date.substr(0, 10);
@@ -437,6 +485,7 @@ function InsertMultipleItemInWordDetails() {
             VehicleNumber: $("#txtVehicleNumber").val(),
             ReceiverName: $("#txtReceiverName").val(),
             Date: $("#txtIteminwordDate").val(),
+            SupplierId: $("#inwardSupplierListHidden").val(),
         };
 
         var form_data = new FormData();
@@ -497,6 +546,7 @@ function UpdateMultipleItemInWordDetails() {
             VehicleNumber: $("#txtVehicleNumber").val(),
             ReceiverName: $("#txtReceiverName").val(),
             Date: $("#txtIteminwordDate").val(),
+            SupplierId: $("#inwardSupplierListHidden").val(),
             DocumentName: documentName,
             SiteId: siteId,
         };
