@@ -1092,7 +1092,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    query = query.OrderByDescending(s => s.s.CreatedOn);
+                    query = query.OrderByDescending(s => s.s.Date);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
