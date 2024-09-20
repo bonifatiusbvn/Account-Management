@@ -658,7 +658,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    supplierDataQuery = supplierDataQuery.OrderByDescending(u=> u.Invoice.CreatedOn);
+                    supplierDataQuery = supplierDataQuery.OrderByDescending(u => u.Invoice.Date);
                 }
 
                 var supplierData = await supplierDataQuery.ToListAsync();

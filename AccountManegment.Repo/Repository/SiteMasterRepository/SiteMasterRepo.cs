@@ -503,6 +503,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             {
                 IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
                 {
+                    Id = a.Id,
                     GroupName = a.GroupName,
                 });
                 return GroupList;
@@ -518,11 +519,13 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var SiteGroupList = (from a in Context.GroupMasters
-                                     group new { a } by new { a.GroupName } into g
+                                     group a by new { a.Id, a.GroupName } into g
                                      select new SiteGroupModel
                                      {
-                                         GroupName = g.Key.GroupName,
-                                     });
+                                         Id = g.Key.Id,
+                                         GroupName = g.Key.GroupName
+                                     }).ToList();
+
                 return SiteGroupList;
             }
             catch (Exception ex)
@@ -531,17 +534,18 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(int Id)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var grouplist  =  Context.GroupMasters.Where(x=>x.GroupName == groupName).ToList();
+                var grouplist = Context.GroupMasters.Where(x => x.Id == Id).ToList();
                 if (grouplist.Count > 0)
                 {
                     foreach (var group in grouplist)
                     {
-                        Context.GroupMasters.Remove(group); 
+                        Context.GroupMasters.Remove(group);
                         await Context.SaveChangesAsync();
                     }
                     response.code = 200;
@@ -550,7 +554,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 else
                 {
                     response.code = 400;
-                    response.message = groupName + "groupname is not found.";
+                    response.message = "groupname is not found.";
                 }
             }
             catch (Exception ex)
@@ -561,13 +565,13 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             return response;
         }
 
-        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(int Id)
         {
             try
             {
                 var groupDetails = await (from g in Context.GroupMasters
                                           join s in Context.Sites on g.SiteId equals s.SiteId
-                                          where g.GroupName == groupName
+                                          where g.Id == Id
                                           group new { g, s } by g.GroupName into grouped
                                           select new GroupMasterModel
                                           {

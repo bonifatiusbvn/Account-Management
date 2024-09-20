@@ -53,7 +53,7 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetSiteNameList();
         }
-       public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
+        public async Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId)
         {
             return await SiteMaster.GetSiteAddressList(SiteId);
         }
@@ -71,13 +71,13 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetGroupNameList();
         }
-        public async Task<ApiResponseModel> DeleteSiteGroupDetails(string groupName)
+        public async Task<ApiResponseModel> DeleteSiteGroupDetails(int Id)
         {
-            return await SiteMaster.DeleteSiteGroupDetails(groupName);
+            return await SiteMaster.DeleteSiteGroupDetails(Id);
         }
-        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(string groupName)
+        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(int Id)
         {
-            return await SiteMaster.GetGroupDetailsByGroupName(groupName);
+            return await SiteMaster.GetGroupDetailsByGroupName(Id);
         }
         public async Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
         {

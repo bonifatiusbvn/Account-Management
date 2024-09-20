@@ -130,11 +130,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("GroupMaster");
 
             entity.Property(e => e.GroupName).HasMaxLength(50);
-
-            entity.HasOne(d => d.Site).WithMany(p => p.GroupMasters)
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_GroupMaster_Site");
         });
 
         modelBuilder.Entity<ItemInWordDocument>(entity =>

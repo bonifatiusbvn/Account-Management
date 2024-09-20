@@ -10,6 +10,4 @@ public partial class GroupMaster
     public string GroupName { get; set; } = null!;
 
     public Guid SiteId { get; set; }
-
-    public virtual Site Site { get; set; } = null!;
 }

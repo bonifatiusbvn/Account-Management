@@ -16,11 +16,11 @@
             <td>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true)))
                 {
-                    <a class="btn text-primary" onclick="DisplaySiteGroup('@item.GroupName')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                    <a class="btn text-primary" onclick="DisplaySiteGroup('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 }
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Delete == true)))
                 {
-                    <a href="javascript:void(0);" class="btn text-primary" onclick="DeleteSiteGroup('@item.GroupName')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    <a href="javascript:void(0);" class="btn text-primary" onclick="DeleteSiteGroup('@item.Id')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                 }
 
             </td>

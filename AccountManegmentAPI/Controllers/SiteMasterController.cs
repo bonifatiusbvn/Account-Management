@@ -183,11 +183,11 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("DeleteSiteGroupDetails")]
-        public async Task<IActionResult> DeleteSiteGroupDetails(string groupName)
+        public async Task<IActionResult> DeleteSiteGroupDetails(int Id)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
 
-            var sitegroupName = await SiteMaster.DeleteSiteGroupDetails(groupName);
+            var sitegroupName = await SiteMaster.DeleteSiteGroupDetails(Id);
             try
             {
 
@@ -211,9 +211,9 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetGroupDetailsByGroupName")]
-        public async Task<IActionResult> GetGroupDetailsByGroupName(string groupName)
+        public async Task<IActionResult> GetGroupDetailsByGroupName(int id)
         {
-            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(groupName);
+            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(id);
             return Ok(new { code = 200, data = SiteGroupDetails });
         }
 
