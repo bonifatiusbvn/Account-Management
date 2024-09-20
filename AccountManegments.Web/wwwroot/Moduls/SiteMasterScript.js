@@ -779,7 +779,7 @@ function toggleShippingAddress() {
 //}
 
 function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
-    debugger
+
     cleargrouplisttext();
     if (showGroupInfo) {
         $('#SiteInfoHeading').text('Add Group Details');
