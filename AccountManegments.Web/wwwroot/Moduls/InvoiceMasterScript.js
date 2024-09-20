@@ -1469,12 +1469,11 @@ function fn_AddInvoiceProductDescription(element) {
     $productDesText.toggle();
 }
 function GetGroupList() {
-
     $.ajax({
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#InvoiceGroupList').append('<Option value=' + data.groupName + '>' + data.groupName + '</Option>')
+                $('#InvoiceGroupList').append('<option value="' + data.groupName + '">' + data.groupName + '</option>');
             });
         }
     });
