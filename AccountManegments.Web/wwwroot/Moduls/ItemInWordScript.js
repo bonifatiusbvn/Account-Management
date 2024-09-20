@@ -1,17 +1,7 @@
 ﻿AllItemInWordListTable();
 GetSiteList();
-toggleSiteList();
 ClearItemInWordTextBox();
 GetSupplierList();
-
-function toggleSiteList() {
-    var roleuserId = $('#userRoleId').val();
-    if (roleuserId == 3) {
-        document.getElementById("siteSection").style.display = "block";
-    } else {
-        document.getElementById("siteSection").style.display = "none";
-    }
-}
 
 function AllItemInWordListTable() {
     var searchText = $('#txtItemInWordSearch').val();
@@ -165,6 +155,11 @@ function GetSiteList() {
             }).focus(function () {
                 $(this).autocomplete("search", "");
             });
+            $("#siteNameList").on('input', function () {
+                if ($(this).val().trim() === "") {
+                    $("#siteNameListHidden").val("");
+                }
+            });
         },
         error: function (err) {
             console.error("Failed to fetch site list: ", err);
@@ -224,6 +219,7 @@ function ClearItemInWordTextBox() {
     $("#siteNameListHidden").val(siteId);
     $("#inwardSupplierListHidden").val('');
     $("#inwardSupplierList").val('');
+    $("#spnInWardSiteName").hide();
 }
 
 function clearCreateInwardtext() {
@@ -322,7 +318,6 @@ function EditItemInWordDetails(InwordId) {
 }
 
 function DeleteItemInWord(InwordId) {
-
     Swal.fire({
         title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
@@ -467,57 +462,62 @@ function showpictures() {
 function InsertMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
-        var siteId = null;
-        if ($("#siteNameList").val()) {
-            siteId = $("#siteNameListHidden").val();
+        var siteId = $("#siteNameListHidden").val();
+        if (siteId == undefined)
+        {
+            siteId = $("#siteNameIdHidden").val();
         }
-        else {
-            siteId = $("#txtInwardSiteid").val();
-        }
+        if (siteId != "") {
+            var ItemInWordRequest = {
+                UnitTypeId: $("#txtUnitTypeHidden").val(),
+                ItemId: $("#txtItemName").val(),
+                Item: $("#searchItemnameInput").val(),
+                Quantity: $("#txtQuantity").val(),
+                SiteId: siteId,
+                CreatedBy: $("#txtCreatedBy").val(),
+                VehicleNumber: $("#txtVehicleNumber").val(),
+                ReceiverName: $("#txtReceiverName").val(),
+                Date: $("#txtIteminwordDate").val(),
+                SupplierId: $("#inwardSupplierListHidden").val(),
+            };
 
-        var ItemInWordRequest = {
-            UnitTypeId: $("#txtUnitTypeHidden").val(),
-            ItemId: $("#txtItemName").val(),
-            Item: $("#searchItemnameInput").val(),
-            Quantity: $("#txtQuantity").val(),
-            SiteId: siteId,
-            CreatedBy: $("#txtCreatedBy").val(),
-            VehicleNumber: $("#txtVehicleNumber").val(),
-            ReceiverName: $("#txtReceiverName").val(),
-            Date: $("#txtIteminwordDate").val(),
-            SupplierId: $("#inwardSupplierListHidden").val(),
-        };
+            var form_data = new FormData();
+            form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
 
-        var form_data = new FormData();
-        form_data.append("InWordsDetails", JSON.stringify(ItemInWordRequest));
-
-        for (var i = 0; i < additionalFiles.length; i++) {
-            form_data.append("DocDetails", additionalFiles[i]);
-        }
-
-        $.ajax({
-            url: '/ItemInWord/InsertMultipleItemInWordDetail',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                if (Result.code == 200) {
-                    AllItemInWordListTable();
-                    ClearItemInWordTextBox();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
-                }
-
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
+            for (var i = 0; i < additionalFiles.length; i++) {
+                form_data.append("DocDetails", additionalFiles[i]);
             }
-        });
+
+            $.ajax({
+                url: '/ItemInWord/InsertMultipleItemInWordDetail',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        AllItemInWordListTable();
+                        ClearItemInWordTextBox();
+                        toastr.success(Result.message);
+                    } else {
+                        toastr.error(Result.message);
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else
+        {
+            siteloaderhide();
+            $("#spnInWardSiteName").show().text('select the site');
+            toastr.error("Kindly select the site");
+        }
     }
     else {
         siteloaderhide();
@@ -528,60 +528,65 @@ function InsertMultipleItemInWordDetails() {
 function UpdateMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
-        var siteId = null;
-        if ($("#siteNameList").val()) {
-            siteId = $("#siteNameListHidden").val();
+        var siteId = $("#siteNameListHidden").val();
+        if (siteId == undefined) {
+            siteId = $("#siteNameIdHidden").val();
         }
-        else {
-            siteId = $("#txtInwardSiteid").val();
-        }
-        var documentName = $("#txtDocumentName").val();
+        if (siteId != "") {
+            var documentName = $("#txtDocumentName").val();
 
-        var UpdateItemInWord = {
-            InwordId: $('#txtItemInWordid').val(),
-            UnitTypeId: $("#txtUnitTypeHidden").val(),
-            ItemId: $("#txtItemName").val(),
-            Item: $("#searchItemnameInput").val(),
-            Quantity: $("#txtQuantity").val(),
-            VehicleNumber: $("#txtVehicleNumber").val(),
-            ReceiverName: $("#txtReceiverName").val(),
-            Date: $("#txtIteminwordDate").val(),
-            SupplierId: $("#inwardSupplierListHidden").val(),
-            DocumentName: documentName,
-            SiteId: siteId,
-        };
+            var UpdateItemInWord = {
+                InwordId: $('#txtItemInWordid').val(),
+                UnitTypeId: $("#txtUnitTypeHidden").val(),
+                ItemId: $("#txtItemName").val(),
+                Item: $("#searchItemnameInput").val(),
+                Quantity: $("#txtQuantity").val(),
+                VehicleNumber: $("#txtVehicleNumber").val(),
+                ReceiverName: $("#txtReceiverName").val(),
+                Date: $("#txtIteminwordDate").val(),
+                SupplierId: $("#inwardSupplierListHidden").val(),
+                DocumentName: documentName,
+                SiteId: siteId,
+            };
 
-        var form_data = new FormData();
-        form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
+            var form_data = new FormData();
+            form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 
-        if (additionalFiles.length > 0) {
-            for (var i = 0; i < additionalFiles.length; i++) {
-                form_data.append("DocDetails", additionalFiles[i]);
-            }
-        }
-
-        $.ajax({
-            url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.code == 200) {
-                    AllItemInWordListTable();
-                    ClearItemInWordTextBox();
-                    toastr.success(Result.message);
-                } else {
-                    toastr.error(Result.message);
+            if (additionalFiles.length > 0) {
+                for (var i = 0; i < additionalFiles.length; i++) {
+                    form_data.append("DocDetails", additionalFiles[i]);
                 }
-                siteloaderhide();
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
             }
-        });
+
+            $.ajax({
+                url: '/ItemInWord/UpdatetMultipleItemInWordDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        AllItemInWordListTable();
+                        ClearItemInWordTextBox();
+                        toastr.success(Result.message);
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                    siteloaderhide();
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else
+        {
+            siteloaderhide();
+            $("#spnInWardSiteName").show().text('select the site');
+            toastr.error("Kindly select the site");
+        }
     }
     else {
         siteloaderhide();
