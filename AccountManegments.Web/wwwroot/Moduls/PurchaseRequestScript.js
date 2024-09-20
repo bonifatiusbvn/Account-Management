@@ -124,7 +124,7 @@ function sortPurchaseRequestTable() {
 
 function SelectPurchaseRequestDetails(PurchaseId, element) {
     siteloadershow();
-    $('#PRheadingtxt').text('Item Inward Details');
+    $('#PRheadingtext').text('PurchaseRequest Details');
     $('#PRInfo').removeClass('d-none');
     $('#addPRInfo').addClass('d-none');
     $('tr').removeClass('active');
