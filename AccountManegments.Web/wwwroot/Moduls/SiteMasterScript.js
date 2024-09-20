@@ -779,6 +779,7 @@ function toggleShippingAddress() {
 //}
 
 function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
+    debugger
     cleargrouplisttext();
     if (showGroupInfo) {
         $('#SiteInfoHeading').text('Add Group Details');
@@ -786,6 +787,7 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
         $('#siteinfo').addClass('d-none');
         $('#updatesitegroupbtn').hide();
         $('#addsitegroupbtn').show();
+        $("#txtSiteGropuName").prop('readonly', false);
 
         $.ajax({
             url: '/SiteMaster/GetSiteNameList',
