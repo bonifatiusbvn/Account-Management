@@ -196,6 +196,7 @@ function CreatePurchaseRequest() {
 
                     AllPurchaseRequestListTable();
                     toastr.success(Result.message);
+                    ClearPurchaseRequestTextBox();
                 } else {
                     toastr.error(Result.message);
                 }
