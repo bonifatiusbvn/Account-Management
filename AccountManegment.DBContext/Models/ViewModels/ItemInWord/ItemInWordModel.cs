@@ -39,6 +39,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? UnitName { get; set; }
 
         public string? SiteName { get; set; }
+        public Guid? SupplierId { get; set; }
+        public string? SupplierName { get; set; }
 
     }
     public class ItemInWordRequestModel
@@ -67,6 +69,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
+        public Guid? SupplierId { get; set; }
 
     }
     public class InwardIsApprovedMasterModel

@@ -11,5 +11,9 @@ public partial class UnitMaster
 
     public virtual ICollection<ItemMaster> ItemMasters { get; set; } = new List<ItemMaster>();
 
+    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
+
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
+
+    public virtual ICollection<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; } = new List<SupplierInvoiceDetail>();
 }

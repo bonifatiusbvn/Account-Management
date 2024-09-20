@@ -34,4 +34,6 @@ public partial class PurchaseOrderDetail
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual UnitMaster UnitType { get; set; } = null!;
 }

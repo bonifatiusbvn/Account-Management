@@ -68,8 +68,10 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Item Name</th>
+                                                        <th>Date</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
+                                                        <th>Supplier</th>
                                                         @if (UserSession.SiteId == "")
                                                         {
                                                             <th>SiteName</th>
@@ -181,6 +183,12 @@
                                             <input type="text" id="siteNameList" name="siteNameList" class="form-control" placeholder="Site">
                                             <input type="hidden" id="siteNameListHidden" name="siteNameListHidden">
                                             <span id="spnInWardSiteName" class="text-danger"></span>
+                                        </div>
+                                         <div class="col-lg-12 col-12">
+                                            <label class="form-label">Supplier</label>
+                                            <input type="text" id="inwardSupplierList" name="inwardSupplierList" class="form-control" placeholder="Supplier">
+                                            <input type="hidden" id="inwardSupplierListHidden" name="inwardSupplierListHidden">
+                                            <span id="inwardSupplierList" class="text-danger"></span>
                                         </div>
                                         <div class="container">
                                             <div id="MultipleImageContainer">

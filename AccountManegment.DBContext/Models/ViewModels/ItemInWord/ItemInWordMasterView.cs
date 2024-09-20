@@ -41,6 +41,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? UnitName { get; set; }
 
         public string? SiteName { get; set; }
+
+        public Guid? SupplierId { get; set; }
+
+        public string? SupplierName { get; set; }
         public List<ItemInWordDocumentModel>? DocumentLists { get; set; }
     }   
 }
