@@ -565,6 +565,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         {
             try
             {
+
                 var supplierDataQuery = from a in Context.SupplierInvoices
                                         join e in Context.SupplierInvoiceDetails on a.Id equals e.RefInvoiceId
                                         join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
@@ -594,12 +595,20 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                                 CreatedOn = a.CreatedOn,
                                                 IsApproved = a.IsApproved,
                                                 SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                                GSTper = f.Gstper,
+                                                ItemPrice = f.PricePerUnit,
+                                                ItemPricewithGST = f.PricePerUnit + f.Gstamount,
                                             },
+
                                             Item = new SupplierInvoiceDetailsModel
                                             {
                                                 RefInvoiceId = e.RefInvoiceId,
                                                 ItemId = e.ItemId,
                                                 ItemName = f.ItemName,
+                                                Price = f.PricePerUnit,
+                                                Gstper = f.Gstper,
+                                                Gst = f.Gstamount,
+                                                PricewithGst = f.Gstamount + f.PricePerUnit,
                                                 Quantity = e.Quantity,
                                                 TotalAmount = e.Quantity * f.PricePerUnit,
                                             }

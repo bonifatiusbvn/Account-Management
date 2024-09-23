@@ -65,6 +65,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal? NetAmount { get; set; }
         public string? GroupName { get; set; }
         public bool? IsApproved { get; set; }
+
+        public decimal? GSTper { get; set; }
+        public decimal? ItemPrice { get; set; }
+        public decimal? ItemPricewithGST { get; set; }
     }
     public class InvoiceTotalAmount
     {
