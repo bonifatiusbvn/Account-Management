@@ -11,7 +11,21 @@
         <td><a class="text-primary">@item.SupplierName</td>
         <td>@item.Gstno</td>
         <td>
+            @if (_userSession.UserRole == 3)
+            {
                 <input class="form-check-input" type="checkbox" name="chk_Supplierchild" id="Supplier_@item.SupplierId">
+            }
+            else
+            {
+                @if (item.IsApproved == true)
+                {
+                    <span class="badge bg-light-success text-success w-100">Approved</span>
+                }
+                else
+                {
+                    <span class="badge bg-light-warning text-warning w-100">Pending</span>
+                }
+            }
         </td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
         {
