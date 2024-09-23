@@ -6,11 +6,13 @@
 <div class="table-responsive">
     <table class="table align-middle mb-0">
         <thead class="table-light btn-primary">
-            <tr>
+            <tr class="text-left">
                 <th>InvoiceNo</th>
                 <th>Date</th>
-                <th>Quantity</th>
-                <th>TotalAmount</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>GST</th>
+                <th>PriceWithGST</th>
             </tr>
         </thead>
         <tbody>
@@ -18,8 +20,8 @@
             {
                 foreach (var item in Model.InvoiceList)
                 {
-                    <tr>
-                        <td>@item.SupplierInvoiceNo</td>
+                    <tr class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
+                        <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
                         <td>@item.Date?.ToString("dd/MM/yyyy")</td>
 
                         @if (Model.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
@@ -31,7 +33,10 @@
                                 </td>
                             }
                         }
-                        <td>@item.TotalAmount</td>
+                        <td>@item.ItemPrice</td>
+                        <td>@item.GSTper</td>
+                        <td class="text-center">@item.ItemPricewithGST</td>
+
                     </tr>
                 }
             }
