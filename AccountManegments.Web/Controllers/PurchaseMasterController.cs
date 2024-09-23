@@ -914,6 +914,13 @@ namespace AccountManegments.Web.Controllers
                 return stringWriter.ToString();
             }
         }
+
+        public async Task<IActionResult> PurchaseOrderView()
+        {
+
+            return View();
+
+        }
     }
 }
 

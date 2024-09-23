@@ -7,7 +7,17 @@
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
 
+<style>
+    .table tbody tr {
+        border-bottom: 1px solid #ddd;
+        height: 50px;
+    }
 
+    .table tbody td {
+        vertical-align: middle;
+        padding: 5px;
+    }
+</style>
 <div class="row">
     <div class="col-12 col-lg-4 col-xl-4 d-flex">
         <div class="card radius-10 w-100">
@@ -40,11 +50,23 @@
                                         <th>Item</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
-                                        <th>
-                                            <input class="form-check-input" type="checkbox" id="checkedAllPR" />
-                                            <span class="g-3">Approve</span>
-                                        </th>
-                                        <th>Action</th>
+                                        @if (_userSession.UserRole == 3)
+                                        {
+                                            <th>
+                                                <input class="form-check-input" type="checkbox" id="checkedAllPR" />
+                                                <span class="g-3">Approve</span>
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <th>
+                                                Approve
+                                            </th>
+                                        }
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <th>Action</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody id="tbPndingApproval">
@@ -120,10 +142,19 @@
                                         <th>Supplier</th>
                                         <th>Company</th>
                                         <th>Amount</th>
-                                        <th style="width:84px;">
-                                            <input class="form-check-input" type="checkbox" id="checkedAllPO" />
-                                            <span class="g-3">Approve</span>
-                                        </th>
+                                        @if (_userSession.UserRole == 3)
+                                        {
+                                            <th style="width:84px;">
+                                                <input class="form-check-input" type="checkbox" id="checkedAllPO" />
+                                                <span class="g-3">Approve</span>
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <th>
+                                                Approve
+                                            </th>
+                                        }
                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                                         {
                                             <th>Action</th>
@@ -154,11 +185,23 @@
                                     <tr>
                                         <th>Item</th>
                                         <th>Price</th>
-                                        <th>
-                                            <input class="form-check-input" type="checkbox" id="checkedAllItem" />
-                                            <span class="g-3">Approve</span>
-                                        </th>
-                                        <th>Action</th>
+                                        @if (_userSession.UserRole == 3)
+                                        {
+                                            <th>
+                                                <input class="form-check-input" type="checkbox" id="checkedAllItem" />
+                                                <span class="g-3">Approve</span>
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <th>
+                                                Approve
+                                            </th>
+                                        }
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <th>Action</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody id="tbItemsList">
@@ -185,10 +228,19 @@
                                         <th>Supplier</th>
                                         <th>Company</th>
                                         <th>Amount</th>
-                                        <th style="width:84px;">
-                                            <input class="form-check-input" type="checkbox" id="checkedAllInvoice" />
-                                            <span class="g-3">Approve</span>
-                                        </th>
+                                        @if (_userSession.UserRole == 3)
+                                        {
+                                            <th style="width:84px;">
+                                                <input class="form-check-input" type="checkbox" id="checkedAllInvoice" />
+                                                <span class="g-3">Approve</span>
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <th>
+                                                Approve
+                                            </th>
+                                        }
                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                         {
                                             <th>Action</th>
@@ -218,11 +270,23 @@
                                         <tr>
                                             <th>Supplier</th>
                                             <th>Gst</th>
-                                            <th>
-                                                <input class="form-check-input" type="checkbox" id="checkedAllSupplier" />
-                                                <span class="g-3">Approve</span>
-                                            </th>
-                                            <th>Action</th>
+                                            @if (_userSession.UserRole == 3)
+                                            {
+                                                <th>
+                                                    <input class="form-check-input" type="checkbox" id="checkedAllSupplier" />
+                                                    <span class="g-3">Approve</span>
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <th>
+                                                    Approve
+                                                </th>
+                                            }
+                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
+                                            {
+                                                <th>Action</th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody id="dashboardSupplierList">
@@ -247,11 +311,23 @@
                                         <tr>
                                             <th>Item</th>
                                             <th>Quantity</th>
-                                            <th>
-                                                <input class="form-check-input" type="checkbox" id="checkedAllInward" />
-                                                <span class="g-3">Approve</span>
-                                            </th>
-                                            <th>Action</th>
+                                            @if (_userSession.UserRole == 3)
+                                            {
+                                                <th>
+                                                    <input class="form-check-input" type="checkbox" id="checkedAllInward" />
+                                                    <span class="g-3">Approve</span>
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <th>
+                                                    Approve
+                                                </th>
+                                            }
+                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Delete == true)))
+                                            {
+                                                <th>Action</th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody id="dashboardInwardList">
