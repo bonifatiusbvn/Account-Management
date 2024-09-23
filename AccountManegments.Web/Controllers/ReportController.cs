@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
+using System.Linq;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -138,6 +139,18 @@ namespace AccountManegments.Web.Controllers
                 if (response.code == 200)
                 {
                     var SupplierDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
+
+                    string FormatIndianCurrency(decimal amount)
+                    {
+                        var cultureInfo = new CultureInfo("en-IN");
+                        var numberFormat = cultureInfo.NumberFormat;
+                        numberFormat.CurrencySymbol = "₹";
+                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                        numberFormat.CurrencyDecimalDigits = 2;
+                        numberFormat.CurrencyGroupSeparator = ",";
+                        numberFormat.CurrencyDecimalSeparator = ".";
+                        return amount.ToString("C", numberFormat);
+                    }
 
                     var document = new Aspose.Pdf.Document
                     {
@@ -273,18 +286,6 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
 
-                    string FormatIndianCurrency(decimal amount)
-                    {
-                        var cultureInfo = new CultureInfo("en-IN");
-                        var numberFormat = cultureInfo.NumberFormat;
-                        numberFormat.CurrencySymbol = "₹";
-                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                        numberFormat.CurrencyDecimalDigits = 2;
-                        numberFormat.CurrencyGroupSeparator = ",";
-                        numberFormat.CurrencyDecimalSeparator = ".";
-                        return amount.ToString("C", numberFormat);
-                    }
-
                     foreach (var item in SupplierDetails.InvoiceList)
                     {
                         var row = table.Rows.Add();
@@ -296,7 +297,7 @@ namespace AccountManegments.Web.Controllers
                         }
                         else
                         {
-                            cellValue = item.SupplierInvoiceNo != null ? item.SupplierInvoiceNo :"";
+                            cellValue = item.SupplierInvoiceNo != null ? item.SupplierInvoiceNo : "";
                         }
                         row.Cells.Add(cellValue != "" ? cellValue : "");
                         row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
@@ -717,80 +718,229 @@ namespace AccountManegments.Web.Controllers
 
                     pdfPage.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment("\n\n"));
 
-
-
-                    // Table 3
-                    string currencyFormat = "#,##,##0.00";
-                    var table = new Aspose.Pdf.Table
+                    if (PayOutReport.SiteId == null)
                     {
-                        ColumnWidths = "40% 20% 20% 20%",
-                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
-                        Border = new BorderInfo(BorderSide.None),
-                        DefaultCellBorder = new BorderInfo(BorderSide.None),
-                    };
+                        var invoiceList = NetInvoiceDetails.InvoiceList as IEnumerable<SupplierInvoiceModel>;
+                        var groupedInvoices = invoiceList
+                            .GroupBy(item => item.SiteName)
+                            .Select(group => new
+                            {
+                                SiteName = group.Key,
+                                Invoices = group.ToList()
+                            }).ToList();
 
-                    var headerRow = table.Rows.Add();
-                    headerRow.Cells.Add("Supplier");
-                    headerRow.Cells.Add("Credit");
-                    headerRow.Cells.Add("Debit");
-                    headerRow.Cells.Add("Net Total");
+                        decimal yougavetotal = 0;
+                        decimal yougettotal = 0;
+                        decimal nettotal = 0;
+                        decimal netbalance = 0;
 
-                    foreach (var cell in headerRow.Cells)
-                    {
-                        cell.BackgroundColor = Aspose.Pdf.Color.Black;
-                        var fragment = cell.Paragraphs[0] as TextFragment;
-                        if (fragment != null)
+                        string lastSiteName = null;
+
+                        foreach (var group in groupedInvoices)
                         {
-                            fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                            if (lastSiteName != group.SiteName)
+                            {
+                                var table1 = new Aspose.Pdf.Table
+                                {
+                                    ColumnWidths = "33% 33% 34%",
+                                    DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                                    Border = new BorderInfo(BorderSide.All, 1f),
+                                    DefaultCellBorder = new BorderInfo(BorderSide.None),
+                                };
+
+                                // Adding the site header row
+                                var siteRow = table1.Rows.Add();
+                                siteRow.Cells.Add("Site");
+                                siteRow.Cells.Add("Supplier");
+                                siteRow.Cells.Add("Company");
+
+                                foreach (var cell in siteRow.Cells)
+                                {
+                                    cell.Alignment = HorizontalAlignment.Center;
+                                }
+
+                                for (int i = 0; i < siteRow.Cells.Count; i++)
+                                {
+                                    siteRow.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                }
+
+                                var siteRowDetail = table1.Rows.Add();
+                                siteRowDetail.Cells.Add(group.SiteName ?? string.Empty);
+                                siteRowDetail.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
+                                siteRowDetail.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
+
+                                foreach (var cell in siteRowDetail.Cells)
+                                {
+                                    cell.Alignment = HorizontalAlignment.Center;
+                                    cell.Border = new BorderInfo(BorderSide.Top, 1f);
+                                }
+
+                                for (int i = 0; i < siteRowDetail.Cells.Count; i++)
+                                {
+                                    siteRowDetail.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                }
+
+                                pdfPage.Paragraphs.Add(table1);
+
+                                lastSiteName = group.SiteName;
+                            }
+
+                            // Create the detailed table for the current group
+                            var detailedTable = new Aspose.Pdf.Table
+                            {
+                                ColumnWidths = "40% 20% 20% 20%",
+                                DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                                Border = new BorderInfo(BorderSide.None),
+                                DefaultCellBorder = new BorderInfo(BorderSide.None),
+                            };
+
+                            var headerRow = detailedTable.Rows.Add();
+                            headerRow.Cells.Add("Supplier");
+                            headerRow.Cells.Add("Credit");
+                            headerRow.Cells.Add("Debit");
+                            headerRow.Cells.Add("Net Total");
+
+                            foreach (var cell in headerRow.Cells)
+                            {
+                                cell.BackgroundColor = Aspose.Pdf.Color.Black;
+                                var fragment = cell.Paragraphs[0] as TextFragment;
+                                if (fragment != null)
+                                {
+                                    fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                                }
+                            }
+                            decimal siteNonPayOutTotal = 0;
+                            decimal sitePayOutTotal = 0;
+                            decimal siteCombinedTotal = 0;
+
+                            foreach (var item in group.Invoices)
+                            {
+                                var row = detailedTable.Rows.Add();
+                                row.Cells.Add(item.SupplierName);
+
+                                decimal nonPayOutTotalAmount = item.NonPayOutTotalAmount ?? 0;
+                                decimal payOutTotalAmount = item.PayOutTotalAmount ?? 0;
+
+                                row.Cells.Add(FormatIndianCurrency(nonPayOutTotalAmount));
+                                siteNonPayOutTotal += nonPayOutTotalAmount;
+
+                                row.Cells.Add(FormatIndianCurrency(payOutTotalAmount));
+                                sitePayOutTotal += payOutTotalAmount; 
+
+                                siteCombinedTotal += nonPayOutTotalAmount + payOutTotalAmount;
+
+                                netbalance = nonPayOutTotalAmount - payOutTotalAmount;
+                                row.Cells.Add(FormatIndianCurrency(netbalance));
+
+                                var backgroundColor = detailedTable.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                                foreach (var cell in row.Cells)
+                                {
+                                    cell.BackgroundColor = backgroundColor;
+                                }
+                            }
+                            var footerRow = detailedTable.Rows.Add();
+                            footerRow.Cells.Add("Total");
+                            footerRow.Cells.Add(FormatIndianCurrency(siteNonPayOutTotal)); 
+                            footerRow.Cells.Add(FormatIndianCurrency(sitePayOutTotal)); 
+                            footerRow.Cells.Add(FormatIndianCurrency(siteCombinedTotal)); 
+
+                            TextState boldTextState = new TextState
+                            {
+                                FontStyle = FontStyles.Bold
+                            };
+
+                            foreach (var cell in footerRow.Cells)
+                            {
+                                cell.DefaultCellTextState = boldTextState;
+                            }
+                            pdfPage.Paragraphs.Add(detailedTable);
+                            pdfPage.Paragraphs.Add(new Aspose.Pdf.Text.TextFragment("\n\n"));
                         }
-                    }
-
-                    decimal yougavetotal = 0;
-                    decimal yougettotal = 0;
-                    decimal nettotal = 0;
-                    decimal netbalance = 0;
-
-                    foreach (var item in NetInvoiceDetails.InvoiceList)
-                    {
-                        var row = table.Rows.Add();
-                        row.Cells.Add(item.SupplierName);
-                        row.Cells.Add(FormatIndianCurrency(item.NonPayOutTotalAmount));
-                        yougettotal += item.NonPayOutTotalAmount;
-                        row.Cells.Add(FormatIndianCurrency(item.PayOutTotalAmount));
-                        yougavetotal += item.PayOutTotalAmount;
-                        netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                        row.Cells.Add(FormatIndianCurrency(netbalance));
-
-                        var backgroundColor = table.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
-                        foreach (var cell in row.Cells)
+                        using (var streamout = new MemoryStream())
                         {
-                            cell.BackgroundColor = backgroundColor;
+                            document.Save(streamout);
+                            return new FileContentResult(streamout.ToArray(), "application/pdf")
+                            {
+                                FileDownloadName = Guid.NewGuid() + "_NetReportList.pdf",
+                            };
                         }
+
                     }
-                    var footerRow = table.Rows.Add();
-                    footerRow.Cells.Add("Total");
-                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalCreadit));
-                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPurchase));
-                    footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
 
-                    TextState boldTextState = new TextState
+                    else
                     {
-                        FontStyle = FontStyles.Bold
-                    };
-
-                    foreach (var cell in footerRow.Cells)
-                    {
-                        cell.DefaultCellTextState = boldTextState;
-                    }
-                    pdfPage.Paragraphs.Add(table);
-
-                    using (var streamout = new MemoryStream())
-                    {
-                        document.Save(streamout);
-                        return new FileContentResult(streamout.ToArray(), "application/pdf")
+                        // Table 3
+                        var table = new Aspose.Pdf.Table
                         {
-                            FileDownloadName = Guid.NewGuid() + "_NetReportList.pdf",
+                            ColumnWidths = "40% 20% 20% 20%",
+                            DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                            Border = new BorderInfo(BorderSide.None),
+                            DefaultCellBorder = new BorderInfo(BorderSide.None),
                         };
+
+                        var headerRow = table.Rows.Add();
+                        headerRow.Cells.Add("Supplier");
+                        headerRow.Cells.Add("Credit");
+                        headerRow.Cells.Add("Debit");
+                        headerRow.Cells.Add("Net Total");
+
+                        foreach (var cell in headerRow.Cells)
+                        {
+                            cell.BackgroundColor = Aspose.Pdf.Color.Black;
+                            var fragment = cell.Paragraphs[0] as TextFragment;
+                            if (fragment != null)
+                            {
+                                fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                            }
+                        }
+
+                        decimal yougavetotal = 0;
+                        decimal yougettotal = 0;
+                        decimal nettotal = 0;
+                        decimal netbalance = 0;
+
+                        foreach (var item in NetInvoiceDetails.InvoiceList)
+                        {
+                            var row = table.Rows.Add();
+                            row.Cells.Add(item.SupplierName);
+                            row.Cells.Add(FormatIndianCurrency(item.NonPayOutTotalAmount));
+                            yougettotal += item.NonPayOutTotalAmount;
+                            row.Cells.Add(FormatIndianCurrency(item.PayOutTotalAmount));
+                            yougavetotal += item.PayOutTotalAmount;
+                            netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
+                            row.Cells.Add(FormatIndianCurrency(netbalance));
+
+                            var backgroundColor = table.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                            foreach (var cell in row.Cells)
+                            {
+                                cell.BackgroundColor = backgroundColor;
+                            }
+                        }
+                        var footerRow = table.Rows.Add();
+                        footerRow.Cells.Add("Total");
+                        footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalCreadit));
+                        footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPurchase));
+                        footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
+
+                        TextState boldTextState = new TextState
+                        {
+                            FontStyle = FontStyles.Bold
+                        };
+
+                        foreach (var cell in footerRow.Cells)
+                        {
+                            cell.DefaultCellTextState = boldTextState;
+                        }
+                        pdfPage.Paragraphs.Add(table);
+
+                        using (var streamout = new MemoryStream())
+                        {
+                            document.Save(streamout);
+                            return new FileContentResult(streamout.ToArray(), "application/pdf")
+                            {
+                                FileDownloadName = Guid.NewGuid() + "_NetReportList.pdf",
+                            };
+                        }
                     }
                 }
                 return RedirectToAction("ReportDetails");
