@@ -31,9 +31,12 @@
                                                         <div class="col-6">
                                                             <h2 class="h5">Payment Report</h2>
                                                         </div>
-                                                        <div class="col-6 text-end">
-                                                            <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab"><i class="lni lni-circle-plus"></i>Opening Balance</button>
-                                                        </div>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Add == true))
+                                                        {
+                                                            <div class="col-6 text-end">
+                                                                <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab"><i class="lni lni-circle-plus"></i>Opening Balance</button>
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
@@ -133,14 +136,16 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="card border-0">
-                                                        <div class="card-body">
-                                                            <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
-                                                                <i class="lni lni-circle-plus"></i>PayOut
-                                                            </a>
-                                                        </div>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Add == true))
+                                                        {
+                                                            <div class="card-body">
+                                                                <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
+                                                                    <i class="lni lni-circle-plus"></i>PayOut
+                                                                </a>
+                                                            </div>
+                                                        }
                                                     </div>
                                                     <div class="row">
-
                                                         <div class="card-body pt-0">
                                                             <div class="table-responsive">
                                                                 <table class="table align-middle mb-0">

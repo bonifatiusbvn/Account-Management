@@ -1103,7 +1103,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    query = query.OrderByDescending(s => s.s.CreatedOn);
+                    query = query.OrderByDescending(s => s.s.Date);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
@@ -1668,7 +1668,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw new Exception("An error occurred while fetching invoice details.", ex);
             }
         }
-
 
         public async Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
         {

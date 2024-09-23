@@ -41,6 +41,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
         public DateTime? UpdatedOn { get; set; }
         public string? UnitName { get; set; }
+
+        public decimal? PricewithGst { get; set; }
     }
 
     public class SupplierPendingDetailsModel
