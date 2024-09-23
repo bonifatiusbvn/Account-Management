@@ -329,15 +329,15 @@
                                                                                 <span id="spnPODispatchBy" class="text-danger"></span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                                            <div class="mb-2">
-                                                                                <div class="input-group mb-3">
-                                                                                    <label class="input-group-text" for="txtPOPaymentTerms">Payment Terms</label>
-                                                                                    <input type="text" id="txtPOPaymentTerms" name="txtPOPaymentTerms" class="form-control" placeholder="Payment Terms" value="@Model.PaymentTerms">
-                                                                                </div>
-                                                                                <span id="spnPOPaymentTerms" class="text-danger"></span>
-                                                                            </div>
+                                                                        @* <div class="col-lg-12 col-sm-12 mt-2">
+                                                                        <div class="mb-2">
+                                                                        <div class="input-group mb-3">
+                                                                        <label class="input-group-text" for="txtPOPaymentTerms">Payment Terms</label>
+                                                                        <input type="text" id="txtPOPaymentTerms" name="txtPOPaymentTerms" class="form-control" placeholder="Payment Terms" value="@Model.PaymentTerms">
                                                                         </div>
+                                                                        <span id="spnPOPaymentTerms" class="text-danger"></span>
+                                                                        </div>
+                                                                        </div> *@
                                                                     </div>
                                                                 </div>
 
@@ -392,11 +392,204 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-6 col-sm-6">
-                                                        <div class="card">
-                                                            <h5 class="card-header">Terms</h5>
-                                                            <div id="dvPOTerms" data-terms="@Model.Terms">
-                                                            </div>
+                                                        @* <div class="card">
+                                                        <h5 class="card-header">Terms</h5>
+                                                        <div id="dvPOTerms" data-terms="@Model.Terms">
                                                         </div>
+                                                        </div> *@
+                                                        @if (Model.PaymentTermsId != null)
+                                                        {
+                                                            <div class="card">
+                                                                <div class="card-header border-bottom">
+                                                                    <h2 class="h5">Select Terms & Conditions</h2>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <ul class="nav nav-pills mb-3" role="tablist">
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link @((Model.PaymentTermsId == "Term-1") ? "active" : "")"
+                                                                               data-bs-toggle="pill"
+                                                                               href="#Terms-1"
+                                                                               role="tab"
+                                                                               data-payment-terms="Term-1"
+                                                                               aria-selected="@((Model.PaymentTermsId == "Term-1").ToString().ToLower())">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-1</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link @((Model.PaymentTermsId == "Term-2") ? "active" : "")"
+                                                                               data-bs-toggle="pill"
+                                                                               href="#Terms-2"
+                                                                               role="tab"
+                                                                               data-payment-terms="Term-2"
+                                                                               aria-selected="@((Model.PaymentTermsId == "Term-2").ToString().ToLower())">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-2</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link @((Model.PaymentTermsId == "Term-3") ? "active" : "")"
+                                                                               data-bs-toggle="pill"
+                                                                               href="#Terms-3"
+                                                                               role="tab"
+                                                                               data-payment-terms="Term-3"
+                                                                               aria-selected="@((Model.PaymentTermsId == "Term-3").ToString().ToLower())">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-3</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div class="tab-content" id="pills-tabContent">
+                                                                        <div class="tab-pane fade @((Model.PaymentTermsId == "Term-1") ? "show active" : "")" id="Terms-1" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-1" value="Term-1" />
+                                                                                <div id="txtPOPaymentTerms1">
+                                                                                    <p>* prices: the Above Price are on site Vadodra</p>
+                                                                                    <p>* Packing: Pvc Wrapping</p>
+                                                                                    <p>* Incude Freight & Annexure of 28 & 29 Nos. Meter Panel</p>
+                                                                                    <p>* Tax: 18 % Gst Extra</p>
+                                                                                    <p>* Delivery: 15 to 20 Days From the Date of Purchase Order</p>
+                                                                                    <p>* Payment: 10 % advance along with PO, Balance Payment 15 Days After Material Dispatch</p>
+                                                                                    <p>* Validity of Offer: 20 Days</p>
+                                                                                    <p>* Warrenty: 12 Months Against manufacturing Defect & Switchgear from the date of delivery.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade @((Model.PaymentTermsId == "Term-2") ? "show active" : "")" id="Terms-2" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-2" value="Term-2" />
+                                                                                <div id="txtPOPaymentTerms2">
+                                                                                    <p>:- The Supplier will Accept Site Wieght & Measurement as correct & Final</p>
+                                                                                    <p>:- All Goods are Subjects to Final approval at site Premies</p>
+                                                                                    <p>:- The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN</p>
+                                                                                    <p>:- Purchase Order no is must on each Invoice.</p>
+                                                                                    <p>:- In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval</p>
+                                                                                    <p>:- All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,</p>
+                                                                                    <p>:- In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade @((Model.PaymentTermsId == "Term-3") ? "show active" : "")" id="Terms-3" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-3" value="Term-3" />
+                                                                                <div id="txtPOPaymentTerms3">
+                                                                                    <p>1. Party shall be responsible for strength only.</p>
+                                                                                    <p>2. Cube casting & testing are conducted in our in-plant laboratory.</p>
+                                                                                    <p>3. Addition & Deletion of water at site rights reserve with us.</p>
+                                                                                    <p>4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.</p>
+                                                                                    <p>
+                                                                                        5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages
+                                                                                        arising out of the use of this product, even if advised of the possiblity of such.
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.
+                                                                                        retention charges will be to your account for each hour delay.
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="card">
+                                                                <div class="card-header border-bottom">
+                                                                    <h2 class="h5">Select Terms & Conditions</h2>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <ul class="nav nav-pills mb-3" role="tablist">
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link active" data-bs-toggle="pill" href="#Terms-1" role="tab" aria-selected="true">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-1</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link" data-bs-toggle="pill" href="#Terms-2" role="tab" aria-selected="false">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-2</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <a class="nav-link" data-bs-toggle="pill" href="#Terms-3" role="tab" aria-selected="false">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div class="tab-title">Templet-3</div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div class="tab-content" id="pills-tabContent">
+                                                                        <div class="tab-pane fade show active" id="Terms-1" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-1" value="Term-1" />
+                                                                                <div id="txtPOPaymentTerms1">
+                                                                                    <p>* prices: the Above Price are on site Vadodra</p>
+                                                                                    <p>* Packing: Pvc Wrapping</p>
+                                                                                    <p>* Incude Freight & Annexure of 28 & 29 Nos. Meter Panel</p>
+                                                                                    <p>* Tax: 18 % Gst Extra</p>
+                                                                                    <p>* Delivery: 15 to 20 Days From the Date of Purchase Order</p>
+                                                                                    <p>* Payment: 10 % advance along with PO, Balance Payment 15 Days After Material Dispatch</p>
+                                                                                    <p>* Validity of Offer: 20 Days</p>
+                                                                                    <p>* Warrenty: 12 Months Against manufacturing Defect & Switchgear from the date of delivery.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="Terms-2" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-2" value="Term-2" />
+                                                                                <div id="txtPOPaymentTerms2">
+                                                                                    <p>:- The Supplier will Accept Site Wieght & Measurement as correct & Final</p>
+                                                                                    <p>:- All Goods are Subjects to Final approval at site Premies</p>
+                                                                                    <p>:- The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN</p>
+                                                                                    <p>:- Purchase Order no is must on each Invoice.</p>
+                                                                                    <p>:- In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval</p>
+                                                                                    <p>:- All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,</p>
+                                                                                    <p>:- In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="Terms-3" role="tabpanel">
+                                                                            <div class="p-3 border rounded">
+                                                                                <h6>Terms & Condition</h6>
+                                                                                <input type="hidden" id="Term-3" value="Term-3" />
+                                                                                <div id="txtPOPaymentTerms3">
+                                                                                    <p>1. Party shall be responsible for strength only.</p>
+                                                                                    <p>2. Cube casting & testing are conducted in our in-plant laboratory.</p>
+                                                                                    <p>3. Addition & Deletion of water at site rights reserve with us.</p>
+                                                                                    <p>4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.</p>
+                                                                                    <p>
+                                                                                        5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages
+                                                                                        arising out of the use of this product, even if advised of the possiblity of such.
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
+                                                                                    </p>
+                                                                                    <p>
+                                                                                        7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.
+                                                                                        retention charges will be to your account for each hour delay.
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -580,13 +773,11 @@
 
 @section Scripts {
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
-    <script src="~/moduls/authenticationscript.js"></script>
 }
 <script type="text/javascript">
     _editCompanyselectedValue = "@Model.ToCompanyId";
     _editSupplierselectedValue = "@Model.FromSupplierId";
     _editItemselectedValue = "@Model.ItemId";
-    onselectsite();
 
     function fn_OpenShippingModal() {
         $('#txtmdAddress').val('');
@@ -598,7 +789,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

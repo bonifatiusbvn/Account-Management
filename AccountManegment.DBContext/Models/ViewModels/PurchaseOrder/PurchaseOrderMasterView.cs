@@ -72,6 +72,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public bool? IsApproved { get; set; }
         public string? PaymentTerms { get; set; }
+        public string? PaymentTermsId { get; set; }
         public List<ItemOrderlist>? ItemOrderlist { get; set; }
         public List<OrderShippingAddress>? ShippingAddressList { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }

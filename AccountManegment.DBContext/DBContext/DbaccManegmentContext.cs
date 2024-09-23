@@ -60,7 +60,8 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{}
+    {
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -130,6 +131,11 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("GroupMaster");
 
             entity.Property(e => e.GroupName).HasMaxLength(50);
+
+            entity.HasOne(d => d.Site).WithMany(p => p.GroupMasters)
+                .HasForeignKey(d => d.SiteId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_GroupMaster_Site");
         });
 
         modelBuilder.Entity<ItemInWordDocument>(entity =>
@@ -214,6 +220,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
+            entity.Property(e => e.PaymentTermsId).HasMaxLength(100);
             entity.Property(e => e.Poid)
                 .HasMaxLength(100)
                 .HasColumnName("POId");

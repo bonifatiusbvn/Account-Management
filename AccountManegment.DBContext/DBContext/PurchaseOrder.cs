@@ -53,5 +53,7 @@ public partial class PurchaseOrder
 
     public string? PaymentTerms { get; set; }
 
+    public string? PaymentTermsId { get; set; }
+
     public virtual SupplierMaster FromSupplier { get; set; } = null!;
 }

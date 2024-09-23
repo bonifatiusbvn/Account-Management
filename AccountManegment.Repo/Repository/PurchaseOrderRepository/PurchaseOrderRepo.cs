@@ -197,6 +197,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      CreatedOn = a.CreatedOn,
                                      Terms = a.Terms,
                                      PaymentTerms = a.PaymentTerms,
+                                     PaymentTermsId = a.PaymentTermsId,
                                      BuyersPurchaseNo = a.BuyersPurchaseNo,
                                      DispatchBy = a.DispatchBy,
                                      IsDeleted = a.IsDeleted,
@@ -611,6 +612,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
                     PaymentTerms = PurchaseOrderDetails.PaymentTerms,
+                    PaymentTermsId= PurchaseOrderDetails.PaymentTermsId,
                     BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -694,6 +696,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.DispatchBy = PurchaseOrderDetails.DispatchBy;
                 PurchaseOrder.BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo;
                 PurchaseOrder.PaymentTerms = PurchaseOrderDetails.PaymentTerms;
+                PurchaseOrder.PaymentTermsId = PurchaseOrderDetails.PaymentTermsId;
                 Context.PurchaseOrders.Update(PurchaseOrder);
 
                 foreach (var address in PurchaseOrderDetails.ShippingAddressList)
