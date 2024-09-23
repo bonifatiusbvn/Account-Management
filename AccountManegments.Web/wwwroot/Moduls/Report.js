@@ -656,6 +656,7 @@ function saveOpeningBalanceInvoice() {
         Date: $('#txtOBdate').val(),
         CreatedBy: $("#txtReportUserId").val(),
         TotalAmount: $('#txtOBamount').val(),
+        SiteId: $("#txtReportSiteId").val(),
     };
     $('#txtOBamount').on('input', function () {
         $('#txtOBamount').css("border", "1px solid #ced4da");
