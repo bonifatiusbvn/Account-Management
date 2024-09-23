@@ -738,11 +738,13 @@ namespace AccountManegments.Web.Controllers
 
                         foreach (var group in groupedInvoices)
                         {
-                            if (lastSiteName != group.SiteName)
+                            string currentSiteName = string.IsNullOrEmpty(group.SiteName) ? "Opening Balance" : group.SiteName;
+
+                            if (currentSiteName == "Opening Balance")
                             {
                                 var table1 = new Aspose.Pdf.Table
                                 {
-                                    ColumnWidths = "33% 33% 34%",
+                                    ColumnWidths = "66% 34%",
                                     DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                                     Border = new BorderInfo(BorderSide.All, 1f),
                                     DefaultCellBorder = new BorderInfo(BorderSide.None),
@@ -750,8 +752,7 @@ namespace AccountManegments.Web.Controllers
 
                                 // Adding the site header row
                                 var siteRow = table1.Rows.Add();
-                                siteRow.Cells.Add("Site");
-                                siteRow.Cells.Add("Supplier");
+                                siteRow.Cells.Add("Opening Balance");
                                 siteRow.Cells.Add("Company");
 
                                 foreach (var cell in siteRow.Cells)
@@ -765,8 +766,7 @@ namespace AccountManegments.Web.Controllers
                                 }
 
                                 var siteRowDetail = table1.Rows.Add();
-                                siteRowDetail.Cells.Add(group.SiteName ?? string.Empty);
-                                siteRowDetail.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
+                                siteRowDetail.Cells.Add("");
                                 siteRowDetail.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
 
                                 foreach (var cell in siteRowDetail.Cells)
@@ -781,8 +781,55 @@ namespace AccountManegments.Web.Controllers
                                 }
 
                                 pdfPage.Paragraphs.Add(table1);
+                            }
+                            else
+                            {
+                                if (lastSiteName != group.SiteName)
+                                {
+                                    var table1 = new Aspose.Pdf.Table
+                                    {
+                                        ColumnWidths = "33% 33% 34%",
+                                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                                        Border = new BorderInfo(BorderSide.All, 1f),
+                                        DefaultCellBorder = new BorderInfo(BorderSide.None),
+                                    };
 
-                                lastSiteName = group.SiteName;
+                                    // Adding the site header row
+                                    var siteRow = table1.Rows.Add();
+                                    siteRow.Cells.Add("Site");
+                                    siteRow.Cells.Add("Supplier");
+                                    siteRow.Cells.Add("Company");
+
+                                    foreach (var cell in siteRow.Cells)
+                                    {
+                                        cell.Alignment = HorizontalAlignment.Center;
+                                    }
+
+                                    for (int i = 0; i < siteRow.Cells.Count; i++)
+                                    {
+                                        siteRow.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                    }
+
+                                    var siteRowDetail = table1.Rows.Add();
+                                    siteRowDetail.Cells.Add(group.SiteName ?? string.Empty);
+                                    siteRowDetail.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
+                                    siteRowDetail.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
+
+                                    foreach (var cell in siteRowDetail.Cells)
+                                    {
+                                        cell.Alignment = HorizontalAlignment.Center;
+                                        cell.Border = new BorderInfo(BorderSide.Top, 1f);
+                                    }
+
+                                    for (int i = 0; i < siteRowDetail.Cells.Count; i++)
+                                    {
+                                        siteRowDetail.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                    }
+
+                                    pdfPage.Paragraphs.Add(table1);
+
+                                    lastSiteName = group.SiteName;
+                                }
                             }
 
                             // Create the detailed table for the current group
@@ -827,8 +874,6 @@ namespace AccountManegments.Web.Controllers
                                 row.Cells.Add(FormatIndianCurrency(payOutTotalAmount));
                                 sitePayOutTotal += payOutTotalAmount; 
 
-                                siteCombinedTotal += nonPayOutTotalAmount + payOutTotalAmount;
-
                                 netbalance = nonPayOutTotalAmount - payOutTotalAmount;
                                 row.Cells.Add(FormatIndianCurrency(netbalance));
 
@@ -838,6 +883,7 @@ namespace AccountManegments.Web.Controllers
                                     cell.BackgroundColor = backgroundColor;
                                 }
                             }
+                            siteCombinedTotal = siteNonPayOutTotal - sitePayOutTotal;
                             var footerRow = detailedTable.Rows.Add();
                             footerRow.Cells.Add("Total");
                             footerRow.Cells.Add(FormatIndianCurrency(siteNonPayOutTotal)); 
