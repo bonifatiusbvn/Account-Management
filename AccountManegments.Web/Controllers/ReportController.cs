@@ -738,11 +738,13 @@ namespace AccountManegments.Web.Controllers
 
                         foreach (var group in groupedInvoices)
                         {
-                            if (lastSiteName != group.SiteName)
+                            string currentSiteName = string.IsNullOrEmpty(group.SiteName) ? "Opening Balance" : group.SiteName;
+
+                            if (currentSiteName == "Opening Balance")
                             {
                                 var table1 = new Aspose.Pdf.Table
                                 {
-                                    ColumnWidths = "33% 33% 34%",
+                                    ColumnWidths = "66% 34%",
                                     DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                                     Border = new BorderInfo(BorderSide.All, 1f),
                                     DefaultCellBorder = new BorderInfo(BorderSide.None),
@@ -750,8 +752,7 @@ namespace AccountManegments.Web.Controllers
 
                                 // Adding the site header row
                                 var siteRow = table1.Rows.Add();
-                                siteRow.Cells.Add("Site");
-                                siteRow.Cells.Add("Supplier");
+                                siteRow.Cells.Add("Opening Balance");
                                 siteRow.Cells.Add("Company");
 
                                 foreach (var cell in siteRow.Cells)
@@ -765,8 +766,7 @@ namespace AccountManegments.Web.Controllers
                                 }
 
                                 var siteRowDetail = table1.Rows.Add();
-                                siteRowDetail.Cells.Add(group.SiteName ?? string.Empty);
-                                siteRowDetail.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
+                                siteRowDetail.Cells.Add("");
                                 siteRowDetail.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
 
                                 foreach (var cell in siteRowDetail.Cells)
@@ -781,8 +781,55 @@ namespace AccountManegments.Web.Controllers
                                 }
 
                                 pdfPage.Paragraphs.Add(table1);
+                            }
+                            else
+                            {
+                                if (lastSiteName != group.SiteName)
+                                {
+                                    var table1 = new Aspose.Pdf.Table
+                                    {
+                                        ColumnWidths = "33% 33% 34%",
+                                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                                        Border = new BorderInfo(BorderSide.All, 1f),
+                                        DefaultCellBorder = new BorderInfo(BorderSide.None),
+                                    };
 
-                                lastSiteName = group.SiteName;
+                                    // Adding the site header row
+                                    var siteRow = table1.Rows.Add();
+                                    siteRow.Cells.Add("Site");
+                                    siteRow.Cells.Add("Supplier");
+                                    siteRow.Cells.Add("Company");
+
+                                    foreach (var cell in siteRow.Cells)
+                                    {
+                                        cell.Alignment = HorizontalAlignment.Center;
+                                    }
+
+                                    for (int i = 0; i < siteRow.Cells.Count; i++)
+                                    {
+                                        siteRow.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                    }
+
+                                    var siteRowDetail = table1.Rows.Add();
+                                    siteRowDetail.Cells.Add(group.SiteName ?? string.Empty);
+                                    siteRowDetail.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
+                                    siteRowDetail.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
+
+                                    foreach (var cell in siteRowDetail.Cells)
+                                    {
+                                        cell.Alignment = HorizontalAlignment.Center;
+                                        cell.Border = new BorderInfo(BorderSide.Top, 1f);
+                                    }
+
+                                    for (int i = 0; i < siteRowDetail.Cells.Count; i++)
+                                    {
+                                        siteRowDetail.Cells[i].Border = new BorderInfo(BorderSide.Left, 1f);
+                                    }
+
+                                    pdfPage.Paragraphs.Add(table1);
+
+                                    lastSiteName = group.SiteName;
+                                }
                             }
 
                             // Create the detailed table for the current group
@@ -827,8 +874,6 @@ namespace AccountManegments.Web.Controllers
                                 row.Cells.Add(FormatIndianCurrency(payOutTotalAmount));
                                 sitePayOutTotal += payOutTotalAmount; 
 
-                                siteCombinedTotal += nonPayOutTotalAmount + payOutTotalAmount;
-
                                 netbalance = nonPayOutTotalAmount - payOutTotalAmount;
                                 row.Cells.Add(FormatIndianCurrency(netbalance));
 
@@ -838,6 +883,7 @@ namespace AccountManegments.Web.Controllers
                                     cell.BackgroundColor = backgroundColor;
                                 }
                             }
+                            siteCombinedTotal = siteNonPayOutTotal - sitePayOutTotal;
                             var footerRow = detailedTable.Rows.Add();
                             footerRow.Cells.Add("Total");
                             footerRow.Cells.Add(FormatIndianCurrency(siteNonPayOutTotal)); 
@@ -961,6 +1007,18 @@ namespace AccountManegments.Web.Controllers
                 {
                     var NetInvoiceDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
 
+                    string FormatIndianCurrency(decimal amount)
+                    {
+                        var cultureInfo = new CultureInfo("en-IN");
+                        var numberFormat = cultureInfo.NumberFormat;
+                        numberFormat.CurrencySymbol = "₹";
+                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                        numberFormat.CurrencyDecimalDigits = 2;
+                        numberFormat.CurrencyGroupSeparator = ",";
+                        numberFormat.CurrencyDecimalSeparator = ".";
+                        return amount.ToString("C", numberFormat);
+                    }
+
                     using (var wb = new XLWorkbook())
                     {
                         var ws = wb.Worksheets.Add("Report");
@@ -1037,70 +1095,141 @@ namespace AccountManegments.Web.Controllers
                         dataRange1.Style.Border.RightBorderColor = XLColor.Black;
 
                         // Table-3
-
                         row += 2;
 
-                        ws.Cell(row, 1).Value = "Supplier";
-                        ws.Cell(row, 2).Value = "Credit";
-                        ws.Cell(row, 3).Value = "Debit";
-                        ws.Cell(row, 4).Value = "Net Total";
-
-                        var headerRange3 = ws.Range(row, 1, row, 4);
-                        headerRange3.Style.Font.Bold = true;
-                        headerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
-                        headerRange3.Style.Font.FontColor = XLColor.White;
-                        headerRange3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        headerRange3.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                        headerRange3.Style.Border.BottomBorderColor = XLColor.Black;
-                        headerRange3.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                        headerRange3.Style.Border.RightBorderColor = XLColor.Black;
-
-                        decimal yougavetotal = 0;
-                        decimal yougettotal = 0;
-                        decimal nettotal = 0;
-                        decimal netbalance = 0;
-
-                        string FormatIndianCurrency(decimal amount)
+                        if (PayOutReport.SiteId == null)
                         {
-                            var cultureInfo = new CultureInfo("en-IN");
-                            var numberFormat = cultureInfo.NumberFormat;
-                            numberFormat.CurrencySymbol = "₹";
-                            numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                            numberFormat.CurrencyDecimalDigits = 2;
-                            numberFormat.CurrencyGroupSeparator = ",";
-                            numberFormat.CurrencyDecimalSeparator = ".";
-                            return amount.ToString("C", numberFormat);
-                        }
+                            var invoiceList = NetInvoiceDetails.InvoiceList as IEnumerable<SupplierInvoiceModel>;
+                            var groupedInvoices = invoiceList
+                                .GroupBy(item => item.SiteName)
+                                .Select(group => new
+                                {
+                                    SiteName = group.Key,
+                                    Invoices = group.ToList()
+                                }).ToList();
 
-                        row++;
-                        foreach (var item in NetInvoiceDetails.InvoiceList)
-                        {
-                            ws.Cell(row, 1).Value = item.SupplierName;
-                            ws.Cell(row, 2).Value = FormatIndianCurrency(item.NonPayOutTotalAmount);
-                            ws.Cell(row, 3).Value = FormatIndianCurrency(item.PayOutTotalAmount);
-                            yougavetotal += item.PayOutTotalAmount;
-                            yougettotal += item.NonPayOutTotalAmount;
-                            netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                            ws.Cell(row, 4).Value = FormatIndianCurrency(netbalance);
                             row++;
+
+                            foreach (var group in groupedInvoices)
+                            {
+                                // Insert site header
+                                ws.Cell(row, 1).Value = "Site: " + (group.SiteName ?? "Opening Balance");                
+                                ws.Cell(row, 2).Value = "Company: " + (PayOutReport.CompanyName ?? "");
+                                row++;
+
+                                var siteHeaderRange = ws.Range(row, 1, row, 2);
+                                siteHeaderRange.Style.Font.Bold = true;
+
+                                // Create headers for the detailed table
+                                ws.Cell(row, 1).Value = "Supplier";
+                                ws.Cell(row, 2).Value = "Credit";
+                                ws.Cell(row, 3).Value = "Debit";
+                                ws.Cell(row, 4).Value = "Net Total";
+
+                                var headerRange = ws.Range(row, 1, row, 4);
+                                headerRange.Style.Font.Bold = true;
+                                headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
+                                headerRange.Style.Font.FontColor = XLColor.White;
+                                headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                                headerRange.Style.Border.BottomBorderColor = XLColor.Black;
+
+                                row++;
+
+                                decimal siteNonPayOutTotal = 0;
+                                decimal sitePayOutTotal = 0;
+
+                                foreach (var item in group.Invoices)
+                                {
+                                    ws.Cell(row, 1).Value = item.SupplierName;
+
+                                    decimal nonPayOutTotalAmount = item.NonPayOutTotalAmount ?? 0;
+                                    decimal payOutTotalAmount = item.PayOutTotalAmount ?? 0;
+
+                                    ws.Cell(row, 2).Value = FormatIndianCurrency(nonPayOutTotalAmount);
+                                    ws.Cell(row, 3).Value = FormatIndianCurrency(payOutTotalAmount);
+
+                                    siteNonPayOutTotal += nonPayOutTotalAmount;
+                                    sitePayOutTotal += payOutTotalAmount;
+
+                                    decimal netbalance = nonPayOutTotalAmount - payOutTotalAmount;
+                                    ws.Cell(row, 4).Value = FormatIndianCurrency(netbalance);
+                                    row++;
+                                }
+
+                                // Insert site totals
+                                ws.Cell(row, 1).Value = "Total for " + (group.SiteName ?? "N/A");
+                                ws.Cell(row, 2).Value = FormatIndianCurrency(siteNonPayOutTotal);
+                                ws.Cell(row, 3).Value = FormatIndianCurrency(sitePayOutTotal);
+                                ws.Cell(row, 4).Value = FormatIndianCurrency(siteNonPayOutTotal - sitePayOutTotal);
+                                row++;
+
+                                // Add a blank row for spacing
+                                row++;
+                            }
+
+                            ws.Columns().AdjustToContents();
+
+                            using (var stream = new MemoryStream())
+                            {
+                                wb.SaveAs(stream);
+                                stream.Seek(0, SeekOrigin.Begin);
+                                string fileName = Guid.NewGuid() + "_NetReportDetails.xlsx";
+                                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                            }
                         }
-
-                        nettotal = yougettotal - yougavetotal;
-
-                        ws.Cell(row, 1).Value = "Total";
-                        ws.Cell(row, 2).Value = FormatIndianCurrency(yougettotal);
-                        ws.Cell(row, 3).Value = FormatIndianCurrency(yougavetotal);
-                        ws.Cell(row, 4).Value = FormatIndianCurrency(nettotal);
-
-
-                        ws.Columns().AdjustToContents();
-
-                        using (var stream = new MemoryStream())
+                        else
                         {
-                            wb.SaveAs(stream);
-                            stream.Seek(0, SeekOrigin.Begin);
-                            string fileName = Guid.NewGuid() + "_NetReportDetails.xlsx";
-                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                            ws.Cell(row, 1).Value = "Supplier";
+                            ws.Cell(row, 2).Value = "Credit";
+                            ws.Cell(row, 3).Value = "Debit";
+                            ws.Cell(row, 4).Value = "Net Total";
+
+                            var headerRange3 = ws.Range(row, 1, row, 4);
+                            headerRange3.Style.Font.Bold = true;
+                            headerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
+                            headerRange3.Style.Font.FontColor = XLColor.White;
+                            headerRange3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            headerRange3.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                            headerRange3.Style.Border.BottomBorderColor = XLColor.Black;
+                            headerRange3.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                            headerRange3.Style.Border.RightBorderColor = XLColor.Black;
+
+                            decimal yougavetotal = 0;
+                            decimal yougettotal = 0;
+                            decimal nettotal = 0;
+                            decimal netbalance = 0;
+
+                            row++;
+                            foreach (var item in NetInvoiceDetails.InvoiceList)
+                            {
+                                ws.Cell(row, 1).Value = item.SupplierName;
+                                ws.Cell(row, 2).Value = FormatIndianCurrency(item.NonPayOutTotalAmount);
+                                ws.Cell(row, 3).Value = FormatIndianCurrency(item.PayOutTotalAmount);
+                                yougavetotal += item.PayOutTotalAmount;
+                                yougettotal += item.NonPayOutTotalAmount;
+                                netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
+                                ws.Cell(row, 4).Value = FormatIndianCurrency(netbalance);
+                                row++;
+                            }
+
+                            nettotal = yougettotal - yougavetotal;
+
+                            ws.Cell(row, 1).Value = "Total";
+                            ws.Cell(row, 2).Value = FormatIndianCurrency(yougettotal);
+                            ws.Cell(row, 3).Value = FormatIndianCurrency(yougavetotal);
+                            ws.Cell(row, 4).Value = FormatIndianCurrency(nettotal);
+
+
+                            ws.Columns().AdjustToContents();
+
+                            using (var stream = new MemoryStream())
+                            {
+                                wb.SaveAs(stream);
+                                stream.Seek(0, SeekOrigin.Begin);
+                                string fileName = Guid.NewGuid() + "_NetReportDetails.xlsx";
+                                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                            }
                         }
                     }
                 }
