@@ -271,9 +271,8 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;
                     PurchaseRequestData.SiteId = PurchaseRequestDetails.SiteId;
                     PurchaseRequestData.SiteAddressId = PurchaseRequestDetails.SiteAddressId;
-                    PurchaseRequestData.SiteAddress = PurchaseRequestDetails.SiteAddress;
+                    PurchaseRequestData.SiteAddress = PurchaseRequestDetails.SiteAddress == "--Select Site Address--" ? null : PurchaseRequestDetails.SiteAddress;
                     PurchaseRequestData.ItemName = PurchaseRequestDetails.ItemName;
-
                 }
                 Context.PurchaseRequests.Update(PurchaseRequestData);
                 Context.SaveChanges();

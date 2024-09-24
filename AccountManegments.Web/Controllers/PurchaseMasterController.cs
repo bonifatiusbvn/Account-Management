@@ -150,7 +150,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = UserSession.UserId,
                     PrNo = PurchaseRequestDetails.PrNo,
                     IsApproved = isApproved,
-                    SiteAddress = PurchaseRequestDetails.SiteAddress,
+                    SiteAddress = PurchaseRequestDetails.SiteAddress == "--Select Site Address--" ? null : PurchaseRequestDetails.SiteAddress,
                     SiteAddressId = PurchaseRequestDetails.SiteAddressId,
                     ItemName = PurchaseRequestDetails.ItemName,
                 };
