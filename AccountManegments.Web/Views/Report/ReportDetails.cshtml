@@ -230,6 +230,7 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
             </form>
+
             <form id="OPBalanceForm">
                 <div class="modal fade" tabindex="-1" id="OBPayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-md modal-dialog-centered">
@@ -272,6 +273,23 @@
 @section Scripts {
     <script type="text/javascript">
         var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); 
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('OBPayoutModal');
+            modal.addEventListener('shown.bs.modal', function () {
+                const today = new Date();
+                const formattedDate = formatDate(today);
+                document.getElementById('txtOBdate').value = formattedDate;
+            });
+        });
     </script>
+
     <script src="~/moduls/report.js" asp-append-version="true"></script>
 }

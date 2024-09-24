@@ -294,6 +294,7 @@ namespace AccountManegments.Web.Controllers
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
                     PaymentTerms = PurchaseOrderDetails.PaymentTerms,
+                    PaymentTermsId = PurchaseOrderDetails.PaymentTermsId,
                     BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     ItemOrderlist =  PurchaseOrderDetails.ItemOrderlist,

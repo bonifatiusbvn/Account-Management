@@ -858,25 +858,44 @@ $(document).ready(function () {
     });
 });
 
-//let editorPOInstance;
-//const poTermsElement = document.querySelector('#dvPOTerms');
-//const initialPOTerms = poTermsElement.getAttribute('data-terms');
-//var uploadUrl = '/PurchaseMaster/UploadTermsImage';
-//ClassicEditor
-//    .create(poTermsElement, {
-//        ckfinder: {
-//            uploadUrl: uploadUrl
-//        }
-//    })
-//    .then(editor => {
-//        editorPOInstance = editor;
-//        if (initialPOTerms) {
-//            editor.setData(initialPOTerms);
-//        }
-//    })
-//    .catch(error => {
-//        toastr.error(error);
-//    });
+let editors = {};
+const uploadUrl = '/PurchaseMaster/UploadTermsImage';
+
+function convertTextToHtml(text) {
+    const lines = text.split('\n').filter(line => line.trim() !== '');
+
+    let htmlContent = lines
+        .map(line => `<p>${line}</p>`)
+        .join('');
+
+    htmlContent = htmlContent.replace(/(<p>(&nbsp;|\s*)<\/p>)+$/, '');
+
+    return htmlContent;
+}
+
+const termsTextAreas = document.querySelectorAll('textarea[id^="txtPOPaymentTerms"]');
+
+termsTextAreas.forEach(textArea => {
+    ClassicEditor
+        .create(textArea, {
+            ckfinder: {
+                uploadUrl: uploadUrl
+            },
+            
+        })
+        .then(editor => {
+
+            editors[textArea.id] = editor;
+
+            const formattedContent = convertTextToHtml(textArea.value);
+            editor.setData(formattedContent);
+        })
+        .catch(error => {
+            toastr.error(error);
+        });
+});
+
+
 
 function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
@@ -909,23 +928,18 @@ function InsertMultiplePurchaseOrderDetails() {
                 };
                 AddressDetails.push(addressData);
             });
+
             var paymentTerms = "";
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                $('#txtPOPaymentTerms1 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
-                $('#txtPOPaymentTerms2 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms2'].getData(); 
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                $('#txtPOPaymentTerms3 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
                 paymentTermsId = $('#Term-3').val();
             }
 
@@ -938,8 +952,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
-                PaymentTerms: paymentTerms,
-                PaymentTermsId: paymentTermsId,
+                PaymentTerms: paymentTerms, 
+                PaymentTermsId: paymentTermsId,  
                 BuyersPurchaseNo: $("#txtPOBuyersPurchaseNo").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
                 DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
@@ -949,7 +963,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 UnitTypeId: $("#UnitTypeId").val(),
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
-            }
+            };
+
 
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
@@ -1247,19 +1262,13 @@ function UpdateMultiplePurchaseOrderDetails() {
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                $('#txtPOPaymentTerms1 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
-                $('#txtPOPaymentTerms2 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms2'].getData();
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                $('#txtPOPaymentTerms3 p').each(function () {
-                    paymentTerms += $(this).text() + "<br>";
-                });
+                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
                 paymentTermsId = $('#Term-3').val();
             }
             var PORequest = {
