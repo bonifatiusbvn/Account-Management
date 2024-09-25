@@ -91,15 +91,15 @@ namespace AccountManagement.API.Controllers
             var updateUser = await _Supplier.DeleteSupplierDetails(SupplierId);
             try
             {
-                if (updateUser != null)
+                if (updateUser.code == 200)
                 {
-                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.code = updateUser.code;
                     responseModel.message = updateUser.message;
                 }
                 else
                 {
                     responseModel.message = updateUser.message;
-                    responseModel.code = (int)HttpStatusCode.NotFound;
+                    responseModel.code = updateUser.code;
                 }
             }
             catch (Exception ex)

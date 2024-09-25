@@ -149,16 +149,32 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
         public async Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId)
         {
             ApiResponseModel response = new ApiResponseModel();
-            var Userdata = Context.SupplierMasters.Where(a => a.SupplierId == SupplierId).FirstOrDefault();
-
-            if (Userdata != null)
+            try
             {
+                var Userdata = Context.SupplierMasters.Where(a => a.SupplierId == SupplierId).FirstOrDefault();
+                var InvoiceDetails = Context.SupplierInvoices.Where(a => a.SupplierId == SupplierId).ToList();
 
-                Userdata.IsDelete = true;
-                Context.SupplierMasters.Update(Userdata);
-                Context.SaveChanges();
-                response.code = 200;
-                response.message = "Supplier is successfully deleted.";
+                if (Userdata != null)
+                {
+                    if (InvoiceDetails.Count > 0)
+                    {
+                        response.code = 404;
+                        response.message = "Invoice is created for this supplier.";
+                    }
+                    else
+                    {
+                        Userdata.IsDelete = true;
+                        Context.SupplierMasters.Update(Userdata);
+                        Context.SaveChanges();
+                        response.code = 200;
+                        response.message = "Supplier is successfully deleted.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 404;
+                response.message = "Error in deleting the supplier.";
             }
             return response;
         }
