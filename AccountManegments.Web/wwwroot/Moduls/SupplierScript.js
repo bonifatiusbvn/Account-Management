@@ -325,15 +325,21 @@ function DeleteSupplierDetails(SupplierId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/Supplier/SupplierList';
-                    })
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Supplier/SupplierList';
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.warning(Result.message);
+                    }
                 },
                 error: function () {
                     siteloaderhide();
