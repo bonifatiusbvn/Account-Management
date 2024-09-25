@@ -922,6 +922,46 @@ namespace AccountManegments.Web.Controllers
             return View();
 
         }
+        public async Task<IActionResult> PrintJKDetails(Guid POId)
+        {
+            try
+            {
+                PurchaseOrderMasterView order = new PurchaseOrderMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", $"PurchaseOrder/GetPurchaseOrderDetailsById?POId={POId}");
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
+                    var number = order.TotalAmount;
+                    var totalAmountInWords = NumberToWords(number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> JKDetails(Guid POId)
+        {
+            try
+            {
+                IActionResult result = await PrintJKDetails(POId);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as PurchaseOrderMasterView;
+                    var htmlContent = await RenderViewToStringAsync("PrintJKDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
