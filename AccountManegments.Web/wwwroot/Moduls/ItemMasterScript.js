@@ -58,8 +58,11 @@ function sortItemTable() {
     });
 }
 
-function ItemHistory(ItemId) {
+function ItemHistory(ItemId, element) {
     siteloadershow();
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/ItemMaster/GetItemHistory',
         type: 'Post',
@@ -256,9 +259,12 @@ function CreateItem() {
 }
 
 
-function EditItemDetails(ItemId) {
+function EditItemDetails(ItemId, element) {
 
     siteloadershow();
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/ItemMaster/DisplayItemDetails?ItemId=' + ItemId,
         type: 'GET',
@@ -382,7 +388,10 @@ function resetItemForm() {
 }
 
 
-function ItemIsApproved(ItemId) {
+function ItemIsApproved(ItemId, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
 
     var isChecked = $('#flexSwitchCheckChecked_' + ItemId).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure want to approve this item?" : "Are you sure want to unapprove this item?";
@@ -435,8 +444,10 @@ function ItemIsApproved(ItemId) {
     });
 }
 
-function deleteItemDetails(ItemId, ItemName) {
-
+function deleteItemDetails(ItemId) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
         title: "Are you sure you want to delete this item?",
         text: "To confirm, type the item name below ",
