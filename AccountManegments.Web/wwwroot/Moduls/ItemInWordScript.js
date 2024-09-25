@@ -318,10 +318,15 @@ function EditItemInWordDetails(InwordId) {
     });
 }
 
-function DeleteItemInWord(InwordId) {
+function DeleteItemInWord(InwordId, Item, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure want to delete this Item?",
+        text: "To confirm, type the Item name below",
+        input: 'text',
+        inputPlaceholder: 'Enter the Item name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -329,7 +334,15 @@ function DeleteItemInWord(InwordId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        showCloseButton: true, inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the Item name!';
+            } else if (value !== Item) {
+                return 'Item name mismatch! Please enter valid Item Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
