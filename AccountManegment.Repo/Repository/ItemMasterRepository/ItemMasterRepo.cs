@@ -605,12 +605,11 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                                 RefInvoiceId = e.RefInvoiceId,
                                                 ItemId = e.ItemId,
                                                 ItemName = f.ItemName,
-                                                Price = f.PricePerUnit,
-                                                Gstper = f.Gstper,
-                                                Gst = f.Gstamount,
-                                                PricewithGst = f.Gstamount + f.PricePerUnit,
+                                                Price = e.Price,
+                                                Gstper = e.Gstper,
+                                                Gst = e.Gst,
                                                 Quantity = e.Quantity,
-                                                TotalAmount = e.Quantity * f.PricePerUnit,
+                                                TotalAmount = e.TotalAmount,
                                             }
                                         };
 
