@@ -1714,3 +1714,83 @@ function UpdateSupplierDetails() {
         toastr.error("Kindly fill all details");
     }
 }
+
+$(document).ready(function () {
+    function PRApproveButton() {
+        var hasChecked = $('input[name="chk_PRchild"]:checked').length > 0;
+        if (hasChecked) {
+            $('#PRApproveBtn').show(); 
+        } else {
+            $('#PRApproveBtn').hide();
+        }
+    } 
+    $('input[name="chk_PRchild"], #checkedAllPR').on('change', function () {
+        PRApproveButton();
+    });
+    PRApproveButton();
+
+    function ItemApproveButton() {
+        var hasChecked = $('input[name="chk_child"]:checked').length > 0;
+        if (hasChecked) {
+            $('#ItemApproveBtn').show();
+        } else {
+            $('#ItemApproveBtn').hide(); 
+        }
+    }
+    $('input[name="chk_child"], #checkedAllItem').on('change', function () {
+        ItemApproveButton();
+    });
+    ItemApproveButton();
+
+    function POApproveButton() {
+        var hasChecked = $('input[name="chk_POchild"]:checked').length > 0;
+        if (hasChecked) {
+            $('#POApproveBtn').show();
+        } else {
+            $('#POApproveBtn').hide();
+        }
+    }
+    $('input[name="chk_POchild"], #checkedAllPO').on('change', function () {
+        POApproveButton();
+    });
+    POApproveButton();
+
+    function InvoiceApproveButton() {
+        var hasChecked = $('input[name="chk_invoicechild"]:checked').length > 0;
+        if (hasChecked) {
+            $('#InvoiceApproveBtn').show();
+        } else {
+            $('#InvoiceApproveBtn').hide();
+        }
+    }
+    $('input[name="chk_invoicechild"], #checkedAllInvoice').on('change', function () {
+        InvoiceApproveButton();
+    });
+    InvoiceApproveButton();
+
+    function SupplierApproveButton() {
+        var hasChecked = $('input[name="chk_Supplierchild"]:checked').length > 0;
+        if (hasChecked) {
+            $('#SupplierApproveBtn').show(); 
+        } else {
+            $('#SupplierApproveBtn').hide(); 
+        }
+    }
+    $('input[name="chk_Supplierchild"], #checkedAllSupplier').on('change', function () {
+        SupplierApproveButton();
+    });
+    SupplierApproveButton();
+
+    function InwardApproveButton() {
+        var hasChecked = $('input[name="chk_Inwardchild"]:checked').length > 0;
+        if (hasChecked) {
+            $('#InwardApproveBtn').show();
+        } else {
+            $('#InwardApproveBtn').hide();
+        }
+    }
+    $('input[name="chk_Inwardchild"], #checkedAllInward').on('change', function () {
+        InwardApproveButton();
+    });
+    InwardApproveButton();
+});
