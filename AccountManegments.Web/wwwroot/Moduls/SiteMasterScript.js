@@ -562,9 +562,15 @@ function ActiveDecativeSite(SiteId) {
     });
 }
 
-function DeleteSite(SiteId) {
+function DeleteSite(SiteId, SiteName, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "If you want to delete this site,delete all data related this site!",
+        title: "Are you sure want to delete this site?",
+        text: "To confirm, type the site name below",
+        input: 'text',
+        inputPlaceholder: 'Enter the site name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -572,7 +578,15 @@ function DeleteSite(SiteId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the site name!';
+            } else if (value !== SiteName) {
+                return 'Site name mismatch! Please enter valid Site Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
