@@ -435,11 +435,13 @@ function ItemIsApproved(ItemId) {
     });
 }
 
-function deleteItemDetails(ItemId) {
+function deleteItemDetails(ItemId, ItemName) {
 
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure you want to delete this item?",
+        text: "To confirm, type the item name below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the item name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -447,9 +449,18 @@ function deleteItemDetails(ItemId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the item name!';
+            } else if (value !== ItemName) {
+                return 'Item name mismatch! Please enter valid Item Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
+
             $.ajax({
                 url: '/ItemMaster/DeleteItemDetails?ItemId=' + ItemId,
                 type: 'POST',
@@ -457,7 +468,6 @@ function deleteItemDetails(ItemId) {
                 success: function (Result) {
                     siteloaderhide();
                     if (Result.code == 200) {
-                        siteloaderhide();
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -467,7 +477,6 @@ function deleteItemDetails(ItemId) {
                             window.location = '/ItemMaster/ItemListView';
                         });
                     } else {
-                        siteloaderhide();
                         toastr.error(Result.message);
                     }
                 },
@@ -475,17 +484,17 @@ function deleteItemDetails(ItemId) {
                     siteloaderhide();
                     toastr.error("Can't delete item!");
                 }
-            })
+            });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-
             Swal.fire(
                 'Cancelled',
-                'Item have no changes.!!😊',
+                'Item has not been deleted.😊',
                 'error'
             );
         }
     });
 }
+
 
 
 function WithGSTSelected() {
