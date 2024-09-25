@@ -444,7 +444,7 @@ function ItemIsApproved(ItemId, element) {
     });
 }
 
-function deleteItemDetails(ItemId) {
+function deleteItemDetails(ItemId, ItemName, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
