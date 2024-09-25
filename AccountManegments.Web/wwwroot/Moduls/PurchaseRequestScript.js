@@ -1340,11 +1340,16 @@ function UpdateMultiplePurchaseOrderDetails() {
     }
 }
 
-function DeletePODetails(POId) {
-
+function DeletePODetails(POId, BuyersPurchaseNo,element)
+{
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure you want to delete this purchase order?",
+        text: "To confirm, type the Purchase order id below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the Purchase order id to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -1352,7 +1357,15 @@ function DeletePODetails(POId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the purchase order id!';
+            } else if (value !== BuyersPurchaseNo) {
+                return 'Purchase order id mismatch! Please enter valid Purchase Order No';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({

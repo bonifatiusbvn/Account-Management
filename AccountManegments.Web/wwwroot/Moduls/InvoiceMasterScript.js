@@ -363,11 +363,16 @@ function SupplierInvoicesortTable() {
 
     });
 }
-function DeleteSupplierInvoice(Id) {
 
+function DeleteSupplierInvoice(Id, SupplierInvoiceNo,element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure you want to delete this invoice?",
+        text: "To confirm, type the invoice no below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the invoice no to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -375,7 +380,15 @@ function DeleteSupplierInvoice(Id) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the Invoice No!';
+            } else if (value !== SupplierInvoiceNo) {
+                return 'Invoice No mismatch! Please enter valid Invoice No';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
