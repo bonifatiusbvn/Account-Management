@@ -149,9 +149,8 @@ function formatDate(dateString) {
 }
 
 function SelectSupplierDetails(SupplierId, element) {
-
-    $('.row.ac-card').removeClass('active');
-    $(element).closest('.row.ac-card').addClass('active');
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
     $.ajax({
         url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
@@ -306,10 +305,12 @@ function UpdateSupplierDetails() {
         toastr.error("Kindly fill all details");
     }
 }
-function DeleteSupplierDetails(SupplierId) {
+function DeleteSupplierDetails(SupplierId, SupplierName) {
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure you want to delete this supplier?",
+        text: "To confirm, type the supplier name below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the supplier name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -317,7 +318,15 @@ function DeleteSupplierDetails(SupplierId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the supplier name!';
+            } else if (value !== SupplierName) {
+                return 'Supplier name mismatch! Please enter valid Supplier Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
