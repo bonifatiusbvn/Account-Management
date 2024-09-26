@@ -962,6 +962,46 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> PurchaseUltraView(Guid POId)
+        {
+            try
+            {
+                PurchaseOrderMasterView order = new PurchaseOrderMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", $"PurchaseOrder/GetPurchaseOrderDetailsById?POId={POId}");
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
+                    var number = order.TotalAmount;
+                    var totalAmountInWords = NumberToWords(number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> PurchaseUltraDetails(Guid POId)
+        {
+            try
+            {
+                IActionResult result = await PurchaseUltraView(POId);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as PurchaseOrderMasterView;
+                    var htmlContent = await RenderViewToStringAsync("PurchaseUltraView", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

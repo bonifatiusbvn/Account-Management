@@ -1259,8 +1259,25 @@ function getCompanyDetails(CompanyId) {
 function UpdateMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
-        if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+        if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+
+            var orderDetails = [];
             var AddressDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    ItemName: orderRow.find("#txtItemName").text(),
+                    ItemId: orderRow.find("#txtItemId").val(),
+                    UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    TotalPrice: orderRow.find("#txtproductamount").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gst: orderRow.find("#txtgstAmount").val(),
+                    ItemTotal: orderRow.find("#txtproducttotalamount").val(),
+                    Hsncode: orderRow.find("#txtHSNcode").val(),
+                };
+                orderDetails.push(objData);
+            });
 
             $(".ShippingAddress").each(function () {
                 var shippingAddress = $(this);
@@ -1302,6 +1319,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddressList: AddressDetails,
+                ItemOrderlist: orderDetails,
             }
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
@@ -1333,6 +1351,11 @@ function UpdateMultiplePurchaseOrderDetails() {
             });
         } else {
             siteloaderhide();
+            if ($('#addNewlink tr').length == 0) {
+                $("#spnitembutton").text("Please Select Product!");
+            } else {
+                $("#spnitembutton").text("");
+            }
             if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
                 siteloaderhide();
                 $("#spnshipping").text("Please Select Shipping Address!");

@@ -200,18 +200,11 @@
 
                                                         <h5 class="card-header">
                                                             Add Product
-                                                            @if (Model.ItemList != null)
-                                                            {
-                                                                <a class="disabled">
-                                                                    <i class="lni lni-circle-plus"></i>
-                                                                </a>
-                                                            }
-                                                            else
-                                                            {
+
                                                                 <a class="font-22" onclick="fn_OpenAddproductmodal()">
                                                                     <i class="lni lni-circle-plus"></i>
                                                                 </a>
-                                                            }
+
                                                             <span id="spnitembutton" class="text-danger"></span>
                                                         </h5>
 
@@ -238,7 +231,7 @@
 
                                                                 @if (Model.ItemList != null)
                                                                 {
-                                                                    <tbody id="addNewlink" class="disabled">
+                                                                    <tbody id="addNewlink">
                                                                         @Html.Partial("_GetItemDetailsPartial.cshtml", Model.ItemList)
                                                                     </tbody>
                                                                 }
