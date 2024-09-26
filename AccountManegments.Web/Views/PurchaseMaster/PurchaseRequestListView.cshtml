@@ -10,8 +10,9 @@
 
 <style>
 
-    #searchItemnameInput-error, #txtUnitType-error, #txtQuantity-error, #txtPoSiteName-error {
-        color: red;
+
+    .error-border {
+        border: 2px solid red;
     }
 
     label.failed {
@@ -209,8 +210,8 @@
                                             </select>
                                         </div>
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary" onclick="CreatePurchaseRequest()" id="addbtnpurchaseRequest" style="margin-left:560px;">Save</button>
-                                            <button type="button" class="btn btn-primary" onclick="UpdatePurchaseRequestDetails()" id="updatebtnpurchaseRequest" style="display:none; margin-left:550px;">Update</button>
+                                            <button type="button" class="btn btn-primary" onclick="CreatePurchaseRequest()" id="addbtnpurchaseRequest" >Save</button>
+                                            <button type="button" class="btn btn-primary" onclick="UpdatePurchaseRequestDetails()" id="updatebtnpurchaseRequest" style="display:none;">Update</button>
                                         </div>
                                     </form>
                                 </div>

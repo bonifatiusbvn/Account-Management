@@ -273,14 +273,19 @@ $(document).ready(function () {
             txtQuantity: "required",
             txtPoSiteName: "required",
         },
-        messages: {
-            searchItemnameInput: "Select Item!",
-            txtUnitType: "Select UnitType!",
-            txtQuantity: "Enter Quantity",
-            txtPoSiteName: "Select Site",
+        highlight: function (element) {
+            $(element).addClass('error-border');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-border');
+        },
+        errorPlacement: function (error, element) {
+            return true;
         }
     });
 });
+
+
 
 function resetPRForm() {
     if (PRForm) {

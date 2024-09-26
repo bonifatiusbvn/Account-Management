@@ -240,7 +240,6 @@ function clearCreateInwardtext() {
 
 var ItemInwordForm;
 $(document).ready(function () {
-
     ItemInwordForm = $("#itemInWordForm").validate({
         rules: {
             txtUnitType: "required",
@@ -251,17 +250,21 @@ $(document).ready(function () {
             txtVehicleNumber: "required",
             txtItemId: "required",
         },
-        messages: {
-            txtUnitType: "Enter UnitType",
-            searchItemnameInput: "Enter Product",
-            inwardSupplierList: "Enter Supplier",
-            txtQuantity: "Enter Quantity",
-            txtReceiverName: "Enter ReceiverName",
-            txtVehicleNumber: "Enter VehicleNumber",
-            txtItemId: "select item",
+        highlight: function (element) {
+            $(element).addClass('error-border'); // Add red border to invalid input
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-border'); // Remove red border on valid input
+        },
+        errorPlacement: function (error, element) {
+            // Don't display error messages
+            return true;
         }
-    })
+    });
 });
+
+
+
 
 function resetErrorsMessages() {
     if (ItemInwordForm) {

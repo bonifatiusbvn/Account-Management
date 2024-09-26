@@ -1335,7 +1335,7 @@ function EditDashboardItemInWordDetails(InwordId) {
 }
 $(document).ready(function () {
 
-    $("#itemInWordForm").validate({
+    $("#DashboarditemInWordForm").validate({
         rules: {
             txtInwardUnitType: "required",
             searchItemnameInput: "required",
@@ -1356,7 +1356,7 @@ $(document).ready(function () {
 });
 function UpdateMultipleItemInWordDetails() {
 
-    if ($("#itemInWordForm").valid()) {
+    if ($("#DashboarditemInWordForm").valid()) {
         var siteId = null;
         if ($("#siteNameList").val()) {
             siteId = $("#siteNameListHidden").val();
