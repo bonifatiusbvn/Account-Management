@@ -54,7 +54,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             }
             return response;
         }
-
         public async Task<ApiResponseModel> CreateSupplier(SupplierModel supplier)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -144,8 +143,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
 
             return response;
         }
-
-
         public async Task<ApiResponseModel> DeleteSupplierDetails(Guid SupplierId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -178,7 +175,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             }
             return response;
         }
-
         public async Task<SupplierModel> GetSupplierById(Guid SupplierId)
         {
 
@@ -218,7 +214,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 throw ex;
             }
         }
-
         public async Task<IEnumerable<SupplierModel>> GetSupplierList(string? searchText, string? searchBy, string? sortBy)
         {
             try
@@ -299,7 +294,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 throw ex;
             }
         }
-
         public async Task<IEnumerable<SupplierModel>> GetSupplierNameList()
         {
             try
@@ -320,8 +314,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
                 throw ex;
             }
         }
-
-
         public async Task<ApiResponseModel> UpdateSupplierDetails(SupplierModel UpdateSupplier)
         {
 
@@ -490,7 +482,6 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
             }
             return response;
         }
-
         public async Task<ApiResponseModel> MultipleSupplierIsApproved(SupplierIsApprovedMasterModel SupplierList)
         {
             ApiResponseModel response = new ApiResponseModel();

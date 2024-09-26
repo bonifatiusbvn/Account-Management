@@ -129,8 +129,6 @@ $(document).ready(function () {
                         value: data.unitId
                     };
                 });
-
-
                 $("#txtUnitType").autocomplete({
                     source: unitTypes,
                     minLength: 0,
@@ -257,8 +255,6 @@ function CreateItem() {
         toastr.error("Kindly fill all details");
     }
 }
-
-
 function EditItemDetails(ItemId, element) {
 
     siteloadershow();
