@@ -836,14 +836,14 @@ $(document).ready(function () {
             txtMobileNo: {
                 required: true,
                 digits: true,
-                minlength: 10,
-                maxlength: 10
+                minlength: 8,  
+                maxlength: 12 
             },
             txtSuppliermobile: {
                 required: true,
                 digits: true,
-                minlength: 10,
-                maxlength: 10
+                minlength: 8,  
+                maxlength: 12 
             },
             txtSupplierAddress: "required",
         },
@@ -854,16 +854,16 @@ $(document).ready(function () {
             txtDeliverySchedule: "Please Enter PO Delivery Schedule",
             txtContectPerson: "Enter Contact Person Name",
             txtMobileNo: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
+                required: "Please enter a phone number",
+                digits: "Please enter a valid phone number",
+                minlength: "Phone number must be at least 8 digits",
+                maxlength: "Phone number cannot exceed 12 digits"
             },
             txtSuppliermobile: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
+                required: "Please enter a phone number",
+                digits: "Please enter a valid phone number",
+                minlength: "Phone number must be at least 8 digits",
+                maxlength: "Phone number cannot exceed 12 digits"
             },
             txtSupplierAddress: "Enter supplier address",
         }
