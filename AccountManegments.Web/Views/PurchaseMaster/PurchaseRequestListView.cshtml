@@ -79,6 +79,7 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>Item Name</th>
+                                                        <th>Date</th>
                                                         <th>Unit</th>
                                                         <th>Quantity</th>
                                                         <th>Status</th>
@@ -153,11 +154,16 @@
                                             <input type="hidden" id="RoleIdinPR" value="@_userSession.UserRole">
                                             <input type="hidden" id="SiteIdinPR" value="@UserSession.SiteId" />
                                         </div>
-                                        <div class="col-lg-12 col-12">
+                                        <div class="col-lg-6 col-12">
                                             <label class="form-label">Product Names</label>
                                             <input type="text" id="searchItemnameInput" name="searchItemnameInput" placeholder="Product Names" class="form-control">
                                             <input type="hidden" id="txtItemName" name="txtItemName">
                                             <span id="searchItemnameInput" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Date</label>
+                                            <input type="date" id="txtPrdate" name="txtPrdate" class="form-control" value="@DateTime.Now">
+                                            <span id="spnPrdate" class="text-danger"></span>
                                         </div>
                                         <div class="col-lg-12 col-12">
                                             <label class="form-label">Product Description</label>

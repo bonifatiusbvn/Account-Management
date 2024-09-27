@@ -19,6 +19,8 @@ public partial class PurchaseRequest
 
     public decimal Quantity { get; set; }
 
+    public DateTime? Date { get; set; }
+
     public string PrNo { get; set; } = null!;
 
     public int? SiteAddressId { get; set; }

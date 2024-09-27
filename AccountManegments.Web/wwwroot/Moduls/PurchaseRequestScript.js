@@ -178,6 +178,7 @@ function CreatePurchaseRequest() {
             SiteAddressId: siteAddressId,
             SiteAddress: siteAddress,
             UnitTypeId: $('#txtUnitTypeHidden').val(),
+            Date: $('#txtPrdate').val(),
             ItemId: $('#txtItemName').val(),
             ItemName: $('#searchItemnameInput').val(),
             ItemDescription: $('#PRItemDescription').val(),
@@ -307,6 +308,7 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
+            $('#txtPrdate').val(response.date);
             $('#addbtnpurchaseRequest').hide();
             $('#updatebtnpurchaseRequest').show();
             $('#PurchaseRequestId').val(response.pid);
@@ -389,7 +391,7 @@ function UpdatePurchaseRequestDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     AllPurchaseRequestListTable();
-                    
+
                     toastr.success(Result.message);
                     ClearPurchaseRequestTextBox();
                     siteloaderhide();
@@ -841,14 +843,14 @@ $(document).ready(function () {
             txtMobileNo: {
                 required: true,
                 digits: true,
-                minlength: 8,  
-                maxlength: 12 
+                minlength: 8,
+                maxlength: 12
             },
             txtSuppliermobile: {
                 required: true,
                 digits: true,
-                minlength: 8,  
-                maxlength: 12 
+                minlength: 8,
+                maxlength: 12
             },
             txtSupplierAddress: "required",
         },
@@ -898,7 +900,7 @@ termsTextAreas.forEach(textArea => {
             ckfinder: {
                 uploadUrl: uploadUrl
             },
-            
+
         })
         .then(editor => {
 
@@ -950,13 +952,13 @@ function InsertMultiplePurchaseOrderDetails() {
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms1'].getData();
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms2'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms2'].getData();
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
 
@@ -969,8 +971,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
-                PaymentTerms: paymentTerms, 
-                PaymentTermsId: paymentTermsId,  
+                PaymentTerms: paymentTerms,
+                PaymentTermsId: paymentTermsId,
                 BuyersPurchaseNo: $("#txtPOBuyersPurchaseNo").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
                 DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
@@ -1296,13 +1298,13 @@ function UpdateMultiplePurchaseOrderDetails() {
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms1'].getData();
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
                 paymentTerms = editors['txtPOPaymentTerms2'].getData();
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
             var PORequest = {
@@ -1314,7 +1316,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ToCompanyId: $("#txtcompanyname").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
                 PaymentTerms: paymentTerms,
-                PaymentTermsId: paymentTermsId, 
+                PaymentTermsId: paymentTermsId,
                 BuyersPurchaseNo: $("#txtPOBuyersPurchaseNo").val(),
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
@@ -1380,8 +1382,7 @@ function UpdateMultiplePurchaseOrderDetails() {
     }
 }
 
-function DeletePODetails(POId, BuyersPurchaseNo,element)
-{
+function DeletePODetails(POId, BuyersPurchaseNo, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');

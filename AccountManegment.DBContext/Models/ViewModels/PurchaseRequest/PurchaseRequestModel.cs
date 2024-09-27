@@ -38,6 +38,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseRequest
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+        public DateTime? Date { get; set; }
 
         public string? UnitName { get; set; }
 

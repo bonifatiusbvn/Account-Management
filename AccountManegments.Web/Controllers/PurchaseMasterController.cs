@@ -150,6 +150,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = UserSession.UserId,
                     PrNo = PurchaseRequestDetails.PrNo,
                     IsApproved = isApproved,
+                    Date = PurchaseRequestDetails.Date,
                     SiteAddress = PurchaseRequestDetails.SiteAddress == "--Select Site Address--" ? null : PurchaseRequestDetails.SiteAddress,
                     SiteAddressId = PurchaseRequestDetails.SiteAddressId,
                     ItemName = PurchaseRequestDetails.ItemName,
@@ -297,7 +298,7 @@ namespace AccountManegments.Web.Controllers
                     PaymentTermsId = PurchaseOrderDetails.PaymentTermsId,
                     BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
-                    ItemOrderlist =  PurchaseOrderDetails.ItemOrderlist,
+                    ItemOrderlist = PurchaseOrderDetails.ItemOrderlist,
                     ShippingAddressList = PurchaseOrderDetails.ShippingAddressList,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(podetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
