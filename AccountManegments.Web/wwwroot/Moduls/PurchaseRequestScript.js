@@ -260,9 +260,10 @@ function clearCreatePRText() {
     $('#searchItemname').val('');
     $('#txtQuantity').val('');
     $('#txtPoSiteName').val('');
-    $('#drpPRSiteAddress').val('');
+    $('#drpPRSiteAddress').empty();
     $('#PurchaseRequestId').val('');
     $('#PRItemDescription').val('');
+    $('#txtPrdate').val('');
 }
 
 var PRForm;
@@ -308,7 +309,10 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
-            $('#txtPrdate').val(response.date);
+           
+            var dbDate = response.date.split('T')[0]; 
+            $('#txtPrdate').val(dbDate);
+
             $('#addbtnpurchaseRequest').hide();
             $('#updatebtnpurchaseRequest').show();
             $('#PurchaseRequestId').val(response.pid);
@@ -380,6 +384,7 @@ function UpdatePurchaseRequestDetails() {
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
+            Date: $('#txtPrdate').val(),
         }
 
         $.ajax({
