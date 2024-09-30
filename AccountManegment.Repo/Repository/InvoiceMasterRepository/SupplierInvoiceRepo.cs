@@ -265,15 +265,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                     }
                 }
+                var TotalData = CountTotalData.Where(i => i.NetAmount != 0).ToList();
 
-                // Pagination after sorting
-                var paginatedResults = CountTotalData
+                var paginatedResults = TotalData
                     .Skip(PayOutReport.skip)
-                    .Take(PayOutReport.pageSize).Where(a=>a.NetAmount != 0)
+                    .Take(PayOutReport.pageSize)
                     .ToList();
-                var totalRecords = await supplierInvoicesQuery
-            .GroupBy(g => g.s.SupplierId)
-            .CountAsync();
+
+                var totalRecords = TotalData.Count();
 
                 var jsonData = new jsonData
                 {
