@@ -5,16 +5,6 @@
     ViewData["Title"] = "Site Master";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-@section HeaderButton {
-    <div class="d-flex gap-2 ms-auto">
-        <button type="button" class="btn btn-primary" onclick="toggleSiteDetailsAndGroupInfo(true)"><i class="lni lni-circle-plus"></i>Add Group</button>
-        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
-        {
-            <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
-        }
-    </div>
-}
-
 <style>
     #txtSiteName-error, #txtContectPersonName-error, #txtContectPersonPhoneNo-error, #txtAddress-error,
     #txtArea-error, #txtPincode-error, #ddlCountry-error, #stateDropdown-error, #ddlCity-error,
@@ -31,6 +21,17 @@
         width: 465px;
     }
 </style>
+
+@section HeaderButton {
+    <div class="d-flex gap-2 ms-auto">
+        <button type="button" class="btn btn-primary" onclick="toggleSiteDetailsAndGroupInfo(true)"><i class="lni lni-circle-plus"></i>Add Group</button>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
+        {
+            <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
+        }
+    </div>
+}
+
 
 <div class="">
     <div class="">

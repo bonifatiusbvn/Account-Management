@@ -23,7 +23,7 @@
                 }
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Delete == true)))
                 {
-                    <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id'); event.stopPropagation();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id','@item.BuyersPurchaseNo',this); event.stopPropagation();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                 }
             </td>
         }

@@ -867,9 +867,13 @@ $(document).ready(function () {
                 var totalDebit = settings.json.totalDebit || 0;
                 var NetAmount = totalCredit - totalDebit;
 
-                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + totalCredit.toFixed(2) + '</span>');
-                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + totalDebit.toFixed(2) + '</span>');
-                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + NetAmount.toFixed(2) + '</span>');
+                var formattedTotalCredit = formatReportNumberWithCommas(totalCredit.toFixed(2));
+                var formattedTotalDebit = formatReportNumberWithCommas(totalDebit.toFixed(2));
+                var formattedNetAmount = formatReportNumberWithCommas(NetAmount.toFixed(2));
+
+                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + formattedTotalCredit + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + formattedTotalDebit + '</span>');
+                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
 
                 // Replace classes for pagination buttons
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
@@ -883,6 +887,20 @@ $(document).ready(function () {
         });
     });
 });
+
+function formatReportNumberWithCommas(x) {
+    var parts = x.toString().split(".");
+    var integerPart = parts[0];
+    var decimalPart = parts.length > 1 ? "." + parts[1] : "";
+
+    var lastThree = integerPart.substring(integerPart.length - 3);
+    var otherNumbers = integerPart.substring(0, integerPart.length - 3);
+
+    if (otherNumbers != '')
+        lastThree = ',' + lastThree;
+
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
+}
 
 
 function openOB() {

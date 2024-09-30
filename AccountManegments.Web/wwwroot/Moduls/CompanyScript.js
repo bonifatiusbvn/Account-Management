@@ -266,10 +266,15 @@ function UpdateCompany() {
         toastr.error("Kindly fill all details");
     }
 }
-function DeleteCompanyDetails(CompanyId) {
+function DeleteCompanyDetails(CompanyId, CompanyName, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure want to delete this company?",
+        text: "To confirm, type the company name below",
+        input: 'text',
+        inputPlaceholder: 'Enter the company name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -277,7 +282,15 @@ function DeleteCompanyDetails(CompanyId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the company name!';
+            } else if (value !== CompanyName) {
+                return 'Company name mismatch! Please enter valid Company Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({

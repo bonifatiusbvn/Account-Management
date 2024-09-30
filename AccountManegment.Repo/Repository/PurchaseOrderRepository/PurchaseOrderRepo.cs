@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 using AccountManagement.DBContext.Models.Common;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using AccountManagement.Repository.Services.PurchaseOrder;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
@@ -698,6 +700,34 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.PaymentTerms = PurchaseOrderDetails.PaymentTerms;
                 PurchaseOrder.PaymentTermsId = PurchaseOrderDetails.PaymentTermsId;
                 Context.PurchaseOrders.Update(PurchaseOrder);
+
+                var existingPOItems = Context.PurchaseOrderDetails
+             .Where(e => e.PorefId == PurchaseOrder.Id)
+             .ToList();
+
+                Context.PurchaseOrderDetails.RemoveRange(existingPOItems);
+                await Context.SaveChangesAsync();
+
+                foreach (var item in PurchaseOrderDetails.ItemOrderlist)
+                {
+                    var newPOItemDetails = new PurchaseOrderDetail()
+                    {
+                        PorefId = PurchaseOrder.Id,
+                        ItemId = item.ItemId,
+                        ItemName = item.ItemName,
+                        ItemTotal = item.ItemTotal,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        IsDeleted = false,
+                        CreatedBy = PurchaseOrderDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    Context.PurchaseOrderDetails.Add(newPOItemDetails);
+                }
 
                 foreach (var address in PurchaseOrderDetails.ShippingAddressList)
                 {

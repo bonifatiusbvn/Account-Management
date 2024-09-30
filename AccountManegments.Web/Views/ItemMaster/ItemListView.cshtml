@@ -25,8 +25,6 @@
 
         </div>
     }
-
-
 }
 
 <div class="">
@@ -50,7 +48,6 @@
                                                             <button id="errorCloseButton" class="btn btn-outline-danger btn-lg" aria-label="Close">×</button>
                                                         </div>
                                                     }
-
                                                     <div class="col-12 col-lg-4">
                                                         <input class="form-control" id="txtItemSearch" onkeyup="filterItemTable()" placeholder="Search" />
                                                     </div>
@@ -62,7 +59,6 @@
                                                             <option>IsApproved</option>
                                                         </select>
                                                     </div>
-
                                                     <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlItemSortBy" onchange="sortItemTable()">
                                                             <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
@@ -96,15 +92,10 @@
                                             </table>
                                         </div>
                                     </div>
-
-
                                 </div>
-
                             </div>
                         </div>
                         <!--end row-->
-
-
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
@@ -149,19 +140,15 @@
                                         <label class="form-label">HsnCode</label>
                                         <input type="text" class="form-control" id="dspHsnCode" readonly>
                                     </div>
-
                                 </div>
                                 <div id="ItemHistoryView" class="card d-none"></div>
                             </div>
-
                         </div>
                     </div>
-             
                 </div>
             </div>
         </div>
     </div>
-
     <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="CreateItem">
         <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
             <h5 class="m-0 me-2 text-white" id="changeName"></h5>
@@ -220,11 +207,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
     <div id="uploadExcelFileModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -247,13 +231,9 @@
                     </div>
                 </form>
             </div><!-- /.modal-content -->
-
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </div>
-
-
-
 
 @section Scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>

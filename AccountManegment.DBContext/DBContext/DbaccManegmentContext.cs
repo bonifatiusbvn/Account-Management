@@ -60,8 +60,7 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    }
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -269,6 +268,7 @@ public partial class DbaccManegmentContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("PId");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.ItemDescription).HasMaxLength(500);
             entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.PrNo).HasMaxLength(50);

@@ -83,8 +83,9 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     Pid = Guid.NewGuid(),
                     PrNo = PurchaseRequestDetails.PrNo,
                     ItemId = PurchaseRequestDetails.ItemId,
+                    Date = PurchaseRequestDetails.Date,
                     ItemName = PurchaseRequestDetails.ItemName,
-                    ItemDescription= PurchaseRequestDetails.ItemDescription,
+                    ItemDescription = PurchaseRequestDetails.ItemDescription,
                     UnitTypeId = PurchaseRequestDetails.UnitTypeId,
                     Quantity = PurchaseRequestDetails.Quantity,
                     SiteId = PurchaseRequestDetails.SiteId,
@@ -144,8 +145,9 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                            Pid = a.Pid,
                                            PrNo = a.PrNo,
                                            ItemId = a.ItemId,
+                                           Date = a.Date,
                                            ItemName = i.ItemName,
-                                           ItemDescription=a.ItemDescription,
+                                           ItemDescription = a.ItemDescription,
                                            UnitTypeId = a.UnitTypeId,
                                            Quantity = a.Quantity,
                                            UnitName = b.UnitName,
@@ -181,17 +183,18 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                                               ItemName = i.ItemName,
                                               ItemId = a.ItemId,
                                               PrNo = a.PrNo,
+                                              Date = a.Date,
                                               Quantity = a.Quantity,
                                               UnitTypeId = a.UnitTypeId,
                                               UnitName = b.UnitName,
-                                              ItemDescription=a.ItemDescription,
+                                              ItemDescription = a.ItemDescription,
                                               SiteId = a.SiteId,
                                               SiteName = c.SiteName,
                                               CreatedBy = a.CreatedBy,
                                               CreatedOn = a.CreatedOn,
                                               IsApproved = a.IsApproved,
-                                             SiteAddress = a.SiteAddress,
-                                             SiteAddressId  = a.SiteAddressId
+                                              SiteAddress = a.SiteAddress,
+                                              SiteAddressId = a.SiteAddressId
                                           };
 
 
@@ -200,7 +203,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     searchText = searchText.ToLower();
                     PurchaseRequestList = PurchaseRequestList.Where(u =>
                         u.UnitName.ToLower().Contains(searchText) ||
-                        u.Quantity.ToString().Contains(searchText)||
+                        u.Quantity.ToString().Contains(searchText) ||
                         u.ItemName.ToLower().Contains(searchText)
                     );
                 }
@@ -266,6 +269,7 @@ namespace AccountManagement.Repository.Repository.PurchaseRequestRepository
                     PurchaseRequestData.Pid = PurchaseRequestDetails.Pid;
                     PurchaseRequestData.PrNo = PurchaseRequestDetails.PrNo;
                     PurchaseRequestData.ItemId = PurchaseRequestDetails.ItemId;
+                    PurchaseRequestData.Date = PurchaseRequestDetails.Date;
                     PurchaseRequestData.ItemDescription = PurchaseRequestDetails.ItemDescription;
                     PurchaseRequestData.Quantity = PurchaseRequestDetails.Quantity;
                     PurchaseRequestData.UnitTypeId = PurchaseRequestDetails.UnitTypeId;

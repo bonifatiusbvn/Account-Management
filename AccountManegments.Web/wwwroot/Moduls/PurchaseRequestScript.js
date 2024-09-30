@@ -178,6 +178,7 @@ function CreatePurchaseRequest() {
             SiteAddressId: siteAddressId,
             SiteAddress: siteAddress,
             UnitTypeId: $('#txtUnitTypeHidden').val(),
+            Date: $('#txtPrdate').val(),
             ItemId: $('#txtItemName').val(),
             ItemName: $('#searchItemnameInput').val(),
             ItemDescription: $('#PRItemDescription').val(),
@@ -259,9 +260,10 @@ function clearCreatePRText() {
     $('#searchItemname').val('');
     $('#txtQuantity').val('');
     $('#txtPoSiteName').val('');
-    $('#drpPRSiteAddress').val('');
+    $('#drpPRSiteAddress').empty();
     $('#PurchaseRequestId').val('');
     $('#PRItemDescription').val('');
+    $('#txtPrdate').val('');
 }
 
 var PRForm;
@@ -273,14 +275,19 @@ $(document).ready(function () {
             txtQuantity: "required",
             txtPoSiteName: "required",
         },
-        messages: {
-            searchItemnameInput: "Select Item!",
-            txtUnitType: "Select UnitType!",
-            txtQuantity: "Enter Quantity",
-            txtPoSiteName: "Select Site",
+        highlight: function (element) {
+            $(element).addClass('error-border');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-border');
+        },
+        errorPlacement: function (error, element) {
+            return true;
         }
     });
 });
+
+
 
 function resetPRForm() {
     if (PRForm) {
@@ -302,8 +309,8 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
-
-            var dbDate = response.date.split('T')[0];
+           
+            var dbDate = response.date.split('T')[0]; 
             $('#txtPrdate').val(dbDate);
 
             $('#addbtnpurchaseRequest').hide();
@@ -377,6 +384,7 @@ function UpdatePurchaseRequestDetails() {
             SiteId: siteName,
             Quantity: $('#txtQuantity').val(),
             PrNo: $('#prNo').val(),
+            Date: $('#txtPrdate').val(),
         }
 
         $.ajax({
@@ -388,7 +396,7 @@ function UpdatePurchaseRequestDetails() {
                 siteloaderhide();
                 if (Result.code == 200) {
                     AllPurchaseRequestListTable();
-                    
+
                     toastr.success(Result.message);
                     ClearPurchaseRequestTextBox();
                     siteloaderhide();
@@ -405,10 +413,15 @@ function UpdatePurchaseRequestDetails() {
     }
 }
 
-function DeletePurchaseRequest(PurchaseId) {
+function DeletePurchaseRequest(PurchaseId, ItemName, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure want to delete this Item?",
+        text: "To confirm, type the Item name below",
+        input: 'text',
+        inputPlaceholder: 'Enter the Item name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -416,7 +429,14 @@ function DeletePurchaseRequest(PurchaseId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true, inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the Item name!';
+            } else if (value !== ItemName) {
+                return 'Item name mismatch! Please enter valid Item Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -823,14 +843,14 @@ $(document).ready(function () {
             txtMobileNo: {
                 required: true,
                 digits: true,
-                minlength: 10,
-                maxlength: 10
+                minlength: 8,
+                maxlength: 12
             },
             txtSuppliermobile: {
                 required: true,
                 digits: true,
-                minlength: 10,
-                maxlength: 10
+                minlength: 8,
+                maxlength: 12
             },
             txtSupplierAddress: "required",
         },
@@ -841,16 +861,16 @@ $(document).ready(function () {
             txtDeliverySchedule: "Please Enter PO Delivery Schedule",
             txtContectPerson: "Enter Contact Person Name",
             txtMobileNo: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
+                required: "Please enter a phone number",
+                digits: "Please enter a valid phone number",
+                minlength: "Phone number must be at least 8 digits",
+                maxlength: "Phone number cannot exceed 12 digits"
             },
             txtSuppliermobile: {
-                required: "Please Enter Phone Number",
-                digits: "Please enter a valid 10-digit phone number",
-                minlength: "Phone number must be 10 digits long",
-                maxlength: "Phone number must be 10 digits long"
+                required: "Please enter a phone number",
+                digits: "Please enter a valid phone number",
+                minlength: "Phone number must be at least 8 digits",
+                maxlength: "Phone number cannot exceed 12 digits"
             },
             txtSupplierAddress: "Enter supplier address",
         }
@@ -880,6 +900,7 @@ termsTextAreas.forEach(textArea => {
             ckfinder: {
                 uploadUrl: uploadUrl
             },
+
         })
         .then(editor => {
 
@@ -931,13 +952,13 @@ function InsertMultiplePurchaseOrderDetails() {
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms1'].getData();
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms2'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms2'].getData();
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
 
@@ -950,8 +971,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
-                PaymentTerms: paymentTerms, 
-                PaymentTermsId: paymentTermsId,  
+                PaymentTerms: paymentTerms,
+                PaymentTermsId: paymentTermsId,
                 BuyersPurchaseNo: $("#txtPOBuyersPurchaseNo").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
                 DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
@@ -1236,8 +1257,25 @@ function getCompanyDetails(CompanyId) {
 function UpdateMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
-        if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+        if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+
+            var orderDetails = [];
             var AddressDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    ItemName: orderRow.find("#txtItemName").text(),
+                    ItemId: orderRow.find("#txtItemId").val(),
+                    UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    TotalPrice: orderRow.find("#txtproductamount").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gst: orderRow.find("#txtgstAmount").val(),
+                    ItemTotal: orderRow.find("#txtproducttotalamount").val(),
+                    Hsncode: orderRow.find("#txtHSNcode").val(),
+                };
+                orderDetails.push(objData);
+            });
 
             $(".ShippingAddress").each(function () {
                 var shippingAddress = $(this);
@@ -1251,13 +1289,13 @@ function UpdateMultiplePurchaseOrderDetails() {
             var paymentTermsId = "";
 
             if ($('a[href="#Terms-1"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms1'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms1'].getData();
                 paymentTermsId = $('#Term-1').val();
             } else if ($('a[href="#Terms-2"]').hasClass('active')) {
                 paymentTerms = editors['txtPOPaymentTerms2'].getData();
                 paymentTermsId = $('#Term-2').val();
             } else if ($('a[href="#Terms-3"]').hasClass('active')) {
-                paymentTerms = editors['txtPOPaymentTerms3'].getData(); 
+                paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
             var PORequest = {
@@ -1269,7 +1307,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ToCompanyId: $("#txtcompanyname").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
                 PaymentTerms: paymentTerms,
-                PaymentTermsId: paymentTermsId, 
+                PaymentTermsId: paymentTermsId,
                 BuyersPurchaseNo: $("#txtPOBuyersPurchaseNo").val(),
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
@@ -1279,6 +1317,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddressList: AddressDetails,
+                ItemOrderlist: orderDetails,
             }
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
@@ -1310,6 +1349,11 @@ function UpdateMultiplePurchaseOrderDetails() {
             });
         } else {
             siteloaderhide();
+            if ($('#addNewlink tr').length == 0) {
+                $("#spnitembutton").text("Please Select Product!");
+            } else {
+                $("#spnitembutton").text("");
+            }
             if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
                 siteloaderhide();
                 $("#spnshipping").text("Please Select Shipping Address!");
@@ -1329,11 +1373,15 @@ function UpdateMultiplePurchaseOrderDetails() {
     }
 }
 
-function DeletePODetails(POId) {
-
+function DeletePODetails(POId, BuyersPurchaseNo, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this?",
-        text: "You won't be able to revert this!",
+        title: "Are you sure you want to delete this purchase order?",
+        text: "To confirm, type the Purchase order id below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the Purchase order id to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -1341,7 +1389,15 @@ function DeletePODetails(POId) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the purchase order id!';
+            } else if (value !== BuyersPurchaseNo) {
+                return 'Purchase order id mismatch! Please enter valid Purchase Order No';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({

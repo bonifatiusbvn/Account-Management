@@ -175,7 +175,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                         var endDate = new DateTime(year, month, 1).AddDays(-1);
 
                         supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
-                    }               
+                    }
                     else if (PayOutReport.filterType == "currentYear")
                     {
                         var currentYear = DateTime.Now.Year;
@@ -1626,47 +1626,47 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 var groupedBySite = await supplierInvoicesQuery
-            .GroupBy(g => g.s.SiteId)
-            .Select(siteGroup => new
-            {
-                SiteId = siteGroup.Key,
-                SupplierInvoices = siteGroup.GroupBy(g => g.s.SupplierId).Select(supplierGroup => new SupplierInvoiceModel
-                {
-                    Id = supplierGroup.FirstOrDefault().s.Id,
-                    InvoiceNo = supplierGroup.FirstOrDefault().s.InvoiceNo,
-                    SiteId = supplierGroup.FirstOrDefault().s.SiteId,
-                    SupplierId = supplierGroup.Key,
-                    CompanyId = supplierGroup.FirstOrDefault().s.CompanyId,
-                    PayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                    NonPayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
-                    NetAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                    GroupName = supplierGroup.FirstOrDefault().s.SiteGroup,
-                    Description = string.Join(", ", supplierGroup.Select(x => x.s.Description)),
-                    CompanyName = supplierGroup.FirstOrDefault().CompanyName,
-                    SupplierName = supplierGroup.FirstOrDefault().SupplierName,
-                    PaymentStatus = supplierGroup.FirstOrDefault().s.PaymentStatus,
-                    IsPayOut = supplierGroup.FirstOrDefault().s.IsPayOut,
-                    SupplierInvoiceNo = supplierGroup.FirstOrDefault().s.SupplierInvoiceNo,
-                    Date = supplierGroup.FirstOrDefault().s.Date,
-                    CreatedOn = supplierGroup.FirstOrDefault().s.CreatedOn,
-                    SiteName = supplierGroup.FirstOrDefault().SiteName
-                }).ToList()
-            }).ToListAsync();
+.GroupBy(g => g.s.SiteId)
+.Select(siteGroup => new
+{
+    SiteId = siteGroup.Key,
+    SupplierInvoices = siteGroup.GroupBy(g => g.s.SupplierId).Select(supplierGroup => new SupplierInvoiceModel
+    {
+        Id = supplierGroup.FirstOrDefault().s.Id,
+        InvoiceNo = supplierGroup.FirstOrDefault().s.InvoiceNo,
+        SiteId = supplierGroup.FirstOrDefault().s.SiteId,
+        SupplierId = supplierGroup.Key,
+        CompanyId = supplierGroup.FirstOrDefault().s.CompanyId,
+        PayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        NonPayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
+        NetAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        GroupName = supplierGroup.FirstOrDefault().s.SiteGroup,
+        Description = string.Join(", ", supplierGroup.Select(x => x.s.Description)),
+        CompanyName = supplierGroup.FirstOrDefault().CompanyName,
+        SupplierName = supplierGroup.FirstOrDefault().SupplierName,
+        PaymentStatus = supplierGroup.FirstOrDefault().s.PaymentStatus,
+        IsPayOut = supplierGroup.FirstOrDefault().s.IsPayOut,
+        SupplierInvoiceNo = supplierGroup.FirstOrDefault().s.SupplierInvoiceNo,
+        Date = supplierGroup.FirstOrDefault().s.Date,
+        CreatedOn = supplierGroup.FirstOrDefault().s.CreatedOn,
+        SiteName = supplierGroup.FirstOrDefault().SiteName
+    }).ToList()
+}).ToListAsync();
 
                 var totalCredit = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.NonPayOutTotalAmount));
                 var totalDebit = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.PayOutTotalAmount));
                 var totalPending = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.NetAmount));
 
-
                 var PayOutDetails = new InvoiceTotalAmount
                 {
-                    InvoiceList = groupedBySite.SelectMany(site => site.SupplierInvoices).ToList(),
+                    InvoiceList = groupedBySite.SelectMany(site => site.SupplierInvoices).Where(inv => inv.NetAmount != 0).ToList(),
                     TotalPending = totalPending ?? 0m,
                     TotalCreadit = totalCredit ?? 0m,
                     TotalPurchase = totalDebit ?? 0m
                 };
 
                 return PayOutDetails;
+
             }
             catch (Exception ex)
             {

@@ -47,6 +47,7 @@
                                 <thead class="table-light btn-primary">
                                     <tr>
                                         <th>Site</th>
+                                        <th>Date</th>
                                         <th>Item</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
@@ -75,7 +76,9 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
+
                                                 <td>@item.SiteName</td>
+                                                <td style="width:100px;">@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : "")</td>
                                                 <td>@item.ItemName</td>
                                                 <td>@item.UnitName</td>
                                                 <td>@item.Quantity</td>
@@ -425,7 +428,7 @@
 
 
 <!----Edit ItemInward---->
-<form id="itemInWordForm">
+<form id="DashboarditemInWordForm">
     <div class="modal fade show" tabindex="-1" id="EditDashboardItemInwardModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
