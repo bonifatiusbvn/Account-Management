@@ -371,5 +371,11 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Group-View")]
+        public IActionResult CreateGroup()
+        {
+            return View();
+        }
     }
 }

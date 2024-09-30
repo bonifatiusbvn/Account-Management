@@ -1,0 +1,134 @@
+﻿@model AccountManagement.DBContext.Models.ViewModels.SiteMaster.SiteMasterModel
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@{
+    ViewData["Title"] = "CreateGroup";
+    Layout = "~/Views/Shared/Main_Layout.cshtml";
+}
+
+@section HeaderButton {
+    <div class="d-flex gap-2 ms-auto">
+
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
+        {
+            <button type="button" class="btn btn-primary" onclick="toggleSiteDetailsAndGroupInfo(true)"><i class="lni lni-circle-plus"></i>Add Group</button>
+        }
+    </div>
+}
+
+<div class="">
+    <div class="">
+        <div class=" radius-10 w-100">
+            <div class="my-3 border-bottom"></div>
+            <div class="">
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                        <div class="card radius-10 w-100">
+                            <div class="card-body">
+                                <div class="row w-100 ac-view-list card radius-10 w-100">
+                                    <div class="row ">
+                                        <div class="col-12">
+                                            <div class="card-body">
+                                                <div class="row g-3">
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <input class="form-control" id="txtSiteSearch" onkeyup="SitefilterTable()" placeholder="Search">
+                                                    </div>
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="SiteSearchBy" onchange="SitefilterTable()">
+                                                            <option selected="selected">
+                                                                All
+                                                            </option>
+                                                            <option> GroupName </option>
+                                                            <option> ContactPersonName </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="SiteDataSortBy" onchange="sortSiteTable()">
+                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
+                                                            <option value="AscendingCreatedOn"> First Created</option>
+                                                            <option value="AscendingSitename">Sitename(A - Z) </option>
+                                                            <option value="DescendingSitename"> Sitename(Z - A) </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--end row-->
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="table-responsive" style="overflow-x: hidden;max-height: 300px;">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-light btn-primary">
+                                                    <tr>
+                                                        <th>Group Name</th>
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true || a.Delete == true)))
+                                                        {
+                                                            <th>Action</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="SiteGrouptbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end row-->
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                        <div class="card radius-10">
+                            <div class="card-body" style="height:658px;">
+                                <h5 class="mb-0 mt-4" id="SiteInfoHeading">Site Information</h5>
+                                <div id="addgroupinfo" class="card d-none">
+                                    <form id="AddSiteGroupForm">
+                                        <div class="card-body">
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label">Group Name</label>
+                                                <input type="text" id="txtSiteGroupId" hidden>
+                                                <input type="text" class="form-control" placeholder="Group Name" id="txtSiteGropuName" name="txtSiteGropuName">
+                                                <span id="spnSiteGropuName" class="text-danger"></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8 mb-3">
+                                                    <label class="form-label">Select Site</label>
+                                                    <select class="multiple-select form-select" data-placeholder="Select Site" multiple="multiple" id="textGroupSiteNameList"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label">GroupAddress</label>
+                                                <textarea type="text" class="form-control" id="txtgroupsitenamelist" rows="3"></textarea>
+                                                <textarea type="text" class="form-control" id="txtgroupsiteIdlist" hidden></textarea>
+                                                <span id="" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" onclick="AddSiteGroupDetails()" id="addsitegroupbtn">Save</button>
+                                            <button type="button" class="btn btn-primary" onclick="UpdateSiteGroupDetails()" id="updatesitegroupbtn" style="display:none;">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+
+    <script src="~/moduls/masterlistscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/sitemasterscript.js" asp-append-version="true"></script>
+}
