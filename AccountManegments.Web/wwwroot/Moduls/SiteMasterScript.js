@@ -810,12 +810,11 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
 
     cleargrouplisttext();
     if (showGroupInfo) {
-        $('#SiteInfoHeading').text('Add Group Details');
+        $('#GroupInfoHeading').text('Add Group Details');
         $('#addgroupinfo').removeClass('d-none');
-        $('#siteinfo').addClass('d-none');
+        $('#groupDetailsInfo').addClass('d-none');
         $('#updatesitegroupbtn').hide();
         $('#addsitegroupbtn').show();
-        $("#txtSiteGropuName").prop('readonly', false);
 
         $.ajax({
             url: '/SiteMaster/GetSiteNameList',
