@@ -5,6 +5,8 @@ using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
+using Aspose.Pdf.Text;
+using Aspose.Pdf;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,8 @@ using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Newtonsoft.Json;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
+using ClosedXML.Excel;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -450,7 +454,7 @@ namespace AccountManegments.Web.Controllers
         public async Task<IActionResult> GetItemHistory(Guid ItemId)
         {
             try
-            {             
+            {
                 SupplierInvoiceList Items = new SupplierInvoiceList();
                 ApiResponseModel response = await APIServices.PostAsync("", "ItemMaster/GetItemHistory?ItemId=" + ItemId);
                 if (response.code == 200)
@@ -462,6 +466,183 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportItemHistoryToPDF(Guid ItemId)
+        {
+            try
+            {
+                SupplierInvoiceList Items = new SupplierInvoiceList();
+                ApiResponseModel response = await APIServices.PostAsync("", "ItemMaster/GetItemHistory?ItemId=" + ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<SupplierInvoiceList>(response.data.ToString());
+
+                    string FormatIndianCurrency(decimal amount)
+                    {
+                        var cultureInfo = new CultureInfo("en-IN");
+                        var numberFormat = cultureInfo.NumberFormat;
+                        numberFormat.CurrencySymbol = "₹";
+                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                        numberFormat.CurrencyDecimalDigits = 2;
+                        numberFormat.CurrencyGroupSeparator = ",";
+                        numberFormat.CurrencyDecimalSeparator = ".";
+                        return amount.ToString("C", numberFormat);
+                    }
+
+                    var document = new Aspose.Pdf.Document
+                    {
+                        PageInfo = new PageInfo { Margin = new MarginInfo(20, 25, 20, 35) }
+                    };
+
+                    var pdfPage = document.Pages.Add();
+
+                    Aspose.Pdf.Table table = new Aspose.Pdf.Table
+                    {
+                        ColumnWidths = "26% 20% 13% 10% 10% 8% 13%",
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                        Border = new BorderInfo(BorderSide.None),
+                        DefaultCellBorder = new BorderInfo(BorderSide.None),
+                    };
+
+                    var headerRow = table.Rows.Add();
+                    headerRow.Cells.Add("Item Name");
+                    headerRow.Cells.Add("Invoice No");
+                    headerRow.Cells.Add("Date");
+                    headerRow.Cells.Add("Quantity");
+                    headerRow.Cells.Add("Price");
+                    headerRow.Cells.Add("GST");
+                    headerRow.Cells.Add("PriceWithGST");
+
+                    foreach (var cell in headerRow.Cells)
+                    {
+                        cell.BackgroundColor = Aspose.Pdf.Color.Black;
+                        var fragment = cell.Paragraphs[0] as TextFragment;
+                        if (fragment != null)
+                        {
+                            fragment.TextState.ForegroundColor = Aspose.Pdf.Color.White;
+                        }
+                    }
+
+                    foreach (var item in Items.InvoiceList)
+                    {
+                        var row = table.Rows.Add();
+                        row.Cells.Add(item.Itemname != null ? item.Itemname : "");
+                        row.Cells.Add(item.InvoiceNo != null ? item.InvoiceNo : "");
+                        row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
+                        if (Items.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
+                        {
+                            foreach (var itemDetail in itemDetails)
+                            {
+                                row.Cells.Add(itemDetail.Quantity.ToString() ?? "");
+                            }
+                        }
+                        row.Cells.Add(FormatIndianCurrency(item.ItemPrice ?? 0));
+                        row.Cells.Add(item.GSTper.ToString() + "%");
+                        row.Cells.Add(FormatIndianCurrency(item.ItemPricewithGST ?? 0));
+                        var backgroundColor = table.Rows.Count % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                        foreach (var cell in row.Cells)
+                        {
+                            cell.BackgroundColor = backgroundColor;
+                        }
+                    }
+                    pdfPage.Paragraphs.Add(table);
+
+                    using (var streamout = new MemoryStream())
+                    {
+                        document.Save(streamout);
+                        return new FileContentResult(streamout.ToArray(), "application/pdf")
+                        {
+                            FileDownloadName = Guid.NewGuid() + "_ItemHistoryDetails.pdf",
+                        };
+                    }
+                }
+                return RedirectToAction("ItemListView");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> ExportItemHistoryToExcel(Guid ItemId)
+        {
+            try
+            {
+                SupplierInvoiceList Items = new SupplierInvoiceList();
+                ApiResponseModel response = await APIServices.PostAsync("", "ItemMaster/GetItemHistory?ItemId=" + ItemId);
+                if (response.code == 200)
+                {
+                    Items = JsonConvert.DeserializeObject<SupplierInvoiceList>(response.data.ToString());
+
+                    using (var wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("Item History");
+
+                        var row = 1;
+
+                        ws.Cell(row, 1).Value = "Item Name";
+                        ws.Cell(row, 2).Value = "Invoice No";
+                        ws.Cell(row, 3).Value = "Date";
+                        ws.Cell(row, 4).Value = "Quantity";
+                        ws.Cell(row, 5).Value = "Price";
+                        ws.Cell(row, 6).Value = "GST";
+                        ws.Cell(row, 7).Value = "PriceWithGst";
+
+                        var headerRange2 = ws.Range(row, 1, row, 7);
+                        headerRange2.Style.Font.Bold = true;
+                        headerRange2.Style.Fill.BackgroundColor = XLColor.Black;
+                        headerRange2.Style.Font.FontColor = XLColor.White;
+                        headerRange2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        row++;
+
+                        string FormatIndianCurrency(decimal amount)
+                        {
+                            var cultureInfo = new CultureInfo("en-IN");
+                            var numberFormat = cultureInfo.NumberFormat;
+                            numberFormat.CurrencySymbol = "₹";
+                            numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                            numberFormat.CurrencyDecimalDigits = 2;
+                            numberFormat.CurrencyGroupSeparator = ",";
+                            numberFormat.CurrencyDecimalSeparator = ".";
+                            return amount.ToString("C", numberFormat);
+                        }
+
+                        foreach (var item in Items.InvoiceList)
+                        {
+                            string cellValue;
+                            ws.Cell(row, 1).Value = item.Itemname;
+                            ws.Cell(row, 2).Value = item.InvoiceNo ?? string.Empty;
+                            ws.Cell(row, 3).Value = item.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
+                            if (Items.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
+                            {
+                                foreach (var itemDetail in itemDetails)
+                                {
+                                    ws.Cell(row, 4).Value = (itemDetail.Quantity.ToString() ?? "");
+                                }
+                            }
+                            ws.Cell(row, 5).Value = FormatIndianCurrency(item.ItemPrice ?? 0);
+                            ws.Cell(row, 6).Value = item.GSTper.ToString() + "%";
+                            ws.Cell(row, 7).Value = FormatIndianCurrency(item.ItemPricewithGST ?? 0);
+                            row++;
+                        }
+                        using (var stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            stream.Seek(0, SeekOrigin.Begin);
+                            var fileName = $"{Guid.NewGuid()}_ItemHistoryDetails.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        }
+                    }
+                }
+                return RedirectToAction("ReportItemListViewDetails");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
     }
