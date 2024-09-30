@@ -1,5 +1,6 @@
 ﻿AllSiteListTable();
 GetGroupNameList();
+GetGroupSiteList();
 fn_getState('stateDropdown', 1);
 fn_getShippingState('ShippingState', 1);
 function AllSiteListTable() {
@@ -366,6 +367,19 @@ function UpdateSiteDetails() {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
+}
+
+function GetGroupSiteList() {
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#textGroupSiteList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+                });
+            }
+        }
+    });
 }
 
 function ClearSiteTextBox() {
@@ -864,30 +878,12 @@ function toggleSiteDetailsAndGroupInfo(showGroupInfo, SiteId, element) {
     }
 }
 
-
-
 function AddSiteGroupDetails() {
-    var selectElement = document.getElementById('textGroupSiteNameList');
-    var SiteList = [];
-
-    $(selectElement.options).each(function () {
-        var option = $(this);
-        if (option.is(':selected')) {
-            // Retrieve the siteId from the data-value attribute
-            var siteId = option.data('value');
-
-            var objData = {
-                SiteId: siteId
-            };
-            SiteList.push(objData);
-        }
-    });
-    var groupName = $('#txtSiteGropuName').val();
-    if (SiteList.length > 0 && groupName != "") {
-
+    if ($("#AddSiteGroupForm").valid()) {
         var SiteData = {
-            GroupName: groupName,
-            SiteList: SiteList,
+            GroupName: $('#txtSiteGropuName').val(),
+            SiteId: $("#textGroupSiteList").val(),
+            GroupAddress: $("#txtgroupAddresslist").val(),
         };
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
@@ -907,7 +903,7 @@ function AddSiteGroupDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/SiteMaster/SiteListView';
+                        window.location = '/SiteMaster/CreateGroup';
                     });
                 } else {
                     toastr.warning(Result.message);
@@ -915,7 +911,7 @@ function AddSiteGroupDetails() {
             },
         });
     } else {
-        toastr.warning("Please add groupname and select site!");
+        toastr.warning("Kindly fill all the details.");
     }
 }
 
@@ -945,7 +941,7 @@ function DeleteSiteGroup(GroupId) {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(function () {
-                            window.location = '/SiteMaster/SiteListView';
+                            window.location = '/SiteMaster/CreateGroup';
                         })
                     }
                     else {
@@ -956,7 +952,7 @@ function DeleteSiteGroup(GroupId) {
                 error: function () {
                     siteloaderhide();
                     toastr.error("Can't delete site group!");
-                    window.location = '/SiteMaster/SiteListView';
+                    window.location = '/SiteMaster/CreateGroup';
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -984,136 +980,89 @@ function DisplaySiteGroup(GroupId) {
             $("#addgroupinfo").removeClass('d-none');
             $("#siteinfo").addClass('d-none');
             $('#SiteInfoHeading').text('Edit Group Details');
-            $("#txtSiteGropuName").val(response.groupName).prop('readonly', true);
+            $("#txtSiteGropuName").val(response.groupName);
             $("#txtSiteGroupId").val(response.groupId);
+            $("#textGroupSiteList").val(response.siteId);
+            $("#txtgroupAddresslist").val(response.groupAddress);
             $('#addsitegroupbtn').hide();
             $('#updatesitegroupbtn').show();
-
-            $.ajax({
-                url: '/SiteMaster/GetSiteNameList',
-                success: function (result) {
-                    var dropdown = $('#textGroupSiteNameList');
-                    dropdown.empty();
-                    $.each(result, function (i, data) {
-                        dropdown.append('<option class="site-dropdown-item-custom" data-value="' + data.siteId + '">' + data.siteName + '</option>');
-                    });
-                    dropdown.css("width", "550px");
-                    dropdown.select2({
-                        placeholder: 'Select Site',
-                        closeOnSelect: false,
-                        allowClear: true,
-                        tags: false,
-                        tokenSeparators: [',', ' ']
-                    }).on('select2:select', function (e) {
-                        $(this).next('.select2-container').find('.select2-search__field').val('');
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error in GetGroupSiteNameList:', error);
-                }
-            });
-
-            var siteNames = response.siteList.map(site => site.siteName) || [];
-            var siteIds = response.siteList.map(site => site.siteId) || [];
-            if (Array.isArray(siteNames)) {
-                var siteNamesText = siteNames.join(',');
-                $("#txtgroupsitenamelist").val(siteNamesText).prop('readonly', true);
-            }
-            if (Array.isArray(siteIds)) {
-                var siteIdsText = siteIds.join(',');
-                $("#txtgroupsiteIdlist").val(siteIdsText);
-            }
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            console.error('Error in GetGroupDetailsByGroupName:', error);
+            console.error('Error in fetching group details:', error);
         }
     });
 }
 
 function UpdateSiteGroupDetails() {
-    var siteIdsText = $("#txtgroupsiteIdlist").val();
-    var siteIds = siteIdsText.split(',').map(id => id.trim()).filter(id => id !== "");
+    if ($("#AddSiteGroupForm").valid()) {
 
-    var SiteList = [];
-    var existingSiteIds = new Set();
+        var SiteData = {
+            GroupName: $('#txtSiteGropuName').val(),
+            SiteId: $("#textGroupSiteList").val(),
+            GroupAddress: $("#txtgroupAddresslist").val(),
+            GroupId: $("#txtSiteGroupId").val(),
+        };
 
-    siteIds.forEach(function (siteId) {
-        var objData = { SiteId: siteId };
-        SiteList.push(objData);
-        existingSiteIds.add(siteId);
-    });
+        var form_data = new FormData();
+        form_data.append("GroupDetails", JSON.stringify(SiteData));
 
-    var selectElement = document.getElementById('textGroupSiteNameList');
-    var newSiteIds = [];
-    var hasDuplicates = false;
-
-    $(selectElement.options).each(function () {
-        var option = $(this);
-        if (option.is(':selected')) {
-            var siteId = option.data('value');
-
-            if (existingSiteIds.has(siteId)) {
-                hasDuplicates = true;
-            } else {
-                newSiteIds.push(siteId);
-            }
-        }
-    });
-    if (!hasDuplicates) {
-        newSiteIds.forEach(function (siteId) {
-            SiteList.push({ SiteId: siteId });
-        });
-        var groupName = $('#txtSiteGropuName').val().trim();
-        var groupId = $('#txtSiteGroupId').val();
-
-        if (SiteList.length > 0 && groupName !== "") {
-            var SiteData = {
-                GroupId: groupId,
-                GroupName: groupName,
-                SiteList: SiteList,
-            };
-
-            var form_data = new FormData();
-            form_data.append("GroupDetails", JSON.stringify(SiteData));
-
-            $.ajax({
-                url: '/SiteMaster/UpdateSiteGroupMaster',
-                type: 'POST',
-                data: form_data,
-                dataType: 'json',
-                processData: false,
-                contentType: false,
-                success: function (Result) {
-                    if (Result.code === 200) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK',
-                        }).then(function () {
-                            window.location = '/SiteMaster/SiteListView';
-                        });
-                    } else {
-                        toastr.warning(Result.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    toastr.error('An error occurred while processing your request.');
+        $.ajax({
+            url: '/SiteMaster/UpdateSiteGroupMaster',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code === 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/SiteMaster/CreateGroup';
+                    });
+                } else {
+                    toastr.warning(Result.message);
                 }
-            });
-        } else {
-            toastr.warning("Please add a group name and select at least one site!");
-        }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
     } else {
-        toastr.warning("Some of the selected sites are already in the existing list.");
+        toastr.warning("Kindly fill all the details.");
     }
 }
 
 function cleargrouplisttext() {
+    resetSiteGroupForm();
     $("#txtSiteGropuName").val('');
-    $("#textGroupSiteNameList").val('');
-    $("#txtgroupsiteIdlist").val('');
-    $("#txtgroupsitenamelist").val('');
+    $("#textGroupSiteList").val('');
+    $("#txtgroupAddresslist").val('');
+}
+
+
+var AddNewSiteGroupForm;
+$(document).ready(function () {
+
+    AddNewSiteGroupForm = $("#AddSiteGroupForm").validate({
+        rules: {
+            txtSiteGropuName: "required",
+            textGroupSiteList: "required",
+        },
+        messages: {
+            txtSiteGropuName: "Please Enter Group Name",
+            textGroupSiteList: "Please Select Site",
+        }
+    })
+});
+
+function resetSiteGroupForm() {
+    if (AddNewSiteGroupForm) {
+        AddNewSiteGroupForm.resetForm();
+    }
 }

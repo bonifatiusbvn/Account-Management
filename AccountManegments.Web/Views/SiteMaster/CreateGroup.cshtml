@@ -16,7 +16,11 @@
         }
     </div>
 }
-
+<style>
+    #textGroupSiteList-error, #txtSiteGropuName-error {
+        color: red;
+    }
+</style>
 <div class="">
     <div class="">
         <div class=" radius-10 w-100">
@@ -96,16 +100,16 @@
                                                 <span id="spnSiteGropuName" class="text-danger"></span>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-8 mb-3">
+                                                <div class="col-md-12 mb-3">
                                                     <label class="form-label">Select Site</label>
-                                                    <select class="multiple-select form-select" data-placeholder="Select Site" multiple="multiple" id="textGroupSiteNameList"></select>
+                                                    <select class="form-select" id="textGroupSiteList" name="textGroupSiteList">
+                                                        <option value="" selected>--Select Site--</option>
+                                                    </select>
                                                 </div>
                                             </div>
-
                                             <div class="col-12 mb-3">
-                                                <label class="form-label">GroupAddress</label>
-                                                <textarea type="text" class="form-control" id="txtgroupsitenamelist" rows="3"></textarea>
-                                                <textarea type="text" class="form-control" id="txtgroupsiteIdlist" hidden></textarea>
+                                                <label class="form-label">Group Address</label>
+                                                <textarea type="text" class="form-control" id="txtgroupAddresslist" name="txtgroupAddresslist" rows="3"></textarea>
                                                 <span id="" class="text-danger"></span>
                                             </div>
                                         </div>

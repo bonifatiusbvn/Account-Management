@@ -248,7 +248,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var GroupList = HttpContext.Request.Form["GroupDetails"];
-                var GroupDetails = JsonConvert.DeserializeObject<GroupMasterModel>(GroupList);
+                var GroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(GroupList);
                 ApiResponseModel postuser = await APIServices.PostAsync(GroupDetails, "SiteMaster/AddSiteGroupDetails");
                 if (postuser.code == 200)
                 {
@@ -335,11 +335,11 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-                GroupMasterModel SiteDetails = new GroupMasterModel();
+                SiteGroupModel SiteDetails = new SiteGroupModel();
                 ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupId=" + GroupId);
                 if (res.code == 200)
                 {
-                    SiteDetails = JsonConvert.DeserializeObject<GroupMasterModel>(res.data.ToString());
+                    SiteDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
                 }
                 return new JsonResult(SiteDetails);
             }
@@ -355,7 +355,7 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 var GroupList = HttpContext.Request.Form["GroupDetails"];
-                var GroupDetails = JsonConvert.DeserializeObject<GroupMasterModel>(GroupList);
+                var GroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(GroupList);
                 ApiResponseModel postUser = await APIServices.PostAsync(GroupDetails, "SiteMaster/UpdateSiteGroupMaster");
                 if (postUser.code == 200)
                 {

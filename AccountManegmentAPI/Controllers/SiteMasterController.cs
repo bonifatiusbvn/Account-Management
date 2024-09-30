@@ -150,7 +150,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("AddSiteGroupDetails")]
-        public async Task<IActionResult> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        public async Task<IActionResult> AddSiteGroupDetails(SiteGroupModel GroupDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var GroupDetail = await SiteMaster.AddSiteGroupDetails(GroupDetails);
@@ -220,7 +220,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("UpdateSiteGroupMaster")]
-        public async Task<IActionResult> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
+        public async Task<IActionResult> UpdateSiteGroupMaster(SiteGroupModel groupDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
