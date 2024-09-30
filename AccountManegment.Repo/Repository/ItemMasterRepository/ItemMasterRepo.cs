@@ -597,6 +597,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                                 SupplierInvoiceNo = a.SupplierInvoiceNo,
                                                 GSTper = f.Gstper,
                                                 ItemPrice = f.PricePerUnit,
+                                                Itemname = f.ItemName,
                                                 ItemPricewithGST = f.PricePerUnit + f.Gstamount,
                                             },
 

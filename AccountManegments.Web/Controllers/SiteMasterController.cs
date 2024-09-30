@@ -38,7 +38,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 string apiUrl = $"SiteMaster/GetSiteList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
@@ -137,9 +136,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/ActiveDeactiveSite?SiteId=" + SiteId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -180,9 +177,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSite?SiteId=" + SiteId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -322,9 +317,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "SiteMaster/DeleteSiteGroupDetails?GroupId=" + GroupId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {

@@ -69,6 +69,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public decimal? GSTper { get; set; }
         public decimal? ItemPrice { get; set; }
         public decimal? ItemPricewithGST { get; set; }
+        public string? Itemname { get; set; }
     }
     public class InvoiceTotalAmount
     {
