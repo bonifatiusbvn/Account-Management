@@ -302,6 +302,10 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
+
+            var dbDate = response.date.split('T')[0];
+            $('#txtPrdate').val(dbDate);
+
             $('#addbtnpurchaseRequest').hide();
             $('#updatebtnpurchaseRequest').show();
             $('#PurchaseRequestId').val(response.pid);
@@ -540,7 +544,6 @@ function filterPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
         }
     });
 }
@@ -560,7 +563,6 @@ function sortPurchaseOrderTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
         }
     });
 }
@@ -589,7 +591,6 @@ function EditPurchaseOrderDetails(Id) {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
         }
     });
 }
@@ -681,14 +682,12 @@ function GetItemDetails() {
         url: '/ItemMaster/GetItemNameList',
         success: function (result) {
 
-
             $.each(result, function (i, data) {
                 $('#searchItemname').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
             $.each(result, function (i, data) {
                 $('#Itemnamesearch').append('<option value="' + data.itemId + '">' + data.itemName + '</option>');
             });
-
         }
     });
 }
@@ -881,7 +880,6 @@ termsTextAreas.forEach(textArea => {
             ckfinder: {
                 uploadUrl: uploadUrl
             },
-            
         })
         .then(editor => {
 
@@ -964,7 +962,6 @@ function InsertMultiplePurchaseOrderDetails() {
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             };
-
 
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
@@ -1065,7 +1062,6 @@ function fn_GetPOSiteAddressList(SiteId) {
             } else {
                 $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
             }
-
         }
     });
 }
@@ -1096,7 +1092,6 @@ function AddShippingAddress() {
         totalQuantity += quantity;
 
         var isDuplicate = false;
-
 
         $('#dvshippingAdd .ac-invoice-shippingadd').each(function () {
             var existingAddress = $(this).find('#shippingaddress').text().trim();
@@ -1174,7 +1169,6 @@ function GetSupplierDetails() {
                     }
                 });
             }
-
         }
     });
 }
@@ -1185,13 +1179,10 @@ $(document).ready(function () {
     });
 });
 $(document).ready(function () {
-
     $('#txtcompanyname').change(function () {
 
         getCompanyDetails($(this).val());
     });
-
-
 });
 function getSupplierDetails(SupplierId) {
 
@@ -1201,8 +1192,6 @@ function getSupplierDetails(SupplierId) {
         siteloaderhide();
     }
     else {
-
-
         siteloadershow();
         $.ajax({
             url: '/Supplier/DisplaySupplier?SupplierId=' + SupplierId,
@@ -1577,7 +1566,6 @@ function filterallItemTable() {
             siteloaderhide();
             $("#mdlistofItem").html(result);
         },
-
     });
 }
 
@@ -1618,7 +1606,6 @@ function sortPOTable() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
         }
     });
 }
