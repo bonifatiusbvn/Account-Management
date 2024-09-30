@@ -31,12 +31,6 @@
                                                         <div class="col-6">
                                                             <h2 class="h5">Payment Report</h2>
                                                         </div>
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Add == true))
-                                                        {
-                                                            <div class="col-6 text-end">
-                                                                <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="openOB()" data-bs-toggle="tab" role="tab"><i class="lni lni-circle-plus"></i>Opening Balance</button>
-                                                            </div>
-                                                        }
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
@@ -93,7 +87,7 @@
                                                                             <th>Supplier</th>
                                                                             <th>Credit</th>
                                                                             <th>Debit</th>
-                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
                                                                             {
                                                                                 <th>Action</th>
                                                                             }
@@ -106,7 +100,7 @@
                                                                             <th colspan="5" style="text-align:right">Total:</th>
                                                                             <th id="totalCredit"></th>
                                                                             <th id="totalDebit"></th>
-                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
                                                                             {
                                                                                 <th id="NetAmount"></th>
                                                                             }
@@ -132,42 +126,58 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="card border-0">
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report & Payout" && a.Add == true))
-                                                        {
-                                                            <div class="card-body">
-                                                                <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()">
-                                                                    <i class="lni lni-circle-plus"></i>PayOut
-                                                                </a>
+                                            <form id="updatePayoutForm">
+                                                <div class="modal fade show" tabindex="-1" id="updatePayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
+                                                    <div class="modal-dialog modal-md modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-primary-subtle p-3">
+                                                                <h5 class="modal-title" id="flipModalLabel">Edit Payout</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                        }
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="card-body pt-0">
-                                                            <div class="table-responsive">
-                                                                <table class="table align-middle mb-0">
-                                                                    <thead class="table-light btn-primary">
-                                                                        <tr>
-                                                                            <th>#</th>
-                                                                            <th>Payment Status</th>
-                                                                            <th>Date</th>
-                                                                            <th>Description</th>
-                                                                            <th>Amount</th>
-                                                                            <th>Action</th>
-                                                                    </thead>
-                                                                    <tbody id="payoutpartialView">
-                                                                    </tbody>
-                                                                </table>
+                                                            <div class="modal-body">
+                                                                <input type="text" class="form-control" id="EdittxtpayoutSiteId" hidden />
+                                                                <input type="text" class="form-control" id="EdittxtpayoutId" hidden />
+                                                                <input type="text" class="form-control" id="EdittxtpayoutUpdatedBy" value="@_userSession.UserId" hidden />
+                                                                <input type="hidden" id="EdittxtpayoutSupplierNameHidden" name="EdittxtpayoutSupplierNameHidden" />
+                                                                <input type="hidden" id="EdittxtpayoutCompanyNameHidden" name="EdittxtpayoutCompanyNameHidden" />
+                                                                <div class="row mb-3">
+                                                                    <div class="col-lg-12 col-12">
+                                                                        <label class="me-2">Payment Status : </label>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" id="Online" value="NEFT/RTGS" name="Editpayoutpaymenttype">
+                                                                            <label class="form-check-label" for="Online">NEFT/RTGS</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayoutpaymenttype">
+                                                                            <label class="form-check-label" for="Cheque">Cheque</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <div class="col-lg-4 col-12">
+                                                                        <label class="form-label">Description</label>
+                                                                        <div class="form-label">
+                                                                            <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-5 col-12">
+                                                                        <label class="form-label">Date</label>
+                                                                        <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-12">
+                                                                        <label class="form-label">Total Amount</label>
+                                                                        <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
-                                                                <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetailsReport()">Submit</button>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -177,60 +187,8 @@
                     </div>
                 </div>
             </section>
-            <form id="updatePayoutForm">
-                <div class="modal fade show" tabindex="-1" id="updatePayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
-                    <div class="modal-dialog modal-md modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary-subtle p-3">
-                                <h5 class="modal-title" id="flipModalLabel">Edit Payout</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" class="form-control" id="EdittxtpayoutSiteId" hidden />
-                                <input type="text" class="form-control" id="EdittxtpayoutId" hidden />
-                                <input type="text" class="form-control" id="EdittxtpayoutUpdatedBy" value="@_userSession.UserId" hidden />
-                                <input type="hidden" id="EdittxtpayoutSupplierNameHidden" name="EdittxtpayoutSupplierNameHidden" />
-                                <input type="hidden" id="EdittxtpayoutCompanyNameHidden" name="EdittxtpayoutCompanyNameHidden" />
-                                <div class="row mb-3">
-                                    <div class="col-lg-12 col-12">
-                                        <label class="me-2">Payment Status : </label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="Online" value="NEFT/RTGS" name="Editpayoutpaymenttype">
-                                            <label class="form-check-label" for="Online">NEFT/RTGS</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayoutpaymenttype">
-                                            <label class="form-check-label" for="Cheque">Cheque</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-4 col-12">
-                                        <label class="form-label">Description</label>
-                                        <div class="form-label">
-                                            <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5 col-12">
-                                        <label class="form-label">Date</label>
-                                        <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
-                                    </div>
-                                    <div class="col-lg-3 col-12">
-                                        <label class="form-label">Total Amount</label>
-                                        <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-            </form>
-
-            <form id="OPBalanceForm">
+            
+@*             <form id="OPBalanceForm">
                 <div class="modal fade" tabindex="-1" id="OBPayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-md modal-dialog-centered">
                         <div class="modal-content">
@@ -263,7 +221,7 @@
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
-            </form>
+            </form> *@
         </div>
     </div>
 </div>
@@ -280,14 +238,6 @@
             return `${year}-${month}-${day}`;
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('OBPayoutModal');
-            modal.addEventListener('shown.bs.modal', function () {
-                const today = new Date();
-                const formattedDate = formatDate(today);
-                document.getElementById('txtOBdate').value = formattedDate;
-            });
-        });
     </script>
 
     <script src="~/moduls/report.js" asp-append-version="true"></script>

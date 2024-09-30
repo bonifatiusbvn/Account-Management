@@ -250,16 +250,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 : CountTotalData.OrderByDescending(s => s.SupplierName).ToList();
                             break;
 
-                        case "nonpayouttotalamount":
+                        case "sitename":
                             CountTotalData = PayOutReport.sortColumnDir == "asc"
-                                ? CountTotalData.OrderBy(s => s.NonPayOutTotalAmount).ToList()
-                                : CountTotalData.OrderByDescending(s => s.NonPayOutTotalAmount).ToList();
-                            break;
-
-                        case "payouttotalamount":
-                            CountTotalData = PayOutReport.sortColumnDir == "asc"
-                                ? CountTotalData.OrderBy(s => s.PayOutTotalAmount).ToList()
-                                : CountTotalData.OrderByDescending(s => s.PayOutTotalAmount).ToList();
+                                ? CountTotalData.OrderBy(s => s.SiteName).ToList()
+                                : CountTotalData.OrderByDescending(s => s.SiteName).ToList();
                             break;
 
                         case "netamount":
@@ -274,7 +268,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 // Pagination after sorting
                 var paginatedResults = CountTotalData
                     .Skip(PayOutReport.skip)
-                    .Take(PayOutReport.pageSize)
+                    .Take(PayOutReport.pageSize).Where(a=>a.NetAmount != 0)
                     .ToList();
                 var totalRecords = await supplierInvoicesQuery
             .GroupBy(g => g.s.SupplierId)
