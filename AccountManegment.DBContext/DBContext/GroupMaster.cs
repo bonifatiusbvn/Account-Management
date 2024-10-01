@@ -13,5 +13,7 @@ public partial class GroupMaster
 
     public Guid SiteId { get; set; }
 
+    public string? GroupAddress { get; set; }
+
     public virtual Site Site { get; set; } = null!;
 }
