@@ -305,7 +305,10 @@ function UpdateSupplierDetails() {
         toastr.error("Kindly fill all details");
     }
 }
-function DeleteSupplierDetails(SupplierId, SupplierName) {
+function DeleteSupplierDetails(SupplierId, SupplierName, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
     Swal.fire({
         title: "Are you sure you want to delete this supplier?",
         text: "To confirm, type the supplier name below ",

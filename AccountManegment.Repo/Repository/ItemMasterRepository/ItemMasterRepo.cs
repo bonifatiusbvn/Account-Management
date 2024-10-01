@@ -102,15 +102,23 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
         {
             ApiResponseModel response = new ApiResponseModel();
             var GetItemdata = Context.ItemMasters.Where(a => a.ItemId == ItemId).FirstOrDefault();
-
+            var InvoiceDetails = Context.SupplierInvoiceDetails.Where(s => s.ItemId == ItemId).ToList();
             if (GetItemdata != null)
             {
-                GetItemdata.IsDeleted = true;
-                Context.ItemMasters.Update(GetItemdata);
-                Context.SaveChanges();
-                response.code = 200;
-                response.data = GetItemdata;
-                response.message = "Item is successfully deleted.";
+                if (InvoiceDetails.Count > 0)
+                {
+                    response.code = 404;
+                    response.message = "Invoice is created for this supplier.";
+                }
+                else
+                {
+                    GetItemdata.IsDeleted = true;
+                    Context.ItemMasters.Update(GetItemdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = GetItemdata;
+                    response.message = "Item is successfully deleted.";
+                }
             }
             return response;
         }

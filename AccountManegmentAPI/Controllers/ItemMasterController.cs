@@ -118,7 +118,7 @@ namespace AccountManagement.API.Controllers
             var Item = await ItemMaster.DeleteItemDetails(ItemId);
             try
             {
-                if (Item != null)
+                if (Item.code == 200)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = Item.message;
