@@ -90,7 +90,6 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
             }
             catch (Exception ex)
             {
-
                 response.code = 500;
                 response.message = "An error occurred while processing the request";
             }
