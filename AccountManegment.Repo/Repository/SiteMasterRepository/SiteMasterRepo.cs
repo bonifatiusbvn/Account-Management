@@ -580,7 +580,10 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 var grouplist = Context.GroupMasters.Where(x => x.GroupId == GroupId).ToList();
                 if (grouplist.Count > 0)
                 {
-                    Context.GroupMasters.Remove(grouplist);
+                    foreach (var group in grouplist)
+                    {
+                        Context.GroupMasters.Remove(group);
+                    }
                     await Context.SaveChangesAsync();
                     response.code = 200;
                     response.message = "Site group is deleted successfully.";

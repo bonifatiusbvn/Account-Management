@@ -1032,7 +1032,7 @@ function DisplaySiteGroup(GroupId,element) {
                         '<label class="form-label">Group Address</label>' +
                         '<div class="row">' +
                         '<div class="col-11">' +
-                        '<textarea class="form-control mb-2" rows="3" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '">' + data.groupAddress + '</textarea>' +
+                        '<textarea class="form-control mb-2" rows="4" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '">' + data.groupAddress + '</textarea>' +
                         '</div>' +
                         '<div class="col-1" style="position:relative; right:16px; top:22px;">' +
                         '<a id="remove" class="btn text-primary" onclick="removeGroupItem(this)"><i class="lni lni-trash"></i></a>' +
