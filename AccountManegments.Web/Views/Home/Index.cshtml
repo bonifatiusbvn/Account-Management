@@ -53,7 +53,7 @@
                                         <th>Qty</th>
                                         @if (_userSession.UserRole == 3)
                                         {
-                                            <th>
+                                            <th style="width:85px;">
                                                 <input class="form-check-input" type="checkbox" id="checkedAllPR" />
                                                 <span class="g-3">Approve</span>
                                             </th>
@@ -85,7 +85,7 @@
                                                 <td>
                                                     @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
                                                     {
-                                                        <input class="form-check-input" type="checkbox" name="chk_PRchild" id="PR_@item.Pid" />
+                                                        <input class="form-check-input" type="checkbox" name="chk_PRchild" id="PR_@item.Pid" style="margin-left:30px;" />
                                                     }
                                                     else
                                                     {
@@ -102,7 +102,7 @@
 
                                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
                                                 {
-                                                    <td>
+                                                    <td style="width:135px;">
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
                                                         {
                                                             <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>

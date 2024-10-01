@@ -7,7 +7,7 @@
 {
     <tr id="userCard_@item.InwordId" class="" onclick="SelectItemInWordDetails('@item.InwordId', this)">
         <td>@item.Item</td>
-        <td>@item.Date?.ToString("dd/MM/yyyy")</td>
+        <td style="width:90px;">@item.Date?.ToString("dd/MM/yyyy")</td>
         <td>@item.Quantity</td>
         <td>
             @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)

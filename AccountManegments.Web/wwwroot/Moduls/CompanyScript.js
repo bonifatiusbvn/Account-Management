@@ -267,6 +267,7 @@ function UpdateCompany() {
     }
 }
 function DeleteCompanyDetails(CompanyId, CompanyName, element) {
+
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -293,11 +294,13 @@ function DeleteCompanyDetails(CompanyId, CompanyName, element) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
+
             $.ajax({
                 url: '/Company/DeleteCompanyDetails?CompanyId=' + CompanyId,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
+
                     if (Result.code == 200) {
                         siteloaderhide();
                         Swal.fire({
@@ -309,7 +312,9 @@ function DeleteCompanyDetails(CompanyId, CompanyName, element) {
                             window.location = '/Company/CreateCompany';
                         })
                     }
+
                     else {
+
                         siteloaderhide();
                         toastr.error(Result.message);
                     }

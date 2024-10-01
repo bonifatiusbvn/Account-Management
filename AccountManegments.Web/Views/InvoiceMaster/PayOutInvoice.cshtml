@@ -26,6 +26,11 @@
                                         <div class="card-body">
                                             <ul class="nav nav-pills mb-3 row" role="tablist">
                                                 <li class="nav-item col-md-2" role="presentation">
+                                                    <select id="textPayoutReportSiteName" name="textPayoutReportSiteName" class="form-control">
+                                                        <option value="">All Site</option>
+                                                    </select>
+                                                </li>
+                                                <li class="nav-item col-md-2" role="presentation">
                                                     <select id="textPayoutReportCompanyName" name="textPayoutReportCompanyName" class="form-control">
                                                         <option value="">Select Company</option>
                                                     </select>
@@ -34,8 +39,8 @@
                                                     <input type="text" id="textPayoutReportSupplierName" name="textPayoutReportSupplierName" class="form-control" placeholder="Supplier" />
                                                     <input type="hidden" id="textPayoutReportSupplierNameHidden" name="textPayoutReportSupplierNameHidden" />
                                                 </li>
-                                                <li class="nav-item col-md-2" role="presentation">
-                                                    <select id="textPayoutReportGroupList" name="textPayoutReportGroupList" class="form-control">
+                                                <li class="nav-item col-md-1" role="presentation">
+                                                    <select id="textPayoutReportGroupList" name="textPayoutReportGroupList" class="form-control" style="width:120px;">
                                                         <option value="">Select Group</option>
                                                     </select>
                                                 </li>
@@ -69,9 +74,8 @@
                                                         <table id="tblPayoutReport" class="table table-bordered table-striped align-middle dataTable dtr-inline">
                                                             <thead class="table-light btn-primary">
                                                                 <tr>
+                                                                    <th>Site</th>
                                                                     <th>Supplier</th>
-                                                                    <th>Credit</th>
-                                                                    <th>Debit</th>
                                                                     <th>Net Amount</th>
                                                                 </tr>
                                                             </thead>
@@ -80,8 +84,7 @@
                                                             <tfoot>
                                                                 <tr class="table-light btn-primary">
                                                                     <th style="text-align:right">Total:</th>
-                                                                    <th id="totalCredit"></th>
-                                                                    <th id="totalDebit"></th>
+                                                                    <th></th>
                                                                     <th id="NetAmount"></th>
                                                                 </tr>
                                                             </tfoot>
@@ -101,6 +104,43 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="card border-0">
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && a.Add == true))
+                                                        {
+                                                            <div class="card-body">
+                                                                <a class="btn btn-primary" id="AddNewRowforPayOutInvoice" onclick="AddNewRowforPayOutInvoicebtn()" style="margin-left:-10px;">
+                                                                    <i class="lni lni-circle-plus"></i>PayOut
+                                                                </a>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="card-body pt-0">
+                                                            <div class="table-responsive">
+                                                                <table class="table align-middle mb-0">
+                                                                    <thead class="table-light btn-primary">
+                                                                        <tr>
+                                                                            <th>#</th>
+                                                                            <th>Payment Status</th>
+                                                                            <th>Date</th>
+                                                                            <th>Site</th>
+                                                                            <th>Description</th>
+                                                                            <th>Amount</th>
+                                                                            <th>Action</th>
+                                                                    </thead>
+                                                                    <tbody id="payoutpartialView">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
+                                                                <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetailsReport()">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,11 +153,18 @@
     </div>
 </div>
 
-
-
 <!--end card-->
 <script type="text/javascript">
     let currentPayOutSortOrder = 'AscendingSupplier';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('OBPayoutModal');
+        modal.addEventListener('shown.bs.modal', function () {
+            const today = new Date();
+            const formattedDate = formatDate(today);
+            document.getElementById('txtOBdate').value = formattedDate;
+        });
+    });
 </script>
 @section Scripts {
     <script src="~/moduls/payoutscript.js" asp-append-version="true"></script>

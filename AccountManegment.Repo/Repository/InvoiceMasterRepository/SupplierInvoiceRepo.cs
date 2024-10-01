@@ -214,29 +214,30 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 var CountTotalData = await supplierInvoicesQuery
-                    .GroupBy(g => g.s.SupplierId)
-                    .Select(group => new SupplierInvoiceModel
-                    {
-                        Id = group.FirstOrDefault().s.Id,
-                        InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
-                        SiteId = group.FirstOrDefault().s.SiteId,
-                        SupplierId = group.FirstOrDefault().s.SupplierId,
-                        CompanyId = group.Key,
-                        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
-                        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-                        GroupName = group.FirstOrDefault().s.SiteGroup,
-                        Description = string.Join(", ", group.Select(x => x.s.Description)),
-                        CompanyName = group.FirstOrDefault().CompanyName,
-                        SupplierName = group.FirstOrDefault().SupplierName,
-                        PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
-                        IsPayOut = group.FirstOrDefault().s.IsPayOut,
-                        SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
-                        Date = group.FirstOrDefault().s.Date,
-                        CreatedOn = group.FirstOrDefault().s.CreatedOn,
-                        SiteName = group.FirstOrDefault().SiteName
-                    })
-                    .ToListAsync();
+    .GroupBy(g => new { g.s.SiteId, g.s.SupplierId }) // Group by SiteId and then by SupplierId
+    .Select(group => new SupplierInvoiceModel
+    {
+        Id = group.FirstOrDefault().s.Id,
+        InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
+        SiteId = group.Key.SiteId,  // Grouped by SiteId
+        SupplierId = group.Key.SupplierId,  // Grouped by SupplierId
+        CompanyId = group.FirstOrDefault().s.CompanyId,
+        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
+        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        GroupName = group.FirstOrDefault().s.SiteGroup,
+        Description = string.Join(", ", group.Select(x => x.s.Description)),
+        CompanyName = group.FirstOrDefault().CompanyName,
+        SupplierName = group.FirstOrDefault().SupplierName,
+        PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+        IsPayOut = group.FirstOrDefault().s.IsPayOut,
+        SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+        Date = group.FirstOrDefault().s.Date,
+        CreatedOn = group.FirstOrDefault().s.CreatedOn,
+        SiteName = group.FirstOrDefault().SiteName
+    })
+    .ToListAsync();
+
                 var TotalCredit = CountTotalData.Sum(i => i.NonPayOutTotalAmount);
                 var TotalDebit = CountTotalData.Sum(i => i.PayOutTotalAmount);
 
@@ -250,16 +251,10 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 : CountTotalData.OrderByDescending(s => s.SupplierName).ToList();
                             break;
 
-                        case "nonpayouttotalamount":
+                        case "sitename":
                             CountTotalData = PayOutReport.sortColumnDir == "asc"
-                                ? CountTotalData.OrderBy(s => s.NonPayOutTotalAmount).ToList()
-                                : CountTotalData.OrderByDescending(s => s.NonPayOutTotalAmount).ToList();
-                            break;
-
-                        case "payouttotalamount":
-                            CountTotalData = PayOutReport.sortColumnDir == "asc"
-                                ? CountTotalData.OrderBy(s => s.PayOutTotalAmount).ToList()
-                                : CountTotalData.OrderByDescending(s => s.PayOutTotalAmount).ToList();
+                                ? CountTotalData.OrderBy(s => s.SiteName).ToList()
+                                : CountTotalData.OrderByDescending(s => s.SiteName).ToList();
                             break;
 
                         case "netamount":
@@ -270,15 +265,14 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                     }
                 }
+                var TotalData = CountTotalData.Where(i => i.NetAmount != 0).ToList();
 
-                // Pagination after sorting
-                var paginatedResults = CountTotalData
+                var paginatedResults = TotalData
                     .Skip(PayOutReport.skip)
                     .Take(PayOutReport.pageSize)
                     .ToList();
-                var totalRecords = await supplierInvoicesQuery
-            .GroupBy(g => g.s.SupplierId)
-            .CountAsync();
+
+                var totalRecords = TotalData.Count();
 
                 var jsonData = new jsonData
                 {
