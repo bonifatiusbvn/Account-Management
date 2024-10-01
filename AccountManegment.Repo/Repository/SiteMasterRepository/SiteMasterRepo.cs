@@ -388,7 +388,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         if (InvoiceDetails.Count > 0)
                         {
                             response.code = 404;
-                            response.message = "Invoice is created for this supplier.";
+                            response.message = "Invoice is created for this Site.";
                         }
                         else
                         {
