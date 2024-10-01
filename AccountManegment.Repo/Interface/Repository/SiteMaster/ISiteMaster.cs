@@ -19,11 +19,13 @@ namespace AccountManagement.Repository.Interface.Repository.SiteMaster
         Task<ApiResponseModel> DeleteSite(Guid SiteId);
         Task<IEnumerable<SiteMasterModel>> GetSiteNameList();
         Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId);
-        Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails);
+        Task<ApiResponseModel> AddSiteGroupDetails(SiteGroupModel GroupDetails);
         Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId);
         Task<IEnumerable<SiteGroupModel>> GetGroupNameList();
+        Task<IEnumerable<SiteGroupModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy);
         Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId); 
-        Task<GroupMasterModel> GetGroupDetailsByGroupName(Guid GroupId); 
-        Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails); 
+        Task<SiteGroupModel> GetGroupDetailsByGroupId(Guid GroupId); 
+        Task<ApiResponseModel> UpdateSiteGroupMaster(SiteGroupModel groupDetails);
+        Task<SiteGroupModel> GetGroupDetailsByGroupName(string GroupName);
     }
 }

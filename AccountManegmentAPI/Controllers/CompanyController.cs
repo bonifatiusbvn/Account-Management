@@ -94,7 +94,7 @@ namespace AccountManagement.API.Controllers
             var company = await _companyService.DeleteCompanyDetails(CompanyId);
             try
             {
-                if (company != null)
+                if (company.code == 200)
                 {
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = company.message;

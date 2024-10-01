@@ -59,6 +59,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
                     ViewBag.EditShippingAddress = invoiceDetails.ShippingAddress;
+                    ViewBag.GroupAddress = invoiceDetails.GroupAddress;
                 }
 
                 // Check for Purchase Order details by POID
@@ -110,7 +111,22 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.SiteAddress = SiteName;
                     }
                 }
-                return View(); 
+
+                if (Id != null)
+                {
+                    if (invoiceDetails.SiteGroup != "")
+                    {
+                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
+                        ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + invoiceDetails.SiteGroup);
+                        if (res.code == 200)
+                        {
+                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
+                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
+                        }
+                    }
+                }
+
+                return View(invoiceDetails);
             }
             catch (Exception ex)
             {
@@ -358,6 +374,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = InsertDetails.CreatedBy,
                     SiteGroup = InsertDetails.SiteGroup,
                     ItemList = InsertDetails.ItemList,
+                    GroupAddress = InsertDetails.GroupAddress,
                     Poid= InsertDetails.Poid,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");

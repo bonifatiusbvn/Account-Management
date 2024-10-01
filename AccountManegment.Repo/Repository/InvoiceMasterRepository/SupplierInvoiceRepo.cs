@@ -357,6 +357,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CreatedOn = a.CreatedOn,
                                     StateCode = f.StateCode,
                                     IsApproved = a.IsApproved,
+                                    GroupAddress = a.GroupAddress,
                                     DiscountRoundoff = a.DiscountRoundoff,
                                     Poid= a.Poid,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
@@ -734,6 +735,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SiteGroup = SupplierInvoiceDetail.SiteGroup,
                     IsApproved = SupplierInvoiceDetail.IsApproved,
                     Poid= SupplierInvoiceDetail.Poid,   
+                    GroupAddress =SupplierInvoiceDetail.GroupAddress,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
@@ -829,6 +831,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = DateTime.Now,
                     SiteGroup = SupplierItemDetails.SiteGroup,
                     Poid= SupplierItemDetails.Poid, 
+                    GroupAddress = SupplierItemDetails.GroupAddress,
                 };
                 Context.SupplierInvoices.Add(supplierInvoice);
 

@@ -7,24 +7,24 @@
 *@
 @foreach (var item in Model)
 {
-
     <tr>
-        <td>@item.GroupName</td>
+        <td onclick="GroupMasterInfo('@item.GroupId' ,this)">@item.GroupName</td>
 
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true || a.Delete == true)))
         {
             <td>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true)))
                 {
-                    <a class="btn text-primary" onclick="DisplaySiteGroup('@item.GroupId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
+                    <a class="btn text-primary" onclick="DisplaySiteGroup('@item.GroupId',this); event.stopPropagation();" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                 }
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Delete == true)))
                 {
-                    <a href="javascript:void(0);" class="btn text-primary" onclick="DeleteSiteGroup('@item.GroupId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
+                    <a href="javascript:void(0);" class="btn text-primary" onclick="event.stopPropagation(); DeleteSiteGroup('@item.GroupId',this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
+                        <i class="lni lni-trash"></i>
+                    </a>
                 }
 
             </td>
         }
-
     </tr>
 }

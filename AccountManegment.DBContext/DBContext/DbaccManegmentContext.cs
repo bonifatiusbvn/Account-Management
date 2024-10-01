@@ -59,8 +59,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -129,6 +129,7 @@ public partial class DbaccManegmentContext : DbContext
         {
             entity.ToTable("GroupMaster");
 
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.GroupAddress).HasMaxLength(500);
             entity.Property(e => e.GroupName).HasMaxLength(50);
 

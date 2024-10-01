@@ -91,7 +91,7 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (invoiceId != null)
+                if (invoiceId.code == 200)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;
@@ -297,7 +297,7 @@ namespace AccountManagement.API.Controllers
         public async Task<IActionResult> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData)
         {
             var invoicenoexists = await SupplierInvoice.CheckSupplierInvoiceNo(InvoiceData);
-            return Ok(new {code = 200, data = invoicenoexists });
+            return Ok(new { code = 200, data = invoicenoexists });
         }
     }
 }

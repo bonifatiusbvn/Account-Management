@@ -62,7 +62,7 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     response.code = 400;
                     response.message = "Company already exists.";
                 }
-                
+
             }
             catch (Exception)
             {
@@ -76,15 +76,24 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
         {
             ApiResponseModel response = new ApiResponseModel();
             var company = Context.Companies.Where(a => a.CompanyId == CompanyId).FirstOrDefault();
-
+            var InvoiceDetails = Context.SupplierInvoices.Where(s => s.CompanyId == CompanyId).ToList();
             if (company != null)
             {
+                if (InvoiceDetails.Count > 0)
+                {
+                    response.code = 404;
+                    response.message = "Invoice is created for this Company.";
+                }
+                else
+                {
+                    company.IsDelete = true;
+                    Context.Companies.Update(company);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.message = "Company is successfully deleted.";
 
-                company.IsDelete = true;
-                Context.Companies.Update(company);
-                Context.SaveChanges();
-                response.code = 200;
-                response.message = "Company is successfully deleted.";
+                }
+
             }
             else
             {

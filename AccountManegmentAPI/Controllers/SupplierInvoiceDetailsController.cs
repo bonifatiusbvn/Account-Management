@@ -86,7 +86,7 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (invoiceId != null)
+                if (invoiceId.code == 200)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;

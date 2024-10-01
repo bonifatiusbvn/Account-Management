@@ -476,6 +476,7 @@ function clearItemErrorMessage() {
 function InsertMultipleSupplierItem() {
     siteloadershow();
     if ($("#CreateInvoiceForm").valid()) {
+        var selectedGroupAddress = $('input[name="selectedGroupAddress"]:checked').val();
         if ($('#addnewproductlink tr').length >= 1) {
 
             var ItemDetails = [];
@@ -521,6 +522,7 @@ function InsertMultipleSupplierItem() {
                 TotalDiscount: $('#cart-discount').val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
+                GroupAddress: $('input[name="selectedGroupAddress"]:checked').val(),
                 Poid: $("#txtInvoicePOID").val(),
                 ItemList: ItemDetails,
             }
@@ -627,6 +629,7 @@ function UpdateInvoiceDetails() {
                 SiteGroup: $("#InvoiceGroupList").val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 IsApproved: $("#txtInvoiceIsApproved").val(),
+                GroupAddress: $('input[name="selectedGroupAddress"]:checked').data('address'),
                 Poid: $("#txtInvoicePOID").val(),
             }
             var form_data = new FormData();
@@ -1496,8 +1499,62 @@ function GetGroupList() {
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#InvoiceGroupList').append('<option value="' + data.groupName + '">' + data.groupName + '</option>');
+                $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
         }
+    });
+}
+$(document).ready(function () {
+    $('#InvoiceGroupList').change(function () {
+        var selectedOption = $(this).find('option:selected');
+        var groupId = selectedOption.data('groupids');
+        GetGroupAddress(groupId);
+    });
+});
+
+function GetGroupAddress(GroupId)
+{
+    siteloadershow();
+    $.ajax({
+        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            $('#dvGroupAddress').empty();
+            if (response.groupAddressList == null) {
+
+            }
+            else {
+                $.each(response.groupAddressList, function (i, data) {
+                    var groupAddressNumber = i + 1;
+
+                    $('#dvGroupAddress').append(
+                        '<div class="row ac-invoice-groupadd GroupAddress" style="display: flex; align-items: flex-start;">' +
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                        '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                        '</div>' +
+                        '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
+                        '<p id="groupaddress_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
+                        '<input type="hidden" id="selectedGroupAddress_' + groupAddressNumber + '" name="selectedGroupAddress" value="' + data.groupAddress + '" />' +
+                        '</div>' +
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                        '<input class="nav-radio form-check-input" ' +
+                        'name="selectedGroupAddress" ' +
+                        'data-bs-toggle="tab" ' +
+                        'role="tab" ' +
+                        'type="radio" ' +
+                        'id="GroupAddressRadio_' + groupAddressNumber + '" ' +
+                        'data-address="' + data.groupAddress + '"' +
+                        'value="' + data.groupAddress + '"' +
+                        (i === 0 ? ' checked' : '') + ' />' +
+                        '</div>' +
+                        '</div>' +
+                        '<hr>'
+                    );
+                });
+            }
+        },
     });
 }

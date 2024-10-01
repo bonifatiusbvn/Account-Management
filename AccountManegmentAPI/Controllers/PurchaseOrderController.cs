@@ -129,7 +129,7 @@ namespace AccountManagement.API.Controllers
             var PO = await PurchaseOrder.DeletePurchaseOrderDetails(POId);
             try
             {
-                if (PO != null)
+                if (PO.code == 200)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = PO.message;
@@ -157,7 +157,7 @@ namespace AccountManagement.API.Controllers
                 var purchaseOrder = await PurchaseOrder.PurchaseOrderIsApproved(POIdList);
                 if (purchaseOrder.code == 200)
                 {
-                    response.code =  purchaseOrder.code;
+                    response.code = purchaseOrder.code;
                     response.message = purchaseOrder.message;
                 }
                 else
