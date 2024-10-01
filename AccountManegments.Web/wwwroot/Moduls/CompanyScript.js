@@ -257,9 +257,7 @@ function UpdateCompany() {
                     siteloaderhide();
                 },
             })
-
         }
-
     }
     else {
         siteloaderhide();
