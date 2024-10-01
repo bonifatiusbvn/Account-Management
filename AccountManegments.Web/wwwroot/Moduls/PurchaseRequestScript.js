@@ -309,8 +309,8 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
-           
-            var dbDate = response.date.split('T')[0]; 
+
+            var dbDate = response.date.split('T')[0];
             $('#txtPrdate').val(dbDate);
 
             $('#addbtnpurchaseRequest').hide();
@@ -1945,3 +1945,28 @@ function sortPOTableDate(field) {
         }
     });
 }
+
+
+function createInvoice(POID) {
+    console.log("Starting AJAX request with POID:", POID);  // Debug before making the AJAX call
+
+    $.ajax({
+        url: '/InvoiceMaster/CheckPurchaseOrderStatus',
+        type: 'GET',
+        data: { POID: POID },
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            console.log("AJAX success response:", response);  // Log success response
+            if (response.code === 200) {
+                console.log("Redirecting to CreateInvoice with POID:", POID);  // Log redirection
+                window.location.href = '/InvoiceMaster/CreateInvoice?POID=' + POID;
+            } else {
+                console.log("Displaying toastr warning with message:", response.message);  // Log warning message
+                toastr.warning(response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX error - Status:", status, "Error:", error);  // Log error details
+            console.error("XHR object:", xhr);  // Log XHR object for detailed info
+            toastr.error('An error occurred while processing

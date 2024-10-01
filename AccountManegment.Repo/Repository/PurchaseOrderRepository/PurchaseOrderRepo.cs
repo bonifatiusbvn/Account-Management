@@ -21,6 +21,7 @@ using AccountManagement.DBContext.Models.Common;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Services.PurchaseOrder;
+using Azure;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
@@ -838,6 +839,109 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 response.message = "Error approving the purchase orders: " + ex.Message;
             }
             return response;
+        }
+
+        public async Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId)
+        {
+            ApiResponseModel response =new ApiResponseModel();
+            SupplierInvoiceMasterView PurchaseOrder = new SupplierInvoiceMasterView();
+            try
+            {
+                var PODetail=Context.PurchaseOrders.Where(a=>a.Id == POId).FirstOrDefault();
+                var checkPOID = Context.SupplierInvoices.Where(a=>a.Poid == PODetail.Poid).FirstOrDefault();
+
+                if(checkPOID != null)
+                {
+                    PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
+                                     join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
+                                     join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                     join d in Context.Sites on a.SiteId equals d.SiteId
+                                     join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                     join e in Context.Cities on b.City equals e.CityId
+                                     join f in Context.States on b.State equals f.StatesId
+                                     join cs in Context.States on c.StateId equals cs.StatesId
+                                     select new SupplierInvoiceMasterView
+                                     {
+                                         POGUID = a.Id,
+                                         SiteId = a.SiteId,
+                                         SiteName = d.SiteName,
+                                         Poid = a.Poid,
+                                         SupplierId = a.FromSupplierId,
+                                         SupplierArea = b.Area,
+                                         SupplierBuildingName = b.BuildingName,
+                                         SupplierName = b.SupplierName,
+                                         SupplierGstNo = b.Gstno,
+                                         SupplierMobileNo = b.Mobile,
+                                         SupplierCity = e.CityName,
+                                         SupplierState = f.StatesName,
+                                         SupplierPincode = b.PinCode,
+                                         CompanyId = a.ToCompanyId,
+                                         CompanyName = c.CompanyName,
+                                         CompanyGstNo = c.Gstno,
+                                         TotalAmountInvoice = a.TotalAmount,
+                                         Description = a.Description,
+                                         TotalDiscount = a.TotalDiscount,
+                                         TotalGstamount = a.TotalGstamount,
+                                         CompanyAddress = a.BillingAddress,
+                                         Date = a.Date,
+                                         ContactName = a.ContactName,
+                                         ContactNumber = a.ContactNumber,
+                                         CreatedBy = a.CreatedBy,
+                                         CreatedOn = a.CreatedOn,
+                                         Lrno = a.BuyersPurchaseNo,
+                                         CompanyStateName = cs.StatesName,
+                                         StateCode = cs.StateCode,
+                                         IsApproved = a.IsApproved,
+                                         ShippingAddress = d.ShippingAddress,
+                                         SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
+                                         CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                     }).First();
+
+                    List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.POGUID)
+                                                         join b in Context.ItemMasters on a.ItemId equals b.ItemId
+                                                         join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
+                                                         join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                                         select new POItemDetailsModel
+                                                         {
+                                                             ItemName = i.ItemName,
+                                                             ItemId = a.ItemId,
+                                                             Quantity = a.Quantity,
+                                                             ItemAmount = a.ItemTotal,
+                                                             Gstamount = a.Gst,
+                                                             UnitType = a.UnitTypeId,
+                                                             UnitTypeName = c.UnitName,
+                                                             PricePerUnit = a.Price,
+                                                             GstPercentage = b.Gstper,
+                                                             Hsncode = b.Hsncode,
+                                                             TotalAmount = a.ItemTotal,
+                                                         }).ToList();
+                    List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.POGUID)
+                                                                select new PODeliveryAddressModel
+                                                                {
+                                                                    Aid = a.Aid,
+                                                                    Poid = a.Poid,
+                                                                    Quantity = a.Quantity,
+                                                                    UnitTypeId = a.UnitTypeId,
+                                                                    Address = a.Address,
+                                                                    IsDeleted = a.IsDeleted,
+                                                                }).ToList();
+                    PurchaseOrder.ItemList = itemlist;
+                    PurchaseOrder.PODeliveryAddress = addresslist;
+
+                    response.code = 200;
+                    response.data = PurchaseOrder;
+                }
+                else
+                {
+                    response.code = 404;
+                    response.message = "Invoice already created!";
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

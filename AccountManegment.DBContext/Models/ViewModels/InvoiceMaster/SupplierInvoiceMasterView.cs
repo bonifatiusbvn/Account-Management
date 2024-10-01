@@ -24,6 +24,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? UnitTypeName { get; set; }
 
         public Guid Id { get; set; }
+        public Guid? POGUID { get; set; }
 
         public string? InvoiceNo { get; set; }
         public string? InvoiceType { get; set; }
@@ -123,8 +124,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SiteGroup { get; set; }
         public decimal? DiscountRoundoff { get; set; }
         public bool? IsApproved { get; set; }
-
+        public string? Poid { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }
+        public List<PODeliveryAddressModel>? PODeliveryAddress { get; set; }
     }
 
 

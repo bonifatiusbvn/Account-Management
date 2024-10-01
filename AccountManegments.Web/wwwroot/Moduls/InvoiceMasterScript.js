@@ -5,6 +5,7 @@ GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
 GetGroupList();
+updateTotals();
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -111,6 +112,13 @@ $(document).ready(function () {
         getCompanyDetail($(this).val());
         getInvoiceNumber($(this).val());
     });
+    
+    var InvoiceCompanyId = $('#textCompanyName').val();
+    var InvoiceGUID = $('#textSupplierInvoiceId').val();
+    if (InvoiceCompanyId != null && InvoiceGUID == "00000000-0000-0000-0000-000000000000") {
+        var CompanyId = $('#textCompanyName').val();
+        getInvoiceNumber(CompanyId);
+    }
 });
 
 function companyfilterSupplierInvoice() {
@@ -502,7 +510,7 @@ function InsertMultipleSupplierItem() {
                 Description: $("#textDescription").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: $('#selectedShippingAddress').val(),
+                ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
                 Lrno: $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
@@ -513,6 +521,7 @@ function InsertMultipleSupplierItem() {
                 TotalDiscount: $('#cart-discount').val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
+                Poid: $("#txtInvoicePOID").val(),
                 ItemList: ItemDetails,
             }
             var form_data = new FormData();
@@ -609,7 +618,7 @@ function UpdateInvoiceDetails() {
                 TotalDiscount: $('#cart-discount').val(),
                 CreatedOn: $('#textCreatedOn').val(),
                 ItemList: ItemDetails,
-                ShippingAddress: $('#selectedShippingAddress').val(),
+                ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
                 Lrno: $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
@@ -618,6 +627,7 @@ function UpdateInvoiceDetails() {
                 SiteGroup: $("#InvoiceGroupList").val(),
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 IsApproved: $("#txtInvoiceIsApproved").val(),
+                Poid: $("#txtInvoicePOID").val(),
             }
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));

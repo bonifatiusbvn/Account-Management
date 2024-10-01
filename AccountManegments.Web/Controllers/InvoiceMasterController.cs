@@ -38,11 +38,13 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Purchase  Invoice-Add")]
-        public async Task<IActionResult> CreateInvoice(Guid? Id)
+        public async Task<IActionResult> CreateInvoice(Guid? Id, Guid? POID)
         {
             try
             {
                 SupplierInvoiceMasterView invoiceDetails = new SupplierInvoiceMasterView();
+
+               
                 if (Id != null)
                 {
                     ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
@@ -59,8 +61,28 @@ namespace AccountManegments.Web.Controllers
                     ViewBag.EditShippingAddress = invoiceDetails.ShippingAddress;
                 }
 
+                // Check for Purchase Order details by POID
+                if (POID != null)
+                {
+                    ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrder/GetPODetailsInInvoice?POID=" + POID);
+                    if (response.code == 200)
+                    {
+                        invoiceDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                        int rowNumber = 0;
+                        foreach (var item in invoiceDetails.ItemList)
+                        {
+                            item.RowNumber = rowNumber++;
+                        }
+                        return View(invoiceDetails);
+                    }
+                    else
+                    {
+                        return Ok(new { code = response.code, message = response.message });
+                    }
+                }
+
                 var SiteId = UserSession.SiteId;
-                if (SiteId == "")
+                if (string.IsNullOrEmpty(SiteId))
                 {
                     ViewBag.SiteAddress = "";
                 }
@@ -88,14 +110,14 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.SiteAddress = SiteName;
                     }
                 }
-
-                return View(invoiceDetails);
+                return View(); 
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { code = 500, message = "An unexpected error occurred. Please try again." });
             }
         }
+
 
 
 
@@ -336,6 +358,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = InsertDetails.CreatedBy,
                     SiteGroup = InsertDetails.SiteGroup,
                     ItemList = InsertDetails.ItemList,
+                    Poid= InsertDetails.Poid,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
