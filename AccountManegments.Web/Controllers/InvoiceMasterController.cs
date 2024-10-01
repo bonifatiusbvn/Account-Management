@@ -44,7 +44,6 @@ namespace AccountManegments.Web.Controllers
             {
                 SupplierInvoiceMasterView invoiceDetails = new SupplierInvoiceMasterView();
 
-               
                 if (Id != null)
                 {
                     ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
@@ -62,7 +61,7 @@ namespace AccountManegments.Web.Controllers
                     ViewBag.GroupAddress = invoiceDetails.GroupAddress;
                 }
 
-                // Check for Purchase Order details by POID
+
                 if (POID != null)
                 {
                     ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrder/GetPODetailsInInvoice?POID=" + POID);
@@ -78,53 +77,11 @@ namespace AccountManegments.Web.Controllers
                     }
                     else
                     {
-                        return Ok(new { code = response.code, message = response.message });
+                        return Json(new { code = response.code, message = response.message });
                     }
                 }
 
-                var SiteId = UserSession.SiteId;
-                if (string.IsNullOrEmpty(SiteId))
-                {
-                    ViewBag.SiteAddress = "";
-                }
-                else
-                {
-                    List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
-                    ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
-                    if (res.code == 200)
-                    {
-                        SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
-                    }
 
-                    if (SiteName.Count == 0)
-                    {
-                        SiteMasterModel SiteDetails = new SiteMasterModel();
-                        ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
-                        if (response.code == 200)
-                        {
-                            SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
-                        }
-                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName + ",Code : " + SiteDetails.StateCode;
-                    }
-                    else
-                    {
-                        ViewBag.SiteAddress = SiteName;
-                    }
-                }
-
-                if (Id != null)
-                {
-                    if (invoiceDetails.SiteGroup != "")
-                    {
-                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
-                        ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + invoiceDetails.SiteGroup);
-                        if (res.code == 200)
-                        {
-                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
-                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
-                        }
-                    }
-                }
 
                 return View(invoiceDetails);
             }
@@ -133,6 +90,7 @@ namespace AccountManegments.Web.Controllers
                 return Json(new { code = 500, message = "An unexpected error occurred. Please try again." });
             }
         }
+
 
 
 
@@ -375,7 +333,7 @@ namespace AccountManegments.Web.Controllers
                     SiteGroup = InsertDetails.SiteGroup,
                     ItemList = InsertDetails.ItemList,
                     GroupAddress = InsertDetails.GroupAddress,
-                    Poid= InsertDetails.Poid,
+                    Poid = InsertDetails.Poid,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
