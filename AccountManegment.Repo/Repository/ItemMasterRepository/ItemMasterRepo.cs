@@ -107,7 +107,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 if (InvoiceDetails.Count > 0)
                 {
                     response.code = 404;
-                    response.message = "Invoice is created for this supplier.";
+                    response.message = "Invoice is created for this Item.";
                 }
                 else
                 {

@@ -531,8 +531,8 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var groupList = await Context.GroupMasters
-                    .Where(e => e.SiteId == siteId) 
-                    .GroupBy(a => new { a.GroupId, a.GroupName }) 
+                    .Where(e => e.SiteId == siteId)
+                    .GroupBy(a => new { a.GroupId, a.GroupName })
                     .Select(g => new GroupMasterModel
                     {
                         Id = g.First().Id,
@@ -549,7 +549,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
         }
 
