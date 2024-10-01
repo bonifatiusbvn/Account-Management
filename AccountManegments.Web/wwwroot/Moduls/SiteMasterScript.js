@@ -1003,7 +1003,7 @@ function DisplaySiteGroup(GroupId,element) {
     $('.ac-detail').removeClass('d-none');
     siteloadershow();
     $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupName?GroupId=' + GroupId,
+        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
@@ -1206,7 +1206,7 @@ function GroupMasterInfo(GroupId,element)
     $('.ac-detail').removeClass('d-none');
     siteloadershow();
     $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupName?GroupId=' + GroupId,
+        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',

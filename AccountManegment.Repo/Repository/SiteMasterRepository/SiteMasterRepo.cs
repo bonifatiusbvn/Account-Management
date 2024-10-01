@@ -516,21 +516,30 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
         }
 
 
-        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId)
+        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid siteId)
         {
             try
             {
-                IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
-                {
-                    Id = a.Id,
-                    GroupName = a.GroupName,
-                    GroupId = a.GroupId,
-                });
-                return GroupList;
+                var groupList = await Context.GroupMasters
+                    .Where(e => e.SiteId == siteId) 
+                    .GroupBy(a => new { a.GroupId, a.GroupName }) 
+                    .Select(g => new GroupMasterModel
+                    {
+                        Id = g.First().Id,
+                        GroupName = g.Key.GroupName,
+                        GroupId = g.Key.GroupId,
+                        SiteList = g.Select(s => new SiteNameList
+                        {
+                            SiteId = s.SiteId,
+                        }).ToList()
+                    })
+                    .ToListAsync();
+
+                return groupList;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ex; 
             }
         }
 
@@ -580,7 +589,42 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             return response;
         }
 
-        public async Task<SiteGroupModel> GetGroupDetailsByGroupName(Guid GroupId)
+        public async Task<SiteGroupModel> GetGroupDetailsByGroupName(string GroupName)
+        {
+            try
+            {
+                var groupDetails = await (from g in Context.GroupMasters
+                                          join s in Context.Sites on g.SiteId equals s.SiteId
+                                          where g.GroupName == GroupName
+                                          select new SiteGroupModel
+                                          {
+                                              GroupName = g.GroupName,
+                                              GroupId = g.GroupId,
+                                              SiteId = g.SiteId,
+                                              SiteName = s.SiteName,
+                                          }).FirstOrDefaultAsync();
+                if (groupDetails == null)
+                {
+                    return null;
+                }
+                var groupAddress = await (from a in Context.GroupMasters
+                                          where a.GroupName == GroupName && !string.IsNullOrEmpty(a.GroupAddress)
+                                          select new GroupAddressList
+                                          {
+                                              GroupAddress = a.GroupAddress,
+                                          }).ToListAsync();
+
+                groupDetails.GroupAddressList = groupAddress.Count > 0 ? groupAddress : null;
+
+                return groupDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<SiteGroupModel> GetGroupDetailsByGroupId(Guid GroupId)
         {
             try
             {
@@ -610,6 +654,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
         }
+
         public async Task<ApiResponseModel> UpdateSiteGroupMaster(SiteGroupModel groupDetails)
         {
             ApiResponseModel model = new ApiResponseModel();
@@ -646,7 +691,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         {
                             existingGroupAddress.GroupName = groupDetails.GroupName;
                             existingGroupAddress.SiteId = groupDetails.SiteId;
-                            
+
                         }
                         else
                         {

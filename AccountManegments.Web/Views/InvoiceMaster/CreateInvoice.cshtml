@@ -493,6 +493,62 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-6 col-sm-6">
+                                                        <div class="card">
+                                                            <h5 class="card-header">
+                                                                Group Addresses
+                                                            </h5>
+                                                            @{
+                                                                var index = 1;
+                                                                var selectedGroupAddress = Model.GroupAddress;
+                                                                var GroupAddress = ViewBag.GroupAddresses;
+                                                            }
+                                                            @if (Model.Id == Guid.Empty)
+                                                            {
+                                                                <div class="card-body GroupAddress" id="dvGroupAddress">
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="card-body GroupAddress">
+                                                                    @if (GroupAddress != null)
+                                                                    {
+                                                                        @foreach (var address in GroupAddress as IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.GroupAddressList>)
+                                                                        {
+                                                                            <div class="row ac-invoice-shippingadd ShippingAddress">
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <label id="lblshprownum1">@index</label>
+                                                                                </div>
+
+                                                                                <div class="col-5 col-sm-5">
+                                                                                    <p id="groupaddress_@counter">@address.GroupAddress</p>
+                                                                                    <input type="hidden" id="selectedGroupAddress" name="selectedGroupAddress" />
+                                                                                </div>
+
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <input class="nav-radio form-check-input"
+                                                                                           name="selectedGroupAddress"
+                                                                                           data-bs-toggle="tab"
+                                                                                           role="tab"
+                                                                                           type="radio"
+                                                                                           id="AddressRadio_@counter"
+                                                                                           data-address="@address.GroupAddress"
+                                                                                    @(address.GroupAddress == selectedGroupAddress ? "checked" : "") />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            index++;
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="card-body GroupAddress" id="dvGroupAddress">
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div id="dvShipping" class="col-lg-6">
@@ -687,7 +743,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');

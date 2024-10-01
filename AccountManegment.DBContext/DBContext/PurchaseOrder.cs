@@ -35,6 +35,8 @@ public partial class PurchaseOrder
 
     public string? BillingAddress { get; set; }
 
+    public string? GroupAddress { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public bool? IsApproved { get; set; }
