@@ -57,6 +57,7 @@ namespace AccountManegments.Web.Controllers
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
                     ViewBag.EditShippingAddress = invoiceDetails.ShippingAddress;
+                    ViewBag.GroupAddress = invoiceDetails.GroupAddress;
                 }
 
                 var SiteId = UserSession.SiteId;
@@ -86,6 +87,20 @@ namespace AccountManegments.Web.Controllers
                     else
                     {
                         ViewBag.SiteAddress = SiteName;
+                    }
+                }
+
+                if (Id != null)
+                {
+                    if (invoiceDetails.SiteGroup != "")
+                    {
+                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
+                        ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + invoiceDetails.SiteGroup);
+                        if (res.code == 200)
+                        {
+                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
+                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
+                        }
                     }
                 }
 
@@ -336,6 +351,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = InsertDetails.CreatedBy,
                     SiteGroup = InsertDetails.SiteGroup,
                     ItemList = InsertDetails.ItemList,
+                    GroupAddress = InsertDetails.GroupAddress,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)

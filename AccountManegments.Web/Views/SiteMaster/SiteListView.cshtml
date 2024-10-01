@@ -24,7 +24,6 @@
 
 @section HeaderButton {
     <div class="d-flex gap-2 ms-auto">
-        <button type="button" class="btn btn-primary" onclick="toggleSiteDetailsAndGroupInfo(true)"><i class="lni lni-circle-plus"></i>Add Group</button>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Add == true)))
         {
             <button type="button" class="btn btn-primary" onclick="ClearSiteTextBox()"><i class="lni lni-circle-plus"></i>Add Site</button>
@@ -95,23 +94,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive" style="overflow-x: hidden;max-height: 300px;">
-                                            <table class="table align-middle mb-0">
-                                                <thead class="table-light btn-primary">
-                                                    <tr>
-                                                        <th>Group Name</th>
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Edit == true || a.Delete == true)))
-                                                        {
-                                                            <th>Action</th>
-                                                        }
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="SiteGrouptbody">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -148,35 +130,6 @@
                                         <label class="form-label">Pincode</label>
                                         <input type="text" class="form-control" id="dspPincode" readonly>
                                     </div>
-                                </div>
-                                <div id="addgroupinfo" class="card d-none">
-                                    <form id="AddSiteGroupForm">
-                                        <div class="card-body">
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label">Group Name</label>
-                                                <input type="text" id="txtSiteGroupId" hidden>
-                                                <input type="text" class="form-control" placeholder="Group Name" id="txtSiteGropuName" name="txtSiteGropuName">
-                                                <span id="spnSiteGropuName" class="text-danger"></span>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-8 mb-3">
-                                                    <label class="form-label">Select Site</label>
-                                                    <select class="multiple-select form-select" data-placeholder="Select Site" multiple="multiple" id="textGroupSiteNameList"></select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 mb-3">
-                                                <label class="form-label"></label>
-                                                <textarea type="text" class="form-control" id="txtgroupsitenamelist" rows="3"></textarea>
-                                                <textarea type="text" class="form-control" id="txtgroupsiteIdlist" hidden></textarea>
-                                                <span id="" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="AddSiteGroupDetails()" id="addsitegroupbtn">Save</button>
-                                            <button type="button" class="btn btn-primary" onclick="UpdateSiteGroupDetails()" id="updatesitegroupbtn" style="display:none;">Update</button>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

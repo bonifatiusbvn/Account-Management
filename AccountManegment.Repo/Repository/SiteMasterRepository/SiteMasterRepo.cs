@@ -3,6 +3,7 @@ using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
+using AccountManagement.Repository.Interface.Repository.ItemMaster;
 using AccountManagement.Repository.Interface.Repository.PurchaseRequest;
 using AccountManagement.Repository.Interface.Repository.SiteMaster;
 using AccountManagement.Repository.Services.SiteMaster;
@@ -472,37 +473,51 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<ApiResponseModel> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        public async Task<ApiResponseModel> AddSiteGroupDetails(SiteGroupModel GroupDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                Guid groupId = Guid.NewGuid();
+                var groupId = Guid.NewGuid();
                 bool isGroupAlreadyExists = Context.GroupMasters.Any(x => x.GroupName == GroupDetails.GroupName);
                 {
-                    if (isGroupAlreadyExists)
+                    if (isGroupAlreadyExists == true)
                     {
                         response.message = "This group already exists.";
                         response.code = (int)HttpStatusCode.NotFound;
                     }
                     else
                     {
-                        foreach (var item in GroupDetails.SiteList)
+                        if (GroupDetails.GroupAddressList.Count > 0)
+                        {
+                            foreach (var item in GroupDetails.GroupAddressList)
+                            {
+                                var groupModel = new GroupMaster()
+                                {
+                                    GroupId = groupId,
+                                    GroupName = GroupDetails.GroupName,
+                                    SiteId = GroupDetails.SiteId,
+                                    GroupAddress = item.GroupAddress,
+                                };
+                                Context.GroupMasters.Add(groupModel);
+                            }
+                        }
+                        else
                         {
                             var groupModel = new GroupMaster()
                             {
                                 GroupId = groupId,
                                 GroupName = GroupDetails.GroupName,
-                                SiteId = item.SiteId,
+                                SiteId = GroupDetails.SiteId,
                             };
                             Context.GroupMasters.Add(groupModel);
-                            await Context.SaveChangesAsync();
                         }
+                        await Context.SaveChangesAsync();
                         response.code = 200;
                         response.message = "Group is added successfully!";
                     }
-                    return response;
                 }
+                return response;
             }
             catch (Exception)
             {
@@ -510,21 +525,31 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
         }
 
-        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId)
+
+        public async Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid siteId)
         {
             try
             {
-                IEnumerable<GroupMasterModel> GroupList = Context.GroupMasters.Where(e => e.SiteId == SiteId).ToList().Select(a => new GroupMasterModel
-                {
-                    Id = a.Id,
-                    GroupName = a.GroupName,
-                    GroupId = a.GroupId,
-                });
-                return GroupList;
+                var groupList = await Context.GroupMasters
+                    .Where(e => e.SiteId == siteId) 
+                    .GroupBy(a => new { a.GroupId, a.GroupName }) 
+                    .Select(g => new GroupMasterModel
+                    {
+                        Id = g.First().Id,
+                        GroupName = g.Key.GroupName,
+                        GroupId = g.Key.GroupId,
+                        SiteList = g.Select(s => new SiteNameList
+                        {
+                            SiteId = s.SiteId,
+                        }).ToList()
+                    })
+                    .ToListAsync();
+
+                return groupList;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ex; 
             }
         }
 
@@ -558,8 +583,8 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     foreach (var group in grouplist)
                     {
                         Context.GroupMasters.Remove(group);
-                        await Context.SaveChangesAsync();
                     }
+                    await Context.SaveChangesAsync();
                     response.code = 200;
                     response.message = "Site group is deleted successfully.";
                 }
@@ -577,24 +602,32 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             return response;
         }
 
-        public async Task<GroupMasterModel> GetGroupDetailsByGroupName(Guid GroupId)
+        public async Task<SiteGroupModel> GetGroupDetailsByGroupName(string GroupName)
         {
             try
             {
                 var groupDetails = await (from g in Context.GroupMasters
                                           join s in Context.Sites on g.SiteId equals s.SiteId
-                                          where g.GroupId == GroupId
-                                          group new { g, s } by new { g.GroupName, g.GroupId } into grouped
-                                          select new GroupMasterModel
+                                          where g.GroupName == GroupName
+                                          select new SiteGroupModel
                                           {
-                                              GroupName = grouped.Key.GroupName,
-                                              GroupId = grouped.Key.GroupId,
-                                              SiteList = grouped.Select(x => new SiteNameList
-                                              {
-                                                  SiteId = x.g.SiteId,
-                                                  SiteName = x.s.SiteName
-                                              }).ToList()
+                                              GroupName = g.GroupName,
+                                              GroupId = g.GroupId,
+                                              SiteId = g.SiteId,
+                                              SiteName = s.SiteName,
                                           }).FirstOrDefaultAsync();
+                if (groupDetails == null)
+                {
+                    return null;
+                }
+                var groupAddress = await (from a in Context.GroupMasters
+                                          where a.GroupName == GroupName && !string.IsNullOrEmpty(a.GroupAddress)
+                                          select new GroupAddressList
+                                          {
+                                              GroupAddress = a.GroupAddress,
+                                          }).ToListAsync();
+
+                groupDetails.GroupAddressList = groupAddress.Count > 0 ? groupAddress : null;
 
                 return groupDetails;
             }
@@ -603,36 +636,97 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 throw ex;
             }
         }
-        public async Task<ApiResponseModel> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
-        {
-            ApiResponseModel model = new ApiResponseModel();
 
+        public async Task<SiteGroupModel> GetGroupDetailsByGroupId(Guid GroupId)
+        {
             try
             {
-                var existingRecords = Context.GroupMasters
-                    .Where(e => e.GroupId == groupDetails.GroupId)
-                    .ToList();
+                var groupDetails = await (from g in Context.GroupMasters
+                                          join s in Context.Sites on g.SiteId equals s.SiteId
+                                          where g.GroupId == GroupId
+                                          select new SiteGroupModel
+                                          {
+                                              GroupName = g.GroupName,
+                                              GroupId = g.GroupId,
+                                              SiteId = g.SiteId,
+                                              SiteName = s.SiteName,
+                                          }).FirstOrDefaultAsync();
+                var groupAddress = await (from a in Context.GroupMasters
+                                          where a.GroupId == GroupId && !string.IsNullOrEmpty(a.GroupAddress)
+                                          select new GroupAddressList
+                                          {
+                                              GroupAddress = a.GroupAddress,
+                                          }).ToListAsync();
 
-                var existingSiteIds = existingRecords.Select(e => e.SiteId).ToHashSet();
+                groupDetails.GroupAddressList = groupAddress.Count > 0 ? groupAddress : null;
 
-                var newSiteIds = groupDetails.SiteList
-                    .Where(s => !existingSiteIds.Contains(s.SiteId))
-                    .Select(s => s.SiteId)
-                    .ToList();
+                return groupDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-                foreach (var siteId in newSiteIds)
+        public async Task<ApiResponseModel> UpdateSiteGroupMaster(SiteGroupModel groupDetails)
+        {
+            ApiResponseModel model = new ApiResponseModel();
+            try
+            {
+                var existingGroup = await Context.GroupMasters.AnyAsync(g => g.GroupId == groupDetails.GroupId);
+
+                if (!existingGroup)
                 {
-                    var newRecord = new GroupMaster
+                    model.code = 400;
+                    model.message = "Group not found.";
+                    return model;
+                }
+
+                if (groupDetails.GroupAddressList == null || groupDetails.GroupAddressList.Count == 0)
+                {
+                    var addressesToRemove = Context.GroupMasters
+                        .Where(e => e.GroupId == groupDetails.GroupId)
+                        .ToList();
+                    Context.GroupMasters.RemoveRange(addressesToRemove);
+                }
+                else
+                {
+                    var currentGroupAddresses = Context.GroupMasters
+                        .Where(a => a.GroupId == groupDetails.GroupId)
+                        .ToList();
+
+                    foreach (var item in groupDetails.GroupAddressList)
                     {
-                        GroupId = groupDetails.GroupId,
-                        GroupName = groupDetails.GroupName,
-                        SiteId = siteId
-                    };
-                    Context.GroupMasters.Add(newRecord);
+                        var existingGroupAddress = currentGroupAddresses
+                            .FirstOrDefault(a => a.GroupAddress == item.GroupAddress);
+
+                        if (existingGroupAddress != null)
+                        {
+                            existingGroupAddress.GroupName = groupDetails.GroupName;
+                            existingGroupAddress.SiteId = groupDetails.SiteId;
+
+                        }
+                        else
+                        {
+                            var newGroupModel = new GroupMaster
+                            {
+                                GroupId = groupDetails.GroupId,
+                                GroupName = groupDetails.GroupName,
+                                SiteId = groupDetails.SiteId,
+                                GroupAddress = item.GroupAddress,
+                            };
+                            Context.GroupMasters.Add(newGroupModel);
+                        }
+                    }
+
+                    var groupAddressIds = groupDetails.GroupAddressList.Select(a => a.GroupAddress).ToList();
+                    var addressesToRemove = currentGroupAddresses
+                        .Where(a => !groupAddressIds.Contains(a.GroupAddress))
+                        .ToList();
+                    Context.GroupMasters.RemoveRange(addressesToRemove);
                 }
 
                 await Context.SaveChangesAsync();
-
                 model.code = 200;
                 model.message = "Site group master updated successfully.";
             }

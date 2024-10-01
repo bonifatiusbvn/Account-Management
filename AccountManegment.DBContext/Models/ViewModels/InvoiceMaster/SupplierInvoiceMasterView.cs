@@ -123,6 +123,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? SiteGroup { get; set; }
         public decimal? DiscountRoundoff { get; set; }
         public bool? IsApproved { get; set; }
+        public string? GroupAddress { get; set; }
 
         public List<POItemDetailsModel>? ItemList { get; set; }
     }

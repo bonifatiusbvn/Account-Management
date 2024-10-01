@@ -150,7 +150,7 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("AddSiteGroupDetails")]
-        public async Task<IActionResult> AddSiteGroupDetails(GroupMasterModel GroupDetails)
+        public async Task<IActionResult> AddSiteGroupDetails(SiteGroupModel GroupDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             var GroupDetail = await SiteMaster.AddSiteGroupDetails(GroupDetails);
@@ -211,16 +211,16 @@ namespace AccountManagement.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetGroupDetailsByGroupName")]
-        public async Task<IActionResult> GetGroupDetailsByGroupName(Guid GroupId)
+        [Route("GetGroupDetailsByGroupId")]
+        public async Task<IActionResult> GetGroupDetailsByGroupId(Guid GroupId)
         {
-            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(GroupId);
+            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupId(GroupId);
             return Ok(new { code = 200, data = SiteGroupDetails });
         }
 
         [HttpPost]
         [Route("UpdateSiteGroupMaster")]
-        public async Task<IActionResult> UpdateSiteGroupMaster(GroupMasterModel groupDetails)
+        public async Task<IActionResult> UpdateSiteGroupMaster(SiteGroupModel groupDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
@@ -243,6 +243,21 @@ namespace AccountManagement.API.Controllers
                 response.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(response.code, response);
+        }
+
+        [HttpGet]
+        [Route("GetGroupDetailsByGroupName")]
+        public async Task<IActionResult> GetGroupDetailsByGroupName(string GroupName)
+        {
+            var SiteGroupDetails = await SiteMaster.GetGroupDetailsByGroupName(GroupName);
+            if (SiteGroupDetails != null)
+            {
+                return Ok(new { code = 200, data = SiteGroupDetails });
+            }
+            else
+            {
+                return BadRequest(new { code = 400, message = "Group not found" });
+            }
         }
     }
 }
