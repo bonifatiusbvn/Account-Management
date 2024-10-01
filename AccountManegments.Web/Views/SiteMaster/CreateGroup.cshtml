@@ -35,26 +35,24 @@
                                         <div class="col-12">
                                             <div class="card-body">
                                                 <div class="row g-3">
-
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSiteSearch" onkeyup="SitefilterTable()" placeholder="Search">
+                                                        <input class="form-control" id="txtSiteGroupSearch" onkeyup="SiteGroupfilterTable()" placeholder="Search">
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteSearchBy" onchange="SitefilterTable()">
+                                                        <select class="form-select" id="SiteGroupSearchBy" onchange="SiteGroupfilterTable()">
                                                             <option selected="selected">
                                                                 All
                                                             </option>
                                                             <option> GroupName </option>
-                                                            <option> ContactPersonName </option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SiteDataSortBy" onchange="sortSiteTable()">
+                                                        <select class="form-select" id="SiteGroupDataSortBy" onchange="sortSiteGroupTable()">
                                                             <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
                                                             <option value="AscendingCreatedOn"> First Created</option>
-                                                            <option value="AscendingSitename">Sitename(A - Z) </option>
-                                                            <option value="DescendingSitename"> Sitename(Z - A) </option>
+                                                            <option value="AscendingGroupname">GroupName(A - Z) </option>
+                                                            <option value="DescendingGroupname">GroupName(Z - A) </option>
                                                         </select>
                                                     </div>
                                                 </div>

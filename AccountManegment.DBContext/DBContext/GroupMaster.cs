@@ -15,5 +15,7 @@ public partial class GroupMaster
 
     public string? GroupAddress { get; set; }
 
+    public DateTime? CreatedOn { get; set; }
+
     public virtual Site Site { get; set; } = null!;
 }

@@ -87,5 +87,9 @@ namespace AccountManagement.Repository.Services.SiteMaster
         {
             return await SiteMaster.GetGroupDetailsByGroupName(GroupName);
         }
+        public async Task<IEnumerable<SiteGroupModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy)
+        {
+            return await SiteMaster.GetGroupNamesList(searchText, searchBy, sortBy);
+        }
     }
 }

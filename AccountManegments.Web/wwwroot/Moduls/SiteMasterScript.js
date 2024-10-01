@@ -19,10 +19,12 @@ function AllSiteListTable() {
         });
 }
 
-function GetGroupNameList() {
+function GetGroupNameList()
+{
+    var searchText = $('#txtSiteGroupSearch').val();
+    var searchBy = $('#SiteGroupSearchBy').val();
 
-
-    $.get("/SiteMaster/GetGroupNameList")
+    $.get("/SiteMaster/GetGroupNameList", { searchBy: searchBy, searchText: searchText })
         .done(function (result) {
 
 
@@ -32,6 +34,48 @@ function GetGroupNameList() {
             siteloaderhide();
 
         });
+}
+
+function SiteGroupfilterTable() {
+    siteloadershow();
+    var searchText = $('#txtSiteGroupSearch').val();
+    var searchBy = $('#SiteGroupSearchBy').val();
+    $.ajax({
+        url: '/SiteMaster/GetGroupNameList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#SiteGrouptbody").html(result);
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+
+        }
+    });
+}
+
+function sortSiteGroupTable() {
+    siteloadershow();
+    var sortBy = $('#SiteGroupDataSortBy').val();
+    $.ajax({
+        url: '/SiteMaster/GetGroupNameList',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#SiteGrouptbody").html(result);
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+
+        }
+    });
 }
 
 function SitefilterTable() {

@@ -259,5 +259,13 @@ namespace AccountManagement.API.Controllers
                 return BadRequest(new { code = 400, message = "Group not found" });
             }
         }
+
+        [HttpPost]
+        [Route("GetGroupNamesList")]
+        public async Task<IActionResult> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy)
+        {
+            var supplierList = await SiteMaster.GetGroupNamesList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = supplierList });
+        }
     }
 }

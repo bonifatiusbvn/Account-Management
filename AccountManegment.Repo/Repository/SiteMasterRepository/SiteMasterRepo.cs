@@ -498,6 +498,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                     GroupName = GroupDetails.GroupName,
                                     SiteId = GroupDetails.SiteId,
                                     GroupAddress = item.GroupAddress,
+                                    CreatedOn = DateTime.Now,
                                 };
                                 Context.GroupMasters.Add(groupModel);
                             }
@@ -509,6 +510,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 GroupId = groupId,
                                 GroupName = GroupDetails.GroupName,
                                 SiteId = GroupDetails.SiteId,
+                                CreatedOn = DateTime.Now,
                             };
                             Context.GroupMasters.Add(groupModel);
                         }
@@ -531,8 +533,8 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var groupList = await Context.GroupMasters
-                    .Where(e => e.SiteId == siteId) 
-                    .GroupBy(a => new { a.GroupId, a.GroupName }) 
+                    .Where(e => e.SiteId == siteId)
+                    .GroupBy(a => new { a.GroupId, a.GroupName })
                     .Select(g => new GroupMasterModel
                     {
                         Id = g.First().Id,
@@ -549,7 +551,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
         }
 
@@ -714,6 +716,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                 GroupName = groupDetails.GroupName,
                                 SiteId = groupDetails.SiteId,
                                 GroupAddress = item.GroupAddress,
+                                CreatedOn = DateTime.Now,
                             };
                             Context.GroupMasters.Add(newGroupModel);
                         }
@@ -737,6 +740,81 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             }
 
             return model;
+        }
+
+        public async Task<IEnumerable<SiteGroupModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy)
+        {
+            try
+            {
+                var SiteGroupList = (from a in Context.GroupMasters
+                                     select new
+                                     {
+                                         a.GroupName,
+                                         a.GroupId,
+                                         a.CreatedOn
+                                     })
+                             .GroupBy(x => new { x.GroupName, x.GroupId })
+                             .Select(g => new SiteGroupModel
+                             {
+                                 GroupName = g.Key.GroupName,
+                                 GroupId = g.Key.GroupId,
+                                 CreatedOn = g.Max(x => x.CreatedOn)
+                             });
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower(); 
+                    SiteGroupList = SiteGroupList.Where(u =>
+                        u.GroupName.ToLower().Contains(searchText));
+                }
+
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "Groupname":
+                            SiteGroupList = SiteGroupList.Where(u => u.GroupName.ToLower().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    SiteGroupList = SiteGroupList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length).Trim();
+
+                    switch (field.ToLower())
+                    {
+                        case "groupname":
+                            SiteGroupList = sortOrder == "ascending"
+                                ? SiteGroupList.OrderBy(u => u.GroupName)
+                                : SiteGroupList.OrderByDescending(u => u.GroupName);
+                            break;
+                        case "createdon":
+                            SiteGroupList = sortOrder == "ascending"
+                                ? SiteGroupList.OrderBy(u => u.CreatedOn)
+                                : SiteGroupList.OrderByDescending(u => u.CreatedOn);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                return await SiteGroupList.ToListAsync(); 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

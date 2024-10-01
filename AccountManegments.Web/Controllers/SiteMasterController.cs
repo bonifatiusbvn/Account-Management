@@ -285,11 +285,12 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetGroupNameList()
+        public async Task<IActionResult> GetGroupNameList(string searchText, string searchBy, string sortBy)
         {
             try
             {
-                ApiResponseModel res = await APIServices.PostAsync("", "SiteMaster/GetGroupNameList");
+                string apiUrl = $"SiteMaster/GetGroupNamesList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
                 if (res.code == 200)
                 {
