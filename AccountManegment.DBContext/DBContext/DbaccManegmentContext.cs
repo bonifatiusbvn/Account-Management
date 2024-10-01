@@ -220,6 +220,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.DeliveryShedule).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
+            entity.Property(e => e.GroupAddress).HasMaxLength(500);
             entity.Property(e => e.PaymentTermsId).HasMaxLength(100);
             entity.Property(e => e.Poid)
                 .HasMaxLength(100)
@@ -367,12 +368,16 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.DiscountRoundoff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
+            entity.Property(e => e.GroupAddress).HasMaxLength(500);
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
             entity.Property(e => e.InvoiceType).HasMaxLength(50);
             entity.Property(e => e.Lrno)
                 .HasMaxLength(100)
                 .HasColumnName("LRNo");
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
+            entity.Property(e => e.Poid)
+                .HasMaxLength(100)
+                .HasColumnName("POId");
             entity.Property(e => e.SiteGroup).HasMaxLength(50);
             entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
             entity.Property(e => e.Tds)
