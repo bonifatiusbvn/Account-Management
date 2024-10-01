@@ -378,28 +378,38 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true && e.IsDeleted == false);
                 var Purchaserequest = Context.PurchaseRequests.Where(b => b.SiteId == SiteId).ToList();
                 var inwardchallan = Context.ItemInwords.Where(c => c.SiteId == SiteId).ToList();
+                var InvoiceDetails = Context.SupplierInvoices.Where(s => s.SiteId == SiteId).ToList();
 
                 if (siteDetails != null && siteDetails.IsActive == false)
                 {
                     if (activeUsersCount == 0)
                     {
-                        siteDetails.IsDeleted = true;
-                        Context.Sites.Update(siteDetails);
-                        foreach (var request in Purchaserequest)
+                        if (InvoiceDetails.Count > 0)
                         {
-                            request.IsDeleted = true;
-                            Context.PurchaseRequests.Update(request);
+                            response.code = 404;
+                            response.message = "Invoice is created for this supplier.";
+                        }
+                        else
+                        {
+                            siteDetails.IsDeleted = true;
+                            Context.Sites.Update(siteDetails);
+                            foreach (var request in Purchaserequest)
+                            {
+                                request.IsDeleted = true;
+                                Context.PurchaseRequests.Update(request);
+                            }
+
+                            foreach (var challan in inwardchallan)
+                            {
+                                challan.IsDeleted = true;
+                                Context.ItemInwords.Update(challan);
+                            }
+                            Context.SaveChanges();
+                            response.code = 200;
+                            response.data = siteDetails;
+                            response.message = "Site is deleted successfully";
                         }
 
-                        foreach (var challan in inwardchallan)
-                        {
-                            challan.IsDeleted = true;
-                            Context.ItemInwords.Update(challan);
-                        }
-                        Context.SaveChanges();
-                        response.code = 200;
-                        response.data = siteDetails;
-                        response.message = "Site is deleted successfully";
                     }
                     else
                     {
@@ -541,8 +551,8 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var grouplist = Context.GroupMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                if (grouplist != null)
+                var grouplist = Context.GroupMasters.Where(x => x.GroupId == GroupId).ToList();
+                if (grouplist.Count > 0)
                 {
                     Context.GroupMasters.Remove(grouplist);
                     await Context.SaveChangesAsync();

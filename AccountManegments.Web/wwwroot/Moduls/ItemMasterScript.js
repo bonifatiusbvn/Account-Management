@@ -58,8 +58,10 @@ function sortItemTable() {
     });
 }
 
+var ItemHistoryId = null;
 function ItemHistory(ItemId, element) {
     siteloadershow();
+    ItemHistoryId  = ItemId
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -74,6 +76,7 @@ function ItemHistory(ItemId, element) {
             $("#ItemDetailsView").hide();
             $("#ItemDetailsView").hide();
             $("#ItemHistoryView").html(result).removeClass('d-none').show();
+            $("#itemhistoryPdf").show();
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -97,6 +100,7 @@ function DisplayItemDetails(ItemId, element) {
             if (response) {
                 $("#ItemDetailsView").removeClass('d-none').show();
                 $("#ItemHistoryView").hide();
+                $("#itemhistoryPdf").hide();
                 $('#dspItemId').val(response.itemId);
                 $('#dspItemName').val(response.itemName);
                 $('#dspUnitName').val(response.unitTypeName);
@@ -634,4 +638,109 @@ function clearExcelFileModel() {
 function OpenFileUploadModel() {
     clearExcelFileModel();
     $("#uploadExcelFileModal").modal('show');
+}
+
+
+function ExportItemHistoryToPDF() {
+    siteloadershow();
+    $.ajax({
+        url: '/ItemMaster/ExportItemHistoryToPDF',
+        type: 'POST',
+        data: { ItemId: ItemHistoryId },
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
+
+function ExportItemHistoryToExcel() {
+    siteloadershow();
+    $.ajax({
+        url: '/ItemMaster/ExportItemHistoryToExcel',
+        type: 'GET',
+        data: { ItemId: ItemHistoryId },
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
 }

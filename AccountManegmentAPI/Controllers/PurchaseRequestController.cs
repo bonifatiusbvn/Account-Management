@@ -88,7 +88,7 @@ namespace AccountManagement.API.Controllers
             try
             {
 
-                if (purchaseId != null)
+                if (purchaseId.code == 200)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;
@@ -151,7 +151,7 @@ namespace AccountManagement.API.Controllers
                 var purchaseOrder = await PurchaseRequest.MultiplePurchaseRequestIsApproved(PRIdList);
                 if (purchaseOrder.code == 200)
                 {
-                    response.code =  purchaseOrder.code;
+                    response.code = purchaseOrder.code;
                     response.message = purchaseOrder.message;
                 }
                 else

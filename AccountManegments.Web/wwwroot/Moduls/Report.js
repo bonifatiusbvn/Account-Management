@@ -338,6 +338,206 @@ function ExportToExcel() {
         }
     });
 }
+
+function fn_ResetAllDropdown() {
+    window.location = '/Report/ReportDetails';
+}
+
+var datas = userPermissions;
+var dtcoulms = [
+    {
+        "data": "supplierInvoiceNo",
+        "name": "InvoiceNo",
+        "render": function (data, type, row) {
+            if (row.invoiceNo === 'Opening Balance' || row.invoiceNo === 'PayOut') {
+                var description = row.description ? ' (' + row.description + ')' : '';
+                return row.invoiceNo + description;
+            }
+            return data;
+        }
+    },
+    {
+        "data": "date",
+        "name": "Date",
+        "render": function (data, type, row) {
+            if (data) {
+                var date = new Date(data);
+                return date.toLocaleDateString('en-GB');
+            }
+            return data;
+        }
+    },
+    { "data": "siteName", "name": "SiteName" },
+    { "data": "groupName", "name": "GroupName" },
+    { "data": "supplierName", "name": "SupplierName" },
+    {
+        "data": "totalAmount",
+        "name": "Credit",
+        "render": function (data, type, row) {
+            if (row.invoiceNo !== 'PayOut') {
+                return '<span style="color:green">' + '₹' + data + '</span>';
+            } else {
+                return '';
+            }
+        }
+    },
+    {
+        "data": "totalAmount",
+        "name": "Debit",
+        "render": function (data, type, row) {
+            if (row.invoiceNo === 'PayOut') {
+                return '<span style="color:red">' + '₹' + data + '</span>';
+            } else {
+                return '';
+            }
+        }
+    }
+];
+
+
+$(document).ready(function () {
+    var table;
+    var userPermissionArray = JSON.parse(datas);
+    var canEdit = false;
+    var canDelete = false;
+
+    for (var i = 0; i < userPermissionArray.length; i++) {
+        var permission = userPermissionArray[i];
+        if (permission.formName == "Details Report") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
+    }
+    if (canEdit || canDelete) {
+        dtcoulms.push({
+            "data": null,
+            "render": function (data, type, row) {
+
+                if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
+                    var buttons = '';
+                    if (canEdit) {
+                        buttons +=
+                            '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
+                            '<i class="fadeIn animated bx bx-edit"></i>' +
+                            '</a>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
+                            '<i class="lni lni-trash"></i>' +
+                            '</a>';
+                    }
+                    return buttons;
+                }
+            },
+        });
+    }
+    $('#searchReportButton').click(function () {
+
+
+        if ($.fn.DataTable.isDataTable('#tblinvoice')) {
+            table.destroy();
+        }
+
+        table = $('#tblinvoice').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: false,
+            paging: true,
+            pageLength: 15,
+            lengthChange: true,
+            lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
+            destroy: true,
+            order: [],
+            ajax: {
+                url: '/Report/GetSupplierInvoiceDetailsReport',
+                type: 'POST',
+                data: function (d) {
+                    d.draw = d.draw;
+                    d.start = d.start;
+                    d.length = d.length;
+                    d.order = d.order;
+                    d.columns = d.columns;
+                    d.SiteId = $('#txtReportSiteId').val() || null;
+                    d.CompanyId = $('#textReportCompanyName').val() || null;
+                    d.SupplierId = $('#textReportSupplierNameHidden').val() || null;
+                    d.GroupName = $('#textReportGroupList').val() || null;
+
+                    var selectedValue = $('#timePeriodDropdown').val();
+                    switch (selectedValue) {
+                        case 'This Month':
+                            d.filterType = "currentMonth";
+                            break;
+                        case 'This Year':
+                            d.filterType = "currentYear";
+                            break;
+                        case 'Between Date':
+                            d.filterType = "dateRange";
+                            d.startDate = $('#startDate').val();
+                            d.endDate = $('#endDate').val();
+                            break;
+                        case 'Between Year':
+                            d.filterType = "betweenYear";
+                            d.SelectedYear = $('#yearDropdown').val();
+                            break;
+                        default:
+                            d.filterType = null;
+                            break;
+                    }
+                }
+            },
+            columns: dtcoulms,
+            scrollX: true,
+            scrollY: '350px',
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: false
+            },
+            autoWidth: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+
+                var totalCredit = settings.json.totalCredit || 0;
+                var totalDebit = settings.json.totalDebit || 0;
+                var NetAmount = totalCredit - totalDebit;
+
+                var formattedTotalCredit = formatReportNumberWithCommas(totalCredit.toFixed(2));
+                var formattedTotalDebit = formatReportNumberWithCommas(totalDebit.toFixed(2));
+                var formattedNetAmount = formatReportNumberWithCommas(NetAmount.toFixed(2));
+
+                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + formattedTotalCredit + '</span>');
+                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + formattedTotalDebit + '</span>');
+                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
+
+                // Replace classes for pagination buttons
+                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
+                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
+            },
+            columnDefs: [{
+                defaultContent: "",
+                targets: "_all",
+                width: 'auto'
+            }]
+        });
+    });
+});
+
+function formatReportNumberWithCommas(x) {
+    var parts = x.toString().split(".");
+    var integerPart = parts[0];
+    var decimalPart = parts.length > 1 ? "." + parts[1] : "";
+
+    var lastThree = integerPart.substring(integerPart.length - 3);
+    var otherNumbers = integerPart.substring(0, integerPart.length - 3);
+
+    if (otherNumbers != '')
+        lastThree = ',' + lastThree;
+
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
+}
+
 function deletePayoutDetails(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -498,444 +698,8 @@ function ClearPayoutTextBox() {
     $('#Edittxtpayoutdescription').val('');
     $("#Editpayoutpaymenttype").prop("checked", false);
 }
-
-
-
-let rowCounter = 0;
-function AddNewRowforPayOutInvoicebtn() {
-    selectedSupplierId = $('#textReportSupplierNameHidden').val();
-    selectedCompanyId = $('#textReportCompanyName').val();
-    selectedReportSiteName = $('#txtReportSiteId').val();
-    var CompanyId = selectedCompanyId;
-    var SupplierId = selectedSupplierId;
-    var SiteId = selectedReportSiteName;
-    if (SiteId != "" && SupplierId != "" && CompanyId != "") {
-        $.ajax({
-            url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',
-            type: 'Post',
-            datatype: 'json',
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-                if (Result.statusText === "success" || Result.statusText === "OK") {
-                    rowCounter++;
-                    AddNewRow(Result.responseText, rowCounter);
-                } else {
-                    toastr.error("Error in display product");
-                }
-            }
-        });
-    } else {
-        toastr.warning("select site, company and supplier");
-    }
-}
-function AddNewRow(resultHtml, rowNumber) {
-    const rowHtml = resultHtml
-        .replace(/ROWID/g, rowNumber)
-        .replace(/ROWNUMBER/g, rowNumber);
-
-    $('#payoutpartialView').show();
-    $('#payoutpartialView').append(rowHtml);
-    $('#payoutsubmitbutton').show();
-}
-function removePayout(buttonElement) {
-    $(buttonElement).closest('tr').remove();
-    updatePayoutRowNumbers();
-
-    if ($('.payoutinvoicerow').length >= 1) {
-        $('#payoutsubmitbutton').show();
-    }
-    else {
-        $('#payoutsubmitbutton').hide();
-    }
-}
 function updatePayoutRowNumbers() {
     $('#payoutpartialView .payoutinvoicerow').each(function (index) {
         $(this).find('.row-number').text(index + 1 + '.');
     });
-}
-function InsertPayOutDetailsReport() {
-    siteloadershow();
-    if ($('.payoutinvoicerow').length >= 1) {
-        var PayoutDetails = [];
-        var isValidPayout = true;
-
-        $(".payoutinvoicerow").each(function () {
-            var orderRow = $(this);
-
-            var objData = {
-                InvoiceNo: "PayOut",
-                SiteId: $("#txtReportSiteId").val(),
-                SupplierId: $('#textReportSupplierNameHidden').val(),
-                CompanyId: $('#textReportCompanyName').val(),
-                PaymentStatus: orderRow.find("input[name^='paymenttype']:checked").val(),
-                Description: orderRow.find("input[id^='txtdescription']").val(),
-                Date: orderRow.find("input[id^='txtdate']").val(),
-                CreatedBy: $("#txtReportUserId").val(),
-                TotalAmount: orderRow.find("input[id^='txtpayoutamount']").val()
-            };
-
-            orderRow.find("input[id^='txtdate']").on('input', function () {
-                $(this).css("border", "1px solid #ced4da");
-            });
-
-            orderRow.find("input[id^='txtpayoutamount']").on('input', function () {
-                $(this).css("border", "1px solid #ced4da");
-            });
-
-            if (objData.Date === "" || objData.TotalAmount === "") {
-                isValidPayout = false;
-
-                if (objData.Date === "") {
-                    orderRow.find("input[id^='txtdate']").css("border", "2px solid red");
-                }
-
-                if (objData.TotalAmount === "") {
-                    orderRow.find("input[id^='txtpayoutamount']").css("border", "2px solid red");
-                }
-            } else {
-                PayoutDetails.push(objData);
-            }
-        });
-
-        if (isValidPayout) {
-            var form_data = new FormData();
-            form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
-
-            $.ajax({
-                url: '/InvoiceMaster/InsertPayOutDetails',
-                type: 'POST',
-                data: form_data,
-                dataType: 'json',
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    siteloaderhide();
-                    if (result.code == 200) {
-                        toastr.success(result.message);
-                        clearPayoutPartialView();
-                        $('#payoutpartialView').hide();
-                        $("#searchReportButton").click();
-                    } else {
-                        toastr.error(result.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    siteloaderhide();
-                    toastr.error('An error occurred while processing your request.');
-                }
-            });
-        } else {
-            siteloaderhide();
-            toastr.warning("Kindly fill all data fields");
-        }
-    } else {
-        siteloaderhide();
-        toastr.warning("Add payout details");
-    }
-}
-
-function fn_ResetAllDropdown() {
-    window.location = '/Report/ReportDetails';
-}
-function clearPayoutPartialView() {
-    $('.payoutinvoicerow').remove();
-    rowCounter = 0;
-}
-
-function saveOpeningBalanceInvoice() {
-    siteloadershow();
-    var PayoutDetails = [];
-    var isValidPayout = true;
-
-    var objData = {
-        InvoiceNo: "Opening Balance",
-        SupplierId: $('#textReportSupplierNameHidden').val(),
-        CompanyId: $('#textReportCompanyName').val(),
-        Description: $('#txtOBdescription').val(),
-        Date: $('#txtOBdate').val(),
-        CreatedBy: $("#txtReportUserId").val(),
-        TotalAmount: $('#txtOBamount').val(),
-        SiteId: $("#txtReportSiteId").val(),
-    };
-    $('#txtOBamount').on('input', function () {
-        $('#txtOBamount').css("border", "1px solid #ced4da");
-    });
-
-    if (objData.TotalAmount === "") {
-        isValidPayout = false;
-        $('#txtOBamount').css("border", "2px solid red");
-    } else {
-        PayoutDetails.push(objData);
-        $('#txtOBamount').css("border", "");
-    }
-
-    if (isValidPayout) {
-        var form_data = new FormData();
-        form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
-
-        $.ajax({
-            url: '/InvoiceMaster/InsertPayOutDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (result) {
-                siteloaderhide();
-                if (result.code === 200) {
-                    $("#OBPayoutModal").modal('hide');
-                    toastr.success(result.message);
-                    $("#searchReportButton").click();
-                } else {
-                    toastr.error(result.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
-            }
-        });
-    } else {
-        siteloaderhide();
-        toastr.warning("Kindly fill all data fields");
-    }
-}
-function ClearOBTextBox() {
-    $('#txtOBdescription').val('');
-    $('#txtOBdate').val('');
-    $('#txtOBamount').val('');
-    $('#txtOBamount').css("border", "1px solid #ced4da");
-}
-var datas = userPermissions;
-var dtcoulms = [
-    {
-        "data": "supplierInvoiceNo",
-        "name": "InvoiceNo",
-        "render": function (data, type, row) {
-            if (row.invoiceNo === 'Opening Balance' || row.invoiceNo === 'PayOut') {
-                var description = row.description ? ' (' + row.description + ')' : '';
-                return row.invoiceNo + description;
-            }
-            return data;
-        }
-    },
-    {
-        "data": "date",
-        "name": "Date",
-        "render": function (data, type, row) {
-            if (data) {
-                var date = new Date(data);
-                return date.toLocaleDateString('en-GB');
-            }
-            return data;
-        }
-    },
-    { "data": "siteName", "name": "SiteName" },
-    { "data": "groupName", "name": "GroupName" },
-    { "data": "supplierName", "name": "SupplierName" },
-    {
-        "data": "totalAmount",
-        "name": "Credit",
-        "render": function (data, type, row) {
-            if (row.invoiceNo !== 'PayOut') {
-                return '<span style="color:green">' + '₹' + data + '</span>';
-            } else {
-                return '';
-            }
-        }
-    },
-    {
-        "data": "totalAmount",
-        "name": "Debit",
-        "render": function (data, type, row) {
-            if (row.invoiceNo === 'PayOut') {
-                return '<span style="color:red">' + '₹' + data + '</span>';
-            } else {
-                return '';
-            }
-        }
-    }
-];
-
-
-$(document).ready(function () {
-    var table;
-    var userPermissionArray = JSON.parse(datas);
-    var canEdit = false;
-    var canDelete = false;
-
-    for (var i = 0; i < userPermissionArray.length; i++) {
-        var permission = userPermissionArray[i];
-        if (permission.formName == "Details Report & Payout") {
-            canEdit = permission.edit;
-            canDelete = permission.delete;
-            break;
-        }
-    }
-    if (canEdit || canDelete) {
-        dtcoulms.push({
-            "data": null,
-            "render": function (data, type, row) {
-
-                if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
-                    var buttons = '';
-                    if (canEdit) {
-                        buttons +=
-                            '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayoutDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
-                            '<i class="fadeIn animated bx bx-edit"></i>' +
-                            '</a>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayoutDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
-                            '<i class="lni lni-trash"></i>' +
-                            '</a>';
-                    }
-                    return buttons;
-                }
-            },
-        });
-    }
-    $('#searchReportButton').click(function () {
-
-
-        if ($.fn.DataTable.isDataTable('#tblinvoice')) {
-            table.destroy();
-        }
-
-        table = $('#tblinvoice').DataTable({
-            processing: false,
-            serverSide: true,
-            filter: false,
-            paging: true,
-            pageLength: 15,
-            lengthChange: true,
-            lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
-            destroy: true,
-            order: [],
-            ajax: {
-                url: '/Report/GetSupplierInvoiceDetailsReport',
-                type: 'POST',
-                data: function (d) {
-                    d.draw = d.draw;
-                    d.start = d.start;
-                    d.length = d.length;
-                    d.order = d.order;
-                    d.columns = d.columns;
-                    d.SiteId = $('#txtReportSiteId').val() || null;
-                    d.CompanyId = $('#textReportCompanyName').val() || null;
-                    d.SupplierId = $('#textReportSupplierNameHidden').val() || null;
-                    d.GroupName = $('#textReportGroupList').val() || null;
-
-                    var selectedValue = $('#timePeriodDropdown').val();
-                    switch (selectedValue) {
-                        case 'This Month':
-                            d.filterType = "currentMonth";
-                            break;
-                        case 'This Year':
-                            d.filterType = "currentYear";
-                            break;
-                        case 'Between Date':
-                            d.filterType = "dateRange";
-                            d.startDate = $('#startDate').val();
-                            d.endDate = $('#endDate').val();
-                            break;
-                        case 'Between Year':
-                            d.filterType = "betweenYear";
-                            d.SelectedYear = $('#yearDropdown').val();
-                            break;
-                        default:
-                            d.filterType = null;
-                            break;
-                    }
-                }
-            },
-            columns: dtcoulms,
-            scrollX: true,
-            scrollY: '350px',
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: false
-            },
-            autoWidth: false,
-            drawCallback: function (settings) {
-                var api = this.api();
-
-                var totalCredit = settings.json.totalCredit || 0;
-                var totalDebit = settings.json.totalDebit || 0;
-                var NetAmount = totalCredit - totalDebit;
-
-                var formattedTotalCredit = formatReportNumberWithCommas(totalCredit.toFixed(2));
-                var formattedTotalDebit = formatReportNumberWithCommas(totalDebit.toFixed(2));
-                var formattedNetAmount = formatReportNumberWithCommas(NetAmount.toFixed(2));
-
-                $(api.table().footer()).find('#totalCredit').html('<span>' + '₹' + formattedTotalCredit + '</span>');
-                $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + formattedTotalDebit + '</span>');
-                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
-
-                // Replace classes for pagination buttons
-                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
-                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
-            },
-            columnDefs: [{
-                defaultContent: "",
-                targets: "_all",
-                width: 'auto'
-            }]
-        });
-    });
-});
-
-function formatReportNumberWithCommas(x) {
-    var parts = x.toString().split(".");
-    var integerPart = parts[0];
-    var decimalPart = parts.length > 1 ? "." + parts[1] : "";
-
-    var lastThree = integerPart.substring(integerPart.length - 3);
-    var otherNumbers = integerPart.substring(0, integerPart.length - 3);
-
-    if (otherNumbers != '')
-        lastThree = ',' + lastThree;
-
-    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
-}
-
-
-function openOB() {
-    siteloadershow();
-    ClearOBTextBox();
-    var supplierId = $('#textReportSupplierNameHidden').val();
-    var companyId = $('#textReportCompanyName').val();
-
-    if (supplierId !== "" && companyId !== "") {
-        var objData = {
-            SupplierId: supplierId,
-            CompanyId: companyId,
-        };
-
-        $.ajax({
-            url: '/InvoiceMaster/CheckOpeningBalance',
-            type: 'GET',
-            data: objData,
-            datatype: 'json',
-            success: function (result) {
-                siteloaderhide();
-                if (result.code == 200) {
-                    var modal = new bootstrap.Modal(document.getElementById('OBPayoutModal'));
-                    modal.show();
-                } else {
-                    toastr.error(result.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                siteloaderhide();
-                toastr.error('An error occurred while processing your request.');
-            }
-        });
-    } else {
-        siteloaderhide();
-        toastr.warning("Select company and supplier");
-    }
 }
