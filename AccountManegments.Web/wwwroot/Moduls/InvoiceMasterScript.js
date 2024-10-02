@@ -522,7 +522,7 @@ function InsertMultipleSupplierItem() {
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
-                Lrno: $("#txtlrNo").val(),
+                Lrno : $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
@@ -641,7 +641,7 @@ function UpdateInvoiceDetails() {
                 ItemList: ItemDetails,
                 ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
-                Lrno: $("#txtlrNo").val(),
+                Lrno: $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(), 
                 VehicleNo: $("#txtvehicleno").val(),
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
@@ -1606,4 +1606,60 @@ function GetGroupAddress(GroupId)
             }
         },
     });
+}
+
+function getallPONoList() {
+    clearbuyerstextbox();
+    $("#txtlrNo").hide();
+    $("#textPONoList").show();
+
+    $.ajax({
+        url: '/PurchaseMaster/PurchaseOrderNoListInvoice',
+        method: 'GET',
+        success: function (result) {
+            var PODetails = result.map(function (data) {
+                return {
+                    label: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid,
+                    value: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid
+                };
+            });
+
+            $("#textPONoList").autocomplete({
+                source: PODetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textPONoList").val(ui.item.label);
+                    $("#textPONoListHidden").val(ui.item.value);
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+
+            $("#textPONoList").on('input', function () {
+                if ($(this).val() === '') {
+                    $("#textPONoListHidden").val('');
+                }
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch purchase order details list: ", err);
+        }
+    });
+}
+
+function GETBUYESCODE()
+{
+    clearbuyerstextbox();
+    $("#txtlrNo").show();
+    $("#textPONoList").hide();
+}
+
+function clearbuyerstextbox()
+{
+    $("#txtlrNo").val('');
+    $("#textPONoList").val('');
 }
