@@ -1014,6 +1014,28 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<JsonResult> PurchaseOrderNoListInvoice()
+        {
+            try
+            {
+                List<PurchaseOrderView> GetPOList = new List<PurchaseOrderView>();
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={null}&searchBy={null}&sortBy={null}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+                }
+                return new JsonResult(GetPOList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
     }
 }
 
