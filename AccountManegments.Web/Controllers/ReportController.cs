@@ -646,7 +646,7 @@ namespace AccountManegments.Web.Controllers
                     }
 
                     var secondTableRow1 = secondTable.Rows.Add();
-                    secondTableRow1.Cells.Add(UserSession.SiteName ?? string.Empty);
+                    secondTableRow1.Cells.Add(PayOutReport.SiteName ?? string.Empty);
                     secondTableRow1.Cells.Add(PayOutReport.SupplierName ?? string.Empty);
                     secondTableRow1.Cells.Add(PayOutReport.CompanyName ?? string.Empty);
 
@@ -1041,7 +1041,7 @@ namespace AccountManegments.Web.Controllers
                         headerRangeNewTable.Style.Border.RightBorderColor = XLColor.Black;
 
                         row++;
-                        ws.Cell(row, 1).Value = UserSession.SiteName ?? string.Empty;
+                        ws.Cell(row, 1).Value = PayOutReport.SiteName ?? string.Empty;
                         ws.Cell(row, 2).Value = PayOutReport.SupplierName ?? string.Empty;
                         ws.Cell(row, 3).Value = PayOutReport.CompanyName ?? string.Empty;
 
