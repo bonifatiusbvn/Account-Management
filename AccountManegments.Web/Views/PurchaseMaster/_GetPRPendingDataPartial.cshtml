@@ -10,6 +10,6 @@
         <td>@(item.PurchaseOrderDate.HasValue ? item.PurchaseOrderDate.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
         <td>@item.OrderedQuantity.ToString("F2")</td>
         <td>@item.TotalInvoicedQuantity.ToString("F2")</td>
-        <td>@item.PendingQuantity.ToString("F2")</td>
+        <td class="text-center">@item.PendingQuantity.ToString("F2")</td>
     </tr>
 }

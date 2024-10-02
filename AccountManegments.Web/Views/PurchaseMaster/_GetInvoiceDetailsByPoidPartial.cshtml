@@ -9,6 +9,6 @@
         <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
         <td>@item.InvoiceItemName</td>
         <td>@item.ItemQUT.ToString("F2")</td>
-        <td>@item.ItemTotal.ToString("F2")</td>
+        <td class="text-center">@item.ItemTotal.ToString("F2")</td>
     </tr>
 }
