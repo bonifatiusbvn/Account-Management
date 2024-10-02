@@ -11,7 +11,25 @@
         <button type="button" class="btn btn-primary fixed-button" onclick="clearPOtextbox()"><i class="lni lni-circle-plus"></i>PurchaseOrder</button>
     }
 }
+<style>
+    .table-wrapper {
+        max-height: 350px; 
+        overflow-y: auto;
+        width: 100%;
+    }
 
+        .table-wrapper table {
+            width: 100%; 
+        }
+
+    .table thead {
+        position: sticky;
+        top: 0;
+        z-index: 1; 
+        background-color: #f8f9fa; 
+    }
+
+</style>
 
 <div class="">
     <div class="">
@@ -88,7 +106,7 @@
                                                     <div class="d-flex align-items-center mb-3">
                                                         <h6 class="mb-0">Invoice Details</h6>
                                                     </div>
-                                                    <div class="table-responsive">
+                                                    <div class="table-wrapper">
                                                         <table class="table align-middle mb-0">
                                                             <thead class="table-light btn-primary">
                                                                 <tr>
@@ -100,6 +118,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="InvoiceDetailsByPOIDtbody">
+                                                                <!-- Table body content -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -112,22 +131,21 @@
                                                     <div class="d-flex align-items-center mb-3">
                                                         <h6 class="mb-0">Pending Details</h6>
                                                     </div>
-                                                    <div>
-                                                        <div class="table-responsive">
-                                                            <table class="table align-middle mb-0">
-                                                                <thead class="table-light btn-primary">
-                                                                    <tr>
-                                                                        <th>ItemName</th>
-                                                                        <th>Date</th>
-                                                                        <th>Ordered-QTY</th>
-                                                                        <th>PR-QTY</th>
-                                                                        <th>Pending-QTY</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="POPendindDatatbody">
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
+                                                    <div class="table-wrapper">
+                                                        <table class="table align-middle mb-0">
+                                                            <thead class="table-light btn-primary">
+                                                                <tr>
+                                                                    <th>ItemName</th>
+                                                                    <th>Date</th>
+                                                                    <th>Ordered-QTY</th>
+                                                                    <th>PR-QTY</th>
+                                                                    <th>Pending-QTY</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="POPendindDatatbody">
+                                                                <!-- Table body content -->
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
