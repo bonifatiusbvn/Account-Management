@@ -4,8 +4,8 @@
 
 @foreach (var item in Model)
 {
-    <tr onclick="fn_GetPOPendingData('@item.Poid')">
-        <td><a class="text-primary" onclick="window.location.href='/PurchaseMaster/DisplayPODetails?POId=@item.Id'"><h6 class="product-name mb-2">@item.BuyersPurchaseNo</h6></a></td>
+    <tr onclick="fn_GetPOPendingData('@item.Poid')" style="cursor: pointer;">
+        <td><a class="text-primary" onclick="window.location.href='/PurchaseMaster/DisplayPODetails?POId=@item.Id'" style="cursor: pointer;"><h6 class="product-name mb-2">@item.BuyersPurchaseNo</h6></a></td>
         <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
         @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
         {
@@ -25,7 +25,7 @@
                 {
                     <a href="javascript:;" class="btn text-primary" onclick="DeletePODetails('@item.Id','@item.BuyersPurchaseNo',this); event.stopPropagation();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                 }
-                <a href='/InvoiceMaster/CreateInvoice?POId=@item.Id' class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="lni lni-remove-file"></i></a>
+                <a href='/InvoiceMaster/CreateInvoice?POId=@item.Id' class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Invoice" aria-label="Create Invoice"><i class="lni lni-remove-file"></i></a>
 
 
             </td>
