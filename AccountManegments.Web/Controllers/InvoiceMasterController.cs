@@ -73,14 +73,52 @@ namespace AccountManegments.Web.Controllers
                         {
                             item.RowNumber = rowNumber++;
                         }
-                        return View(invoiceDetails);
+                    }
+                    ViewBag.POShippingAddress = invoiceDetails.PODeliveryAddress;
+                }
+                var SiteId = UserSession.SiteId;
+                if (string.IsNullOrEmpty(SiteId))
+                {
+                    ViewBag.SiteAddress = "";
+                }
+                else
+                {
+                    List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
+                    ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
+                    if (res.code == 200)
+                    {
+                        SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
+                    }
+
+                    if (SiteName.Count == 0)
+                    {
+                        SiteMasterModel SiteDetails = new SiteMasterModel();
+                        ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
+                        if (response.code == 200)
+                        {
+                            SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
+                        }
+                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName + ",Code : " + SiteDetails.StateCode;
                     }
                     else
                     {
-                        return Json(new { code = response.code, message = response.message });
+                        ViewBag.SiteAddress = SiteName;
                     }
                 }
 
+                if (Id != null)
+                {
+                    if (invoiceDetails.SiteGroup != "")
+                    {
+                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
+                        ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + invoiceDetails.SiteGroup);
+                        if (res.code == 200)
+                        {
+                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
+                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
+                        }
+                    }
+                }
                 return View(invoiceDetails);
             }
             catch (Exception ex)
@@ -717,6 +755,24 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while fetching invoice details.", Error = ex.Message });
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> EditGroupNameListBySiteId(Guid? SiteId)
+        {
+            try
+            {
+                List<GroupMasterModel> GroupList = new List<GroupMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupNameListBySiteId?SiteId=" + SiteId);
+                if (res.code == 200)
+                {
+                    GroupList = JsonConvert.DeserializeObject<List<GroupMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(GroupList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

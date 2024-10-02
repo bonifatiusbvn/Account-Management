@@ -20,7 +20,8 @@ namespace AccountManagement.Repository.Interface.Services.PurchaseOrderService
         Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList);
-        Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId);
+        Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId);
+
         Task<POPendingData> GetPRPendingData(string PRId);
     }
 }

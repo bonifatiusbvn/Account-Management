@@ -306,6 +306,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 join g in Context.Countries on c.Country equals g.CountryId
                                 join supCity in Context.Cities on b.City equals supCity.CityId
                                 join supState in Context.States on b.State equals supState.StatesId
+                                join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                from subgroup in gj.DefaultIfEmpty()
                                 select new SupplierInvoiceMasterView
                                 {
                                     Id = a.Id,
@@ -337,7 +339,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     CompanyGstNo = c.Gstno,
                                     CompanyPincode = c.Pincode,
                                     CompanyPanNo = c.PanNo,
-                                    ShippingAddress = a.ShippingAddress,
                                     SupplierMobileNo = b.Mobile,
                                     Date = a.Date,
                                     TotalAmountInvoice = a.TotalAmount,
@@ -362,6 +363,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     Poid= a.Poid,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
+                                    ShippingAddress = a.ShippingAddress,
+                                    SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId

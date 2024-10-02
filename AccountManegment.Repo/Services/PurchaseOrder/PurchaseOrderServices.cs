@@ -63,7 +63,7 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.PurchaseOrderIsApproved(POIdList);
         }
 
-        public async Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId)
+        public async Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId)
         {
             return await PurchaseOrder.GetPODetailsInInvoice(POId);
         }

@@ -4,7 +4,7 @@ GetItemDetailsList()
 GetSiteDetail();
 GetCompanyDetail();
 GetSupplierDetail();
-GetGroupList();
+//GetGroupList();
 updateTotals();
 function filterallItemTable() {
     siteloadershow();
@@ -112,7 +112,7 @@ $(document).ready(function () {
         getCompanyDetail($(this).val());
         getInvoiceNumber($(this).val());
     });
-    
+
     var InvoiceCompanyId = $('#textCompanyName').val();
     var InvoiceGUID = $('#textSupplierInvoiceId').val();
     if (InvoiceCompanyId != null && InvoiceGUID == "00000000-0000-0000-0000-000000000000") {
@@ -498,6 +498,15 @@ function InsertMultipleSupplierItem() {
                 ItemDetails.push(objData);
             });
 
+            var modelSiteId = $("#txtModelSiteId").val();
+            var sessionSiteId = $("#txtsessionSiteName").val();
+
+            if (!modelSiteId || modelSiteId.trim() === "") {
+                $("#txtsessionSiteName").val(sessionSiteId);
+            } else {
+                $("#txtsessionSiteName").val(modelSiteId);
+            }
+
             var InvoiceDetails = {
                 SiteId: $("#txtsessionSiteName").val(),
                 InvoiceNo: $("#textInvoicePrefix").val(),
@@ -526,6 +535,7 @@ function InsertMultipleSupplierItem() {
                 Poid: $("#txtInvoicePOID").val(),
                 ItemList: ItemDetails,
             }
+
             var form_data = new FormData();
             form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
             $.ajax({
@@ -600,6 +610,15 @@ function UpdateInvoiceDetails() {
                 ItemDetails.push(objData);
             });
 
+            var modelSiteId = $("#txtModelSiteId").val();
+            var sessionSiteId = $("#txtsessionSiteName").val();
+
+            if (!modelSiteId || modelSiteId.trim() === "") {
+                $("#txtsessionSiteName").val(sessionSiteId);
+            } else {
+                $("#txtsessionSiteName").val(modelSiteId);
+            }
+
             var InvoiceDetails = {
                 Id: $('#textSupplierInvoiceId').val(),
                 SiteId: $("#txtModelSiteId").val(),
@@ -632,6 +651,7 @@ function UpdateInvoiceDetails() {
                 GroupAddress: $('input[name="selectedGroupAddress"]:checked').data('address'),
                 Poid: $("#txtInvoicePOID").val(),
             }
+
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
 
@@ -1498,8 +1518,10 @@ function GetGroupList() {
     $.ajax({
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
+            $('#InvoiceGroupList').empty();
+            $('#InvoiceGroupList').append('<option selected disabled>' + "Select Group" + '</option>');
             $.each(result, function (i, data) {
-                $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
+                    $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
         }
     });
@@ -1510,7 +1532,34 @@ $(document).ready(function () {
         var groupId = selectedOption.data('groupids');
         GetGroupAddress(groupId);
     });
+    var EditSiteId = $('#txtModelSiteId').val();
+    var SessionSiteId = $('#txtsessionSiteName').val();
+    var Company = $('#textCompanyName').val();
+    if (EditSiteId != "00000000-0000-0000-0000-000000000000" && Company != null && SessionSiteId == "") {
+        EditGroupList(EditSiteId)
+    }
+    else if (EditSiteId != "00000000-0000-0000-0000-000000000000" && SessionSiteId != "" && Company != null) {
+        EditGroupList(EditSiteId)
+    }
+    else {
+        GetGroupList();
+    }
 });
+
+function EditGroupList(EditSiteId) {
+    $.ajax({
+        url: '/InvoiceMaster/EditGroupNameListBySiteId?SiteId=' + EditSiteId,
+        success: function (result) {
+            var existingGroup = $('#InvoiceGroupList option:selected').text();
+            $.each(result, function (i, data) {
+                if (existingGroup !== data.groupName) {
+                    $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
+                }
+            });
+        }
+    });
+}
+
 
 function GetGroupAddress(GroupId)
 {
