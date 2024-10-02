@@ -5,10 +5,10 @@
 @foreach (var item in Model)
 {
     <tr>
-        <th>@item.SupplierInvoiceNo</th>
-        <th>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</th>
-        <th>@item.InvoiceItemName</th>
-        <th>@item.ItemQUT.ToString("F2")</th>
-        <th>@item.ItemTotal.ToString("F2")</th>
+        <td>@item.SupplierInvoiceNo</td>
+        <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : string.Empty)</td>
+        <td>@item.InvoiceItemName</td>
+        <td>@item.ItemQUT.ToString("F2")</td>
+        <td>@item.ItemTotal.ToString("F2")</td>
     </tr>
 }
