@@ -1,0 +1,15 @@
+﻿@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@model IEnumerable<AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.POPendingData>
+
+
+@foreach(var item in Model)
+{
+    <tr>
+        <th>@item.ItemName</th>
+        <th>@(item.PurchaseOrderDate.HasValue ? item.PurchaseOrderDate.Value.ToString("dd/MM/yyyy") : string.Empty)</th>
+        <th>@item.OrderedQuantity.ToString("F2")</th>
+        <th>@item.TotalInvoicedQuantity.ToString("F2")</th>
+        <th>@item.PendingQuantity.ToString("F2")</th>
+    </tr>
+}

@@ -9,7 +9,6 @@ AllPurchaseRequestListTable();
 GetSiteDetail();
 GetCompanyName();
 GetSupplierDetails();
-GetPurchaseOrderList();
 GetPOList();
 checkAndDisableAddButton();
 GetAllItemDetailsList();
@@ -530,62 +529,6 @@ $(document).ready(function () {
     fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
     fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
 });
-
-function GetPurchaseOrderList() {
-    siteloadershow();
-    var searchText = $('#txtPurchaseOrderSearch').val();
-    var searchBy = $('#ddlPurchaseOrderSearchBy').val();
-
-    $.get("/PurchaseMaster/PurchaseOrderListView", { searchBy: searchBy, searchText: searchText })
-        .done(function (result) {
-            siteloaderhide();
-            $("#PurchaseOrdertbody").html(result);
-        })
-        .fail(function (error) {
-            siteloaderhide();
-
-        });
-}
-function filterPurchaseOrderTable() {
-    siteloadershow();
-    var searchText = $('#txtPurchaseOrderSearch').val();
-    var searchBy = $('#ddlPurchaseOrderSearchBy').val();
-
-    $.ajax({
-        url: '/PurchaseMaster/PurchaseOrderListView',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-            searchBy: searchBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#PurchaseOrdertbody").html(result);
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-        }
-    });
-}
-
-function sortPurchaseOrderTable() {
-    siteloadershow();
-    var sortBy = $('#ddlPurchaseOrderSortBy').val();
-    $.ajax({
-        url: '/PurchaseMaster/PurchaseOrderListView',
-        type: 'GET',
-        data: {
-            sortBy: sortBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#PurchaseOrdertbody").html(result);
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
-        }
-    });
-}
 
 function EditPurchaseOrderDetails(Id) {
     siteloadershow();
@@ -1930,6 +1873,30 @@ function sortPOTableDate(field) {
     });
 }
 
+function fn_GetPOPendingData(POID) {
 
+    $.ajax({
+        url: '/PurchaseMaster/GetPRPendingData?PRID=' + POID,
+        type: 'GET',
+        success: function (result) {
+            $("#POPendindDatatbody").html(result);
+            fn_GetInvoiceDetailsByPOID(POID);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching sorted data:", error);
+        }
+    });
+}
 
-
+function fn_GetInvoiceDetailsByPOID(POID) {
+    $.ajax({
+        url: '/PurchaseMaster/GetInvoiceDetailsByPOId?PRID=' + POID,
+        type: 'GET',
+        success: function (result) {
+            $("#InvoiceDetailsByPOIDtbody").html(result);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching sorted data:", error);
+        }
+    });
+}

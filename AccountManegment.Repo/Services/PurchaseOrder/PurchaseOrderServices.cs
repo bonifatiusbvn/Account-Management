@@ -68,7 +68,7 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
             return await PurchaseOrder.GetPODetailsInInvoice(POId);
         }
 
-        public async Task<POPendingData> GetPRPendingData(string PRId)
+        public async Task<IEnumerable<POPendingData>> GetPRPendingData(string PRId)
         {
             return await PurchaseOrder.GetPRPendingData(PRId);
         }

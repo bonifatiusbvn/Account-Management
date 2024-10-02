@@ -22,7 +22,7 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList);
         Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId);
-        Task<POPendingData> GetPRPendingData(string PRId);
+        Task<IEnumerable<POPendingData>> GetPRPendingData(string PRId);
         Task<IEnumerable<InvoiceDetailsViewModel>> GetInvoiceDetailsByPOId(string PRId);
     }
 }

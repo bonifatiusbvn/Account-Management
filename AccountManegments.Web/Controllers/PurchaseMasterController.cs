@@ -317,38 +317,6 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("Purchase Orders-View")]
-        public IActionResult PurchaseOrderList()
-        {
-            return View();
-        }
-        public async Task<IActionResult> PurchaseOrderListView(string searchText, string searchBy, string sortBy)
-        {
-            try
-            {
-
-                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
-
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
-
-                if (res.code == 200)
-                {
-                    List<PurchaseOrderView> GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
-
-                    return PartialView("~/Views/PurchaseMaster/_PurchaseOrderListPartial.cshtml", GetPOList);
-                }
-                else
-                {
-                    return BadRequest(new { Message = "Failed to retrieve user list." });
-                }
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
-            }
-        }
-
         [HttpGet]
         public async Task<IActionResult> DisplayPurchaseOrderDetails(string Id)
         {
@@ -997,6 +965,49 @@ namespace AccountManegments.Web.Controllers
                     return Content(htmlContent, "text/html");
                 }
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GetPRPendingData(string? PRID)
+        {
+            try
+            {
+                string apiUrl = $"PurchaseOrder/GetPRPendingData?PRID={PRID}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<POPendingData> POPending = JsonConvert.DeserializeObject<List<POPendingData>>(response.data.ToString());
+                    return PartialView("~/Views/PurchaseMaster/_GetPRPendingDataPartial.cshtml", POPending);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Order list" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> GetInvoiceDetailsByPOId(string? PRID)
+        {
+            try
+            {
+                string apiUrl = $"PurchaseOrder/GetInvoiceDetailsByPOId?PRID={PRID}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<InvoiceDetailsViewModel> InvoiceDetails = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
+                    return PartialView("~/Views/PurchaseMaster/_GetInvoiceDetailsByPoidPartial.cshtml", InvoiceDetails);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Order list" });
+                }
             }
             catch (Exception ex)
             {

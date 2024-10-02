@@ -933,7 +933,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
-        public async Task<POPendingData> GetPRPendingData(string PRId)
+        public async Task<IEnumerable<POPendingData>> GetPRPendingData(string PRId)
         {
             try
             {
@@ -957,7 +957,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  PendingQuantity = grouped.Key.Quantity - grouped.Sum(g => g != null ? g.Quantity : 0)
                              };
 
-                return await result.FirstOrDefaultAsync();
+                return result;
             }
             catch (Exception ex)
             {

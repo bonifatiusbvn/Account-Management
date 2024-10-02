@@ -179,5 +179,20 @@ namespace AccountManagement.API.Controllers
             var purchaseOrder = await PurchaseOrder.GetPODetailsInInvoice(POId);
             return Ok(new { code = 200, data = purchaseOrder });
         }
+
+        [HttpPost]
+        [Route("GetPRPendingData")]
+        public async Task<IActionResult> GetPRPendingData(string PRId)
+        {
+            var purchaseRequest = await PurchaseOrder.GetPRPendingData(PRId);
+            return Ok(new { code = 200, data = purchaseRequest });
+        }
+        [HttpPost]
+        [Route("GetInvoiceDetailsByPOId")]
+        public async Task<IActionResult> GetInvoiceDetailsByPOId(string PRId)
+        {
+            var purchaseRequest = await PurchaseOrder.GetInvoiceDetailsByPOId(PRId);
+            return Ok(new { code = 200, data = purchaseRequest });
+        }
     }
 }
