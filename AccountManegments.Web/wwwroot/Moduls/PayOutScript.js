@@ -17,12 +17,12 @@ function GetAllSiteList() {
             $dropdown.empty();
             $dropdown.append('<option value="">All Site</option>');
             result.forEach(function (data) {
-                $dropdown.append('<option value="' + data.siteId + '" data-payoutcompany-name="' + data.siteName + '">' + data.siteName + '</option>');
+                $dropdown.append('<option value="' + data.siteId + '" data-payoutsite-name="' + data.siteName + '">' + data.siteName + '</option>');
             });
 
         },
         error: function (err) {
-            console.error("Failed to fetch company list: ", err);
+            console.error("Failed to fetch Site list: ", err);
         }
     });
 }
@@ -102,6 +102,7 @@ var selectedSortOrder = "DescendingDate";
 var parsedSiteId = null;
 var selectedCompanyName = null;
 var selectedSupplierName = null;
+var selectedSiteName = null;
 
 let currentReportSortOrder = 'AscendingDate';
 function sortReportTable(field) {
@@ -207,8 +208,12 @@ function fn_ResetAllPayoutDropdown() {
 
 $(document).ready(function () {
     $("#textPayoutReportCompanyName").on('change', function () {
-        var selectedOption = $(this).find('option:selected');
-        selectedCompanyName = selectedOption.data('payoutcompany-name');
+        var selectedCompanyOption = $(this).find('option:selected');
+        selectedCompanyName = selectedCompanyOption.data('payoutcompany-name');
+    });
+    $("#textPayoutReportSiteName").on('change', function () {
+        var selectedSiteOption = $(this).find('option:selected');
+        selectedSiteName = selectedSiteOption.data('payoutsite-name');
     });
 });
 
@@ -235,6 +240,7 @@ function ExportNetReportToPDF() {
         startDate: null,
         endDate: null,
         SelectedYear: null,
+        SiteName: selectedSiteName || null,
     };
 
     switch (selectedValue) {
@@ -334,6 +340,7 @@ function ExportNetReportToExcel() {
         startDate: null,
         endDate: null,
         SelectedYear: null,
+        SiteName: selectedSiteName || null,
     };
 
     switch (selectedValue) {
