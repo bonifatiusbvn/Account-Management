@@ -21,6 +21,7 @@
         pointer-events: none;
     }
 </style>
+
 <div class="">
     <div class="">
         <div class="radius-10 w-100">
@@ -125,9 +126,19 @@
                                                                             <div class="col">
                                                                                 <h6 class="mb-0">Invoice Details</h6>
                                                                             </div>
-                                                                            <div class="col">
-                                                                                <input type="text" class="form-control" id="textInvoicePrefix" value="@Model.InvoiceNo" readonly />
-                                                                            </div>
+                                                                            <input type="hidden" value="@Model.Poid" id="txtInvoicePOID" />
+                                                                            @if (Model.Poid != null)
+                                                                            {
+                                                                                <div class="col">
+                                                                                    <input type="text" class="form-control" id="textInvoicePrefix" readonly />
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="col">
+                                                                                    <input type="text" class="form-control" id="textInvoicePrefix" value="@Model.InvoiceNo" readonly />
+                                                                                </div>
+                                                                            }
                                                                         </div>
                                                                     </div>
                                                                     <div class="card-body">
@@ -412,9 +423,11 @@
                                                                     bool isSingleAddress = siteAddresses is string;
                                                                     bool isAddressList = siteAddresses is IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.SiteAddressModel>;
                                                                     bool isSelected = false;
+
+                                                                    var slectedPOShippingAddress = ViewBag.POShippingAddress;
                                                                 }
 
-                                                                @if (isSingleAddress)
+                                                                @if (isSingleAddress && !string.IsNullOrEmpty(siteAddresses.ToString()))
                                                                 {
                                                                     <div class="row ac-invoice-shippingadd ShippingAddress">
                                                                         <div class="col-2 col-sm-2">
@@ -433,7 +446,6 @@
                                                                                    type="radio"
                                                                                    id="AddressRadio_@counter"
                                                                                    data-address="@siteAddresses"
-                                                                                   checked
                                                                             @(selectedShippingAddress != null && siteAddresses == selectedShippingAddress ? "checked" : "") />
                                                                         </div>
                                                                     </div>
@@ -452,43 +464,48 @@
                                                                                 <p id="shippingaddress_@counter">@address.Address</p>
                                                                                 <input type="hidden" id="selectedShippingAddress" name="selectedShippingAddress" />
                                                                             </div>
-                                                                            @if (selectedShippingAddress != null)
-                                                                            {
-                                                                                <div class="col-2 col-sm-2">
-                                                                                    <input class="nav-radio form-check-input"
-                                                                                           name="selectedAddress"
-                                                                                           data-bs-toggle="tab"
-                                                                                           role="tab"
-                                                                                           type="radio"
-                                                                                           id="AddressRadio_@counter"
-                                                                                           data-address="@address.Address"
-                                                                                    @(
-                                                                                        selectedShippingAddress != null && address.Address == selectedShippingAddress
-                                                                                        ? "checked"
-                                                                                        : !isSelected && selectedShippingAddress == null
-                                                                                        ? (isSelected = true).ToString()
-                                                                                        : ""
-                                                                                        ) />
-                                                                                </div>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <div class="col-2 col-sm-2">
-                                                                                    <input class="nav-radio form-check-input"
-                                                                                           name="selectedAddress"
-                                                                                           data-bs-toggle="tab"
-                                                                                           role="tab"
-                                                                                           type="radio"
-                                                                                           id="AddressRadio_@counter"
-                                                                                           data-address="@address.Address"
-                                                                                    @(counter == 1 ? "checked" : "") />
-                                                                                </div>
-                                                                            }
-
+                                                                            <div class="col-2 col-sm-2">
+                                                                                <input class="nav-radio form-check-input"
+                                                                                       name="selectedAddress"
+                                                                                       data-bs-toggle="tab"
+                                                                                       role="tab"
+                                                                                       type="radio"
+                                                                                       id="AddressRadio_@counter"
+                                                                                       data-address="@address.Address"
+                                                                                @(selectedShippingAddress != null && address.Address == selectedShippingAddress ? "checked" : (counter == 1 && selectedShippingAddress == null ? "checked" : "")) />
+                                                                            </div>
                                                                         </div>
                                                                         counter++;
                                                                     }
                                                                 }
+                                                                else if (slectedPOShippingAddress != null)
+                                                                {
+                                                                    foreach (var address in slectedPOShippingAddress)
+                                                                    {
+                                                                        <div class="row ac-invoice-shippingadd ShippingAddress">
+                                                                            <div class="col-2 col-sm-2">
+                                                                                <label id="lblshprownum1">@counter</label>
+                                                                            </div>
+
+                                                                            <div class="col-5 col-sm-5">
+                                                                                <p id="shippingaddress_@counter">@address</p>
+                                                                                <input type="hidden" id="selectedShippingAddress" name="selectedShippingAddress" />
+                                                                            </div>
+                                                                            <div class="col-2 col-sm-2">
+                                                                                <input class="nav-radio form-check-input"
+                                                                                       name="selectedAddress"
+                                                                                       data-bs-toggle="tab"
+                                                                                       role="tab"
+                                                                                       type="radio"
+                                                                                       id="AddressRadio_@counter"
+                                                                                       data-address="@address"
+                                                                                @(selectedShippingAddress != null && address == selectedShippingAddress ? "checked" : (counter == 1 && selectedShippingAddress == null ? "checked" : "")) />
+                                                                            </div>
+                                                                        </div>
+                                                                        counter++;
+                                                                    }
+                                                                }
+                                                            </div>
 
                                                             </div>
                                                         </div>
@@ -573,16 +590,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
                             </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
-</div>
+
 
 @* <div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -733,6 +750,9 @@
 }
 <script type="text/javascript">
 
+    var Pochech = @ViewBag.ErrorMessage;
+
+
     function fn_OpenShippingModal() {
         $('#textmdAddress').val('');
         $('#textmdQty').val('');
@@ -743,7 +763,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');

@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using AccountManagement.Repository.Interface.Services.PurchaseOrderService;
@@ -60,6 +61,11 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         public async Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList)
         {
             return await PurchaseOrder.PurchaseOrderIsApproved(POIdList);
+        }
+
+        public async Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId)
+        {
+            return await PurchaseOrder.GetPODetailsInInvoice(POId);
         }
     }
 }

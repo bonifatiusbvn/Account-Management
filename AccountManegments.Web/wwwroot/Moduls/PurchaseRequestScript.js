@@ -309,8 +309,8 @@ function EditPurchaseRequestDetails(PurchaseId) {
             $('#PRheadingtext').html('Edit PurchaseRequest');
             $('#addPRInfo').removeClass('d-none');
             $('#PRInfo').addClass('d-none');
-           
-            var dbDate = response.date.split('T')[0]; 
+
+            var dbDate = response.date.split('T')[0];
             $('#txtPrdate').val(dbDate);
 
             $('#addbtnpurchaseRequest').hide();
@@ -1929,3 +1929,28 @@ function sortPOTableDate(field) {
         }
     });
 }
+
+
+function createInvoice(POID) {
+
+    $.ajax({
+        url: '/InvoiceMaster/CreateInvoice',
+        type: 'GET',
+        data: { POID: POID },
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function (response, data) {
+
+            if (response.code === 200) {
+                window.location.href = response.redirectUrl;
+            } else {
+
+                toastr.warning(response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            window.location.href = '/InvoiceMaster/CreateInvoice?POID=' + POID;
+        }
+    });
+}
+

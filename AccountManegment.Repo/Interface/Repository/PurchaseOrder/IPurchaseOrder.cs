@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using System;
@@ -20,5 +21,6 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList);
+        Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId);
     }
 }

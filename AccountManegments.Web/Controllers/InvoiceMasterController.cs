@@ -38,11 +38,12 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Purchase  Invoice-Add")]
-        public async Task<IActionResult> CreateInvoice(Guid? Id)
+        public async Task<IActionResult> CreateInvoice(Guid? Id, Guid? POID)
         {
             try
             {
                 SupplierInvoiceMasterView invoiceDetails = new SupplierInvoiceMasterView();
+
                 if (Id != null)
                 {
                     ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/GetSupplierInvoiceById?Id=" + Id);
@@ -60,57 +61,37 @@ namespace AccountManegments.Web.Controllers
                     ViewBag.GroupAddress = invoiceDetails.GroupAddress;
                 }
 
-                var SiteId = UserSession.SiteId;
-                if (SiteId == "")
-                {
-                    ViewBag.SiteAddress = "";
-                }
-                else
-                {
-                    List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
-                    ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
-                    if (res.code == 200)
-                    {
-                        SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(res.data.ToString());
-                    }
 
-                    if (SiteName.Count == 0)
+                if (POID != null)
+                {
+                    ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrder/GetPODetailsInInvoice?POID=" + POID);
+                    if (response.code == 200)
                     {
-                        SiteMasterModel SiteDetails = new SiteMasterModel();
-                        ApiResponseModel response = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
-                        if (response.code == 200)
+                        invoiceDetails = JsonConvert.DeserializeObject<SupplierInvoiceMasterView>(response.data.ToString());
+                        int rowNumber = 0;
+                        foreach (var item in invoiceDetails.ItemList)
                         {
-                            SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(response.data.ToString());
+                            item.RowNumber = rowNumber++;
                         }
-                        ViewBag.SiteAddress = SiteDetails.ShippingAddress + " , " + SiteDetails.ShippingArea + " , " + SiteDetails.ShippingCityName + " , " + SiteDetails.ShippingStateName + " , " + SiteDetails.ShippingCountryName + ",Code : " + SiteDetails.StateCode;
+                        return View(invoiceDetails);
                     }
                     else
                     {
-                        ViewBag.SiteAddress = SiteName;
+                        return Json(new { code = response.code, message = response.message });
                     }
                 }
 
-                if (Id != null)
-                {
-                    if (invoiceDetails.SiteGroup != "")
-                    {
-                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
-                        ApiResponseModel res = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + invoiceDetails.SiteGroup);
-                        if (res.code == 200)
-                        {
-                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(res.data.ToString());
-                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
-                        }
-                    }
-                }
+
 
                 return View(invoiceDetails);
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Json(new { code = 500, message = "An unexpected error occurred. Please try again." });
             }
         }
+
+
 
 
 
@@ -352,6 +333,7 @@ namespace AccountManegments.Web.Controllers
                     SiteGroup = InsertDetails.SiteGroup,
                     ItemList = InsertDetails.ItemList,
                     GroupAddress = InsertDetails.GroupAddress,
+                    Poid = InsertDetails.Poid,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(invoicedetails, "SupplierInvoice/InsertMultipleSupplierItemDetails");
                 if (postuser.code == 200)
