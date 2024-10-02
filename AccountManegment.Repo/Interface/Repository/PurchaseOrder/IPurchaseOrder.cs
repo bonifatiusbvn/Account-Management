@@ -21,6 +21,6 @@ namespace AccountManagement.Repository.Interface.Repository.PurchaseOrder
         Task<ApiResponseModel> InsertMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> UpdateMultiplePurchaseOrderDetails(PurchaseOrderMasterView PurchaseOrderDetails);
         Task<ApiResponseModel> PurchaseOrderIsApproved(POIsApprovedMasterModel POIdList);
-        Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId);
+        Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId);
     }
 }

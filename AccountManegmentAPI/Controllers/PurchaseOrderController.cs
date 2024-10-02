@@ -176,28 +176,8 @@ namespace AccountManagement.API.Controllers
         [Route("GetPODetailsInInvoice")]
         public async Task<IActionResult> GetPODetailsInInvoice(Guid POId)
         {
-            ApiResponseModel response = new ApiResponseModel();
-            try
-            {
-                var purchaseOrder = await PurchaseOrder.GetPODetailsInInvoice(POId);
-                if (purchaseOrder.code == 200)
-                {
-                    response.code = purchaseOrder.code;
-                    response.message = purchaseOrder.message;
-                    response.data = purchaseOrder.data;
-                }
-                else
-                {
-                    response.message = purchaseOrder.message;
-                    response.code = purchaseOrder.code;
-                }
-            }
-            catch (Exception)
-            {
-                response.code = (int)HttpStatusCode.InternalServerError;
-                throw;
-            }
-            return StatusCode(response.code, response);
+            var purchaseOrder = await PurchaseOrder.GetPODetailsInInvoice(POId);
+            return Ok(new { code = 200, data = purchaseOrder });
         }
     }
 }

@@ -122,6 +122,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public string? PaymentTerms { get; set; }
         public int? StateCode { get; set; }
         public string? SiteGroup { get; set; }
+        public Guid? SiteGroupId { get; set; }
         public decimal? DiscountRoundoff { get; set; }
         public bool? IsApproved { get; set; }
         public string? GroupAddress { get; set; }

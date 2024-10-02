@@ -841,17 +841,11 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             return response;
         }
 
-        public async Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId)
+        public async Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId)
         {
-            ApiResponseModel response =new ApiResponseModel();
             SupplierInvoiceMasterView PurchaseOrder = new SupplierInvoiceMasterView();
             try
             {
-                var PODetail=Context.PurchaseOrders.Where(a=>a.Id == POId).FirstOrDefault();
-                var checkPOID = Context.SupplierInvoices.Where(a=>a.Poid == PODetail.Poid).FirstOrDefault();
-
-                if(checkPOID != null)
-                {
                     PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
                                      join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                      join c in Context.Companies on a.ToCompanyId equals c.CompanyId
@@ -860,6 +854,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      join e in Context.Cities on b.City equals e.CityId
                                      join f in Context.States on b.State equals f.StatesId
                                      join cs in Context.States on c.StateId equals cs.StatesId
+                                     join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                     from subgroup in gj.DefaultIfEmpty()
                                      select new SupplierInvoiceMasterView
                                      {
                                          POGUID = a.Id,
@@ -895,6 +891,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          ShippingAddress = d.ShippingAddress,
                                          SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
                                          CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                         SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
                                      }).First();
 
                     List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.POGUID)
@@ -927,16 +924,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                                 }).ToList();
                     PurchaseOrder.ItemList = itemlist;
                     PurchaseOrder.PODeliveryAddress = addresslist;
-
-                    response.code = 200;
-                    response.data = PurchaseOrder;
-                }
-                else
-                {
-                    response.code = 404;
-                    response.message = "Invoice already created!";
-                }
-                return response;
+      
+                return PurchaseOrder;
             }
             catch (Exception)
             {
