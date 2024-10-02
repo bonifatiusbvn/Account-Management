@@ -81,8 +81,6 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
 
-
-
                 return View(invoiceDetails);
             }
             catch (Exception ex)
@@ -90,10 +88,6 @@ namespace AccountManegments.Web.Controllers
                 return Json(new { code = 500, message = "An unexpected error occurred. Please try again." });
             }
         }
-
-
-
-
 
         public async Task<IActionResult> CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
