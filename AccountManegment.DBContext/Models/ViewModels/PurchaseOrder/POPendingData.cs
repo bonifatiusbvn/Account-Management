@@ -17,4 +17,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public Guid ItemId { get; set; }
 
     }
+    public class InvoiceDetailsViewModel
+    {
+        public string PurchaseOrderId { get; set; }
+        public string SupplierInvoiceNo { get; set; }
+        public DateTime? Date { get; set; }
+        public string InvoiceItemName { get; set; }
+        public decimal ItemQUT { get; set; }
+        public decimal ItemTotal { get; set; }
+    }
+
 }

@@ -846,85 +846,85 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             SupplierInvoiceMasterView PurchaseOrder = new SupplierInvoiceMasterView();
             try
             {
-                    PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
-                                     join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
-                                     join c in Context.Companies on a.ToCompanyId equals c.CompanyId
-                                     join d in Context.Sites on a.SiteId equals d.SiteId
-                                     join g in Context.PodeliveryAddresses on a.Id equals g.Poid
-                                     join e in Context.Cities on b.City equals e.CityId
-                                     join f in Context.States on b.State equals f.StatesId
-                                     join cs in Context.States on c.StateId equals cs.StatesId
-                                     join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
-                                     from subgroup in gj.DefaultIfEmpty()
-                                     select new SupplierInvoiceMasterView
-                                     {
-                                         POGUID = a.Id,
-                                         SiteId = a.SiteId,
-                                         SiteName = d.SiteName,
-                                         Poid = a.Poid,
-                                         SupplierId = a.FromSupplierId,
-                                         SupplierArea = b.Area,
-                                         SupplierBuildingName = b.BuildingName,
-                                         SupplierName = b.SupplierName,
-                                         SupplierGstNo = b.Gstno,
-                                         SupplierMobileNo = b.Mobile,
-                                         SupplierCity = e.CityName,
-                                         SupplierState = f.StatesName,
-                                         SupplierPincode = b.PinCode,
-                                         CompanyId = a.ToCompanyId,
-                                         CompanyName = c.CompanyName,
-                                         CompanyGstNo = c.Gstno,
-                                         TotalAmountInvoice = a.TotalAmount,
-                                         Description = a.Description,
-                                         TotalDiscount = a.TotalDiscount,
-                                         TotalGstamount = a.TotalGstamount,
-                                         CompanyAddress = a.BillingAddress,
-                                         Date = a.Date,
-                                         ContactName = a.ContactName,
-                                         ContactNumber = a.ContactNumber,
-                                         CreatedBy = a.CreatedBy,
-                                         CreatedOn = a.CreatedOn,
-                                         Lrno = a.BuyersPurchaseNo,
-                                         CompanyStateName = cs.StatesName,
-                                         StateCode = cs.StateCode,
-                                         IsApproved = a.IsApproved,
-                                         ShippingAddress = d.ShippingAddress,
-                                         SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
-                                         CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
-                                         SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
-                                     }).First();
+                PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
+                                 join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
+                                 join c in Context.Companies on a.ToCompanyId equals c.CompanyId
+                                 join d in Context.Sites on a.SiteId equals d.SiteId
+                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                 join e in Context.Cities on b.City equals e.CityId
+                                 join f in Context.States on b.State equals f.StatesId
+                                 join cs in Context.States on c.StateId equals cs.StatesId
+                                 join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                 from subgroup in gj.DefaultIfEmpty()
+                                 select new SupplierInvoiceMasterView
+                                 {
+                                     POGUID = a.Id,
+                                     SiteId = a.SiteId,
+                                     SiteName = d.SiteName,
+                                     Poid = a.Poid,
+                                     SupplierId = a.FromSupplierId,
+                                     SupplierArea = b.Area,
+                                     SupplierBuildingName = b.BuildingName,
+                                     SupplierName = b.SupplierName,
+                                     SupplierGstNo = b.Gstno,
+                                     SupplierMobileNo = b.Mobile,
+                                     SupplierCity = e.CityName,
+                                     SupplierState = f.StatesName,
+                                     SupplierPincode = b.PinCode,
+                                     CompanyId = a.ToCompanyId,
+                                     CompanyName = c.CompanyName,
+                                     CompanyGstNo = c.Gstno,
+                                     TotalAmountInvoice = a.TotalAmount,
+                                     Description = a.Description,
+                                     TotalDiscount = a.TotalDiscount,
+                                     TotalGstamount = a.TotalGstamount,
+                                     CompanyAddress = a.BillingAddress,
+                                     Date = a.Date,
+                                     ContactName = a.ContactName,
+                                     ContactNumber = a.ContactNumber,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                     Lrno = a.BuyersPurchaseNo,
+                                     CompanyStateName = cs.StatesName,
+                                     StateCode = cs.StateCode,
+                                     IsApproved = a.IsApproved,
+                                     ShippingAddress = d.ShippingAddress,
+                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
+                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                     SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
+                                 }).First();
 
-                    List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.POGUID)
-                                                         join b in Context.ItemMasters on a.ItemId equals b.ItemId
-                                                         join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
-                                                         join i in Context.ItemMasters on a.ItemId equals i.ItemId
-                                                         select new POItemDetailsModel
-                                                         {
-                                                             ItemName = i.ItemName,
-                                                             ItemId = a.ItemId,
-                                                             Quantity = a.Quantity,
-                                                             ItemAmount = a.ItemTotal,
-                                                             Gstamount = a.Gst,
-                                                             UnitType = a.UnitTypeId,
-                                                             UnitTypeName = c.UnitName,
-                                                             PricePerUnit = a.Price,
-                                                             GstPercentage = b.Gstper,
-                                                             Hsncode = b.Hsncode,
-                                                             TotalAmount = a.ItemTotal,
-                                                         }).ToList();
-                    List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.POGUID)
-                                                                select new PODeliveryAddressModel
-                                                                {
-                                                                    Aid = a.Aid,
-                                                                    Poid = a.Poid,
-                                                                    Quantity = a.Quantity,
-                                                                    UnitTypeId = a.UnitTypeId,
-                                                                    Address = a.Address,
-                                                                    IsDeleted = a.IsDeleted,
-                                                                }).ToList();
-                    PurchaseOrder.ItemList = itemlist;
-                    PurchaseOrder.PODeliveryAddress = addresslist;
-      
+                List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.POGUID)
+                                                     join b in Context.ItemMasters on a.ItemId equals b.ItemId
+                                                     join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
+                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                                     select new POItemDetailsModel
+                                                     {
+                                                         ItemName = i.ItemName,
+                                                         ItemId = a.ItemId,
+                                                         Quantity = a.Quantity,
+                                                         ItemAmount = a.ItemTotal,
+                                                         Gstamount = a.Gst,
+                                                         UnitType = a.UnitTypeId,
+                                                         UnitTypeName = c.UnitName,
+                                                         PricePerUnit = a.Price,
+                                                         GstPercentage = b.Gstper,
+                                                         Hsncode = b.Hsncode,
+                                                         TotalAmount = a.ItemTotal,
+                                                     }).ToList();
+                List<PODeliveryAddressModel> addresslist = (from a in Context.PodeliveryAddresses.Where(a => a.Poid == PurchaseOrder.POGUID)
+                                                            select new PODeliveryAddressModel
+                                                            {
+                                                                Aid = a.Aid,
+                                                                Poid = a.Poid,
+                                                                Quantity = a.Quantity,
+                                                                UnitTypeId = a.UnitTypeId,
+                                                                Address = a.Address,
+                                                                IsDeleted = a.IsDeleted,
+                                                            }).ToList();
+                PurchaseOrder.ItemList = itemlist;
+                PurchaseOrder.PODeliveryAddress = addresslist;
+
                 return PurchaseOrder;
             }
             catch (Exception)
@@ -965,5 +965,30 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             }
         }
 
+        public async Task<IEnumerable<InvoiceDetailsViewModel>> GetInvoiceDetailsByPOId(string PRId)
+        {
+            try
+            {
+                var result = await (from si in Context.SupplierInvoices
+                                    join sid in Context.SupplierInvoiceDetails on si.Id equals sid.RefInvoiceId
+                                    join it in Context.ItemMasters on sid.ItemId equals it.ItemId
+                                    where si.Poid == PRId
+                                    select new InvoiceDetailsViewModel
+                                    {
+                                        PurchaseOrderId = si.Poid,
+                                        SupplierInvoiceNo = si.InvoiceNo,
+                                        Date = si.Date,
+                                        InvoiceItemName = it.ItemName,
+                                        ItemQUT = sid.Quantity,
+                                        ItemTotal = sid.Price
+                                    }).ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

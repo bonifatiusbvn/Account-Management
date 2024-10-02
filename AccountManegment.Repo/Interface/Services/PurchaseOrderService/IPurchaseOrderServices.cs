@@ -23,5 +23,6 @@ namespace AccountManagement.Repository.Interface.Services.PurchaseOrderService
         Task<SupplierInvoiceMasterView> GetPODetailsInInvoice(Guid POId);
 
         Task<POPendingData> GetPRPendingData(string PRId);
+        Task<IEnumerable<InvoiceDetailsViewModel>> GetInvoiceDetailsByPOId(string PRId);
     }
 }
