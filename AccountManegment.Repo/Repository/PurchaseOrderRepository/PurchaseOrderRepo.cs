@@ -615,7 +615,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
                     PaymentTerms = PurchaseOrderDetails.PaymentTerms,
-                    PaymentTermsId= PurchaseOrderDetails.PaymentTermsId,
+                    PaymentTermsId = PurchaseOrderDetails.PaymentTermsId,
                     BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -843,14 +843,14 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 
         public async Task<ApiResponseModel> GetPODetailsInInvoice(Guid POId)
         {
-            ApiResponseModel response =new ApiResponseModel();
+            ApiResponseModel response = new ApiResponseModel();
             SupplierInvoiceMasterView PurchaseOrder = new SupplierInvoiceMasterView();
             try
             {
-                var PODetail=Context.PurchaseOrders.Where(a=>a.Id == POId).FirstOrDefault();
-                var checkPOID = Context.SupplierInvoices.Where(a=>a.Poid == PODetail.Poid).FirstOrDefault();
+                var PODetail = Context.PurchaseOrders.Where(a => a.Id == POId).FirstOrDefault();
+                var checkPOID = Context.SupplierInvoices.Where(a => a.Poid == PODetail.Poid).FirstOrDefault();
 
-                if(checkPOID != null)
+                if (checkPOID != null)
                 {
                     PurchaseOrder = (from a in Context.PurchaseOrders.Where(x => x.Id == POId)
                                      join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
@@ -943,5 +943,38 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 throw;
             }
         }
+
+        public async Task<POPendingData> GetPRPendingData(string PRId)
+        {
+            try
+            {
+                var result = from po in Context.PurchaseOrders
+                             join pod in Context.PurchaseOrderDetails on po.Id equals pod.PorefId
+                             join it in Context.ItemMasters on pod.ItemId equals it.ItemId
+                             join si in Context.SupplierInvoices on po.Poid equals si.Poid into siGroup
+                             from si in siGroup.DefaultIfEmpty()
+                             join sid in Context.SupplierInvoiceDetails on new { ItemId = pod.ItemId, RefInvoiceId = (Guid?)si.Id }
+                             equals new { ItemId = sid.ItemId, RefInvoiceId = (Guid?)sid.RefInvoiceId } into sidGroup
+                             from sid in sidGroup.DefaultIfEmpty()
+                             where po.Poid == PRId
+                             group sid by new { po.Poid, po.Date, it.ItemName, pod.Quantity } into grouped
+                             select new POPendingData
+                             {
+                                 PurchaseOrderId = grouped.Key.Poid,
+                                 PurchaseOrderDate = grouped.Key.Date,
+                                 ItemName = grouped.Key.ItemName,
+                                 OrderedQuantity = grouped.Key.Quantity,
+                                 TotalInvoicedQuantity = grouped.Sum(g => g != null ? g.Quantity : 0),
+                                 PendingQuantity = grouped.Key.Quantity - grouped.Sum(g => g != null ? g.Quantity : 0)
+                             };
+
+                return await result.FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
