@@ -1873,8 +1873,9 @@ function sortPOTableDate(field) {
     });
 }
 
-function fn_GetPOPendingData(POID) {
-
+function fn_GetPOPendingData(POID, element) {
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
     $.ajax({
         url: '/PurchaseMaster/GetPRPendingData?PRID=' + POID,
         type: 'GET',
