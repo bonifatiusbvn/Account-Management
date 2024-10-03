@@ -35,6 +35,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public string? BillingAddress { get; set; }
 
+        public string? SiteGroup { get; set; }
+
+        public string? GroupAddress { get; set; }
+
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

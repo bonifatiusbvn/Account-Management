@@ -226,6 +226,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Poid)
                 .HasMaxLength(100)
                 .HasColumnName("POId");
+            entity.Property(e => e.SiteGroup).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGstamount)

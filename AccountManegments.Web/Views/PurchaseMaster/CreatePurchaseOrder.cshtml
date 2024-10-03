@@ -34,11 +34,11 @@
         resize: none;
     }
 
-    textarea:focus {
-        border: none;
-        outline: none;
-        box-shadow: none;
-    }
+        textarea:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
 
     .ck-editor__editable {
         height: 380px;
@@ -46,7 +46,7 @@
     }
 </style>
 <div class="">
-    <div class=""> 
+    <div class="">
         <div class="radius-10 w-100">
             <div class="my-3 border-bottom"></div>
             <div class="">
@@ -143,6 +143,7 @@
                                                                                     <input type="hidden" class="form-control" id="poModelSiteId" value="@Model.SiteId">
                                                                                     <input type="hidden" class="form-control" id="RefPOid" value="@Model.Id">
                                                                                     <input type="hidden" class="form-control" id="UserRoleinPO" value="@_userSession.UserRole">
+
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-5 col-lg-5">
@@ -201,9 +202,9 @@
                                                         <h5 class="card-header">
                                                             Add Product
 
-                                                                <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                                    <i class="lni lni-circle-plus"></i>
-                                                                </a>
+                                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                                <i class="lni lni-circle-plus"></i>
+                                                            </a>
 
                                                             <span id="spnitembutton" class="text-danger"></span>
                                                         </h5>
@@ -340,6 +341,24 @@
                                                                                 <span id="spnPODispatchBy" class="text-danger"></span>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="input-group mb-3">
+                                                                            <label class="input-group-text">
+                                                                                Group
+                                                                            </label>
+                                                                            @if (Model.SiteGroup != null)
+                                                                            {
+                                                                                <select class="form-select" id="POGroupList" name="POGroupList">
+                                                                                    <option selected value="@Model.SiteGroup" data-groupids="@Model.SiteGroupId">@Model.SiteGroup</option>
+                                                                                </select>
+
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <select class="form-select" id="POGroupList" name="POGroupList">
+                                                                                    <option selected value="" disabled>Select Group</option>
+                                                                                </select>
+                                                                            }
+                                                                        </div>
                                                                         @* <div class="col-lg-12 col-sm-12 mt-2">
                                                                         <div class="mb-2">
                                                                         <div class="input-group mb-3">
@@ -400,6 +419,58 @@
                                                                     @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
                                                                 }
                                                             </div>
+                                                        </div>
+                                                        <div class="card">
+                                                            <h5 class="card-header">
+                                                                Group Address
+                                                            </h5>
+                                                            @{
+                                                                var index = 1;
+                                                                var selectedPOGroupAddress = Model.GroupAddress;
+                                                                var GroupAddress = ViewBag.GroupAddresses;
+                                                            }
+                                                            @if (Model.Id == Guid.Empty)
+                                                            {
+                                                                <div class="card-body POGroupAddress" id="dvPoGroupAddress">
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="card-body POGroupAddress" id="dvPoGroupAddress">
+                                                                    @if (GroupAddress != null)
+                                                                    {
+                                                                        @foreach (var address in GroupAddress as IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.GroupAddressList>)
+                                                                        {
+                                                                            <div class="row ac-invoice-groupadd POGroupAddress">
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <label id="lblshprownum1">@index</label>
+                                                                                </div>
+
+                                                                                <div class="col-5 col-sm-5">
+                                                                                    <p id="groupaddress_@index">@address.GroupAddress</p>
+                                                                                    <input type="hidden" id="selectedPOGroupAddress_@index" value="@address.GroupAddress" />
+                                                                                </div>
+
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <input class="nav-radio form-check-input"
+                                                                                     name="selectedPOGroupAddress" 
+                                                                                    type="radio"
+                                                                                    id="AddressRadio_@index"
+                                                                                    value="@address.GroupAddress"
+                                                                                    @(address.GroupAddress == selectedPOGroupAddress ? "checked" : "")
+                                                                                    onchange="saveSelectedGroupAddress()" />
+                                                                                </div>
+                                                                            </div>
+                                                                            index++;
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="card-body POGroupAddress" id="dvPoGroupAddress">
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div class="col-6 col-sm-6">
@@ -464,17 +535,17 @@
                                                                                     }
                                                                                     else
                                                                                     {
-@:Terms & Condition
-@:1. Prices: The Above Price are on site Vadodara
-@:2. Packing: Pvc Wrapping
-@:3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
-@:4. Tax: 18% GST Extra
-@:5. Delivery: 15 to 20 Days From the Date of Purchase Order
-@:6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
-@:7. Validity of Offer: 20 Days
-@:8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.
+                                                                                        @:Terms & Condition
+                                                                                        @:1. Prices: The Above Price are on site Vadodara
+                                                                                        @:2. Packing: Pvc Wrapping
+                                                                                        @:3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
+                                                                                        @:4. Tax: 18% GST Extra
+                                                                                        @:5. Delivery: 15 to 20 Days From the Date of Purchase Order
+                                                                                        @:6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
+                                                                                        @:7. Validity of Offer: 20 Days
+                                                                                        @:8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.
                                                                                     }
-            </textarea>
+                    </textarea>
                                                                             </div>
                                                                         </div>
 
@@ -488,14 +559,14 @@
                                                                                     }
                                                                                     else
                                                                                     {
-@:Terms & Condition
-@:1.The Supplier will Accept Site Wieght & Measurement as correct & Final
-@:2.All Goods are Subjects to Final approval at site Premies.
-@:3.The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
-@:4.Purchase Order no is must on each Invoice.
-@:5.In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
-@:6.All necessary test Certificates to be sent alongwith the material.Material will be tested at our end,
-@:7.In case of rejection of Material, Supplier will take the material back & testing Charges will be paid by Supplier.
+                                                                                        @:Terms & Condition
+                                                                                        @:1.The Supplier will Accept Site Wieght & Measurement as correct & Final
+                                                                                        @:2.All Goods are Subjects to Final approval at site Premies.
+                                                                                        @:3.The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
+                                                                                        @:4.Purchase Order no is must on each Invoice.
+                                                                                        @:5.In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
+                                                                                        @:6.All necessary test Certificates to be sent alongwith the material.Material will be tested at our end,
+                                                                                        @:7.In case of rejection of Material, Supplier will take the material back & testing Charges will be paid by Supplier.
                                                                                     }</textarea>
                                                                             </div>
                                                                         </div>
@@ -509,14 +580,14 @@
                                                                                     }
                                                                                     else
                                                                                     {
-@:Terms & Condition
-@:1. Party shall be responsible for strength only.
-@:2. Cube casting & testing are conducted in our in-plant laboratory.
-@:3. Addition & Deletion of water at site rights reserve with us.
-@:4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
-@:5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
-@:6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
-@:7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.
+                                                                                        @:Terms & Condition
+                                                                                        @:1. Party shall be responsible for strength only.
+                                                                                        @:2. Cube casting & testing are conducted in our in-plant laboratory.
+                                                                                        @:3. Addition & Deletion of water at site rights reserve with us.
+                                                                                        @:4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
+                                                                                        @:5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
+                                                                                        @:6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
+                                                                                        @:7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.
                                                                                     }</textarea>
                                                                             </div>
                                                                         </div>
@@ -555,45 +626,45 @@
                                                                             </a>
                                                                         </li>
                                                                     </ul>
-                                                                    <div class="tab-content" id="pills-tabContent" >
+                                                                    <div class="tab-content" id="pills-tabContent">
                                                                         <div class="tab-pane fade show active" id="Terms-1" role="tabpanel">
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-1" value="Term-1" />
                                                                                 <textarea id="txtPOPaymentTerms1" style="height:300px; width:670px; border: none;">Terms & Condition
-1. Prices: The Above Price are on site Vadodra
-2. Packing: Pvc Wrapping
-3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
-4. Tax: 18% Gst Extra
-5. Delivery: 15 to 20 Days From the Date of Purchase Order
-6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
-7. Validity of Offer: 20 Days
-8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.</textarea>
+        1. Prices: The Above Price are on site Vadodra
+        2. Packing: Pvc Wrapping
+        3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
+        4. Tax: 18% Gst Extra
+        5. Delivery: 15 to 20 Days From the Date of Purchase Order
+        6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
+        7. Validity of Offer: 20 Days
+        8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.</textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane fade" id="Terms-2" role="tabpanel">
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-2" value="Term-2" />
                                                                                 <textarea id="txtPOPaymentTerms2" style="height:300px; width:670px; border: none;">Terms & Condition
-1. The Supplier will Accept Site Wieght & Measurement as correct & Final
-2. All Goods are Subjects to Final approval at site Premies.
-3. The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
-4. Purchase Order no is must on each Invoice.
-5. In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
-6. All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,
-7. In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</textarea>
+        1. The Supplier will Accept Site Wieght & Measurement as correct & Final
+        2. All Goods are Subjects to Final approval at site Premies.
+        3. The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
+        4. Purchase Order no is must on each Invoice.
+        5. In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
+        6. All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,
+        7. In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane fade" id="Terms-3" role="tabpanel">
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-3" value="Term-3" />
                                                                                 <textarea id="txtPOPaymentTerms3" style="height:300px; width:670px; border: none;">Terms & Condition
-1. Party shall be responsible for strength only.
-2. Cube casting & testing are conducted in our in-plant laboratory.
-3. Addition & Deletion of water at site rights reserve with us.
-4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
-5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
-6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
-7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.</textarea>
+        1. Party shall be responsible for strength only.
+        2. Cube casting & testing are conducted in our in-plant laboratory.
+        3. Addition & Deletion of water at site rights reserve with us.
+        4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
+        5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
+        6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
+        7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.</textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -604,6 +675,10 @@
                                                 </div>
 
                                                 <div id="dvshipping" class="col-lg-6">
+                                                    <div class="row">
+                                                    </div>
+                                                </div>
+                                                <div id="dvPoGroupAddress" class="col-lg-6">
                                                     <div class="row">
                                                     </div>
                                                 </div>
@@ -799,7 +874,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

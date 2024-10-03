@@ -10,47 +10,33 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
     public class PurchaseOrderMasterView
     {
         public Guid Id { get; set; }
-
         public Guid SiteId { get; set; }
-
         public string? Poid { get; set; }
-
         public Guid FromSupplierId { get; set; }
-
         public Guid ToCompanyId { get; set; }
-
         public DateTime? Date { get; set; }
-
         public string? Terms { get; set; }
-
         public string? Description { get; set; }
         public Guid? ItemId { get; set; }
         public string? Item { get; set; }
         public string? DeliveryShedule { get; set; }
         public string? ContactName { get; set; }
         public string? ContactNumber { get; set; }
-
         public decimal? TotalDiscount { get; set; }
-
         public decimal TotalGstamount { get; set; }
-
         public decimal TotalAmount { get; set; }
-
         public string? BillingAddress { get; set; }
-
+        public string? SiteGroup { get; set; }
+        public Guid? SiteGroupId { get; set; }
+        public string? GroupAddress { get; set; }
         public bool? IsDeleted { get; set; }
         public int UnitTypeId { get; set; }
         public Guid CreatedBy { get; set; }
-
         public DateTime CreatedOn { get; set; }
-
         public string? SupplierName { get; set; }
-
         public string? CompanyName { get; set; }
-
         public string? SiteName { get; set; }
         public string? UnitName { get; set; }
-
         public string? BuildingName { get; set; }
         public string? Area { get; set; }
         public int? CityId { get; set; }
@@ -69,7 +55,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public int? CompanyStateCode { get; set; }
         public string? DispatchBy { get; set; }
         public string? BuyersPurchaseNo { get; set; }
-
         public bool? IsApproved { get; set; }
         public string? PaymentTerms { get; set; }
         public string? PaymentTermsId { get; set; }

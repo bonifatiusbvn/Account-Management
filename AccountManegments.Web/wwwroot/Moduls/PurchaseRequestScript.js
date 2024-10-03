@@ -15,6 +15,27 @@ GetAllItemDetailsList();
 updateTotals();
 
 
+$(document).ready(function () {
+    $('#POGroupList').change(function () {
+        var selectedOption = $(this).find('option:selected');
+        var groupId = selectedOption.data('groupids');
+        GetPOGroupAddress(groupId);
+    });
+    var EditpoSiteId = $('#poModelSiteId').val();
+    var SessionSiteId = $('#positeid').val();
+    var Company = $('#txtcompanyname').val();
+
+    if (EditpoSiteId != "00000000-0000-0000-0000-000000000000" && Company != null && SessionSiteId == "") {
+        EditPOGroupList(EditpoSiteId)
+    }
+    else if (EditpoSiteId != "00000000-0000-0000-0000-000000000000" && SessionSiteId != "" && Company != null) {
+        EditPOGroupList(EditpoSiteId)
+    }
+    else {
+        GetPOGroupList();
+    }
+});
+
 function AllPurchaseRequestListTable() {
 
     var searchText = $('#txtPurchaseRequestSearch').val();
@@ -884,11 +905,15 @@ function InsertMultiplePurchaseOrderDetails() {
 
             $(".ShippingAddress").each(function () {
                 var shippingAddress = $(this);
-                var addressData = {
-                    ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-                    ShippingAddress: shippingAddress.find("#shippingaddress").text(),
-                };
-                AddressDetails.push(addressData);
+                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
+
+                if (shippingAddressText) {
+                    var addressData = {
+                        ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
+                        ShippingAddress: shippingAddressText,
+                    };
+                    AddressDetails.push(addressData);
+                }
             });
 
             var paymentTerms = "";
@@ -923,6 +948,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 ContactNumber: $("#txtMobileNo").val(),
                 CreatedBy: $("#createdbyid").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
+                SiteGroup: $("#POGroupList").val(),
+                GroupAddress: $('input[name="selectedPOGroupAddress"]:checked').val(),
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
             };
@@ -1198,6 +1225,7 @@ function getCompanyDetails(CompanyId) {
 }
 
 function UpdateMultiplePurchaseOrderDetails() {
+    debugger
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
         if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
@@ -1222,12 +1250,17 @@ function UpdateMultiplePurchaseOrderDetails() {
 
             $(".ShippingAddress").each(function () {
                 var shippingAddress = $(this);
-                var addressData = {
-                    ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-                    ShippingAddress: shippingAddress.find("#shippingaddress").text(),
-                };
-                AddressDetails.push(addressData);
+                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim(); 
+
+                if (shippingAddressText) {
+                    var addressData = {
+                        ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
+                        ShippingAddress: shippingAddressText,
+                    };
+                    AddressDetails.push(addressData);
+                }
             });
+
             var paymentTerms = "";
             var paymentTermsId = "";
 
@@ -1259,6 +1292,8 @@ function UpdateMultiplePurchaseOrderDetails() {
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
+                SiteGroup: $("#POGroupList").val(),
+                GroupAddress: $('input[name="selectedPOGroupAddress"]:checked').val(),
                 ShippingAddressList: AddressDetails,
                 ItemOrderlist: orderDetails,
             }
@@ -1901,3 +1936,88 @@ function fn_GetInvoiceDetailsByPOID(POID) {
         }
     });
 }
+
+function GetPOGroupList() {
+    $.ajax({
+        url: '/SiteMaster/GetGroupNameListBySiteId',
+        success: function (result) {
+            $('#POGroupList').empty();
+            $('#POGroupList').append('<option selected disabled>' + "Select Group" + '</option>');
+            $.each(result, function (i, data) {
+                $('#POGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
+            });
+        }
+    });
+}
+
+function GetPOGroupAddress(GroupId) {
+    siteloadershow();
+    $.ajax({
+        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            debugger
+            siteloaderhide();
+            $('#dvPoGroupAddress').empty();
+            if (response.groupAddressList == null) {
+
+            }
+            else {
+                $.each(response.groupAddressList, function (i, data) {
+                    var groupAddressNumber = i + 1;
+
+                    $('#dvPoGroupAddress').append(
+                        '<div class="row ac-invoice-groupadd POGroupAddress" style="display: flex; align-items: flex-start;">' +
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                        '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                        '</div>' +
+                        '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
+                        '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' + 
+                        '<input type="hidden" id="selectedPOGroupAddress_' + groupAddressNumber + '" name="selectedPOGroupAddress" value="' + data.groupAddress + '" />' + // Changed name
+                        '</div>' +
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                        '<input class="nav-radio form-check-input" ' +
+                        'name="selectedPOGroupAddress" ' +
+                        'data-bs-toggle="tab" ' +
+                        'role="tab" ' +
+                        'type="radio" ' +
+                        'id="GroupPOAddressRadio_' + groupAddressNumber + '" ' +
+                        'data-address="' + data.groupAddress + '"' +
+                        'value="' + data.groupAddress + '"' +
+                        (i === 0 ? ' checked' : '') + ' />' +
+                        '</div>' +
+                        '</div>' +
+                        '<hr>'
+                    );
+                });
+            }
+        },
+    });
+}
+
+function EditPOGroupList(EditSiteId) {
+    $.ajax({
+        url: '/InvoiceMaster/EditGroupNameListBySiteId?SiteId=' + EditSiteId,
+        success: function (result) {
+            var existingGroup = $('#POGroupList option:selected').text();
+            $.each(result, function (i, data) {
+                if (existingGroup !== data.groupName) {
+                    $('#POGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
+                }
+            });
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+

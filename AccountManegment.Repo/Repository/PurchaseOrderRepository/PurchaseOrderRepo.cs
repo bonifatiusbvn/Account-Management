@@ -168,6 +168,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  join e in Context.Cities on b.City equals e.CityId
                                  join f in Context.States on b.State equals f.StatesId
                                  join cs in Context.States on c.StateId equals cs.StatesId
+                                 join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                 from subgroup in gj.DefaultIfEmpty()
                                  select new PurchaseOrderMasterView
                                  {
                                      Id = a.Id,
@@ -209,7 +211,10 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SupplierStateCode = f.StateCode,
                                      IsApproved = a.IsApproved,
                                      SupplierStateName = f.StatesName,
-                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName
+                                     GroupAddress= a.GroupAddress,
+                                     SiteGroup = a.SiteGroup,
+                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
+                                     SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
                                  }).First();
 
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
@@ -387,6 +392,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          DispatchBy = a.DispatchBy,
                                          PaymentTerms = a.PaymentTerms,
                                          IsApproved = a.IsApproved,
+                                         SiteGroup = a.SiteGroup,
+                                         GroupAddress = a.GroupAddress,
+                                         
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -618,6 +626,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PaymentTermsId = PurchaseOrderDetails.PaymentTermsId,
                     BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo,
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
+                    GroupAddress = PurchaseOrderDetails.GroupAddress,
+                    SiteGroup = PurchaseOrderDetails.SiteGroup,
                     CreatedOn = DateTime.Now,
                 };
                 Context.PurchaseOrders.Add(PurchaseOrder);
@@ -700,6 +710,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.BuyersPurchaseNo = PurchaseOrderDetails.BuyersPurchaseNo;
                 PurchaseOrder.PaymentTerms = PurchaseOrderDetails.PaymentTerms;
                 PurchaseOrder.PaymentTermsId = PurchaseOrderDetails.PaymentTermsId;
+                PurchaseOrder.GroupAddress = PurchaseOrderDetails.GroupAddress;
+                PurchaseOrder.SiteGroup = PurchaseOrderDetails.SiteGroup;
                 Context.PurchaseOrders.Update(PurchaseOrder);
 
                 var existingPOItems = Context.PurchaseOrderDetails

@@ -256,6 +256,19 @@ namespace AccountManegments.Web.Controllers
                             item.RowNumber = rowNumber++;
                         }
                     }
+
+                    ViewBag.GroupAddress = response.GroupAddress;
+
+                    if (response.SiteGroup != "")
+                    {
+                        SiteGroupModel SiteGroupDetails = new SiteGroupModel();
+                        ApiResponseModel postuser = await APIServices.GetAsync("", "SiteMaster/GetGroupDetailsByGroupName?GroupName=" + response.SiteGroup);
+                        if (postuser.code == 200)
+                        {
+                            SiteGroupDetails = JsonConvert.DeserializeObject<SiteGroupModel>(postuser.data.ToString());
+                            ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
+                        }
+                    }
                 }
                 return View(response);
             }
@@ -300,6 +313,8 @@ namespace AccountManegments.Web.Controllers
                     CreatedBy = PurchaseOrderDetails.CreatedBy,
                     ItemOrderlist = PurchaseOrderDetails.ItemOrderlist,
                     ShippingAddressList = PurchaseOrderDetails.ShippingAddressList,
+                    SiteGroup = PurchaseOrderDetails.SiteGroup,
+                    GroupAddress = PurchaseOrderDetails.GroupAddress,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(podetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)
