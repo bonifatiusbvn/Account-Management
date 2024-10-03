@@ -236,7 +236,6 @@ namespace AccountManagement.API.Controllers
                     response.code = (int)HttpStatusCode.BadRequest;
                     response.message = sitemaster.message;
                 }
-
             }
             catch (Exception ex)
             {

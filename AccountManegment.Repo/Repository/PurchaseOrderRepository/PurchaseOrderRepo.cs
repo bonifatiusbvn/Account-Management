@@ -988,7 +988,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                     select new InvoiceDetailsViewModel
                                     {
                                         PurchaseOrderId = si.Poid,
-                                        SupplierInvoiceNo = si.InvoiceNo,
+                                        SupplierInvoiceNo = si.InvoiceNo + "-" + si.SupplierInvoiceNo,
                                         Date = si.Date,
                                         InvoiceItemName = it.ItemName,
                                         ItemQUT = sid.Quantity,

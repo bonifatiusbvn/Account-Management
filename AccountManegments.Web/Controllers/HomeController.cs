@@ -62,18 +62,15 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 UserSession.SiteId = SiteId.ToString();
                 UserSession.SiteName = SiteId == null ? "All Site" : SiteName.ToString();
 
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
                 string siteName = string.IsNullOrEmpty(UserSession.SiteName) ? null : new(UserSession.SiteName);
                 return Ok();
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -83,7 +80,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel res = await APIServices.GetAsync("", "SupplierInvoiceDetails/GetSupplierPendingDetailsList?CompanyId=" + CompanyId);
 
                 if (res.code == 200)
@@ -99,7 +95,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -143,7 +138,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -175,7 +169,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -231,7 +224,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -245,9 +237,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(POIdList, "PurchaseOrder/PurchaseOrderIsApproved");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -301,7 +291,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-        
+
 
         [HttpPost]
         public async Task<IActionResult> InvoiceIsApproved()
