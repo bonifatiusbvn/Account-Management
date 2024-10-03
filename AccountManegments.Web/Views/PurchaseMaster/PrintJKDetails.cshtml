@@ -191,14 +191,13 @@
                                                             @{
                                                                 int Index = 1;
                                                             }
-                                                            @foreach (var item in Model.AddressList)
-                                                            {
+                                                            
                                                                 <div style="display: inline;">
                                                                     <span>@Index.</span>
-                                                                    <span class="text-muted" style="padding-left: 5px;">@Model.SupplierFullAddress</span>
+                                                                    <span class="text-muted" style="padding-left: 5px;">@Model.GroupAddress</span>
                                                                 </div>
-                                                                Index++;
-                                                            }
+                                                                
+                                                            
                                                         </td>
                                                     </tr>
                                                     <tr style="height: 20px;">
