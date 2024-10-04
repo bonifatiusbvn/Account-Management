@@ -129,9 +129,26 @@
                                                     <textarea id="SelectedSiteID" class="form-control" style="height:80px;" hidden></textarea>
                                                 </div>
                                             </div>
+                                            <div class="col-md-12 mb-3">
+                                                <h5>
+                                                    <b>
+                                                        Multiple Group Address
+                                                        <a class="font-22" id="AddMoreGroupAddress">
+                                                            <i class="lni lni-circle-plus"></i>
+                                                        </a>
+                                                    </b>
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <div class="card border mb-3">
+                                                    <div id="GroupAddressTable" class="mb-2" style="height: 180px;overflow-y: scroll;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="AddSiteGroupDetails()">Save</button>
+                                            <button type="button" class="btn btn-primary" onclick="AddSiteGroupDetails()" id="addsitegroupbtn">Save</button>
                                             <button type="button" class="btn btn-primary" onclick="UpdateSiteGroupDetails()" id="updatesitegroupbtn" style="display:none;">Update</button>
                                         </div>
                                     </form>

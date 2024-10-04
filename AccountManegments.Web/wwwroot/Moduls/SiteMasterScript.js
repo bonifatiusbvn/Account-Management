@@ -972,7 +972,7 @@ function AddSiteGroupDetails() {
         var siteIds = $('#SelectedSiteID').val();
         if (siteIds) {
             siteIds = siteIds.trim();
-
+            
 
             var splitSiteIds = siteIds.split(/[\n,]+/).map(function (id) {
                 return id.trim();
@@ -999,7 +999,7 @@ function AddSiteGroupDetails() {
             GroupAddressList: GroupAddressDetails,
             SiteIdList: SiteIdList,
         };
-
+        
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
 
@@ -1112,7 +1112,10 @@ function DisplaySiteGroup(GroupId, element) {
             response.siteIdList.forEach(site => {
                 uniqueSiteNames.add(site.siteName);
                 uniqueSiteIds.add(site.siteId);
+
+                $('#textGroupSiteList option[value="' + site.siteId + '"]').prop('selected', true);
             });
+            $('#textGroupSiteList').trigger('change');
 
             // Join unique values into a string and set them in the respective text areas
             $("#SelectedSite").val(Array.from(uniqueSiteNames).join(', '));
@@ -1188,6 +1191,7 @@ function UpdateSiteGroupDetails() {
             GroupAddressDetails.push(addressData);
         });
 
+
         var SiteIdList = [];
         var siteIds = $('#SelectedSiteID').val();
         if (siteIds) {
@@ -1209,13 +1213,13 @@ function UpdateSiteGroupDetails() {
             toastr.error("Site ID textarea is empty or not found.");
             return;
         }
+
         if (!isValidGroupAddress) {
             return;
         }
 
         var SiteData = {
             GroupName: $('#txtSiteGropuName').val(),
-            SiteId: $("#textGroupSiteList").val(),
             GroupId: $("#txtSiteGroupId").val(),
             GroupAddressList: GroupAddressDetails,
             SiteIdList: SiteIdList,
@@ -1223,6 +1227,7 @@ function UpdateSiteGroupDetails() {
 
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
+
 
         $.ajax({
             url: '/SiteMaster/UpdateSiteGroupMaster',
