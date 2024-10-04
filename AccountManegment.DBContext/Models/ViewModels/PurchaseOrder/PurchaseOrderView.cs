@@ -48,9 +48,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public DateTime? UpdatedOn { get; set; }
 
         public string? SupplierName { get; set; }
-        
+
         public string? CompanyName { get; set; }
-        
+
         public string? SiteName { get; set; }
 
         public DateTime? Date { get; set; }
@@ -61,5 +61,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
 
         public string? PaymentTerms { get; set; }
         public bool? IsApproved { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

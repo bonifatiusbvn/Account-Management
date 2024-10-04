@@ -124,28 +124,38 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == POId).FirstOrDefault();
             var PODDataList = Context.PurchaseOrderDetails.Where(a => a.PorefId == POId).ToList();
             var POADataList = Context.PodeliveryAddresses.Where(a => a.Poid == POId).ToList();
-
+            var checkPo = Context.SupplierInvoices.Where(a => a.Poid == GetPOdata.Poid).ToList();
             GetPOdata.IsDeleted = true;
             Context.PurchaseOrders.Update(GetPOdata);
 
             if (PODDataList.Any() || POADataList.Any())
             {
-                foreach (var PODData in PODDataList)
+                if (checkPo.Count > 0)
                 {
-                    PODData.IsDeleted = true;
-                    Context.PurchaseOrderDetails.Update(PODData);
+                    response.code = 404;
+                    response.message = "Invoice is created for this PurchaseOrder.";
+                }
+                else
+                {
+                    foreach (var PODData in PODDataList)
+                    {
+                        PODData.IsDeleted = true;
+                        Context.PurchaseOrderDetails.Update(PODData);
+                    }
+
+                    foreach (var POAData in POADataList)
+                    {
+                        POAData.IsDeleted = true;
+                        Context.PodeliveryAddresses.Update(POAData);
+                    }
+
+                    Context.SaveChanges();
+
+                    response.code = 200;
+                    response.message = "Purchase order details are successfully deleted.";
+
                 }
 
-                foreach (var POAData in POADataList)
-                {
-                    POAData.IsDeleted = true;
-                    Context.PodeliveryAddresses.Update(POAData);
-                }
-
-                Context.SaveChanges();
-
-                response.code = 200;
-                response.message = "Purchase order details are successfully deleted.";
             }
             else
             {
@@ -211,7 +221,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SupplierStateCode = f.StateCode,
                                      IsApproved = a.IsApproved,
                                      SupplierStateName = f.StatesName,
-                                     GroupAddress= a.GroupAddress,
+                                     GroupAddress = a.GroupAddress,
                                      SiteGroup = a.SiteGroup,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
                                      SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
@@ -392,9 +402,10 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          DispatchBy = a.DispatchBy,
                                          PaymentTerms = a.PaymentTerms,
                                          IsApproved = a.IsApproved,
+                                         IsActive = a.IsActive,
                                          SiteGroup = a.SiteGroup,
                                          GroupAddress = a.GroupAddress,
-                                         
+
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -619,6 +630,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     ContactName = PurchaseOrderDetails.ContactName,
                     ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
+                    IsActive = true,
                     IsApproved = PurchaseOrderDetails.IsApproved,
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
@@ -1001,6 +1013,35 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<ApiResponseModel> ActiveDeactivePO(Guid Id)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == Id).FirstOrDefault();
+
+            if (GetPOdata != null)
+            {
+                if (GetPOdata.IsActive == true)
+                {
+                    GetPOdata.IsActive = false;
+                    Context.PurchaseOrders.Update(GetPOdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = GetPOdata;
+                    response.message = "Supplier is deactive succesfully.";
+                }
+                else
+                {
+                    GetPOdata.IsActive = true;
+                    Context.PurchaseOrders.Update(GetPOdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = GetPOdata;
+                    response.message = "Supplier is active succesfully.";
+                }
+            }
+            return response;
         }
     }
 }

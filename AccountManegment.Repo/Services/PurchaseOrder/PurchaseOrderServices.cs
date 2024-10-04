@@ -77,5 +77,10 @@ namespace AccountManagement.Repository.Services.PurchaseOrder
         {
             return await PurchaseOrder.GetInvoiceDetailsByPOId(PRId);
         }
+
+        public async Task<ApiResponseModel> ActiveDeactivePO(Guid Id)
+        {
+            return await PurchaseOrder.ActiveDeactivePO(Id);
+        }
     }
 }

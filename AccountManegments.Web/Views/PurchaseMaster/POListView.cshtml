@@ -8,7 +8,7 @@
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Add == true)))
     {
-        <button type="button" class="btn btn-primary fixed-button" onclick="clearPOtextbox()"><i class="lni lni-circle-plus"></i>PurchaseOrder</button>
+                                        <button type="button" class="btn btn-primary fixed-button" onclick="clearPOtextbox()"><i class="lni lni-circle-plus"></i>PurchaseOrder</button>
     }
 }
 <style>
@@ -81,14 +81,15 @@
                                                         </th>
                                                         @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
                                                         {
-                                                            <th>Site Name</th>
+                                                                            <th>Site Name</th>
                                                         }
+                                                        <th>IsActive</th>
                                                         <th>Supplier Name</th>
                                                         <th>Company Name</th>
                                                         <th>Total Amount</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                                                         {
-                                                            <th>Action</th>
+                                                                            <th>Action</th>
                                                         }
                                                     </tr>
                                                 </thead>
@@ -164,5 +165,5 @@
     let currentPOSortOrder = 'AscendingDate';
 </script>
 @section Scripts {
-    <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
+                    <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
 }

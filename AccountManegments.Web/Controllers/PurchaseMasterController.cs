@@ -1030,10 +1030,13 @@ namespace AccountManegments.Web.Controllers
             }
         }
         [HttpGet]
+
         public async Task<JsonResult> PurchaseOrderNoListInvoice()
         {
             try
             {
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
                 List<PurchaseOrderView> GetPOList = new List<PurchaseOrderView>();
                 string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={null}&searchBy={null}&sortBy={null}";
 
@@ -1042,13 +1045,47 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+
+                    if (SiteId != null)
+                    {
+                        GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
+                    }
+
+
+                    GetPOList = GetPOList.Where(a => a.IsActive == true).ToList();
                 }
+
                 return new JsonResult(GetPOList);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
 
+
+        [HttpPost]
+        public async Task<IActionResult> ActiveDeactivePO(Guid Id)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseOrder/ActiveDeactivePO?Id=" + Id);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

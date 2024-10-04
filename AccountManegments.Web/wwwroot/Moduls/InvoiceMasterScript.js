@@ -6,6 +6,7 @@ GetCompanyDetail();
 GetSupplierDetail();
 //GetGroupList();
 updateTotals();
+getallPONoList();
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -208,8 +209,13 @@ $(document).ready(function () {
         updateTotals();
     }).on('keydown', '#txtproductquantity', function (event) {
         var productRow = $(this).closest(".product");
-        var productFocus = productRow.find('#txtproductamount');
-        handleFocus(event, productFocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            productRow.find('#txtHSNcode').focus();
+        } else if (event.key === 'Tab') {
+            var productFocus = productRow.find('#txtproductamount');
+            handleFocus(event, productFocus);
+        }
     });
 
     $(document).on('input', '#txtgst', function () {
@@ -228,12 +234,13 @@ $(document).ready(function () {
         return function (...args) {
             clearTimeout(timer);
             timer = setTimeout(() => func.apply(this, args), delay);
-        };
+        };  
     }
 
     $(document).on('input', '#txtdiscountpercentage', debounce(function () {
         var value = $(this).val();
         var productRow = $(this).closest(".product");
+
         if (value > 100) {
             toastr.warning("Discount cannot be greater than 100%");
             productRow.find("#txtdiscountpercentage").val(0);
@@ -247,9 +254,15 @@ $(document).ready(function () {
         }
     }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
         var productRow = $(this).closest(".product");
-        var gstFocus = productRow.find('#txtgst');
-        handleFocus(event, gstFocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault(); 
+            productRow.find('#txtdiscountamount').focus(); 
+        } else if (event.key === 'Tab') {
+            var gstFocus = productRow.find('#txtgst');
+            handleFocus(event, gstFocus); 
+        }
     });
+
 
     $(document).on('input', '#txtdiscountamount', debounce(function () {
         var productRow = $(this).closest(".product");
@@ -269,8 +282,13 @@ $(document).ready(function () {
         }
     }, 300)).on('keydown', '#txtdiscountamount', function (event) {
         var productRow = $(this).closest(".product");
-        var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
-        handleFocus(event, discountPercentagefocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            productRow.find('#txtproductamount').focus();
+        } else if (event.key === 'Tab') {
+            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
+            handleFocus(event, discountPercentagefocus);
+        }
     });
 
     $(document).on('input', '#txtproductamount', function () {
@@ -289,8 +307,13 @@ $(document).ready(function () {
 
     }).on('keydown', '#txtproductamount', function (event) {
         var productRow = $(this).closest(".product");
-        var discountAmountfocus = productRow.find('#txtdiscountamount');
-        handleFocus(event, discountAmountfocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            productRow.find('#txtproductquantity').focus();
+        } else if (event.key === 'Tab') {
+            var discountAmountfocus = productRow.find('#txtdiscountamount');
+            handleFocus(event, discountAmountfocus);
+        }
     });
 
 
@@ -532,7 +555,7 @@ function InsertMultipleSupplierItem() {
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
                 GroupAddress: $('input[name="selectedGroupAddress"]:checked').val(),
-                Poid: $("#txtInvoicePOID").val(),
+                Poid: $("#txtInvoicePOID").val() ? $("#txtInvoicePOID").val() : InvoicePONo,
                 ItemList: ItemDetails,
             }
 
@@ -1608,11 +1631,8 @@ function GetGroupAddress(GroupId)
     });
 }
 
+var InvoicePONo = null;
 function getallPONoList() {
-    clearbuyerstextbox();
-    $("#txtlrNo").hide();
-    $("#textPONoList").show();
-
     $.ajax({
         url: '/PurchaseMaster/PurchaseOrderNoListInvoice',
         method: 'GET',
@@ -1620,7 +1640,8 @@ function getallPONoList() {
             var PODetails = result.map(function (data) {
                 return {
                     label: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid,
-                    value: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid
+                    value: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid,
+                    poid: data.poid
                 };
             });
 
@@ -1631,6 +1652,7 @@ function getallPONoList() {
                     event.preventDefault();
                     $("#textPONoList").val(ui.item.label);
                     $("#textPONoListHidden").val(ui.item.value);
+                    InvoicePONo = ui.item.poid;
                 },
                 focus: function () {
                     return false;
@@ -1651,15 +1673,16 @@ function getallPONoList() {
     });
 }
 
-function GETBUYESCODE()
-{
-    clearbuyerstextbox();
-    $("#txtlrNo").show();
-    $("#textPONoList").hide();
-}
+$(document).ready(function () {
+    $("#txtlrNo").on('click', function () {
+        $("#txtlrNo").prop("readonly", false); 
+        $("#textPONoList").prop("readonly", true); 
+        $("#textPONoList").val(''); 
+    });
 
-function clearbuyerstextbox()
-{
-    $("#txtlrNo").val('');
-    $("#textPONoList").val('');
-}
+    $("#textPONoList").on('click', function () {
+        $("#txtlrNo").prop("readonly", true);
+        $("#txtlrNo").val(''); 
+        $("#textPONoList").prop("readonly", false);
+    });
+});

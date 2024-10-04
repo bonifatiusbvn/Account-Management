@@ -748,8 +748,13 @@ $(document).ready(function () {
         updateTotals();
     }).on('keydown', '#txtproductquantity', function (event) {
         var productRow = $(this).closest(".product");
-        var productFocus = productRow.find('#txtproductamount');
-        handleFocus(event, productFocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            productRow.find('#txtHSNcode').focus();
+        } else if (event.key === 'Tab') {
+            var productFocus = productRow.find('#txtproductamount');
+            handleFocus(event, productFocus);
+        }
     });
 
     $(document).on('input', '#txtgst', function () {
@@ -773,9 +778,18 @@ $(document).ready(function () {
 
     }).on('keydown', '#txtproductamount', function (event) {
         var productRow = $(this).closest(".product");
-        var gstFocus = productRow.find('#txtgst');
-        handleFocus(event, gstFocus);
+
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            if (event.shiftKey) {
+                productRow.find('#txtproductquantity').focus();
+            } else {
+                var gstFocus = productRow.find('#txtgst');
+                gstFocus.focus();
+            }
+        }
     });
+
 });
 function clearShippingAddressErrorMssage() {
     $("#spnshipping").text("");
@@ -1225,7 +1239,6 @@ function getCompanyDetails(CompanyId) {
 }
 
 function UpdateMultiplePurchaseOrderDetails() {
-    debugger
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
         if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
@@ -1250,7 +1263,7 @@ function UpdateMultiplePurchaseOrderDetails() {
 
             $(".ShippingAddress").each(function () {
                 var shippingAddress = $(this);
-                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim(); 
+                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
 
                 if (shippingAddressText) {
                     var addressData = {
@@ -1383,15 +1396,22 @@ function DeletePODetails(POId, BuyersPurchaseNo, element) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/PurchaseMaster/POListView';
-                    })
+                    if (Result.code == 200) {
+                        debugger
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseMaster/POListView';
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.warning(Result.message);
+                    }
                 },
                 error: function () {
                     siteloaderhide();
@@ -1958,7 +1978,6 @@ function GetPOGroupAddress(GroupId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
             siteloaderhide();
             $('#dvPoGroupAddress').empty();
             if (response.groupAddressList == null) {
@@ -1974,7 +1993,7 @@ function GetPOGroupAddress(GroupId) {
                         '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
                         '</div>' +
                         '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
-                        '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' + 
+                        '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
                         '<input type="hidden" id="selectedPOGroupAddress_' + groupAddressNumber + '" name="selectedPOGroupAddress" value="' + data.groupAddress + '" />' + // Changed name
                         '</div>' +
                         '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
@@ -2011,6 +2030,55 @@ function EditPOGroupList(EditSiteId) {
     });
 }
 
+function POActiveDecative(Id) {
+
+    var isChecked = $('#flexSwitchCheckChecked_' + Id).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to active this PO?" : "Are you sure want to deactive this PO?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("Id", Id);
+
+            $.ajax({
+                url: '/PurchaseMaster/ActiveDeactivePO?Id=' + Id,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: isChecked ? "Active!" : "Deactive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/PurchaseMaster/POListView';
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            siteloaderhide();
+            Swal.fire(
+                'Cancelled',
+                'User have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 
 
 
