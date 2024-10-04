@@ -490,17 +490,20 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     {
                         if (GroupDetails.GroupAddressList.Count > 0)
                         {
-                            foreach (var item in GroupDetails.GroupAddressList)
+                            foreach(var siteId in GroupDetails.SiteIdList)
                             {
-                                var groupModel = new GroupMaster()
+                                foreach (var item in GroupDetails.GroupAddressList)
                                 {
-                                    GroupId = groupId,
-                                    GroupName = GroupDetails.GroupName,
-                                    SiteId = GroupDetails.SiteId,
-                                    GroupAddress = item.GroupAddress,
-                                    CreatedOn = DateTime.Now,
-                                };
-                                Context.GroupMasters.Add(groupModel);
+                                    var groupModel = new GroupMaster()
+                                    {
+                                        GroupId = groupId,
+                                        GroupName = GroupDetails.GroupName,
+                                        SiteId = siteId.SiteId,
+                                        GroupAddress = item.GroupAddress,
+                                        CreatedOn = DateTime.Now,
+                                    };
+                                    Context.GroupMasters.Add(groupModel);
+                                }
                             }
                         }
                         else
@@ -660,7 +663,17 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                               GroupAddress = a.GroupAddress,
                                           }).ToListAsync();
 
+                var SiteDetails = await (from a in Context.GroupMasters
+                                         join b in Context.Sites on a.SiteId equals b.SiteId
+                                         where a.GroupId == GroupId
+                                         select new SiteNameList
+                                         {
+                                             SiteId = a.SiteId,
+                                             SiteName = b.SiteName,
+                                         }).ToListAsync();
+
                 groupDetails.GroupAddressList = groupAddress.Count > 0 ? groupAddress : null;
+                groupDetails.SiteIdList = SiteDetails;
 
                 return groupDetails;
             }
@@ -684,50 +697,26 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     return model;
                 }
 
-                if (groupDetails.GroupAddressList == null || groupDetails.GroupAddressList.Count == 0)
-                {
-                    var addressesToRemove = Context.GroupMasters
+                var addressesToRemove = Context.GroupMasters
                         .Where(e => e.GroupId == groupDetails.GroupId)
                         .ToList();
                     Context.GroupMasters.RemoveRange(addressesToRemove);
-                }
-                else
-                {
-                    var currentGroupAddresses = Context.GroupMasters
-                        .Where(a => a.GroupId == groupDetails.GroupId)
-                        .ToList();
 
+                foreach (var siteId in groupDetails.SiteIdList)
+                {
                     foreach (var item in groupDetails.GroupAddressList)
                     {
-                        var existingGroupAddress = currentGroupAddresses
-                            .FirstOrDefault(a => a.GroupAddress == item.GroupAddress);
-
-                        if (existingGroupAddress != null)
+                        var groupModel = new GroupMaster()
                         {
-                            existingGroupAddress.GroupName = groupDetails.GroupName;
-                            existingGroupAddress.SiteId = groupDetails.SiteId;
-
-                        }
-                        else
-                        {
-                            var newGroupModel = new GroupMaster
-                            {
-                                GroupId = groupDetails.GroupId,
-                                GroupName = groupDetails.GroupName,
-                                SiteId = groupDetails.SiteId,
-                                GroupAddress = item.GroupAddress,
-                                CreatedOn = DateTime.Now,
-                            };
-                            Context.GroupMasters.Add(newGroupModel);
-                        }
+                            GroupId = groupDetails.GroupId,
+                            GroupName = groupDetails.GroupName,
+                            SiteId = siteId.SiteId,
+                            GroupAddress = item.GroupAddress,
+                            CreatedOn = DateTime.Now,
+                        };
+                        Context.GroupMasters.Add(groupModel);
                     }
-
-                    var groupAddressIds = groupDetails.GroupAddressList.Select(a => a.GroupAddress).ToList();
-                    var addressesToRemove = currentGroupAddresses
-                        .Where(a => !groupAddressIds.Contains(a.GroupAddress))
-                        .ToList();
-                    Context.GroupMasters.RemoveRange(addressesToRemove);
-                }
+                }           
 
                 await Context.SaveChangesAsync();
                 model.code = 200;
