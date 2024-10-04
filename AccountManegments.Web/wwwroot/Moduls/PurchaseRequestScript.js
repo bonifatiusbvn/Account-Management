@@ -748,8 +748,13 @@ $(document).ready(function () {
         updateTotals();
     }).on('keydown', '#txtproductquantity', function (event) {
         var productRow = $(this).closest(".product");
-        var productFocus = productRow.find('#txtproductamount');
-        handleFocus(event, productFocus);
+        if (event.key === 'Tab' && event.shiftKey) {
+            event.preventDefault();
+            productRow.find('#txtHSNcode').focus();
+        } else if (event.key === 'Tab') {
+            var productFocus = productRow.find('#txtproductamount');
+            handleFocus(event, productFocus);
+        }
     });
 
     $(document).on('input', '#txtgst', function () {
@@ -773,9 +778,18 @@ $(document).ready(function () {
 
     }).on('keydown', '#txtproductamount', function (event) {
         var productRow = $(this).closest(".product");
-        var gstFocus = productRow.find('#txtgst');
-        handleFocus(event, gstFocus);
+
+        if (event.key === 'Tab') {
+            event.preventDefault(); 
+            if (event.shiftKey) {
+                productRow.find('#txtproductquantity').focus();
+            } else {
+                var gstFocus = productRow.find('#txtgst');
+                gstFocus.focus();
+            }
+        }
     });
+
 });
 function clearShippingAddressErrorMssage() {
     $("#spnshipping").text("");
@@ -1225,7 +1239,6 @@ function getCompanyDetails(CompanyId) {
 }
 
 function UpdateMultiplePurchaseOrderDetails() {
-    debugger
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
         if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
@@ -1958,7 +1971,6 @@ function GetPOGroupAddress(GroupId) {
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger
             siteloaderhide();
             $('#dvPoGroupAddress').empty();
             if (response.groupAddressList == null) {
