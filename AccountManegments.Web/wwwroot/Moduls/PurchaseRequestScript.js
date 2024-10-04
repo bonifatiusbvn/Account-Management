@@ -19,7 +19,7 @@ $(document).ready(function () {
     $('#POGroupList').change(function () {
         var selectedOption = $(this).find('option:selected');
         var groupId = selectedOption.data('groupids');
-        GetPOGroupAddress(groupId);
+            GetPOGroupAddress(groupId);
     });
     var EditpoSiteId = $('#poModelSiteId').val();
     var SessionSiteId = $('#positeid').val();
@@ -1962,7 +1962,7 @@ function GetPOGroupList() {
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
             $('#POGroupList').empty();
-            $('#POGroupList').append('<option selected disabled>' + "Select Group" + '</option>');
+            $('#POGroupList').append('<option selected>' + "Select Group" + '</option>');
             $.each(result, function (i, data) {
                 $('#POGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
@@ -1971,49 +1971,54 @@ function GetPOGroupList() {
 }
 
 function GetPOGroupAddress(GroupId) {
-    siteloadershow();
-    $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            siteloaderhide();
-            $('#dvPoGroupAddress').empty();
-            if (response.groupAddressList == null) {
+    if (GroupId == undefined) {
+        $('#dvPoGroupAddress').empty();
+    }
+    else {
+        siteloadershow();
+        $.ajax({
+            url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                siteloaderhide();
+                $('#dvPoGroupAddress').empty();
+                if (response.groupAddressList == null) {
 
-            }
-            else {
-                $.each(response.groupAddressList, function (i, data) {
-                    var groupAddressNumber = i + 1;
+                }
+                else {
+                    $.each(response.groupAddressList, function (i, data) {
+                        var groupAddressNumber = i + 1;
 
-                    $('#dvPoGroupAddress').append(
-                        '<div class="row ac-invoice-groupadd POGroupAddress" style="display: flex; align-items: flex-start;">' +
-                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
-                        '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
-                        '</div>' +
-                        '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
-                        '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
-                        '<input type="hidden" id="selectedPOGroupAddress_' + groupAddressNumber + '" name="selectedPOGroupAddress" value="' + data.groupAddress + '" />' + // Changed name
-                        '</div>' +
-                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
-                        '<input class="nav-radio form-check-input" ' +
-                        'name="selectedPOGroupAddress" ' +
-                        'data-bs-toggle="tab" ' +
-                        'role="tab" ' +
-                        'type="radio" ' +
-                        'id="GroupPOAddressRadio_' + groupAddressNumber + '" ' +
-                        'data-address="' + data.groupAddress + '"' +
-                        'value="' + data.groupAddress + '"' +
-                        (i === 0 ? ' checked' : '') + ' />' +
-                        '</div>' +
-                        '</div>' +
-                        '<hr>'
-                    );
-                });
-            }
-        },
-    });
+                        $('#dvPoGroupAddress').append(
+                            '<div class="row ac-invoice-groupadd POGroupAddress" style="display: flex; align-items: flex-start;">' +
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                            '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                            '</div>' +
+                            '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
+                            '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
+                            '<input type="hidden" id="selectedPOGroupAddress_' + groupAddressNumber + '" name="selectedPOGroupAddress" value="' + data.groupAddress + '" />' + // Changed name
+                            '</div>' +
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                            '<input class="nav-radio form-check-input" ' +
+                            'name="selectedPOGroupAddress" ' +
+                            'data-bs-toggle="tab" ' +
+                            'role="tab" ' +
+                            'type="radio" ' +
+                            'id="GroupPOAddressRadio_' + groupAddressNumber + '" ' +
+                            'data-address="' + data.groupAddress + '"' +
+                            'value="' + data.groupAddress + '"' +
+                            (i === 0 ? ' checked' : '') + ' />' +
+                            '</div>' +
+                            '</div>' +
+                            '<hr>'
+                        );
+                    });
+                }
+            },
+        });
+    }
 }
 
 function EditPOGroupList(EditSiteId) {
