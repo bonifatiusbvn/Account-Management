@@ -211,7 +211,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SupplierStateCode = f.StateCode,
                                      IsApproved = a.IsApproved,
                                      SupplierStateName = f.StatesName,
-                                     GroupAddress= a.GroupAddress,
+                                     GroupAddress = a.GroupAddress,
                                      SiteGroup = a.SiteGroup,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
                                      SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
@@ -394,7 +394,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          IsApproved = a.IsApproved,
                                          SiteGroup = a.SiteGroup,
                                          GroupAddress = a.GroupAddress,
-                                         
+
                                      });
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -1001,6 +1001,35 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<ApiResponseModel> ActiveDeactivePO(Guid Id)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == Id).FirstOrDefault();
+
+            if (GetPOdata != null)
+            {
+                if (GetPOdata.IsActive == true)
+                {
+                    GetPOdata.IsActive = false;
+                    Context.PurchaseOrders.Update(GetPOdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = GetPOdata;
+                    response.message = "Supplier is deactive succesfully.";
+                }
+                else
+                {
+                    GetPOdata.IsActive = true;
+                    Context.PurchaseOrders.Update(GetPOdata);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = GetPOdata;
+                    response.message = "Supplier is active succesfully.";
+                }
+            }
+            return response;
         }
     }
 }

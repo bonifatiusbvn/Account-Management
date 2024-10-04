@@ -412,7 +412,7 @@ function resetSupplierForm() {
 function SupplierActiveDecative(SupplierId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + SupplierId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to active this user?" : "Are you sure want to deactive this user?";
+    var confirmationMessage = isChecked ? "Are you sure want to active this Supplier?" : "Are you sure want to deactive this Supplier?";
 
     Swal.fire({
         title: confirmationMessage,

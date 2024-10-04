@@ -43,6 +43,8 @@ public partial class PurchaseOrder
 
     public bool? IsApproved { get; set; }
 
+    public bool? IsActive { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

@@ -194,5 +194,31 @@ namespace AccountManagement.API.Controllers
             var purchaseRequest = await PurchaseOrder.GetInvoiceDetailsByPOId(PRId);
             return Ok(new { code = 200, data = purchaseRequest });
         }
+
+        [HttpPost]
+        [Route("ActiveDeactivePO")]
+        public async Task<IActionResult> ActiveDeactivePO(Guid Id)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var updateUser = await PurchaseOrder.ActiveDeactivePO(Id);
+            try
+            {
+                if (updateUser != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = updateUser.message;
+                }
+                else
+                {
+                    responseModel.message = updateUser.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
+        }
     }
 }
