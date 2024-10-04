@@ -972,7 +972,7 @@ function AddSiteGroupDetails() {
         var siteIds = $('#SelectedSiteID').val();
         if (siteIds) {
             siteIds = siteIds.trim();
-            
+
 
             var splitSiteIds = siteIds.split(/[\n,]+/).map(function (id) {
                 return id.trim();
@@ -999,7 +999,7 @@ function AddSiteGroupDetails() {
             GroupAddressList: GroupAddressDetails,
             SiteIdList: SiteIdList,
         };
-        
+
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
 
@@ -1030,12 +1030,16 @@ function AddSiteGroupDetails() {
     }
 }
 
-function DeleteSiteGroup(GroupId, element) {
+function DeleteSiteGroup(GroupId, GroupName, element) {
+
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "If you want to delete this site group,delete all data related this site!",
+        title: "Are you sure you want to delete this Group?",
+        text: "To confirm, type the Group name below ",
+        input: 'text',
+        inputPlaceholder: 'Enter the Group name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -1043,7 +1047,15 @@ function DeleteSiteGroup(GroupId, element) {
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the Group name!';
+            } else if (value !== GroupName) {
+                return 'Supplier name mismatch! Please enter valid Group Name';
+            }
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({

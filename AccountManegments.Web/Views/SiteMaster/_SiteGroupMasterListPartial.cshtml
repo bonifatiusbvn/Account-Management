@@ -19,7 +19,7 @@
                 }
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Site" && (a.Delete == true)))
                 {
-                    <a href="javascript:void(0);" class="btn text-primary" onclick="event.stopPropagation(); DeleteSiteGroup('@item.GroupId',this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
+                    <a href="javascript:void(0);" class="btn text-primary" onclick="event.stopPropagation(); DeleteSiteGroup('@item.GroupId','@item.GroupName',this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">
                         <i class="lni lni-trash"></i>
                     </a>
                 }

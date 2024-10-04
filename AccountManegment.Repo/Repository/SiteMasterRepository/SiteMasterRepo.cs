@@ -490,7 +490,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     {
                         if (GroupDetails.GroupAddressList.Count > 0)
                         {
-                            foreach(var siteId in GroupDetails.SiteIdList)
+                            foreach (var siteId in GroupDetails.SiteIdList)
                             {
                                 foreach (var item in GroupDetails.GroupAddressList)
                                 {
@@ -583,15 +583,31 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             try
             {
                 var grouplist = Context.GroupMasters.Where(x => x.GroupId == GroupId).ToList();
+
+
                 if (grouplist.Count > 0)
                 {
-                    foreach (var group in grouplist)
+
+                    var groupName = grouplist.FirstOrDefault()?.GroupName;
+
+
+                    var checkgroup = Context.SupplierInvoices.Where(x => x.SiteGroup == groupName).ToList();
+
+                    if (checkgroup.Count > 0)
                     {
-                        Context.GroupMasters.Remove(group);
+                        response.code = 404;
+                        response.message = "Invoice is created for this Group.";
                     }
-                    await Context.SaveChangesAsync();
-                    response.code = 200;
-                    response.message = "Site group is deleted successfully.";
+                    else
+                    {
+                        foreach (var group in grouplist)
+                        {
+                            Context.GroupMasters.Remove(group);
+                        }
+                        await Context.SaveChangesAsync();
+                        response.code = 200;
+                        response.message = "Site group is deleted successfully.";
+                    }
                 }
                 else
                 {
@@ -602,10 +618,11 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "There is some error in deleting site group";
+                response.message = "There is some error in deleting site group.";
             }
             return response;
         }
+
 
         public async Task<SiteGroupModel> GetGroupDetailsByGroupName(string GroupName)
         {
@@ -700,7 +717,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                 var addressesToRemove = Context.GroupMasters
                         .Where(e => e.GroupId == groupDetails.GroupId)
                         .ToList();
-                    Context.GroupMasters.RemoveRange(addressesToRemove);
+                Context.GroupMasters.RemoveRange(addressesToRemove);
 
                 foreach (var siteId in groupDetails.SiteIdList)
                 {
@@ -716,7 +733,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         };
                         Context.GroupMasters.Add(groupModel);
                     }
-                }           
+                }
 
                 await Context.SaveChangesAsync();
                 model.code = 200;
@@ -752,7 +769,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
-                    searchText = searchText.ToLower(); 
+                    searchText = searchText.ToLower();
                     SiteGroupList = SiteGroupList.Where(u =>
                         u.GroupName.ToLower().Contains(searchText));
                 }
@@ -798,7 +815,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                     }
                 }
 
-                return await SiteGroupList.ToListAsync(); 
+                return await SiteGroupList.ToListAsync();
             }
             catch (Exception ex)
             {
