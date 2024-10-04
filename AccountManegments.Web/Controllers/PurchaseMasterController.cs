@@ -1034,6 +1034,8 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
                 List<PurchaseOrderView> GetPOList = new List<PurchaseOrderView>();
                 string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={null}&searchBy={null}&sortBy={null}";
 
@@ -1042,6 +1044,10 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+                    if (SiteId != null)
+                    {
+                        GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
+                    }
                 }
                 return new JsonResult(GetPOList);
             }
