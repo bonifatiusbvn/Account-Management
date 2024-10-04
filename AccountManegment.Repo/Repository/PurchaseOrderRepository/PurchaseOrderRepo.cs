@@ -124,28 +124,38 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
             var GetPOdata = Context.PurchaseOrders.Where(a => a.Id == POId).FirstOrDefault();
             var PODDataList = Context.PurchaseOrderDetails.Where(a => a.PorefId == POId).ToList();
             var POADataList = Context.PodeliveryAddresses.Where(a => a.Poid == POId).ToList();
-
+            var checkPo = Context.SupplierInvoices.Where(a => a.Poid == GetPOdata.Poid).ToList();
             GetPOdata.IsDeleted = true;
             Context.PurchaseOrders.Update(GetPOdata);
 
             if (PODDataList.Any() || POADataList.Any())
             {
-                foreach (var PODData in PODDataList)
+                if (checkPo.Count > 0)
                 {
-                    PODData.IsDeleted = true;
-                    Context.PurchaseOrderDetails.Update(PODData);
+                    response.code = 404;
+                    response.message = "Invoice is created for this PurchaseOrder.";
+                }
+                else
+                {
+                    foreach (var PODData in PODDataList)
+                    {
+                        PODData.IsDeleted = true;
+                        Context.PurchaseOrderDetails.Update(PODData);
+                    }
+
+                    foreach (var POAData in POADataList)
+                    {
+                        POAData.IsDeleted = true;
+                        Context.PodeliveryAddresses.Update(POAData);
+                    }
+
+                    Context.SaveChanges();
+
+                    response.code = 200;
+                    response.message = "Purchase order details are successfully deleted.";
+
                 }
 
-                foreach (var POAData in POADataList)
-                {
-                    POAData.IsDeleted = true;
-                    Context.PodeliveryAddresses.Update(POAData);
-                }
-
-                Context.SaveChanges();
-
-                response.code = 200;
-                response.message = "Purchase order details are successfully deleted.";
             }
             else
             {

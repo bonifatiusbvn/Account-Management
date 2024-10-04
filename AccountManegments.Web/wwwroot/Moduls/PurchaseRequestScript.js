@@ -780,7 +780,7 @@ $(document).ready(function () {
         var productRow = $(this).closest(".product");
 
         if (event.key === 'Tab') {
-            event.preventDefault(); 
+            event.preventDefault();
             if (event.shiftKey) {
                 productRow.find('#txtproductquantity').focus();
             } else {
@@ -1396,15 +1396,22 @@ function DeletePODetails(POId, BuyersPurchaseNo, element) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    siteloaderhide();
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/PurchaseMaster/POListView';
-                    })
+                    if (Result.code == 200) {
+                        debugger
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseMaster/POListView';
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.warning(Result.message);
+                    }
                 },
                 error: function () {
                     siteloaderhide();
