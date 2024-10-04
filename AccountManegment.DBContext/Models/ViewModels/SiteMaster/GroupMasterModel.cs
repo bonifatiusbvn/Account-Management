@@ -28,6 +28,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public string? SiteName { get; set; }
         public DateTime? CreatedOn { get; set; }
         public List<GroupAddressList>? GroupAddressList { get; set; }
+        public List<SiteNameList>? SiteIdList { get; set; }
     }
     public class GroupAddressList
     {

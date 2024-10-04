@@ -418,13 +418,55 @@ function GetGroupSiteList() {
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             if (result.length > 0) {
+                
                 $.each(result, function (i, data) {
-                    $('#textGroupSiteList').append('<Option value=' + data.siteId + '>' + data.siteName + '</Option>')
+                    $('#textGroupSiteList').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                 });
             }
         }
     });
 }
+
+$(document).ready(function () {
+    $('#textGroupSiteList').on('change', function () {
+
+        var selectedSite = $('#textGroupSiteList option:selected').text().trim();
+        var selectedSiteId = $('#textGroupSiteList option:selected').val().trim();
+
+        var currentValue = $('#SelectedSite').val().trim();
+        var currentValueId = $('#SelectedSiteID').val().trim();
+
+        if (selectedSite !== "--Select Site--") {
+
+            if (currentValue.includes(selectedSite)) {
+
+                toastr.error("This Site Already Selected");
+            } else {
+
+                if (currentValue === '') {
+                    $('#SelectedSite').val(selectedSite);
+                } else {
+                    $('#SelectedSite').val(currentValue + ', ' + selectedSite);
+                }
+            }
+        }
+        if (selectedSiteId !== "--Select Site--") {
+
+            if (currentValueId.includes(selectedSiteId)) {
+
+                //toastr.error("This Site Already Selected");
+            } else {
+
+                if (currentValueId === '') {
+                    $('#SelectedSiteID').val(selectedSiteId);
+                } else {
+                    $('#SelectedSiteID').val(currentValueId + ', ' + selectedSiteId);
+                }
+            }
+        }
+    });
+});
+
 
 function ClearSiteTextBox() {
 
@@ -946,15 +988,39 @@ function AddSiteGroupDetails() {
             GroupAddressDetails.push(addressData);
         });
 
+
+        var SiteIdList = [];
+        var siteIds = $('#SelectedSiteID').val(); 
+        if (siteIds) { 
+            siteIds = siteIds.trim();
+
+            
+            var splitSiteIds = siteIds.split(/[\n,]+/).map(function (id) {
+                return id.trim();  
+            });
+
+            splitSiteIds.forEach(function (siteId) {
+                if (siteId) {
+                    SiteIdList.push({
+                        SiteId: siteId 
+                    });
+                }
+            });
+        } else {
+            toastr.error("Site ID textarea is empty or not found.");
+            return; 
+        }
+
         if (!isValidGroupAddress) {
             return;
         }
 
         var SiteData = {
             GroupName: $('#txtSiteGropuName').val(),
-            SiteId: $("#textGroupSiteList").val(),
             GroupAddressList: GroupAddressDetails,
+            SiteIdList: SiteIdList,
         };
+        
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
 
@@ -1058,36 +1124,58 @@ function DisplaySiteGroup(GroupId,element) {
             $('#GroupInfoHeading').text('Edit Group Details');
             $("#txtSiteGropuName").val(response.groupName);
             $("#txtSiteGroupId").val(response.groupId);
-            $("#textGroupSiteList").val(response.siteId);
+
+            // Create a Set to store unique site names and IDs
+            const uniqueSiteNames = new Set();
+            const uniqueSiteIds = new Set();
+
+            // Loop through the siteIdList to add unique values to the Sets
+            response.siteIdList.forEach(site => {
+                uniqueSiteNames.add(site.siteName);
+                uniqueSiteIds.add(site.siteId);
+            });
+
+            // Join unique values into a string and set them in the respective text areas
+            $("#SelectedSite").val(Array.from(uniqueSiteNames).join(', '));
+            $("#SelectedSiteID").val(Array.from(uniqueSiteIds).join(', '));
+
             $('#addsitegroupbtn').hide();
             $('#updatesitegroupbtn').show();
 
             $('#GroupAddressTable').empty();
-            if (response.groupAddressList == null)
-            {
 
-            }
-            else
-            {
+            if (response.groupAddressList == null) {
+                // Handle empty group address list
+            } else {
+                // Create a Set to store unique group addresses
+                const uniqueGroupAddresses = new Set();
+
                 $.each(response.groupAddressList, function (i, data) {
-                    var groupAddressNumber = i + 1;
+                    // Add unique group addresses to the Set
+                    uniqueGroupAddresses.add(data.groupAddress);
+                });
+
+                // Loop through unique group addresses and append to the GroupAddressTable
+                let groupAddressNumber = 1; // Initialize counter for group address index
+                uniqueGroupAddresses.forEach(address => {
                     $('#GroupAddressTable').append(
                         '<div class="col-md-12 mb-2 groupaddressindex" id="groupAddressContainer-' + groupAddressNumber + '" style="padding: 20px;">' +
                         '<label class="form-label">Group Address</label>' +
                         '<div class="row">' +
                         '<div class="col-11">' +
-                        '<textarea class="form-control mb-2" rows="4" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '">' + data.groupAddress + '</textarea>' +
+                        '<textarea class="form-control mb-2" rows="4" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '">' + address + '</textarea>' +
                         '</div>' +
                         '<div class="col-1" style="position:relative; right:16px; top:22px;">' +
                         '<a id="remove" class="btn text-primary" onclick="removeGroupItem(this)"><i class="lni lni-trash"></i></a>' +
                         '</div>' +
                         '</div>' +
-
                         '</div>'
                     );
+                    groupAddressNumber++; // Increment the counter for the next address
                 });
             }
         },
+
         error: function (xhr, status, error) {
             siteloaderhide();
             console.error('Error in fetching group details:', error);
@@ -1121,6 +1209,27 @@ function UpdateSiteGroupDetails() {
             GroupAddressDetails.push(addressData);
         });
 
+        var SiteIdList = [];
+        var siteIds = $('#SelectedSiteID').val();
+        if (siteIds) {
+            siteIds = siteIds.trim();
+
+
+            var splitSiteIds = siteIds.split(/[\n,]+/).map(function (id) {
+                return id.trim();
+            });
+
+            splitSiteIds.forEach(function (siteId) {
+                if (siteId) {
+                    SiteIdList.push({
+                        SiteId: siteId
+                    });
+                }
+            });
+        } else {
+            toastr.error("Site ID textarea is empty or not found.");
+            return;
+        }
         if (!isValidGroupAddress) {
             return;
         }
@@ -1130,6 +1239,7 @@ function UpdateSiteGroupDetails() {
             SiteId: $("#textGroupSiteList").val(),
             GroupId: $("#txtSiteGroupId").val(),
             GroupAddressList: GroupAddressDetails,
+            SiteIdList: SiteIdList,
         };
 
         var form_data = new FormData();
@@ -1261,33 +1371,57 @@ function GroupMasterInfo(GroupId,element)
             $('#GroupInfoHeading').text('Group Details');
             $("#dspGroupName").val(response.groupName);
             $("#dspGroupid").val(response.groupId);
-            $("#dspSiteName").val(response.siteName);
-            $('#addsitegroupbtn').hide();
-            $('#updatesitegroupbtn').hide();
+
+            const uniqueSiteNames = new Set();
+
+            response.siteIdList.forEach(site => {
+                uniqueSiteNames.add(site.siteName);
+            });
+
+            $("#dspSite").val(Array.from(uniqueSiteNames).join(', '));
+
+            const uniqueGroupAddresses = new Set();
 
             $('#GroupAddressDsp').empty();
-            if (response.groupAddressList == null) {
-
-            }
-            else {
+            if (response.groupAddressList != null) {
                 $.each(response.groupAddressList, function (i, data) {
-                    var groupAddressNumber = i + 1;
-                    $('#GroupAddressDsp').append(
-                        '<div class="col-md-12 mb-2 groupaddressindex" id="groupAddressContainer-' + groupAddressNumber + '" style="padding: 20px;">' +
-                        '<label class="form-label">Group Address</label>' +
-                        '<div class="row">' +
-                        '<div class="col-11">' +
-                        '<textarea class="form-control mb-2" rows="3" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '"readonly>' + data.groupAddress + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    );
+                    uniqueGroupAddresses.add(data.groupAddress);
                 });
             }
+
+            uniqueGroupAddresses.forEach(address => {
+                uniqueSiteNames.forEach(siteName => {
+                    if (address === siteName) {
+                        uniqueGroupAddresses.delete(address);
+                    }
+                });
+            });
+
+           
+            let groupAddressNumber = 1; // Initialize counter for group address index
+            uniqueGroupAddresses.forEach(address => {
+                $('#GroupAddressDsp').append(
+                    '<div class="col-md-12 mb-2 groupaddressindex" id="groupAddressContainer-' + groupAddressNumber + '" style="padding: 20px;">' +
+                    '<label class="form-label">Group Address</label>' +
+                    '<div class="row">' +
+                    '<div class="col-11">' +
+                    '<textarea class="form-control mb-2" rows="3" placeholder="Group Address" id="txtgroupAddresslist-' + groupAddressNumber + '" name="txtgroupAddresslist-' + groupAddressNumber + '" readonly>' + address + '</textarea>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
+                );
+                groupAddressNumber++; // Increment the counter for the next address
+            });
+
+            $('#addsitegroupbtn').hide();
+            $('#updatesitegroupbtn').hide();
         },
+
         error: function (xhr, status, error) {
             siteloaderhide();
             console.error('Error in fetching group details:', error);
         }
     });
 }
+
+
