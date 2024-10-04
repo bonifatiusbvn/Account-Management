@@ -1542,7 +1542,7 @@ function GetGroupList() {
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
             $('#InvoiceGroupList').empty();
-            $('#InvoiceGroupList').append('<option selected disabled>' + "Select Group" + '</option>');
+            $('#InvoiceGroupList').append('<option selected>' + "Select Group" + '</option>');
             $.each(result, function (i, data) {
                     $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
@@ -1586,6 +1586,10 @@ function EditGroupList(EditSiteId) {
 
 function GetGroupAddress(GroupId)
 {
+    if (GroupId == undefined) {
+        $('#dvGroupAddress').empty();
+    }
+    else {
     siteloadershow();
     $.ajax({
         url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
@@ -1598,7 +1602,8 @@ function GetGroupAddress(GroupId)
             if (response.groupAddressList == null) {
 
             }
-            else {
+            else
+            {
                 $.each(response.groupAddressList, function (i, data) {
                     var groupAddressNumber = i + 1;
 
@@ -1629,6 +1634,7 @@ function GetGroupAddress(GroupId)
             }
         },
     });
+    }
 }
 
 var InvoicePONo = null;
