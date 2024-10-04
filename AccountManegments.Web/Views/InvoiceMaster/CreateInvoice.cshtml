@@ -279,17 +279,17 @@
                                                                                     <input type="text" class="form-control" placeholder="Challan/Document No" id="txtchalanNo" name="txtchalanNo" value="@Model.ChallanNo">
                                                                                 </div>
                                                                                 <div class="input-group mb-3">
-                                                                                    <button class="input-group-text dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">BUYERS CODE</button>
-                                                                                    <ul class="dropdown-menu">
-                                                                                        <li>
-                                                                                            <a class="dropdown-item" onclick="GETBUYESCODE();">Select</a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a class="dropdown-item" onclick="getallPONoList();">Select All</a>
-                                                                                        </li>
-                                                                                    </ul>
+                                                                                    <label class="input-group-text">
+                                                                                        BUYERS CODE
+                                                                                    </label>
                                                                                     <input type="text" class="form-control" placeholder="Buyer's Code" id="txtlrNo" name="txtlrNo" value="@Model.Lrno">
-                                                                                    <input type="text" id="textPONoList" name="textPONoList" class="form-control" placeholder="Purchase Order" style="display: none;" />
+
+                                                                                </div>
+                                                                                <div class="input-group mb-3">
+                                                                                    <label class="input-group-text">
+                                                                                        Active PO
+                                                                                    </label>
+                                                                                    <input type="text" id="textPONoList" name="textPONoList" class="form-control" placeholder=" Active PO" readonly />
                                                                                     <input type="hidden" id="textPONoListHidden" name="textPONoListHidden" />
                                                                                 </div>
                                                                                 <div class="input-group mb-3">
@@ -785,7 +785,7 @@
         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
             $('#dvShippingAddress').append(html);
         } else {
             tostar.error('Please select address!');

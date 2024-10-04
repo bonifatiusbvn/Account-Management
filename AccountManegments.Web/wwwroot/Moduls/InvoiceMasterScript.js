@@ -6,6 +6,7 @@ GetCompanyDetail();
 GetSupplierDetail();
 //GetGroupList();
 updateTotals();
+getallPONoList();
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -532,7 +533,7 @@ function InsertMultipleSupplierItem() {
                 DiscountRoundoff: $("#IDiscountRoundOff").val(),
                 SiteGroup: $("#InvoiceGroupList").val(),
                 GroupAddress: $('input[name="selectedGroupAddress"]:checked').val(),
-                Poid: $("#txtInvoicePOID").val(),
+                Poid: $("#txtInvoicePOID").val() ? $("#txtInvoicePOID").val() : InvoicePONo,
                 ItemList: ItemDetails,
             }
 
@@ -1608,11 +1609,8 @@ function GetGroupAddress(GroupId)
     });
 }
 
+var InvoicePONo = null;
 function getallPONoList() {
-    clearbuyerstextbox();
-    $("#txtlrNo").hide();
-    $("#textPONoList").show();
-
     $.ajax({
         url: '/PurchaseMaster/PurchaseOrderNoListInvoice',
         method: 'GET',
@@ -1620,7 +1618,8 @@ function getallPONoList() {
             var PODetails = result.map(function (data) {
                 return {
                     label: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid,
-                    value: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid
+                    value: data.buyersPurchaseNo ? data.poid + '-' + data.buyersPurchaseNo : data.poid,
+                    poid: data.poid
                 };
             });
 
@@ -1631,6 +1630,7 @@ function getallPONoList() {
                     event.preventDefault();
                     $("#textPONoList").val(ui.item.label);
                     $("#textPONoListHidden").val(ui.item.value);
+                    InvoicePONo = ui.item.poid;
                 },
                 focus: function () {
                     return false;
@@ -1651,15 +1651,16 @@ function getallPONoList() {
     });
 }
 
-function GETBUYESCODE()
-{
-    clearbuyerstextbox();
-    $("#txtlrNo").show();
-    $("#textPONoList").hide();
-}
+$(document).ready(function () {
+    $("#txtlrNo").on('click', function () {
+        $("#txtlrNo").prop("readonly", false); 
+        $("#textPONoList").prop("readonly", true); 
+        $("#textPONoList").val(''); 
+    });
 
-function clearbuyerstextbox()
-{
-    $("#txtlrNo").val('');
-    $("#textPONoList").val('');
-}
+    $("#textPONoList").on('click', function () {
+        $("#txtlrNo").prop("readonly", true);
+        $("#txtlrNo").val(''); 
+        $("#textPONoList").prop("readonly", false);
+    });
+});

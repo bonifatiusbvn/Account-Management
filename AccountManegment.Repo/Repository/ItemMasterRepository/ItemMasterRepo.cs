@@ -603,9 +603,9 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                                 IsApproved = a.IsApproved,
                                                 SupplierInvoiceNo = a.SupplierInvoiceNo,
                                                 GSTper = f.Gstper,
-                                                ItemPrice = f.PricePerUnit,
+                                                ItemPrice = e.Price,
                                                 Itemname = f.ItemName,
-                                                ItemPricewithGST = f.PricePerUnit + f.Gstamount,
+                                                ItemPricewithGST = e.Gst,
                                             },
 
                                             Item = new SupplierInvoiceDetailsModel
