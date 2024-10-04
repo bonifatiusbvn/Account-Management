@@ -1030,6 +1030,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
         [HttpGet]
+
         public async Task<JsonResult> PurchaseOrderNoListInvoice()
         {
             try
@@ -1044,19 +1045,25 @@ namespace AccountManegments.Web.Controllers
                 if (res.code == 200)
                 {
                     GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
+
+
                     if (SiteId != null)
                     {
                         GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
                     }
+
+
+                    GetPOList = GetPOList.Where(a => a.IsActive == true).ToList();
                 }
+
                 return new JsonResult(GetPOList);
             }
             catch (Exception ex)
             {
                 throw ex;
-
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ActiveDeactivePO(Guid Id)

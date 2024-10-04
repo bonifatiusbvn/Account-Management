@@ -392,6 +392,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                          DispatchBy = a.DispatchBy,
                                          PaymentTerms = a.PaymentTerms,
                                          IsApproved = a.IsApproved,
+                                         IsActive = a.IsActive,
                                          SiteGroup = a.SiteGroup,
                                          GroupAddress = a.GroupAddress,
 
@@ -619,6 +620,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     ContactName = PurchaseOrderDetails.ContactName,
                     ContactNumber = PurchaseOrderDetails.ContactNumber,
                     IsDeleted = false,
+                    IsActive = true,
                     IsApproved = PurchaseOrderDetails.IsApproved,
                     Terms = PurchaseOrderDetails.Terms,
                     DispatchBy = PurchaseOrderDetails.DispatchBy,
