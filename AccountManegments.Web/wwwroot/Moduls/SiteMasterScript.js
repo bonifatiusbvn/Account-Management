@@ -19,8 +19,7 @@ function AllSiteListTable() {
         });
 }
 
-function GetGroupNameList()
-{
+function GetGroupNameList() {
     var searchText = $('#txtSiteGroupSearch').val();
     var searchBy = $('#SiteGroupSearchBy').val();
 
@@ -418,7 +417,6 @@ function GetGroupSiteList() {
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
             if (result.length > 0) {
-                
                 $.each(result, function (i, data) {
                     $('#textGroupSiteList').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                 });
@@ -427,45 +425,26 @@ function GetGroupSiteList() {
     });
 }
 
+
 $(document).ready(function () {
+
+    $('#textGroupSiteList').select2({
+        placeholder: "--Select Site--",
+        allowClear: true
+    });
+
+
     $('#textGroupSiteList').on('change', function () {
+        var selectedSites = $('#textGroupSiteList').select2('data');
+        var selectedSiteNames = selectedSites.map(site => site.text).join(', ');
+        var selectedSiteIds = selectedSites.map(site => site.id).join(', ');
 
-        var selectedSite = $('#textGroupSiteList option:selected').text().trim();
-        var selectedSiteId = $('#textGroupSiteList option:selected').val().trim();
 
-        var currentValue = $('#SelectedSite').val().trim();
-        var currentValueId = $('#SelectedSiteID').val().trim();
-
-        if (selectedSite !== "--Select Site--") {
-
-            if (currentValue.includes(selectedSite)) {
-
-                toastr.error("This Site Already Selected");
-            } else {
-
-                if (currentValue === '') {
-                    $('#SelectedSite').val(selectedSite);
-                } else {
-                    $('#SelectedSite').val(currentValue + ', ' + selectedSite);
-                }
-            }
-        }
-        if (selectedSiteId !== "--Select Site--") {
-
-            if (currentValueId.includes(selectedSiteId)) {
-
-                //toastr.error("This Site Already Selected");
-            } else {
-
-                if (currentValueId === '') {
-                    $('#SelectedSiteID').val(selectedSiteId);
-                } else {
-                    $('#SelectedSiteID').val(currentValueId + ', ' + selectedSiteId);
-                }
-            }
-        }
+        $('#SelectedSite').val(selectedSiteNames);
+        $('#SelectedSiteID').val(selectedSiteIds);
     });
 });
+
 
 
 function ClearSiteTextBox() {
@@ -990,25 +969,25 @@ function AddSiteGroupDetails() {
 
 
         var SiteIdList = [];
-        var siteIds = $('#SelectedSiteID').val(); 
-        if (siteIds) { 
+        var siteIds = $('#SelectedSiteID').val();
+        if (siteIds) {
             siteIds = siteIds.trim();
 
-            
+
             var splitSiteIds = siteIds.split(/[\n,]+/).map(function (id) {
-                return id.trim();  
+                return id.trim();
             });
 
             splitSiteIds.forEach(function (siteId) {
                 if (siteId) {
                     SiteIdList.push({
-                        SiteId: siteId 
+                        SiteId: siteId
                     });
                 }
             });
         } else {
             toastr.error("Site ID textarea is empty or not found.");
-            return; 
+            return;
         }
 
         if (!isValidGroupAddress) {
@@ -1020,7 +999,7 @@ function AddSiteGroupDetails() {
             GroupAddressList: GroupAddressDetails,
             SiteIdList: SiteIdList,
         };
-        
+
         var form_data = new FormData();
         form_data.append("GroupDetails", JSON.stringify(SiteData));
 
@@ -1051,7 +1030,7 @@ function AddSiteGroupDetails() {
     }
 }
 
-function DeleteSiteGroup(GroupId,element) {
+function DeleteSiteGroup(GroupId, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -1106,7 +1085,7 @@ function DeleteSiteGroup(GroupId,element) {
     });
 }
 
-function DisplaySiteGroup(GroupId,element) {
+function DisplaySiteGroup(GroupId, element) {
     cleargrouplisttext();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -1352,8 +1331,7 @@ $(document).ready(function () {
     }
 });
 
-function GroupMasterInfo(GroupId,element)
-{
+function GroupMasterInfo(GroupId, element) {
     cleargrouplisttext();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -1397,7 +1375,7 @@ function GroupMasterInfo(GroupId,element)
                 });
             });
 
-           
+
             let groupAddressNumber = 1; // Initialize counter for group address index
             uniqueGroupAddresses.forEach(address => {
                 $('#GroupAddressDsp').append(
