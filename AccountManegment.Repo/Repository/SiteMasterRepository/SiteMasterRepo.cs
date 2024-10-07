@@ -748,7 +748,7 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             return model;
         }
 
-        public async Task<IEnumerable<SiteGroupModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<GroupMasterModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -757,15 +757,20 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                                      {
                                          a.GroupName,
                                          a.GroupId,
+                                         a.SiteId,
                                          a.CreatedOn
                                      })
-                             .GroupBy(x => new { x.GroupName, x.GroupId })
-                             .Select(g => new SiteGroupModel
-                             {
-                                 GroupName = g.Key.GroupName,
-                                 GroupId = g.Key.GroupId,
-                                 CreatedOn = g.Max(x => x.CreatedOn)
-                             });
+                            .GroupBy(x => new { x.GroupName, x.GroupId })
+                            .Select(g => new GroupMasterModel
+                            {
+                                GroupName = g.Key.GroupName,
+                                GroupId = g.Key.GroupId,
+                                SiteList = g.Select(x => new SiteNameList
+                                {
+                                    SiteId = x.SiteId,
+                                }).Distinct().ToList(),
+                                CreatedOn = g.Max(x => x.CreatedOn)
+                            });
 
                 if (!string.IsNullOrEmpty(searchText))
                 {

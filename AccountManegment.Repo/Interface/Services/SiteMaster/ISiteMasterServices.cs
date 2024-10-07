@@ -22,7 +22,7 @@ namespace AccountManagement.Repository.Interface.Services.SiteMaster
         Task<ApiResponseModel> AddSiteGroupDetails(SiteGroupModel GroupDetails);
         Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId);
         Task<IEnumerable<SiteGroupModel>> GetGroupNameList();
-        Task<IEnumerable<SiteGroupModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy);
+        Task<IEnumerable<GroupMasterModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy);
         Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId);
         Task<SiteGroupModel> GetGroupDetailsByGroupId(Guid GroupId);
         Task<ApiResponseModel> UpdateSiteGroupMaster(SiteGroupModel groupDetails);

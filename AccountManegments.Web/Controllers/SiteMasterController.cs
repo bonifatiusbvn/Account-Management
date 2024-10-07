@@ -289,12 +289,21 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
+
+                string siteIdString = UserSession.SiteId;
+                Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
+
                 string apiUrl = $"SiteMaster/GetGroupNamesList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 
                 if (res.code == 200)
                 {
-                    List<SiteGroupModel> GetSiteList = JsonConvert.DeserializeObject<List<SiteGroupModel>>(res.data.ToString());
+                    List<GroupMasterModel> GetSiteList = JsonConvert.DeserializeObject<List<GroupMasterModel>>(res.data.ToString());
+
+                    if (SiteId.HasValue)
+                    {
+                        GetSiteList = GetSiteList.Where(group => group.SiteList != null && group.SiteList.Any(site => site.SiteId == SiteId.Value)).ToList();
+                    }
 
                     return PartialView("~/Views/SiteMaster/_SiteGroupMasterListPartial.cshtml", GetSiteList);
                 }

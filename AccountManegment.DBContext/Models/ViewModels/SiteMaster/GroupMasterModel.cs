@@ -12,6 +12,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public string GroupName { get; set; } = null!;
         public Guid GroupId { get; set; }
         public List<SiteNameList>? SiteList { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
     public class SiteNameList
     {
