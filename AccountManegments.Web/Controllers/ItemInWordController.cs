@@ -165,9 +165,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ItemInWord/ItemInWordIsApproved?InwordId=" + InwordId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {

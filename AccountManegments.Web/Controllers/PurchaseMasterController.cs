@@ -52,9 +52,7 @@ namespace AccountManegments.Web.Controllers
         [FormPermissionAttribute("Purchase Request-View")]
         public async Task<IActionResult> PurchaseRequestListView()
         {
-
             return View();
-
         }
 
         [HttpGet]
@@ -106,7 +104,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -224,9 +221,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseRequest/PurchaseRequestIsApproved?PurchaseId=" + PurchaseId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -275,7 +270,6 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
-
             }
         }
 
@@ -337,7 +331,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 return RedirectToAction("CreatePurchaseOrder", new { id = Id });
             }
             catch (Exception ex)
@@ -422,7 +415,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -751,7 +743,6 @@ namespace AccountManegments.Web.Controllers
             return htmlBuilder.ToString();
         }
 
-
         public async Task<IActionResult> GetAllItemDetailsList(string? searchText)
         {
             try
@@ -902,9 +893,7 @@ namespace AccountManegments.Web.Controllers
 
         public async Task<IActionResult> PurchaseOrderView()
         {
-
             return View();
-
         }
         public async Task<IActionResult> PrintJKDetails(Guid POId)
         {
@@ -1046,12 +1035,10 @@ namespace AccountManegments.Web.Controllers
                 {
                     GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
 
-
                     if (SiteId != null)
                     {
                         GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
                     }
-
 
                     GetPOList = GetPOList.Where(a => a.IsActive == true).ToList();
                 }
@@ -1070,13 +1057,10 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseOrder/ActiveDeactivePO?Id=" + Id);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {

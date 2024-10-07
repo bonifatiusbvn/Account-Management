@@ -51,7 +51,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (FormatException ex)
             {
-
                 return BadRequest(new { Message = "Invalid SiteId format." });
             }
 
@@ -194,7 +193,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -303,9 +301,7 @@ namespace AccountManegments.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InvoiceIdList, "SupplierInvoice/InvoiceIsApproved");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {

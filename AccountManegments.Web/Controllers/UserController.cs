@@ -127,7 +127,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postUser = await APIServices.PostAsync(UpdateUser, "Authentication/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
@@ -150,13 +149,10 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postuser = await APIServices.PostAsync("", "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -339,13 +335,10 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/ActiveDeactiveRole?roleId=" + roleId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
