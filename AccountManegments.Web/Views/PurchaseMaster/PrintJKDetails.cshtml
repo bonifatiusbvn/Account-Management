@@ -125,18 +125,33 @@
                                                         var singleTotalAmount = (decimal?)(@item.TotalAmount / quantity) ?? 0m;
 
                                                         <tr>
-                                                            <td style="text-align: center; width: 60px;"></td>
-                                                            <td style="text-align: left;padding-right: 25px; width: 137px; height: 20px; vertical-align: top; font-size: 14px; position: relative;">
-                                                                <span style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 190px;">Per Bag</span>
+                                                            <td style="text-align: center;width: 70px;border-bottom: none;"></td>
+                                                            <td style="text-align: left;padding: 5px;">
+                                                               Per Bag
                                                             </td>
-                                                            <td style="text-align: center; min-width: 100px; height: 30px; vertical-align: bottom; position: relative;">
-                                                                <span style="position: relative; bottom: 0; transform: translateX(-50%); display: inline-block; margin-left: 60px;">@item.PricePerUnit</span>
+                                                            <td style="text-align: center;font-size: 15px;">
+                                                                @item.PricePerUnit
                                                             </td>
-                                                            <td style="text-align: center; min-width: 80px; height: 30px; vertical-align: bottom; position: relative;">
-                                                                <span style="position: relative; bottom: 0; transform: translateX(-50%); display: inline-block; margin-left: 50px;">@singleGstAmount.ToString("F2")</span>
+                                                            <td style ="text-align: center;font-size: 15px;">
+                                                               @singleGstAmount.ToString("F2")
                                                             </td>
-                                                            <td style="text-align: center; min-width: 200px; height: 30px; vertical-align: bottom; position: relative;">
-                                                                <b style="position: relative; bottom: 0; transform: translateX(-50%); display: inline-block; font-weight: 800;">@singleTotalAmount.ToString("F2")</b>
+                                                            <td style ="text-align: center;font-size: 15px;">
+                                                                <b>@singleTotalAmount.ToString("F2")</b>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="text-align: center;width: 70px;border-bottom: none;"></td>
+                                                            <td style="text-align: left;padding: 5px;">
+                                                                Per MT
+                                                            </td>
+                                                            <td style="text-align: center;font-size: 15px;">
+                                                                @(item.PricePerUnit * 20)
+                                                            </td>
+                                                            <td style="text-align: center;font-size: 15px;">
+                                                                @((singleGstAmount * 20).ToString("F2"))
+                                                            </td>
+                                                            <td style="text-align: center;font-size: 15px;">
+                                                                <b>@((singleTotalAmount * 20).ToString("F2"))</b>
                                                             </td>
                                                         </tr>
                                                     }
