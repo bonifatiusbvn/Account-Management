@@ -318,18 +318,20 @@
                 printJKPOButton.addEventListener('click', function () {
                     fetch(`/PurchaseMaster/JKDetails?POId=${POId}`)
                         .then(response => {
+
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
                             }
                             return response.text();
                         })
                         .then(htmlContent => {
+
                             const printWindow = window.open('', '', 'width=800,height=600');
                             if (printWindow) {
                                 printWindow.document.open();
                                 printWindow.document.write(htmlContent);
                                 printWindow.document.close();
-                                printWindow.print();
+
                             } else {
                                 console.error('Failed to open new window.');
                             }
@@ -352,7 +354,7 @@
                                 printWindow.document.open();
                                 printWindow.document.write(htmlContent);
                                 printWindow.document.close();
-                                printWindow.print();
+
                             } else {
                                 console.error('Failed to open new window.');
                             }
