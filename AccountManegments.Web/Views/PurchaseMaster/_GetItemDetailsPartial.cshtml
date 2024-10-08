@@ -26,10 +26,10 @@
         </td>
         <td class="text-start">
             <div class="position-relative">
-                <select class="form-select" id="txtPOUnitType_@item.ItemId" style="width: 110px;">
+                <input type="hidden" id="txtunittype_@item.ItemId" value="@item.UnitType" />
+                <select class="form-control" id="txtPOUnitType_@item.ItemId" style="width: 112px;" onclick="PopulateUnitTypeDropdown('@item.ItemId')">
                     <option value="@item.UnitType">@item.UnitTypeName</option>
                 </select>
-
             </div>
         </td>
         <td class="text-start">
