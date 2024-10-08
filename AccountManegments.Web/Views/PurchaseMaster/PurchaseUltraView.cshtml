@@ -107,8 +107,10 @@
                                                             <b style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);">1</b>
                                                         </td>
                                                         <td style="text-align: left;padding-left: 5px;font-size: 13px;">Qty & Grade</td>
-                                                        <td style="text-align: center;font-weight: 800;">50 MT</td>
-                                                        <td style="text-align: left;padding-left: 5px;" colspan="2"><span style="font-weight: 700;font-size: 11px;">OPC 53 Grade </span><span style="font-weight: 800;">(BAG)</span></td>
+                                                        <td style="text-align: center;font-weight: 800;">@Model.ItemList.FirstOrDefault()?.Quantity MT</td>
+                                                        <td style="text-align: left;padding-left: 5px;" colspan="2">
+                                                            <span style="font-weight: 700;font-size: 11px;">OPC 53 Grade </span><span style="font-weight: 800;">(BAG)</span>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td style="text-align: center; width: 70px; height: 20px; vertical-align: bottom; position: relative;">
@@ -121,12 +123,17 @@
                                                     </tr>
                                                     @foreach (var item in Model.ItemList)
                                                     {
+
+                                                        var quantity = Model.ItemList.FirstOrDefault()?.Quantity ?? 1;
+                                                        var singleGstAmount = (decimal?)(item.Gstamount / quantity) ?? 0m;
+                                                        var singleTotalAmount = (decimal?)(item.TotalAmount / quantity) ?? 0m;
+
                                                         <tr>
                                                             <td style="text-align: center;width: 70px;border-bottom: none;"></td>
                                                             <td style="text-align: left;padding: 5px;">Per Bag</td>
                                                             <td style="text-align: center;font-size: 15px;">@item.PricePerUnit</td>
-                                                            <td style="text-align: center;font-size: 15px;">@item.Gstamount</td>
-                                                            <td style="text-align: center;font-size: 15px;"><b>@item.TotalAmount</b></td>
+                                                            <td style="text-align: center;font-size: 15px;">@singleGstAmount.ToString("F2")</td>
+                                                            <td style="text-align: center;font-size: 15px;"><b>@singleTotalAmount.ToString("F2")</b></td>
                                                         </tr>
                                                     }
                                                     <tr>
