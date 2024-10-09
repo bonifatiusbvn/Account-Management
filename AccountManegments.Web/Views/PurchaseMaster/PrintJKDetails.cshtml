@@ -62,8 +62,8 @@
                         <div class="col-xxl-9">
                             <div class="card">
                                 <div>
+                                    <img src="~/assets/images/dh_latter.jpeg" style="width:800px" />
                                     <div>
-                                        <img src="~/assets/images/dh_latter.jpeg" />
                                         <div class="table-responsive">
                                             <table class="table no-border-table">
                                                 <tbody>
@@ -127,18 +127,10 @@
 
                                                         <tr>
                                                             <td style="text-align: center;width: 70px;border-bottom: none;"></td>
-                                                            <td style="text-align: left;padding: 5px;">
-                                                                Per MT
-                                                            </td>
-                                                            <td style="text-align: center;font-size: 15px;">
-                                                                @item.PricePerUnit
-                                                            </td>
-                                                            <td style="text-align: center;font-size: 15px;">
-                                                                @singleGstAmount.ToString("F2")
-                                                            </td>
-                                                            <td style="text-align: center;font-size: 15px;">
-                                                                <b>@singleTotalAmount.ToString("F2")</b>
-                                                            </td>
+                                                            <td style="text-align: left;padding: 5px;">Per Bag</td>
+                                                            <td style="text-align: center;font-size: 15px;">@(item.PricePerUnit / 20)</td>
+                                                            <td style="text-align: center;font-size: 15px;">@((singleGstAmount / 20).ToString("F2"))</td>
+                                                            <td style="text-align: center;font-size: 15px;"><b>@((singleTotalAmount / 20).ToString("F2"))</b></td>
                                                         </tr>
 
                                                     }
@@ -200,9 +192,16 @@
                                                                 int Index = 1;
                                                             }
 
+                                                            @if (Model.GroupAddress != null)
+                                                            {
+                                                                <div style="display: inline;">
+                                                                    <span>@Index.</span>
+                                                                    <span class="text-muted" style="padding-left: 5px;">@Model.GroupAddress</span>
+                                                                </div>
+                                                            }
                                                             <div style="display: inline;">
                                                                 <span>@Index.</span>
-                                                                <span class="text-muted" style="padding-left: 5px;">@Model.GroupAddress</span>
+                                                                <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
                                                             </div>
 
 

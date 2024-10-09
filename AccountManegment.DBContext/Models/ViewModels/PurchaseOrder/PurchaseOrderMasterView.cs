@@ -48,6 +48,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public string? SupplierMobile { get; set; }
         public string? SupplierGstno { get; set; }
         public string? SupplierStateName { get; set; }
+        public string? SupplierCityName { get; set; }
         public int? SupplierStateCode { get; set; }
         public string? SupplierFullAddress { get; set; }
         public string? CompanyGstno { get; set; }

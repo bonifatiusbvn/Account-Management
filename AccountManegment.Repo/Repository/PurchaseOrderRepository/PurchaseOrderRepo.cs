@@ -221,6 +221,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SupplierStateCode = f.StateCode,
                                      IsApproved = a.IsApproved,
                                      SupplierStateName = f.StatesName,
+                                     SupplierCityName = e.CityName,
                                      GroupAddress = a.GroupAddress,
                                      SiteGroup = a.SiteGroup,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
