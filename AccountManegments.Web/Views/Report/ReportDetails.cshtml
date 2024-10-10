@@ -87,6 +87,7 @@
                                                                             <th>Supplier</th>
                                                                             <th>Credit</th>
                                                                             <th>Debit</th>
+                                                                            <th>Balance</th>
                                                                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
                                                                             {
                                                                                 <th>Action</th>
@@ -104,6 +105,7 @@
                                                                             {
                                                                                 <th id="NetAmount"></th>
                                                                             }
+                                                                            <th></th>
                                                                         </tr>
                                                                     </tfoot>
                                                                 </table>

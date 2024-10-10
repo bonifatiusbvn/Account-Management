@@ -1053,7 +1053,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
-                {
+                    {
 
                     var queryType = query.FirstOrDefault().GetType();
 
@@ -1099,6 +1099,11 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 ? query.OrderBy(s => s.Date)
                                 : query.OrderByDescending(s => s.Date);
                             break;
+                        case "totalamount":
+                            query = invoiceReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
                         default:
                             query = query.OrderByDescending(s => s.s.CreatedOn);
                             break;
@@ -1106,7 +1111,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    query = query.OrderByDescending(s => s.s.Date);
+                    query = query.OrderBy(s => s.s.Date);
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.filterType))
