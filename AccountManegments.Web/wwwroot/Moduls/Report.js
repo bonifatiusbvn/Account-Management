@@ -344,6 +344,10 @@ function fn_ResetAllDropdown() {
 }
 
 var datas = userPermissions;
+
+var supplierBalances = {}; // Object to store balance for each supplier
+var processedInvoices = {}; // Object to track processed invoices per supplier
+
 var dtcoulms = [
     {
         "data": "supplierInvoiceNo",
@@ -391,8 +395,41 @@ var dtcoulms = [
                 return '';
             }
         }
+    },
+    {
+        "data": "totalAmount",
+        "name": "Balance",
+        "render": function (data, type, row) {
+            var supplierName = row.supplierName;
+            var totalAmount = parseFloat(row.totalAmount) || 0;
+            var invoiceNo = row.invoiceNo;
+
+            if (!supplierBalances[supplierName]) {
+                supplierBalances[supplierName] = 0;
+                processedInvoices[supplierName] = new Set();
+            }
+
+            var uniqueKey = (invoiceNo === "PayOut") ? invoiceNo + "_" + totalAmount : invoiceNo;
+
+            if (!processedInvoices[supplierName].has(uniqueKey)) {
+
+                if (invoiceNo === "PayOut") {
+                    supplierBalances[supplierName] -= totalAmount;
+                }
+                else {
+                    supplierBalances[supplierName] += totalAmount;
+                }
+
+                processedInvoices[supplierName].add(uniqueKey);
+            }
+
+            return '<span style="color:blue">' + '₹' + supplierBalances[supplierName].toFixed(2) + '</span>';
+        }
     }
+
 ];
+
+
 
 
 $(document).ready(function () {
