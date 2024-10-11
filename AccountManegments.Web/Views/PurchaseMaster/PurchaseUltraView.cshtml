@@ -74,7 +74,6 @@
                                 <div>
                                     <img src="~/assets/images/dh_latter.jpeg" style="width:700px" />
                                     <div>
-
                                         <div class="table-responsive">
                                             <table class="table no-border-table">
                                                 <tbody>
@@ -209,10 +208,15 @@
                                                                     <span class="text-muted" style="padding-left: 5px;">@Model.GroupAddress</span>
                                                                 </div>
                                                             }
-                                                            <div style="display: inline;">
-                                                                <span>@Index.</span>
-                                                                <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
-                                                            </div>
+                                                            else
+                                                            {
+                                                                <div style="display: inline;">
+                                                                    <span>@Index.</span>
+                                                                    <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
+                                                                </div>
+
+                                                            }
+
                                                         </td>
                                                     </tr>
                                                     <tr style="height: 20px;">

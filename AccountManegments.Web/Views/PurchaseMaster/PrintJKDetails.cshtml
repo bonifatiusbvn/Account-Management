@@ -199,11 +199,14 @@
                                                                     <span class="text-muted" style="padding-left: 5px;">@Model.GroupAddress</span>
                                                                 </div>
                                                             }
-                                                            <div style="display: inline;">
-                                                                <span>@Index.</span>
-                                                                <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
-                                                            </div>
+                                                            else
+                                                            {
+                                                                <div style="display: inline;">
+                                                                    <span>@Index.</span>
+                                                                    <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
+                                                                </div>
 
+                                                            }
 
                                                         </td>
                                                     </tr>
