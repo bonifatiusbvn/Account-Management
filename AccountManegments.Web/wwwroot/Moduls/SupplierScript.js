@@ -69,8 +69,6 @@ function CreateSupplier() {
         toastr.error("Kindly fill all details");
     }
 }
-
-
 function ClearSupplierTextBox() {
     resetSupplierForm();
     $('#changeName').html('Create Supplier');
@@ -138,7 +136,6 @@ function DisplaySupplierDetails(SupplierId) {
         }
     });
 }
-
 function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -147,7 +144,6 @@ function formatDate(dateString) {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
-
 function SelectSupplierDetails(SupplierId, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -185,7 +181,6 @@ function SelectSupplierDetails(SupplierId, element) {
         }
     });
 }
-
 function AllUserTable() {
 
     var searchText = $('#txtSupplierSearch').val();
@@ -200,7 +195,6 @@ function AllUserTable() {
 
         });
 }
-
 function filterSupplierTable() {
     siteloadershow();
     var searchText = $('#txtSupplierSearch').val();
@@ -222,7 +216,6 @@ function filterSupplierTable() {
         }
     });
 }
-
 function sortSupplierTable() {
     siteloadershow();
     var sortBy = $('#SupplierSortBy').val();
@@ -242,7 +235,6 @@ function sortSupplierTable() {
         }
     });
 }
-
 function UpdateSupplierDetails() {
     siteloadershow();
     if ($("#SupplierForm").valid()) {
@@ -402,13 +394,11 @@ function validateAndCreateSupplier() {
         }
     }
 }
-
 function resetSupplierForm() {
     if (SupplierForm) {
         SupplierForm.resetForm();
     }
 }
-
 function SupplierActiveDecative(SupplierId) {
 
     var isChecked = $('#flexSwitchCheckChecked_' + SupplierId).is(':checked');
@@ -480,7 +470,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
 function downloadSampleFile() {
     siteloadershow();
     var fileUrl = '/uploadexcelfile/SuplierMasterDetails.xlsx';
@@ -510,7 +499,6 @@ $(document).ready(function () {
         }
     })
 });
-
 function UploadSupplierFile() {
     if ($("#uploadSupplierFile").valid()) {
         var formData = new FormData();
@@ -544,14 +532,11 @@ function UploadSupplierFile() {
         toastr.error("Kindly upload a file.");
     }
 }
-
-
 function ResetButton() {
     if (UploadExcelFile) {
         UploadExcelFile.resetForm();
     }
 }
-
 function clearExcelFileModel() {
     ResetButton();
     $("#supplierExcelFile").val('');
