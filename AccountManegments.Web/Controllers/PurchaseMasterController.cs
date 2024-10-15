@@ -1020,7 +1020,7 @@ namespace AccountManegments.Web.Controllers
         }
         [HttpGet]
 
-        public async Task<JsonResult> PurchaseOrderNoListInvoice()
+        public async Task<JsonResult> PurchaseOrderNoListInvoice(Guid? SupplierId)
         {
             try
             {
@@ -1035,9 +1035,9 @@ namespace AccountManegments.Web.Controllers
                 {
                     GetPOList = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(res.data.ToString());
 
-                    if (SiteId != null)
+                    if (SiteId != null && SupplierId != null)
                     {
-                        GetPOList = GetPOList.Where(a => a.SiteId == SiteId).ToList();
+                        GetPOList = GetPOList.Where(a => a.SiteId == SiteId && a.FromSupplierId == SupplierId).ToList();
                     }
 
                     GetPOList = GetPOList.Where(a => a.IsActive == true).ToList();
