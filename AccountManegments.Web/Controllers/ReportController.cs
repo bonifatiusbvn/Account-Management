@@ -512,6 +512,8 @@ namespace AccountManegments.Web.Controllers
 
                         var footerRange2 = ws.Range(row, 1, row, 7);
                         footerRange2.Style.Font.Bold = true;
+                        footerRange2.Style.Fill.BackgroundColor = XLColor.Black;
+                        footerRange2.Style.Font.FontColor = XLColor.White;
 
                         using (var stream = new MemoryStream())
                         {
@@ -1162,6 +1164,10 @@ namespace AccountManegments.Web.Controllers
                                 ws.Cell(row, 2).Value = FormatIndianCurrency(siteNonPayOutTotal);
                                 ws.Cell(row, 3).Value = FormatIndianCurrency(sitePayOutTotal);
                                 ws.Cell(row, 4).Value = FormatIndianCurrency(siteNonPayOutTotal - sitePayOutTotal);
+
+                                var footerRange2 = ws.Range(row, 1, row, 4);
+                                footerRange2.Style.Fill.BackgroundColor = XLColor.Gray;
+                                footerRange2.Style.Font.FontColor = XLColor.White;
                                 row++;
 
                                 // Add a blank row for spacing
@@ -1220,6 +1226,9 @@ namespace AccountManegments.Web.Controllers
                             ws.Cell(row, 3).Value = FormatIndianCurrency(yougavetotal);
                             ws.Cell(row, 4).Value = FormatIndianCurrency(nettotal);
 
+                            var footerRange3 = ws.Range(row, 1, row, 4);
+                            footerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
+                            footerRange3.Style.Font.FontColor = XLColor.White;
 
                             ws.Columns().AdjustToContents();
 
