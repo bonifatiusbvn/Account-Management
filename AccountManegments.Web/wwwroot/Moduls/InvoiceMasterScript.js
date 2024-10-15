@@ -6,7 +6,6 @@ GetCompanyDetail();
 GetSupplierDetail();
 //GetGroupList();
 updateTotals();
-getallPONoList();
 function filterallItemTable() {
     siteloadershow();
     var searchText = $('#mdProductSearch').val();
@@ -1639,8 +1638,9 @@ function GetGroupAddress(GroupId)
 
 var InvoicePONo = null;
 function getallPONoList() {
+    var SupplierId = $('#textSupplierName').val();
     $.ajax({
-        url: '/PurchaseMaster/PurchaseOrderNoListInvoice',
+        url: '/PurchaseMaster/PurchaseOrderNoListInvoice?SupplierId=' + SupplierId,
         method: 'GET',
         success: function (result) {
             var PODetails = result.map(function (data) {
@@ -1690,5 +1690,8 @@ $(document).ready(function () {
         $("#txtlrNo").prop("readonly", true);
         $("#txtlrNo").val(''); 
         $("#textPONoList").prop("readonly", false);
+    });
+    $('#textSupplierName').change(function () {
+        getallPONoList();
     });
 });
