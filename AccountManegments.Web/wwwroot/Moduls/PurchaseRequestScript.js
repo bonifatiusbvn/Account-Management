@@ -19,7 +19,7 @@ $(document).ready(function () {
     $('#POGroupList').change(function () {
         var selectedOption = $(this).find('option:selected');
         var groupId = selectedOption.data('groupids');
-            GetPOGroupAddress(groupId);
+        GetPOGroupAddress(groupId);
     });
     var EditpoSiteId = $('#poModelSiteId').val();
     var SessionSiteId = $('#positeid').val();
@@ -898,16 +898,19 @@ function InsertMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
 
-        if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+        if ($('#addNewlink tr').length >= 1) {
             var orderDetails = [];
-            var AddressDetails = [];
+            var totalProductQuantity = 0;
             $(".product").each(function () {
                 var orderRow = $(this);
+                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; // Get product quantity
+
+                totalProductQuantity += itemQuantity; 
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
                     UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
-                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Quantity: itemQuantity,
                     TotalPrice: orderRow.find("#txtproductamount").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Gst: orderRow.find("#txtgstAmount").val(),
@@ -917,18 +920,50 @@ function InsertMultiplePurchaseOrderDetails() {
                 orderDetails.push(objData);
             });
 
-            $(".ShippingAddress").each(function () {
-                var shippingAddress = $(this);
-                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
+            //$(".ShippingAddress").each(function () {
+            //    var shippingAddress = $(this);
+            //    var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
 
-                if (shippingAddressText) {
-                    var addressData = {
-                        ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-                        ShippingAddress: shippingAddressText,
-                    };
-                    AddressDetails.push(addressData);
+            //    if (shippingAddressText) {
+            //        var addressData = {
+            //            ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
+            //            ShippingAddress: shippingAddressText,
+            //        };
+            //        AddressDetails.push(addressData);
+            //    }
+            //});
+
+            var AddressDetails = [];
+            var totalShippingQuantity = 0;
+            var hasError = false; 
+
+            $(".shipping-checkbox:checked").each(function () {
+                var address = $(this).data("address"); // Get address from the data attribute
+                var quantityInput = $(this)
+                    .closest(".PoSiteShipppingAddress") // Find the closest parent row
+                    .find(".shippingquantity"); // Find the corresponding quantity input
+
+                var shippingQuantity = parseFloat(quantityInput.val()) || 0;
+                totalShippingQuantity += shippingQuantity;
+
+                // Add to AddressDetails array
+                if (totalShippingQuantity > totalProductQuantity) {
+                    debugger
+                    toastr.error("Shipping quantity exceeds available product quantity.");
+                    hasError = true; 
+                } else {
+                    AddressDetails.push({
+                        ShippingAddress: address,
+                        ShippingQuantity: shippingQuantity,
+                    });
                 }
+
             });
+
+            if (hasError) {
+                siteloaderhide(); 
+                return; 
+            }
 
             var paymentTerms = "";
             var paymentTermsId = "";
@@ -1004,12 +1039,6 @@ function InsertMultiplePurchaseOrderDetails() {
             } else {
                 $("#spnitembutton").text("");
             }
-            if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
-                siteloaderhide();
-                $("#spnshipping").text("Please Select Shipping Address!");
-            } else {
-                $("#spnshipping").text("");
-            }
         }
     } else {
         siteloaderhide();
@@ -1052,28 +1081,139 @@ $(document).ready(function () {
     });
 });
 
-function fn_GetPOSiteAddressList(SiteId) {
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
-        success: function (result) {
-            $('#drpPOSiteAddress').empty();
-            $('#drpPOSiteAddress').append('<option value="">-- Select site address --</option>');
-            $('#txtmdAddress').val('');
+//function fn_GetPOSiteAddressList(SiteId) {
+//    $.ajax({
+//        url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+//        success: function (result) {
+//            $('#drpPOSiteAddress').empty();
+//            $('#drpPOSiteAddress').append('<option value="">-- Select site address --</option>');
+//            $('#txtmdAddress').val('');
 
-            if (Array.isArray(result)) {
-                $.each(result, function (i, data) {
-                    $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
-                });
-            } else {
-                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
-            }
-        }
-    });
+//            if (Array.isArray(result)) {
+//                $.each(result, function (i, data) {
+//                    $('#drpPOSiteAddress').append('<option value="' + data.address + '">' + data.address + '</option>');
+//                });
+//            } else {
+//                $('#txtmdAddress').val(result.shippingAddress + ' , ' + result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName);
+//            }
+//        }
+//    });
+//}
+//$('#drpPOSiteAddress').on('change', function () {
+//    var selectedPOAddress = $(this).val();
+//    $('#txtmdAddress').val(selectedPOAddress);
+//});
+$(document).ready(function () {
+    var SiteId = $('#positeid').val();
+    GetPOSiteShippingAddress(SiteId)
+})
+function GetPOSiteShippingAddress(SiteId) {
+    if (SiteId == undefined) {
+        $('#dvPoSiteShipppingAddress').empty();
+    }
+    else {
+        siteloadershow();
+        $.ajax({
+            url: '/SiteMaster/DisplaySiteAddressList?SiteId=' + SiteId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (result) {
+                siteloaderhide();
+                $('#dvPoSiteShipppingAddress').empty();
+                $('#dvPoSiteShipppingAddress').append(
+                    '<div class="row">' +
+                    '<div class="col-2 col-sm-2"></div>' +
+                    '<div class="col-5 col-sm-5"><h6>Address</h6></div>' +
+                    '<div class="col-3 col-sm-3"><h6>Quantity</h6></div>' +
+                    '</div>' +
+                    '<hr />'
+                );
+                if (Array.isArray(result)) {
+                    $.each(result, function (i, data) {
+                        var groupAddressNumber = i + 1;
+
+                        $('#dvPoSiteShipppingAddress').append(
+                            '<div class="row ac-invoice-groupadd PoSiteShipppingAddress" style="display: flex; align-items: flex-start;">' +
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                            '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                            '</div>' +
+
+                            '<div class="col-5 col-sm-5" style="flex: 1; display: flex;">' +
+                            '<p id="poaddressgroup_' + groupAddressNumber + '" style="margin-left: -70px;">' + data.address + '</p>' +
+                            '<input type="hidden" id="selectedPOShippingAddress_' + groupAddressNumber + '" ' +
+                            'name="selectedPOShippingAddress[]" value="' + data.address + '" />' +
+                            '</div>' +
+
+                            '<div class="col-3 col-sm-3">' +
+                            '<input type="number" class="shippingquantity" ' +
+                            'data-address="' + data.address + '" ' +
+                            'style="width: 50px; margin-left: 50px;" />' +
+                            '</div>' +
+
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                            '<input class="nav-checkbox form-check-input shipping-checkbox" ' +
+                            'name="selectedPOShippingAddress[]" ' +
+                            'type="checkbox" ' +
+                            'data-address="' + data.address + '" ' +
+                            'value="' + data.address + '" ' +
+                            (i === 0 ? 'checked' : '') + ' />' +
+                            '</div>' +
+                            '</div>' +
+
+                            '<hr>'
+                        );
+                    });
+                } else {
+                    var groupAddressNumber = 1;
+
+                    $('#dvPoSiteShipppingAddress').append(
+                        '<div class="row ac-invoice-groupadd PoSiteShipppingAddress" style="display: flex; align-items: flex-start;">' +
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                        '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                        '</div>' +
+
+                        '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
+                        '<p id="poaddressgroup_' + groupAddressNumber + '" style="margin-left: -70px;">' + result.shippingAddress + ' , ' +
+                        result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName +
+                        ', ' + result.shippingCountryName + '</p>' +
+                        '<input type="hidden" id="selectedPOShippingAddress_' + groupAddressNumber + '" ' +
+                        'name="selectedPOShippingAddress[]" value="' + result.shippingAddress + ' , ' +
+                        result.shippingArea + ', ' + result.shippingCityName + ', ' + result.shippingStateName +
+                        ', ' + result.shippingCountryName + '" />' +
+                        '</div>' +
+
+                        '<div class="col-3 col-sm-3">' +
+                        '<input type="number" class="shippingquantity" ' +
+                        'data-address="' + result.shippingAddress + ' , ' + result.shippingArea + ', ' +
+                        result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + '" ' +
+                        'style="width: 50px; margin-left: 50px;" />' +
+                        '</div>' +
+
+                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                        '<input class="nav-radio form-check-input shipping-checkbox" ' +
+                        'name="selectedPOShippingAddress" type="radio" ' +
+                        'id="ShippingPOAddressRadio_' + groupAddressNumber + '" ' +
+                        'data-address="' + result.shippingAddress + ' , ' + result.shippingArea + ', ' +
+                        result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + '" ' +
+                        'value="' + result.shippingAddress + ' , ' + result.shippingArea + ', ' +
+                        result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + '" ' +
+                        'checked />' +
+                        '</div>' +
+                        '</div>' +
+
+                        '<hr>'
+                    );
+
+                    // Automatically select the radio button if only one address exists.
+                    if ($('#dvPoSiteShipppingAddress .ac-invoice-groupadd').length === 1) {
+                        $('#ShippingPOAddressRadio_' + groupAddressNumber).prop('checked', true);
+                    }
+                }
+            },
+        });
+    }
 }
-$('#drpPOSiteAddress').on('change', function () {
-    var selectedPOAddress = $(this).val();
-    $('#txtmdAddress').val(selectedPOAddress);
-});
 function AddShippingAddress() {
     siteloadershow();
     if ($("#ShippingAddressForm").valid()) {
@@ -1241,17 +1381,23 @@ function getCompanyDetails(CompanyId) {
 function UpdateMultiplePurchaseOrderDetails() {
     siteloadershow();
     if ($("#CreatePOForm").valid()) {
-        if ($('#addNewlink tr').length >= 1 && $('#dvshippingAdd .row.ac-invoice-shippingadd').length >= 1) {
+        if ($('#addNewlink tr').length >= 1) {
 
             var orderDetails = [];
-            var AddressDetails = [];
+            var totalProductQuantity = 0;
+
+            // Collect product details
             $(".product").each(function () {
                 var orderRow = $(this);
+                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; // Get product quantity
+
+                totalProductQuantity += itemQuantity; // Add to total quantity
+
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
                     UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
-                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Quantity: itemQuantity,
                     TotalPrice: orderRow.find("#txtproductamount").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Gst: orderRow.find("#txtgstAmount").val(),
@@ -1260,20 +1406,39 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 orderDetails.push(objData);
             });
+            
+            var AddressDetails = [];
+            var totalShippingQuantity = 0;
+            var hasError = false; 
 
-            $(".ShippingAddress").each(function () {
-                var shippingAddress = $(this);
-                var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
+            $(".nav-checkbox:checked").each(function () {
+                var address = $(this).val();
+                var quantityInput = $(this)
+                    .closest(".PoSiteShipppingAddress")
+                    .find(".shippingquantity");
 
-                if (shippingAddressText) {
-                    var addressData = {
-                        ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-                        ShippingAddress: shippingAddressText,
-                    };
-                    AddressDetails.push(addressData);
+                var shippingQuantity = parseFloat(quantityInput.val()) || 0;
+                totalShippingQuantity += shippingQuantity;
+
+                if (totalShippingQuantity > totalProductQuantity) {
+                    toastr.error("Shipping quantity exceeds available product quantity.");
+                    hasError = true;
+                    
+                } else {
+                    AddressDetails.push({
+                        ShippingAddress: address,
+                        ShippingQuantity: shippingQuantity,
+                    });
                 }
             });
 
+            if (hasError) {
+                siteloaderhide();
+                return; 
+            }
+            
+
+            // Collect payment terms
             var paymentTerms = "";
             var paymentTermsId = "";
 
@@ -1287,6 +1452,8 @@ function UpdateMultiplePurchaseOrderDetails() {
                 paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
+            debugger
+            // Prepare the PO request object
             var PORequest = {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#poModelSiteId").val(),
@@ -1301,7 +1468,9 @@ function UpdateMultiplePurchaseOrderDetails() {
                 TotalAmount: $("#cart-total").val(),
                 TotalGstamount: $("#totalgst").val(),
                 BillingAddress: $("#companybillingaddressDetails").val(),
-                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 && $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ? "Immediate" : $("#txtDeliverySchedule").val(),
+                DeliveryShedule: $("input[name='txtDeliverySchedule']:checked").length > 0 &&
+                    $("input[name='txtDeliverySchedule']:checked").val() === "Immediate" ?
+                    "Immediate" : $("#txtDeliverySchedule").val(),
                 ContactName: $("#txtContectPerson").val(),
                 ContactNumber: $("#txtMobileNo").val(),
                 UnitTypeId: $("#UnitTypeId").val(),
@@ -1309,9 +1478,13 @@ function UpdateMultiplePurchaseOrderDetails() {
                 GroupAddress: $('input[name="selectedPOGroupAddress"]:checked').val(),
                 ShippingAddressList: AddressDetails,
                 ItemOrderlist: orderDetails,
-            }
+            };
+
+            // Prepare form data
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
+
+            // Make AJAX request to update the PO details
             $.ajax({
                 url: '/PurchaseMaster/UpdateMultiplePurchaseOrderDetails',
                 type: 'POST',
@@ -1322,15 +1495,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                 success: function (Result) {
                     siteloaderhide();
                     if (Result.code == 200) {
-                        siteloaderhide();
                         toastr.success(Result.message);
                         setTimeout(function () {
                             window.location = '/PurchaseMaster/DisplayPODetails?POId=' + Result.data;
                         }, 2000);
-                    }
-                    else {
-                        siteloaderhide();
-                        toastr.error("There is some prolem in your request!");
+                    } else {
+                        toastr.error("There is some problem in your request!");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -1338,6 +1508,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     toastr.error('An error occurred while processing your request.');
                 }
             });
+
         } else {
             siteloaderhide();
             if ($('#addNewlink tr').length == 0) {
@@ -1346,10 +1517,8 @@ function UpdateMultiplePurchaseOrderDetails() {
                 $("#spnitembutton").text("");
             }
             if ($('#dvshippingAdd .row.ac-invoice-shippingadd').length == 0) {
-                siteloaderhide();
                 $("#spnshipping").text("Please Select Shipping Address!");
             } else {
-                siteloaderhide();
                 $("#spnshipping").text("");
             }
         }
@@ -1360,9 +1529,10 @@ function UpdateMultiplePurchaseOrderDetails() {
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
-        })
+        });
     }
 }
+
 
 function DeletePODetails(POId, BuyersPurchaseNo, element) {
     $('tr').removeClass('active');
@@ -1397,7 +1567,6 @@ function DeletePODetails(POId, BuyersPurchaseNo, element) {
                 dataType: 'json',
                 success: function (Result) {
                     if (Result.code == 200) {
-                        debugger
                         siteloaderhide();
                         Swal.fire({
                             title: Result.message,

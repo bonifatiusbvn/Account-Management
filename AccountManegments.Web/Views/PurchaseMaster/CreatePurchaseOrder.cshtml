@@ -408,17 +408,128 @@
                                                         <div class="card">
                                                             <h5 class="card-header">
                                                                 Shipping Addresses
-                                                                <a class="font-22" onclick="fn_OpenShippingModal()">
-                                                                    <i class="lni lni-circle-plus"></i>
-                                                                </a>
-                                                                <span id="spnshipping" style="color:red;"></span>
+                                                                @*  <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                                <i class="lni lni-circle-plus"></i>
+                                                                </a> *@
+                                                                @* <span id="spnshipping" style="color:red;"></span> *@
                                                             </h5>
-                                                            <div class="card-body Address" id="dvshippingAdd">
-                                                                @if (Model.AddressList != null)
-                                                                {
-                                                                    @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                                                }
-                                                            </div>
+                                                            @* <div class="card-body Address" id="dvshippingAdd">
+                                                            @if (Model.AddressList != null)
+                                                            {
+                                                            @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                                            }
+                                                            </div> *@
+                                                            @if (Model.Id == Guid.Empty)
+                                                            {
+                                                                <div class="card-body PoSiteShipppingAddress" id="dvPoSiteShipppingAddress">
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="card-body PoSiteShipppingAddress" id="dvPoSiteShipppingAddress">
+                                                                    @{
+                                                                        var counter = 1;
+                                                                        var SiteShippingAddress = ViewBag.ShippingAddresses;
+                                                                        var SingleSiteShippingAddress = ViewBag.SingleShippingAddress;
+                                                                        var AddressList = Model.AddressList;
+                                                                    }
+
+                                                                    @if (Model.AddressList != null)
+                                                                    {
+                                                                        <div class="row">  
+                                                                            <div class="col-2 col-sm-2">
+                                                                            </div>
+                                                                            <div class="col-5 col-sm-5">
+                                                                                <h6>Address</h6>
+                                                                            </div>
+                                                                            <div class="col-3 col-sm-3" style="margin-left: 50px;">
+                                                                                <h6>Quantity</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr />
+                                                                        @if (SingleSiteShippingAddress != null)
+                                                                        {
+                                                                            // Get all matching items for this address
+                                                                            var FullAddress = SingleSiteShippingAddress.Address + " , " + SingleSiteShippingAddress.Area + ", " + SingleSiteShippingAddress.CityName + ", " + SingleSiteShippingAddress.StateName + ", " + SingleSiteShippingAddress.CountryName;
+                                                                            var matchedItems = Model.AddressList.Where(a => a.Address == FullAddress).ToList();
+
+                                                                            <div class="row ac-invoice-groupadd PoSiteShipppingAddress">
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <label id="lblshprownum1">@counter</label>
+                                                                                </div>
+
+                                                                                <div class="col-5 col-sm-5">
+                                                                                    <p id="shippingaddress_@counter">@FullAddress</p>
+                                                                                    <input type="hidden" id="selectedPOShippingAddress_@counter" value="@FullAddress" />
+                                                                                </div>
+
+                                                                                <div class="col-3 col-sm-3">
+                                                                                    <input type="text"
+                                                                                           class="shippingquantity"
+                                                                                           style="width: 50px; margin-left: 50px;"
+                                                                                           value="@(matchedItems.Any() ? matchedItems.Sum(i => i.Quantity).ToString() : "")" />
+                                                                                </div>
+
+                                                                                <div class="col-2 col-sm-2">
+                                                                                    <input class="nav-checkbox form-check-input"
+                                                                                           type="checkbox"
+                                                                                           id="ShippingCheckbox_@counter"
+                                                                                           value="@FullAddress"
+                                                                                           checked="@(matchedItems.Any() ? "checked" : "")"
+                                                                                           onchange="saveSelectedGroupAddress()" />
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @foreach (var address in SiteShippingAddress)
+                                                                            {
+                                                                                // Get all matching items for this address
+                                                                                var matchedItems = Model.AddressList.Where(a => a.Address == address.Address).ToList();
+
+
+
+                                                                                <div class="row ac-invoice-groupadd PoSiteShipppingAddress">
+                                                                                    <div class="col-2 col-sm-2">
+                                                                                        <label id="lblshprownum1">@counter</label>
+                                                                                    </div>
+
+                                                                                    <div class="col-5 col-sm-5">
+                                                                                        <p id="shippingaddress_@counter">@address.Address</p>
+                                                                                        <input type="hidden" id="selectedPOShippingAddress_@counter" value="@address.Address" />
+                                                                                    </div>
+
+                                                                                    <div class="col-3 col-sm-3">
+                                                                                        <input type="text"
+                                                                                               class="shippingquantity"
+                                                                                               style="width: 50px; margin-left: 50px;"
+                                                                                               v value="@(matchedItems.Any() ? matchedItems.Sum(i => i.Quantity).ToString() : "")" />
+                                                                                    </div>
+
+                                                                                    <div class="col-2 col-sm-2">
+                                                                                        <input class="nav-checkbox form-check-input"
+                                                                                               type="checkbox"
+                                                                                               id="ShippingCheckbox_@counter"
+                                                                                               value="@address.Address"
+                                                                                        @(matchedItems.Any() ? "checked" : "")
+                                                                                               onchange="saveSelectedGroupAddress()" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                counter++;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="card-body PoSiteShipppingAddress" id="dvPoSiteShipppingAddress">
+                                                                            <p>No Shipping Addresses Found.</p>
+                                                                        </div>
+                                                                    }
+
+                                                                </div>
+
+                                                            }
                                                         </div>
                                                         <div class="card">
                                                             <h5 class="card-header">
@@ -453,12 +564,12 @@
 
                                                                                 <div class="col-2 col-sm-2">
                                                                                     <input class="nav-radio form-check-input"
-                                                                                     name="selectedPOGroupAddress" 
-                                                                                    type="radio"
-                                                                                    id="AddressRadio_@index"
-                                                                                    value="@address.GroupAddress"
+                                                                                           name="selectedPOGroupAddress"
+                                                                                           type="radio"
+                                                                                           id="AddressRadio_@index"
+                                                                                           value="@address.GroupAddress"
                                                                                     @(address.GroupAddress == selectedPOGroupAddress ? "checked" : "")
-                                                                                    onchange="saveSelectedGroupAddress()" />
+                                                                                           onchange="saveSelectedGroupAddress()" />
                                                                                 </div>
                                                                             </div>
                                                                             index++;
@@ -545,7 +656,7 @@
                                                                                         @:7. Validity of Offer: 20 Days
                                                                                         @:8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.
                                                                                     }
-                    </textarea>
+                                                </textarea>
                                                                             </div>
                                                                         </div>
 
@@ -631,40 +742,40 @@
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-1" value="Term-1" />
                                                                                 <textarea id="txtPOPaymentTerms1" style="height:300px; width:670px; border: none;">Terms & Condition
-        1. Prices: The Above Price are on site Vadodra
-        2. Packing: Pvc Wrapping
-        3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
-        4. Tax: 18% Gst Extra
-        5. Delivery: 15 to 20 Days From the Date of Purchase Order
-        6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
-        7. Validity of Offer: 20 Days
-        8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.</textarea>
+                                    1. Prices: The Above Price are on site Vadodra
+                                    2. Packing: Pvc Wrapping
+                                    3. Include Freight & Annexure of 28 & 29 Nos. Meter Panel
+                                    4. Tax: 18% Gst Extra
+                                    5. Delivery: 15 to 20 Days From the Date of Purchase Order
+                                    6. Payment: 10% advance along with PO, Balance Payment 15 Days After Material Dispatch
+                                    7. Validity of Offer: 20 Days
+                                    8. Warranty: 12 Months Against Manufacturing Defect & Switchgear from the date of delivery.</textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane fade" id="Terms-2" role="tabpanel">
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-2" value="Term-2" />
                                                                                 <textarea id="txtPOPaymentTerms2" style="height:300px; width:670px; border: none;">Terms & Condition
-        1. The Supplier will Accept Site Wieght & Measurement as correct & Final
-        2. All Goods are Subjects to Final approval at site Premies.
-        3. The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
-        4. Purchase Order no is must on each Invoice.
-        5. In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
-        6. All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,
-        7. In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</textarea>
+                                    1. The Supplier will Accept Site Wieght & Measurement as correct & Final
+                                    2. All Goods are Subjects to Final approval at site Premies.
+                                    3. The Tax Invoice are to be raised in name of DH PATEL, GST No. 24AABFD8160H1ZN
+                                    4. Purchase Order no is must on each Invoice.
+                                    5. In Case of deviation from above mentioned supply, the supplier must contact the concern Person for ap.proval
+                                    6. All necessary test Certificates to be sent alongwith the material. Material will be tested at our end,
+                                    7. In case of rejection of Material, Supplier will take the material back &testing Charges will be paid by Supplier.</textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane fade" id="Terms-3" role="tabpanel">
                                                                             <div class="p-3 border rounded">
                                                                                 <input type="hidden" id="Term-3" value="Term-3" />
                                                                                 <textarea id="txtPOPaymentTerms3" style="height:300px; width:670px; border: none;">Terms & Condition
-        1. Party shall be responsible for strength only.
-        2. Cube casting & testing are conducted in our in-plant laboratory.
-        3. Addition & Deletion of water at site rights reserve with us.
-        4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
-        5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
-        6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
-        7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.</textarea>
+                                    1. Party shall be responsible for strength only.
+                                    2. Cube casting & testing are conducted in our in-plant laboratory.
+                                    3. Addition & Deletion of water at site rights reserve with us.
+                                    4. Harikrishna is no way responsible for any plastic shrinkage or settlement cracks as these occur primarily due to improper handling of concrete during and post settlement.
+                                    5. In no event shall Harikrishna Concrete Solutions be liable for direct, indirect, special, incidental or consequential damages arising out of the use of this product, even if advised of the possiblity of such.
+                                    6. Damages. In no case shall Harikrishna Concrete Solution's liability exceed the purchase price of this product.
+                                    7. Vehicles should not be detained for more than 1 hour after reching the site. For retention more than 1 hr, RS.400/- per Hr.retention charges will be to your account for each hour delay.</textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -711,7 +822,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
+@* <div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -764,10 +875,10 @@
                 <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
                 <span id="spnaddressbutton" style="color:red;"></span>
                 @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
-            </div>
+@* </div>
         </div>
     </div>
-</div>
+</div>*@
 
 <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -874,7 +985,7 @@
         var rowcount = $('#dvshippingAdd .row.ac-invoice-shippingadd').length + 1
         if ($('#txtmdAddress').val() != null && $('#txtmdAddress').val().trim() != "") {
             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>`
             $('#dvshippingAdd').append(html);
         } else {
             tostar.error('Please select address!');

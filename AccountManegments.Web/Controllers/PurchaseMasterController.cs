@@ -264,6 +264,24 @@ namespace AccountManegments.Web.Controllers
                             ViewBag.GroupAddresses = SiteGroupDetails.GroupAddressList;
                         }
                     }
+                    var SiteId = response.SiteId;
+                    List<SiteAddressModel> SiteName = new List<SiteAddressModel>();
+                    ApiResponseModel Response = await APIServices.GetAsync("", "SiteMaster/GetSiteAddressList?SiteId=" + SiteId);
+                    if (Response.code == 200)
+                    {
+                        SiteName = JsonConvert.DeserializeObject<List<SiteAddressModel>>(Response.data.ToString());
+                        ViewBag.ShippingAddresses = SiteName;
+                    }
+                    if (SiteName.Count == 0)
+                    {
+                        SiteMasterModel SiteDetails = new SiteMasterModel();
+                        ApiResponseModel Res = await APIServices.GetAsync("", "SiteMaster/GetSiteDetailsById?SiteId=" + SiteId);
+                        if (Res.code == 200)
+                        {
+                            SiteDetails = JsonConvert.DeserializeObject<SiteMasterModel>(Res.data.ToString());
+                        }
+                        ViewBag.SingleShippingAddress = SiteDetails;
+                    }
                 }
                 return View(response);
             }
