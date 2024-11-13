@@ -398,7 +398,6 @@ namespace AccountManegments.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -435,7 +434,7 @@ namespace AccountManegments.Web.Controllers
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });
-                } 
+                }
                 else
                 {
                     return Ok(new { postuser.message, postuser.code });

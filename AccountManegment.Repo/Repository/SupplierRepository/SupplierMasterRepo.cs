@@ -23,9 +23,7 @@ namespace AccountManagement.Repository.Repository.SupplierRepository
         {
             Context = context;
         }
-
         public DbaccManegmentContext Context { get; }
-
         public async Task<ApiResponseModel> ActiveDeactiveSupplier(Guid SupplierId)
         {
             ApiResponseModel response = new ApiResponseModel();

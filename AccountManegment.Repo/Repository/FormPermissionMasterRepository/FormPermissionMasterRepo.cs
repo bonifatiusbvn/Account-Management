@@ -357,7 +357,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                     await Context.SaveChangesAsync();
                     response.Code = 200;
                     response.Data = GetRoleData;
-                    response.Message = GetRoleData.Role+ " " + "is active succesfully";
+                    response.Message = GetRoleData.Role + " " + "is active succesfully";
                 }
             }
             catch (Exception ex)
@@ -390,7 +390,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                                 Context.RolewiseFormPermissions.Remove(form);
                                 Context.SaveChanges();
                             }
-                        }                       
+                        }
                         response.Code = 200;
                         response.Message = "Role is successfully deleted.";
                     }
@@ -431,17 +431,18 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                               select new UserwiseFormPermissionModel
                               {
                                   Id = e.Id,
-                                  UserId=e.UserId,
+                                  UserId = e.UserId,
                                   FormId = e.FormId,
-                                  FormName = f.FormGroup,
+                                  FormName = f.FormName,
                                   FullName = r.FirstName + " " + r.LastName,
-                                  IsAddAllow=e.IsAddAllow,
+                                  IsAddAllow = e.IsAddAllow,
                                   IsViewAllow = e.IsViewAllow,
                                   IsEditAllow = e.IsEditAllow,
                                   IsDeleteAllow = e.IsDeleteAllow,
                                   IsApproved = e.IsApproved,
                                   CreatedBy = e.Createdby,
                                   CreatedOn = e.CreatedOn
+
                               }).ToListAsync();
 
 
@@ -474,7 +475,7 @@ namespace AccountManagement.Repository.Repository.FormPermissionMasterRepository
                             Item.IsApproved = updatedPermission.IsApproved;
                             Item.Createdby = updatedPermission.UserId;
                             Item.CreatedOn = DateTime.Now;
-                            Context.Update(Item);   
+                            Context.Update(Item);
                         }
                     }
                     else
