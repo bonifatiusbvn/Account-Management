@@ -18,10 +18,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Moduls\UserwiseFormPermissionScript.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Moduls\UserwiseFormPermissionScript.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Aspose.PDF" Version="24.3.0" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.17" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.OleDb" Version="7.0.0" />
   </ItemGroup>
@@ -120,6 +128,7 @@
     <None Include="wwwroot\lib\select2\js\select2.full.min.js" />
     <None Include="wwwroot\lib\select2\js\select2.js" />
     <None Include="wwwroot\lib\select2\js\select2.min.js" />
+    <None Include="wwwroot\Moduls\UserwiseFormPermissionScript.js" />
   </ItemGroup>
 
   <ItemGroup>

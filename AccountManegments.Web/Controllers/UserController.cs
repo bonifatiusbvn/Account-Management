@@ -372,5 +372,79 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+
+        //[FormPermissionAttribute("Userwise Permission-View")]
+        [HttpGet]
+        public IActionResult UserwisePermission()
+        {
+            return View();
+        }
+        public async Task<IActionResult> UserwisePermissionListAction()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.PostAsync("", "Authentication/GetAllUserList");
+
+                if (res.code == 200)
+                {
+                    List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
+
+                    return PartialView("~/Views/User/_UserwisePermissionPartial.cshtml", GetUserList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user role list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<IActionResult> GetUserwiseFormListById(Guid UserId)
+        {
+            try
+            {
+                List<UserwiseFormPermissionModel> UserwiseFormList = new List<UserwiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserwiseFormPermissionById?UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    UserwiseFormList = JsonConvert.DeserializeObject<List<UserwiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/User/_EditUserwiseFormPermissionPartial.cshtml", UserwiseFormList);
+                }
+                else
+                {
+                    return BadRequest(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateMultipleUserwiseFormPermission()
+        {
+            try
+            {
+                var UserwisePermissionDetails = HttpContext.Request.Form["UserwisePermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<UserwiseFormPermissionModel>>(UserwisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleUserewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                } 
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

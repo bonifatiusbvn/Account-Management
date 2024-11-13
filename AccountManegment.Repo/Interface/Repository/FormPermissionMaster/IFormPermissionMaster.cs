@@ -29,5 +29,8 @@ namespace AccountManagement.Repository.Interface.Repository.FormPermissionMaster
         Task<UserResponceModel> ActiveDeactiveRole(int roleId);
         Task<UserResponceModel> DeleteRole(int roleId);
 
+        Task<IEnumerable<UserwiseFormPermissionModel>> GetUserwiseFormPermissionList();
+        Task<List<UserwiseFormPermissionModel>> GetUserwiseFormPermissionById(Guid UserId);
+        Task<ApiResponseModel> UpdateMultipleUserwiseFormPermission(List<UserwiseFormPermissionModel> UpdatedUserwiseFormPermissions);
     }
 }
