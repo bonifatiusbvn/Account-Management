@@ -59,8 +59,10 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
+    public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+{}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -498,6 +500,24 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Role).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<UserwiseFormPermission>(entity =>
+        {
+            entity.ToTable("UserwiseFormPermission");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedBy).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Form).WithMany(p => p.UserwiseFormPermissions)
+                .HasForeignKey(d => d.FormId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserwiseFormPermission_Form");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserwiseFormPermissions)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserwiseFormPermission_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

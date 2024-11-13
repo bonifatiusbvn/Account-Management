@@ -34,4 +34,6 @@ public partial class User
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<UserwiseFormPermission> UserwiseFormPermissions { get; set; } = new List<UserwiseFormPermission>();
 }
