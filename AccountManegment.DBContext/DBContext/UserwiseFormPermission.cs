@@ -25,9 +25,9 @@ public partial class UserwiseFormPermission
 
     public DateTime CreatedOn { get; set; }
 
-    public Guid? UpdatedOn { get; set; }
+    public Guid? UpdatedBy { get; set; }
 
-    public DateTime? UpdatedBy { get; set; }
+    public DateTime? UpdatedOn { get; set; }
 
     public virtual Form Form { get; set; } = null!;
 
