@@ -45,8 +45,6 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<SiteAddress> SiteAddresses { get; set; }
 
-    public virtual DbSet<SiteMember> SiteMembers { get; set; }
-
     public virtual DbSet<State> States { get; set; }
 
     public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
@@ -58,8 +56,6 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UnitMaster> UnitMasters { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<UserRole> UserRoles { get; set; }
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
@@ -345,21 +341,6 @@ public partial class DbaccManegmentContext : DbContext
                 .HasConstraintName("FK_SiteAddress_Site");
         });
 
-        modelBuilder.Entity<SiteMember>(entity =>
-        {
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.CreatedOn).HasColumnType("date");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Site).WithMany(p => p.SiteMembers)
-                .HasForeignKey(d => d.SiteId)
-                .HasConstraintName("FK_SiteMembers_Site");
-
-            entity.HasOne(d => d.User).WithMany(p => p.SiteMembers)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_SiteMembers_User");
-        });
-
         modelBuilder.Entity<State>(entity =>
         {
             entity.HasKey(e => e.StatesId).HasName("PK__States__AC838DA89CEB4784");
@@ -506,17 +487,6 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.PhoneNo).HasMaxLength(100);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(20);
-        });
-
-        modelBuilder.Entity<UserRole>(entity =>
-        {
-            entity.HasKey(e => e.RoleId);
-
-            entity.ToTable("UserRole");
-
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Role).HasMaxLength(50);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<UserwiseFormPermission>(entity =>

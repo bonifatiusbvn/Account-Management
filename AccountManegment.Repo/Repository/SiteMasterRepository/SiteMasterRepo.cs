@@ -334,38 +334,50 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
         public async Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId)
         {
             ApiResponseModel response = new ApiResponseModel();
-            var Getsitedata = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
-            var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true);
+            var siteData = await Context.Sites.FirstOrDefaultAsync(a => a.SiteId == SiteId);
 
-            if (Getsitedata != null)
+            if (siteData == null)
             {
-                if (activeUsersCount == 0)
+                response.code = 404;
+                response.message = "Site not found.";
+                return response;
+            }
+
+
+            var activeUsersCount = Context.Users
+                .AsEnumerable()
+                .Count(e => e.IsActive &&
+                            e.SiteId != null &&
+                            e.SiteId.Split(',')
+                                .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                                .Contains(SiteId));
+
+
+            if (activeUsersCount == 0)
+            {
+                if (siteData.IsActive)
                 {
-                    if (Getsitedata.IsActive)
-                    {
-                        Getsitedata.IsActive = false;
-                        Context.Sites.Update(Getsitedata);
-                        await Context.SaveChangesAsync();
-                        response.code = 200;
-                        response.data = Getsitedata;
-                        response.message = "Site " + Getsitedata.SiteName + " is successfully deactivated.";
-                    }
-                    else
-                    {
-                        Getsitedata.IsActive = true;
-                        Context.Sites.Update(Getsitedata);
-                        await Context.SaveChangesAsync();
-                        response.code = 200;
-                        response.data = Getsitedata;
-                        response.message = "Site " + Getsitedata.SiteName + " is successfully activated.";
-                    }
+                    siteData.IsActive = false;
+                    response.message = "Site " + siteData.SiteName + " is successfully deactivated.";
                 }
                 else
                 {
-                    response.message = "This site has active users so it can't deactive.";
-                    response.code = 400;
+                    siteData.IsActive = true;
+                    response.message = "Site " + siteData.SiteName + " is successfully activated.";
                 }
+
+                Context.Sites.Update(siteData);
+                await Context.SaveChangesAsync();
+
+                response.code = 200;
+                response.data = siteData;
             }
+            else
+            {
+                response.message = "This site has active users, so it can't be deactivated.";
+                response.code = 400;
+            }
+
             return response;
         }
 
@@ -375,62 +387,82 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var siteDetails = Context.Sites.Where(a => a.SiteId == SiteId).FirstOrDefault();
-                var activeUsersCount = Context.Users.Count(e => e.SiteId == SiteId && e.IsActive == true && e.IsDeleted == false);
-                var Purchaserequest = Context.PurchaseRequests.Where(b => b.SiteId == SiteId).ToList();
-                var inwardchallan = Context.ItemInwords.Where(c => c.SiteId == SiteId).ToList();
-                var InvoiceDetails = Context.SupplierInvoices.Where(s => s.SiteId == SiteId).ToList();
+                var siteDetails = await Context.Sites.FirstOrDefaultAsync(a => a.SiteId == SiteId);
 
-                if (siteDetails != null && siteDetails.IsActive == false)
+                if (siteDetails == null)
+                {
+                    response.code = 404;
+                    response.message = "Site not found.";
+                    return response;
+                }
+
+
+                var activeUsersCount = Context.Users
+                    .AsEnumerable()
+                    .Count(e => e.IsActive && !e.IsDeleted &&
+                                e.SiteId != null &&
+                                e.SiteId.Split(',')
+                                    .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                                    .Contains(SiteId));
+
+                var purchaseRequests = await Context.PurchaseRequests.Where(b => b.SiteId == SiteId).ToListAsync();
+                var inwardChallans = await Context.ItemInwords.Where(c => c.SiteId == SiteId).ToListAsync();
+                var invoiceDetails = await Context.SupplierInvoices.Where(s => s.SiteId == SiteId).ToListAsync();
+
+                if (!siteDetails.IsActive)
                 {
                     if (activeUsersCount == 0)
                     {
-                        if (InvoiceDetails.Count > 0)
+                        if (invoiceDetails.Any())
                         {
                             response.code = 404;
-                            response.message = "Invoice is created for this Site.";
+                            response.message = "Invoice is created for this site.";
                         }
                         else
                         {
                             siteDetails.IsDeleted = true;
                             Context.Sites.Update(siteDetails);
-                            foreach (var request in Purchaserequest)
+
+                            foreach (var request in purchaseRequests)
                             {
                                 request.IsDeleted = true;
                                 Context.PurchaseRequests.Update(request);
                             }
 
-                            foreach (var challan in inwardchallan)
+                            foreach (var challan in inwardChallans)
                             {
                                 challan.IsDeleted = true;
                                 Context.ItemInwords.Update(challan);
                             }
-                            Context.SaveChanges();
+
+                            await Context.SaveChangesAsync();
+
                             response.code = 200;
                             response.data = siteDetails;
                             response.message = "Site is deleted successfully";
                         }
-
                     }
                     else
                     {
-                        response.message = "This site has active users so it can't delete.";
+                        response.message = "This site has active users, so it can't be deleted.";
                         response.code = 400;
                     }
-
                 }
                 else
                 {
-                    response.message = "Active site can't delete.";
+                    response.message = "Active site can't be deleted.";
                     response.code = 400;
                 }
-                return response;
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = 500;
+                response.message = "An error occurred while processing your request.";
             }
+
+            return response;
         }
+
 
         public async Task<IEnumerable<SiteMasterModel>> GetSiteNameList()
         {

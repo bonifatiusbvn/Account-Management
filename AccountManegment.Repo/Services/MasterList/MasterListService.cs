@@ -64,17 +64,6 @@ namespace AccountManagement.Repository.Services.MasterList
             }
         }
 
-        public async Task<IEnumerable<UserRoleModel>> GetUserRole()
-        {
-            try
-            {
-                return await MasterList.GetUserRole();
-            }
-            catch (Exception ex)
-            {
 
-                throw ex;
-            }
-        }
     }
 }

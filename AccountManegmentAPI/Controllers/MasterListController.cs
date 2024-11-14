@@ -43,20 +43,5 @@ namespace AccountManagement.API.Controllers
             return Ok(new { code = 200, data = getCities.ToList() });
         }
 
-        [HttpGet]
-        [Route("GetUserRole")]
-        public async Task<IActionResult> GetUserRole()
-        {
-            IEnumerable<UserRoleModel> userRole = await MasterList.GetUserRole();
-            return Ok(new { code = 200, data = userRole.ToList() });
-        }
-
-        [HttpPost]
-        [Route("GetUserRoleList")]
-        public async Task<IActionResult> GetUserRoleList()
-        {
-            IEnumerable<UserRoleModel> userRole = await MasterList.GetUserRole();
-            return Ok(new { code = 200, data = userRole.ToList() });
-        }
     }
 }

@@ -74,28 +74,7 @@ namespace AccountManagement.Repository.Repository.MasterListRepository
             }
         }
 
-        public async Task<IEnumerable<UserRoleModel>> GetUserRole()
-        {
-            try
-            {
 
-                var roles = await Context.UserRoles
-                    .Where(a => a.IsDelete == false)
-                    .Select(a => new UserRoleModel
-                    {
-                        RoleId = a.RoleId,
-                        Role = a.Role,
-                        IsActive = a.IsActive,
-                    })
-                    .ToListAsync();
-
-                return roles;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
     }
 }

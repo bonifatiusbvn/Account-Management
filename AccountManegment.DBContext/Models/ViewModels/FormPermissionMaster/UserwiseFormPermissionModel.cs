@@ -26,7 +26,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
 
         public Guid CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
 

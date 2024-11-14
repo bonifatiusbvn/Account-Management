@@ -1,4 +1,5 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManegments.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public bool? IsDeleted { get; set; }
         public List<FromPermission> FromPermissionData { get; set; }
 
-        public List<Site> userSites { get; set; }
+        public List<UserSiteListModel> userSites { get; set; }
         public string? Token { get; set; }
     }
     public class LoginResponseModel

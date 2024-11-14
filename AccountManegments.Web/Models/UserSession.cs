@@ -1,4 +1,5 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using Newtonsoft.Json;
 
 namespace AccountManegments.Web.Models
@@ -108,15 +109,15 @@ namespace AccountManegments.Web.Models
             }
 
         }
-        public static List<Site> SiteData
+        public static List<UserSiteListModel> SiteData
         {
 
             get
             {
-                if (StaticHttpContext.Session.GetObjectFromJson<List<Site>>("SiteData") == null)
-                    return new List<Site>();
+                if (StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData") == null)
+                    return new List<UserSiteListModel>();
                 else
-                    return StaticHttpContext.Session.GetObjectFromJson<List<Site>>("SiteData");
+                    return StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData");
             }
             set
             {

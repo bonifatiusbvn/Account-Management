@@ -23,7 +23,7 @@ public partial class UserwiseFormPermission
 
     public Guid Createdby { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public DateTime? CreatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
 
