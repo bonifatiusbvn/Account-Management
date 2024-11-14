@@ -2,10 +2,12 @@
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManegments.Web.Models;
 using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -38,31 +40,46 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId)
         {
             UserResponceModel response = new UserResponceModel();
-            var GetUserdta = Context.Users.Where(a => a.Id == UserId).FirstOrDefault();
-            var GetSite = Context.Sites.FirstOrDefault(e => e.SiteId == GetUserdta.SiteId && e.IsDeleted == false);
 
-            if (GetUserdta != null && GetSite != null)
+            var GetUserdta = Context.Users.FirstOrDefault(a => a.Id == UserId);
+
+            if (GetUserdta == null)
+            {
+                response.Message = "User not found.";
+                response.Code = 404;
+                return response;
+            }
+
+
+            var userSiteIds = GetUserdta.SiteId?
+                              .Split(',')
+                              .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                              .Where(guid => guid.HasValue)
+                              .Select(guid => guid.Value)
+                              .ToList();
+
+            if (userSiteIds == null || !userSiteIds.Any())
+            {
+                response.Message = "No valid SiteId associated with the user.";
+                response.Code = 400;
+                return response;
+            }
+
+
+            var GetSite = Context.Sites.FirstOrDefault(e => userSiteIds.Contains(e.SiteId) && e.IsDeleted == false);
+
+            if (GetSite != null)
             {
                 if (GetSite.IsActive)
                 {
-                    if (GetUserdta.IsActive)
-                    {
-                        GetUserdta.IsActive = false;
-                        Context.Users.Update(GetUserdta);
-                        await Context.SaveChangesAsync();
-                        response.Code = 200;
-                        response.Data = GetUserdta;
-                        response.Message = "User" + " " + GetUserdta.UserName + " " + "is deactive succesfully";
-                    }
-                    else
-                    {
-                        GetUserdta.IsActive = true;
-                        Context.Users.Update(GetUserdta);
-                        await Context.SaveChangesAsync();
-                        response.Code = 200;
-                        response.Data = GetUserdta;
-                        response.Message = "User" + " " + GetUserdta.UserName + " " + "is active succesfully";
-                    }
+
+                    GetUserdta.IsActive = !GetUserdta.IsActive;
+                    Context.Users.Update(GetUserdta);
+                    await Context.SaveChangesAsync();
+
+                    response.Code = 200;
+                    response.Data = GetUserdta;
+                    response.Message = $"User {GetUserdta.UserName} is {(GetUserdta.IsActive ? "active" : "deactive")} successfully";
                 }
                 else
                 {
@@ -75,6 +92,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 response.Message = "This user's site is deleted.";
                 response.Code = 400;
             }
+
             return response;
         }
 
@@ -102,9 +120,8 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         Email = CreateUser.Email,
                         PhoneNo = CreateUser.PhoneNo,
                         Password = CreateUser.Password,
-                        RoleId = CreateUser.Role,
                         IsActive = true,
-                        SiteId = CreateUser.SiteId,
+
                         IsDeleted = false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -170,8 +187,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
-                            join r in Context.UserRoles on e.RoleId equals r.RoleId into roleGroup
-                            from r in roleGroup.DefaultIfEmpty()
+
                             select new LoginView
                             {
                                 Id = e.Id,
@@ -182,10 +198,9 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 Password = e.Password,
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
-                                RoleId = e.RoleId,
-                                RoleName = r != null ? r.Role : null,
-                                SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
-                                SiteId = e.SiteId,
+
+                                //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
+                                //SiteId = e.SiteId,
                             }).First();
                 return Userdata;
             }
@@ -200,8 +215,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 IEnumerable<LoginView> userList = (from e in Context.Users
-                                                   join r in Context.UserRoles on e.RoleId equals r.RoleId into roleGroup
-                                                   from r in roleGroup.DefaultIfEmpty()
                                                    where e.IsDeleted == false
                                                    select new LoginView
                                                    {
@@ -212,10 +225,9 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                        Email = e.Email,
                                                        PhoneNo = e.PhoneNo,
                                                        IsActive = e.IsActive,
-                                                       RoleName = r != null ? r.Role : null,
-                                                       RoleId = e.RoleId,
-                                                       SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
-                                                       SiteId = e.SiteId,
+
+                                                       //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
+                                                       //SiteId = e.SiteId,
                                                        CreatedOn = e.CreatedOn,
                                                    });
 
@@ -295,12 +307,10 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 var tblUser = await (from u in Context.Users
-                                     join r in Context.UserRoles on u.RoleId equals r.RoleId
                                      where u.UserName == loginRequest.UserName
                                      select new
                                      {
                                          User = u,
-                                         Role = r.Role,
                                      }).FirstOrDefaultAsync();
 
                 if (tblUser == null)
@@ -329,23 +339,11 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 {
                     UserName = tblUser.User.UserName,
                     Id = tblUser.User.Id,
-                    RoleId = tblUser.User.RoleId,
-                    RoleName = tblUser.Role,
                     FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
                     FirstName = tblUser.User.FirstName,
-                    SiteId = tblUser.User.SiteId,
+                    userSites = new List<UserSiteListModel>(),
                     Token = authToken
                 };
-
-                if (tblUser.User.SiteId != null)
-                {
-                    var siteData = await (from s in Context.Sites
-                                          where s.SiteId == tblUser.User.SiteId
-                                          select new { s.SiteName }).FirstOrDefaultAsync();
-
-                    userModel.SiteName = siteData?.SiteName;
-                }
-
 
                 bool userFormPermissionExists = await Context.UserwiseFormPermissions.AnyAsync(e => e.UserId == userModel.Id);
                 if (userFormPermissionExists)
@@ -366,30 +364,26 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                               Delete = rfp.IsDeleteAllow,
                                                               IsApproved = rfp.IsApproved,
                                                           }).ToListAsync();
-                }
-                else
-                {
-                    userModel.FromPermissionData = await (from rfp in Context.RolewiseFormPermissions
-                                                          join f in Context.Forms on rfp.FormId equals f.FormId
-                                                          where rfp.RoleId == userModel.RoleId && f.IsActive
-                                                          orderby f.OrderId
-                                                          select new FromPermission
-                                                          {
-                                                              FormName = f.FormName,
-                                                              GroupName = f.FormGroup,
-                                                              Controller = f.Controller,
-                                                              Action = f.Action,
-                                                              Add = rfp.IsAddAllow,
-                                                              View = rfp.IsViewAllow,
-                                                              Edit = rfp.IsEditAllow,
-                                                              Delete = rfp.IsDeleteAllow,
-                                                              IsApproved = rfp.IsApproved,
-                                                          }).ToListAsync();
+                    var siteIds = tblUser.User.SiteId?.Split(',')
+                      .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                      .Where(guid => guid.HasValue)
+                      .Select(guid => guid.Value)
+                      .ToList();
 
-                    userModel.userSites = await (from s in Context.Sites
-                                                 where s.IsActive
-                                                 select new Site { SiteId = s.SiteId, SiteName = s.SiteName }).ToListAsync();
+
+                    if (siteIds != null && siteIds.Any())
+                    {
+                        userModel.userSites = await (from s in Context.Sites
+                                                     where siteIds.Contains(s.SiteId)
+                                                     select new UserSiteListModel
+                                                     {
+                                                         SiteId = s.SiteId,
+                                                         SiteName = s.SiteName,
+                                                     }).ToListAsync();
+                    }
+
                 }
+
 
                 response.Data = userModel;
                 response.Code = (int)HttpStatusCode.OK;
@@ -452,9 +446,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.Password = UpdateUser.Password;
                     Userdata.Email = UpdateUser.Email;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
-                    Userdata.RoleId = UpdateUser.Role;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
-                    Userdata.SiteId = UpdateUser.SiteId;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();
                     response.Code = (int)HttpStatusCode.OK;
