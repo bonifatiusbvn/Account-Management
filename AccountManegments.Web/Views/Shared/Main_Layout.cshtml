@@ -317,38 +317,32 @@
                     var userSites = UserSession.SiteData;
                 }
                 <form id="frmdrpdashbord">
-                    @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
-                    {
-                        <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
-                            <option value="">All Site</option>
-                            @if (userSites != null)
+
+                    <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
+                        <option value="">All Site</option>
+                        @if (userSites != null)
+                        {
+                            foreach (var site in userSites)
                             {
-                                foreach (var site in userSites)
+                                Guid siteGuid;
+                                bool isValidGuid = Guid.TryParse(UserSession.SiteId, out siteGuid);
+
+                                var selected = isValidGuid && siteGuid == site.SiteId ? "selected" : "";
+
+                                if (selected == "selected")
                                 {
-                                    Guid siteGuid;
-                                    bool isValidGuid = Guid.TryParse(UserSession.SiteId, out siteGuid);
+                                    <option value="@site.SiteId" selected>@site.SiteName</option>
+                                }
+                                else
+                                {
+                                    <option value="@site.SiteId">@site.SiteName</option>
 
-                                    var selected = isValidGuid && siteGuid == site.SiteId ? "selected" : "";
-
-                                    if (selected == "selected")
-                                    {
-                                        <option value="@site.SiteId" selected>@site.SiteName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@site.SiteId">@site.SiteName</option>
-
-                                    }
                                 }
                             }
-                        </select>
-                    }
-                    else
-                    {
-                        <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName" disabled>
-                            <option value="@UserSession.SiteId">@UserSession.SiteName</option>
-                        </select>
-                    }
+                        }
+                    </select>
+
+
                 </form>
                 <h5 id="siteErrorMesssage">
                 </h5>
