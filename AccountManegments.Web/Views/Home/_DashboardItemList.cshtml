@@ -13,7 +13,7 @@
                 <td>@item.ItemName</td>
                 <td>@item.PricePerUnit</td>
                 <td>
-                    @if (_userSession.UserRole == 3)
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true)))
                     {
                         <input class="form-check-input" type="checkbox" name="chk_child" id="item_@item.ItemId" />
                     }

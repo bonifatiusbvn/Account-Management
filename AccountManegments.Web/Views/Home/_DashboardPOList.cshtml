@@ -16,7 +16,7 @@
                 <td>@item.CompanyName</td>
                 <td>@item.TotalAmount</td>
                 <td>
-                    @if (_userSession.UserRole == 3)
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
                     {
                         <input class="form-check-input" type="checkbox" name="chk_POchild" id="PO_@item.Id" />
                     }
@@ -35,7 +35,7 @@
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
                 {
                     <td style="width:131px;">
-                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
                         {
                             <a class="btn text-primary" id="EditPOButton" href="/PurchaseMaster/CreatePurchaseOrder?Id=@item.Id" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                         }

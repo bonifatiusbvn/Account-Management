@@ -111,20 +111,17 @@ namespace AccountManegments.Web.Models
         }
         public static List<UserSiteListModel> SiteData
         {
-
             get
             {
-                if (StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData") == null)
-                    return new List<UserSiteListModel>();
-                else
-                    return StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData");
+                var siteData = StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData");
+                return siteData ?? new List<UserSiteListModel>();
             }
             set
             {
                 StaticHttpContext.Session.SetObjectAsJson("SiteData", value);
             }
-
         }
+
 
         public string Token
         {

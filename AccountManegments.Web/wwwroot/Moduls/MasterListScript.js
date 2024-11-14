@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     GetCountry();
-    GetUserRole()
+
     $('#dropState').change(function () {
 
         var Text = $("#dropState Option:Selected").text();
@@ -77,16 +77,4 @@ function GetCountry() {
     });
 }
 
-function GetUserRole() {
-
-    $.ajax({
-        url: '/User/GetRoles',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#ddlUserRole').append('<Option value=' + data.roleId + ' Selected>' + data.role + '</Option>')
-
-            });
-        }
-    });
-}
 

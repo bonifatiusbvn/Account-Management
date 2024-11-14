@@ -80,7 +80,7 @@
                                                         <td>@item.UnitName</td>
                                                         <td>@item.Quantity</td>
                                                         <td>
-                                                            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
+                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
                                                             {
                                                                 <input class="form-check-input" type="checkbox" name="chk_PRchild" id="PR_@item.Pid" style="margin-left:30px;" />
                                                             }
@@ -142,7 +142,7 @@
                                                 <th>Supplier</th>
                                                 <th>Company</th>
                                                 <th>Amount</th>
-                                                @if (_userSession.UserRole == 3)
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
                                                 {
                                                     <th style="width:84px;">
                                                         <input class="form-check-input" type="checkbox" id="checkedAllPO" />
@@ -185,7 +185,7 @@
                                             <tr>
                                                 <th>Item</th>
                                                 <th>Price</th>
-                                                @if (_userSession.UserRole == 3)
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true)))
                                                 {
                                                     <th>
                                                         <input class="form-check-input" type="checkbox" id="checkedAllItem" />
@@ -228,7 +228,7 @@
                                                 <th>Supplier</th>
                                                 <th>Company</th>
                                                 <th>Amount</th>
-                                                @if (_userSession.UserRole == 3)
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th style="width:84px;">
                                                         <input class="form-check-input" type="checkbox" id="checkedAllInvoice" />
@@ -270,7 +270,7 @@
                                                 <tr>
                                                     <th>Supplier</th>
                                                     <th>Gst</th>
-                                                    @if (_userSession.UserRole == 3)
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
                                                     {
                                                         <th>
                                                             <input class="form-check-input" type="checkbox" id="checkedAllSupplier" />
@@ -311,7 +311,7 @@
                                                 <tr>
                                                     <th>Item</th>
                                                     <th>Quantity</th>
-                                                    @if (_userSession.UserRole == 3)
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Delete == true)))
                                                     {
                                                         <th>
                                                             <input class="form-check-input" type="checkbox" id="checkedAllInward" />
@@ -552,16 +552,15 @@
                                     <span id="spnQuantity" class="text-danger"></span>
                                 </div>
                             </div>
-                            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
-                            {
-                                <div class="col-lg-12 col-12" id="siteDetails">
-                                    <label class="form-label">Site</label>
-                                    <select class="form-select" id="txtPRSiteName" name="txtPRSiteName">
-                                        <option value="" selected>--Select Site--</option>
-                                    </select>
-                                    <span id="spnSiteName" class="text-danger"></span>
-                                </div>
-                            }
+
+                            <div class="col-lg-12 col-12" id="siteDetails">
+                                <label class="form-label">Site</label>
+                                <select class="form-select" id="txtPRSiteName" name="txtPRSiteName">
+                                    <option value="" selected>--Select Site--</option>
+                                </select>
+                                <span id="spnSiteName" class="text-danger"></span>
+                            </div>
+
                             <input type="hidden" id="txtPRsiteid" value="@UserSession.SiteId" />
                             <input type="hidden" id="txtPRRoleId" value="@_userSession.UserRole" />
                             <div class="col-lg-6 col-12" id="siteSection" style="display: none;">
@@ -929,4 +928,3 @@
     </script>
 }
 
-<script src="~/moduls/masterlistscript.js"></script>
