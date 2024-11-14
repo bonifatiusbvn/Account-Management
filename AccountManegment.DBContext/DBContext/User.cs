@@ -35,5 +35,7 @@ public partial class User
 
     public DateTime? UpdatedOn { get; set; }
 
+    public virtual ICollection<SiteMember> SiteMembers { get; set; } = new List<SiteMember>();
+
     public virtual ICollection<UserwiseFormPermission> UserwiseFormPermissions { get; set; } = new List<UserwiseFormPermission>();
 }

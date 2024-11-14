@@ -45,6 +45,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<SiteAddress> SiteAddresses { get; set; }
 
+    public virtual DbSet<SiteMember> SiteMembers { get; set; }
+
     public virtual DbSet<State> States { get; set; }
 
     public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
@@ -341,6 +343,21 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.SiteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_SiteAddress_Site");
+        });
+
+        modelBuilder.Entity<SiteMember>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Site).WithMany(p => p.SiteMembers)
+                .HasForeignKey(d => d.SiteId)
+                .HasConstraintName("FK_SiteMembers_Site");
+
+            entity.HasOne(d => d.User).WithMany(p => p.SiteMembers)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_SiteMembers_User");
         });
 
         modelBuilder.Entity<State>(entity =>

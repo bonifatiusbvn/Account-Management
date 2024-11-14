@@ -22,7 +22,11 @@
                 }/>
             }
         </td>
-
+        <td>
+            <a class="btn text-primary" id="siteCard_@item.Id" onclick="EditUserWiseFormDetails('@item.Id', this)" title="Edit" aria-label="Edit">
+                <i class="fadeIn animated bx bx-edit"></i>
+            </a>
+        </td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && (a.Edit || a.Delete)))
         {
             <td>
