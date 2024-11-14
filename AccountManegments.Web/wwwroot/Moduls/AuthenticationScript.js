@@ -13,7 +13,7 @@ function CreateUser() {
             LastName: $('#txtLastName').val(),
             UserName: $('#txtUserName').val(),
             Password: $('#txtPassword').val(),
-            Role: $('#txtrole').val(),
+            
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#ddlSiteName').val(),
@@ -76,9 +76,9 @@ function ClearUserTextBox() {
     $('#txtUserName').val('');
     $('#txtPassword').val('');
     $('#txtEmail').val('');
-    $('#txtrole').val('');
+    
     $('#txtPhoneNo').val('');
-    $('#ddlUserRole').val('');
+   
     $('#ddlSiteName').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
@@ -223,7 +223,7 @@ function UpdateUserDetails() {
             LastName: $('#txtLastName').val(),
             UserName: $('#txtUserName').val(),
             Password: $('#txtPassword').val(),
-            Role: $('#ddlUserRole').val(),
+            
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#ddlSiteName').val(),
@@ -280,7 +280,7 @@ function validateAndCreateUser() {
                     minlength: 10,
                     maxlength: 10
                 },
-                ddlUserRole: "required",
+                
             },
             messages: {
                 txtFirstName: "FirstName is Required!",
@@ -297,7 +297,7 @@ function validateAndCreateUser() {
                     minlength: "Phone number must be 10 digits long",
                     maxlength: "Phone number must be 10 digits long"
                 },
-                ddlUserRole: "Select User Role!",
+                
             }
         })
     }
@@ -318,7 +318,7 @@ function validateAndCreateUser() {
                     minlength: 10,
                     maxlength: 10
                 },
-                ddlUserRole: "required",
+               
 
             },
             messages: {
@@ -336,7 +336,7 @@ function validateAndCreateUser() {
                     minlength: "Phone number must be 10 digits long",
                     maxlength: "Phone number must be 10 digits long"
                 },
-                ddlUserRole: "Select User Role!",
+                
 
             }
         })

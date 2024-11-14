@@ -102,7 +102,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         Email = CreateUser.Email,
                         PhoneNo = CreateUser.PhoneNo,
                         Password = CreateUser.Password,
-                        RoleId = CreateUser.Role,
                         IsActive = true,
                         SiteId = CreateUser.SiteId,
                         IsDeleted = false,
@@ -111,6 +110,28 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     };
 
                     Context.Users.Add(model);
+
+
+                    var Forms = Context.Forms.ToList();
+
+                    foreach (var form in Forms)
+                    {
+                        var UserwisePermission = new UserwiseFormPermission()
+                        {
+
+                            UserId = CreateUser.Id,
+                            FormId = form.FormId,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            IsApproved = true,
+                            Createdby = CreateUser.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                        };
+                        Context.UserwiseFormPermissions.Add(UserwisePermission);
+                    }
+
+
                     Context.SaveChanges();
 
                     response.Code = (int)HttpStatusCode.OK;
