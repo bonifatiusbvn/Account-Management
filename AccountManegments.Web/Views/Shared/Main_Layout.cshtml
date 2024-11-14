@@ -328,11 +328,13 @@
                                 bool isValidGuid = Guid.TryParse(selectedSiteId, out siteGuid);
                                 var selected = isValidGuid && siteGuid == site.SiteId ? "selected" : "";
 
+
                                 <option value="@site.SiteId" @@selected>@site.SiteName</option>
                             }
                         }
                     </select>
                 </form>
+
                 <h5 id="siteErrorMesssage">
                 </h5>
                 <div class="top-navbar-right ms-auto">
@@ -484,13 +486,17 @@
             });
         }
 
-             $(document).ready(function () {
-
+                     $(document).ready(function () {
             const userSitesCount = @userSitesCount;
-
 
             if (userSitesCount === 0) {
                 fetchSiteNameList();
+            } else {
+
+                const selectedSiteId = sessionStorage.getItem('SelectedSiteId');
+                if (selectedSiteId) {
+                    $('#drpSiteName').val(selectedSiteId);
+                }
             }
 
             $('#drpSiteName').change(function () {
@@ -501,17 +507,16 @@
         });
 
         function fetchSiteNameList() {
-
             $.ajax({
                 url: '/SiteMaster/GetSiteNameList',
                 type: 'GET',
                 success: function (siteList) {
-
                     const $dropdown = $('#drpSiteName');
                     $dropdown.empty().append('<option value="">All Site</option>');
                     siteList.forEach(site => {
                         $dropdown.append(`<option value="${site.siteId}">${site.siteName}</option>`);
                     });
+
 
                     const selectedSiteId = sessionStorage.getItem('SelectedSiteId');
                     if (selectedSiteId) {
@@ -525,7 +530,6 @@
         }
 
         function fn_ChangeSite(selectedSiteId, siteText) {
-
             $.ajax({
                 url: '/Home/PurchaseRequestList',
                 type: 'GET',
@@ -534,8 +538,6 @@
                     SiteName: siteText
                 },
                 success: function (result) {
-                    debugger
-                    $('#drpSiteName').text(siteText);
                     $("#tbPndingApproval").html(result);
                     sessionStorage.setItem('SelectedSiteId', selectedSiteId);
                     location.reload();
