@@ -5,6 +5,43 @@ GetDashboardPurchaseOrderList();
 GetDashboardInvoiceList();
 GetDashboardSupplierList();
 GetDashboardInwardList();
+
+GetUserSiteList();
+function GetUserSiteList() {
+    
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        success: function (result) {
+            
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#textUserSiteList').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
+                });
+            }
+        }
+    });
+}
+
+
+$(document).ready(function () {
+
+
+    $('#textUserSiteList').select2({
+        placeholder: "--Select Site--",
+        allowClear: true
+    });
+
+
+    $('#textUserSiteList').on('change', function () {
+        var selectedSites = $('#textUserSiteList').select2('data');
+        var selectedSiteNames = selectedSites.map(site => site.text).join(', ');
+        var selectedSiteIds = selectedSites.map(site => site.id).join(', ');
+
+
+        $('#SelectedSite').val(selectedSiteNames);
+        $('#SelectedSiteID').val(selectedSiteIds);
+    });
+});
 function CreateUser() {
     siteloadershow();
     if ($("#userForm").valid()) {
@@ -16,8 +53,9 @@ function CreateUser() {
             
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
-            SiteId: $('#ddlSiteName').val(),
+            SiteId: $('#SelectedSiteID').val(),
         };
+        
         $.ajax({
             url: '/User/CreateUser',
             type: 'post',
@@ -105,8 +143,16 @@ function DisplayUserDetails(UserId) {
             $('#txtUserName').val(response.userName);
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
-            $('#ddlSiteName').val(response.siteId);
+            $('#SelectedSiteID').val(response.siteId);
             $('#ddlUserRole').val(response.roleId);
+            
+            if (response.siteId) {
+                $('#textUserSiteList').val(null).trigger('change');
+                
+                var selectedSiteIds = response.siteId.split(', '); 
+                $('#textUserSiteList').val(selectedSiteIds).trigger('change'); 
+            }
+
             var button = document.getElementById("btnuser");
             if ($('#txtUserid').val() != '') {
                 button.textContent = "Update";
@@ -223,10 +269,9 @@ function UpdateUserDetails() {
             LastName: $('#txtLastName').val(),
             UserName: $('#txtUserName').val(),
             Password: $('#txtPassword').val(),
-            
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
-            SiteId: $('#ddlSiteName').val(),
+            SiteId: $('#SelectedSiteID').val(),
         }
         $.ajax({
             url: '/User/UpdateUserDetails',
@@ -1794,3 +1839,5 @@ $(document).ready(function () {
     });
     InwardApproveButton();
 });
+
+

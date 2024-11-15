@@ -121,7 +121,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         PhoneNo = CreateUser.PhoneNo,
                         Password = CreateUser.Password,
                         IsActive = true,
-
+                        SiteId=CreateUser.SiteId,
                         IsDeleted = false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -220,6 +220,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 Password = e.Password,
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
+                                SiteId=e.SiteId,
 
                                 //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                 //SiteId = e.SiteId,
