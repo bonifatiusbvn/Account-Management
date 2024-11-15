@@ -121,7 +121,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         PhoneNo = CreateUser.PhoneNo,
                         Password = CreateUser.Password,
                         IsActive = true,
-                        SiteId=CreateUser.SiteId,
+                        SiteId = CreateUser.SiteId,
                         IsDeleted = false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -139,7 +139,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                             UserId = model.Id,
                             FormId = form.FormId,
-                            IsAddAllow=true,
+                            IsAddAllow = true,
                             IsViewAllow = true,
                             IsEditAllow = true,
                             IsDeleteAllow = true,
@@ -221,7 +221,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 Password = e.Password,
                                 IsActive = e.IsActive,
                                 PhoneNo = e.PhoneNo,
-                                SiteId=e.SiteId,
+                                SiteId = e.SiteId,
 
                                 //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
                                 //SiteId = e.SiteId,
@@ -401,6 +401,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     {
                         userModel.userSites = await (from s in Context.Sites
                                                      where siteIds.Contains(s.SiteId)
+                                                     orderby s.SiteName
                                                      select new UserSiteListModel
                                                      {
                                                          SiteId = s.SiteId,

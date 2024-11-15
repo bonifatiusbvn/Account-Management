@@ -315,25 +315,23 @@
             <nav class="navbar navbar-expand gap-3">
                 @{
                     var userSites = UserSession.SiteData;
-                    var userSitesCount = (userSites != null) ? userSites.Count : 0;
                     var selectedSiteId = UserSession.SiteId;
+                    var userSitesCount = (userSites != null) ? userSites.Count : 0;
                 }
+
                 <form id="frmdrpdashbord">
                     <select class="form-select form-control-lg" id="drpSiteName" name="drpSiteName">
                         @if (userSites != null && userSites.Any())
                         {
                             foreach (var site in userSites)
                             {
-                                Guid siteGuid;
-                                bool isValidGuid = Guid.TryParse(selectedSiteId, out siteGuid);
-                                var selected = isValidGuid && siteGuid == site.SiteId ? "selected" : "";
-
-
-                                <option value="@site.SiteId" selected>@site.SiteName</option>
+                                var isSelected = site.SiteId.ToString().Equals(selectedSiteId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                <option value="@site.SiteId" isSelected>@site.SiteName</option>
                             }
                         }
                     </select>
                 </form>
+
 
                 <h5 id="siteErrorMesssage">
                 </h5>

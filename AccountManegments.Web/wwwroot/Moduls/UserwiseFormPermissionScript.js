@@ -67,9 +67,6 @@ function UpdateUserwiseFormPermission() {
         };
         formPermissions.push(objData);
     });
-
-
-
     var form_data = new FormData();
     form_data.append("UserwisePermissionDetails", JSON.stringify(formPermissions));
 
