@@ -38,7 +38,7 @@ $(document).ready(function () {
     $('#textUserSiteList').on('change', function () {
         var selectedSites = $('#textUserSiteList').select2('data');
         var selectedSiteNames = selectedSites.map(site => site.text).join(', ');
-        var selectedSiteIds = selectedSites.map(site => site.id).join(', ');
+        var selectedSiteIds = selectedSites.map(site => site.id).join(',');
 
         $('#SelectedSite').val(selectedSiteNames);
         $('#SelectedSiteID').val(selectedSiteIds);
