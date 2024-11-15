@@ -6,25 +6,28 @@ GetDashboardInvoiceList();
 GetDashboardSupplierList();
 GetDashboardInwardList();
 
-GetUserSiteList();
 function GetUserSiteList() {
-    
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-            $('#textUserSiteList').append('<option value="null">All Sites</option>');
+
+            $('#textUserSiteList').empty().append('<option value="null">All Sites</option>');
+
             if (result.length > 0) {
                 $.each(result, function (i, data) {
                     $('#textUserSiteList').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
                 });
             }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching site list:", error);
         }
     });
 }
 
 
-$(document).ready(function () {
 
+$(document).ready(function () {
 
     $('#textUserSiteList').select2({
         placeholder: "--Select Site--",
@@ -37,11 +40,12 @@ $(document).ready(function () {
         var selectedSiteNames = selectedSites.map(site => site.text).join(', ');
         var selectedSiteIds = selectedSites.map(site => site.id).join(', ');
 
-
         $('#SelectedSite').val(selectedSiteNames);
         $('#SelectedSiteID').val(selectedSiteIds);
     });
+    GetUserSiteList();
 });
+
 function CreateUser() {
     siteloadershow();
     if ($("#userForm").valid()) {
@@ -50,12 +54,12 @@ function CreateUser() {
             LastName: $('#txtLastName').val(),
             UserName: $('#txtUserName').val(),
             Password: $('#txtPassword').val(),
-            
+
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#SelectedSiteID').val(),
         };
-        
+
         $.ajax({
             url: '/User/CreateUser',
             type: 'post',
@@ -114,9 +118,9 @@ function ClearUserTextBox() {
     $('#txtUserName').val('');
     $('#txtPassword').val('');
     $('#txtEmail').val('');
-    
+
     $('#txtPhoneNo').val('');
-   
+
     $('#ddlSiteName').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
@@ -128,6 +132,7 @@ function ClearUserTextBox() {
 
 function DisplayUserDetails(UserId) {
     siteloadershow();
+
     $.ajax({
         url: '/User/DisplayUserDetails?UserId=' + UserId,
         type: 'GET',
@@ -144,29 +149,26 @@ function DisplayUserDetails(UserId) {
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
             $('#SelectedSiteID').val(response.siteId);
-            $('#ddlUserRole').val(response.roleId);
-            
+
+
             if (response.siteId) {
                 $('#textUserSiteList').val(null).trigger('change');
-                
-                var selectedSiteIds = response.siteId.split(', '); 
-                $('#textUserSiteList').val(selectedSiteIds).trigger('change'); 
+                var selectedSiteIds = response.siteId.split(',');
+                $('#textUserSiteList').val(selectedSiteIds).trigger('change');
             }
 
-            var button = document.getElementById("btnuser");
-            if ($('#txtUserid').val() != '') {
-                button.textContent = "Update";
-            }
+            $('#btnuser').text("Update");
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
-            resetUserForm()
+            resetUserForm();
             offcanvas.show();
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-
+            console.error("Error fetching user details:", error);
         }
     });
 }
+
 
 function SelectUserDetails(UserId, element) {
     siteloadershow();
@@ -325,7 +327,7 @@ function validateAndCreateUser() {
                     minlength: 10,
                     maxlength: 10
                 },
-                
+
             },
             messages: {
                 txtFirstName: "FirstName is Required!",
@@ -342,7 +344,7 @@ function validateAndCreateUser() {
                     minlength: "Phone number must be 10 digits long",
                     maxlength: "Phone number must be 10 digits long"
                 },
-                
+
             }
         })
     }
@@ -363,7 +365,7 @@ function validateAndCreateUser() {
                     minlength: 10,
                     maxlength: 10
                 },
-               
+
 
             },
             messages: {
@@ -381,7 +383,7 @@ function validateAndCreateUser() {
                     minlength: "Phone number must be 10 digits long",
                     maxlength: "Phone number must be 10 digits long"
                 },
-                
+
 
             }
         })
@@ -1764,11 +1766,11 @@ $(document).ready(function () {
     function PRApproveButton() {
         var hasChecked = $('input[name="chk_PRchild"]:checked').length > 0;
         if (hasChecked) {
-            $('#PRApproveBtn').show(); 
+            $('#PRApproveBtn').show();
         } else {
             $('#PRApproveBtn').hide();
         }
-    } 
+    }
     $('input[name="chk_PRchild"], #checkedAllPR').on('change', function () {
         PRApproveButton();
     });
@@ -1779,7 +1781,7 @@ $(document).ready(function () {
         if (hasChecked) {
             $('#ItemApproveBtn').show();
         } else {
-            $('#ItemApproveBtn').hide(); 
+            $('#ItemApproveBtn').hide();
         }
     }
     $('input[name="chk_child"], #checkedAllItem').on('change', function () {
@@ -1816,9 +1818,9 @@ $(document).ready(function () {
     function SupplierApproveButton() {
         var hasChecked = $('input[name="chk_Supplierchild"]:checked').length > 0;
         if (hasChecked) {
-            $('#SupplierApproveBtn').show(); 
+            $('#SupplierApproveBtn').show();
         } else {
-            $('#SupplierApproveBtn').hide(); 
+            $('#SupplierApproveBtn').hide();
         }
     }
     $('input[name="chk_Supplierchild"], #checkedAllSupplier').on('change', function () {
