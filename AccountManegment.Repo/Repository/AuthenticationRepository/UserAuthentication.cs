@@ -137,13 +137,14 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         var UserwisePermission = new UserwiseFormPermission()
                         {
 
-                            UserId = CreateUser.Id,
+                            UserId = model.Id,
                             FormId = form.FormId,
+                            IsAddAllow=true,
                             IsViewAllow = true,
                             IsEditAllow = true,
                             IsDeleteAllow = true,
                             IsApproved = true,
-                            Createdby = CreateUser.CreatedBy,
+                            Createdby = model.CreatedBy,
                             CreatedOn = DateTime.Now,
                         };
                         Context.UserwiseFormPermissions.Add(UserwisePermission);
@@ -477,6 +478,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.Email = UpdateUser.Email;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
+                    Userdata.SiteId = UpdateUser.SiteId;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();
                     response.Code = (int)HttpStatusCode.OK;
