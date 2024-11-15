@@ -12,7 +12,7 @@ function GetUserSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
         success: function (result) {
-            
+            $('#textUserSiteList').append('<option value="null">All Sites</option>');
             if (result.length > 0) {
                 $.each(result, function (i, data) {
                     $('#textUserSiteList').append('<option value="' + data.siteId + '">' + data.siteName + '</option>');
