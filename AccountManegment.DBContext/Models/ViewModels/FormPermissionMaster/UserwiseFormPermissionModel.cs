@@ -33,6 +33,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
         public DateTime? UpdatedOn { get; set; }
         public string? FullName { get; set; }
         public string? FormName { get; set; }
+        public int RowNumber { get; set; }
 
     }
 }

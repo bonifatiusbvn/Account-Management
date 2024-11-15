@@ -4,65 +4,47 @@
 {
     foreach (var item in Model)
     {
-        <div class="forms" data-product-id="@item.FormId">
-            <div class="row  mb-2">
-                <div class="col-3">
-                    <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
-                    <input type="text" id="txtUserId" value="@item.UserId" hidden />
-                    <input type="text" id="formId" value="@item.FormId" hidden />
+        <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
+            <td>
+                <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
+
+                <input type="hidden" id="txtuserformId" value="@item.FormId" />
+                <input type="hidden" id="txtuserId" value="@item.UserId" />
+            </td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isView_@item.FormId" class="form-checkbox" name="isView" @(item.IsViewAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
-                <div class="col-9">
-                    <div class="d-flex flex-wrap gap-3">
-                        <div class="d-flex align-items-center">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="isAdd" name="isAdd" @(item.IsAddAllow ? "checked" : "")>
-                                <label class="form-check-label" for="isAdd">Add</label>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="isView" name="isView" @(item.IsViewAllow ? "checked" : "")>
-                                <label class="form-check-label" for="isView">View</label>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="isEdit" name="isEdit" @(item.IsEditAllow ? "checked" : "")>
-                                <label class="form-check-label" for="isEdit">Edit</label>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="isDelete" name="isDelete" @(item.IsDeleteAllow ? "checked" : "")>
-                                <label class="form-check-label" for="isDelete">Delete</label>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="isApproved_@item.FormId"
-                                       name="isApproved" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "")>
-                                <label class="form-check-label" for="isApproved_@item.FormId"
-                                       id="labelIsApproved_@item.FormId">
-                                    @(item.IsApproved.HasValue && item.IsApproved.Value ? "Auto isApproved-On" : "Auto isApproved-Off")
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+            </td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isAdd_@item.FormId" class="form-checkbox" name="isAdd" @(item.IsAddAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
-            </div>
-        </div>
+            </td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isEdit_@item.FormId" class="form-checkbox" name="isEdit" @(item.IsEditAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                </div>
+            </td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isDelete_@item.FormId" class="form-checkbox" name="isDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="isApproved_@item.FormId" name="isApproved" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onchange="toggleIsApprovedLabel(@item.FormId)">
+                    <label id="labelIsApproved_@item.FormId">
+                        @(item.IsApproved.HasValue && item.IsApproved.Value ? "Auto Approved-On" : "Auto Approved-Off")
+                    </label>
+                </div>
+            </td>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input alluser-checkbox" type="checkbox" id="usercheckboxAll_@item.FormId" onclick="toggleUserCheckboxes('@item.FormId')">
+                </div>
+            </td>
+        </tr>
     }
 }
-<script>
-    $(document).ready(function () {
 
-        $("input[type='checkbox'][name='isApproved']").on('change', function () {
-            const isChecked = $(this).is(':checked');
-            const formId = $(this).attr('id').split('_')[1];
-            const label = $('#labelIsApproved_' + formId);
-
-
-            label.text(isChecked ? 'Auto isApproved-On' : 'Auto isApproved-Off');
-        });
-    });
-</script>
