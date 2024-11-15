@@ -82,10 +82,9 @@
                                                         <th>Quantity</th>
                                                         <th>Status</th>
                                                         <th>Supplier</th>
-                                                        @if (UserSession.SiteId == "")
-                                                        {
-                                                            <th>SiteName</th>
-                                                        }
+
+                                                        <th>SiteName</th>
+
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -185,7 +184,7 @@
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Site</label>
-                                            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
+                                            @if (@UserSession.SiteId != "")
                                             {
                                                 <input type="text" id="siteNameList" name="siteNameList" class="form-control" placeholder="Site">
                                                 <input type="hidden" id="siteNameListHidden" name="siteNameListHidden">

@@ -15,6 +15,7 @@ using AccountManagement.DBContext.Models.ViewModels.FormMaster;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 
 
 namespace AccountManegments.Web.Controllers
@@ -125,7 +126,7 @@ namespace AccountManegments.Web.Controllers
                     if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                     {
                         TempData["ErrorMessage"] = responsemodel.message;
-                        return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
+                        return Ok(new { Message = responsemodel.message, Code = responsemodel.code });
                     }
                     else
                     {
@@ -135,25 +136,31 @@ namespace AccountManegments.Web.Controllers
                 else
                 {
                     var data = JsonConvert.SerializeObject(responsemodel.data);
-                    userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
+
+                    userlogin.Data = JsonConvert.DeserializeObject<LoginView>(responsemodel.data.ToString());
+
+                    if (userlogin.Data != null && userlogin.Data.userSites == null)
+                    {
+                        userlogin.Data.userSites = JsonConvert.DeserializeObject<List<UserSiteListModel>>(responsemodel.data["userSites"].ToString());
+                    }
 
 
                     var claims = new List<Claim>()
-                    {
-                        new Claim("UserId", userlogin.Data.Id.ToString()),
-                        new Claim("FullName", userlogin.Data.FullName),
-                        new Claim("UserName", userlogin.Data.UserName),
-                        new Claim("Token", userlogin.Data.Token),
-                    };
+            {
+                new Claim("UserId", userlogin.Data.Id.ToString()),
+                new Claim("FullName", userlogin.Data.FullName),
+                new Claim("UserName", userlogin.Data.UserName),
+                new Claim("Token", userlogin.Data.Token),
+            };
 
-                    if (userlogin.Data.SiteId != null)
-                    {
-                        claims.Add(new Claim("SiteId", userlogin.Data.SiteId.ToString()));
-                    }
 
-                    if (!string.IsNullOrEmpty(userlogin.Data.SiteName))
+                    if (userlogin.Data.userSites.Count == 1 || userlogin.Data.userSites.Count >= 1)
                     {
-                        claims.Add(new Claim("SiteName", userlogin.Data.SiteName));
+                        var singleSite = userlogin.Data.userSites.First();
+                        claims.Add(new Claim("SiteId", singleSite.SiteId.ToString()));
+                        claims.Add(new Claim("SiteName", singleSite.SiteName));
+                        UserSession.SiteId = singleSite.SiteId.ToString() ?? "";
+                        UserSession.SiteName = singleSite.SiteName ?? "";
                     }
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -161,10 +168,9 @@ namespace AccountManegments.Web.Controllers
 
                     if (login.RememberMe)
                     {
-                        CookieOptions cookie = new CookieOptions();
-                        cookie.Expires = DateTime.UtcNow.AddDays(7);
-                        Response.Cookies.Append("UserName", (login.UserName), cookie);
-                        Response.Cookies.Append("Password", (login.Password), cookie);
+                        CookieOptions cookie = new CookieOptions { Expires = DateTime.UtcNow.AddDays(7) };
+                        Response.Cookies.Append("UserName", login.UserName, cookie);
+                        Response.Cookies.Append("Password", login.Password, cookie);
                         ViewBag.chkRememberMe = true;
                     }
                     else
@@ -174,8 +180,7 @@ namespace AccountManegments.Web.Controllers
                         ViewBag.chkRememberMe = false;
                     }
 
-                    UserSession.SiteId = userlogin.Data.SiteId?.ToString() ?? "";
-                    UserSession.SiteName = userlogin.Data.SiteName ?? "";
+
                     UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
                     UserSession.SiteData = userlogin.Data.userSites;
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
@@ -189,6 +194,7 @@ namespace AccountManegments.Web.Controllers
             }
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()

@@ -7,7 +7,7 @@
     <tr>
         <td>@item.Role</td>
         <td>
-            @if (_userSession.UserRole == 3)
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Permission" && a.Edit))
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.RoleId"
                 @(item.IsActive ?? false ? "checked" : "")

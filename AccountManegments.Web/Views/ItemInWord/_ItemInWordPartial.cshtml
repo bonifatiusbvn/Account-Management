@@ -10,7 +10,7 @@
         <td style="width:90px;">@item.Date?.ToString("dd/MM/yyyy")</td>
         <td>@item.Quantity</td>
         <td>
-            @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true)))
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.InwordId" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="ItemInWordIsApproved('@item.InwordId')" />
             }

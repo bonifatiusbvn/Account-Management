@@ -387,14 +387,16 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                               Delete = rfp.IsDeleteAllow,
                                                               IsApproved = rfp.IsApproved,
                                                           }).ToListAsync();
-                    var siteIds = tblUser.User.SiteId?.Split(',')
-                      .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
-                      .Where(guid => guid.HasValue)
-                      .Select(guid => guid.Value)
-                      .ToList();
 
+                    var siteIds = string.IsNullOrEmpty(tblUser.User.SiteId)
+                        ? new List<Guid>()
+                        : tblUser.User.SiteId.Split(',')
+                            .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                            .Where(guid => guid.HasValue)
+                            .Select(guid => guid.Value)
+                            .ToList();
 
-                    if (siteIds != null && siteIds.Any())
+                    if (siteIds.Any())
                     {
                         userModel.userSites = await (from s in Context.Sites
                                                      where siteIds.Contains(s.SiteId)
@@ -404,6 +406,11 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                                          SiteName = s.SiteName,
                                                      }).ToListAsync();
                     }
+                    else
+                    {
+                        userModel.userSites = new List<UserSiteListModel>();
+                    }
+
 
                 }
 

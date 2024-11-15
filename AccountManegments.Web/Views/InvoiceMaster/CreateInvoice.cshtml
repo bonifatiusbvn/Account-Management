@@ -624,60 +624,6 @@
     </div>
 </div>
 
-@* <div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="mdShippingAddlLabel">Shipping Address</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="shippingAddressForm">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-10 col-sm-10 ">
-                                <label class="form-label">Select Site</label>
-                                @if (_userSession.UserRole == 3)
-                                {
-                                    <select class="form-control" id="textInvoiceSiteName" name="textInvoiceSiteName">
-                                        <option selected value="">--Select Site--</option>
-                                    </select>
-                                }
-                                else
-                                {
-                                    <select class="form-control" id="textInvoiceSiteName" name="textInvoiceSiteName" disabled>
-                                        <option selected value="@UserSession.SiteId">@UserSession.SiteName-</option>
-                                    </select>
-                                }
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-10 col-sm-10">
-                                <label class="form-label">Address</label>
-                                <select class="single-select form-select" id="drpInvoiceSiteAddress">
-                                    <option value="">--Select Site Address--</option>
-                                </select>
-                                <br />
-                                <div>
-                                    <textarea class="form-control" id="textmdAddress" name="textmdAddress" style="height:90px;"></textarea>
-                                </div>
-                                <span id="spnSiteAddress" style="color:red;"></span>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-addresses" onclick="addShippingAddress()">Add</button>
-                <span id="spnaddressbutton" style="color:red;"></span>
-                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button>
-            </div>
-        </div>
-    </div>
-</div> *@
-
-
 <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

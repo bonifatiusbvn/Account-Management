@@ -67,10 +67,9 @@
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
                                                         <th>Role</th>
-                                                        @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
-                                                        {
-                                                            <th>Site Name</th>
-                                                        }
+
+                                                        <th>Site Name</th>
+
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
                                                         {
@@ -162,24 +161,15 @@
                                         <label class="form-label">User Name</label>
                                         <input type="text" class="form-control" placeholder="User Name" id="txtUserName" name="txtUserName">
                                     </div>
-                                    @* @if (_userSession.UserRole == 3 || _userSession.UserRole == 10)
-                                    {
+
+
                                     <div class="col-lg-12 col-12">
-                                    <label class="form-label">Site</label>
-                                    <select class="form-select" id="ddlSiteName" name="ddlSiteName">
-                                    <option selected value="">All Site</option>
-                                    </select>
+                                        <label class="form-label">Site</label>
+                                        <select class="form-select" id="ddlSiteName" name="ddlSiteName" disabled>
+                                            <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
+                                        </select>
                                     </div>
-                                    }
-                                    else
-                                    {
-                                    <div class="col-lg-12 col-12">
-                                    <label class="form-label">Site</label>
-                                    <select class="form-select" id="ddlSiteName" name="ddlSiteName" disabled>
-                                    <option selected value="@UserSession.SiteId">@UserSession.SiteName</option>
-                                    </select>
-                                    </div>
-                                    } *@
+
                                     <div class="col-lg-12 col-12">
                                         <label class="form-label">Select Site</label>
                                         <select class="multiple-select form-select form-control" id="textUserSiteList" name="textUserSiteList" multiple="multiple" style="width: 100%;">
