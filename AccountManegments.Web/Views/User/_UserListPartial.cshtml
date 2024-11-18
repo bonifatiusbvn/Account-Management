@@ -7,7 +7,7 @@
     <tr id="userCard_@item.Id" onclick="SelectUserDetails('@item.Id', this)">
         <td>@item.FirstName  @item.LastName</td>
         <td>@item.UserName</td>
-        <td>@item.SiteName</td>
+        <td style="width: 320px;">@item.SiteName</td>
         <td>
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true)))
             {

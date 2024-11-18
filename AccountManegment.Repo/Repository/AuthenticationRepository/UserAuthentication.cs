@@ -209,22 +209,39 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             LoginView Userdata = new LoginView();
             try
             {
+                var SiteList = Context.Sites.ToList();
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
 
-                            select new LoginView
+                            select new
                             {
-                                Id = e.Id,
-                                UserName = e.UserName,
-                                FirstName = e.FirstName,
-                                LastName = e.LastName,
-                                Email = e.Email,
-                                Password = e.Password,
-                                IsActive = e.IsActive,
-                                PhoneNo = e.PhoneNo,
-                                SiteId = e.SiteId,
+                                e.Id,
+                                e.UserName,
+                                e.FirstName,
+                                e.LastName,
+                                e.Email,
+                                e.Password,
+                                e.IsActive,
+                                e.PhoneNo,
+                                e.SiteId,
 
-                                //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
-                                //SiteId = e.SiteId,
+                            }).AsEnumerable().Select(user => new LoginView
+                            {
+                                Id = user.Id,
+                                UserName = user.UserName,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Email = user.Email,
+                                Password = user.Password,
+                                IsActive = user.IsActive,
+                                PhoneNo = user.PhoneNo,
+                                SiteId = user.SiteId,
+
+                                // Map SiteId GUIDs to SiteNames
+                                SiteName = user.SiteId != null
+                        ? string.Join(", ", user.SiteId.Split(',')
+                            .Select(guid => SiteList.FirstOrDefault(s => s.SiteId.ToString() == guid)?.SiteName)
+                            .Where(name => !string.IsNullOrEmpty(name)))
+                        : null,
                             }).First();
                 return Userdata;
             }
@@ -238,22 +255,44 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         {
             try
             {
-                IEnumerable<LoginView> userList = (from e in Context.Users
-                                                   where e.IsDeleted == false
-                                                   select new LoginView
-                                                   {
-                                                       Id = e.Id,
-                                                       FirstName = e.FirstName,
-                                                       LastName = e.LastName,
-                                                       UserName = e.UserName,
-                                                       Email = e.Email,
-                                                       PhoneNo = e.PhoneNo,
-                                                       IsActive = e.IsActive,
+                var SiteList = Context.Sites.ToList();
 
-                                                       //SiteName = e.SiteId == null ? null : Context.Sites.Where(a => a.SiteId == e.SiteId).FirstOrDefault().SiteName,
-                                                       //SiteId = e.SiteId,
-                                                       CreatedOn = e.CreatedOn,
-                                                   });
+                IEnumerable<LoginView> userList = Context.Users
+                    .Where(e => e.IsDeleted == false)
+                    .Select(e => new
+                    {
+                        e.Id,
+                        e.FirstName,
+                        e.LastName,
+                        e.UserName,
+                        e.Email,
+                        e.PhoneNo,
+                        e.IsActive,
+                        e.SiteId,
+                        e.CreatedOn
+                    })
+                    .AsEnumerable()
+                    .Select(user => new LoginView
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        PhoneNo = user.PhoneNo,
+                        IsActive = user.IsActive,
+                        SiteId = user.SiteId,
+                        CreatedOn = user.CreatedOn,
+
+                        SiteName = user.SiteId != null
+                            ? string.Join(", ", user.SiteId.Split(',')
+                                .Select(guid => SiteList.FirstOrDefault(s => s.SiteId.ToString() == guid)?.SiteName)
+                                .Where(name => !string.IsNullOrEmpty(name)))
+                            : null,
+                    });
+
+
+
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
