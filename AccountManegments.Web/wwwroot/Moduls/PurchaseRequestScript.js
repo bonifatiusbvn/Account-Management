@@ -541,7 +541,7 @@ function PurchaseRequestIsApproved(PurchaseId) {
 }
 GetOtherPersonContectNoAndContectName();
 function GetOtherPersonContectNoAndContectName() {
-    
+
     var SiteId = $('#positeid').val();
     $.ajax({
         url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
@@ -941,8 +941,9 @@ function InsertMultiplePurchaseOrderDetails() {
                 var orderRow = $(this);
                 var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; // Get product quantity
 
-                totalProductQuantity += itemQuantity; 
+                totalProductQuantity += itemQuantity;
                 var objData = {
+
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
                     UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
@@ -971,22 +972,22 @@ function InsertMultiplePurchaseOrderDetails() {
 
             var AddressDetails = [];
             var totalShippingQuantity = 0;
-            var hasError = false; 
+            var hasError = false;
 
             $(".shipping-checkbox:checked").each(function () {
-                var address = $(this).data("address"); // Get address from the data attribute
+                var address = $(this).data("address");
                 var quantityInput = $(this)
-                    .closest(".PoSiteShipppingAddress") // Find the closest parent row
-                    .find(".shippingquantity"); // Find the corresponding quantity input
+                    .closest(".PoSiteShipppingAddress")
+                    .find(".shippingquantity");
 
                 var shippingQuantity = parseFloat(quantityInput.val()) || 0;
                 totalShippingQuantity += shippingQuantity;
 
-                // Add to AddressDetails array
+
                 if (totalShippingQuantity > totalProductQuantity) {
-                    debugger
+
                     toastr.error("Shipping quantity exceeds available product quantity.");
-                    hasError = true; 
+                    hasError = true;
                 } else {
                     AddressDetails.push({
                         ShippingAddress: address,
@@ -997,8 +998,8 @@ function InsertMultiplePurchaseOrderDetails() {
             });
 
             if (hasError) {
-                siteloaderhide(); 
-                return; 
+                siteloaderhide();
+                return;
             }
 
             var paymentTerms = "";
@@ -1078,7 +1079,9 @@ function InsertMultiplePurchaseOrderDetails() {
                 $("#spnitembutton").text("");
             }
         }
-    } else {
+    }
+
+    else {
         siteloaderhide();
         toastr.error("Kindly fill all details");
     }
@@ -1426,7 +1429,7 @@ function UpdateMultiplePurchaseOrderDetails() {
 
             $(".product").each(function () {
                 var orderRow = $(this);
-                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; 
+                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0;
 
                 totalProductQuantity += itemQuantity;
 
@@ -1443,12 +1446,13 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 orderDetails.push(objData);
             });
-            debugger
+
             var AddressDetails = [];
             var totalShippingQuantity = 0;
-            var hasError = false; 
+            var hasError = false;
 
-            $(".nav-checkbox:checked").each(function () {debugger
+            $(".nav-checkbox:checked").each(function () {
+
                 var address = $(this).val();
                 var quantityInput = $(this)
                     .closest(".PoSiteShipppingAddress")
@@ -1460,7 +1464,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 if (totalShippingQuantity > totalProductQuantity) {
                     toastr.error("Shipping quantity exceeds available product quantity.");
                     hasError = true;
-                    
+
                 } else {
                     AddressDetails.push({
                         ShippingAddress: address,
@@ -1468,12 +1472,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     });
                 }
             });
-            debugger
-            if (hasError) {
-                siteloaderhide();
-                return; 
-            }
-            
+
             var paymentTerms = "";
             var paymentTermsId = "";
 
@@ -1487,7 +1486,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
-            
+
             // Prepare the PO request object
             var PORequest = {
                 Id: $("#RefPOid").val(),
@@ -1516,7 +1515,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 OtherContact: $('#txtOtherContectPerson').val(),
                 OtherName: $('#txtOtherContactNumber').val(),
             };
-            
+
             // Prepare form data
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
