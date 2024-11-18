@@ -339,10 +339,6 @@ function ExportToExcel() {
     });
 }
 
-function fn_ResetAllDropdown() {
-    window.location = '/Report/ReportDetails';
-}
-
 var datas = userPermissions;
 
 var supplierBalances = {}; // Object to store balance for each supplier

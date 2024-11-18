@@ -91,44 +91,44 @@ function GetAllSupplierList() {
     });
 }
 
-var selectedSiteId = null;
-var selectedCompanyId = null;
-var selectedSupplierId = null;
-var selectedendDate = null;
-var selectedfilterType = null;
-var selectedGroupName = null;
-var selectedYears = null;
-var selectedSortOrder = "DescendingDate";
-var parsedSiteId = null;
-var selectedCompanyName = null;
-var selectedSupplierName = null;
-var selectedSiteName = null;
+var selectedPayoutSiteId = null;
+var selectedPayoutCompanyId = null;
+var selectedPayoutSupplierId = null;
+var selectedPayoutendDate = null;
+var selectedPayoutfilterType = null;
+var selectedPayoutGroupName = null;
+var selectedPayoutYears = null;
+var selectedPayoutSortOrder = "DescendingDate";
+var parsedPayoutSiteId = null;
+var selectedPayoutCompanyName = null;
+var selectedPayoutSupplierName = null;
+var selectedPayoutSiteName = null;
 
-let currentReportSortOrder = 'AscendingDate';
+let currentPayoutReportSortOrder = 'AscendingDate';
 function sortReportTable(field) {
-    if (currentReportSortOrder === 'Ascending' + field) {
-        currentReportSortOrder = 'Descending' + field;
+    if (currentPayoutReportSortOrder === 'Ascending' + field) {
+        currentPayoutReportSortOrder = 'Descending' + field;
     } else {
-        currentReportSortOrder = 'Ascending' + field;
+        currentPayoutReportSortOrder = 'Ascending' + field;
     }
 
-    selectedSortOrder = currentReportSortOrder;
+    selectedPayoutSortOrder = currentPayoutReportSortOrder;
 
-    if (selectedGroupName) {
+    if (selectedPayoutGroupName) {
         var objData = {
-            GroupName: selectedGroupName,
-            sortBy: selectedSortOrder,
+            GroupName: selectedPayoutGroupName,
+            sortBy: selectedPayoutSortOrder,
         };
     }
     else {
         var objData = {
-            CompanyId: selectedCompanyId,
-            SupplierId: selectedSupplierId,
-            filterType: selectedfilterType,
-            endDate: selectedendDate,
-            GroupName: selectedGroupName,
-            SelectedYear: selectedYears,
-            sortBy: selectedSortOrder,
+            CompanyId: selectedPayoutCompanyId,
+            SupplierId: selectedPayoutSupplierId,
+            filterType: selectedPayoutfilterType,
+            endDate: selectedPayoutendDate,
+            GroupName: selectedPayoutGroupName,
+            SelectedYear: selectedPayoutYears,
+            sortBy: selectedPayoutSortOrder,
         };
     }
 
@@ -158,7 +158,7 @@ function sortReportTable(field) {
 
 $(document).ready(function () {
 
-    function clearDates() {
+    function clearPayoutDates() {
 
         $('#txtPayoutmonth').val('');
     }
@@ -171,25 +171,25 @@ $(document).ready(function () {
     }
 
     $('#timePeriodPayoutDropdown').change(function () {
-        var selectedValue = $(this).val();
+        var selectedPayoutValue = $(this).val();
 
-        if (selectedValue === 'This Month' || selectedValue === 'This Year') {
+        if (selectedPayoutValue === 'This Month' || selectedPayoutValue === 'This Year') {
             $('#PayoutendDate, #PayoutyearDropdown').hide();
-        } else if (selectedValue === 'Till Month') {
+        } else if (selectedPayoutValue === 'Till Month') {
             $('#txtPayoutmonth, #searchPayoutReportButton').show();
             $('#PayoutyearDropdown').hide();
-            clearDates(); // Clear previous values
+            clearPayoutDates(); // Clear previous values
             setTodaysPayoutDate(); // Set today's date
-        } else if (selectedValue === 'Between Year') {
+        } else if (selectedPayoutValue === 'Between Year') {
             $('#PayoutyearDropdown, #searchPayoutReportButton').show();
             $('#txtPayoutmonth').hide();
-            populateYearDropdown(); // Assuming you have a function to populate the year dropdown
+            populatePayoutYearDropdown(); // Assuming you have a function to populate the year dropdown
         }
     });
 });
 
 
-function populateYearDropdown() {
+function populatePayoutYearDropdown() {
     var currentYear = new Date().getFullYear();
     var startYear = 2023;
     var yearDropdown = $('#PayoutyearDropdown');
@@ -208,12 +208,12 @@ function fn_ResetAllPayoutDropdown() {
 
 $(document).ready(function () {
     $("#textPayoutReportCompanyName").on('change', function () {
-        var selectedCompanyOption = $(this).find('option:selected');
-        selectedCompanyName = selectedCompanyOption.data('payoutcompany-name');
+        var selectedPayoutCompanyOption = $(this).find('option:selected');
+        selectedPayoutCompanyName = selectedPayoutCompanyOption.data('payoutcompany-name');
     });
     $("#textPayoutReportSiteName").on('change', function () {
-        var selectedSiteOption = $(this).find('option:selected');
-        selectedSiteName = selectedSiteOption.data('payoutsite-name');
+        var selectedPayoutSiteOption = $(this).find('option:selected');
+        selectedPayoutSiteName = selectedPayoutSiteOption.data('payoutsite-name');
     });
 });
 
@@ -417,7 +417,7 @@ function ExportNetReportToExcel() {
     });
 }
 
-var dtcoulms = [
+var Payoutdtcoulms = [
     {
         "data": "siteName",
         "name": "SiteName",
@@ -445,13 +445,13 @@ var dtcoulms = [
     }
 ];
 $(document).ready(function () {
-    var table;
+    var Payouttable;
     $('#searchPayoutReportButton').click(function () {
 
         if ($.fn.DataTable.isDataTable('#tblPayoutReport')) {
-            table.destroy();
+            Payouttable.destroy();
         }
-        table = $('#tblPayoutReport').DataTable({
+        Payouttable = $('#tblPayoutReport').DataTable({
             processing: false,
             serverSide: true,
             filter: false,
@@ -475,8 +475,8 @@ $(document).ready(function () {
                     d.SupplierId = $('#textPayoutReportSupplierNameHidden').val() || null;
                     d.GroupName = $('#textPayoutReportGroupList').val() || null;
 
-                    var selectedValue = $('#timePeriodPayoutDropdown').val();
-                    switch (selectedValue) {
+                    var selectedPayoutValue = $('#timePeriodPayoutDropdown').val();
+                    switch (selectedPayoutValue) {
                         case 'This Month':
                             d.filterType = "currentMonth";
                             break;
@@ -497,7 +497,7 @@ $(document).ready(function () {
                     }
                 }
             },
-            columns: dtcoulms,
+            columns: Payoutdtcoulms,
             scrollX: true,
             scrollY: '350px',
             scrollCollapse: true,
@@ -515,7 +515,7 @@ $(document).ready(function () {
 
                 var formattedNetAmount = formatNumberWithCommas(NetAmount.toFixed(2));
 
-                $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
+                $(api.table().footer()).find('#PayoutNetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
 
                 // Replace classes for pagination buttons
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
@@ -547,12 +547,12 @@ function formatNumberWithCommas(x) {
 
 let rowCounter = 0;
 function AddNewRowforPayOutInvoicebtn() {
-    selectedSupplierId = $('#textPayoutReportSupplierNameHidden').val();
-    selectedCompanyId = $('#textPayoutReportCompanyName').val();
-    selectedReportSiteName = $('#textPayoutReportSiteName').val();
-    var CompanyId = selectedCompanyId;
-    var SupplierId = selectedSupplierId;
-    var SiteId = selectedReportSiteName;
+    selectedPayoutSupplierId = $('#textPayoutReportSupplierNameHidden').val();
+    selectedPayoutCompanyId = $('#textPayoutReportCompanyName').val();
+    selectedPayoutReportSiteName = $('#textPayoutReportSiteName').val();
+    var CompanyId = selectedPayoutCompanyId;
+    var SupplierId = selectedPayoutSupplierId;
+    var SiteId = selectedPayoutReportSiteName;
     if (SupplierId != "" && CompanyId != "") {
         $.ajax({
             url: '/InvoiceMaster/DisplayPayOutInvoicePayOutInvoice',

@@ -394,7 +394,7 @@ function SupplierInvoicesortTable() {
     });
 }
 
-function DeleteSupplierInvoice(Id, SupplierInvoiceNo,element) {
+function DeleteSupplierInvoice(Id, SupplierInvoiceNo, InvoiceNo, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -412,11 +412,18 @@ function DeleteSupplierInvoice(Id, SupplierInvoiceNo,element) {
         buttonsStyling: false,
         showCloseButton: true,
         inputValidator: (value) => {
-
-            if (!value) {
-                return 'Please enter the Invoice No!';
-            } else if (value !== SupplierInvoiceNo) {
-                return 'Invoice No mismatch! Please enter valid Invoice No';
+            if (SupplierInvoiceNo == "") {
+                if (!value) {
+                    return 'Please enter the Invoice No!';
+                } else if (value !== InvoiceNo) {
+                    return 'Invoice No mismatch! Please enter valid Invoice No';
+                }
+            } else {
+                if (!value) {
+                    return 'Please enter the Invoice No!';
+                } else if (value !== SupplierInvoiceNo) {
+                    return 'Invoice No mismatch! Please enter valid Invoice No';
+                }
             }
         }
     }).then((result) => {
