@@ -222,6 +222,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.DispatchBy).HasMaxLength(30);
             entity.Property(e => e.GroupAddress).HasMaxLength(500);
+            entity.Property(e => e.OtherContact).HasMaxLength(15);
+            entity.Property(e => e.OtherName).HasMaxLength(50);
             entity.Property(e => e.PaymentTermsId).HasMaxLength(100);
             entity.Property(e => e.Poid)
                 .HasMaxLength(100)
@@ -315,8 +317,8 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.SiteId).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
-            entity.Property(e => e.ContectPersonName).HasMaxLength(50);
-            entity.Property(e => e.ContectPersonPhoneNo).HasMaxLength(10);
+            entity.Property(e => e.ContectPersonName).HasMaxLength(500);
+            entity.Property(e => e.ContectPersonPhoneNo).HasMaxLength(500);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Pincode).HasMaxLength(10);
             entity.Property(e => e.ShippingAddress).HasMaxLength(100);

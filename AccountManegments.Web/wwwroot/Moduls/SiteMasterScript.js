@@ -1419,4 +1419,21 @@ function GroupMasterInfo(GroupId, element) {
     });
 }
 
+$(document).on('click', '.add-row', function () {
+
+    const newRow = $(this).closest('.contact-row').clone();
+    newRow.find('input').val('');
+    newRow.find('.add-row')
+        .removeClass('btn-success add-row')
+        .addClass('btn text-primary remove-row')
+        .html('<i class="lni lni-trash"></i>');
+
+
+    $('#dynamicContactRows').append(newRow);
+});
+
+$(document).on('click', '.remove-row', function () {
+    $(this).closest('.contact-row').remove();
+});
+
 

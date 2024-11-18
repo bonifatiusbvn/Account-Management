@@ -33,6 +33,10 @@ public partial class PurchaseOrder
 
     public string? ContactNumber { get; set; }
 
+    public string? OtherContact { get; set; }
+
+    public string? OtherName { get; set; }
+
     public string? SiteGroup { get; set; }
 
     public string? BillingAddress { get; set; }
