@@ -44,6 +44,7 @@ function SerchItemDetailsById(Id, inputField) {
         processData: false,
         contentType: false,
         complete: function (Result) {
+
             siteloaderhide();
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
@@ -233,7 +234,7 @@ $(document).ready(function () {
         return function (...args) {
             clearTimeout(timer);
             timer = setTimeout(() => func.apply(this, args), delay);
-        };  
+        };
     }
 
     $(document).on('input', '#txtdiscountpercentage', debounce(function () {
@@ -254,11 +255,11 @@ $(document).ready(function () {
     }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
         var productRow = $(this).closest(".product");
         if (event.key === 'Tab' && event.shiftKey) {
-            event.preventDefault(); 
-            productRow.find('#txtdiscountamount').focus(); 
+            event.preventDefault();
+            productRow.find('#txtdiscountamount').focus();
         } else if (event.key === 'Tab') {
             var gstFocus = productRow.find('#txtgst');
-            handleFocus(event, gstFocus); 
+            handleFocus(event, gstFocus);
         }
     });
 
@@ -551,7 +552,7 @@ function InsertMultipleSupplierItem() {
                 UnitTypeId: $("#UnitTypeId").val(),
                 ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
-                Lrno : $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(),
+                Lrno: $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
@@ -670,7 +671,7 @@ function UpdateInvoiceDetails() {
                 ItemList: ItemDetails,
                 ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
                 ChallanNo: $("#txtchalanNo").val(),
-                Lrno: $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(), 
+                Lrno: $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(),
                 VehicleNo: $("#txtvehicleno").val(),
                 DispatchBy: $("#txtdispatch").val(),
                 PaymentTerms: $("#txtpayment").val(),
@@ -1550,7 +1551,7 @@ function GetGroupList() {
             $('#InvoiceGroupList').empty();
             $('#InvoiceGroupList').append('<option selected>' + "Select Group" + '</option>');
             $.each(result, function (i, data) {
-                    $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
+                $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
         }
     });
@@ -1590,56 +1591,54 @@ function EditGroupList(EditSiteId) {
 }
 
 
-function GetGroupAddress(GroupId)
-{
+function GetGroupAddress(GroupId) {
     if (GroupId == undefined) {
         $('#dvGroupAddress').empty();
     }
     else {
-    siteloadershow();
-    $.ajax({
-        url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            siteloaderhide();
-            $('#dvGroupAddress').empty();
-            if (response.groupAddressList == null) {
+        siteloadershow();
+        $.ajax({
+            url: '/SiteMaster/GetGroupDetailsByGroupId?GroupId=' + GroupId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                siteloaderhide();
+                $('#dvGroupAddress').empty();
+                if (response.groupAddressList == null) {
 
-            }
-            else
-            {
-                $.each(response.groupAddressList, function (i, data) {
-                    var groupAddressNumber = i + 1;
+                }
+                else {
+                    $.each(response.groupAddressList, function (i, data) {
+                        var groupAddressNumber = i + 1;
 
-                    $('#dvGroupAddress').append(
-                        '<div class="row ac-invoice-groupadd GroupAddress" style="display: flex; align-items: flex-start;">' +
-                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
-                        '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
-                        '</div>' +
-                        '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
-                        '<p id="groupaddress_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
-                        '<input type="hidden" id="selectedGroupAddress_' + groupAddressNumber + '" name="selectedGroupAddress" value="' + data.groupAddress + '" />' +
-                        '</div>' +
-                        '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
-                        '<input class="nav-radio form-check-input" ' +
-                        'name="selectedGroupAddress" ' +
-                        'data-bs-toggle="tab" ' +
-                        'role="tab" ' +
-                        'type="radio" ' +
-                        'id="GroupAddressRadio_' + groupAddressNumber + '" ' +
-                        'data-address="' + data.groupAddress + '"' +
-                        'value="' + data.groupAddress + '"' +
-                        (i === 0 ? ' checked' : '') + ' />' +
-                        '</div>' +
-                        '</div>' +
-                        '<hr>'
-                    );
-                });
-            }
-        },
-    });
+                        $('#dvGroupAddress').append(
+                            '<div class="row ac-invoice-groupadd GroupAddress" style="display: flex; align-items: flex-start;">' +
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">' +
+                            '<label id="lblgprownum' + groupAddressNumber + '" style="margin-right: 10px;">' + groupAddressNumber + '</label>' +
+                            '</div>' +
+                            '<div class="col-5 col-sm-5" style="flex: 1; display: flex; align-items: center;">' +
+                            '<p id="groupaddress_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
+                            '<input type="hidden" id="selectedGroupAddress_' + groupAddressNumber + '" name="selectedGroupAddress" value="' + data.groupAddress + '" />' +
+                            '</div>' +
+                            '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
+                            '<input class="nav-radio form-check-input" ' +
+                            'name="selectedGroupAddress" ' +
+                            'data-bs-toggle="tab" ' +
+                            'role="tab" ' +
+                            'type="radio" ' +
+                            'id="GroupAddressRadio_' + groupAddressNumber + '" ' +
+                            'data-address="' + data.groupAddress + '"' +
+                            'value="' + data.groupAddress + '"' +
+                            (i === 0 ? ' checked' : '') + ' />' +
+                            '</div>' +
+                            '</div>' +
+                            '<hr>'
+                        );
+                    });
+                }
+            },
+        });
     }
 }
 
@@ -1688,14 +1687,14 @@ function getallPONoList() {
 
 $(document).ready(function () {
     $("#txtlrNo").on('click', function () {
-        $("#txtlrNo").prop("readonly", false); 
-        $("#textPONoList").prop("readonly", true); 
-        $("#textPONoList").val(''); 
+        $("#txtlrNo").prop("readonly", false);
+        $("#textPONoList").prop("readonly", true);
+        $("#textPONoList").val('');
     });
 
     $("#textPONoList").on('click', function () {
         $("#txtlrNo").prop("readonly", true);
-        $("#txtlrNo").val(''); 
+        $("#txtlrNo").val('');
         $("#textPONoList").prop("readonly", false);
     });
     $('#textSupplierName').change(function () {

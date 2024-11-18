@@ -25,7 +25,7 @@ $(document).ready(function () {
 });
 
 function EditUserWiseFormDetails(UserId, element) {
-    debugger
+
     siteloadershow();
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -38,7 +38,7 @@ function EditUserWiseFormDetails(UserId, element) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
+
             siteloaderhide();
             $('#dvEditUserPermissionForm').html(Result.responseText);
         },
