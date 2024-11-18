@@ -539,6 +539,42 @@ function PurchaseRequestIsApproved(PurchaseId) {
         }
     });
 }
+GetOtherPersonContectNoAndContectName();
+function GetOtherPersonContectNoAndContectName() {
+    
+    var SiteId = $('#positeid').val();
+    $.ajax({
+        url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            if (response.contectPersonName && response.contectPersonPhoneNo) {
+                $('#txtOtherContectPerson').empty();
+                $('#txtOtherContactNumber').empty();
+
+                $('#txtOtherContectPerson').append('<option value="null">Select ContactPerson</option>');
+                $('#txtOtherContactNumber').append('<option value="null">Select ContactNo</option>');
+
+                var contactNames = response.contectPersonName.split(',');
+                contactNames.forEach(function (name) {
+                    $('#txtOtherContectPerson').append(
+                        `<option value="${name.trim()}">${name.trim()}</option>`
+                    );
+                });
+
+                var contactNumbers = response.contectPersonPhoneNo.split(',');
+                contactNumbers.forEach(function (number) {
+                    $('#txtOtherContactNumber').append(
+                        `<option value="${number.trim()}">${number.trim()}</option>`
+                    );
+                });
+            } else {
+                toastr.error("No contact details found for the selected site.");
+            }
+        },
+    });
+}
 
 function clearPOtextbox() {
     window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
@@ -1001,6 +1037,8 @@ function InsertMultiplePurchaseOrderDetails() {
                 GroupAddress: $('input[name="selectedPOGroupAddress"]:checked').val(),
                 ItemOrderlist: orderDetails,
                 ShippingAddressList: AddressDetails,
+                OtherContact: $('#txtOtherContectPerson').val(),
+                OtherName: $('#txtOtherContactNumber').val(),
             };
 
             var form_data = new FormData();
@@ -1192,13 +1230,13 @@ function GetPOSiteShippingAddress(SiteId) {
 
                         '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
                         '<input class="nav-radio form-check-input shipping-checkbox" ' +
-                        'name="selectedPOShippingAddress" type="radio" ' +
+                        'name="selectedPOShippingAddress" type="checkbox" ' +
                         'id="ShippingPOAddressRadio_' + groupAddressNumber + '" ' +
                         'data-address="' + result.shippingAddress + ' , ' + result.shippingArea + ', ' +
                         result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + '" ' +
                         'value="' + result.shippingAddress + ' , ' + result.shippingArea + ', ' +
                         result.shippingCityName + ', ' + result.shippingStateName + ', ' + result.shippingCountryName + '" ' +
-                        'checked />' +
+                        'checked disabled/>' +
                         '</div>' +
                         '</div>' +
 
@@ -1386,12 +1424,11 @@ function UpdateMultiplePurchaseOrderDetails() {
             var orderDetails = [];
             var totalProductQuantity = 0;
 
-            // Collect product details
             $(".product").each(function () {
                 var orderRow = $(this);
-                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; // Get product quantity
+                var itemQuantity = parseFloat(orderRow.find("#txtproductquantity").val()) || 0; 
 
-                totalProductQuantity += itemQuantity; // Add to total quantity
+                totalProductQuantity += itemQuantity;
 
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
@@ -1406,12 +1443,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                 };
                 orderDetails.push(objData);
             });
-            
+            debugger
             var AddressDetails = [];
             var totalShippingQuantity = 0;
             var hasError = false; 
 
-            $(".nav-checkbox:checked").each(function () {
+            $(".nav-checkbox:checked").each(function () {debugger
                 var address = $(this).val();
                 var quantityInput = $(this)
                     .closest(".PoSiteShipppingAddress")
@@ -1431,14 +1468,12 @@ function UpdateMultiplePurchaseOrderDetails() {
                     });
                 }
             });
-
+            debugger
             if (hasError) {
                 siteloaderhide();
                 return; 
             }
             
-
-            // Collect payment terms
             var paymentTerms = "";
             var paymentTermsId = "";
 
@@ -1452,7 +1487,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 paymentTerms = editors['txtPOPaymentTerms3'].getData();
                 paymentTermsId = $('#Term-3').val();
             }
-            debugger
+            
             // Prepare the PO request object
             var PORequest = {
                 Id: $("#RefPOid").val(),
@@ -1478,8 +1513,10 @@ function UpdateMultiplePurchaseOrderDetails() {
                 GroupAddress: $('input[name="selectedPOGroupAddress"]:checked').val(),
                 ShippingAddressList: AddressDetails,
                 ItemOrderlist: orderDetails,
+                OtherContact: $('#txtOtherContectPerson').val(),
+                OtherName: $('#txtOtherContactNumber').val(),
             };
-
+            
             // Prepare form data
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
@@ -2253,13 +2290,6 @@ function POActiveDecative(Id) {
         }
     });
 }
-
-
-
-
-
-
-
 
 
 

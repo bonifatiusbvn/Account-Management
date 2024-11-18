@@ -327,6 +327,8 @@ namespace AccountManegments.Web.Controllers
                     ShippingAddressList = PurchaseOrderDetails.ShippingAddressList,
                     SiteGroup = PurchaseOrderDetails.SiteGroup,
                     GroupAddress = PurchaseOrderDetails.GroupAddress,
+                    OtherContact=PurchaseOrderDetails.OtherContact,
+                    OtherName = PurchaseOrderDetails.OtherName,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(podetails, "PurchaseOrder/InsertMultiplePurchaseOrderDetails");
                 if (postuser.code == 200)

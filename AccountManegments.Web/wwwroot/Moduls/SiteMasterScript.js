@@ -132,8 +132,6 @@ function DisplaySiteDetails(SiteId) {
             $('#changeName').html('Update Site');
             $('#txtSiteid').val(response.siteId);
             $('#txtSiteName').val(response.siteName);
-            $('#txtContectPersonName').val(response.contectPersonName);
-            $('#txtContectPersonPhoneNo').val(response.contectPersonPhoneNo);
             $('#txtAddress').val(response.address);
             $('#txtArea').val(response.area);
             $('#stateDropdown').val(response.stateId);
@@ -146,6 +144,34 @@ function DisplaySiteDetails(SiteId) {
             $('#ShippingState').val(response.shippingStateId);
             $('#txtShippingCountry').val(response.shippingCountry);
             $('#txtShippingPincode').val(response.shippingPincode);
+
+            $('#dynamicContactRows').empty();
+
+            // Split contact names and phone numbers by commas
+            const contactNames = response.contectPersonName.split(',');
+            const contactPhoneNumbers = response.contectPersonPhoneNo.split(',');
+
+            // Loop through names and phone numbers and create rows
+            contactNames.forEach((name, index) => {
+                const phoneNo = contactPhoneNumbers[index] || ''; 
+                const rowHtml = `
+            <div class="row contact-row">
+                <div class="col-lg-6 col-12">
+                    <label class="form-label">Contact Name</label>
+                    <input type="text" class="form-control" placeholder="Contact Name" name="txtContectPersonName" value="${name.trim()}">
+                </div>
+                <div class="col-lg-5 col-12">
+                    <label class="form-label">Contact Phone No.</label>
+                    <input type="number" class="form-control" placeholder="Contact Phone No." name="txtContectPersonPhoneNo" value="${phoneNo.trim()}">
+                </div>
+                <div class="col-lg-1 col-12 d-flex align-items-center">
+                    <a class="font-22 ${index === contactNames.length - 1 ? 'add-row' : 'remove-row'}">
+                        <i class="lni ${index === contactNames.length - 1 ? 'lni-circle-plus' : 'lni-trash'}"></i>
+                    </a>
+                </div>
+            </div>`;
+                $('#dynamicContactRows').append(rowHtml);
+            });
 
             $('#shippingAddressTable').empty();
 
@@ -263,11 +289,25 @@ function CreateSite() {
         if (!isValidProduct) {
             return;
         }
+        
+       
+        var contactNames = [];
+        var contactPhoneNumbers = [];
 
+        $('#dynamicContactRows .contact-row').each(function () {
+            var contactName = $(this).find('input[name="txtContectPersonName"]').val().trim();
+            var contactPhone = $(this).find('input[name="txtContectPersonPhoneNo"]').val().trim();
+
+            if (contactName !== "" && contactPhone !== "") {
+                contactNames.push(contactName);
+                contactPhoneNumbers.push(contactPhone);
+            }
+        });
+        
         var objData = {
             SiteName: $('#txtSiteName').val(),
-            ContectPersonName: $('#txtContectPersonName').val(),
-            ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
+            ContectPersonName: contactNames.join(','),
+            ContectPersonPhoneNo: contactPhoneNumbers.join(','),
             Address: $('#txtAddress').val(),
             Area: $('#txtArea').val(),
             CityId: $('#ddlCity').val(),
@@ -283,7 +323,7 @@ function CreateSite() {
             ShippingCountry: $('#hideShippingAddress').is(':checked') ? $('#ddlCountry').val() : $('#shippingCountry').val(),
             SiteShippingAddresses: shippingAddressDetails
         };
-
+        
         if (objData.CityId === "--Select City--" || objData.StateId === "--Select State--") {
             siteloaderhide();
             toastr.error("Kindly fill all details");
@@ -354,11 +394,25 @@ function UpdateSiteDetails() {
         if (!isValidProduct) {
             return;
         }
+
+        var contactNames = [];
+        var contactPhoneNumbers = [];
+
+        $('#dynamicContactRows .contact-row').each(function () {
+            var contactName = $(this).find('input[name="txtContectPersonName"]').val().trim();
+            var contactPhone = $(this).find('input[name="txtContectPersonPhoneNo"]').val().trim();
+
+            if (contactName !== "" && contactPhone !== "") {
+                contactNames.push(contactName);
+                contactPhoneNumbers.push(contactPhone);
+            }
+        });
+
         var objData = {
             SiteId: $('#txtSiteid').val(),
             SiteName: $('#txtSiteName').val(),
-            ContectPersonName: $('#txtContectPersonName').val(),
-            ContectPersonPhoneNo: $('#txtContectPersonPhoneNo').val(),
+            ContectPersonName: contactNames.join(','),
+            ContectPersonPhoneNo: contactPhoneNumbers.join(','),
             Address: $('#txtAddress').val(),
             Area: $('#txtArea').val(),
             CityId: $('#ddlCity').val(),

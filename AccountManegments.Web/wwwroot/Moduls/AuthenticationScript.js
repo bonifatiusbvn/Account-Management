@@ -118,10 +118,10 @@ function ClearUserTextBox() {
     $('#txtUserName').val('');
     $('#txtPassword').val('');
     $('#txtEmail').val('');
-
     $('#txtPhoneNo').val('');
-
-    $('#ddlSiteName').val('');
+    $('#textUserSiteList').empty();
+    $('#SelectedSite').val('');
+    $('#SelectedSiteID').val('');
     var button = document.getElementById("btnuser");
     if ($('#txtUserid').val() == '') {
         button.textContent = "Create";

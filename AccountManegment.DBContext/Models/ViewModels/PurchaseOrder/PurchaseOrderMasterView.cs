@@ -63,6 +63,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public List<OrderShippingAddress>? ShippingAddressList { get; set; }
         public List<POItemDetailsModel>? ItemList { get; set; }
         public List<PODeliveryAddressModel>? AddressList { get; set; }
+        public string? OtherContact { get; set; }
+
+        public string? OtherName { get; set; }
     }
 
 
