@@ -28,7 +28,7 @@
         <div class="container">
             <div class="row">
 
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Add == true || a.Edit == true)))
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.View == true)))
                 {
                     <div class="col-md-6 mb-3">
                         <div class="card" style="max-width: 790px;margin-left: -152px;">
@@ -61,7 +61,7 @@
                                                         Approve
                                                     </th>
                                                 }
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th>Action</th>
                                                 }
@@ -80,7 +80,7 @@
                                                         <td>@item.UnitName</td>
                                                         <td>@item.Quantity</td>
                                                         <td>
-                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
+                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true)))
                                                             {
                                                                 <input class="form-check-input" type="checkbox" name="chk_PRchild" id="PR_@item.Pid" style="margin-left:30px;" />
                                                             }
@@ -97,14 +97,14 @@
                                                             }
                                                         </td>
 
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true || a.Delete == true)))
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                         {
                                                             <td style="width:135px;">
-                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Edit == true)))
+                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true)))
                                                                 {
                                                                     <a class="btn text-primary" onclick="EditPurchaseRequestDetails('@item.Pid')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
                                                                 }
-                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Delete == true)))
+                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Delete == true)))
                                                                 {
                                                                     <a href="javascript:;" class="btn text-primary" onclick="DeletePurchaseRequest('@item.Pid')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>
                                                                 }
@@ -142,7 +142,7 @@
                                                 <th>Supplier</th>
                                                 <th>Company</th>
                                                 <th>Amount</th>
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true)))
                                                 {
                                                     <th style="width:84px;">
                                                         <input class="form-check-input" type="checkbox" id="checkedAllPO" />
@@ -155,7 +155,7 @@
                                                         Approve
                                                     </th>
                                                 }
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Orders" && (a.Edit == true || a.Delete == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th>Action</th>
                                                 }
@@ -185,7 +185,7 @@
                                             <tr>
                                                 <th>Item</th>
                                                 <th>Price</th>
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true)))
                                                 {
                                                     <th>
                                                         <input class="form-check-input" type="checkbox" id="checkedAllItem" />
@@ -198,7 +198,7 @@
                                                         Approve
                                                     </th>
                                                 }
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.Edit == true || a.Delete == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th>Action</th>
                                                 }
@@ -228,7 +228,7 @@
                                                 <th>Supplier</th>
                                                 <th>Company</th>
                                                 <th>Amount</th>
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th style="width:84px;">
                                                         <input class="form-check-input" type="checkbox" id="checkedAllInvoice" />
@@ -241,7 +241,7 @@
                                                         Approve
                                                     </th>
                                                 }
-                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
+                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Edit == true || a.Delete == true)))
                                                 {
                                                     <th>Action</th>
                                                 }
@@ -270,7 +270,7 @@
                                                 <tr>
                                                     <th>Supplier</th>
                                                     <th>Gst</th>
-                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Delete == true)))
                                                     {
                                                         <th>
                                                             <input class="form-check-input" type="checkbox" id="checkedAllSupplier" />
@@ -283,7 +283,7 @@
                                                             Approve
                                                         </th>
                                                     }
-                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Supplier" && (a.Delete == true)))
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Delete == true)))
                                                     {
                                                         <th>Action</th>
                                                     }
@@ -311,7 +311,7 @@
                                                 <tr>
                                                     <th>Item</th>
                                                     <th>Quantity</th>
-                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Delete == true)))
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Delete == true)))
                                                     {
                                                         <th>
                                                             <input class="form-check-input" type="checkbox" id="checkedAllInward" />
@@ -324,7 +324,7 @@
                                                             Approve
                                                         </th>
                                                     }
-                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Delete == true)))
+                                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Dashboard" && (a.Delete == true)))
                                                     {
                                                         <th>Action</th>
                                                     }
