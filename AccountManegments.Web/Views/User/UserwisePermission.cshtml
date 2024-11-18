@@ -44,26 +44,32 @@
                     <hr>
                     <div class="row g-3 ac-detail d-none" id="groupDetailsInfo">
                         <div class="table-responsive">
-                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
-                                <thead class="table-light btn-primary">
-                                    <tr>
-                                        <th>Form Permission</th>
-                                        <th>View Permission</th>
-                                        <th>Add Permission</th>
-                                        <th>Edit Permission</th>
-                                        <th>Delete Permission</th>
-                                        <th>AutoApproved Permission</th>
-                                        <th class="text-center">
-                                            All
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="userRoleCheckboxAll" onclick="userRoleAllCheckboxes(this)">
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dvEditUserPermissionForm" class="gridjs-tbody">
-                                </tbody>
-                            </table>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
+                                    <div class="p-3">
+                                        <table class="table table-bordered table-hover" style="width: 1200px;">
+                                            <thead class="table-light btn-primary">
+                                                <tr>
+                                                    <th>Form Permission</th>
+                                                    <th>View Permission</th>
+                                                    <th>Add Permission</th>
+                                                    <th>Edit Permission</th>
+                                                    <th>Delete Permission</th>
+                                                    <th>AutoApproved Permission</th>
+                                                    <th class="text-center">
+                                                        All
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" id="userRoleCheckboxAll" onclick="userRoleAllCheckboxes(this)">
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="dvEditUserPermissionForm">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12">
                             <button type="button" class="btn btn-lg btn-success col-lg" onclick="UpdateUserwiseFormPermission()" id="btnUserwiseForm">Update</button>
