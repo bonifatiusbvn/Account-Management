@@ -51,14 +51,9 @@
                                                         </select>
                                                     </div>
                                                 </div><!--end row-->
-
                                             </div>
-
                                         </div>
-
                                     </div>
-
-
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table align-middle mb-0">
@@ -66,10 +61,7 @@
                                                     <tr>
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
-                                                        <th>Role</th>
-
                                                         <th>Site Name</th>
-
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
                                                         {
@@ -82,15 +74,10 @@
                                             </table>
                                         </div>
                                     </div>
-
-
                                 </div>
-
                             </div>
                         </div>
                         <!--end row-->
-
-
                     </div>
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
@@ -135,7 +122,6 @@
                 </div>
             </div>
         </div>
-
         <div class="offcanvas offcanvas-end border-0 w-25 ac-add-edit" tabindex="-1" id="createUser">
             <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
                 <h5 class="m-0 me-2 text-white" id="changeName"></h5>
