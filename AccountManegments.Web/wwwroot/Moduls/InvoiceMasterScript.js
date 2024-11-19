@@ -1549,7 +1549,7 @@ function GetGroupList() {
         url: '/SiteMaster/GetGroupNameListBySiteId',
         success: function (result) {
             $('#InvoiceGroupList').empty();
-            $('#InvoiceGroupList').append('<option selected>' + "Select Group" + '</option>');
+            $('#InvoiceGroupList').append('<option value="" selected>' + "Select Group" + '</option>');
             $.each(result, function (i, data) {
                 $('#InvoiceGroupList').append('<option value="' + data.groupName + '" data-groupids="' + data.groupId + '">' + data.groupName + '</option>');
             });
