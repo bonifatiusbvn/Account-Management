@@ -128,6 +128,7 @@ function ClearUserTextBox() {
     }
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
     offcanvas.show();
+    GetUserSiteList()
 }
 
 function DisplayUserDetails(UserId) {
