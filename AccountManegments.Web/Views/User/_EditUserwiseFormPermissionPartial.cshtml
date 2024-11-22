@@ -14,27 +14,27 @@
             </td>
             <td>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="isView_@item.FormId" name="isView" @(item.IsViewAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                    <input class="form-check-input isView-column" type="checkbox" id="isView_@item.FormId" name="isView" @(item.IsViewAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
             </td>
             <td>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="isAdd_@item.FormId" name="isAdd" @(item.IsAddAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                    <input class="form-check-input isAdd-column" type="checkbox" id="isAdd_@item.FormId" name="isAdd" @(item.IsAddAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
             </td>
             <td>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="isEdit_@item.FormId" name="isEdit" @(item.IsEditAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                    <input class="form-check-input isEdit-column" type="checkbox" id="isEdit_@item.FormId" name="isEdit" @(item.IsEditAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
             </td>
             <td>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="isDelete_@item.FormId" name="isDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+                    <input class="form-check-input isDelete-column" type="checkbox" id="isDelete_@item.FormId" name="isDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
                 </div>
             </td>
             <td class="text-center">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="isApproved_@item.FormId" name="isApproved" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onchange="toggleIsApprovedLabel(@item.FormId)">
+                    <input class="form-check-input isApproved-column" type="checkbox" id="isApproved_@item.FormId" name="isApproved" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onchange="toggleIsApprovedLabel(@item.FormId)">
                     <label id="labelIsApproved_@item.FormId">
                         @(item.IsApproved.HasValue && item.IsApproved.Value ? "Auto Approved-On" : "Auto Approved-Off")
                     </label>

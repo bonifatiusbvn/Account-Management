@@ -239,9 +239,9 @@ function ExportNetReportToPDF() {
         startDate: null,
         endDate: null,
         SelectedYear: null,
-        SiteName: selectedSiteName || null,
+        SiteName: selectedPayoutSiteName || null,
     };
-
+    
     switch (selectedValue) {
         case 'This Month':
             PayOutReport.filterType = "currentMonth";
@@ -266,6 +266,7 @@ function ExportNetReportToPDF() {
             selectedValue = null;
             break;
     }
+    
     $.ajax({
         url: '/Report/ExportNetReportToPDF',
         type: 'POST',
@@ -339,7 +340,7 @@ function ExportNetReportToExcel() {
         startDate: null,
         endDate: null,
         SelectedYear: null,
-        SiteName: selectedSiteName || null,
+        SiteName: selectedPayoutSiteName || null,
     };
 
     switch (selectedValue) {

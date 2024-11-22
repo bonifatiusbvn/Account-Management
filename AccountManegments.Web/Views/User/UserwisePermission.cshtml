@@ -51,11 +51,36 @@
                                             <thead class="table-light btn-primary">
                                                 <tr>
                                                     <th>Form Permission</th>
-                                                    <th>View Permission</th>
-                                                    <th>Add Permission</th>
-                                                    <th>Edit Permission</th>
-                                                    <th>Delete Permission</th>
-                                                    <th>AutoApproved Permission</th>
+                                                    <th>
+                                                        View Permission
+                                                        <div class="form-check">
+                                                            <input class="form-check-input alluser-checkbox" type="checkbox" onclick="toggleColumnCheckboxes(this, 'isView-column')">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Add Permission
+                                                        <div class="form-check">
+                                                            <input class="form-check-input alluser-checkbox" type="checkbox" onclick="toggleColumnCheckboxes(this, 'isAdd-column')">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Edit Permission
+                                                        <div class="form-check">
+                                                            <input class="form-check-input alluser-checkbox" type="checkbox" onclick="toggleColumnCheckboxes(this, 'isEdit-column')">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        Delete Permission
+                                                        <div class="form-check">
+                                                            <input class="form-check-input alluser-checkbox" type="checkbox" onclick="toggleColumnCheckboxes(this, 'isDelete-column')">
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        AutoApproved Permission
+                                                        <div class="form-check">
+                                                            <input class="form-check-input alluser-checkbox" type="checkbox" onclick="toggleColumnCheckboxes(this, 'isApproved-column')">
+                                                        </div>
+                                                    </th>
                                                     <th class="text-center">
                                                         All
                                                         <div class="form-check">
@@ -64,6 +89,7 @@
                                                     </th>
                                                 </tr>
                                             </thead>
+
                                             <tbody id="dvEditUserPermissionForm">
                                             </tbody>
                                         </table>
