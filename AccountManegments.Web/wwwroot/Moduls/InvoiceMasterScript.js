@@ -96,7 +96,7 @@ function GetItemDetailsList() {
 
 
 $(document).ready(function () {
-    $('#textCompanyName').change(function () {
+    $('#txtcompanyname').change(function () {
 
         getCompanyDetail($(this).val());
         getInvoiceNumber($(this).val());
@@ -1103,7 +1103,7 @@ function getInvoiceNumber(CompanyId) {
         },
     });
 }
-function getCompanyDetail(CompanyId) {
+function getCompanyDetail(CompanyId) {debugger
     siteloadershow();
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,

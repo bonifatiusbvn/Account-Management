@@ -77,22 +77,24 @@ function GetCountry() {
     });
 }
 
-function GetCompanyDetail(that) {
-    debugger
+function GetCompanyDetail(that, selectedCompanyId) {
+
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
-            debugger
             if (result.length > 0) {
                 var $dropdown = $('#' + that);
                 $dropdown.empty();
-
-                $dropdown.append('<option selected value="" disabled>Select Company</option>');
-
+                $dropdown.append('<option value="" disabled>Select Company</option>');
 
                 $.each(result, function (i, data) {
-                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                    var isSelected = data.companyId === selectedCompanyId ? 'selected' : '';
+                    $dropdown.append('<option value="' + data.companyId + '" ' + isSelected + '>' + data.companyName + '</option>');
                 });
+
+                if (selectedCompanyId) {
+                    $dropdown.val(selectedCompanyId);
+                }
             }
         },
         error: function (xhr, status, error) {
@@ -100,3 +102,4 @@ function GetCompanyDetail(that) {
         }
     });
 }
+

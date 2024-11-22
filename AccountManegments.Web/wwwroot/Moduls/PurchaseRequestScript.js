@@ -18,7 +18,8 @@ updateTotals();
 if (_userCompanyCount === 0) {
 
     $(document).ready(function () {
-        GetCompanyDetail('txtcompanyname');
+        var SelectedId = $('#SelectedCompanyId').val();
+        GetCompanyDetail('txtcompanyname', SelectedId);
     });
 }
 
