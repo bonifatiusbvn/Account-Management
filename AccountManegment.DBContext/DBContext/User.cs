@@ -23,6 +23,8 @@ public partial class User
 
     public string? SiteId { get; set; }
 
+    public string? CompanyId { get; set; }
+
     public bool IsActive { get; set; }
 
     public bool IsDeleted { get; set; }

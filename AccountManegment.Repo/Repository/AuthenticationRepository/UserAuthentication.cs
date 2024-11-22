@@ -122,6 +122,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         Password = CreateUser.Password,
                         IsActive = true,
                         SiteId = CreateUser.SiteId,
+                        CompanyId = CreateUser.CompanyId,
                         IsDeleted = false,
                         CreatedBy = CreateUser.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -210,6 +211,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 var SiteList = Context.Sites.ToList();
+                var CompanyList = Context.Companies.ToList();
                 Userdata = (from e in Context.Users.Where(x => x.Id == UserId)
 
                             select new
@@ -223,6 +225,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 e.IsActive,
                                 e.PhoneNo,
                                 e.SiteId,
+                                e.CompanyId,
 
                             }).AsEnumerable().Select(user => new LoginView
                             {
@@ -235,11 +238,17 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                                 IsActive = user.IsActive,
                                 PhoneNo = user.PhoneNo,
                                 SiteId = user.SiteId,
+                                CompanyId = user.CompanyId,
 
                                 // Map SiteId GUIDs to SiteNames
                                 SiteName = user.SiteId != null
                         ? string.Join(", ", user.SiteId.Split(',')
                             .Select(guid => SiteList.FirstOrDefault(s => s.SiteId.ToString() == guid)?.SiteName)
+                            .Where(name => !string.IsNullOrEmpty(name)))
+                        : null,
+                                CompanyName = user.CompanyId != null
+                        ? string.Join(", ", user.CompanyId.Split(',')
+                            .Select(guid => CompanyList.FirstOrDefault(s => s.CompanyId.ToString() == guid)?.CompanyName)
                             .Where(name => !string.IsNullOrEmpty(name)))
                         : null,
                             }).First();
@@ -256,6 +265,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 var SiteList = Context.Sites.ToList();
+                var CompanyList=Context.Companies.ToList();
 
                 IEnumerable<LoginView> userList = Context.Users
                     .Where(e => e.IsDeleted == false)
@@ -269,6 +279,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         e.PhoneNo,
                         e.IsActive,
                         e.SiteId,
+                        e.CompanyId,
                         e.CreatedOn
                     })
                     .AsEnumerable()
@@ -282,11 +293,17 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         PhoneNo = user.PhoneNo,
                         IsActive = user.IsActive,
                         SiteId = user.SiteId,
+                        CompanyId = user.CompanyId,
                         CreatedOn = user.CreatedOn,
 
                         SiteName = user.SiteId != null
                             ? string.Join(", ", user.SiteId.Split(',')
                                 .Select(guid => SiteList.FirstOrDefault(s => s.SiteId.ToString() == guid)?.SiteName)
+                                .Where(name => !string.IsNullOrEmpty(name)))
+                            : null,
+                        CompanyName = user.CompanyId != null
+                            ? string.Join(", ", user.CompanyId.Split(',')
+                                .Select(guid => CompanyList.FirstOrDefault(s => s.CompanyId.ToString() == guid)?.CompanyName)
                                 .Where(name => !string.IsNullOrEmpty(name)))
                             : null,
                     });
@@ -519,6 +536,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Userdata.PhoneNo = UpdateUser.PhoneNo;
                     Userdata.SiteId = UpdateUser.SiteId;
+                    Userdata.CompanyId = UpdateUser.CompanyId;
                     Context.Users.Update(Userdata);
                     Context.SaveChanges();
                     response.Code = (int)HttpStatusCode.OK;
