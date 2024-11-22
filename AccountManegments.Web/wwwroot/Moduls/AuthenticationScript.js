@@ -24,7 +24,24 @@ function GetUserSiteList() {
         }
     });
 }
+function GetUserCompanyList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
 
+            $('#textUserCompanyList').empty().append('<option value="null">All Companies</option>');
+
+            if (result.length > 0) {
+                $.each(result, function (i, data) {
+                    $('#textUserCompanyList').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching site list:", error);
+        }
+    });
+}
 
 
 $(document).ready(function () {
@@ -43,7 +60,24 @@ $(document).ready(function () {
         $('#SelectedSite').val(selectedSiteNames);
         $('#SelectedSiteID').val(selectedSiteIds);
     });
+
+
+    $('#textUserCompanyList').select2({
+        placeholder: "--Select Company--",
+        allowClear: true
+    });
+
+
+    $('#textUserCompanyList').on('change', function () {
+        var selectedCompanies = $('#textUserCompanyList').select2('data');
+        var selectedCompanyNames = selectedCompanies.map(company => company.text).join(', ');
+        var selectedCompanyIds = selectedCompanies.map(company => company.id).join(',');
+
+        $('#SelectedCompany').val(selectedCompanyNames);
+        $('#SelectedCompanyID').val(selectedCompanyIds);
+    });
     GetUserSiteList();
+    GetUserCompanyList();
 });
 
 function CreateUser() {
@@ -58,6 +92,7 @@ function CreateUser() {
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#SelectedSiteID').val(),
+            CompanyId: $('#SelectedCompanyID').val(),
         };
 
         $.ajax({
@@ -119,6 +154,9 @@ function ClearUserTextBox() {
     $('#txtPassword').val('');
     $('#txtEmail').val('');
     $('#txtPhoneNo').val('');
+    $('#textUserCompanyList').empty();
+    $('#SelectedCompany').val('');
+    $('#SelectedCompanyID').val('');
     $('#textUserSiteList').empty();
     $('#SelectedSite').val('');
     $('#SelectedSiteID').val('');
@@ -129,6 +167,7 @@ function ClearUserTextBox() {
     var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
     offcanvas.show();
     GetUserSiteList()
+    GetUserCompanyList();
 }
 
 function DisplayUserDetails(UserId) {
@@ -150,6 +189,7 @@ function DisplayUserDetails(UserId) {
             $('#txtEmail').val(response.email);
             $('#txtPhoneNo').val(response.phoneNo);
             $('#SelectedSiteID').val(response.siteId);
+            $('#SelectedCompanyID').val(response.companyId);
 
 
             if (response.siteId) {
@@ -157,7 +197,11 @@ function DisplayUserDetails(UserId) {
                 var selectedSiteIds = response.siteId.split(',');
                 $('#textUserSiteList').val(selectedSiteIds).trigger('change');
             }
-
+            if (response.companyId) {
+                $('#textUserCompanyList').val(null).trigger('change');
+                var selectedCompanyIds = response.companyId.split(',');
+                $('#textUserCompanyList').val(selectedCompanyIds).trigger('change');
+            }
             $('#btnuser').text("Update");
             var offcanvas = new bootstrap.Offcanvas(document.getElementById('createUser'));
             resetUserForm();
@@ -193,6 +237,7 @@ function SelectUserDetails(UserId, element) {
                 $('#dspPhoneNo').val(response.phoneNo);
                 $('#dspRole').val(response.roleName);
                 $('#dspSiteName').val(response.siteName);
+                $('#dspCompanyName').val(response.companyName);
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -275,6 +320,7 @@ function UpdateUserDetails() {
             Email: $('#txtEmail').val(),
             PhoneNo: $('#txtPhoneNo').val(),
             SiteId: $('#SelectedSiteID').val(),
+            CompanyId: $('#SelectedCompanyID').val(),
         }
         $.ajax({
             url: '/User/UpdateUserDetails',

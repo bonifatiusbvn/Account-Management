@@ -29,7 +29,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
 
         public DateTime CreatedOn { get; set; }
         public string? SiteName { get; set; }
+        public string? CompanyName { get; set; }
         public string? SiteId { get; set; }
+        public string? CompanyId { get; set; }
         public bool? IsDeleted { get; set; }
         public List<FromPermission> FromPermissionData { get; set; }
 
