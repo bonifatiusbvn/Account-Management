@@ -163,10 +163,9 @@ $(document).ready(function () {
         $('#txtPayoutmonth').val('');
     }
 
-    // Function to set today's date in the Payout start and end date fields
     function setTodaysPayoutDate() {
         var today = new Date();
-        var formattedDate = today.toISOString().substr(0, 10); // Format date as yyyy-mm-dd
+        var formattedDate = today.toISOString().substr(0, 10);
         $('#txtPayoutmonth').val(formattedDate);
     }
 
@@ -178,12 +177,12 @@ $(document).ready(function () {
         } else if (selectedPayoutValue === 'Till Month') {
             $('#txtPayoutmonth, #searchPayoutReportButton').show();
             $('#PayoutyearDropdown').hide();
-            clearPayoutDates(); // Clear previous values
-            setTodaysPayoutDate(); // Set today's date
+            clearPayoutDates();
+            setTodaysPayoutDate();
         } else if (selectedPayoutValue === 'Between Year') {
             $('#PayoutyearDropdown, #searchPayoutReportButton').show();
             $('#txtPayoutmonth').hide();
-            populatePayoutYearDropdown(); // Assuming you have a function to populate the year dropdown
+            populatePayoutYearDropdown();
         }
     });
 });
@@ -456,11 +455,7 @@ $(document).ready(function () {
             processing: false,
             serverSide: true,
             filter: false,
-            paging: true,
-            pageLength: 15,
-            lengthChange: true,
-            lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
-            destroy: true,
+            paging: false,
             order: [],
             ajax: {
                 url: '/InvoiceMaster/GetInvoiceDetails',
@@ -518,7 +513,7 @@ $(document).ready(function () {
 
                 $(api.table().footer()).find('#PayoutNetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
 
-                // Replace classes for pagination buttons
+
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
                 $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
             },
@@ -530,6 +525,7 @@ $(document).ready(function () {
         });
     });
 });
+
 function formatNumberWithCommas(x) {
     var parts = x.toString().split(".");
     var integerPart = parts[0];
@@ -663,7 +659,7 @@ function InsertPayOutDetailsReport() {
             var companyId = $('#textPayoutReportCompanyName').val();
             var form_data = new FormData();
             form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
-            
+
             var selectedPaymentType = $('input[name^="paymenttype"]:checked').val();
             if (selectedPaymentType === "OpeningBalance") {
                 var objData = {

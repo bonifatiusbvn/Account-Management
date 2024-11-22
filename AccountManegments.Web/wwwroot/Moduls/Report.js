@@ -477,7 +477,7 @@ $(document).ready(function () {
             processing: false,
             serverSide: true,
             filter: false,
-            paging: true,
+            paging: false,
             pageLength: 15,
             lengthChange: true,
             lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
