@@ -5,7 +5,7 @@ GetDashboardPurchaseOrderList();
 GetDashboardInvoiceList();
 GetDashboardSupplierList();
 GetDashboardInwardList();
-
+fn_getState('dropState', 1);
 function GetUserSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
@@ -1691,7 +1691,7 @@ function GetCountry() {
         }
     });
 }
-fn_getState('dropState', 1);
+
 GetCountry();
 function EditSupplierDetails(SupplierId) {
 

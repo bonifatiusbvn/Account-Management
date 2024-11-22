@@ -21,7 +21,11 @@
         pointer-events: none;
     }
 </style>
-
+@{
+    var usercompany = UserSession.CompanyData;
+    var selectedcompanyId = UserSession.ComapnyId;
+    var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
+}
 <div class="">
     <div class="">
         <div class="radius-10 w-100">
@@ -139,27 +143,24 @@
                                                                                     <label for="textCompanyName" class="form-label">Company Name</label>
                                                                                 </div>
                                                                                 <div class="ms-auto">
-                                                                                    @if (Model.CompanyName != null)
-                                                                                    {
-                                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName">
+                                                                                    <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                                        @if (Model.CompanyName != null)
+                                                                                        {
                                                                                             <option selected value="@Model.CompanyId">@Model.CompanyName</option>
-                                                                                        </select>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <select class="form-select" id="textCompanyName" name="textCompanyName">
-                                                                                            <option selected disabled value="">Select Company</option>
-                                                                                        </select>
-                                                                                    }
-                                                                                    <label id="textCompanyName-error" class="error" for="textCompanyName"></label>
-                                                                                    <span id="spnCompanyName" class="text-danger"></span>
-                                                                                    <input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
-                                                                                    <input type="hidden" class="form-control" id="textSupplierInvoiceId" value="@Model.Id">
-                                                                                    <input type="hidden" class="form-control" id="textCreatedOn" value="@Model.CreatedOn">
-                                                                                    <input type="hidden" id="txtsessionSiteName" value="@UserSession.SiteId" />
-                                                                                    <input type="hidden" id="txtModelSiteId" value="@Model.SiteId" />
-                                                                                    <input type="hidden" id="txtInvoiceIsApproved" value="@Model.IsApproved.ToString()" />
-
+                                                                                        }
+                                                                                        else if (usercompany != null && usercompany.Any())
+                                                                                        {
+                                                                                            foreach (var company in usercompany)
+                                                                                            {
+                                                                                                var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                                                                                <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <option selected value="" disabled>Select Company</option>
+                                                                                        }
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-5 col-lg-5">
@@ -715,37 +716,42 @@
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
     <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
+
 }
 <script type="text/javascript">
 
-    function fn_OpenShippingModal() {
-        $('#textmdAddress').val('');
-        $('#textmdQty').val('');
-        $('#mdShippingAdd').modal('show');
-    }
+    window._userCompanyCount = @usercompanyCount;
+    debugger
+     function fn_OpenShippingModal() {
+         $('#textmdAddress').val('');
+         $('#textmdQty').val('');
+         $('#mdShippingAdd').modal('show');
+     }
 
-    function fn_mdAddAddress() {
-        var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
-        if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
-            var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>`
-            $('#dvShippingAddress').append(html);
-        } else {
-            tostar.error('Please select address!');
-            $('#textmdAddress').focus();
-        }
+     function fn_mdAddAddress() {
+         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
+         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
+             var html = `<div class="row ac-invoice-shippingadd">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>`
+             $('#dvShippingAddress').append(html);
+         } else {
+             tostar.error('Please select address!');
+             $('#textmdAddress').focus();
+         }
 
-    }
-    function fn_removeShippingAdd(that) {
-        $(that).closest('.ac-invoice-shippingadd').remove();
-    }
+     }
+     function fn_removeShippingAdd(that) {
+         $(that).closest('.ac-invoice-shippingadd').remove();
+     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const supplierNameDropdown = document.getElementById("textSupplierName");
-        const companyNameDropdown = document.getElementById("textCompanyName");
+     document.addEventListener("DOMContentLoaded", function () {
+         const supplierNameDropdown = document.getElementById("textSupplierName");
+         const companyNameDropdown = document.getElementById("textCompanyName");
 
-        supplierNameDropdown.addEventListener("change", function () {
-            companyNameDropdown.focus();
-        });
-    });
+         supplierNameDropdown.addEventListener("change", function () {
+             companyNameDropdown.focus();
+         });
+     });
+
+
 </script>

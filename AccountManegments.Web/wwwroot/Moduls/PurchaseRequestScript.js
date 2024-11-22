@@ -3,6 +3,7 @@ var _editCompanyselectedValue = "";
 var _editSupplierselectedValue = "";
 var _editItemselectedValue = "";
 var TotalPending = '';
+var _userCompanyCount = window._userCompanyCount || 0;
 
 
 AllPurchaseRequestListTable();
@@ -13,6 +14,13 @@ checkAndDisableAddButton();
 GetAllItemDetailsList();
 updateTotals();
 
+
+if (_userCompanyCount === 0) {
+
+    $(document).ready(function () {
+        GetCompanyName();
+    });
+}
 
 $(document).ready(function () {
     $('#POGroupList').change(function () {

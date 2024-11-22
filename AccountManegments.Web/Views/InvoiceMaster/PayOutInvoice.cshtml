@@ -5,7 +5,11 @@
     ViewData["Title"] = "Report";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
+@{
+    var usercompany = UserSession.CompanyData;
+    var selectedcompanyId = UserSession.ComapnyId;
+    var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
+}
 <input type="hidden" id="txtSiteId" value="@UserSession.SiteId" hidden />
 <input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden />
 
@@ -32,7 +36,18 @@
                                                 </li>
                                                 <li class="nav-item col-md-2" role="presentation">
                                                     <select id="textPayoutReportCompanyName" name="textPayoutReportCompanyName" class="form-control">
-                                                        <option value="">Select Company</option>
+                                                        @if (usercompany != null && usercompany.Any())
+                                                        {
+                                                            foreach (var company in usercompany)
+                                                            {
+                                                                var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                                                <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <option selected value="" disabled>Select Company</option>
+                                                        }
                                                     </select>
                                                 </li>
                                                 <li class="nav-item col-md-2" role="presentation">
@@ -120,8 +135,19 @@
                                                                     <div class="card-body">
                                                                         <ul class="nav nav-pills mb-3 row" role="tablist">
                                                                             <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="textReportCompanyName" name="textReportCompanyName" class="form-control">
-                                                                                    <option value="">Select Company</option>
+                                                                                <select id="textPayoutReportCompanyName" name="textReportCompanyName" class="form-control">
+                                                                                    @if (usercompany != null && usercompany.Any())
+                                                                                    {
+                                                                                        foreach (var company in usercompany)
+                                                                                        {
+                                                                                            var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                                                                            <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <option selected value="" disabled>Select Company</option>
+                                                                                    }
                                                                                 </select>
                                                                             </li>
                                                                             <li class="nav-item col-md-2" role="presentation">
@@ -321,7 +347,7 @@
 <!--end card-->
 <script type="text/javascript">
     let currentPayOutSortOrder = 'AscendingSupplier';
-
+    window._userCompanyCount = @usercompanyCount;
     document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('OBPayoutModal');
         modal.addEventListener('shown.bs.modal', function () {

@@ -1,7 +1,19 @@
-﻿GetAllSiteList();
-GetAllCompanyList();
+﻿
+var _userCompanyCount = window._userCompanyCount || 0;
+
+
+GetAllSiteList();
+
 GetAllSupplierList();
 GetGroupList();
+
+
+if (_userCompanyCount === 0) {
+
+    $(document).ready(function () {
+        GetAllCompanyList();
+    });
+}
 function GetAllSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
@@ -17,15 +29,18 @@ function GetAllCompanyList() {
         url: '/Company/GetCompanyNameList',
         method: 'GET',
         success: function (result) {
-            var $dropdown = $("#textReportCompanyName");
-            $dropdown.empty();
-            $dropdown.append('<option value="">Select Company</option>');
-            result.forEach(function (data) {
-                $dropdown.append(
-                    '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' + data.companyName + '</option>'
-                );
-            });
+            if (result.length > 0) {
+                var $dropdown = $('#textReportCompanyName');
+                $dropdown.empty();
 
+
+                $dropdown.append('<option selected value="" disabled>Select Company</option>');
+
+
+                $.each(result, function (i, data) {
+                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                });
+            }
         },
         error: function (err) {
             console.error("Failed to fetch company list: ", err);
