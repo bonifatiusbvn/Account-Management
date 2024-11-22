@@ -542,37 +542,39 @@ GetOtherPersonContectNoAndContectName();
 function GetOtherPersonContectNoAndContectName() {
 
     var SiteId = $('#positeid').val();
-    $.ajax({
-        url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            if (response.contectPersonName && response.contectPersonPhoneNo) {
-                $('#txtOtherContectPerson').empty();
-                $('#txtOtherContactNumber').empty();
+    if (SiteId) {
+        $.ajax({
+            url: '/SiteMaster/DisplaySiteDetails?SiteId=' + SiteId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                if (response.contectPersonName && response.contectPersonPhoneNo) {
+                    $('#txtOtherContectPerson').empty();
+                    $('#txtOtherContactNumber').empty();
 
-                $('#txtOtherContectPerson').append('<option value="null">Select ContactPerson</option>');
-                $('#txtOtherContactNumber').append('<option value="null">Select ContactNo</option>');
+                    $('#txtOtherContectPerson').append('<option value="null">Select ContactPerson</option>');
+                    $('#txtOtherContactNumber').append('<option value="null">Select ContactNo</option>');
 
-                var contactNames = response.contectPersonName.split(',');
-                contactNames.forEach(function (name) {
-                    $('#txtOtherContectPerson').append(
-                        `<option value="${name.trim()}">${name.trim()}</option>`
-                    );
-                });
+                    var contactNames = response.contectPersonName.split(',');
+                    contactNames.forEach(function (name) {
+                        $('#txtOtherContectPerson').append(
+                            `<option value="${name.trim()}">${name.trim()}</option>`
+                        );
+                    });
 
-                var contactNumbers = response.contectPersonPhoneNo.split(',');
-                contactNumbers.forEach(function (number) {
-                    $('#txtOtherContactNumber').append(
-                        `<option value="${number.trim()}">${number.trim()}</option>`
-                    );
-                });
-            } else {
-                toastr.error("No contact details found for the selected site.");
-            }
-        },
-    });
+                    var contactNumbers = response.contectPersonPhoneNo.split(',');
+                    contactNumbers.forEach(function (number) {
+                        $('#txtOtherContactNumber').append(
+                            `<option value="${number.trim()}">${number.trim()}</option>`
+                        );
+                    });
+                } else {
+                    toastr.error("No contact details found for the selected site.");
+                }
+            },
+        });
+    }
 }
 
 function clearPOtextbox() {
@@ -2097,15 +2099,27 @@ function WithGSTSelected() {
     }
 }
 
-document.getElementById('textpoGstPerUnit').addEventListener('input', function () {
-    WithGSTSelected();
-});
-document.getElementById('textpoPricePerUnit').addEventListener('input', function () {
-    WithGSTSelected();
-});
-document.getElementById('textpoIsWithGst').addEventListener('change', function () {
-    WithGSTSelected();
-});
+const textpoGstPerUnit = document.getElementById('textpoGstPerUnit');
+if (textpoGstPerUnit) {
+    textpoGstPerUnit.addEventListener('input', function () {
+        WithGSTSelected();
+    });
+}
+
+const textpoPricePerUnit = document.getElementById('textpoPricePerUnit');
+if (textpoPricePerUnit) {
+    textpoPricePerUnit.addEventListener('input', function () {
+        WithGSTSelected();
+    });
+}
+
+const textpoIsWithGst = document.getElementById('textpoIsWithGst');
+if (textpoIsWithGst) {
+    textpoIsWithGst.addEventListener('change', function () {
+        WithGSTSelected();
+    });
+}
+
 
 
 
