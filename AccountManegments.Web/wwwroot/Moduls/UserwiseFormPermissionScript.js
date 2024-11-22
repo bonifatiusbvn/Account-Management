@@ -155,3 +155,11 @@ function toggleIsApprovedLabel(formId) {
     const label = document.getElementById(`labelIsApproved_${formId}`);
     label.textContent = isApprovedCheckbox.checked ? "Auto Approved-On" : "Auto Approved-Off";
 }
+
+function toggleColumnCheckboxes(checkbox, columnClass) {
+    const isChecked = checkbox.checked;
+
+    const columnCheckboxes = document.querySelectorAll(`.${columnClass}`);
+
+    columnCheckboxes.forEach(cb => cb.checked = isChecked);
+}
