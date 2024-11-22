@@ -12,4 +12,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.SiteMaster
         public Guid SiteId { get; set; }
         public string SiteName { get; set; } = null!;
     }
+
+    public class UserCompanyListModel
+    {
+        public Guid CompanyId { get; set; }
+        public string CompanyName { get; set; } = null!;
+    }
 }

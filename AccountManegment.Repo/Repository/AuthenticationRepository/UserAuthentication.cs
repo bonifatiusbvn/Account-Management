@@ -452,6 +452,29 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         userModel.userSites = new List<UserSiteListModel>();
                     }
 
+                    var companyIds = string.IsNullOrEmpty(tblUser.User.SiteId)
+                        ? new List<Guid>()
+                        : tblUser.User.SiteId.Split(',')
+                            .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
+                            .Where(guid => guid.HasValue)
+                            .Select(guid => guid.Value)
+                            .ToList();
+
+                    if (siteIds.Any())
+                    {
+                        userModel.userSites = await (from s in Context.Sites
+                                                     where siteIds.Contains(s.SiteId)
+                                                     orderby s.SiteName
+                                                     select new UserSiteListModel
+                                                     {
+                                                         SiteId = s.SiteId,
+                                                         SiteName = s.SiteName,
+                                                     }).ToListAsync();
+                    }
+                    else
+                    {
+                        userModel.userSites = new List<UserSiteListModel>();
+                    }
 
                 }
 

@@ -34,6 +34,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public List<FromPermission> FromPermissionData { get; set; }
 
         public List<UserSiteListModel> userSites { get; set; }
+        public List<UserCompanyListModel> userCompany { get; set; }
         public string? Token { get; set; }
     }
     public class LoginResponseModel

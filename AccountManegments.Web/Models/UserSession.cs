@@ -46,21 +46,37 @@ namespace AccountManegments.Web.Models
                 return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserName", true) == 0)?.Value;
             }
         }
-        public int UserRole
+        public static string ComapnyId
         {
             get
             {
-                var userroleid = StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserRole", true) == 0);
-                return userroleid != null ? int.Parse(userroleid.Value) : 0;
+                if (StaticHttpContext.Session.GetString("ComapnyId") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("ComapnyId");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("ComapnyId", value);
             }
         }
 
-        public string RoleName
+        public static string CompanyName
         {
             get
             {
-                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "RoleName", true) == 0)?.Value;
+                if (StaticHttpContext.Session.GetString("CompanyName") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("CompanyName");
+
             }
+            set
+            {
+                StaticHttpContext.Session.SetString("CompanyName", value);
+            }
+
         }
         public static string SiteName
         {
@@ -119,6 +135,19 @@ namespace AccountManegments.Web.Models
             set
             {
                 StaticHttpContext.Session.SetObjectAsJson("SiteData", value);
+            }
+        }
+
+        public static List<UserCompanyListModel> CompanyData
+        {
+            get
+            {
+                var companylData = StaticHttpContext.Session.GetObjectFromJson<List<UserCompanyListModel>>("CompanyData");
+                return companylData ?? new List<UserCompanyListModel>();
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("CompanyData", value);
             }
         }
 
