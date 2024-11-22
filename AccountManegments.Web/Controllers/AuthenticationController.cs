@@ -119,81 +119,96 @@ namespace AccountManegments.Web.Controllers
             try
             {
                 ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
-                LoginResponseModel userlogin = new LoginResponseModel();
 
                 if (responsemodel.code != (int)HttpStatusCode.OK)
                 {
+                    TempData["ErrorMessage"] = responsemodel.message;
+
                     if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                     {
-                        TempData["ErrorMessage"] = responsemodel.message;
                         return Ok(new { Message = responsemodel.message, Code = responsemodel.code });
                     }
-                    else
-                    {
-                        TempData["ErrorMessage"] = responsemodel.message;
-                    }
+
+                    return View(login);
+                }
+
+
+                var userLogin = new LoginResponseModel
+                {
+                    Data = JsonConvert.DeserializeObject<LoginView>(responsemodel.data.ToString())
+                };
+
+                if (userLogin.Data == null)
+                {
+                    TempData["ErrorMessage"] = "Invalid login data received.";
+                    return View(login);
+                }
+
+
+                userLogin.Data.userSites ??= JsonConvert.DeserializeObject<List<UserSiteListModel>>(responsemodel.data["userSites"]?.ToString() ?? "[]");
+                userLogin.Data.userCompany ??= JsonConvert.DeserializeObject<List<UserCompanyListModel>>(responsemodel.data["userCompany"]?.ToString() ?? "[]");
+
+
+                var claims = new List<Claim>
+        {
+            new Claim("UserId", userLogin.Data.Id.ToString()),
+            new Claim("FullName", userLogin.Data.FullName ?? ""),
+            new Claim("UserName", userLogin.Data.UserName ?? ""),
+            new Claim("Token", userLogin.Data.Token ?? "")
+        };
+
+
+                if (userLogin.Data.userSites.Any())
+                {
+                    var singleSite = userLogin.Data.userSites.First();
+                    claims.Add(new Claim("SiteId", singleSite.SiteId.ToString()));
+                    claims.Add(new Claim("SiteName", singleSite.SiteName ?? ""));
+                    UserSession.SiteId = singleSite.SiteId.ToString();
+                    UserSession.SiteName = singleSite.SiteName;
+                }
+
+
+                if (userLogin.Data.userCompany.Any())
+                {
+                    var singleCompany = userLogin.Data.userCompany.First();
+                    claims.Add(new Claim("CompanyId", singleCompany.CompanyId.ToString())); // Corrected the typo
+                    claims.Add(new Claim("CompanyName", singleCompany.CompanyName ?? ""));
+                    UserSession.ComapnyId = singleCompany.CompanyId.ToString();
+                    UserSession.CompanyName = singleCompany.CompanyName;
+                }
+
+
+                if (login.RememberMe)
+                {
+                    CookieOptions cookie = new CookieOptions { Expires = DateTime.UtcNow.AddDays(7) };
+                    Response.Cookies.Append("UserName", login.UserName, cookie);
+                    Response.Cookies.Append("Password", login.Password, cookie);
                 }
                 else
                 {
-                    var data = JsonConvert.SerializeObject(responsemodel.data);
-
-                    userlogin.Data = JsonConvert.DeserializeObject<LoginView>(responsemodel.data.ToString());
-
-                    if (userlogin.Data != null && userlogin.Data.userSites == null)
-                    {
-                        userlogin.Data.userSites = JsonConvert.DeserializeObject<List<UserSiteListModel>>(responsemodel.data["userSites"].ToString());
-                    }
-
-
-                    var claims = new List<Claim>()
-            {
-                new Claim("UserId", userlogin.Data.Id.ToString()),
-                new Claim("FullName", userlogin.Data.FullName),
-                new Claim("UserName", userlogin.Data.UserName),
-                new Claim("Token", userlogin.Data.Token),
-            };
-
-
-                    if (userlogin.Data.userSites.Count == 1 || userlogin.Data.userSites.Count >= 1)
-                    {
-                        var singleSite = userlogin.Data.userSites.First();
-                        claims.Add(new Claim("SiteId", singleSite.SiteId.ToString()));
-                        claims.Add(new Claim("SiteName", singleSite.SiteName));
-                        UserSession.SiteId = singleSite.SiteId.ToString() ?? "";
-                        UserSession.SiteName = singleSite.SiteName ?? "";
-                    }
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                    if (login.RememberMe)
-                    {
-                        CookieOptions cookie = new CookieOptions { Expires = DateTime.UtcNow.AddDays(7) };
-                        Response.Cookies.Append("UserName", login.UserName, cookie);
-                        Response.Cookies.Append("Password", login.Password, cookie);
-                        ViewBag.chkRememberMe = true;
-                    }
-                    else
-                    {
-                        Response.Cookies.Delete("UserName");
-                        Response.Cookies.Delete("Password");
-                        ViewBag.chkRememberMe = false;
-                    }
-
-
-                    UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
-                    UserSession.SiteData = userlogin.Data.userSites;
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-                    return RedirectToAction("Index", "Home");
+                    Response.Cookies.Delete("UserName");
+                    Response.Cookies.Delete("Password");
                 }
+
+
+                UserSession.FormPermisionData = userLogin.Data.FromPermissionData;
+                UserSession.SiteData = userLogin.Data.userSites;
+                UserSession.CompanyData = userLogin.Data.userCompany;
+
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                ViewBag.LoginError = "Login failed.";
+                ViewBag.LoginError = "Login failed due to an unexpected error.";
+                return View(login);
             }
-            return View();
         }
+
 
 
         [HttpPost]

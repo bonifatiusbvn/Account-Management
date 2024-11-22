@@ -496,7 +496,6 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
 
                 }
 
-
                 response.Data = userModel;
                 response.Code = (int)HttpStatusCode.OK;
             }

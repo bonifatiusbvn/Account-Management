@@ -7,7 +7,6 @@ var TotalPending = '';
 
 AllPurchaseRequestListTable();
 GetSiteDetail();
-GetCompanyName();
 GetSupplierDetails();
 GetPOList();
 checkAndDisableAddButton();
@@ -639,14 +638,18 @@ function getPONumber(CompanyId) {
 function GetCompanyName() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
+        method: 'GET',
         success: function (result) {
             if (result.length > 0) {
+                var $dropdown = $('#txtcompanyname');
+                $dropdown.empty();
 
-                var selectedValue = $('#txtcompanyname').find('option:first').val();
+
+                $dropdown.append('<option selected value="" disabled>Select Company</option>');
+
+
                 $.each(result, function (i, data) {
-                    if (data.companyId !== selectedValue) {
-                        $('#txtcompanyname').append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
-                    }
+                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
                 });
             }
         },
@@ -655,6 +658,7 @@ function GetCompanyName() {
         }
     });
 }
+
 $(document).ready(function () {
     $('#txtcompanyname').change(function () {
         getPONumber($(this).val());
