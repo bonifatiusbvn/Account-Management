@@ -265,7 +265,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             try
             {
                 var SiteList = Context.Sites.ToList();
-                var CompanyList=Context.Companies.ToList();
+                var CompanyList = Context.Companies.ToList();
 
                 IEnumerable<LoginView> userList = Context.Users
                     .Where(e => e.IsDeleted == false)
@@ -422,6 +422,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                     FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
                     FirstName = tblUser.User.FirstName,
                     userSites = new List<UserSiteListModel>(),
+                    userCompany = new List<UserCompanyListModel>(),
                     Token = authToken
                 };
 
@@ -469,28 +470,28 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                         userModel.userSites = new List<UserSiteListModel>();
                     }
 
-                    var companyIds = string.IsNullOrEmpty(tblUser.User.SiteId)
+                    var companyIds = string.IsNullOrEmpty(tblUser.User.CompanyId)
                         ? new List<Guid>()
-                        : tblUser.User.SiteId.Split(',')
+                        : tblUser.User.CompanyId.Split(',')
                             .Select(id => Guid.TryParse(id, out var guid) ? guid : (Guid?)null)
                             .Where(guid => guid.HasValue)
                             .Select(guid => guid.Value)
                             .ToList();
 
-                    if (siteIds.Any())
+                    if (companyIds.Any())
                     {
-                        userModel.userSites = await (from s in Context.Sites
-                                                     where siteIds.Contains(s.SiteId)
-                                                     orderby s.SiteName
-                                                     select new UserSiteListModel
-                                                     {
-                                                         SiteId = s.SiteId,
-                                                         SiteName = s.SiteName,
-                                                     }).ToListAsync();
+                        userModel.userCompany = await (from s in Context.Companies
+                                                       where companyIds.Contains(s.CompanyId)
+                                                       orderby s.CompanyName
+                                                       select new UserCompanyListModel
+                                                       {
+                                                           CompanyId = s.CompanyId,
+                                                           CompanyName = s.CompanyName,
+                                                       }).ToListAsync();
                     }
                     else
                     {
-                        userModel.userSites = new List<UserSiteListModel>();
+                        userModel.userCompany = new List<UserCompanyListModel>();
                     }
 
                 }

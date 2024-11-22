@@ -31,8 +31,6 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
 
-
-
     public virtual DbSet<PodeliveryAddress> PodeliveryAddresses { get; set; }
 
     public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
@@ -62,9 +60,7 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -199,8 +195,6 @@ public partial class DbaccManegmentContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ItemMaster_UnitMaster");
         });
-
-       
 
         modelBuilder.Entity<PodeliveryAddress>(entity =>
         {
