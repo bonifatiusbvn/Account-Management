@@ -214,13 +214,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 var CountTotalData = await supplierInvoicesQuery
-    .GroupBy(g => new { g.s.SiteId, g.s.SupplierId }) // Group by SiteId and then by SupplierId
+    .GroupBy(g => new { g.s.SiteId, g.s.SupplierId })
     .Select(group => new SupplierInvoiceModel
     {
         Id = group.FirstOrDefault().s.Id,
         InvoiceNo = group.FirstOrDefault().s.InvoiceNo,
-        SiteId = group.Key.SiteId,  // Grouped by SiteId
-        SupplierId = group.Key.SupplierId,  // Grouped by SupplierId
+        SiteId = group.Key.SiteId,
+        SupplierId = group.Key.SupplierId,
         CompanyId = group.FirstOrDefault().s.CompanyId,
         PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
         NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
@@ -267,10 +267,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 var TotalData = CountTotalData.Where(i => i.NetAmount != 0).ToList();
 
-                var paginatedResults = TotalData
-                    .Skip(PayOutReport.skip)
-                    .Take(PayOutReport.pageSize)
-                    .ToList();
+
 
                 var totalRecords = TotalData.Count();
 
@@ -279,7 +276,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     draw = PayOutReport.draw,
                     recordsFiltered = totalRecords,
                     recordsTotal = totalRecords,
-                    data = paginatedResults,
+                    data = TotalData,
                     TotalCredit = TotalCredit,
                     TotalDebit = TotalDebit,
                 };
@@ -360,7 +357,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     IsApproved = a.IsApproved,
                                     GroupAddress = a.GroupAddress,
                                     DiscountRoundoff = a.DiscountRoundoff,
-                                    Poid= a.Poid,
+                                    Poid = a.Poid,
                                     CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
                                     SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
                                     ShippingAddress = a.ShippingAddress,
@@ -737,8 +734,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     DiscountRoundoff = SupplierInvoiceDetail.DiscountRoundoff,
                     SiteGroup = SupplierInvoiceDetail.SiteGroup,
                     IsApproved = SupplierInvoiceDetail.IsApproved,
-                    Poid= SupplierInvoiceDetail.Poid,   
-                    GroupAddress =SupplierInvoiceDetail.GroupAddress,
+                    Poid = SupplierInvoiceDetail.Poid,
+                    GroupAddress = SupplierInvoiceDetail.GroupAddress,
                 };
                 Context.SupplierInvoices.Update(supplierInvoice);
 
@@ -833,7 +830,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedBy = SupplierItemDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                     SiteGroup = SupplierItemDetails.SiteGroup,
-                    Poid= SupplierItemDetails.Poid, 
+                    Poid = SupplierItemDetails.Poid,
                     GroupAddress = SupplierItemDetails.GroupAddress,
                 };
                 Context.SupplierInvoices.Add(supplierInvoice);
@@ -1053,7 +1050,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
 
                 if (!string.IsNullOrEmpty(invoiceReport.sortColumn) && !string.IsNullOrEmpty(invoiceReport.sortColumnDir))
-                    {
+                {
 
                     var queryType = query.FirstOrDefault().GetType();
 
@@ -1137,20 +1134,20 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     }
                     else if (invoiceReport.filterType == "betweenYear" && !string.IsNullOrEmpty(invoiceReport.SelectedYear))
                     {
-                        // Assuming the SelectedYear is in the format "2024-25"
+
                         var years = invoiceReport.SelectedYear.Split('-');
 
                         if (years.Length == 2)
                         {
-                            // Parse the start year and end year
-                            int startYear = int.Parse(years[0]); // 2024
-                            int endYear = int.Parse("20" + years[1]); // 2025
 
-                            // Create DateTime objects for the start and end of the fiscal year
-                            var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1); // April 1, 2024
-                            var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31); // March 31, 2025
+                            int startYear = int.Parse(years[0]);
+                            int endYear = int.Parse("20" + years[1]);
 
-                            // Apply the date filter based on the fiscal year range
+
+                            var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                            var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+
+
                             query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
                         }
                     }
@@ -1175,32 +1172,30 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 var totalRecords = await query.CountAsync();
 
 
-                var filteredData = await query
-                    .Select(s => new SupplierInvoiceModel
-                    {
-                        Id = s.s.Id,
-                        InvoiceNo = s.s.InvoiceNo,
-                        SiteId = s.s.SiteId,
-                        SupplierId = s.s.SupplierId,
-                        CompanyId = s.s.CompanyId,
-                        TotalAmount = s.s.TotalAmount,
-                        GroupName = s.s.SiteGroup,
-                        TotalDiscount = s.s.TotalDiscount,
-                        TotalGstamount = s.s.TotalGstamount,
-                        Tds = s.s.Tds,
-                        Description = s.s.Description,
-                        CompanyName = s.CompanyName,
-                        SupplierName = s.SupplierName,
-                        PaymentStatus = s.s.PaymentStatus,
-                        IsPayOut = s.s.IsPayOut,
-                        SupplierInvoiceNo = s.s.SupplierInvoiceNo,
-                        Date = s.s.Date,
-                        CreatedOn = s.s.CreatedOn,
-                        SiteName = s.SiteName
-                    })
-                    .Skip(invoiceReport.skip)
-                    .Take(invoiceReport.pageSize)
-                    .ToListAsync();
+                var allData = await query
+           .Select(s => new SupplierInvoiceModel
+           {
+               Id = s.s.Id,
+               InvoiceNo = s.s.InvoiceNo,
+               SiteId = s.s.SiteId,
+               SupplierId = s.s.SupplierId,
+               CompanyId = s.s.CompanyId,
+               TotalAmount = s.s.TotalAmount,
+               GroupName = s.s.SiteGroup,
+               TotalDiscount = s.s.TotalDiscount,
+               TotalGstamount = s.s.TotalGstamount,
+               Tds = s.s.Tds,
+               Description = s.s.Description,
+               CompanyName = s.CompanyName,
+               SupplierName = s.SupplierName,
+               PaymentStatus = s.s.PaymentStatus,
+               IsPayOut = s.s.IsPayOut,
+               SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+               Date = s.s.Date,
+               CreatedOn = s.s.CreatedOn,
+               SiteName = s.SiteName
+           })
+           .ToListAsync();
 
 
                 var CountTotalData = await query
@@ -1235,7 +1230,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     draw = invoiceReport.draw,
                     recordsFiltered = totalRecords,
                     recordsTotal = totalRecords,
-                    data = filteredData,
+                    data = allData,
                     TotalCredit = TotalCredit,
                     TotalDebit = TotalDebit,
                 };
