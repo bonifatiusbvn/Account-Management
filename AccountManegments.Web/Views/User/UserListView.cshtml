@@ -62,6 +62,7 @@
                                                         <th>Full Name</th>
                                                         <th>User Name</th>
                                                         <th>Site Name</th>
+                                                        <th>Company Name</th>
                                                         <th>Active</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
                                                         {
@@ -101,6 +102,10 @@
                                     <div class="col-6">
                                         <label class="form-label">Site</label>
                                         <textarea type="text" class="form-control" id="dspSiteName" readonly></textarea>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Company</label>
+                                        <textarea type="text" class="form-control" id="dspCompanyName" readonly></textarea>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Password</label>

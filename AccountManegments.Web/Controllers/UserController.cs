@@ -102,6 +102,7 @@ namespace AccountManegments.Web.Controllers
                     Password = CreatUser.Password,
                     PhoneNo = CreatUser.PhoneNo,
                     SiteId = CreatUser.SiteId,
+                    CompanyId = CreatUser.CompanyId,
                     CreatedBy = _userSession.UserId,
                 };
 

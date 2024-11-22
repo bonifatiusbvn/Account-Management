@@ -7,7 +7,8 @@
     <tr id="userCard_@item.Id" onclick="SelectUserDetails('@item.Id', this)">
         <td>@item.FirstName  @item.LastName</td>
         <td>@item.UserName</td>
-        <td style="width: 320px;">@item.SiteName</td>
+        <td >@item.SiteName</td>
+        <td >@item.CompanyName</td>
         <td>
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true)))
             {
@@ -26,7 +27,7 @@
         </td>
         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true || a.Delete == true)))
         {
-            <td>
+            <td style="width:140px;">
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "User List" && (a.Edit == true)))
                 {
                     <a class="btn text-primary" onclick="DisplayUserDetails('@item.Id')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
