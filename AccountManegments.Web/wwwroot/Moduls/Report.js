@@ -25,14 +25,14 @@ function GetAllSiteList() {
     });
 }
 function GetAllCompanyList() {
+    
     $.ajax({
         url: '/Company/GetCompanyNameList',
-        method: 'GET',
         success: function (result) {
+            debugger
             if (result.length > 0) {
                 var $dropdown = $('#textReportCompanyName');
                 $dropdown.empty();
-
 
                 $dropdown.append('<option selected value="" disabled>Select Company</option>');
 
@@ -42,8 +42,8 @@ function GetAllCompanyList() {
                 });
             }
         },
-        error: function (err) {
-            console.error("Failed to fetch company list: ", err);
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
         }
     });
 }

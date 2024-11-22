@@ -12,7 +12,7 @@ updateTotals();
 if (_userCompanyCount === 0) {
     debugger
     $(document).ready(function () {
-        GetCompanyDetail();
+        GetCompanyDetail('txtcompanyname');
     });
 }
 function filterallItemTable() {
@@ -93,28 +93,7 @@ function GetItemDetailsList() {
         })
 }
 
-function GetCompanyDetail() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        success: function (result) {
-            if (result.length > 0) {
-                var $dropdown = $('#txtcompanyname');
-                $dropdown.empty();
 
-
-                $dropdown.append('<option selected value="" disabled>Select Company</option>');
-
-
-                $.each(result, function (i, data) {
-                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching company details:', error);
-        }
-    });
-}
 
 $(document).ready(function () {
     $('#textCompanyName').change(function () {

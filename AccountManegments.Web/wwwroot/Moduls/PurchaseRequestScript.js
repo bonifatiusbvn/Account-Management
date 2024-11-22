@@ -18,7 +18,7 @@ updateTotals();
 if (_userCompanyCount === 0) {
 
     $(document).ready(function () {
-        GetCompanyName();
+        GetCompanyDetail('txtcompanyname');
     });
 }
 
@@ -643,29 +643,6 @@ function getPONumber(CompanyId) {
                 toastr.error('Empty response received.');
             }
         },
-    });
-}
-function GetCompanyName() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        method: 'GET',
-        success: function (result) {
-            if (result.length > 0) {
-                var $dropdown = $('#txtcompanyname');
-                $dropdown.empty();
-
-
-                $dropdown.append('<option selected value="" disabled>Select Company</option>');
-
-
-                $.each(result, function (i, data) {
-                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching company details:', error);
-        }
     });
 }
 

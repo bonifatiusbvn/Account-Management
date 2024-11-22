@@ -14,7 +14,7 @@ GetAllSiteList();
 if (_userCompanyCount === 0) {
 
     $(document).ready(function () {
-        GetAllCompanyList();
+        GetCompanyDetail('textPayoutReportCompanyName');
     });
 }
 function GetAllSiteList() {
