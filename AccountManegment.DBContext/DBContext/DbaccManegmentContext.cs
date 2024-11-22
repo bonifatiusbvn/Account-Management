@@ -31,7 +31,7 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<ItemMaster> ItemMasters { get; set; }
 
-    public virtual DbSet<PartyMaster> PartyMasters { get; set; }
+
 
     public virtual DbSet<PodeliveryAddress> PodeliveryAddresses { get; set; }
 
@@ -62,7 +62,7 @@ public partial class DbaccManegmentContext : DbContext
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { 
+    {
 
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -200,24 +200,7 @@ public partial class DbaccManegmentContext : DbContext
                 .HasConstraintName("FK_ItemMaster_UnitMaster");
         });
 
-        modelBuilder.Entity<PartyMaster>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("PartyMaster");
-
-            entity.Property(e => e.Area).HasMaxLength(250);
-            entity.Property(e => e.BuildingName).HasMaxLength(100);
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Gstno)
-                .HasMaxLength(20)
-                .HasColumnName("GSTNo");
-            entity.Property(e => e.Mobile).HasMaxLength(15);
-            entity.Property(e => e.PartyName).HasMaxLength(30);
-            entity.Property(e => e.PinCode).HasMaxLength(7);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
+       
 
         modelBuilder.Entity<PodeliveryAddress>(entity =>
         {
