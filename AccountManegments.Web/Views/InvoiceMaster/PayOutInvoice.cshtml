@@ -215,11 +215,8 @@
                                                                                                 <th colspan="5" style="text-align:right">Total:</th>
                                                                                                 <th id="totalCredit"></th>
                                                                                                 <th id="totalDebit"></th>
-                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
-                                                                                                {
-                                                                                                    <th id="NetAmount"></th>
-                                                                                                }
-                                                                                                <th></th>
+
+                                                                                                <th id="NetAmount"></th>
                                                                                             </tr>
                                                                                         </tfoot>
                                                                                     </table>
