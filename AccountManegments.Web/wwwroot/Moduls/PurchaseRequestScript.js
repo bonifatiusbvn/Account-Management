@@ -1140,7 +1140,7 @@ $(document).ready(function () {
     var SiteId = $('#positeid').val();
     GetPOSiteShippingAddress(SiteId)
 })
-function GetPOSiteShippingAddress(SiteId) {
+function GetPOSiteShippingAddress(SiteId) {debugger
     if (SiteId == undefined) {
         $('#dvPoSiteShipppingAddress').empty();
     }
