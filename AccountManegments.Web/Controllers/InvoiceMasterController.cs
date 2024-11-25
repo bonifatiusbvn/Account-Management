@@ -161,6 +161,7 @@ namespace AccountManegments.Web.Controllers
             {
                 string siteIdString = UserSession.SiteId;
                 Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
+                List<UserCompanyListModel> CompanyData = UserSession.CompanyData;
 
                 string apiUrl = $"SupplierInvoice/GetSupplierInvoiceList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
@@ -174,6 +175,22 @@ namespace AccountManegments.Web.Controllers
                     {
                         GetInvoiceList.InvoiceList = GetInvoiceList.InvoiceList
                             .Where(invoice => invoice.SiteId == SiteId.Value)
+                            .ToList();
+
+                        GetInvoiceList.InvoiceItemList = GetInvoiceList.InvoiceItemList
+                            .Where(item => GetInvoiceList.InvoiceList.Any(invoice => invoice.Id == item.Key))
+                            .ToDictionary(
+                                item => item.Key,
+                                item => item.Value
+                            );
+                    }
+
+                    if (CompanyData != null && CompanyData.Any())
+                    {
+                        var companyIds = CompanyData.Select(c => c.CompanyId).ToList();
+
+                        GetInvoiceList.InvoiceList = GetInvoiceList.InvoiceList
+                            .Where(invoice => companyIds.Contains(invoice.CompanyId))
                             .ToList();
 
                         GetInvoiceList.InvoiceItemList = GetInvoiceList.InvoiceItemList
