@@ -499,7 +499,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
                 response.Data = userModel;
                 response.Code = (int)HttpStatusCode.OK;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 response.Message = "An error occurred while processing your request.";
                 response.Code = (int)HttpStatusCode.InternalServerError;
@@ -509,38 +509,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
         }
 
 
-        public async Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission)
-        {
-            ApiResponseModel response = new ApiResponseModel();
 
-            try
-            {
-                var model = new RolewiseFormPermission()
-                {
-                    RoleId = RolePermission.RoleId,
-                    FormId = RolePermission.FormId,
-                    IsViewAllow = RolePermission.IsViewAllow,
-                    IsEditAllow = RolePermission.IsEditAllow,
-                    IsDeleteAllow = RolePermission.IsDeleteAllow,
-                    CreatedBy = RolePermission.CreatedBy,
-                    CreatedOn = DateTime.Now,
-                };
-
-                Context.RolewiseFormPermissions.Add(model);
-                Context.SaveChanges();
-
-                response.code = (int)HttpStatusCode.OK;
-                response.message = "Permissions given successfully";
-
-            }
-            catch (Exception ex)
-            {
-                response.code = (int)HttpStatusCode.InternalServerError;
-                response.message = "An error occurred while creating the permissions to user";
-            }
-
-            return response;
-        }
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
         {

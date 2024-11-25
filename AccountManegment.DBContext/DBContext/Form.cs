@@ -19,7 +19,5 @@ public partial class Form
 
     public bool IsActive { get; set; }
 
-    public virtual ICollection<RolewiseFormPermission> RolewiseFormPermissions { get; set; } = new List<RolewiseFormPermission>();
-
     public virtual ICollection<UserwiseFormPermission> UserwiseFormPermissions { get; set; } = new List<UserwiseFormPermission>();
 }

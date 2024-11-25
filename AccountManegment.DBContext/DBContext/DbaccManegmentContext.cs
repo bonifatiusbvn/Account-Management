@@ -39,8 +39,6 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<PurchaseRequest> PurchaseRequests { get; set; }
 
-    public virtual DbSet<RolewiseFormPermission> RolewiseFormPermissions { get; set; }
-
     public virtual DbSet<Site> Sites { get; set; }
 
     public virtual DbSet<SiteAddress> SiteAddresses { get; set; }
@@ -295,19 +293,6 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.UnitTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseRequest_UnitMaster");
-        });
-
-        modelBuilder.Entity<RolewiseFormPermission>(entity =>
-        {
-            entity.ToTable("RolewiseFormPermission");
-
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Form).WithMany(p => p.RolewiseFormPermissions)
-                .HasForeignKey(d => d.FormId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_RolewiseFormPermission_Form");
         });
 
         modelBuilder.Entity<Site>(entity =>

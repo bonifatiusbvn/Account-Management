@@ -58,10 +58,7 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.LoginUser(LoginUser);
         }
 
-        public async Task<ApiResponseModel> RolewisePermission(RolewiseFormPermissionModel RolePermission)
-        {
-            return await Authentication.RolewisePermission(RolePermission);
-        }
+
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
         {
