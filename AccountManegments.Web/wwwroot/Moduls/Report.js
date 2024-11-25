@@ -25,7 +25,7 @@ function GetAllSiteList() {
     });
 }
 function GetAllCompanyList() {
-    
+
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
@@ -450,7 +450,7 @@ $(document).ready(function () {
 
     for (var i = 0; i < userPermissionArray.length; i++) {
         var permission = userPermissionArray[i];
-        if (permission.formName == "Details Report") {
+        if (permission.formName == "Report & Payout") {
             canEdit = permission.edit;
             canDelete = permission.delete;
             break;

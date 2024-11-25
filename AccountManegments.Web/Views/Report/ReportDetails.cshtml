@@ -87,7 +87,7 @@
                                                                             <th>Credit</th>
                                                                             <th>Debit</th>
                                                                             <th>Balance</th>
-                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && (a.Edit == true || a.Delete == true)))
                                                                             {
                                                                                 <th>Action</th>
                                                                             }
@@ -100,7 +100,7 @@
                                                                             <th colspan="5" style="text-align:right">Total:</th>
                                                                             <th id="totalCredit"></th>
                                                                             <th id="totalDebit"></th>
-                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Details Report" && (a.Edit == true || a.Delete == true)))
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && (a.Edit == true || a.Delete == true)))
                                                                             {
                                                                                 <th id="NetAmount"></th>
                                                                             }
