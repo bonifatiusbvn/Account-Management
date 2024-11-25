@@ -174,7 +174,7 @@ function ExportToPDF() {
     var selectedSupplierName = $('#textReportSupplierName').val();
     var selectedCompanyId = $('#textReportCompanyName').val();
     var selectedGroupName = $('#textReportGroupList').val();
-    var selectedReportSiteName = $('#txtReportSiteId').val();
+    var selectedReportSiteName = $('#textReportSiteName').val();
     var selectedSortOrder = "AscendingDate";
 
     var objData = {
@@ -267,7 +267,7 @@ function ExportToExcel() {
     var selectedSupplierName = $('#textReportSupplierName').val();
     var selectedCompanyId = $('#textReportCompanyName').val();
     var selectedGroupName = $('#textReportGroupList').val();
-    var selectedReportSiteName = $('#txtReportSiteId').val();
+    var selectedReportSiteName = $('#textReportSiteName').val();
     var selectedSortOrder = "AscendingDate";
     var objData = {
         SiteId: selectedReportSiteName || null,
@@ -506,7 +506,7 @@ $(document).ready(function () {
                     d.length = d.length;
                     d.order = d.order;
                     d.columns = d.columns;
-                    d.SiteId = $('#txtReportSiteId').val() || null;
+                    d.SiteId = $('#textReportSiteName').val() || null;
                     d.CompanyId = $('#textReportCompanyName').val() || null;
                     d.SupplierId = $('#textReportSupplierNameHidden').val() || null;
                     d.GroupName = $('#textReportGroupList').val() || null;

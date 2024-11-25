@@ -135,6 +135,11 @@
                                                                     <div class="card-body">
                                                                         <ul class="nav nav-pills mb-3 row" role="tablist">
                                                                             <li class="nav-item col-md-2" role="presentation">
+                                                                                <select id="textReportSiteName" name="textReportSiteName" class="form-control">
+                                                                                    <option value="">All Site</option>
+                                                                                </select>
+                                                                            </li>
+                                                                            <li class="nav-item col-md-2" role="presentation">
                                                                                 <select id="textReportCompanyName" name="textReportCompanyName" class="form-control">
                                                                                     @if (usercompany != null && usercompany.Any())
                                                                                     {
@@ -154,13 +159,13 @@
                                                                                 <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
                                                                                 <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
                                                                             </li>
-                                                                            <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="textReportGroupList" name="textReportGroupList" class="form-control">
+                                                                            <li class="nav-item col-md-1" role="presentation">
+                                                                                <select id="textReportGroupList" name="textReportGroupList" class="form-control" style="width:120px;">
                                                                                     <option value="">Select Group</option>
                                                                                 </select>
                                                                             </li>
                                                                             <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="timePeriodDropdown" name="timePeriodDropdown" class="form-control">
+                                                                                <select id="timePeriodDropdown" name="timePeriodDropdown" class="form-control" style="width:160px;margin-left:6px;">
                                                                                     <option value="" selected disabled>Search By</option>
                                                                                     <option value="This Month">This Month</option>
                                                                                     <option value="This Year">This Year</option>
@@ -169,7 +174,7 @@
                                                                                 </select>
                                                                             </li>
 
-                                                                            <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls">
+                                                                            <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls" style="margin-left: -75px;">
                                                                                 <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;width: 135px;">
                                                                                 <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;width: 135px;">
                                                                                 <select id="yearDropdown" class="form-control" style="display:none; width: 110px;">
