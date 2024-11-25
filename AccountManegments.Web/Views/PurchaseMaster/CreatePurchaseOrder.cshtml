@@ -500,7 +500,7 @@
                                                                                 </div>
 
                                                                                 <div class="col-2 col-sm-2">
-                                                                                    <input class="nav-checkbox form-check-input"
+                                                                                    <input class="nav-checkbox form-check-input shipping-checkbox"
                                                                                            type="checkbox"
                                                                                            id="ShippingCheckbox_@counter"
                                                                                            value="@FullAddress"
@@ -534,7 +534,7 @@
                                                                                     </div>
 
                                                                                     <div class="col-2 col-sm-2">
-                                                                                        <input class="nav-checkbox form-check-input"
+                                                                                        <input class="nav-checkbox form-check-input shipping-checkbox"
                                                                                                type="checkbox"
                                                                                                id="ShippingCheckbox_@counter"
                                                                                                value="@address.Address"
@@ -579,6 +579,10 @@
                                                                     {
                                                                         @foreach (var address in GroupAddress as IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.GroupAddressList>)
                                                                         {
+                                                                            var matchedAddress = Model.AddressList.FirstOrDefault(a =>
+                                                                            a.Address.Replace("Group-", "") == address.GroupAddress
+                                                                            );
+                                                                            var quantity = matchedAddress?.Quantity ?? 0;
                                                                             <div class="row ac-invoice-groupadd POGroupAddress">
                                                                                 <div class="col-2 col-sm-2">
                                                                                     <label id="lblshprownum1">@index</label>
@@ -589,14 +593,20 @@
                                                                                     <input type="hidden" id="selectedPOGroupAddress_@index" value="@address.GroupAddress" />
                                                                                 </div>
 
+                                                                                <div class="col-3 col-sm-3">
+                                                                                    <input type="text"
+                                                                                           class="GroupAddressquantity"
+                                                                                           style="width: 50px; margin-left: 50px;"
+                                                                                           value="@quantity" />
+                                                                                </div>
+
                                                                                 <div class="col-2 col-sm-2">
-                                                                                    <input class="nav-radio form-check-input"
+                                                                                    <input class="nav-checkbox form-check-input GroupAddress-Checkbox"
                                                                                            name="selectedPOGroupAddress"
-                                                                                           type="radio"
+                                                                                           type="checkbox"
                                                                                            id="AddressRadio_@index"
                                                                                            value="@address.GroupAddress"
-                                                                                    @(address.GroupAddress == selectedPOGroupAddress ? "checked" : "")
-                                                                                           onchange="saveSelectedGroupAddress()" />
+                                                                                    @(matchedAddress != null ? "checked" : "") />
                                                                                 </div>
                                                                             </div>
                                                                             index++;

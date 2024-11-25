@@ -949,21 +949,9 @@ function InsertMultiplePurchaseOrderDetails() {
                 orderDetails.push(objData);
             });
 
-            //$(".ShippingAddress").each(function () {
-            //    var shippingAddress = $(this);
-            //    var shippingAddressText = shippingAddress.find("#shippingaddress").text().trim();
-
-            //    if (shippingAddressText) {
-            //        var addressData = {
-            //            ShippingQuantity: shippingAddress.find("#shippingquantity").text(),
-            //            ShippingAddress: shippingAddressText,
-            //        };
-            //        AddressDetails.push(addressData);
-            //    }
-            //});
-
             var AddressDetails = [];
             var totalShippingQuantity = 0;
+            var totalGroupQuantity = 0;
             var hasError = false;
 
             $(".shipping-checkbox:checked").each(function () {
@@ -987,6 +975,27 @@ function InsertMultiplePurchaseOrderDetails() {
                     });
                 }
 
+            });
+
+            $(".GroupAddress-Checkbox:checked").each(function () {
+                const GroupAddress = $(this).data("address");
+                const GroupquantityInput = $(this)
+                    .closest(".POGroupAddress")
+                    .find(".GroupAddressquantity");
+
+                const GroupQuantity = parseFloat(GroupquantityInput.val()) || 0;
+                totalGroupQuantity += GroupQuantity;
+
+                if (totalGroupQuantity > totalProductQuantity) {
+                    toastr.error("Group quantity exceeds available product quantity.");
+                    hasError = true;
+                    return false;
+                }
+
+                AddressDetails.push({
+                    ShippingAddress: 'Group-'+ GroupAddress,
+                    ShippingQuantity: GroupQuantity,
+                });
             });
 
             if (hasError) {
@@ -1140,7 +1149,7 @@ $(document).ready(function () {
     var SiteId = $('#positeid').val();
     GetPOSiteShippingAddress(SiteId)
 })
-function GetPOSiteShippingAddress(SiteId) {debugger
+function GetPOSiteShippingAddress(SiteId) {
     if (SiteId == undefined) {
         $('#dvPoSiteShipppingAddress').empty();
     }
@@ -1441,6 +1450,7 @@ function UpdateMultiplePurchaseOrderDetails() {
 
             var AddressDetails = [];
             var totalShippingQuantity = 0;
+            var totalGroupQuantity = 0;
             var hasError = false;
 
             $(".nav-checkbox:checked").each(function () {
@@ -1464,6 +1474,39 @@ function UpdateMultiplePurchaseOrderDetails() {
                     });
                 }
             });
+            $(".GroupAddress-Checkbox:checked").each(function () {
+                const GroupAddress = $(this).val();
+                const GroupquantityInput = $(this)
+                    .closest(".POGroupAddress")
+                    .find(".GroupAddressquantity");
+
+                const GroupQuantity = parseFloat(GroupquantityInput.val()) || 0;
+                totalGroupQuantity += GroupQuantity;
+
+                if (totalGroupQuantity > totalProductQuantity) {
+                    toastr.error("Group quantity exceeds available product quantity.");
+                    hasError = true;
+                    return false;
+                }
+                
+                const existingEntryIndex = AddressDetails.findIndex(
+                    detail => detail.ShippingAddress === GroupAddress
+                );
+                if (existingEntryIndex !== -1) {
+                    AddressDetails[existingEntryIndex].ShippingQuantity = GroupQuantity;
+                    AddressDetails[existingEntryIndex].ShippingAddress = 'Group-' + GroupAddress;
+                } else {
+                    AddressDetails.push({
+                        ShippingAddress: 'Group-' + GroupAddress,
+                        ShippingQuantity: GroupQuantity,
+                    });
+                }
+            });
+
+            if (hasError) {
+                siteloaderhide();
+                return;
+            }
 
             var paymentTerms = "";
             var paymentTermsId = "";
@@ -1479,7 +1522,6 @@ function UpdateMultiplePurchaseOrderDetails() {
                 paymentTermsId = $('#Term-3').val();
             }
 
-            // Prepare the PO request object
             var PORequest = {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#poModelSiteId").val(),
@@ -1508,11 +1550,9 @@ function UpdateMultiplePurchaseOrderDetails() {
                 OtherName: $('#txtOtherContactNumber').val(),
             };
 
-            // Prepare form data
             var form_data = new FormData();
             form_data.append("PODETAILS", JSON.stringify(PORequest));
 
-            // Make AJAX request to update the PO details
             $.ajax({
                 url: '/PurchaseMaster/UpdateMultiplePurchaseOrderDetails',
                 type: 'POST',
@@ -2209,12 +2249,17 @@ function GetPOGroupAddress(GroupId) {
                             '<p id="poaddressgroup_' + groupAddressNumber + '">' + data.groupAddress + '</p>' +
                             '<input type="hidden" id="selectedPOGroupAddress_' + groupAddressNumber + '" name="selectedPOGroupAddress" value="' + data.groupAddress + '" />' + // Changed name
                             '</div>' +
+                            '<div class="col-3 col-sm-3">' +
+                            '<input type="text"' +
+                            'class="GroupAddressquantity"' +
+                            'style="width: 50px; margin-left: 50px;"/>' +
+                            '</div>' +
                             '<div class="col-2 col-sm-2" style="flex: 1; display: flex; align-items: center; justify-content: center;">' +
-                            '<input class="nav-radio form-check-input" ' +
+                            '<input class="nav-checkbox form-check-input GroupAddress-Checkbox" ' +
                             'name="selectedPOGroupAddress" ' +
                             'data-bs-toggle="tab" ' +
                             'role="tab" ' +
-                            'type="radio" ' +
+                            'type="checkbox" ' +
                             'id="GroupPOAddressRadio_' + groupAddressNumber + '" ' +
                             'data-address="' + data.groupAddress + '"' +
                             'value="' + data.groupAddress + '"' +
