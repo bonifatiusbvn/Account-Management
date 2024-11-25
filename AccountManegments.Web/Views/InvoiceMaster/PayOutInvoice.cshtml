@@ -217,6 +217,10 @@
                                                                                                 <th id="totalDebit"></th>
 
                                                                                                 <th id="NetAmount"></th>
+                                                                                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                                                {
+                                                                                                <th></th>    
+                                                                                                }
                                                                                             </tr>
                                                                                         </tfoot>
                                                                                     </table>
