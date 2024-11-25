@@ -549,7 +549,6 @@ function PurchaseRequestIsApproved(PurchaseId) {
 }
 GetOtherPersonContectNoAndContectName();
 function GetOtherPersonContectNoAndContectName() {
-
     var SiteId = $('#positeid').val();
     if (SiteId) {
         $.ajax({
@@ -565,18 +564,30 @@ function GetOtherPersonContectNoAndContectName() {
                     $('#txtOtherContectPerson').append('<option value="null">Select ContactPerson</option>');
                     $('#txtOtherContactNumber').append('<option value="null">Select ContactNo</option>');
 
+
+                    const contactMap = {};
                     var contactNames = response.contectPersonName.split(',');
-                    contactNames.forEach(function (name) {
+                    var contactNumbers = response.contectPersonPhoneNo.split(',');
+
+                    contactNames.forEach((name, index) => {
+                        const trimmedName = name.trim();
+                        const trimmedNumber = contactNumbers[index] ? contactNumbers[index].trim() : '';
+                        contactMap[trimmedName] = trimmedNumber;
+
+
                         $('#txtOtherContectPerson').append(
-                            `<option value="${name.trim()}">${name.trim()}</option>`
+                            `<option value="${trimmedName}">${trimmedName}</option>`
+                        );
+                        $('#txtOtherContactNumber').append(
+                            `<option value="${trimmedNumber}">${trimmedNumber}</option>`
                         );
                     });
 
-                    var contactNumbers = response.contectPersonPhoneNo.split(',');
-                    contactNumbers.forEach(function (number) {
-                        $('#txtOtherContactNumber').append(
-                            `<option value="${number.trim()}">${number.trim()}</option>`
-                        );
+
+                    $('#txtOtherContectPerson').on('change', function () {
+                        const selectedPerson = $(this).val();
+                        const correspondingNumber = contactMap[selectedPerson] || 'null';
+                        $('#txtOtherContactNumber').val(correspondingNumber);
                     });
                 } else {
                     toastr.error("No contact details found for the selected site.");
@@ -585,6 +596,7 @@ function GetOtherPersonContectNoAndContectName() {
         });
     }
 }
+
 
 function clearPOtextbox() {
     window.location.href = '/PurchaseMaster/CreatePurchaseOrder';
@@ -993,7 +1005,7 @@ function InsertMultiplePurchaseOrderDetails() {
                 }
 
                 AddressDetails.push({
-                    ShippingAddress: 'Group-'+ GroupAddress,
+                    ShippingAddress: 'Group-' + GroupAddress,
                     ShippingQuantity: GroupQuantity,
                 });
             });
@@ -1488,7 +1500,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     hasError = true;
                     return false;
                 }
-                
+
                 const existingEntryIndex = AddressDetails.findIndex(
                     detail => detail.ShippingAddress === GroupAddress
                 );
