@@ -147,6 +147,7 @@
                                                                                         @if (Model.CompanyName != null)
                                                                                         {
                                                                                             <option selected value="@Model.CompanyId">@Model.CompanyName</option>
+                                                                                            <input type="hidden" id="txtInvoiceCompanyId" value="@Model.CompanyId" />
                                                                                         }
                                                                                         else if (usercompany != null && usercompany.Any())
                                                                                         {
@@ -721,7 +722,6 @@
 <script type="text/javascript">
 
     window._userCompanyCount = @usercompanyCount;
-    debugger
      function fn_OpenShippingModal() {
          $('#textmdAddress').val('');
          $('#textmdQty').val('');

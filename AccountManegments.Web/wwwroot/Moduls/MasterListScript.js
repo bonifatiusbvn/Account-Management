@@ -94,6 +94,8 @@ function GetCompanyDetail(that, selectedCompanyId) {
 
                 if (selectedCompanyId) {
                     $dropdown.val(selectedCompanyId);
+                } else {
+                    $dropdown.val('');
                 }
             }
         },

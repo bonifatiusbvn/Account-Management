@@ -10,9 +10,9 @@ updateTotals();
 
 
 if (_userCompanyCount === 0) {
-    debugger
     $(document).ready(function () {
-        GetCompanyDetail('txtcompanyname');
+        var SelectedCompanyId = $('#txtInvoiceCompanyId').val();
+        GetCompanyDetail('txtcompanyname', SelectedCompanyId);
     });
 }
 function filterallItemTable() {
@@ -1103,7 +1103,7 @@ function getInvoiceNumber(CompanyId) {
         },
     });
 }
-function getCompanyDetail(CompanyId) {debugger
+function getCompanyDetail(CompanyId) {
     siteloadershow();
     $.ajax({
         url: '/Company/GetCompnaytById?CompanyId=' + CompanyId,

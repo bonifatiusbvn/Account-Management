@@ -29,7 +29,6 @@ function GetAllCompanyList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
-            debugger
             if (result.length > 0) {
                 var $dropdown = $('#textReportCompanyName');
                 $dropdown.empty();
