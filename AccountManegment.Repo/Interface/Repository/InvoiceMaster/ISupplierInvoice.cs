@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
@@ -30,5 +31,6 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         Task<InvoiceTotalAmount> GetInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
         Task<InvoiceTotalAmount> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
         Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData);
+        Task<List<SupplierInvoiceMasterView>> InvoiceDetailsExportToPdf(Guid? SiteId);
     }
 }

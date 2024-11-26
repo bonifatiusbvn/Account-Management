@@ -530,6 +530,14 @@ $(document).ready(function () {
 
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
                 $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
+
+                var scrollContainer = $('.dataTables_scrollBody');
+                var lastRow = $(this.api().table().body()).find('tr:last');
+
+                if (lastRow.length && scrollContainer.length) {
+                    var offsetTop = lastRow.offset().top - scrollContainer.offset().top + scrollContainer.scrollTop();
+                    scrollContainer.animate({ scrollTop: offsetTop }, 10);
+                }
             },
             columnDefs: [{
                 defaultContent: "",
@@ -558,9 +566,9 @@ function formatNumberWithCommas(x) {
 
 let rowCounter = 0;
 function AddNewRowforPayOutInvoicebtn() {
-    selectedPayoutSupplierId = $('#textPayoutReportSupplierNameHidden').val();
-    selectedPayoutCompanyId = $('#textPayoutReportCompanyName').val();
-    selectedPayoutReportSiteName = $('#textPayoutReportSiteName').val();
+    selectedPayoutSupplierId = $('#textReportSupplierNameHidden').val();
+    selectedPayoutCompanyId = $('#textReportCompanyName').val();
+    selectedPayoutReportSiteName = $('#textReportSiteName').val();
     var CompanyId = selectedPayoutCompanyId;
     var SupplierId = selectedPayoutSupplierId;
     var SiteId = selectedPayoutReportSiteName;
@@ -618,8 +626,8 @@ function InsertPayOutDetailsReport() {
         $(".payoutinvoicerow").each(function () {
             var orderRow = $(this);
             var paymentType = orderRow.find("input[name^='paymenttype']:checked").val();
-            var supplierId = $('#textPayoutReportSupplierNameHidden').val();
-            var companyId = $('#textPayoutReportCompanyName').val();
+            var supplierId = $('#textReportSupplierNameHidden').val();
+            var companyId = $('#textReportCompanyName').val();
 
             var objData = {
                 InvoiceNo: (paymentType === "OpeningBalance") ? "Opening Balance" : "PayOut",
@@ -669,8 +677,8 @@ function InsertPayOutDetailsReport() {
         });
 
         if (isValidPayout) {
-            var supplierId = $('#textPayoutReportSupplierNameHidden').val();
-            var companyId = $('#textPayoutReportCompanyName').val();
+            var supplierId = $('#textReportSupplierNameHidden').val();
+            var companyId = $('#textReportCompanyName').val();
             var form_data = new FormData();
             form_data.append("PAYOUTDETAILS", JSON.stringify(PayoutDetails));
 

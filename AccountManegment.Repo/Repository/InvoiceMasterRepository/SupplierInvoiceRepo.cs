@@ -1692,6 +1692,57 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<List<SupplierInvoiceMasterView>> InvoiceDetailsExportToPdf(Guid? SiteId)
+        {
+            try
+            {
+                var supplierInvoiceData = await (from a in Context.SupplierInvoices
+                                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                                 join d in Context.Sites on a.SiteId equals d.SiteId
+                                                 where a.InvoiceNo != "PayOut"  && a.IsApproved == true && a.SiteId == SiteId
+                                                 select new SupplierInvoiceMasterView
+                                                 {
+                                                     Id = a.Id,
+                                                     InvoiceNo = a.InvoiceNo,
+                                                     SiteId = a.SiteId,
+                                                     SupplierId = a.SupplierId,
+                                                     TotalAmount = a.TotalAmount,
+                                                     TotalDiscount = a.TotalDiscount,
+                                                     TotalGstamount = a.TotalGstamount,
+                                                     CompanyId = a.CompanyId,
+                                                     Date = a.Date,
+                                                     CompanyName = c.CompanyName,
+                                                     SiteName = d.SiteName,
+                                                     SupplierName = b.SupplierName,
+                                                     SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                                 }).ToListAsync();
+
+                foreach (var invoice in supplierInvoiceData)
+                {
+                    var itemList = await (from a in Context.SupplierInvoiceDetails
+                                          join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                          where a.RefInvoiceId == invoice.Id 
+                                          select new POItemDetailsModel
+                                          {
+                                              ItemId = a.ItemId,
+                                              ItemName = i.ItemName,
+                                              Quantity = a.Quantity,
+                                              TotalAmount = a.TotalAmount,
+                                              PricePerUnit = a.Price,
+                                          }).ToListAsync();
+                    invoice.ItemList = itemList;
+                }
+
+                return supplierInvoiceData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching invoice details.", ex);
+            }
+        }
+
     }
 }
 

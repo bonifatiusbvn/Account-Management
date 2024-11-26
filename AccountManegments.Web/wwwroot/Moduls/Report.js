@@ -558,9 +558,16 @@ $(document).ready(function () {
                 $(api.table().footer()).find('#totalDebit').html('<span>' + '₹' + formattedTotalDebit + '</span>');
                 $(api.table().footer()).find('#NetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
 
-                // Replace classes for pagination buttons
                 $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
                 $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
+
+                var scrollContainer = $('.dataTables_scrollBody');
+                var lastRow = $(this.api().table().body()).find('tr:last');
+
+                if (lastRow.length && scrollContainer.length) {
+                    var offsetTop = lastRow.offset().top - scrollContainer.offset().top + scrollContainer.scrollTop();
+                    scrollContainer.animate({ scrollTop: offsetTop }, 10);
+                }
             },
             columnDefs: [{
                 defaultContent: "",

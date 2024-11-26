@@ -108,5 +108,10 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
         {
             return await SupplierInvoice.CheckSupplierInvoiceNo(InvoiceData);
         }
+
+        public async Task<List<SupplierInvoiceMasterView>> InvoiceDetailsExportToPdf(Guid? SiteId)
+        {
+            return await SupplierInvoice.InvoiceDetailsExportToPdf(SiteId);
+        }
     }
 }

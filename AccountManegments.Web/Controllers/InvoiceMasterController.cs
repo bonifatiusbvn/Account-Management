@@ -9,7 +9,10 @@ using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Aspose.Pdf;
+using Aspose.Pdf.Text;
+using ClosedXML.Excel;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Irony.Parsing.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +27,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Permissions;
+
 
 namespace AccountManegments.Web.Controllers
 {
@@ -792,5 +796,189 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> InvoiceDetailsExportToPdf()
+        {
+            try
+            {
+                var SiteId = UserSession.SiteId;
+                if (SiteId == "" || SiteId == null)
+                {
+                    return BadRequest("Please select a Site.");
+                }
+                ApiResponseModel response = await APIServices.GetAsync("", "SupplierInvoice/InvoiceDetailsExportToPdf?SiteId=" + SiteId);
+
+                if (response.code == 200)
+                {
+                    var supplierDetailsList = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(response.data.ToString());
+
+
+                    decimal TotalAmount = 0;
+                    decimal AllItemTotalAmount = 0;
+                    foreach (var supplier in supplierDetailsList)
+                    {
+                        foreach (var item in supplier.ItemList ?? new List<POItemDetailsModel>())
+                        {
+                            TotalAmount = item.TotalAmount ?? 0;
+                            AllItemTotalAmount += TotalAmount;
+                        }
+                    }
+                    var document = new Aspose.Pdf.Document
+                    {
+                        PageInfo = new PageInfo { Margin = new MarginInfo(20, 20, 20, 20) }
+                    };
+                    var pdfPage = document.Pages.Add();
+
+                    Aspose.Pdf.Text.TextFragment lineBreak = new Aspose.Pdf.Text.TextFragment("");
+
+                    Aspose.Pdf.Table InvoiceSite = new Aspose.Pdf.Table
+                    {
+                        ColumnWidths = "60% 40%",
+                        DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                        Border = new BorderInfo(BorderSide.All, 1f),
+                    };
+
+                    var InvoiceSiteTableHeaderRow = InvoiceSite.Rows.Add();
+                    InvoiceSiteTableHeaderRow.Cells.Add("Site Name");
+                    InvoiceSiteTableHeaderRow.Cells.Add("Total Amount");
+                    TextState boldTextState = new TextState
+                    {
+                        FontStyle = FontStyles.Bold
+                    };
+
+                    foreach (var cell in InvoiceSiteTableHeaderRow.Cells)
+                    {
+                        cell.Alignment = HorizontalAlignment.Center;
+                        cell.DefaultCellTextState = boldTextState;
+                    }
+
+                    var InvoiceSiteBodyRow = InvoiceSite.Rows.Add();
+                    InvoiceSiteBodyRow.Cells.Add(UserSession.SiteName ?? string.Empty);
+
+                    InvoiceSiteBodyRow.Cells.Add(FormatIndianCurrency(AllItemTotalAmount));
+                    foreach (var cell in InvoiceSiteBodyRow.Cells)
+                    {
+                        cell.Alignment = HorizontalAlignment.Center;
+                    }
+                    pdfPage.Paragraphs.Add(InvoiceSite);
+
+                    pdfPage.Paragraphs.Add(lineBreak);
+                    pdfPage.Paragraphs.Add(lineBreak);
+                    pdfPage.Paragraphs.Add(lineBreak);
+                    pdfPage.Paragraphs.Add(lineBreak);
+
+                    foreach (var Supplier in supplierDetailsList)
+                    {
+
+
+                        Aspose.Pdf.Table InvoiceDetial = new Aspose.Pdf.Table
+                        {
+                            ColumnWidths = "25% 15% 30% 30%",
+                            DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                            Border = new BorderInfo(BorderSide.All, 1f),
+                        };
+
+                        var InvoiceDetialTableHeaderRow = InvoiceDetial.Rows.Add();
+                        InvoiceDetialTableHeaderRow.Cells.Add("InvoiceNo");
+                        InvoiceDetialTableHeaderRow.Cells.Add("Date");
+                        InvoiceDetialTableHeaderRow.Cells.Add("Supplier");
+                        InvoiceDetialTableHeaderRow.Cells.Add("Company");
+
+                        foreach (var cell in InvoiceDetialTableHeaderRow.Cells)
+                        {
+                            cell.Alignment = HorizontalAlignment.Center;
+                            cell.DefaultCellTextState = boldTextState;
+                        }
+
+                        var InvoiceDetialBodyRow = InvoiceDetial.Rows.Add();
+                        InvoiceDetialBodyRow.Cells.Add(Supplier.InvoiceNo ?? string.Empty);
+                        InvoiceDetialBodyRow.Cells.Add(Supplier.Date?.ToString("dd-MM-yyyy") ?? string.Empty);
+                        InvoiceDetialBodyRow.Cells.Add(Supplier.SupplierName ?? string.Empty);
+                        InvoiceDetialBodyRow.Cells.Add(Supplier.CompanyName ?? string.Empty);
+                        foreach (var cell in InvoiceDetialBodyRow.Cells)
+                        {
+                            cell.Alignment = HorizontalAlignment.Center;
+                        }
+                        pdfPage.Paragraphs.Add(InvoiceDetial);
+
+                        Aspose.Pdf.Table ItemTable = new Aspose.Pdf.Table
+                        {
+                            ColumnWidths = "50% 25% 25% ",
+                            DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
+                            Border = new BorderInfo(BorderSide.All, 0.5f),
+                            DefaultCellBorder = new BorderInfo(BorderSide.None),
+                        };
+
+                        var ItemTableheaderRow = ItemTable.Rows.Add();
+                        ItemTableheaderRow.Cells.Add("Item Name");
+                        ItemTableheaderRow.Cells.Add("Quantity");
+                        ItemTableheaderRow.Cells.Add("Amount");
+                        foreach (var cell in ItemTableheaderRow.Cells)
+                        {
+
+                            cell.DefaultCellTextState = boldTextState;
+                        }
+
+                        int rowCount = 0;
+                        decimal ItemTotalAmount = 0;
+                        foreach (var item in Supplier.ItemList ?? new List<POItemDetailsModel>())
+                        {
+                            var itemRow = ItemTable.Rows.Add();
+                            itemRow.Cells.Add(item.ItemName ?? string.Empty);
+                            itemRow.Cells.Add(item.Quantity?.ToString() ?? "0");
+                            itemRow.Cells.Add(FormatIndianCurrency(item.TotalAmount ?? 0));
+
+                            var backgroundColor = rowCount % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
+                            foreach (var cell in itemRow.Cells)
+                            {
+                                cell.BackgroundColor = backgroundColor;
+                            }
+                            {
+                                ItemTotalAmount += item.TotalAmount ?? 0;
+                            }
+                            rowCount++;
+                        }
+                        var footerRow = ItemTable.Rows.Add();
+                        footerRow.Cells.Add("Total");
+                        footerRow.Cells.Add("");
+                        footerRow.Cells.Add(FormatIndianCurrency(ItemTotalAmount));
+                        foreach (var cell in footerRow.Cells)
+                        {
+                            cell.DefaultCellTextState = boldTextState;
+                        }
+
+                        pdfPage.Paragraphs.Add(ItemTable);
+
+                        pdfPage.Paragraphs.Add(lineBreak);
+                        pdfPage.Paragraphs.Add(lineBreak);
+
+                    }
+
+                    using (var streamout = new MemoryStream())
+                    {
+                        document.Save(streamout);
+                        return new FileContentResult(streamout.ToArray(), "application/pdf")
+                        {
+                            FileDownloadName = Guid.NewGuid() + "_InvoiceDetails.pdf",
+                        };
+                    }
+                }
+                return RedirectToAction("ReportDetails");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+
+        private string FormatIndianCurrency(decimal amount)
+        {
+            var cultureInfo = new CultureInfo("en-IN");
+            var numberFormat = cultureInfo.NumberFormat;
+            numberFormat.CurrencySymbol = "₹";
+            return amount.ToString("C", numberFormat);
+        }
+
     }
 }

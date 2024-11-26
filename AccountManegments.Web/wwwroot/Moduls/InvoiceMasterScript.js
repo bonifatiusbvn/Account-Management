@@ -1689,3 +1689,58 @@ $(document).ready(function () {
         getallPONoList();
     });
 });
+function ExportToPDFInvoiceDetails() {
+
+    siteloadershow();
+    $.ajax({
+        url: '/InvoiceMaster/InvoiceDetailsExportToPdf',
+        type: 'Get',
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            if (xhr.status === 400) {
+                toastr.warning("Please select a Site.");
+            } else {
+                toastr.warning("An error occurred while processing the request.");
+            }
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+
+}

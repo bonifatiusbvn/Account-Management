@@ -299,5 +299,13 @@ namespace AccountManagement.API.Controllers
             var invoicenoexists = await SupplierInvoice.CheckSupplierInvoiceNo(InvoiceData);
             return Ok(new { code = 200, data = invoicenoexists });
         }
+
+        [HttpGet]
+        [Route("InvoiceDetailsExportToPdf")]
+        public async Task<IActionResult> InvoiceDetailsExportToPdf(Guid? SiteId)
+        {
+            var supplierList = await SupplierInvoice.InvoiceDetailsExportToPdf(SiteId);
+            return Ok(new { code = 200, data = supplierList });
+        }
     }
 }
