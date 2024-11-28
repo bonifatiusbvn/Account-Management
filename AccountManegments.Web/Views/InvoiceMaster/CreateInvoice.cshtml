@@ -26,6 +26,12 @@
     var selectedcompanyId = UserSession.ComapnyId;
     var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
 }
+<input type="hidden" class="form-control" id="createdbyid" value="@_userSession.UserId">
+<input type="hidden" class="form-control" id="textSupplierInvoiceId" value="@Model.Id">
+<input type="hidden" class="form-control" id="textCreatedOn" value="@Model.CreatedOn">
+<input type="hidden" id="txtsessionSiteName" value="@UserSession.SiteId" />
+<input type="hidden" id="txtModelSiteId" value="@Model.SiteId" />
+<input type="hidden" id="txtInvoiceIsApproved" value="@Model.IsApproved.ToString()" />
 <div class="">
     <div class="">
         <div class="radius-10 w-100">
@@ -143,7 +149,7 @@
                                                                                     <label for="textCompanyName" class="form-label">Company Name</label>
                                                                                 </div>
                                                                                 <div class="ms-auto">
-                                                                                    <select class="form-select" id="txtcompanyname" name="txtcompanyname">
+                                                                                    <select class="form-select" id="textCompanyName" name="textCompanyName">
                                                                                         @if (Model.CompanyName != null)
                                                                                         {
                                                                                             <option selected value="@Model.CompanyId">@Model.CompanyName</option>

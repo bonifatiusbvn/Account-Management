@@ -12,7 +12,7 @@ updateTotals();
 if (_userCompanyCount === 0) {
     $(document).ready(function () {
         var SelectedCompanyId = $('#txtInvoiceCompanyId').val();
-        GetCompanyDetail('txtcompanyname', SelectedCompanyId);
+        GetCompanyDetail('textCompanyName', SelectedCompanyId);
     });
 }
 function filterallItemTable() {
@@ -96,7 +96,7 @@ function GetItemDetailsList() {
 
 
 $(document).ready(function () {
-    $('#txtcompanyname').change(function () {
+    $('#textCompanyName').change(function () {
 
         getCompanyDetail($(this).val());
         getInvoiceNumber($(this).val());
@@ -669,7 +669,6 @@ function UpdateInvoiceDetails() {
                 GroupAddress: $('input[name="selectedGroupAddress"]:checked').data('address'),
                 Poid: $("#txtInvoicePOID").val(),
             }
-
             var form_data = new FormData();
             form_data.append("UpdateSupplierItems", JSON.stringify(InvoiceDetails));
 
