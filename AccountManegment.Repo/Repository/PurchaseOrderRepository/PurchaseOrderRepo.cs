@@ -226,7 +226,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      SiteGroup = a.SiteGroup,
                                      SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + e.CityName + "," + f.StatesName,
                                      SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null,
-                                  
+                                     OtherContact = a.OtherContact,
+                                     OtherName = a.OtherName,
                                  }).First();
 
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
@@ -643,8 +644,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     GroupAddress = PurchaseOrderDetails.GroupAddress,
                     SiteGroup = PurchaseOrderDetails.SiteGroup,
                     CreatedOn = DateTime.Now,
-                    OtherContact=PurchaseOrderDetails.OtherContact,     
-                    OtherName=PurchaseOrderDetails.OtherName,
+                    OtherContact = PurchaseOrderDetails.OtherContact,
+                    OtherName = PurchaseOrderDetails.OtherName,
                 };
                 Context.PurchaseOrders.Add(PurchaseOrder);
 
@@ -727,7 +728,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 PurchaseOrder.PaymentTerms = PurchaseOrderDetails.PaymentTerms;
                 PurchaseOrder.PaymentTermsId = PurchaseOrderDetails.PaymentTermsId;
                 PurchaseOrder.GroupAddress = PurchaseOrderDetails.GroupAddress;
-                PurchaseOrder.SiteGroup = PurchaseOrderDetails.SiteGroup;  
+                PurchaseOrder.SiteGroup = PurchaseOrderDetails.SiteGroup;
 
                 Context.PurchaseOrders.Update(PurchaseOrder);
 

@@ -558,8 +558,9 @@ function GetOtherPersonContectNoAndContectName() {
             dataType: 'json',
             success: function (response) {
                 if (response.contectPersonName && response.contectPersonPhoneNo) {
-                    $('#txtOtherContectPerson').empty();
-                    $('#txtOtherContactNumber').empty();
+
+                    var selectedNameValue = $('#txtOtherContectPerson').find('option:first').val();
+                    var selectedContectValue = $('#txtOtherContactNumber').find('option:first').val();
 
                     $('#txtOtherContectPerson').append('<option value="null">Select ContactPerson</option>');
                     $('#txtOtherContactNumber').append('<option value="null">Select ContactNo</option>');
@@ -574,13 +575,16 @@ function GetOtherPersonContectNoAndContectName() {
                         const trimmedNumber = contactNumbers[index] ? contactNumbers[index].trim() : '';
                         contactMap[trimmedName] = trimmedNumber;
 
-
-                        $('#txtOtherContectPerson').append(
-                            `<option value="${trimmedName}">${trimmedName}</option>`
-                        );
-                        $('#txtOtherContactNumber').append(
-                            `<option value="${trimmedNumber}">${trimmedNumber}</option>`
-                        );
+                        if (trimmedName !== selectedNameValue) {
+                            $('#txtOtherContectPerson').append(
+                                `<option value="${trimmedName}">${trimmedName}</option>`
+                            );
+                        }
+                        if (trimmedNumber !== selectedContectValue) {
+                            $('#txtOtherContactNumber').append(
+                                `<option value="${trimmedNumber}">${trimmedNumber}</option>`
+                            );
+                        }
                     });
 
 
