@@ -64,6 +64,16 @@
     }
 </style>
 
+@if (firstItem.CompanyName == "DH PATEL")
+{
+    <img src="~/assets/images/dh_latter.jpeg" style="width:800px" />
+}
+@if (firstItem.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
+{
+    <img src="~/assets/images/D H Infra Logo.jpeg" style="width:800px" />
+}
+
+
 <div class="row justify-content-center">
     <div class="col-xxl-9">
         <div class="row">
@@ -319,6 +329,17 @@
                             }
                         </div>
                         <div class="col-6 d-flex align-items-end">
+
+                            @if (firstItem.CompanyName == "DH PATEL")
+                            {
+                                <img src="~/assets/images/dh_stamp.jpeg" />
+                            }
+                            @if (firstItem.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
+                            {
+                                <img src="~/assets/images/D H Infra Stamp.jpeg" style="width:150px" />
+                            }
+
+
                             <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:578px;">
                                 <p class="text-muted"><b>for @firstItem.CompanyName</b></p>
                                 <p class="text-muted" style="margin-top:45px;">Authorised Signatory</p>
@@ -332,5 +353,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
