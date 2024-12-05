@@ -8,6 +8,7 @@
         <thead class="table-light btn-primary">
             <tr class="text-left">
                 <th>InvoiceNo</th>
+                <th style="width: 130px;">Supplier</th>
                 <th>Date</th>
                 <th>Qty</th>
                 <th>Price</th>
@@ -21,7 +22,9 @@
                 foreach (var item in Model.InvoiceList)
                 {
                     <tr class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
+
                         <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
+                        <td>@item.SupplierName</td>
                         <td>@item.Date?.ToString("dd/MM/yyyy")</td>
 
                         @if (Model.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
