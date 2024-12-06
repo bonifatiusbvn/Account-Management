@@ -959,7 +959,7 @@ function InsertMultiplePurchaseOrderDetails() {
                     TotalPrice: orderRow.find("#txtproductamount").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Gst: orderRow.find("#txtgstAmount").val(),
-                    GstPer: orderRow.find("#txtgst").val(),
+                    Gstper: orderRow.find("#txtgst").val(),
                     ItemTotal: orderRow.find("#txtproducttotalamount").val(),
                     Hsncode: orderRow.find("#txtHSNcode").val(),
                 };
@@ -1459,7 +1459,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                     TotalPrice: orderRow.find("#txtproductamount").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Gst: orderRow.find("#txtgstAmount").val(),
-                    GstPer: orderRow.find("#txtgst").val(),
+                    Gstper: orderRow.find("#txtgst").val(),
                     ItemTotal: orderRow.find("#txtproducttotalamount").val(),
                     Hsncode: orderRow.find("#txtHSNcode").val(),
                 };
