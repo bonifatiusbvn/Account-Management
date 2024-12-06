@@ -21,7 +21,7 @@ public partial class PurchaseOrderDetail
 
     public decimal? Discount { get; set; }
 
-    public decimal? GstPer { get; set; }
+    public decimal? Gstper { get; set; }
 
     public decimal Gst { get; set; }
 
