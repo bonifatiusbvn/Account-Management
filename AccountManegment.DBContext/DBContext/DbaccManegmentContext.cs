@@ -57,8 +57,7 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -249,6 +248,9 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GST");
+            entity.Property(e => e.GstPer)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GST Per");
             entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.ItemTotal).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.PorefId).HasColumnName("PORefId");
