@@ -244,7 +244,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          UnitType = a.UnitTypeId,
                                                          UnitTypeName = c.UnitName,
                                                          PricePerUnit = a.Price,
-                                                         GstPercentage = b.Gstper,
+                                                         GstPercentage = a.GstPer,
                                                          Hsncode = b.Hsncode,
                                                          TotalAmount = a.ItemTotal,
                                                      }).ToList();
@@ -662,6 +662,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Price = item.Price,
                         Discount = item.Discount,
                         Gst = item.Gst,
+                        GstPer=item.GstPer,
                         IsDeleted = false,
                         CreatedBy = PurchaseOrderDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -752,6 +753,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Price = item.Price,
                         Discount = item.Discount,
                         Gst = item.Gst,
+                        GstPer = item.GstPer,
                         IsDeleted = false,
                         CreatedBy = PurchaseOrderDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
@@ -938,7 +940,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                          UnitType = a.UnitTypeId,
                                                          UnitTypeName = c.UnitName,
                                                          PricePerUnit = a.Price,
-                                                         GstPercentage = b.Gstper,
+                                                         GstPercentage = a.GstPer,
                                                          Hsncode = b.Hsncode,
                                                          TotalAmount = a.ItemTotal,
                                                      }).ToList();

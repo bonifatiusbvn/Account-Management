@@ -83,6 +83,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public decimal? Discount { get; set; }
 
         public decimal Gst { get; set; }
+        public decimal? GstPer { get; set; }
         public decimal ItemTotal { get; set; }
     }
 
