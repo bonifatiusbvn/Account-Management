@@ -343,27 +343,56 @@
                                                                                 <span id="spnMobileNo" class="text-danger"></span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                                            <div class="mb-2">
-                                                                                <div class="input-group mb-3">
-                                                                                    <label class="input-group-text">Other ContactPerson</label>
-                                                                                    <select id="txtOtherContectPerson" class="form-control" name="txtOtherContectPerson">
-                                                                                        <option value="@Model.OtherContact" selected>@Model.OtherContact</option>
-                                                                                    </select>
+                                                                        @if (@Model.OtherContact!= null)
+                                                                        {
+                                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                                <div class="mb-2">
+                                                                                    <div class="input-group mb-3">
+                                                                                        <label class="input-group-text">Other ContactPerson</label>
+                                                                                        <select id="txtOtherContectPerson" class="form-control" name="txtOtherContectPerson">
+                                                                                            <option value="@Model.OtherContact" selected>@Model.OtherContact</option>
+                                                                                        </select>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                                            <div class="mb-2">
-                                                                                <div class="input-group mb-3">
-                                                                                    <label class="input-group-text">Other ContectNo</label>
-                                                                                    <select id="txtOtherContactNumber" name="txtOtherContactNumber" class="form-control">
-                                                                                        <option value="@Model.OtherName" selected>@Model.OtherName</option>
-                                                                                    </select>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                                <div class="mb-2">
+                                                                                    <div class="input-group mb-3">
+                                                                                        <label class="input-group-text">Other ContactPerson</label>
+                                                                                        <select id="txtOtherContectPerson" class="form-control" name="txtOtherContectPerson">
+                                                                                        </select>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-
+                                                                        }
+                                                                        @if (@Model.OtherName != null)
+                                                                        {
+                                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                                <div class="mb-2">
+                                                                                    <div class="input-group mb-3">
+                                                                                        <label class="input-group-text">Other ContectNo</label>
+                                                                                        <select id="txtOtherContactNumber" name="txtOtherContactNumber" class="form-control">
+                                                                                            <option value="@Model.OtherName" selected>@Model.OtherName</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                                <div class="mb-2">
+                                                                                    <div class="input-group mb-3">
+                                                                                        <label class="input-group-text">Other ContectNo</label>
+                                                                                        <select id="txtOtherContactNumber" name="txtOtherContactNumber" class="form-control">
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
 
                                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                                             <div class="mb-2">
