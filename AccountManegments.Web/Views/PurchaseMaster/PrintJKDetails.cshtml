@@ -19,7 +19,7 @@
             .table th, .table td {
                 border: 1px solid black;
                 padding: 8px;
-                font-size: 13px;
+                font-size: 12px;
                 padding: 0px;
             }
 
@@ -47,6 +47,16 @@
             width: 100%;
             margin: 0 auto;
             padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            min-height: 1000px;
+        }
+
+        .page-container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
             background-color: white;
             min-height: 1000px;
         }
@@ -62,7 +72,14 @@
                         <div class="col-xxl-9">
                             <div class="card">
                                 <div>
-                                    <img src="~/assets/images/dh_latter.jpeg" style="width:800px" />
+                                    @if (Model.CompanyName == "DH PATEL")
+                                    {
+                                        <img src="~/assets/images/dh_latter.jpeg" style="width:800px" />
+                                    }
+                                    @if (Model.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
+                                    {
+                                        <img src="~/assets/images/DH Infra New.jpeg" style="width:800px" />
+                                    }
                                     <div>
                                         <div class="table-responsive">
                                             <table class="table no-border-table">
@@ -234,7 +251,14 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <img src="~/assets/images/dh_stamp.jpeg" />
+                                        @if (Model.CompanyName == "DH PATEL")
+                                        {
+                                            <img src="~/assets/images/dh_stamp.jpeg" />
+                                        }
+                                        @if (Model.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
+                                        {
+                                            <img src="~/assets/images/D H Infra Stamp.jpeg" style="width:150px" />
+                                        }
                                     </div>
                                 </div>
                             </div>

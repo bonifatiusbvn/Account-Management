@@ -769,17 +769,6 @@ function SerchItemDetailsById(Id, inputField) {
 
 
 $(document).ready(function () {
-
-
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-    $("#orderdate").val(today);
-    $("#txtDeliverySchedule").val(today);
-
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
