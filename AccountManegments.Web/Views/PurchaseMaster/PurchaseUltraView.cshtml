@@ -42,15 +42,7 @@
             margin: 10px 0;
         }
 
-        .container {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            min-height: 1000px;
-        }
-
+        
         .page-container {
             max-width: 700px;
             width: 100%;
@@ -72,11 +64,11 @@
                                 <div>
                                     @if (Model.CompanyName == "DH PATEL")
                                     {
-                                        <img src="~/assets/images/dh_latter.jpeg" style="width:800px" />
+                                        <img src="~/assets/images/dh_latter.jpeg" style="width:700px" />
                                     }
                                     @if (Model.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
                                     {
-                                        <img src="~/assets/images/DH Infra New.jpeg" style="width:620px" />
+                                        <img src="~/assets/images/DH Infra New.jpeg" style="width:650px" />
                                     }
                                     <div>
                                         <div class="table-responsive">
@@ -215,7 +207,7 @@
                                                                         {
                                                                             <span>@Index.</span>
                                                                             <span class="text-muted" style="padding-left: 5px;">
-                                                                                @item.Address.Replace("Group-", "")
+                                                                                @item.Address.Replace("Group-", "") - @item.Quantity
                                                                             </span>
                                                                             <br />
                                                                             Index++;

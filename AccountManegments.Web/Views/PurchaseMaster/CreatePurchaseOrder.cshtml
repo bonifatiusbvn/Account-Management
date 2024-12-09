@@ -166,7 +166,7 @@
                                                                                        class="form-control"
                                                                                        name="orderdate"
                                                                                        placeholder="Select Order-Date"
-                                                                                       value="@(Model.Date.HasValue ? Model.Date.Value.ToString("yyyy-MM-dd") : String.Empty)">
+                                                                                       value="@(Model.Date.HasValue ? Model.Date.Value.ToString("yyyy-MM-dd") :  DateTime.Now.ToString("yyyy-MM-dd"))">
                                                                             </div>
 
 

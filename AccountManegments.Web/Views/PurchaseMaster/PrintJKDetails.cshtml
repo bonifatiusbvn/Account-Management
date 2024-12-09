@@ -42,15 +42,6 @@
             margin: 10px 0;
         }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            min-height: 1000px;
-        }
 
         .page-container {
             max-width: 700px;
@@ -215,7 +206,7 @@
                                                                         {
                                                                             <span>@Index.</span>
                                                                             <span class="text-muted" style="padding-left: 5px;">
-                                                                                @item.Address.Replace("Group-", "")
+                                                                                @item.Address.Replace("Group-", "") - @item.Quantity
                                                                             </span>
                                                                             <br />
                                                                             Index++;
