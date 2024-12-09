@@ -1533,7 +1533,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 Id: $("#RefPOid").val(),
                 SiteId: $("#poModelSiteId").val(),
                 Poid: $("#textPOPrefix").val(),
-                Date: $("#orderdate2").val(),
+                Date: $("#orderdate").val(),
                 FromSupplierId: $("#txtSuppliername").val(),
                 ToCompanyId: $("#txtcompanyname").val(),
                 DispatchBy: $("#txtPODispatchBy").val(),
