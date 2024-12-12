@@ -12,6 +12,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
         public Guid Id { get; set; }
 
         public string? InvoiceNo { get; set; }
+        public string? InvoiceType { get; set; }
 
         public Guid? SiteId { get; set; }
 

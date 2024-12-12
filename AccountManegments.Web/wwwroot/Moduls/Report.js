@@ -367,6 +367,10 @@ var dtcoulms = [
                 var description = row.description ? ' (' + row.description + ')' : '';
                 return row.invoiceNo + description;
             }
+            else {
+                var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
+                return row.invoiceNo + invoiceType;
+            }
             return data;
         }
     },
@@ -388,7 +392,7 @@ var dtcoulms = [
         "data": "totalAmount",
         "name": "Credit",
         "render": function (data, type, row) {
-            if (row.invoiceNo !== 'PayOut') {
+            if (row.invoiceNo !== 'PayOut' && row.invoiceType != 'Purchase Return') {
                 return '<span style="color:green">' + '₹' + data + '</span>';
             } else {
                 return '';
@@ -399,7 +403,7 @@ var dtcoulms = [
         "data": "totalAmount",
         "name": "Debit",
         "render": function (data, type, row) {
-            if (row.invoiceNo === 'PayOut') {
+            if (row.invoiceNo === 'PayOut' || row.invoiceType === 'Purchase Return') {
                 return '<span style="color:red">' + '₹' + data + '</span>';
             } else {
                 return '';

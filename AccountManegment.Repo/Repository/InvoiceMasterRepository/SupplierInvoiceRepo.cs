@@ -1193,7 +1193,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                SupplierInvoiceNo = s.s.SupplierInvoiceNo,
                Date = s.s.Date,
                CreatedOn = s.s.CreatedOn,
-               SiteName = s.SiteName
+               SiteName = s.SiteName,
+               InvoiceType = s.s.InvoiceType,
            })
            .ToListAsync();
 
