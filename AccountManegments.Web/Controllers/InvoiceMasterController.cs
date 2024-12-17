@@ -159,7 +159,7 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Purchase  Invoice-View")]
-        public async Task<IActionResult> SupplierInvoiceListAction(string searchText, string searchBy, string sortBy)
+        public async Task<IActionResult> SupplierInvoiceListAction(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
