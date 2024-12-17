@@ -53,5 +53,7 @@ public partial class SupplierMaster
 
     public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
 
+    public virtual ICollection<SalesInvoice> SalesInvoices { get; set; } = new List<SalesInvoice>();
+
     public virtual State StateNavigation { get; set; } = null!;
 }

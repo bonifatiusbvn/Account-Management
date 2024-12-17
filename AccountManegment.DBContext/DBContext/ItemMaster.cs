@@ -37,5 +37,7 @@ public partial class ItemMaster
 
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
 
+    public virtual ICollection<SalesInvoiceDetail> SalesInvoiceDetails { get; set; } = new List<SalesInvoiceDetail>();
+
     public virtual UnitMaster UnitTypeNavigation { get; set; } = null!;
 }

@@ -39,6 +39,10 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<PurchaseRequest> PurchaseRequests { get; set; }
 
+    public virtual DbSet<SalesInvoice> SalesInvoices { get; set; }
+
+    public virtual DbSet<SalesInvoiceDetail> SalesInvoiceDetails { get; set; }
+
     public virtual DbSet<Site> Sites { get; set; }
 
     public virtual DbSet<SiteAddress> SiteAddresses { get; set; }
@@ -57,7 +61,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -295,6 +300,85 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.UnitTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseRequest_UnitMaster");
+        });
+
+        modelBuilder.Entity<SalesInvoice>(entity =>
+        {
+            entity.ToTable("SalesInvoice");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.ChallanNo).HasMaxLength(100);
+            entity.Property(e => e.ContactName).HasMaxLength(50);
+            entity.Property(e => e.ContactNumber).HasMaxLength(15);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.DiscountRoundoff).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DispatchBy).HasMaxLength(30);
+            entity.Property(e => e.InvoiceType).HasMaxLength(50);
+            entity.Property(e => e.Lrno)
+                .HasMaxLength(100)
+                .HasColumnName("LRNo");
+            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
+            entity.Property(e => e.SalesInvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.SupplierInvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.Tds)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("TDS");
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalGstamount)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("TotalGSTAmount");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VehicleNo).HasMaxLength(15);
+
+            entity.HasOne(d => d.Company).WithMany(p => p.SalesInvoices)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SalesInvoice_Company");
+
+            entity.HasOne(d => d.Site).WithMany(p => p.SalesInvoices)
+                .HasForeignKey(d => d.SiteId)
+                .HasConstraintName("FK_SalesInvoice_Site");
+
+            entity.HasOne(d => d.Supplier).WithMany(p => p.SalesInvoices)
+                .HasForeignKey(d => d.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SalesInvoice_SupplierMaster");
+        });
+
+        modelBuilder.Entity<SalesInvoiceDetail>(entity =>
+        {
+            entity.HasKey(e => e.InvoiceDetailsId);
+
+            entity.Property(e => e.InvoiceDetailsId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Gst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GST");
+            entity.Property(e => e.Gstper)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GSTPer");
+            entity.Property(e => e.ItemDescription).HasMaxLength(100);
+            entity.Property(e => e.ItemName).HasMaxLength(100);
+            entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.SalesInvoiceDetails)
+                .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SalesInvoiceDetails_ItemMaster");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.SalesInvoiceDetails)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SalesInvoiceDetails_UnitMaster");
         });
 
         modelBuilder.Entity<Site>(entity =>

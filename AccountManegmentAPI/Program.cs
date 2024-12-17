@@ -48,6 +48,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AccountManagement.Repository.Interface.Repository.Sales;
+using AccountManagement.Repository.Repository.SalesRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,7 @@ builder.Services.AddScoped<Iiteminword, ItemInWordRepo>();
 builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
+
 
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();

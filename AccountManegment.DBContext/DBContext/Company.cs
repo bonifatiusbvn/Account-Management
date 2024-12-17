@@ -36,4 +36,6 @@ public partial class Company
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<SalesInvoice> SalesInvoices { get; set; } = new List<SalesInvoice>();
 }
