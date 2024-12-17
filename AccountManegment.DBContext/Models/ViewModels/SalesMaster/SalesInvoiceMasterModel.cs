@@ -1,0 +1,110 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
+{
+    public class SalesInvoiceMasterModel
+    {
+        public Guid Id { get; set; }
+
+        public string? SalesInvoiceNo { get; set; }
+
+        public string? InvoiceType { get; set; }
+
+        public Guid? SiteId { get; set; }
+
+        public Guid SupplierId { get; set; }
+
+        public Guid CompanyId { get; set; }
+
+        public string? SupplierInvoiceNo { get; set; }
+
+        public DateTime? Date { get; set; }
+
+        public string? ChallanNo { get; set; }
+
+        public string? Lrno { get; set; }
+
+        public string? VehicleNo { get; set; }
+
+        public string? DispatchBy { get; set; }
+
+        public string? PaymentTerms { get; set; }
+
+        public string? Description { get; set; }
+
+        public decimal TotalAmount { get; set; }
+
+        public decimal TotalGstamount { get; set; }
+
+        public decimal? TotalDiscount { get; set; }
+
+        public decimal? DiscountRoundoff { get; set; }
+
+        public decimal? Tds { get; set; }
+
+        public string? PaymentStatus { get; set; }
+
+        public bool? IsPayOut { get; set; }
+
+        public string? ContactName { get; set; }
+
+        public string? ContactNumber { get; set; }
+
+        public string? ShippingAddress { get; set; }
+
+        public bool? IsApproved { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
+
+        public List<SalesInvoiceDetailsModel>? SalesInvoiceDetails { get; set; }
+    }
+
+    public class SalesInvoiceDetailsModel
+    {
+        public int InvoiceDetailsId { get; set; }
+
+        public Guid? RefSalesInvoiceId { get; set; }
+
+        public Guid ItemId { get; set; }
+
+        public string? ItemName { get; set; }
+
+        public string? ItemDescription { get; set; }
+
+        public int UnitTypeId { get; set; }
+
+        public decimal Quantity { get; set; }
+
+        public decimal Price { get; set; }
+
+        public decimal? DiscountPer { get; set; }
+
+        public decimal? DiscountAmount { get; set; }
+
+        public decimal? Gstper { get; set; }
+
+        public decimal? Gst { get; set; }
+
+        public decimal? TotalAmount { get; set; }
+
+        public DateTime? Date { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
+    }
+}
