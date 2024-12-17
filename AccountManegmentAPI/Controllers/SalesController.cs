@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AccountManagement.Repository.Services.Sales;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,5 +10,12 @@ namespace AccountManagement.API.Controllers
     [Authorize]
     public class SalesController : ControllerBase
     {
+        public SalesController(SalesInvoiceService saleInvoice)
+        {
+            SaleInvoice = saleInvoice;
+        }
+
+        public SalesInvoiceService SaleInvoice { get; }
+
     }
 }

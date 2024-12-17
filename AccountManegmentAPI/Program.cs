@@ -50,6 +50,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AccountManagement.Repository.Interface.Repository.Sales;
 using AccountManagement.Repository.Repository.SalesRepository;
+using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
+using AccountManagement.Repository.Services.Sales;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,7 +77,7 @@ builder.Services.AddScoped<ISupplierInvoice, SupplierInvoiceRepo>();
 builder.Services.AddScoped<Iiteminword, ItemInWordRepo>();
 builder.Services.AddScoped<ISupplierInvoiceDetails, SupplierInvoiceDetailsRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
-builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
+builder.Services.AddScoped<ISalesInvoice, SalesRepo>();
 
 
 
@@ -93,6 +95,7 @@ builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
 builder.Services.AddScoped<IiteminwordService, ItemInWordService>();
 builder.Services.AddScoped<ISupplierInvoiceDetailsService, SupplierInvoiceDetailsService>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
+builder.Services.AddScoped<ISalesInvoiceService, SalesInvoiceService>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
