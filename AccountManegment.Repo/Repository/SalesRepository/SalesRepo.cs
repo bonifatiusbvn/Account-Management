@@ -2,20 +2,12 @@
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.DBContext.Models.API;
-using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
-using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.Sales;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
-using Microsoft.AspNetCore.Components;
-using System.ComponentModel.Design;
+
 #nullable disable
 
 namespace AccountManagement.Repository.Repository.SalesRepository
@@ -291,58 +283,58 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             try
             {
                 SalesList = (from a in Context.SalesInvoices.Where(x => x.Id == Id)
-                                join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
-                                join c in Context.Companies on a.CompanyId equals c.CompanyId
+                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                             join c in Context.Companies on a.CompanyId equals c.CompanyId
                              join d in Context.Sites on a.SiteId equals d.SiteId into siteGroup
                              from d in siteGroup.DefaultIfEmpty()
                              join e in Context.Cities on c.CityId equals e.CityId
-                                join f in Context.States on c.StateId equals f.StatesId
-                                join g in Context.Countries on c.Country equals g.CountryId
-                                join supCity in Context.Cities on b.City equals supCity.CityId
-                                join supState in Context.States on b.State equals supState.StatesId
-                                join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
-                                from subgroup in gj.DefaultIfEmpty()
-                                select new SalesInvoiceMasterModel
-                                {
-                                    Id = a.Id,
-                                    SalesInvoiceNo = a.SalesInvoiceNo,
-                                    InvoiceType = a.InvoiceType,
-                                    SiteId = a.SiteId,
-                                    SiteName = d != null ? d.SiteName : " ",
-                                    SupplierId = a.SupplierId,
-                                    SupplierName = b.SupplierName,
-                                    SupplierStateCode = supState.StateCode,
-                                    SupplierStateName = supState.StatesName,
-                                    Description = a.Description,
-                                    SupplierGstNo = b.Gstno,
-                                    CompanyId = a.CompanyId,
-                                    CompanyName = c.CompanyName,
-                                    SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                    CompanyGstNo = c.Gstno,
-                                    CompanyStateCode= f.StateCode,
-                                    CompanyStateName= f.StatesName,
-                                    SupplierMobileNo = b.Mobile,
-                                    Date = a.Date,
-                                    TotalAmount = a.TotalAmount,
-                                    TotalDiscount = a.TotalDiscount,
-                                    TotalGstamount = a.TotalGstamount,
-                                    PaymentStatus = a.PaymentStatus,
-                                    IsPayOut = a.IsPayOut,
-                                    Tds = a.Tds,
-                                    ChallanNo = a.ChallanNo,
-                                    Lrno = a.Lrno,
-                                    VehicleNo = a.VehicleNo,
-                                    DispatchBy = a.DispatchBy,
-                                    PaymentTerms = a.PaymentTerms,
-                                    ContactName = a.ContactName,
-                                    ContactNumber = a.ContactNumber,
-                                    CreatedOn = a.CreatedOn,
-                                    IsApproved = a.IsApproved,
-                                    DiscountRoundoff = a.DiscountRoundoff,
-                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
-                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
-                                    ShippingAddress = a.ShippingAddress,
-                                }).FirstOrDefault();
+                             join f in Context.States on c.StateId equals f.StatesId
+                             join g in Context.Countries on c.Country equals g.CountryId
+                             join supCity in Context.Cities on b.City equals supCity.CityId
+                             join supState in Context.States on b.State equals supState.StatesId
+                             join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                             from subgroup in gj.DefaultIfEmpty()
+                             select new SalesInvoiceMasterModel
+                             {
+                                 Id = a.Id,
+                                 SalesInvoiceNo = a.SalesInvoiceNo,
+                                 InvoiceType = a.InvoiceType,
+                                 SiteId = a.SiteId,
+                                 SiteName = d != null ? d.SiteName : " ",
+                                 SupplierId = a.SupplierId,
+                                 SupplierName = b.SupplierName,
+                                 SupplierStateCode = supState.StateCode,
+                                 SupplierStateName = supState.StatesName,
+                                 Description = a.Description,
+                                 SupplierGstNo = b.Gstno,
+                                 CompanyId = a.CompanyId,
+                                 CompanyName = c.CompanyName,
+                                 SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                 CompanyGstNo = c.Gstno,
+                                 CompanyStateCode = f.StateCode,
+                                 CompanyStateName = f.StatesName,
+                                 SupplierMobileNo = b.Mobile,
+                                 Date = a.Date,
+                                 TotalAmount = a.TotalAmount,
+                                 TotalDiscount = a.TotalDiscount,
+                                 TotalGstamount = a.TotalGstamount,
+                                 PaymentStatus = a.PaymentStatus,
+                                 IsPayOut = a.IsPayOut,
+                                 Tds = a.Tds,
+                                 ChallanNo = a.ChallanNo,
+                                 Lrno = a.Lrno,
+                                 VehicleNo = a.VehicleNo,
+                                 DispatchBy = a.DispatchBy,
+                                 PaymentTerms = a.PaymentTerms,
+                                 ContactName = a.ContactName,
+                                 ContactNumber = a.ContactNumber,
+                                 CreatedOn = a.CreatedOn,
+                                 IsApproved = a.IsApproved,
+                                 DiscountRoundoff = a.DiscountRoundoff,
+                                 CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                 SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
+                                 ShippingAddress = a.ShippingAddress,
+                             }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SalesInvoiceDetails.Where(a => a.RefSalesInvoiceId == SalesList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                                      join i in Context.ItemMasters on a.ItemId equals i.ItemId
@@ -484,6 +476,89 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<IEnumerable<InventoryInwardView>> GetInventoryList(string searchText, string searchBy, string sortBy)
+        {
+            try
+            {
+                var PurchaseRequestList = from a in Context.InventoryInwards
+                                          join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+
+                                          join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                          where a.IsDeleted == false
+                                          select new InventoryInwardView
+                                          {
+                                              ItemName = i.ItemName,
+                                              ItemId = a.ItemId,
+                                              Date = a.Date,
+                                              Quantity = a.Quantity,
+                                              UnitTypeId = a.UnitTypeId,
+                                              UnitName = b.UnitName,
+                                              CreatedBy = a.CreatedBy,
+                                              CreatedOn = a.CreatedOn,
+                                              IsApproved = a.IsApproved,
+
+                                          };
+
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    PurchaseRequestList = PurchaseRequestList.Where(u =>
+                        u.UnitName.ToLower().Contains(searchText) ||
+                        u.Quantity.ToString().Contains(searchText) ||
+                        u.ItemName.ToLower().Contains(searchText)
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "unitname":
+                            PurchaseRequestList = PurchaseRequestList.Where(u => u.UnitName.ToLower().Contains(searchText));
+                            break;
+                        case "itemname":
+                            PurchaseRequestList = PurchaseRequestList.Where(u => u.ItemName.ToLower().Contains(searchText));
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(sortBy))
+                {
+
+                    PurchaseRequestList = PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
+                }
+                else
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = sortBy.Substring(sortOrder.Length);
+
+                    switch (field.ToLower())
+                    {
+                        case "item":
+                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.ItemName) : PurchaseRequestList.OrderByDescending(u => u.ItemName);
+                            break;
+                        case "createdon":
+                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.CreatedOn) : PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+
+                return await PurchaseRequestList.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

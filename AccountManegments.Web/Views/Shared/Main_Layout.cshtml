@@ -258,7 +258,8 @@
                             </a>
                             <ul>
                                 @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
-                                {@if (item.View)
+                                {
+                                    @if (item.View)
                                     {
                                         <li>
 

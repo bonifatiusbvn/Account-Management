@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 
 namespace AccountManagement.Repository.Interface.Repository.Sales
 {
@@ -18,5 +19,6 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
         Task<SalesInvoiceMasterModel> EditSalesInvoiceDetails(Guid Id);
         Task<ApiResponseModel> UpdateSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails);
         Task<ApiResponseModel> DeleteSalesInvoiceDetails(Guid Id);
+        Task<IEnumerable<InventoryInwardView>> GetInventoryList(string? searchText, string? searchBy, string? sortBy);
     }
 }
