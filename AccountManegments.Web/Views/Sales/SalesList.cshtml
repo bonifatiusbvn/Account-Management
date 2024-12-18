@@ -41,15 +41,16 @@
                                             <div class="card-body">
                                                 <div class="row g-3">
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="filterSupplierInvoiceTable()" placeholder="Search">
+                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="filterSalesInvoiceTable()" placeholder="Search">
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="ddlInvoiceCompanyName" name="ddlInvoiceCompanyName" onchange="companyfilterSupplierInvoice()">
-                                                            <option selected disabled value="">Select Company</option>
+                                                        <select class="form-select" id="ddlInvoiceCompanyName" name="ddlInvoiceCompanyName" onchange="filterSalesInvoiceTable()">
+                                                            <option selected value="">All</option>
+                                                            <option value="CompanyName">CompanyName</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SortBySupplierInvoice" onchange="SupplierInvoicesortTable()">
+                                                        <select class="form-select" id="SortBySupplierInvoice" onchange="SalesInvoicesortTable()">
                                                             <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
                                                             <option value="AscendingCreatedOn">First Created</option>
                                                             <option value="AscendingCompanyName">CompanyName (a-z)</option>

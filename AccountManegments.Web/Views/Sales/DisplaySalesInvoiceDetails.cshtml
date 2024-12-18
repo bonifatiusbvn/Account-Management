@@ -58,30 +58,11 @@
                                             <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:-1%;"></div>
                                             <br />
                                             <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                                @{
-                                                    string SiteStateCode = "";
-                                                    string SiteState = "";
-                                                    string SiteAddress = "";
-
-                                                    if (!string.IsNullOrEmpty(Model.ShippingAddress))
-                                                    {
-                                                        string shippingAddress = Model.ShippingAddress;
-                                                        string[] addressParts = shippingAddress.Split(',');
-                                                        if (addressParts.Length > 4)
-                                                        {
-                                                            SiteStateCode = string.IsNullOrWhiteSpace(addressParts[addressParts.Length - 1].Trim()) ? "" : addressParts[addressParts.Length - 1].Trim();
-                                                            SiteState = string.IsNullOrWhiteSpace(addressParts[addressParts.Length - 3].Trim()) ? "" : addressParts[addressParts.Length - 3].Trim();
-                                                            SiteAddress = string.Join(",", addressParts.Take(addressParts.Length - 1));
-                                                        }
-                                                        SiteAddress = Model.ShippingAddress;
-                                                    }
-                                                }
-
                                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                                <span class="text-muted text-uppercase"><b>@Model.SiteName</b></span><br />
-                                                <span class="text-muted">@SiteAddress</span><br />
-                                                <span class="text-muted">GSTIN/UIN :@Model.CompanyGstNo</span><br />
-                                                <p class="text-muted">State Name :  @SiteState, Code :  @SiteStateCode</p>
+                                                <span class="text-muted text-uppercase"><b>@Model.SupplierName</b></span><br />
+                                                <span class="text-muted">@Model.ShippingAddress</span><br />
+                                                <span class="text-muted">GSTIN/UIN :@Model.SupplierGstNo</span><br />
+                                                <p class="text-muted">State Name :  @Model.SupplierStateName, Code :  @Model.SupplierStateCode</p>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;position: relative;">
@@ -89,18 +70,8 @@
                                                 <div class="col-6">
                                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Invoice No</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.SupplierInvoiceNo</b></p>
-                                                    </div>
-                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:108%;"></div>
-                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Delivery Note</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
-                                                    </div>
-                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:108%;"></div>
-                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Reference No. & Date</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
-                                                    </div>
+                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.SalesInvoiceNo</b></p>
+                                                    </div>                                                 
                                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:108%;"></div>
                                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Challan/Document No</p>
@@ -129,27 +100,11 @@
                                                         <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.PaymentTerms</b></p>
                                                     </div>
                                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
-                                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Other Refrences</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
-                                                    </div>
-                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
-                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dated</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;">
-                                                            <b></b>
-                                                        </p>
-                                                    </div>
-                                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
                                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Vehicle No</p>
                                                         <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.VehicleNo</b></p>
                                                     </div>
                                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:100%;"></div>
-                                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Destination</p>
-                                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

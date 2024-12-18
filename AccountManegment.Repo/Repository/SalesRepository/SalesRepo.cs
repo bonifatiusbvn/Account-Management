@@ -219,7 +219,16 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                         u.Item.ItemName.ToLower().Contains(searchText)
                     );
                 }
-
+                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                {
+                    searchText = searchText.ToLower();
+                    switch (searchBy.ToLower())
+                    {
+                        case "companyname":
+                            supplierDataQuery = supplierDataQuery.Where(u => u.SalesInvoice.CompanyName.ToLower().Contains(searchText));
+                            break;
+                    }
+                }
                 if (!string.IsNullOrEmpty(sortBy))
                 {
                     string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
@@ -231,6 +240,11 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                             supplierDataQuery = sortOrder == "ascending"
                                 ? supplierDataQuery.OrderBy(u => u.SalesInvoice.Date)
                                 : supplierDataQuery.OrderByDescending(u => u.SalesInvoice.Date);
+                            break;
+                        case "companyname":
+                            supplierDataQuery = sortOrder == "ascending"
+                                ? supplierDataQuery.OrderBy(u => u.SalesInvoice.CompanyName)
+                                : supplierDataQuery.OrderByDescending(u => u.SalesInvoice.CompanyName);
                             break;
                     }
                 }
@@ -279,8 +293,9 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 SalesList = (from a in Context.SalesInvoices.Where(x => x.Id == Id)
                                 join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                 join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                join d in Context.Sites on a.SiteId equals d.SiteId
-                                join e in Context.Cities on c.CityId equals e.CityId
+                             join d in Context.Sites on a.SiteId equals d.SiteId into siteGroup
+                             from d in siteGroup.DefaultIfEmpty()
+                             join e in Context.Cities on c.CityId equals e.CityId
                                 join f in Context.States on c.StateId equals f.StatesId
                                 join g in Context.Countries on c.Country equals g.CountryId
                                 join supCity in Context.Cities on b.City equals supCity.CityId
@@ -293,7 +308,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                     SalesInvoiceNo = a.SalesInvoiceNo,
                                     InvoiceType = a.InvoiceType,
                                     SiteId = a.SiteId,
-                                    SiteName = d.SiteName,
+                                    SiteName = d != null ? d.SiteName : " ",
                                     SupplierId = a.SupplierId,
                                     SupplierName = b.SupplierName,
                                     SupplierStateCode = supState.StateCode,

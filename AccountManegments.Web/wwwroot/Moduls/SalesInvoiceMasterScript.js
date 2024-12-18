@@ -576,7 +576,7 @@ function InsertSalesInvoiceDetails() {
                 TotalGstamount: $("#Salestotalgst").val(),
                 PaymentStatus: $("input[name='SalespaymentStatus']:checked").val(),
                 CreatedBy: $("#Salescreatedbyid").val(),
-                ShippingAddress: $("input[name='selectedSalesAddress']:checked").data('address'),
+                ShippingAddress: $("#textSalesSupplierAddress").val(),
                 ChallanNo: $("#txtSaleschalanNo").val(),
                 Lrno: $("#txtSaleslrNo").val(),
                 VehicleNo: $("#txtSalesvehicleno").val(),
@@ -672,7 +672,7 @@ function UpdateSalesInvoiceDetails() {
                 TotalAmount: $("#Sales-cart-total").val(),
                 TotalGstamount: $("#Salestotalgst").val(),
                 PaymentStatus: $("input[name='SalespaymentStatus']:checked").val(),
-                ShippingAddress: $("input[name='selectedSalesAddress']:checked").data('address'),
+                ShippingAddress: $("#textSalesSupplierAddress").val(),
                 ChallanNo: $("#txtSaleschalanNo").val(),
                 Lrno: $("#txtSaleslrNo").val(),
                 VehicleNo: $("#txtSalesvehicleno").val(),
@@ -850,7 +850,7 @@ function filterSalesInvoiceTable() {
 
     siteloadershow();
     var searchText = $('#txtSupplierInvoiceSearch').val();
-    var searchBy = $('#SupplierInvoiceSearchBy').val();
+    var searchBy = $('#ddlInvoiceCompanyName').val();
 
     $.ajax({
         url: '/Sales/SalesInvoiceListAction',
