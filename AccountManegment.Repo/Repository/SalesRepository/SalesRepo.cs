@@ -117,7 +117,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     ContactName = SalesInvoiceDetails.ContactName,
                     ContactNumber = SalesInvoiceDetails.ContactNumber,
                     ShippingAddress = SalesInvoiceDetails.ShippingAddress,
-                    IsApproved = SalesInvoiceDetails.IsApproved,
+                    IsApproved = true,
                     CreatedBy = SalesInvoiceDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };

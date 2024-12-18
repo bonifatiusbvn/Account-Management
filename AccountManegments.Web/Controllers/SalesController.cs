@@ -2,6 +2,7 @@
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
@@ -188,6 +189,30 @@ namespace AccountManegments.Web.Controllers
                     }
                 }
                 return PartialView("~/Views/Sales/_DisplaySalesItemDetailsPartial.cshtml", Items);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertSalesInvoiceDetails()
+        {
+            try
+            {
+                var SalesOrderDetails = HttpContext.Request.Form["SalesInvoiceDetails"];
+                var SalesInvoicedetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(SalesOrderDetails.ToString());
+               
+                ApiResponseModel postuser = await APIServices.PostAsync(SalesInvoicedetails, "Sales/InsertSalesInvoiceDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code, postuser.data });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
             }
             catch (Exception ex)
             {
