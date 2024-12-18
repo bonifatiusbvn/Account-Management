@@ -483,9 +483,8 @@ namespace AccountManagement.Repository.Repository.SalesRepository
         {
             try
             {
-                var PurchaseRequestList = from a in Context.InventoryInwards
+                var InventoryInwardList = from a in Context.InventoryInwards
                                           join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
-
                                           join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                           where a.IsDeleted == false
                                           select new InventoryInwardView
@@ -506,7 +505,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
-                    PurchaseRequestList = PurchaseRequestList.Where(u =>
+                    InventoryInwardList = InventoryInwardList.Where(u =>
                         u.UnitName.ToLower().Contains(searchText) ||
                         u.Quantity.ToString().Contains(searchText) ||
                         u.ItemName.ToLower().Contains(searchText)
@@ -519,10 +518,10 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     switch (searchBy.ToLower())
                     {
                         case "unitname":
-                            PurchaseRequestList = PurchaseRequestList.Where(u => u.UnitName.ToLower().Contains(searchText));
+                            InventoryInwardList = InventoryInwardList.Where(u => u.UnitName.ToLower().Contains(searchText));
                             break;
                         case "itemname":
-                            PurchaseRequestList = PurchaseRequestList.Where(u => u.ItemName.ToLower().Contains(searchText));
+                            InventoryInwardList = InventoryInwardList.Where(u => u.ItemName.ToLower().Contains(searchText));
                             break;
                         default:
 
@@ -533,7 +532,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 if (string.IsNullOrEmpty(sortBy))
                 {
 
-                    PurchaseRequestList = PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
+                    InventoryInwardList = InventoryInwardList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
@@ -543,10 +542,10 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     switch (field.ToLower())
                     {
                         case "item":
-                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.ItemName) : PurchaseRequestList.OrderByDescending(u => u.ItemName);
+                            InventoryInwardList = sortOrder == "ascending" ? InventoryInwardList.OrderBy(u => u.ItemName) : InventoryInwardList.OrderByDescending(u => u.ItemName);
                             break;
                         case "createdon":
-                            PurchaseRequestList = sortOrder == "ascending" ? PurchaseRequestList.OrderBy(u => u.CreatedOn) : PurchaseRequestList.OrderByDescending(u => u.CreatedOn);
+                            InventoryInwardList = sortOrder == "ascending" ? InventoryInwardList.OrderBy(u => u.CreatedOn) : InventoryInwardList.OrderByDescending(u => u.CreatedOn);
                             break;
                         default:
 
@@ -554,7 +553,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     }
                 }
 
-                return await PurchaseRequestList.ToListAsync();
+                return await InventoryInwardList.ToListAsync();
             }
             catch (Exception ex)
             {
