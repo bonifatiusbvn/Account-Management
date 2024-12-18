@@ -172,7 +172,8 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                         join e in Context.SalesInvoiceDetails on a.Id equals e.RefSalesInvoiceId
                                         join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                         join c in Context.Companies on a.CompanyId equals c.CompanyId
-                                        join d in Context.Sites on a.SiteId equals d.SiteId
+                                        join d in Context.Sites on a.SiteId equals d.SiteId into siteJoin
+                                        from d in siteJoin.DefaultIfEmpty() // Handles cases where SiteId is null
                                         join f in Context.ItemMasters on e.ItemId equals f.ItemId
 
                                         select new
@@ -191,7 +192,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                                 CompanyId = a.CompanyId,
                                                 Date = a.Date,
                                                 CompanyName = c.CompanyName,
-                                                SiteName = d.SiteName,
+                                                SiteName = d == null ? "No Site Assigned" : d.SiteName,
                                                 SupplierName = b.SupplierName,
                                                 CreatedOn = a.CreatedOn,
                                                 IsApproved = a.IsApproved,
@@ -204,6 +205,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                                 ItemName = f.ItemName
                                             }
                                         };
+
 
                 if (!string.IsNullOrEmpty(searchText))
                 {
@@ -361,8 +363,8 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var salesInvoice = Context.SalesInvoices.Where(e=>e.Id == SalesInvoiceDetails.Id).FirstOrDefault();
-                if(salesInvoice != null)
+                var salesInvoice = Context.SalesInvoices.Where(e => e.Id == SalesInvoiceDetails.Id).FirstOrDefault();
+                if (salesInvoice != null)
                 {
                     salesInvoice.SalesInvoiceNo = SalesInvoiceDetails.SalesInvoiceNo;
                     salesInvoice.InvoiceType = SalesInvoiceDetails.InvoiceType;
@@ -444,7 +446,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 var SalesDetails = Context.SalesInvoices.Where(a => a.Id == Id).FirstOrDefault();
                 if (SalesDetails != null)
                 {
-                    var SalesItemDetails = Context.SalesInvoiceDetails.Where(a=>a.RefSalesInvoiceId == Id).ToList();
+                    var SalesItemDetails = Context.SalesInvoiceDetails.Where(a => a.RefSalesInvoiceId == Id).ToList();
                     if (SalesItemDetails != null)
                     {
                         foreach (var item in SalesItemDetails)
