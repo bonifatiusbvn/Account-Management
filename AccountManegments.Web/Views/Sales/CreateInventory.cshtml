@@ -100,9 +100,9 @@
                     <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:700px;">
-                                <h5 class="mb-0 mt-4" id="PRheadingtext"></h5>
+                                <h5 class="mb-0 mt-4" id="Inventoryheadingtext"></h5>
                                 <hr>
-                                <div class="row g-3 ac-detail d-none" id="PRInfo">
+                                <div class="row g-3 ac-detail d-none" id="InventoryInfo">
                                     <div class="col-12">
                                         <label class="form-label">Purchase Request No</label>
                                         <input type="text" class="form-control" id="dspPrNo" readonly>
@@ -141,62 +141,37 @@
                                     </div>
                                 </div>
 
-                                <div id="addPRInfo">
-                                    <form class="row g-3" id="purchaseRequestForm" enctype="multipart/form-data">
-                                        <div class="col-lg-12 col-12">
-                                            <label class="form-label">Purchase Request No</label>
-                                            <input type="text" class="form-control form-control" id="prNo" readonly />
-                                            <input type="hidden" class="form-control form-control" id="PurchaseRequestId" readonly />
-                                            <input type="hidden" class="form-control form-control" id="txtcreatedby" value="@_userSession.UserId" readonly />
-
-                                            <input type="hidden" id="SiteIdinPR" value="@UserSession.SiteId" />
-                                        </div>
+                                <div id="addInventoryInfo">
+                                    <form class="row g-3" id="InventoryForm" enctype="multipart/form-data">
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Product Names</label>
-                                            <input type="text" id="searchItemnameInput" name="searchItemnameInput" placeholder="Product Names" class="form-control">
-                                            <input type="hidden" id="txtItemName" name="txtItemName">
+                                            <input type="text" id="searchInventoryItemnameInput" name="searchInventoryItemnameInput" placeholder="Product Names" class="form-control">
+                                            <input type="hidden" id="txtInventoryItemName" name="txtItemName">
                                             <span id="searchItemnameInput" class="text-danger"></span>
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Date</label>
-                                            <input type="date" id="txtPrdate" name="txtPrdate" class="form-control">
+                                            <input type="date" id="txtInventoryPrdate" name="txtInventoryPrdate" class="form-control">
                                             <span id="spnPrdate" class="text-danger"></span>
                                         </div>
                                         <div class="col-lg-12 col-12">
                                             <label class="form-label">Product Description</label>
-                                            <textarea id="PRItemDescription" name="PRItemDescription" placeholder="Product Description" class="form-control" style="height: 50px;"></textarea>
+                                            <textarea id="PRInventoryItemDescription" name="PRInventoryItemDescription" placeholder="Product Description" class="form-control" style="height: 50px;"></textarea>
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Unit Type</label>
-                                            <input type="text" id="txtUnitType" name="txtUnitType" placeholder="Unit Type" class="form-control">
+                                            <input type="text" id="txtInventoryUnitType" name="txtInventoryUnitType" placeholder="Unit Type" class="form-control">
                                             <span id="spnUnitType" class="text-danger"></span>
                                         </div>
-                                        <input type="hidden" id="txtUnitTypeHidden" name="txtUnitTypeHidden">
+                                        <input type="hidden" id="txtInventoryUnitTypeHidden" name="txtInventoryUnitTypeHidden">
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Quantity</label>
-                                            <input type="number" class="form-control form-control" placeholder="Quantity" id="txtQuantity" name="txtQuantity" value="1" min="1" oninput="preventEmptyValue(this)">
+                                            <input type="number" class="form-control form-control" placeholder="Quantity" id="txtInventoryQuantity" name="txtInventoryQuantity" value="1" min="1" oninput="preventEmptyValue(this)">
                                             <span id="spnQuantity" class="text-danger"></span>
                                         </div>
-
-                                        <div class="col-lg-12 col-12" id="siteDetails">
-                                            <label class="form-label">Site</label>
-                                            <select class="form-select" id="txtPoSiteName" name="txtPoSiteName">
-                                                <option value="" selected>--Select Site--</option>
-                                            </select>
-                                            <span id="spnSiteName" class="text-danger"></span>
-                                        </div>
-
-                                        <input type="hidden" id="txtPRsiteid" value="@UserSession.SiteId" />
-
-
-                                        <div class="col-lg-12 col-12">
-                                            <label class="form-label">Where To Ship</label>
-                                            <select class="single-select form-select" id="drpPRSiteAddress" name="drpPRSiteAddress">
-                                            </select>
-                                        </div>
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary" onclick="CreatePurchaseRequest()" id="addbtnpurchaseRequest" style="margin-top: 5px; margin-left:557px;">Save</button>
-                                            <button type="button" class="btn btn-primary" onclick="UpdatePurchaseRequestDetails()" id="updatebtnpurchaseRequest" style="display:none;margin-top: 5px;margin-left:540px;">Update</button>
+                                            <button type="button" class="btn btn-primary" onclick="CreateInventory()" id="addbtnInventory" style="margin-top: 5px; margin-left:557px;">Save</button>
+                                            <button type="button" class="btn btn-primary" onclick="UpdateInventoryDetails()" id="updatebtnInventory" style="display:none;margin-top: 5px;margin-left:540px;">Update</button>
                                         </div>
                                     </form>
                                 </div>
@@ -222,6 +197,5 @@
                     window.onload = setTodayDate;
 </script>
 @section Scripts {
-
-    <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/inventoryscript.js" asp-append-version="true"></script>
 }
