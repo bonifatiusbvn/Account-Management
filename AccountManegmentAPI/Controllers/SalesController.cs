@@ -62,6 +62,50 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpGet]
+        [Route("EditSalesInvoiceDetails")]
+        public async Task<IActionResult> EditSalesInvoiceDetails(Guid Id)
+        {
+            var SalesDetails = await SaleInvoice.EditSalesInvoiceDetails(Id);
+            return Ok(new { code = 200, data = SalesDetails });
+        }
 
+        [HttpPost]
+        [Route("UpdateSalesInvoiceDetails")]
+        public async Task<IActionResult> UpdateSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SalesInvoicemaster = await SaleInvoice.UpdateSalesInvoiceDetails(SalesInvoiceDetails);
+            if (SalesInvoicemaster.code == 200)
+            {
+                response.code = SalesInvoicemaster.code;
+                response.message = SalesInvoicemaster.message;
+                response.data = SalesInvoicemaster.data;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("DeleteSalesInvoiceDetails")]
+        public async Task<IActionResult> DeleteSalesInvoiceDetails(Guid Id)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SalesInvoicemaster = await SaleInvoice.DeleteSalesInvoiceDetails(Id);
+            if (SalesInvoicemaster.code == 200)
+            {
+                response.code = SalesInvoicemaster.code;
+                response.message = SalesInvoicemaster.message;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

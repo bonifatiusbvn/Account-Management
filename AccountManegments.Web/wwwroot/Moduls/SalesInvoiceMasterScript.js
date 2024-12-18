@@ -636,6 +636,165 @@ function InsertSalesInvoiceDetails() {
         toastr.error("Kindly fill all details");
     }
 }
+function UpdateSalesInvoiceDetails() {
+    siteloadershow();
+    if ($("#CreateSalesInvoiceForm").valid()) {
+        if ($('#addnewSalesproductlink tr').length >= 1) {
+
+            var ItemDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var objData = {
+                    ItemName: orderRow.find("#txtSalesItemName").val(),
+                    ItemId: orderRow.find("#txtSalesItemId").val(),
+                    ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
+                    UnitTypeId: orderRow.find("#txtSalesPOUnitType_" + orderRow.find("#txtSalesItemId").val()).val(),
+                    DiscountAmount: orderRow.find("#txtSalesdiscountamount").val(),
+                    DiscountPer: orderRow.find("#txtSalesdiscountpercentage").val(),
+                    Quantity: orderRow.find("#txtSalesproductquantity").val(),
+                    Price: orderRow.find("#txtSalesproductamount").val(),
+                    Gst: orderRow.find("#txtSalesgstAmount").val(),
+                    Gstper: orderRow.find("#txtSalesgst").val(),
+                    TotalAmount: orderRow.find("#txtSalesproducttotalamount").val(),
+                };
+                ItemDetails.push(objData);
+            });
+
+            var InvoiceDetails = {
+
+                Id: $("#txtSalesId").val(),
+                SalesInvoiceNo: $("#textSalesInvoicePrefix").val(),
+                InvoiceType: $('#ddlSalesinvoicetype').val(),
+                SiteId: $("#txtSalesSiteName").val(),
+                Date: $("#textSalesOrderDate").val(),
+                SupplierId: $("#textSalesSupplierName").val(),
+                CompanyId: $("#textSalesCompanyName").val(),
+                TotalAmount: $("#Sales-cart-total").val(),
+                TotalGstamount: $("#Salestotalgst").val(),
+                PaymentStatus: $("input[name='SalespaymentStatus']:checked").val(),
+                ShippingAddress: $("input[name='selectedSalesAddress']:checked").data('address'),
+                ChallanNo: $("#txtSaleschalanNo").val(),
+                Lrno: $("#txtSaleslrNo").val(),
+                VehicleNo: $("#txtSalesvehicleno").val(),
+                DispatchBy: $("#txtSalesdispatch").val(),
+                PaymentTerms: $("#txtSalespayment").val(),
+                SupplierInvoiceNo: $("#textSalesSupplierInvoiceNo").val(),
+                Tds: $('#Sales-cart-tds').val(),
+                TotalDiscount: $('#Sales-cart-discount').val(),
+                DiscountRoundoff: $("#SalesIDiscountRoundOff").val(),
+                UpdatedBy: $("#Salescreatedbyid").val(),
+                SalesInvoiceDetails: ItemDetails,
+            }
+            var form_data = new FormData();
+            form_data.append("SalesInvoiceDetails", JSON.stringify(InvoiceDetails));
+            $.ajax({
+                url: '/Sales/UpdateSalesInvoiceDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
+                            window.location = '/Sales/SalesList';
+                        }, 2000);
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    siteloaderhide();
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
+        } else {
+            siteloaderhide();
+            if ($('#addnewSalesproductlink tr').length == 0) {
+                $("#spnSalesitembutton").text("Please Select Product!");
+            } else {
+                $("#spnSalesitembutton").text("");
+            }
+        }
+    }
+    else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+function DeleteSalesInvoiceDetails(Id, SalesInvoiceNo, element) {
+
+    $('tr').removeClass('active');
+    $(element).closest('tr').addClass('active');
+    $('.ac-detail').removeClass('d-none');
+    Swal.fire({
+        title: "Are you sure want to delete this SalesInvoice?",
+        text: "To confirm, type the SalesInvoiceNo below",
+        input: 'text',
+        inputPlaceholder: 'Enter the SalesInvoiceNo name to confirm',
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true,
+        inputValidator: (value) => {
+
+            if (!value) {
+                return 'Please enter the SalesInvoiceNo!';
+            } else if (value !== SalesInvoiceNo) {
+                return 'SalesInvoiceNo mismatch! Please enter valid SalesInvoiceNo';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: '/Sales/DeleteSalesInvoiceDetails?Id=' + Id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        toastr.success(Result.message);
+                        setTimeout(function () {
+                            window.location = '/Sales/SalesList';
+                        }, 2000);
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete salesinvoice!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'SalesInvoice have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 
 SalesInvoicesortTable();
 function companyfilterSalesInvoice() {

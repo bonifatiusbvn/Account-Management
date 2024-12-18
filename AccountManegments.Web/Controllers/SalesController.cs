@@ -32,8 +32,23 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateSalesInvoice()
+        public async Task<IActionResult> CreateSalesInvoice(Guid? Id)
         {
+            SalesInvoiceMasterModel SalesDetails = new SalesInvoiceMasterModel();
+            if (Id != null)
+            {
+                ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditSalesInvoiceDetails?Id=" + Id);
+                if (response.code == 200)
+                {
+                    SalesDetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(response.data.ToString());
+                    int rowNumber = 0;
+                    foreach (var item in SalesDetails.SalesItemList)
+                    {
+                        item.RowNumber = rowNumber++;
+                    }
+                }
+                ViewBag.EditSalesShippingAddress = SalesDetails.ShippingAddress;
+            }
             var SiteId = UserSession.SiteId;
             if (string.IsNullOrEmpty(SiteId))
             {
@@ -63,7 +78,7 @@ namespace AccountManegments.Web.Controllers
                     ViewBag.SiteAddress = SiteName;
                 }
             }
-            return View();
+            return View(SalesDetails);
         }
         public async Task<IActionResult> CheckSalesInvoiceNo(Guid? CompanyId)
         {
@@ -203,7 +218,7 @@ namespace AccountManegments.Web.Controllers
             {
                 var SalesOrderDetails = HttpContext.Request.Form["SalesInvoiceDetails"];
                 var SalesInvoicedetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(SalesOrderDetails.ToString());
-               
+
                 ApiResponseModel postuser = await APIServices.PostAsync(SalesInvoicedetails, "Sales/InsertSalesInvoiceDetails");
                 if (postuser.code == 200)
                 {
@@ -217,6 +232,42 @@ namespace AccountManegments.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateSalesInvoiceDetails()
+        {
+            try
+            {
+                var SalesOrderDetails = HttpContext.Request.Form["SalesInvoiceDetails"];
+                var SalesInvoicedetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(SalesOrderDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(SalesInvoicedetails, "Sales/UpdateSalesInvoiceDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code, postuser.data });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> DeleteSalesInvoiceDetails(Guid Id)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/DeleteSalesInvoiceDetails?Id=" + Id);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
             }
         }
     }

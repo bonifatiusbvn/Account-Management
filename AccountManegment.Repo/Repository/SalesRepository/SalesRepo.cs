@@ -13,6 +13,10 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using Microsoft.AspNetCore.Components;
+using System.ComponentModel.Design;
+#nullable disable
 
 namespace AccountManagement.Repository.Repository.SalesRepository
 {
@@ -262,6 +266,203 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<SalesInvoiceMasterModel> EditSalesInvoiceDetails(Guid Id)
+        {
+            SalesInvoiceMasterModel SalesList = new SalesInvoiceMasterModel();
+            try
+            {
+                SalesList = (from a in Context.SalesInvoices.Where(x => x.Id == Id)
+                                join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                join d in Context.Sites on a.SiteId equals d.SiteId
+                                join e in Context.Cities on c.CityId equals e.CityId
+                                join f in Context.States on c.StateId equals f.StatesId
+                                join g in Context.Countries on c.Country equals g.CountryId
+                                join supCity in Context.Cities on b.City equals supCity.CityId
+                                join supState in Context.States on b.State equals supState.StatesId
+                                join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                from subgroup in gj.DefaultIfEmpty()
+                                select new SalesInvoiceMasterModel
+                                {
+                                    Id = a.Id,
+                                    SalesInvoiceNo = a.SalesInvoiceNo,
+                                    InvoiceType = a.InvoiceType,
+                                    SiteId = a.SiteId,
+                                    SiteName = d.SiteName,
+                                    SupplierId = a.SupplierId,
+                                    SupplierName = b.SupplierName,
+                                    Description = a.Description,
+                                    SupplierGstNo = b.Gstno,
+                                    CompanyId = a.CompanyId,
+                                    CompanyName = c.CompanyName,
+                                    SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                    CompanyGstNo = c.Gstno,
+                                    SupplierMobileNo = b.Mobile,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    TotalDiscount = a.TotalDiscount,
+                                    TotalGstamount = a.TotalGstamount,
+                                    PaymentStatus = a.PaymentStatus,
+                                    IsPayOut = a.IsPayOut,
+                                    Tds = a.Tds,
+                                    ChallanNo = a.ChallanNo,
+                                    Lrno = a.Lrno,
+                                    VehicleNo = a.VehicleNo,
+                                    DispatchBy = a.DispatchBy,
+                                    PaymentTerms = a.PaymentTerms,
+                                    ContactName = a.ContactName,
+                                    ContactNumber = a.ContactNumber,
+                                    CreatedOn = a.CreatedOn,
+                                    IsApproved = a.IsApproved,
+                                    DiscountRoundoff = a.DiscountRoundoff,
+                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
+                                    ShippingAddress = a.ShippingAddress,
+                                }).FirstOrDefault();
+                List<POItemDetailsModel> itemlist = (from a in Context.SalesInvoiceDetails.Where(a => a.RefSalesInvoiceId == SalesList.Id)
+                                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
+                                                     select new POItemDetailsModel
+                                                     {
+                                                         ItemId = a.ItemId,
+                                                         ItemName = i.ItemName,
+                                                         ItemDescription = a.ItemDescription,
+                                                         Quantity = a.Quantity,
+                                                         Gstamount = a.Gst,
+                                                         TotalAmount = a.TotalAmount,
+                                                         UnitType = a.UnitTypeId,
+                                                         UnitTypeName = b.UnitName,
+                                                         PricePerUnit = a.Price,
+                                                         GstPercentage = a.Gstper,
+                                                         DiscountAmount = a.DiscountAmount,
+                                                         DiscountPer = a.DiscountPer,
+                                                         Hsncode = i.Hsncode,
+                                                     }).ToList();
+
+
+                SalesList.SalesItemList = itemlist;
+                return SalesList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ApiResponseModel> UpdateSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var salesInvoice = Context.SalesInvoices.Where(e=>e.Id == SalesInvoiceDetails.Id).FirstOrDefault();
+                if(salesInvoice != null)
+                {
+                    salesInvoice.SalesInvoiceNo = SalesInvoiceDetails.SalesInvoiceNo;
+                    salesInvoice.InvoiceType = SalesInvoiceDetails.InvoiceType;
+                    salesInvoice.SiteId = SalesInvoiceDetails.SiteId;
+                    salesInvoice.SupplierId = SalesInvoiceDetails.SupplierId;
+                    salesInvoice.CompanyId = SalesInvoiceDetails.CompanyId;
+                    salesInvoice.SupplierInvoiceNo = SalesInvoiceDetails.SupplierInvoiceNo;
+                    salesInvoice.Date = SalesInvoiceDetails.Date;
+                    salesInvoice.ChallanNo = SalesInvoiceDetails.ChallanNo;
+                    salesInvoice.Lrno = SalesInvoiceDetails.Lrno;
+                    salesInvoice.VehicleNo = SalesInvoiceDetails.VehicleNo;
+                    salesInvoice.DispatchBy = SalesInvoiceDetails.DispatchBy;
+                    salesInvoice.PaymentTerms = SalesInvoiceDetails.PaymentTerms;
+                    salesInvoice.Description = SalesInvoiceDetails.Description;
+                    salesInvoice.TotalAmount = SalesInvoiceDetails.TotalAmount;
+                    salesInvoice.TotalGstamount = SalesInvoiceDetails.TotalGstamount;
+                    salesInvoice.TotalDiscount = SalesInvoiceDetails.TotalDiscount;
+                    salesInvoice.DiscountRoundoff = SalesInvoiceDetails.DiscountRoundoff;
+                    salesInvoice.Tds = SalesInvoiceDetails.Tds;
+                    salesInvoice.PaymentStatus = SalesInvoiceDetails.PaymentStatus;
+                    salesInvoice.IsPayOut = SalesInvoiceDetails.IsPayOut;
+                    salesInvoice.ContactName = SalesInvoiceDetails.ContactName;
+                    salesInvoice.ContactNumber = SalesInvoiceDetails.ContactNumber;
+                    salesInvoice.ShippingAddress = SalesInvoiceDetails.ShippingAddress;
+                    salesInvoice.UpdatedBy = SalesInvoiceDetails.UpdatedBy;
+                    salesInvoice.UpdatedOn = DateTime.Now;
+                }
+                Context.SalesInvoices.Update(salesInvoice);
+
+                var existingItems = Context.SalesInvoiceDetails
+             .Where(e => e.RefSalesInvoiceId == salesInvoice.Id)
+             .ToList();
+
+                Context.SalesInvoiceDetails.RemoveRange(existingItems);
+                await Context.SaveChangesAsync();
+
+                foreach (var item in SalesInvoiceDetails.SalesInvoiceDetails)
+                {
+                    var salesInvoiceDetail = new SalesInvoiceDetail()
+                    {
+                        RefSalesInvoiceId = salesInvoice.Id,
+                        ItemId = item.ItemId,
+                        ItemName = item.ItemName,
+                        ItemDescription = item.ItemDescription,
+                        UnitTypeId = item.UnitTypeId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        DiscountPer = item.DiscountPer,
+                        DiscountAmount = item.DiscountAmount,
+                        Gstper = item.Gstper,
+                        Gst = item.Gst,
+                        TotalAmount = item.TotalAmount,
+                        Date = salesInvoice.Date,
+                        CreatedBy = salesInvoice.CreatedBy,
+                        CreatedOn = salesInvoice.CreatedOn,
+                        UpdatedBy = salesInvoice.UpdatedBy,
+                        UpdatedOn = DateTime.Now,
+                    };
+                    Context.SalesInvoiceDetails.Add(salesInvoiceDetail);
+                }
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "SalesInvoice updated successfully.";
+                response.data = salesInvoice.Id;
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating SalesInvoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> DeleteSalesInvoiceDetails(Guid Id)
+        {
+            var response = new ApiResponseModel();
+            try
+            {
+                var SalesDetails = Context.SalesInvoices.Where(a => a.Id == Id).FirstOrDefault();
+                if (SalesDetails != null)
+                {
+                    var SalesItemDetails = Context.SalesInvoiceDetails.Where(a=>a.RefSalesInvoiceId == Id).ToList();
+                    if (SalesItemDetails != null)
+                    {
+                        foreach (var item in SalesItemDetails)
+                        {
+                            Context.SalesInvoiceDetails.Remove(item);
+                        }
+                    }
+                    Context.SalesInvoices.Remove(SalesDetails);
+                    Context.SaveChanges();
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "SalesDetails Deleted successfully.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in deleing SalesDetails!";
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

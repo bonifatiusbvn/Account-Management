@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
+using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
 
         public Guid SupplierId { get; set; }
         public string? SupplierName { get; set; }
+        public string? SupplierFullAddress { get; set; }
+        public string? SupplierMobileNo { get; set; }
+        public string? SupplierGstNo { get; set; }
 
         public Guid CompanyId { get; set; }
         public string? CompanyName { get; set; }
+        public string? CompanyFullAddress { get; set; }
+        public string? CompanyGstNo { get; set; }
 
         public string? SupplierInvoiceNo { get; set; }
 
@@ -71,6 +77,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public DateTime? UpdatedOn { get; set; }
 
         public List<SalesInvoiceDetailsModel>? SalesInvoiceDetails { get; set; }
+        public List<POItemDetailsModel>? SalesItemList { get; set; }
     }
 
     public class SalesInvoiceDetailsModel

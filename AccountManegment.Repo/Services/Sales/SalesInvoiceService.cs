@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AccountManagement.API;
 
 namespace AccountManagement.Repository.Services.Sales
 {
@@ -33,6 +34,21 @@ namespace AccountManagement.Repository.Services.Sales
         public async Task<SalesInvoiceListView> GetSalesList(string? searchText, string? searchBy, string? sortBy)
         {
             return await SaleInvoice.GetSalesList(searchText, searchBy, sortBy);
+        }
+
+        public async Task<SalesInvoiceMasterModel> EditSalesInvoiceDetails(Guid Id)
+        {
+            return await SaleInvoice.EditSalesInvoiceDetails(Id);
+        }
+
+        public async Task<ApiResponseModel> UpdateSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails)
+        {
+           return await SaleInvoice.UpdateSalesInvoiceDetails(SalesInvoiceDetails);
+        }
+
+        public async Task<ApiResponseModel> DeleteSalesInvoiceDetails(Guid Id)
+        {
+            return await SaleInvoice.DeleteSalesInvoiceDetails(Id);
         }
     }
 }
