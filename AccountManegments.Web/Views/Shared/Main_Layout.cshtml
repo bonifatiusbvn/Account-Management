@@ -192,7 +192,24 @@
                             }
                         }
                     }
+                    @if (group == "Inventory Inward" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                    {
+                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                        {
+                            @if (item.View)
+                            {
+                                <li>
+                                    <a asp-action="@item.Action" asp-controller="@item.Controller">
+                                        <div class="parent-icon">
 
+                                            <i class="fadeIn animated bx bx-store-alt"></i>
+                                        </div>
+                                        <div class="menu-title">@item.FormName</div>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
 
                     @if (group == "Sales Invoice" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                     {
@@ -204,8 +221,6 @@
                                     <a asp-action="@item.Action" asp-controller="@item.Controller">
                                         <div class="parent-icon">
                                             <i class="fadeIn animated bx bx-receipt"></i>
-
-
                                         </div>
                                         <div class="menu-title">@item.FormName</div>
                                     </a>
