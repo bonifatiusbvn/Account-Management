@@ -86,7 +86,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-5 col-lg-5">
-                                                                                <label for="SalesSupplierInvoiceNo" class="form-label">Supplier Invoice No</label>
+                                                                                <label for="SalesSupplierInvoiceNo" class="form-label">Supplier PO No</label>
                                                                                 <input type="text" id="textSalesSupplierInvoiceNo" value="@Model.SupplierInvoiceNo" class="form-control" name="textSalesSupplierInvoiceNo" placeholder="Supplier Invoice No" />
                                                                             </div>
                                                                             <div class="col-3 col-lg-3">
@@ -123,28 +123,28 @@
                                                                                 {
                                                                                     <select class="form-control form-select valid" id="ddlSalesinvoicetype" name="ddlSalesinvoicetype">
                                                                                         <option value="@Model.InvoiceType" selected>@Model.InvoiceType</option>
-                                                                                        @if (@Model.InvoiceType == "Purchase")
+                                                                                        @if (@Model.InvoiceType == "Sales")
                                                                                         {
-                                                                                            <option value="Purchase Return">Purchase Return</option>
+                                                                                            <option value="Sales Return">Sales Return</option>
                                                                                             <option value="Credit Note">Credit Note</option>
                                                                                         }
-                                                                                        @if (@Model.InvoiceType == "Purchase Return")
+                                                                                        @if (@Model.InvoiceType == "Sales Return")
                                                                                         {
-                                                                                            <option value="Purchase">Purchase</option>
+                                                                                            <option value="Sales">Sales</option>
                                                                                             <option value="Credit Note">Credit Note</option>
                                                                                         }
                                                                                         @if (@Model.InvoiceType == "Credit Note")
                                                                                         {
-                                                                                            <option value="Purchase">Purchase</option>
-                                                                                            <option value="Purchase Return">Purchase Return</option>
+                                                                                            <option value="Sales">Sales</option>
+                                                                                            <option value="Sales Return">Sales Return</option>
                                                                                         }
                                                                                     </select>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <select class="form-control form-select valid" id="ddlSalesinvoicetype" name="ddlSalesinvoicetype">
-                                                                                        <option value="Purchase" selected>Purchase</option>
-                                                                                        <option value="Purchase Return">Purchase Return</option>
+                                                                                        <option value="Sales" selected>Sales</option>
+                                                                                        <option value="Sales Return">Sales Return</option>
                                                                                         <option value="Credit Note">Credit Note</option>
                                                                                     </select>
                                                                                 }
@@ -329,7 +329,7 @@
                                                                                         {
                                                                                             <input type="text" class="form-control border-0" id="Sales-cart-tds" placeholder="₹0.00" />
                                                                                         }
-                                                                                        
+
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -347,7 +347,7 @@
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                        <input type="text" class="form-control border-0" id="SalesIDiscountRoundOff" placeholder="₹0.00" />
+                                                                                            <input type="text" class="form-control border-0" id="SalesIDiscountRoundOff" placeholder="₹0.00" />
                                                                                         }
                                                                                     </td>
                                                                                 </tr>

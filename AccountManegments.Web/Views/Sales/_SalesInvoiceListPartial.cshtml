@@ -7,7 +7,7 @@
 @foreach (var item in Model.SalesInvoiceList)
 {
 
-    <tr id="userCard_@item.Id" class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
+    <tr id="userCard_@item.Id">
         @if (item.SupplierInvoiceNo == "")
         {
             <td><a class="text-primary"><h6 class="product-name mb-2">@item.SalesInvoiceNo</h6></a></td>
