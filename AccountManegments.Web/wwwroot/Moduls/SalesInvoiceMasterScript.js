@@ -639,6 +639,7 @@ function InsertMultipleSupplierItem() {
         toastr.error("Kindly fill all details");
     }
 }
+
 SalesInvoicesortTable();
 function companyfilterSalesInvoice() {
     siteloadershow();
@@ -661,7 +662,7 @@ function companyfilterSalesInvoice() {
 }
 
 
-let currentSortOrder = 'AscendingDate';
+let currentSortOrder = '';
 
 function sortTable(field) {
     if (currentSortOrder === 'Ascending' + field) {
@@ -690,7 +691,7 @@ function sortTable(field) {
 }
 
 function filterSalesInvoiceTable() {
-    debugger
+
     siteloadershow();
     var searchText = $('#txtSupplierInvoiceSearch').val();
     var searchBy = $('#SupplierInvoiceSearchBy').val();
@@ -711,9 +712,10 @@ function filterSalesInvoiceTable() {
 }
 
 function SalesInvoicesortTable() {
-    debugger
+
     siteloadershow();
     var sortBy = $('#SortBySupplierInvoice').val();
+
     $.ajax({
         url: '/Sales/SalesInvoiceListAction',
         type: 'GET',

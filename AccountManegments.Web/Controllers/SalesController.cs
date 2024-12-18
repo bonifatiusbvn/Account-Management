@@ -7,9 +7,11 @@ using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AccountManegments.Web.Controllers
 {
+    [Authorize]
     public class SalesController : Controller
     {
         public APIServices APIServices { get; }
@@ -24,7 +26,10 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
-
+        public IActionResult SalesReport()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> CreateSalesInvoice()
         {
@@ -79,7 +84,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-       
+
         public async Task<IActionResult> GetAllSalesItemDetailList(string? searchText)
         {
             try
@@ -101,8 +106,9 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
-        [FormPermissionAttribute("Sales Invoice-View")]
-        public async Task<IActionResult> SalesInvoiceListAction(string searchText, string searchBy, string sortBy)
+
+
+        public async Task<IActionResult> SalesInvoiceListAction(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -112,7 +118,7 @@ namespace AccountManegments.Web.Controllers
 
                 string apiUrl = $"Sales/GetSalestInvoiceList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+                ApiResponseModel res = await APIServices.GetAsync("", apiUrl);
 
                 if (res.code == 200)
                 {

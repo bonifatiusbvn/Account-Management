@@ -142,7 +142,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                         Date = salesInvoice.Date,
                         CreatedBy = salesInvoice.CreatedBy,
                         CreatedOn = DateTime.Now,
-                        
+
                     };
                     Context.SalesInvoiceDetails.Add(salesInvoiceDetail);
                 }
@@ -160,7 +160,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             return response;
         }
 
-        public async Task<SalesInvoiceListView> GetSalesList(string searchText, string searchBy, string sortBy)
+        public async Task<SalesInvoiceListView> GetSalesList(string? searchText, string? searchBy, string? sortBy)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
 
                                         select new
                                         {
-                                            Invoice = new SalesInvoiceMasterModel
+                                            SalesInvoice = new SalesInvoiceMasterModel
                                             {
                                                 Id = a.Id,
                                                 SalesInvoiceNo = a.SalesInvoiceNo,
@@ -205,11 +205,11 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 {
                     searchText = searchText.ToLower();
                     supplierDataQuery = supplierDataQuery.Where(u =>
-                        u.Invoice.SiteName.ToLower().Contains(searchText) ||
-                        u.Invoice.CompanyName.ToLower().Contains(searchText) ||
-                        u.Invoice.SupplierName.ToLower().Contains(searchText) ||
-                        u.Invoice.SupplierInvoiceNo.ToLower().Contains(searchText) ||
-                        u.Invoice.TotalAmount.ToString().Contains(searchText) ||
+                        u.SalesInvoice.SiteName.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.CompanyName.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.SupplierName.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.SupplierInvoiceNo.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.TotalAmount.ToString().Contains(searchText) ||
                         u.Item.ItemName.ToLower().Contains(searchText)
                     );
                 }
@@ -223,14 +223,14 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     {
                         case "date":
                             supplierDataQuery = sortOrder == "ascending"
-                                ? supplierDataQuery.OrderBy(u => u.Invoice.Date)
-                                : supplierDataQuery.OrderByDescending(u => u.Invoice.Date);
+                                ? supplierDataQuery.OrderBy(u => u.SalesInvoice.Date)
+                                : supplierDataQuery.OrderByDescending(u => u.SalesInvoice.Date);
                             break;
                     }
                 }
                 else
                 {
-                    supplierDataQuery = supplierDataQuery.OrderByDescending(u => u.Invoice.Date);
+                    supplierDataQuery = supplierDataQuery.OrderByDescending(u => u.SalesInvoice.Date);
                 }
 
                 var supplierData = await supplierDataQuery.ToListAsync();
@@ -243,10 +243,10 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     );
 
                 var invoicesGroupedById = supplierData
-                    .GroupBy(x => x.Invoice.Id)
+                    .GroupBy(x => x.SalesInvoice.Id)
                     .Select(g => new
                     {
-                        Invoice = g.First().Invoice,
+                        Invoice = g.First().SalesInvoice,
                         Items = groupedByRefInvoiceId.ContainsKey(g.Key)
                             ? groupedByRefInvoiceId[g.Key]
                             : new List<SalesInvoiceDetailsModel>()

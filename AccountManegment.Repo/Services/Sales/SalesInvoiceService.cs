@@ -30,9 +30,9 @@ namespace AccountManagement.Repository.Services.Sales
             return await SaleInvoice.InsertSalesInvoiceDetails(SalesInvoiceDetails);
         }
 
-        public async Task<SalesInvoiceListView> GetSalesList(string searchText, string searchBy, string sortBy)
+        public async Task<SalesInvoiceListView> GetSalesList(string? searchText, string? searchBy, string? sortBy)
         {
-            return await GetSalesList(searchText, searchBy, sortBy);
+            return await SaleInvoice.GetSalesList(searchText, searchBy, sortBy);
         }
     }
 }

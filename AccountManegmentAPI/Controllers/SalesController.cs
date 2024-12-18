@@ -17,11 +17,11 @@ namespace AccountManagement.API.Controllers
     [Authorize]
     public class SalesController : ControllerBase
     {
-        public SalesController(SalesInvoiceService saleInvoice, ISalesInvoiceService salesInvoice)
+
         public SalesController(ISalesInvoiceService saleInvoice)
         {
             SaleInvoice = saleInvoice;
-            SalesInvoice = salesInvoice;
+
         }
 
         public ISalesInvoiceService SaleInvoice { get; }
@@ -33,6 +33,15 @@ namespace AccountManagement.API.Controllers
             var checkInvoiceNo = SaleInvoice.CheckSalesInvoiceNo(CompanyId);
             return Ok(new { code = 200, data = checkInvoiceNo });
         }
+
+        [HttpGet]
+        [Route("GetSalestInvoiceList")]
+        public async Task<IActionResult> GetSalestInvoiceList(string? searchText, string? searchBy, string? sortBy)
+        {
+            var checkInvoiceNo = await SaleInvoice.GetSalesList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = checkInvoiceNo });
+        }
+
 
         [HttpPost]
         [Route("InsertSalesInvoiceDetails")]

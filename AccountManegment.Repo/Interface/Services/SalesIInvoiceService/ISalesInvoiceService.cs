@@ -12,6 +12,6 @@ namespace AccountManagement.Repository.Interface.Services.SalesIInvoiceService
     {
         string CheckSalesInvoiceNo(Guid? CompanyId);
         Task<ApiResponseModel> InsertSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails);
-        Task<SalesInvoiceListView> GetSalesList(string searchText, string searchBy, string sortBy);
+        Task<SalesInvoiceListView> GetSalesList(string? searchText, string? searchBy, string? sortBy);
     }
 }
