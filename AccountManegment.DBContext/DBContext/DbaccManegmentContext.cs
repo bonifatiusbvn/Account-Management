@@ -61,8 +61,7 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -352,7 +351,6 @@ public partial class DbaccManegmentContext : DbContext
         {
             entity.HasKey(e => e.InvoiceDetailsId);
 
-            entity.Property(e => e.InvoiceDetailsId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");

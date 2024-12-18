@@ -8,7 +8,7 @@
 }
 
 <style>
-    #paymentStatus-error, #textSupplierName-error, #textCompanyName-error, #txtgst-error, #textSupplierMobile-error, #textmdAddress-error {
+    #SalespaymentStatus-error, #textSalesSupplierName-error, #textSalesCompanyName-error, #textSalesSupplierMobile-error {
         color: red;
     }
 
@@ -26,7 +26,8 @@
     var selectedcompanyId = UserSession.ComapnyId;
     var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
 }
-
+<input type="hidden" id="Salescreatedbyid" value="@_userSession.UserId" />
+<input type="hidden" id="txtSalessessionSiteName" value="@UserSession.SiteId" />
 <div class="">
     <div class="">
         <div class="radius-10 w-100">
@@ -101,7 +102,7 @@
                                                                                 <h6 class="mb-0">Customer Details</h6>
                                                                             </div>
                                                                             <div class="col" style="padding-left: 400px;">
-                                                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                                                <select class="form-control form-select valid" id="ddlSalesinvoicetype" name="ddlSalesinvoicetype">
                                                                                         <option value="Purchase" selected>Purchase</option>
                                                                                         <option value="Purchase Return">Purchase Return</option>
                                                                                         <option value="Credit Note">Credit Note</option>
@@ -218,13 +219,6 @@
                                                                                 </div>
                                                                                 <div class="input-group mb-3">
                                                                                     <label class="input-group-text">
-                                                                                        Active PO
-                                                                                    </label>
-                                                                                    <input type="text" id="textSalesPONoList" name="textSalesPONoList" class="form-control" placeholder=" Active PO" readonly />
-                                                                                    <input type="hidden" id="textSalesPONoListHidden" name="textSalesPONoListHidden" />
-                                                                                </div>
-                                                                                <div class="input-group mb-3">
-                                                                                    <label class="input-group-text">
                                                                                         Vehicle No
                                                                                     </label>
                                                                                     <input type="text" class="form-control" placeholder="Vehicle No" id="txtSalesvehicleno" name="txtSalesvehicleno">
@@ -243,7 +237,7 @@
 
                                                                                 </div>
                                                                                 <div class="form-check form-check-inline" style="display:none">
-                                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="SalesunpaidRadio" value="unpaid" name="paymentStatus" checked>
+                                                                                    <input class="form-check-input" style="margin-left:2px;" type="radio" id="SalesunpaidRadio" value="unpaid" name="SalespaymentStatus" checked>
                                                                                     <label class="form-check-label" for="SalesunpaidRadio">Unpaid</label>
                                                                                 </div>
                                                                             </div>
@@ -332,7 +326,7 @@
                                                                         </div>
                                                                         <div class="col-2 col-sm-2">
                                                                             <input class="nav-radio form-check-input"
-                                                                                   name="selectedAddress"
+                                                                                   name="selectedSalesAddress"
                                                                                    data-bs-toggle="tab"
                                                                                    role="tab"
                                                                                    type="radio"
@@ -358,7 +352,7 @@
                                                                             </div>
                                                                             <div class="col-2 col-sm-2">
                                                                                 <input class="nav-radio form-check-input"
-                                                                                       name="selectedAddress"
+                                                                                       name="selectedSalesAddress"
                                                                                        data-bs-toggle="tab"
                                                                                        role="tab"
                                                                                        type="radio"
@@ -388,7 +382,7 @@
                                                                             </div>
                                                                             <div class="col-2 col-sm-2">
                                                                                 <input class="nav-radio form-check-input"
-                                                                                       name="selectedAddress"
+                                                                                       name="selectedSalesAddress"
                                                                                        data-bs-toggle="tab"
                                                                                        role="tab"
                                                                                        type="radio"
@@ -414,7 +408,7 @@
                                                                         </div>
                                                                         <div class="col-2 col-sm-2">
                                                                             <input class="nav-radio form-check-input"
-                                                                                   name="selectedAddress"
+                                                                                   name="selectedSalesAddress"
                                                                                    data-bs-toggle="tab"
                                                                                    role="tab"
                                                                                    type="radio"
@@ -440,7 +434,7 @@
                                                 <div class="card-body">
                                                     <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                                             <button type="button" class="btn btn-lg btn-primary px-5" id="SaveSalesInvoiceOButton" onclick="InsertSalesInvoiceDetails()"><i class="ri-printer-line align-bottom me-1"></i>Create Invoice</button>
-                                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdateInvoiceOButton" onclick="UpdateSalesInvoiceDetails()"><i class="ri-printer-line align-bottom me-1"></i>Update Invoice</button>
+                                                            @* <button type="button" class="btn btn-lg btn-primary px-5" id="UpdateInvoiceOButton" onclick="UpdateSalesInvoiceDetails()"><i class="ri-printer-line align-bottom me-1"></i>Update Invoice</button> *@
                                                     </div>
                                                 </div>
                                             </div>

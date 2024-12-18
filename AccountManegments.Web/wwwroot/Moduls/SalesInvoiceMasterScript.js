@@ -347,7 +347,19 @@ function SerchSalesItemDetailsById(Id, inputField) {
         }
     });
 }
+function fn_AddSalesInvoiceProductDescription(element) {
+    var itemId = $(element).data('item-id');
 
+    var $productDesBtn = $(`div[data-item-id='${itemId}']#ProductDesBtn`);
+    var $productDesText = $(`div[data-item-id='${itemId}']#ProductDesText`);
+
+    if ($productDesText.is(':visible')) {
+        $productDesText.find('input').val('');
+    }
+
+    $productDesBtn.toggle();
+    $productDesText.toggle();
+}
 $(document).ready(function () {
 
     $("#CreateSalesInvoiceForm").validate({
@@ -528,73 +540,58 @@ $(document).ready(function () {
     });
 });
 
-function InsertMultipleSupplierItem() {
+function InsertSalesInvoiceDetails() {
     siteloadershow();
-    if ($("#CreateInvoiceForm").valid()) {
-        var selectedGroupAddress = $('input[name="selectedGroupAddress"]:checked').val();
-        if ($('#addnewproductlink tr').length >= 1) {
+    if ($("#CreateSalesInvoiceForm").valid()) {
+        if ($('#addnewSalesproductlink tr').length >= 1) {
 
             var ItemDetails = [];
             $(".product").each(function () {
                 var orderRow = $(this);
                 var objData = {
-                    ItemName: orderRow.find("#txtItemName").text(),
-                    ItemId: orderRow.find("#txtItemId").val(),
+                    ItemName: orderRow.find("#txtSalesItemName").val(),
+                    ItemId: orderRow.find("#txtSalesItemId").val(),
                     ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
-                    UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
-                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
-                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
-                    Quantity: orderRow.find("#txtproductquantity").val(),
-                    PricePerUnit: orderRow.find("#txtproductamount").val(),
-                    GSTamount: orderRow.find("#txtgstAmount").val(),
-                    GSTPercentage: orderRow.find("#txtgst").val(),
-                    TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+                    UnitTypeId: orderRow.find("#txtSalesPOUnitType_" + orderRow.find("#txtSalesItemId").val()).val(),
+                    DiscountAmount: orderRow.find("#txtSalesdiscountamount").val(),
+                    DiscountPer: orderRow.find("#txtSalesdiscountpercentage").val(),
+                    Quantity: orderRow.find("#txtSalesproductquantity").val(),
+                    Price: orderRow.find("#txtSalesproductamount").val(),
+                    Gst: orderRow.find("#txtSalesgstAmount").val(),
+                    Gstper: orderRow.find("#txtSalesgst").val(),
+                    TotalAmount: orderRow.find("#txtSalesproducttotalamount").val(),
                 };
                 ItemDetails.push(objData);
             });
 
-            var modelSiteId = $("#txtModelSiteId").val();
-            var sessionSiteId = $("#txtsessionSiteName").val();
-
-            if (!modelSiteId || modelSiteId.trim() === "") {
-                $("#txtsessionSiteName").val(sessionSiteId);
-            } else {
-                $("#txtsessionSiteName").val(modelSiteId);
-            }
-
             var InvoiceDetails = {
-                SiteId: $("#txtsessionSiteName").val(),
-                InvoiceNo: $("#textInvoicePrefix").val(),
-                InvoiceType: $('#ddlinvoicetype').val(),
-                Date: $("#textOrderDate").val(),
-                SupplierId: $("#textSupplierName").val(),
-                CompanyId: $("#textCompanyName").val(),
-                TotalAmountInvoice: $("#cart-total").val(),
-                TotalGstamount: $("#totalgst").val(),
-                PaymentStatus: $("input[name='paymentStatus']:checked").val(),
-                Description: $("#textDescription").val(),
-                CreatedBy: $("#createdbyid").val(),
-                UnitTypeId: $("#UnitTypeId").val(),
-                ShippingAddress: $("input[name='selectedAddress']:checked").data('address'),
-                ChallanNo: $("#txtchalanNo").val(),
-                Lrno: $("#textPONoListHidden").val() ? $("#textPONoListHidden").val() : $("#txtlrNo").val(),
-                VehicleNo: $("#txtvehicleno").val(),
-                DispatchBy: $("#txtdispatch").val(),
-                PaymentTerms: $("#txtpayment").val(),
-                SupplierInvoiceNo: $("#textSupplierInvoiceNo").val(),
-                Tds: $('#cart-tds').val(),
-                TotalDiscount: $('#cart-discount').val(),
-                DiscountRoundoff: $("#IDiscountRoundOff").val(),
-                SiteGroup: $("#InvoiceGroupList").val(),
-                GroupAddress: $('input[name="selectedGroupAddress"]:checked').val(),
-                Poid: $("#txtInvoicePOID").val() ? $("#txtInvoicePOID").val() : InvoicePONo,
-                ItemList: ItemDetails,
+                
+                SalesInvoiceNo: $("#textSalesInvoicePrefix").val(),
+                InvoiceType: $('#ddlSalesinvoicetype').val(),
+                SiteId: $("#txtSalessessionSiteName").val(),
+                Date: $("#textSalesOrderDate").val(),
+                SupplierId: $("#textSalesSupplierName").val(),
+                CompanyId: $("#textSalesCompanyName").val(),
+                TotalAmount: $("#Sales-cart-total").val(),
+                TotalGstamount: $("#Salestotalgst").val(),
+                PaymentStatus: $("input[name='SalespaymentStatus']:checked").val(),
+                CreatedBy: $("#Salescreatedbyid").val(),
+                ShippingAddress: $("input[name='selectedSalesAddress']:checked").data('address'),
+                ChallanNo: $("#txtSaleschalanNo").val(),
+                Lrno: $("#txtSaleslrNo").val(),
+                VehicleNo: $("#txtSalesvehicleno").val(),
+                DispatchBy: $("#txtSalesdispatch").val(),
+                PaymentTerms: $("#txtSalespayment").val(),
+                SupplierInvoiceNo: $("#textSalesSupplierInvoiceNo").val(),
+                Tds: $('#Sales-cart-tds').val(),
+                TotalDiscount: $('#Sales-cart-discount').val(),
+                DiscountRoundoff: $("#SalesIDiscountRoundOff").val(),
+                SalesInvoiceDetails: ItemDetails,
             }
-
             var form_data = new FormData();
-            form_data.append("SupplierItems", JSON.stringify(InvoiceDetails));
+            form_data.append("SalesInvoiceDetails", JSON.stringify(InvoiceDetails));
             $.ajax({
-                url: '/InvoiceMaster/InsertMultipleSupplierItemDetails',
+                url: '/Sales/InsertSalesInvoiceDetails',
                 type: 'POST',
                 data: form_data,
                 dataType: 'json',
@@ -606,7 +603,7 @@ function InsertMultipleSupplierItem() {
                         siteloaderhide();
                         toastr.success(Result.message);
                         setTimeout(function () {
-                            window.location = '/InvoiceMaster/SupplierInvoiceListView';
+                            window.location = '/Sales/SalesList';
                         }, 2000);
                     }
                     else {
@@ -627,10 +624,10 @@ function InsertMultipleSupplierItem() {
             });
         } else {
             siteloaderhide();
-            if ($('#addnewproductlink tr').length == 0) {
-                $("#spnitembutton").text("Please Select Product!");
+            if ($('#addnewSalesproductlink tr').length == 0) {
+                $("#spnSalesitembutton").text("Please Select Product!");
             } else {
-                $("#spnitembutton").text("");
+                $("#spnSalesitembutton").text("");
             }
         }
     }
