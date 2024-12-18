@@ -1,4 +1,6 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using System;
@@ -13,5 +15,6 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
     {
         string CheckSalesInvoiceNo(Guid? CompanyId);
         Task<ApiResponseModel> InsertSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails);
+        Task<SalesInvoiceListView> GetSalesList(string searchText, string searchBy, string sortBy);
     }
 }

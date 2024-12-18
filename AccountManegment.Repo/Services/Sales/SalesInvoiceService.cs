@@ -1,4 +1,5 @@
-﻿using AccountManagement.DBContext.Models.API;
+﻿using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
+using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Repository.Sales;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Services.Sales
 {
-    public class SalesInvoiceService:ISalesInvoiceService
+    public class SalesInvoiceService : ISalesInvoiceService
     {
         public SalesInvoiceService(ISalesInvoice saleInvoice)
         {
@@ -27,6 +28,11 @@ namespace AccountManagement.Repository.Services.Sales
         public async Task<ApiResponseModel> InsertSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails)
         {
             return await SaleInvoice.InsertSalesInvoiceDetails(SalesInvoiceDetails);
+        }
+
+        public async Task<SalesInvoiceListView> GetSalesList(string searchText, string searchBy, string sortBy)
+        {
+            return await GetSalesList(searchText, searchBy, sortBy);
         }
     }
 }

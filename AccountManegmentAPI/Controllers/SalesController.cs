@@ -1,6 +1,9 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
+using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
 using AccountManagement.Repository.Services.Sales;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +17,11 @@ namespace AccountManagement.API.Controllers
     [Authorize]
     public class SalesController : ControllerBase
     {
+        public SalesController(SalesInvoiceService saleInvoice, ISalesInvoiceService salesInvoice)
         public SalesController(ISalesInvoiceService saleInvoice)
         {
             SaleInvoice = saleInvoice;
+            SalesInvoice = salesInvoice;
         }
 
         public ISalesInvoiceService SaleInvoice { get; }
