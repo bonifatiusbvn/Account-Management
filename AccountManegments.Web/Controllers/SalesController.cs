@@ -9,6 +9,10 @@ using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -268,6 +272,170 @@ namespace AccountManegments.Web.Controllers
             else
             {
                 return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        public async Task<IActionResult> DisplaySalesInvoiceDetails(Guid Id)
+        {
+            try
+            {
+                SalesInvoiceMasterModel SalesDetails = new SalesInvoiceMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditSalesInvoiceDetails?Id=" + Id);
+                if (response.code == 200)
+                {
+                    SalesDetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(response.data.ToString());
+                    var number = SalesDetails.TotalAmount;
+                    var totalAmountInWords = NumberToWords((decimal)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = SalesDetails.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
+                }
+                return View(SalesDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public string NumberToWords(decimal number)
+        {
+            int integerPart = (int)Math.Floor(number);
+            decimal decimalPart = number - integerPart;
+
+            string words = "";
+
+            if (integerPart == 0)
+            {
+                words = "zero";
+            }
+            else if (integerPart < 0)
+            {
+                words = "minus " + NumberToWords(Math.Abs(integerPart));
+            }
+            else
+            {
+                if ((integerPart / 10000000) > 0)
+                {
+                    words += NumberToWords(integerPart / 10000000) + " Crore ";
+                    integerPart %= 10000000;
+                }
+
+                if ((integerPart / 100000) > 0)
+                {
+                    words += NumberToWords(integerPart / 100000) + " Lakh ";
+                    integerPart %= 100000;
+                }
+
+                if ((integerPart / 1000) > 0)
+                {
+                    words += NumberToWords(integerPart / 1000) + " Thousand ";
+                    integerPart %= 1000;
+                }
+
+                if ((integerPart / 100) > 0)
+                {
+                    words += NumberToWords(integerPart / 100) + " Hundred ";
+                    integerPart %= 100;
+                }
+
+                if (integerPart > 0)
+                {
+                    var unitsMap = new[] { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+                    var tensMap = new[] { "Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
+                    if (words != "")
+                        words += " ";
+
+                    if (integerPart < 20)
+                        words += unitsMap[integerPart];
+                    else
+                    {
+                        words += tensMap[integerPart / 10];
+                        if ((integerPart % 10) > 0)
+                            words += " " + unitsMap[integerPart % 10];
+                    }
+                }
+            }
+
+            if (decimalPart > 0)
+            {
+                decimalPart *= 100;
+                words += " and " + NumberToWords((int)decimalPart) + " paisa";
+            }
+
+            return words;
+        }
+
+        public async Task<IActionResult> PrintSalesInvoiceDetails(Guid Id)
+        {
+            try
+            {
+                SalesInvoiceMasterModel SalesDetails = new SalesInvoiceMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditSalesInvoiceDetails?Id=" + Id);
+                if (response.code == 200)
+                {
+                    SalesDetails = JsonConvert.DeserializeObject<SalesInvoiceMasterModel>(response.data.ToString());
+                    var number = SalesDetails.TotalAmount;
+                    var totalAmountInWords = NumberToWords((decimal)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = SalesDetails.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
+                }
+                return View(SalesDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> SalesInvoicePrintDetails(Guid Id)
+        {
+            try
+            {
+                IActionResult result = await PrintSalesInvoiceDetails(Id);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as SalesInvoiceMasterModel;
+                    var htmlContent = await RenderViewToStringAsync("PrintSalesInvoiceDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
+            var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
+
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"View '{viewName}' was not found.");
+                }
+
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewData,
+                    tempData,
+                    stringWriter,
+                    new HtmlHelperOptions()
+                );
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
             }
         }
     }
