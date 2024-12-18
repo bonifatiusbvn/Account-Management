@@ -1,12 +1,7 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
-using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
-using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
-using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
-using AccountManagement.Repository.Services.Sales;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

@@ -33,6 +33,8 @@ public partial class ItemMaster
 
     public DateTime? UpdatedOn { get; set; }
 
+    public virtual ICollection<InventoryInward> InventoryInwards { get; set; } = new List<InventoryInward>();
+
     public virtual ICollection<ItemInword> ItemInwords { get; set; } = new List<ItemInword>();
 
     public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();

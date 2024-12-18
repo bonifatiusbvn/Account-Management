@@ -32,6 +32,10 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
+        public IActionResult CreateInventory()
+        {
+            return View();
+        }
         public async Task<IActionResult> CreateSalesInvoice(Guid? Id)
         {
             SalesInvoiceMasterModel SalesDetails = new SalesInvoiceMasterModel();

@@ -25,6 +25,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<GroupMaster> GroupMasters { get; set; }
 
+    public virtual DbSet<InventoryInward> InventoryInwards { get; set; }
+
     public virtual DbSet<ItemInWordDocument> ItemInWordDocuments { get; set; }
 
     public virtual DbSet<ItemInword> ItemInwords { get; set; }
@@ -61,7 +63,8 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -138,6 +141,29 @@ public partial class DbaccManegmentContext : DbContext
                 .HasForeignKey(d => d.SiteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_GroupMaster_Site");
+        });
+
+        modelBuilder.Entity<InventoryInward>(entity =>
+        {
+            entity.ToTable("InventoryInward");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.Details).HasMaxLength(50);
+            entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ItemNavigation).WithMany(p => p.InventoryInwards)
+                .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InventoryInward_ItemMaster");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.InventoryInwards)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InventoryInward_UnitMaster");
         });
 
         modelBuilder.Entity<ItemInWordDocument>(entity =>
