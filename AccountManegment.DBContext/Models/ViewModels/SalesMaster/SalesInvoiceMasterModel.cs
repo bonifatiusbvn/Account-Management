@@ -24,11 +24,15 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public string? SupplierFullAddress { get; set; }
         public string? SupplierMobileNo { get; set; }
         public string? SupplierGstNo { get; set; }
+        public string? SupplierStateName { get; set; }
+        public int? SupplierStateCode { get; set; }
 
         public Guid CompanyId { get; set; }
         public string? CompanyName { get; set; }
         public string? CompanyFullAddress { get; set; }
         public string? CompanyGstNo { get; set; }
+        public string? CompanyStateName { get; set; }
+        public int? CompanyStateCode { get; set; }
 
         public string? SupplierInvoiceNo { get; set; }
 

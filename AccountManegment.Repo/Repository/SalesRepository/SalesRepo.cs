@@ -277,53 +277,57 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             try
             {
                 SalesList = (from a in Context.SalesInvoices.Where(x => x.Id == Id)
-                             join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
-                             join c in Context.Companies on a.CompanyId equals c.CompanyId
-                             join d in Context.Sites on a.SiteId equals d.SiteId
-                             join e in Context.Cities on c.CityId equals e.CityId
-                             join f in Context.States on c.StateId equals f.StatesId
-                             join g in Context.Countries on c.Country equals g.CountryId
-                             join supCity in Context.Cities on b.City equals supCity.CityId
-                             join supState in Context.States on b.State equals supState.StatesId
-                             join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
-                             from subgroup in gj.DefaultIfEmpty()
-                             select new SalesInvoiceMasterModel
-                             {
-                                 Id = a.Id,
-                                 SalesInvoiceNo = a.SalesInvoiceNo,
-                                 InvoiceType = a.InvoiceType,
-                                 SiteId = a.SiteId,
-                                 SiteName = d.SiteName,
-                                 SupplierId = a.SupplierId,
-                                 SupplierName = b.SupplierName,
-                                 Description = a.Description,
-                                 SupplierGstNo = b.Gstno,
-                                 CompanyId = a.CompanyId,
-                                 CompanyName = c.CompanyName,
-                                 SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                 CompanyGstNo = c.Gstno,
-                                 SupplierMobileNo = b.Mobile,
-                                 Date = a.Date,
-                                 TotalAmount = a.TotalAmount,
-                                 TotalDiscount = a.TotalDiscount,
-                                 TotalGstamount = a.TotalGstamount,
-                                 PaymentStatus = a.PaymentStatus,
-                                 IsPayOut = a.IsPayOut,
-                                 Tds = a.Tds,
-                                 ChallanNo = a.ChallanNo,
-                                 Lrno = a.Lrno,
-                                 VehicleNo = a.VehicleNo,
-                                 DispatchBy = a.DispatchBy,
-                                 PaymentTerms = a.PaymentTerms,
-                                 ContactName = a.ContactName,
-                                 ContactNumber = a.ContactNumber,
-                                 CreatedOn = a.CreatedOn,
-                                 IsApproved = a.IsApproved,
-                                 DiscountRoundoff = a.DiscountRoundoff,
-                                 CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
-                                 SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
-                                 ShippingAddress = a.ShippingAddress,
-                             }).FirstOrDefault();
+                                join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
+                                join c in Context.Companies on a.CompanyId equals c.CompanyId
+                                join d in Context.Sites on a.SiteId equals d.SiteId
+                                join e in Context.Cities on c.CityId equals e.CityId
+                                join f in Context.States on c.StateId equals f.StatesId
+                                join g in Context.Countries on c.Country equals g.CountryId
+                                join supCity in Context.Cities on b.City equals supCity.CityId
+                                join supState in Context.States on b.State equals supState.StatesId
+                                join h in Context.GroupMasters on a.SiteId equals h.SiteId into gj
+                                from subgroup in gj.DefaultIfEmpty()
+                                select new SalesInvoiceMasterModel
+                                {
+                                    Id = a.Id,
+                                    SalesInvoiceNo = a.SalesInvoiceNo,
+                                    InvoiceType = a.InvoiceType,
+                                    SiteId = a.SiteId,
+                                    SiteName = d.SiteName,
+                                    SupplierId = a.SupplierId,
+                                    SupplierName = b.SupplierName,
+                                    SupplierStateCode = supState.StateCode,
+                                    SupplierStateName = supState.StatesName,
+                                    Description = a.Description,
+                                    SupplierGstNo = b.Gstno,
+                                    CompanyId = a.CompanyId,
+                                    CompanyName = c.CompanyName,
+                                    SupplierInvoiceNo = a.SupplierInvoiceNo,
+                                    CompanyGstNo = c.Gstno,
+                                    CompanyStateCode= f.StateCode,
+                                    CompanyStateName= f.StatesName,
+                                    SupplierMobileNo = b.Mobile,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    TotalDiscount = a.TotalDiscount,
+                                    TotalGstamount = a.TotalGstamount,
+                                    PaymentStatus = a.PaymentStatus,
+                                    IsPayOut = a.IsPayOut,
+                                    Tds = a.Tds,
+                                    ChallanNo = a.ChallanNo,
+                                    Lrno = a.Lrno,
+                                    VehicleNo = a.VehicleNo,
+                                    DispatchBy = a.DispatchBy,
+                                    PaymentTerms = a.PaymentTerms,
+                                    ContactName = a.ContactName,
+                                    ContactNumber = a.ContactNumber,
+                                    CreatedOn = a.CreatedOn,
+                                    IsApproved = a.IsApproved,
+                                    DiscountRoundoff = a.DiscountRoundoff,
+                                    CompanyFullAddress = c.Address + "-" + c.Area + "," + e.CityName + "," + f.StatesName,
+                                    SupplierFullAddress = b.BuildingName + "-" + b.Area + "," + supCity.CityName + "," + supState.StatesName,
+                                    ShippingAddress = a.ShippingAddress,
+                                }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SalesInvoiceDetails.Where(a => a.RefSalesInvoiceId == SalesList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
                                                      join i in Context.ItemMasters on a.ItemId equals i.ItemId
