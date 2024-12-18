@@ -369,7 +369,7 @@ var dtcoulms = [
             }
             else {
                 var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
-                return row.invoiceNo + invoiceType;
+                return row.supplierInvoiceNo + invoiceType;
             }
             return data;
         }
