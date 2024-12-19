@@ -369,10 +369,11 @@ var dtcoulms = [
             }
             else {
                 var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
-                return row.supplierInvoiceNo + invoiceType;
+                return row.invoiceNo + invoiceType;
             }
             return data;
         }
+
     },
     {
         "data": "date",
@@ -393,7 +394,7 @@ var dtcoulms = [
         "name": "Credit",
         "render": function (data, type, row) {
             if (row.invoiceNo !== 'PayOut' && row.invoiceType != 'Purchase Return' && row.invoiceType != 'Credit Note') {
-                return '<span style="color:green">' + '₹' + data + '</span>';
+                return '<span style="color:green">' + '₹' + formatReportNumberWithCommas(data.toFixed(2)) + '</span>';
             } else {
                 return '';
             }
@@ -404,7 +405,7 @@ var dtcoulms = [
         "name": "Debit",
         "render": function (data, type, row) {
             if (row.invoiceNo === 'PayOut' || row.invoiceType === 'Purchase Return' || row.invoiceType === 'Credit Note') {
-                return '<span style="color:red">' + '₹' + data + '</span>';
+                return '<span style="color:red">' + '₹' + formatReportNumberWithCommas(data.toFixed(2)) + '</span>';
             } else {
                 return '';
             }
@@ -417,17 +418,17 @@ var dtcoulms = [
             var supplierName = row.supplierName;
             var totalAmount = parseFloat(row.totalAmount) || 0;
             var invoiceNo = row.invoiceNo;
+            var invoiceType = row.invoiceType;
 
             if (!supplierBalances[supplierName]) {
                 supplierBalances[supplierName] = 0;
                 processedInvoices[supplierName] = new Set();
             }
-
-            var uniqueKey = (invoiceNo === "PayOut") ? invoiceNo + "_" + totalAmount : invoiceNo;
+            var uniqueKey = (invoiceNo === "PayOut" || invoiceType === 'Purchase Return' || invoiceType === 'Credit Note') ? invoiceNo + "_" + totalAmount : invoiceNo ;
 
             if (!processedInvoices[supplierName].has(uniqueKey)) {
-
-                if (invoiceNo === "PayOut") {
+                
+                if (invoiceNo === "PayOut" || invoiceType === 'Purchase Return' || invoiceType === 'Credit Note') {
                     supplierBalances[supplierName] -= totalAmount;
                 }
                 else {
@@ -437,12 +438,10 @@ var dtcoulms = [
                 processedInvoices[supplierName].add(uniqueKey);
             }
 
-            return '<span style="color:blue">' + '₹' + supplierBalances[supplierName].toFixed(2) + '</span>';
+            return '<span style="color:blue">' + '₹' + formatReportNumberWithCommas(supplierBalances[supplierName].toFixed(2)) + '</span>';
         }
     }
-
 ];
-
 
 
 
