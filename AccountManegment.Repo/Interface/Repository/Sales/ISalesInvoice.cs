@@ -24,5 +24,6 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
         Task<InventoryInwardView> EditInventoryDetails(Guid InventoryId);
         Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails);
         Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId);
+        Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId);
     }
 }

@@ -75,5 +75,10 @@ namespace AccountManagement.Repository.Services.Sales
         {
             return await SaleInvoice.DeleteInventoryDetails(InventoryId);
         }
+
+        public async Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId)
+        {
+            return await SaleInvoice.ApproveInventoryDetails(InventoryId);
+        }
     }
 }

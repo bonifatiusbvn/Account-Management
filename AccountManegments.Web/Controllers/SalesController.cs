@@ -472,7 +472,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-
+        [FormPermissionAttribute("Inventory Inward-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertInventoryDetails(InventoryInwardView InventoryDetails)
         {
@@ -494,13 +494,16 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Inventory Inward-Edit")]
         public async Task<IActionResult> EditInventoryDetails(Guid InventoryId)
         {
+            var Inventory = new InventoryInwardView();
             ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditInventoryDetails?Id=" + InventoryId);
 
             if (response.code == 200)
             {
-                return Ok(new { Code = response.code, Message = response.message });
+                Inventory = JsonConvert.DeserializeObject<InventoryInwardView>(response.data.ToString());
+                return Ok(Inventory);
             }
             else
             {
@@ -528,9 +531,23 @@ namespace AccountManegments.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Inventory Inward-Delete")]
         public async Task<IActionResult> DeleteInventoryDetails(Guid InventoryId)
         {
-            ApiResponseModel response = await APIServices.GetAsync("", "Sales/DeleteInventoryDetails?Id=" + InventoryId);
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/DeleteInventoryDetails?InventoryId=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        public async Task<IActionResult> ApproveInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/ApproveInventoryDetails?InventoryId=" + InventoryId);
 
             if (response.code == 200)
             {

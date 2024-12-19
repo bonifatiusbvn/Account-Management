@@ -489,6 +489,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                           where a.IsDeleted == false
                                           select new InventoryInwardView
                                           {
+                                              Id = a.Id,
                                               ItemName = i.ItemName,
                                               ItemId = a.ItemId,
                                               Date = a.Date,
@@ -603,12 +604,14 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                         select new InventoryInwardView
                                         {
                                             ItemId = a.ItemId,
+                                            ItemName=a.Item,
                                             UnitTypeId = a.UnitTypeId,
                                             Quantity = a.Quantity,
                                             Date = a.Date,
                                             Details = a.Details,
                                             UnitName = b.UnitName,
                                             Id = a.Id,
+                                            IsApproved = a.IsApproved,
                                         }).FirstOrDefault();
                 return InventoryInvoice;
             }
@@ -624,7 +627,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             try
             {
                 var InventoryInvoice = Context.InventoryInwards.Where(e => e.Id == InventoryDetails.Id).FirstOrDefault();
-                if (InventoryInvoice == null)
+                if (InventoryInvoice != null)
                 {
                     InventoryInvoice.ItemId = InventoryDetails.ItemId;
                     InventoryInvoice.Item = InventoryDetails.ItemName;
@@ -668,6 +671,44 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 {
                     response.code = 400;
                     response.message = "Error in deleting inventory!";
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId)
+        {
+            var response = new ApiResponseModel();
+            try
+            {
+                var InventoryInvoice = Context.InventoryInwards.Where(e => e.Id == InventoryId).FirstOrDefault();
+                if (InventoryInvoice != null)
+                {
+                    if(InventoryInvoice.IsApproved == true)
+                    {
+                        InventoryInvoice.IsApproved = false;
+
+                        response.code = (int)HttpStatusCode.OK;
+                        response.message = "Inventory unapproved successfully.";
+                    }
+                    else
+                    {
+                        InventoryInvoice.IsApproved = true;
+
+                        response.code = (int)HttpStatusCode.OK;
+                        response.message = "Inventory approved successfully.";
+                    }
+                    Context.InventoryInwards.Update(InventoryInvoice);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in approve inventory!";
                 }
                 return response;
             }

@@ -165,7 +165,24 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-
+        [HttpGet]
+        [Route("ApproveInventoryDetails")]
+        public async Task<IActionResult> ApproveInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Inventory = await SaleInvoice.ApproveInventoryDetails(InventoryId);
+            if (Inventory.code == 200)
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            else
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            return StatusCode(response.code, response);
+        }
         [HttpPost]
         [Route("GetInventoryList")]
         public async Task<IActionResult> GetInventoryList(string? searchText, string? searchBy, string? sortBy)
