@@ -20,5 +20,9 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
         Task<ApiResponseModel> UpdateSalesInvoiceDetails(SalesInvoiceMasterModel SalesInvoiceDetails);
         Task<ApiResponseModel> DeleteSalesInvoiceDetails(Guid Id);
         Task<IEnumerable<InventoryInwardView>> GetInventoryList(string? searchText, string? searchBy, string? sortBy);
+        Task<ApiResponseModel> InsertInventoryDetails(InventoryInwardView InventoryDetails);
+        Task<InventoryInwardView> EditInventoryDetails(Guid InventoryId);
+        Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails);
+        Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId);
     }
 }

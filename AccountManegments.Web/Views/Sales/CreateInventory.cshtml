@@ -31,7 +31,7 @@
 
     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request" && (a.Add == true)))
     {
-        <button type="button" class="btn btn-primary fixed-button" onclick="ClearPurchaseRequestTextBox()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
+        <button type="button" class="btn btn-primary fixed-button" onclick="clearCreatetxtInventoryText()"><i class="lni lni-circle-plus"></i>Purchase Request</button>
     }
 }
 
@@ -148,6 +148,7 @@
                                             <input type="text" id="searchInventoryItemnameInput" name="searchInventoryItemnameInput" placeholder="Product Names" class="form-control">
                                             <input type="hidden" id="txtInventoryItemName" name="txtItemName">
                                             <span id="searchItemnameInput" class="text-danger"></span>
+                                            <input type="hidden" id="txtInventoryCreatedBy" value="@_userSession.UserId" />
                                         </div>
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Date</label>
@@ -184,17 +185,10 @@
     </div>
 </div>
 <script type="text/javascript">
-    // Function to set today's date in the date input field
-    function setTodayDate() {
-        var today = new Date();
-        var day = ("0" + today.getDate()).slice(-2);
-        var month = ("0" + (today.getMonth() + 1)).slice(-2);
-        var todayDate = today.getFullYear() + "-" + month + "-" + day;
-
-        document.getElementById('txtPrdate').value = todayDate;
-    }
-
-                    window.onload = setTodayDate;
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        document.getElementById("txtInventoryPrdate").value = today;
+    });
 </script>
 @section Scripts {
     <script src="~/moduls/inventoryscript.js" asp-append-version="true"></script>

@@ -102,10 +102,11 @@ function CreateInventory() {
             ItemName: $('#searchInventoryItemnameInput').val(),
             ItemDescription: $('#PRInventoryItemDescription').val(),
             Quantity: $('#txtInventoryQuantity').val(),
+            CreatedBy: $('#txtInventoryCreatedBy').val(),
         }
 
         $.ajax({
-            url: '/PurchaseMaster/CreatePurchaseRequest',
+            url: '/Sales/InsertInventoryDetails',
             type: 'post',
             data: objData,
             datatype: 'json',
@@ -114,7 +115,7 @@ function CreateInventory() {
 
                     AllPurchaseRequestListTable();
                     toastr.success(Result.message);
-                    ClearPurchaseRequestTextBox();
+                    clearCreatetxtInventoryText();
                 } else {
                     toastr.error(Result.message);
                 }
@@ -127,70 +128,29 @@ function CreateInventory() {
         toastr.error("Kindly fill all details");
     }
 }
-ClearPurchaseRequestTextBox();
-function ClearPurchaseRequestTextBox() {
-    clearCreatePRText();
-    $('#prNo').val('');
-    $.ajax({
-        url: '/PurchaseMaster/CheckPRNo',
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            siteloaderhide();
-            $('#prNo').val(response);
-        }, error: function () {
-            siteloaderhide();
-            toastr.error("Error in getting PR No");
-        }
-    });
-    resetPRForm();
+clearCreatetxtInventoryText();
+function clearCreatetxtInventoryText() {
+    $('#searchInventoryItemnameInput').val('');
+    $('#txtInventoryUnitType').val('');
+    $('#searchInventoryItemname').val('');
+    $('#txtInventoryQuantity').val('');
+    $('#txtInventoryPrdate').val('');
+
+    resetInventoryForm();
     $('#Inventoryheadingtext').html('Create Inventory');
     $('#addInventoryInfo').removeClass('d-none');
     $('#InventoryInfo').addClass('d-none');
     $('#addbtnInventory').show();
     $('#updatebtnInventory').hide();
-
-    $('#searchItemname').select2({
-        maximumSelectionLength: 1,
-        theme: 'bootstrap4',
-
-        closeOnSelect: true,
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#CreatePurchaseRequest")
-    });
-
-    //$('#drpPRSiteAddress').select2({
-
-    //    theme: 'bootstrap4',
-    //    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-    //    placeholder: $(this).data('placeholder'),
-    //    allowClear: Boolean($(this).data('allow-clear')),
-    //    dropdownParent: $("#CreatePurchaseRequest")
-    //});
-}
-function clearCreatePRText() {
-    $('#searchItemnameInput').val('');
-    $('#txtUnitType').val('');
-    $('#searchItemname').val('');
-    $('#txtQuantity').val('');
-    $('#txtPoSiteName').val('');
-    $('#drpPRSiteAddress').empty();
-    $('#PurchaseRequestId').val('');
-    $('#PRItemDescription').val('');
-    $('#txtPrdate').val('');
 }
 
-var PRForm;
+var InventoryForm;
 $(document).ready(function () {
-    $("#purchaseRequestForm").validate({
+    $("#InventoryForm").validate({
         rules: {
-            searchItemnameInput: "required",
-            txtUnitType: "required",
-            txtQuantity: "required",
-            txtPoSiteName: "required",
+            searchInventoryItemnameInput: "required",
+            txtInventoryUnitType: "required",
+            txtInventoryQuantity: "required",
         },
         highlight: function (element) {
             $(element).addClass('error-border');
@@ -206,64 +166,40 @@ $(document).ready(function () {
 
 
 
-function resetPRForm() {
-    if (PRForm) {
-        PRForm.resetForm();
+function resetInventoryForm() {
+    if (InventoryForm) {
+        InventoryForm.resetForm();
     }
 }
 
-function EditPurchaseRequestDetails(PurchaseId) {
+function EditInventoryDetails(InventoryId) {
 
     siteloadershow();
     $.ajax({
-        url: '/PurchaseMaster/DisplayPurchaseRequestDetails?PurchaseId=' + PurchaseId,
+        url: '/PurchaseMaster/DisplayPurchaseRequestDetails?InventoryId=' + InventoryId,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
         success: function (response) {
 
             siteloaderhide();
-            $('#PRheadingtext').html('Edit PurchaseRequest');
-            $('#addPRInfo').removeClass('d-none');
-            $('#PRInfo').addClass('d-none');
+            $('#Inventoryheadingtext').html('Edit PurchaseRequest');
+            $('#addInventoryInfo').removeClass('d-none');
+            $('#InventoryInfo').addClass('d-none');
 
             var dbDate = response.date.split('T')[0];
-            $('#txtPrdate').val(dbDate);
+            $('#txtInventoryPrdate').val(dbDate);
 
-            $('#addbtnpurchaseRequest').hide();
-            $('#updatebtnpurchaseRequest').show();
-            $('#PurchaseRequestId').val(response.pid);
-            $('#txtUnitTypeHidden').val(response.unitTypeId);
-            $('#prNo').val(response.prNo);
-            $('#txtItemName').val(response.itemId);
-            $('#searchItemnameInput').val(response.itemName);
-            $('#PRItemDescription').val(response.itemDescription);
-            $('#txtQuantity').val(response.quantity);
-            $('#txtPoSiteName').val(response.siteId);
-            $('#txtUnitType').val(response.unitName);
-
-            fn_getPRSiteDetail(response.siteId, function () {
-                $('#drpPRSiteAddress').val(response.siteAddressId);
-            });
-
-            resetPRForm()
-            $('#searchItemname').select2({
-                maximumSelectionLength: 1,
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#CreatePurchaseRequest")
-            });
-
-
-            //$('#drpPRSiteAddress').select2({
-            //    theme: 'bootstrap4',
-            //    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            //    placeholder: $(this).data('placeholder'),
-            //    allowClear: Boolean($(this).data('allow-clear')),
-            //    dropdownParent: $("#CreatePurchaseRequest")
-            //});
+            $('#addbtnInventory').hide();
+            $('#updatebtnInventory').show();
+            $('#InventoryId').val(response.pid);
+            $('#txtInventoryUnitTypeHidden').val(response.unitTypeId);
+            $('#txtInventoryItemName').val(response.itemId);
+            $('#searchInventoryItemnameInput').val(response.itemName);
+            $('#PRInventoryItemDescription').val(response.itemDescription);
+            $('#txtInventoryQuantity').val(response.quantity);
+            $('#txtInventoryUnitType').val(response.unitName);
+            resetInventoryForm()
         },
         error: function (xhr, status, error) {
             siteloaderhide();
@@ -272,56 +208,37 @@ function EditPurchaseRequestDetails(PurchaseId) {
     });
 }
 
-function UpdatePurchaseRequestDetails() {
+function UpdateInventoryDetails() {
 
     siteloadershow();
-    if ($("#purchaseRequestForm").valid()) {
-
-        var siteName = null;
-        siteId = $("#SiteIdinPR").val();
-        PRsiteId = $("#txtPoSiteName").val();
-        if (PRsiteId != undefined) {
-            siteName = PRsiteId;
-        }
-        else {
-            siteName = siteId
-        }
-        var siteAddressId = $('#drpPRSiteAddress').val();
-        var siteAddress = $('#drpPRSiteAddress option:selected').text();
+    if ($("#InventoryForm").valid()) {
 
         var objData = {
-            SiteAddressId: siteAddressId,
-            SiteAddress: siteAddress,
-            Pid: $('#PurchaseRequestId').val(),
-            CreatedBy: $('#txtcreatedby').val(),
-            UnitTypeId: $('#txtUnitTypeHidden').val(),
-            ItemId: $('#txtItemName').val(),
-            ItemName: $('#searchItemnameInput').val(),
-            ItemDescription: $('#PRItemDescription').val(),
-            SiteId: siteName,
-            Quantity: $('#txtQuantity').val(),
-            PrNo: $('#prNo').val(),
-            Date: $('#txtPrdate').val(),
+            UnitTypeId: $('#txtInventoryUnitTypeHidden').val(),
+            Date: $('#txtInventoryPrdate').val(),
+            ItemId: $('#txtInventoryItemName').val(),
+            ItemName: $('#searchInventoryItemnameInput').val(),
+            ItemDescription: $('#PRInventoryItemDescription').val(),
+            Quantity: $('#txtInventoryQuantity').val(),
+            CreatedBy: $('#txtInventoryCreatedBy').val(),
         }
 
         $.ajax({
-            url: '/PurchaseMaster/UpdatePurchaseRequestDetails',
+            url: '/Sales/InsertInventoryDetails',
             type: 'post',
             data: objData,
             datatype: 'json',
             success: function (Result) {
-                siteloaderhide();
                 if (Result.code == 200) {
-                    AllPurchaseRequestListTable();
 
+                    AllPurchaseRequestListTable();
                     toastr.success(Result.message);
-                    ClearPurchaseRequestTextBox();
-                    siteloaderhide();
+                    clearCreatetxtInventoryText();
                 } else {
                     toastr.error(Result.message);
                 }
                 siteloaderhide();
-            },
+            }
         })
     }
     else {
@@ -330,15 +247,15 @@ function UpdatePurchaseRequestDetails() {
     }
 }
 
-function DeletePurchaseRequest(PurchaseId, ItemName, element) {
+function DeleteInventory(InventoryId, ItemName, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
     Swal.fire({
-        title: "Are you sure want to delete this Item?",
-        text: "To confirm, type the Item name below",
+        title: "Are you sure want to delete this Inventory?",
+        text: "To confirm, type the InventoryItem name below",
         input: 'text',
-        inputPlaceholder: 'Enter the Item name to confirm',
+        inputPlaceholder: 'Enter the InventoryItem name to confirm',
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -349,9 +266,9 @@ function DeletePurchaseRequest(PurchaseId, ItemName, element) {
         showCloseButton: true, inputValidator: (value) => {
 
             if (!value) {
-                return 'Please enter the Item name!';
+                return 'Please enter the InventoryItem name!';
             } else if (value !== ItemName) {
-                return 'Item name mismatch! Please enter valid Item Name';
+                return 'InventoryItem name mismatch! Please enter valid InventoryItem Name';
             }
         }
     }).then((result) => {
@@ -373,64 +290,14 @@ function DeletePurchaseRequest(PurchaseId, ItemName, element) {
                 },
                 error: function () {
                     siteloaderhide();
-                    toastr.error("Can't delete Purchaserequest!");
+                    toastr.error("Can't delete Inventory!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
 
             Swal.fire(
                 'Cancelled',
-                'Purchaserequest have no changes.!!😊',
-                'error'
-            );
-        }
-    });
-}
-
-function PurchaseRequestIsApproved(PurchaseId) {
-
-    var isChecked = $('#flexSwitchCheckChecked_' + PurchaseId).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure want to approve this purchaserequest?" : "Are you sure want to unapprove this purchaserequest?";
-
-    Swal.fire({
-        title: confirmationMessage,
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, enter it!",
-        cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-        cancelButtonClass: "btn btn-danger w-xs mt-2",
-        buttonsStyling: false,
-        showCloseButton: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            var formData = new FormData();
-            formData.append("PurchaseId", PurchaseId);
-
-            $.ajax({
-                url: '/PurchaseMaster/PurchaseRequestIsApproved?PurchaseId=' + PurchaseId,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-                success: function (Result) {
-
-
-                    Swal.fire({
-                        title: isChecked ? "Approved!" : "Unapproved!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/PurchaseMaster/PurchaseRequestListView';
-                    });
-                }
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire(
-                'Cancelled',
-                'Purchaserequest have no changes.!!😊',
+                'Inventory have no changes.!!😊',
                 'error'
             );
         }

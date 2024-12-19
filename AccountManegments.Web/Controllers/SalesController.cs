@@ -442,5 +442,74 @@ namespace AccountManegments.Web.Controllers
                 return stringWriter.ToString();
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(InventoryDetails, "Sales/InsertInventoryDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> EditInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditInventoryDetails?Id=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(InventoryDetails, "Sales/UpdateInventoryDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> DeleteInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/DeleteInventoryDetails?Id=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
     }
 }

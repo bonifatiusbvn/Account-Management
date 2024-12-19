@@ -560,5 +560,121 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 throw ex;
             }
         }
+
+        public async Task<ApiResponseModel> InsertInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var InventoryInvoice = new InventoryInward()
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = InventoryDetails.ItemId,
+                    Item = InventoryDetails.ItemName,
+                    UnitTypeId = InventoryDetails.UnitTypeId,
+                    Quantity = InventoryDetails.Quantity,
+                    Date = InventoryDetails.Date,
+                    Details = InventoryDetails.Details,
+                    IsApproved = true,
+                    IsDeleted = false,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = InventoryDetails.CreatedBy,
+                };
+                Context.InventoryInwards.Add(InventoryInvoice);
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Inventory Invoice inserted successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<InventoryInwardView> EditInventoryDetails(Guid InventoryId)
+        {
+            try
+            {
+                var InventoryInvoice = (from a in Context.InventoryInwards.Where(e => e.Id == InventoryId)
+                                        join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                        select new InventoryInwardView
+                                        {
+                                            ItemId = a.ItemId,
+                                            UnitTypeId = a.UnitTypeId,
+                                            Quantity = a.Quantity,
+                                            Date = a.Date,
+                                            Details = a.Details,
+                                            UnitName = b.UnitName,
+                                            Id = a.Id,
+                                        }).FirstOrDefault();
+                return InventoryInvoice;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var InventoryInvoice = Context.InventoryInwards.Where(e => e.Id == InventoryDetails.Id).FirstOrDefault();
+                if (InventoryInvoice == null)
+                {
+                    InventoryInvoice.ItemId = InventoryDetails.ItemId;
+                    InventoryInvoice.Item = InventoryDetails.ItemName;
+                    InventoryInvoice.UnitTypeId = InventoryDetails.UnitTypeId;
+                    InventoryInvoice.Quantity = InventoryDetails.Quantity;
+                    InventoryInvoice.Date = InventoryDetails.Date;
+                    InventoryInvoice.Details = InventoryDetails.Details;
+                    InventoryInvoice.UpdatedOn = DateTime.Now;
+                    InventoryInvoice.UpdatedBy = InventoryDetails.CreatedBy;
+                };
+                Context.InventoryInwards.Update(InventoryInvoice);
+
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Inventory Invoice updated successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error creating invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId)
+        {
+            var response = new ApiResponseModel();
+            try
+            {
+                var InventoryInvoice = Context.InventoryInwards.Where(e => e.Id == InventoryId).FirstOrDefault();
+                if (InventoryInvoice != null)
+                {
+                    InventoryInvoice.IsDeleted = true;
+                    Context.InventoryInwards.Remove(InventoryInvoice);
+                    Context.SaveChanges();
+
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = "Inventory deleted successfully.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in deleting inventory!";
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

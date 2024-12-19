@@ -55,5 +55,25 @@ namespace AccountManagement.Repository.Services.Sales
         {
             return await SaleInvoice.GetInventoryList(searchText, searchBy, sortBy);
         }
+
+        public async Task<ApiResponseModel> InsertInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            return await SaleInvoice.InsertInventoryDetails(InventoryDetails);
+        }
+
+        public async Task<InventoryInwardView> EditInventoryDetails(Guid InventoryId)
+        {
+            return await SaleInvoice.EditInventoryDetails(InventoryId);
+        }
+
+        public async Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            return await SaleInvoice.UpdateInventoryDetails(InventoryDetails);
+        }
+
+        public async Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId)
+        {
+            return await SaleInvoice.DeleteInventoryDetails(InventoryId);
+        }
     }
 }
