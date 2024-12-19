@@ -71,7 +71,7 @@
                                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Invoice No</p>
                                                         <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.SalesInvoiceNo</b></p>
-                                                    </div>                                                 
+                                                    </div>
                                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:0px;width:108%;"></div>
                                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Challan/Document No</p>
@@ -134,7 +134,7 @@
                                                     <th>HSN/SAC</th>
                                                     <th>Quantity</th>
                                                     <th>Rate</th>
-                                                    <th>Per</th>
+                                                    <th>Unit</th>
                                                     <th>Gst</th>
                                                     <th>Amount</th>
                                                 </tr>
@@ -167,10 +167,10 @@
                                                             <span class="fw-medium text-muted" id="txtproductname">@item.ItemDescription</span>
                                                         </td>
                                                         <td class="border" id="txtper">@item.Hsncode</td>
-                                                        <td class="border" id="txtquantity">@item.Quantity @trimmedUnitTypeName</td>
+                                                        <td class="border" id="txtquantity">@item.Quantity </td>
                                                         <td class="border" id="txtHSN">@item.PricePerUnit</td>
                                                         <td class="border" id="txtper">@trimmedUnitTypeName</td>
-                                                        <td class ="border">@item.GstPercentage %</td>
+                                                        <td class="border">@item.GstPercentage %</td>
                                                         <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
                                                     </tr>
                                                     index++;
