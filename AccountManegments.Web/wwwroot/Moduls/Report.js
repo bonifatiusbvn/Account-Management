@@ -361,15 +361,30 @@ var processedInvoices = {}; // Object to track processed invoices per supplier
 var dtcoulms = [
     {
         "data": "supplierInvoiceNo",
-        "name": "InvoiceNo",
+        "name": "supplierInvoiceNo",
         "render": function (data, type, row) {
+
             if (row.invoiceNo === 'Opening Balance' || row.invoiceNo === 'PayOut') {
                 var description = row.description ? ' (' + row.description + ')' : '';
-                return row.invoiceNo + description;
+                if (row.supplierInvoiceNo != null) {
+                    return row.supplierInvoiceNo + description;
+                }
+                else {
+                    return row.invoiceNo + description;
+                }
+
             }
             else {
                 var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
-                return row.invoiceNo + invoiceType;
+                if (row.supplierInvoiceNo != null) {
+
+                    return row.supplierInvoiceNo + invoiceType;
+                }
+                else {
+                    return row.invoiceNo + invoiceType;
+                }
+
+
             }
             return data;
         }
@@ -424,10 +439,10 @@ var dtcoulms = [
                 supplierBalances[supplierName] = 0;
                 processedInvoices[supplierName] = new Set();
             }
-            var uniqueKey = (invoiceNo === "PayOut" || invoiceType === 'Purchase Return' || invoiceType === 'Credit Note') ? invoiceNo + "_" + totalAmount : invoiceNo ;
+            var uniqueKey = (invoiceNo === "PayOut" || invoiceType === 'Purchase Return' || invoiceType === 'Credit Note') ? invoiceNo + "_" + totalAmount : invoiceNo;
 
             if (!processedInvoices[supplierName].has(uniqueKey)) {
-                
+
                 if (invoiceNo === "PayOut" || invoiceType === 'Purchase Return' || invoiceType === 'Credit Note') {
                     supplierBalances[supplierName] -= totalAmount;
                 }
