@@ -470,5 +470,91 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
+        [FormPermissionAttribute("Inventory Inward-Add")]
+        [HttpPost]
+        public async Task<IActionResult> InsertInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(InventoryDetails, "Sales/InsertInventoryDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("Inventory Inward-Edit")]
+        public async Task<IActionResult> EditInventoryDetails(Guid InventoryId)
+        {
+            var Inventory = new InventoryInwardView();
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/EditInventoryDetails?Id=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                Inventory = JsonConvert.DeserializeObject<InventoryInwardView>(response.data.ToString());
+                return Ok(Inventory);
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+
+            try
+            {
+                ApiResponseModel postUser = await APIServices.PostAsync(InventoryDetails, "Sales/UpdateInventoryDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("Inventory Inward-Delete")]
+        public async Task<IActionResult> DeleteInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/DeleteInventoryDetails?InventoryId=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        public async Task<IActionResult> ApproveInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = await APIServices.GetAsync("", "Sales/ApproveInventoryDetails?InventoryId=" + InventoryId);
+
+            if (response.code == 200)
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+            else
+            {
+                return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
     }
 }

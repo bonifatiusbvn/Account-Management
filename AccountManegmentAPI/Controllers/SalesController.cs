@@ -103,7 +103,86 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpPost]
+        [Route("InsertInventoryDetails")]
+        public async Task<IActionResult> InsertInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Inventory = await SaleInvoice.InsertInventoryDetails(InventoryDetails);
+            if (Inventory.code == 200)
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            else
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("EditInventoryDetails")]
+        public async Task<IActionResult> EditInventoryDetails(Guid Id)
+        {
+            var Inventory = await SaleInvoice.EditInventoryDetails(Id);
+            return Ok(new { code = 200, data = Inventory });
+        }
 
+        [HttpPost]
+        [Route("UpdateInventoryDetails")]
+        public async Task<IActionResult> UpdateInventoryDetails(InventoryInwardView InventoryDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Inventory = await SaleInvoice.UpdateInventoryDetails(InventoryDetails);
+            if (Inventory.code == 200)
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            else
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("DeleteInventoryDetails")]
+        public async Task<IActionResult> DeleteInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Inventory = await SaleInvoice.DeleteInventoryDetails(InventoryId);
+            if (Inventory.code == 200)
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            else
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("ApproveInventoryDetails")]
+        public async Task<IActionResult> ApproveInventoryDetails(Guid InventoryId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var Inventory = await SaleInvoice.ApproveInventoryDetails(InventoryId);
+            if (Inventory.code == 200)
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            else
+            {
+                response.code = Inventory.code;
+                response.message = Inventory.message;
+            }
+            return StatusCode(response.code, response);
+        }
         [HttpPost]
         [Route("GetInventoryList")]
         public async Task<IActionResult> GetInventoryList(string? searchText, string? searchBy, string? sortBy)
