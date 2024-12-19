@@ -225,12 +225,15 @@
                                                 else
                                                 {
                                                     <div style="display: inline;">
-                                                        <span>@Index.</span>
-                                                        <span class="text-muted" style="padding-left: 5px;">@Model.ShippingAddress</span>
+                                                        @foreach (var item in Model.AddressList)
+                                                        {
+                                                            <span>@Index.</span>
+                                                            <span class="text-muted" style="padding-left: 5px;">@item.Address - <span style="background-color: yellow;">@item.Quantity</span></span>
+                                                            <br />
+                                                            Index++;
+                                                        }
                                                     </div>
-
                                                 }
-
                                             </td>
                                         </tr>
                                         <tr style="height: 20px;">
@@ -310,11 +313,11 @@
                             <div class="stamp-div">
                                 @if (Model.CompanyName == "DH PATEL")
                                 {
-                                    <img src="~/assets/images/DH_Stamp.jpg" style="width:160px;height:160px" />
+                                    <img src="~/assets/images/DH_Stamp.jpg" style="width:160px;height:160px;" />
                                 }
                                 @if (Model.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
                                 {
-                                    <img src="~/assets/images/D H Infra Stamp.jpeg" style="width:150px" />
+                                    <img src="~/assets/images/D H Infra Stamp.jpeg" style="width:170px" />
                                 }
                             </div>
                         </div>
