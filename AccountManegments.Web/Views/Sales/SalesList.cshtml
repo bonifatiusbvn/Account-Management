@@ -21,7 +21,7 @@
         <form class="position-relative">
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Sales Invoice" && (a.Add == true)))
             {
-                                    <a type="button" class="btn btn-primary fixed-button" href="/Sales/CreateSalesInvoice"><i class="lni lni-circle-plus"></i>Create SalesInvoice</a>
+                <a type="button" class="btn btn-primary fixed-button" href="/Sales/CreateSalesInvoice"><i class="lni lni-circle-plus"></i>Create SalesInvoice</a>
             }
         </form>
     </div>
@@ -75,7 +75,7 @@
                                                         <th>Total Amount</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Sales Invoice" && (a.Edit == true || a.Delete == true)))
                                                         {
-                                                                                <th>Action</th>
+                                                            <th>Action</th>
                                                         }
                                                     </tr>
                                                 </thead>
@@ -261,6 +261,6 @@
 </div>
 
 @section Scripts {
-                        <script src="~/moduls/salesinvoicemasterscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/salesinvoicemasterscript.js" asp-append-version="true"></script>
 }
 
