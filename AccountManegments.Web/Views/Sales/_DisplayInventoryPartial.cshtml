@@ -2,14 +2,12 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @model IEnumerable<AccountManagement.DBContext.Models.ViewModels.SalesMaster.InventoryInwardView>
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @foreach (var item in Model)
 {
 
 
-    <tr id="purchaseRequestCard_@item.Id" class="" onclick="SelectPurchaseRequestDetails('@item.Id', this)">
+    <tr id="InventoryRequestCard_@item.Id" class="" onclick="SelectInventoryRequestDetails('@item.Id', this)">
         <td>@item.ItemName</td>
         <td style="width:100px;">@(item.Date.HasValue ? item.Date.Value.ToString("dd/MM/yyyy") : "")</td>
         <td>@item.UnitName</td>

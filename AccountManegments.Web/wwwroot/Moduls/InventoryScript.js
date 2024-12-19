@@ -443,7 +443,7 @@ $(document).ready(function () {
 
 InventoryTable();
 function InventoryTable() {
-    debugger
+
     var searchText = $('#txtInventoryRequestSearch').val();
     var searchBy = $('#InventoryRequestSearchBy').val();
 
@@ -503,5 +503,9 @@ function EditInventoryRequestDetails() {
 }
 
 function DeleteInventoryRequest() {
+
+}
+
+function SelectInventoryRequestDetails() {
 
 }
