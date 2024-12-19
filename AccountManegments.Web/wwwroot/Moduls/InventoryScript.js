@@ -440,3 +440,68 @@ $(document).ready(function () {
     fn_autoselect('#txtInventoryUnitType', '/ItemMaster/GetAllUnitType', '#txtInventoryUnitTypeHidden');
     fn_autoselect('#searchInventoryItemnameInput', '/ItemMaster/GetItemNameList', '#txtInventoryItemName');
 });
+
+InventoryTable();
+function InventoryTable() {
+    debugger
+    var searchText = $('#txtInventoryRequestSearch').val();
+    var searchBy = $('#InventoryRequestSearchBy').val();
+
+    $.get("/Sales/InventoryListAction", { searchBy: searchBy, searchText: searchText })
+        .done(function (result) {
+
+            $("#Inventorybody").html(result);
+        })
+
+}
+
+function filterInventoryRequestTable() {
+    siteloadershow();
+    var searchText = $('#txtInventoryRequestSearch').val();
+    var searchBy = $('#InventoryRequestSearchBy').val();
+
+    $.ajax({
+        url: '/Sales/InventoryListAction',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+            searchBy: searchBy
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#Inventorybody").html(result);
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.error(xhr.responseText);
+        }
+    });
+}
+
+function sortInventoryRequestTable() {
+    siteloadershow();
+    var sortBy = $('#InventoryRequestSortBy').val();
+    $.ajax({
+        url: '/Sales/InventoryListAction',
+        type: 'GET',
+        data: {
+            sortBy: sortBy
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#Inventorybody").html(result);
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+
+        }
+    });
+}
+
+function EditInventoryRequestDetails() {
+
+}
+
+function DeleteInventoryRequest() {
+
+}

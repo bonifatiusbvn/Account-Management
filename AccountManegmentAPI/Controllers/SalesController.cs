@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
 using Microsoft.AspNetCore.Authorization;
@@ -101,6 +102,14 @@ namespace AccountManagement.API.Controllers
                 response.message = "There Is Some Problem In Your Request!";
             }
             return StatusCode(response.code, response);
+        }
+
+        [HttpPost]
+        [Route("GetInventoryList")]
+        public async Task<IActionResult> GetInventoryList(string? searchText, string? searchBy, string? sortBy)
+        {
+            IEnumerable<InventoryInwardView> InventoryList = await SaleInvoice.GetInventoryList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = InventoryList.ToList() });
         }
     }
 }
