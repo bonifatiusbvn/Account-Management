@@ -450,8 +450,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
-
                 string apiUrl = $"Sales/GetInventoryList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
