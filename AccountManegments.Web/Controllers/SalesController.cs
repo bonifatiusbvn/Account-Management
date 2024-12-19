@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -440,6 +441,35 @@ namespace AccountManegments.Web.Controllers
                 );
                 await viewResult.View.RenderAsync(viewContext);
                 return stringWriter.ToString();
+            }
+        }
+
+
+        [FormPermissionAttribute("Inventory Inward-View")]
+        public async Task<IActionResult> InventoryListAction(string searchText, string searchBy, string sortBy, Guid? SiteId)
+        {
+            try
+            {
+
+
+                string apiUrl = $"Sales/GetInventoryList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+
+                if (res.code == 200)
+                {
+                    List<InventoryInwardView> GetInventoryList = JsonConvert.DeserializeObject<List<InventoryInwardView>>(res.data.ToString());
+
+                    return PartialView("~/Views/Sales/_DisplayInventoryPartial.cshtml", GetInventoryList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve Purchase Request list." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 

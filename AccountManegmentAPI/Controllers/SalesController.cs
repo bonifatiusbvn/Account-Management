@@ -165,5 +165,13 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
+        [HttpPost]
+        [Route("GetInventoryList")]
+        public async Task<IActionResult> GetInventoryList(string? searchText, string? searchBy, string? sortBy)
+        {
+            IEnumerable<InventoryInwardView> InventoryList = await SaleInvoice.GetInventoryList(searchText, searchBy, sortBy);
+            return Ok(new { code = 200, data = InventoryList.ToList() });
+        }
     }
 }
