@@ -49,8 +49,11 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                         Pincode = AddCompany.Pincode,
                         CreatedBy = AddCompany.CreatedBy,
                         InvoicePef = AddCompany.InvoicePef,
+                        AccountNo = AddCompany.AccountNo,
+                        BankBranch = AddCompany.BankBranch,
+                        BankName = AddCompany.BankName,
+                        Iffccode = AddCompany.Iffccode,
                         IsDelete = false,
-
                     };
                     response.code = (int)HttpStatusCode.OK;
                     response.message = "Company successfully created.";
@@ -230,7 +233,11 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                                CreatedBy = a.CreatedBy,
                                CreatedOn = a.CreatedOn,
                                InvoicePef = a.InvoicePef,
-                               FullAddress = a.Address + "-" + a.Area + "," + b.CityName + "," + c.StatesName + "-" + a.Pincode
+                               FullAddress = a.Address + "-" + a.Area + "," + b.CityName + "," + c.StatesName + "-" + a.Pincode,
+                               AccountNo = a.AccountNo,
+                               BankName = a.BankName,
+                               BankBranch = a.BankBranch,
+                               Iffccode = a.Iffccode,
                            }).First();
                 return company;
             }
@@ -259,6 +266,10 @@ namespace AccountManagement.Repository.Repository.CompanyRepository
                     company.Country = UpdateCompany.Country;
                     company.Pincode = UpdateCompany.Pincode;
                     company.InvoicePef = UpdateCompany.InvoicePef;
+                    company.BankBranch = UpdateCompany.BankBranch;
+                    company.BankName = UpdateCompany.BankName;
+                    company.Iffccode = UpdateCompany.Iffccode;
+                    company.AccountNo = UpdateCompany.AccountNo;
                 }
                 Context.Companies.Update(company);
                 Context.SaveChanges();

@@ -72,6 +72,10 @@ function AddCompany() {
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
             InvoicePef: $('#txtInvoicePrefix').val(),
+            BankName: $('#txtCompanyBank').val(),
+            AccountNo: $('#txtCompanyAccount').val(),
+            Iffccode: $('#txtCompanyIFFC').val(),
+            BankBranch: $('#txtCompanyBranch').val(),
         }
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {
             siteloaderhide();
@@ -156,7 +160,10 @@ function GetCompnaytById(CompanyId) {
             $('#txtCountry').val(response.countryId);
             $('#txtPincode').val(response.pincode);
             $("#txtInvoicePrefix").val(response.invoicePef),
-
+                $("#txtCompanyBank").val(response.bankName),
+                $("#txtCompanyAccount").val(response.accountNo),
+                $("#txtCompanyIFFC").val(response.iffccode),
+                $("#txtCompanyBranch").val(response.bankBranch),
                 setTimeout(function () { $('#ddlCity').val(response.cityId); }, 100)
 
             var button = document.getElementById("btncompany");
@@ -198,6 +205,10 @@ function SelectCompanyDetails(CompanyId, element) {
                 $('#dspCountry').val(response.countryName);
                 $('#dspPincode').val(response.pincode);
                 $('#dspInvoicePrefix').val(response.invoicePef);
+                $("#dspCompanyBankName").val(response.bankName),
+                    $("#dspCompanyAccountNo").val(response.accountNo),
+                    $("#dspCompanyIffccode").val(response.iffccode),
+                    $("#dspCompanyBankBranch").val(response.bankBranch)
             } else {
                 siteloaderhide();
                 toastr.error('Empty response received.');
@@ -224,6 +235,10 @@ function UpdateCompany() {
             Country: $('#ddlCountry').val(),
             Pincode: $('#txtPincode').val(),
             InvoicePef: $("#txtInvoicePrefix").val(),
+            BankName: $('#txtCompanyBank').val(),
+            AccountNo: $('#txtCompanyAccount').val(),
+            Iffccode: $('#txtCompanyIFFC').val(),
+            BankBranch: $('#txtCompanyBranch').val(),
         }
 
         if (objData.CityId == "--Select City--" || objData.StateId == "--Select State--") {

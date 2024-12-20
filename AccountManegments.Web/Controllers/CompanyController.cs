@@ -83,6 +83,10 @@ namespace AccountManegments.Web.Controllers
                     Pincode = AddCompany.Pincode,
                     CreatedBy = _userSession.UserId,
                     InvoicePef = AddCompany.InvoicePef,
+                    BankName = AddCompany.BankName,
+                    BankBranch = AddCompany.BankBranch,
+                    Iffccode = AddCompany.Iffccode,
+                    AccountNo = AddCompany.AccountNo,
                 };
 
                 ApiResponseModel response = await APIServices.PostAsync(company, "Company/AddCompany");

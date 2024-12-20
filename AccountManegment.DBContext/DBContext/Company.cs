@@ -27,6 +27,14 @@ public partial class Company
 
     public string Pincode { get; set; } = null!;
 
+    public string? BankName { get; set; }
+
+    public string? BankBranch { get; set; }
+
+    public string? AccountNo { get; set; }
+
+    public string? Iffccode { get; set; }
+
     public bool? IsDelete { get; set; }
 
     public Guid CreatedBy { get; set; }

@@ -63,8 +63,7 @@ public partial class DbaccManegmentContext : DbContext
 
     public virtual DbSet<UserwiseFormPermission> UserwiseFormPermissions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -88,13 +87,19 @@ public partial class DbaccManegmentContext : DbContext
             entity.ToTable("Company");
 
             entity.Property(e => e.CompanyId).ValueGeneratedNever();
+            entity.Property(e => e.AccountNo).HasMaxLength(25);
             entity.Property(e => e.Address).HasMaxLength(100);
             entity.Property(e => e.Area).HasMaxLength(100);
+            entity.Property(e => e.BankBranch).HasMaxLength(100);
+            entity.Property(e => e.BankName).HasMaxLength(100);
             entity.Property(e => e.CompanyName).HasMaxLength(200);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Gstno)
                 .HasMaxLength(17)
                 .HasColumnName("GSTNo");
+            entity.Property(e => e.Iffccode)
+                .HasMaxLength(15)
+                .HasColumnName("IFFCCode");
             entity.Property(e => e.InvoicePef).HasMaxLength(6);
             entity.Property(e => e.PanNo).HasMaxLength(10);
             entity.Property(e => e.Pincode).HasMaxLength(10);
