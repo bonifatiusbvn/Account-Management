@@ -214,7 +214,7 @@
                                     <th>HSN/SAC</th>
                                     <th>Quantity</th>
                                     <th>Rate</th>
-                                    <th>per</th>
+                                    <th>Unit</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
@@ -246,7 +246,7 @@
                                             <span class="fw-medium text-muted" id="txtproductname">@item.ItemDescription</span>
                                         </td>
                                         <td id="txtper">@item.Hsncode</td>
-                                        <td id="txtquantity">@item.Quantity @trimmedUnitTypeName</td>
+                                        <td id="txtquantity">@item.Quantity</td>
                                         <td id="txtHSN">@item.PricePerUnit</td>
                                         <td id="txtper">@trimmedUnitTypeName</td>
                                         <td id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
@@ -296,7 +296,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>₹@Model.Tds</b></td>
+                                    <td><b>₹@(Model.Tds?.ToString("0.00") ?? "0.00")</b></td>
                                 </tr>
                                 <tr>
                                     <td></td>

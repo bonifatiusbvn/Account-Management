@@ -458,6 +458,9 @@ namespace AccountManegments.Web.Controllers
                     var number = order.TotalAmount;
                     var totalAmountInWords = NumberToWords(number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = order.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
                 return View(order);
             }
@@ -860,6 +863,9 @@ namespace AccountManegments.Web.Controllers
                     var number = order.TotalAmount;
                     var totalAmountInWords = NumberToWords(number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = order.TotalGstamount;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
                 return View(order);
             }

@@ -168,6 +168,7 @@
                                                 <th class="border" style="color:white;">Product Details</th>
                                                 <th class="border" style="color:white;">Quantity</th>
                                                 <th class="border" style="color:white;">Rate</th>
+                                                <th class="border" style="color:white;">Unit</th>
                                                 <th class="border" style="color:white;">GST</th>
                                                 <th class="border" style="color:white;">Amount</th>
                                             </tr>
@@ -189,6 +190,7 @@
                                                 TotalQty += item.Quantity;
                                                 cgst = firstItem.TotalGstamount / 2;
                                                 sgst = firstItem.TotalGstamount / 2;
+                                                var trimmedUnitTypeName = item.UnitTypeName.Split('-').First().Trim();
 
                                                 <tr>
                                                     <td class="border">@index</td>
@@ -198,6 +200,7 @@
                                                     </td>
                                                     <td class="border" id="txtper">@item.Quantity</td>
                                                     <td class="border" id="txtHSN">@item.PricePerUnit</td>
+                                                    <td class="border" id="txtHSN">@trimmedUnitTypeName</td>
                                                     <td class="border" id="txtper">@item.GstPercentage</td>
                                                     <td class="border" id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
                                                 </tr>
@@ -207,6 +210,7 @@
                                                 <td class="border"></td>
                                                 <td class="border" style="text-align: end;">CGST</td>
                                                 <td class="border"></td>
+                                                <td class="border"></td>
                                                 <td class="border" style="text-align: end;"></td>
                                                 <td class="border" style="text-align: start;"></td>
                                                 <td class="border"><b>₹@($"{cgst:F2}")</b></td>
@@ -214,6 +218,7 @@
                                             <tr>
                                                 <td class="border"></td>
                                                 <td class="border" style="text-align: end;">SGST</td>
+                                                <td class="border"></td>
                                                 <td class="border"></td>
                                                 <td class="border" style="text-align: end;"></td>
                                                 <td class="border" style="text-align: start;"></td>
@@ -225,14 +230,79 @@
                                                 <td class="border">@TotalQty</td>
                                                 <td class="border"></td>
                                                 <td class="border"></td>
+                                                <td class="border"></td>
                                                 <td class="border"><b>₹@firstItem.TotalAmount</b></td>
                                             </tr>
                                         </tbody>
                                     </table><!--end table-->
-
-                                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray; margin: 0;">
-                                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 870px;">E. &amp; O.E</i></span><br />
+                                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">
+                                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 905px" ;>E. &amp; O.E</i></span><br />
                                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
+                                    </div>
+                                    @{
+                                        var groupedItems = Model.ItemList
+                                        .GroupBy(item => new { StateTaxPer = item.GstPercentage / 2, CenteralTaxPer = item.GstPercentage / 2 })
+                                        .Select(group => new
+                                        {
+                                            Hsncode = group.First().Hsncode,
+                                            TaxableValue = group.Sum(item => item.Quantity * item.PricePerUnit),
+                                            StateTaxPer = group.Key.StateTaxPer,
+                                            StateTax = Math.Round(group.Sum(item => item.Quantity * item.PricePerUnit * group.Key.StateTaxPer / 100).GetValueOrDefault(), 2),
+                                            CenteralTaxPer = group.Key.CenteralTaxPer,
+                                            CenteralTax = Math.Round(group.Sum(item => item.Quantity * item.PricePerUnit * group.Key.CenteralTaxPer / 100).GetValueOrDefault(), 2),
+                                            GstAmount = group.Sum(item => item.Gstamount ?? 0)
+                                        }).ToList();
+
+                                        decimal? taxTotal = groupedItems.Sum(item => item.TaxableValue);
+                                        decimal? TotalCenteralTax = groupedItems.Sum(item => item.CenteralTax);
+                                        decimal? TotalStateTax = groupedItems.Sum(item => item.StateTax);
+                                        decimal? TotalGSTAmount = TotalCenteralTax + TotalStateTax;
+                                    }
+
+                                    <table class="table text-center align-middle invoice-table" style="border: 1px solid lightgray;">
+                                        <thead class="btn-primary">
+                                            <tr class="table-active" style="color:white;">
+                                                <th rowspan="2">HSN/SAC</th>
+                                                <th rowspan="2">Taxable<br /> Value</th>
+                                                <th colspan="2">Central Tax</th>
+                                                <th colspan="2">State Tax</th>
+                                                <th rowspan="2">Total<br /> Tax Amount</th>
+                                            </tr>
+                                            <tr class="table-active" style="color:white;">
+                                                <th>Rate</th>
+                                                <th>Amount</th>
+                                                <th>Rate</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in groupedItems)
+                                            {
+                                                <tr>
+                                                    <td class="border">@item.Hsncode</td>
+                                                    <td class="border">₹@item.TaxableValue.ToString("0.00")</td>
+                                                    <td class="border">@item.CenteralTaxPer%</td>
+                                                    <td class="border">₹@item.CenteralTax.ToString("0.00")</td>
+                                                    <td class="border">@item.StateTaxPer%</td>
+                                                    <td class="border">₹@item.StateTax.ToString("0.00")</td>
+                                                    <td class="border"><b>₹@TotalGSTAmount?.ToString("0.00")</b></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="text-end border">Total</td>
+                                                <td class="border"><b>₹@taxTotal?.ToString("0.00")</b></td>
+                                                <td class="border"></td>
+                                                <td class="border"><b>₹@TotalCenteralTax?.ToString("0.00")</b></td>
+                                                <td class="border"></td>
+                                                <td class="border"><b>₹@TotalStateTax?.ToString("0.00")</b></td>
+                                                <td class="border"><b>₹@TotalGSTAmount?.ToString("0.00")</b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--end table-->
+                                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray; margin: 0;">
+                                        <span class="text-muted">Tax Amount (in words) :<i style="margin-left: 870px;">E. &amp; O.E</i></span><br />
+                                        <p class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></p>
 
                                         <div class="row d-flex" style="position: relative;">
                                             <div class="col-6">
