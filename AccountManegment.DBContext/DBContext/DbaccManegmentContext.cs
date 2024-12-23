@@ -286,6 +286,7 @@ public partial class DbaccManegmentContext : DbContext
             entity.Property(e => e.Gstper)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTPer");
+            entity.Property(e => e.ItemDescription).HasMaxLength(100);
             entity.Property(e => e.ItemName).HasMaxLength(50);
             entity.Property(e => e.ItemTotal).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.PorefId).HasColumnName("PORefId");

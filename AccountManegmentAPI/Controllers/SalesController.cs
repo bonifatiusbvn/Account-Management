@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
@@ -189,6 +190,13 @@ namespace AccountManagement.API.Controllers
         {
             IEnumerable<InventoryInwardView> InventoryList = await SaleInvoice.GetInventoryList(searchText, searchBy, sortBy);
             return Ok(new { code = 200, data = InventoryList.ToList() });
+        }
+        [HttpPost]
+        [Route("SalesInvoiceReport")]
+        public async Task<IActionResult> SalesInvoiceReport(DataTableRequstModel SalesReport)
+        {
+            var Report = await SaleInvoice.SalesInvoiceReport(SalesReport);
+            return Ok(new { code = 200, data = Report });
         }
     }
 }

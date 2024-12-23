@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.DataTableParameters;
 
 namespace AccountManagement.Repository.Interface.Repository.Sales
 {
@@ -25,5 +26,6 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
         Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails);
         Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId);
         Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId);
+        Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport);
     }
 }

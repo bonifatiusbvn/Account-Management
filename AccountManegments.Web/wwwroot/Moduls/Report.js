@@ -25,7 +25,6 @@ function GetAllSiteList() {
     });
 }
 function GetAllCompanyList() {
-
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
@@ -35,9 +34,10 @@ function GetAllCompanyList() {
 
                 $dropdown.append('<option selected value="" disabled>Select Company</option>');
 
-
                 $.each(result, function (i, data) {
-                    $dropdown.append('<option value="' + data.companyId + '">' + data.companyName + '</option>');
+                    $dropdown.append(
+                        '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' + data.companyName + '</option>'
+                    );
                 });
             }
         },
@@ -157,13 +157,9 @@ $(document).ready(function () {
 
 
 
-$(document).ready(function () {
-
-    $("#textReportCompanyName").on('change', function () {
-
-        var selectedOption = $(this).find('option:selected');
-        selectedCompanyName = selectedOption.data('company-name');
-    });
+$("#textReportCompanyName").on('change', function () {
+    var selectedOption = $(this).find('option:selected');
+    selectedCompanyName = selectedOption.data('company-name');
 });
 
 function ExportToPDF() {

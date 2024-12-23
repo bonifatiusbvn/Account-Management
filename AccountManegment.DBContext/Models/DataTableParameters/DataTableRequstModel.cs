@@ -43,8 +43,7 @@ namespace AccountManagement.DBContext.Models.DataTableParameters
         public dynamic data { get; set; }
         public dynamic? TotalCredit { get; set; }
         public dynamic? TotalDebit { get; set; }
-
-
+        public dynamic? TotalAmount { get; set; }
     }
 
 }

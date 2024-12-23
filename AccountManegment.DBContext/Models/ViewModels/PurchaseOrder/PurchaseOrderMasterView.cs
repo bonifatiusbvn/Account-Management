@@ -73,7 +73,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
     {
         public string? ItemName { get; set; }
         public Guid ItemId { get; set; }
-
+        public string? ItemDescription { get; set; }
         public int UnitTypeId { get; set; }
         public string? Hsncode { get; set; }
         public decimal Quantity { get; set; }

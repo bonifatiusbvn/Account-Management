@@ -238,6 +238,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                      {
                                                          ItemName = i.ItemName,
                                                          ItemId = a.ItemId,
+                                                         ItemDescription = a.ItemDescription,
                                                          Quantity = a.Quantity,
                                                          ItemAmount = a.ItemTotal,
                                                          Gstamount = a.Gst,
@@ -656,6 +657,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         PorefId = PurchaseOrder.Id,
                         ItemId = item.ItemId,
                         ItemName = item.ItemName,
+                        ItemDescription = item.ItemDescription,
                         ItemTotal = item.ItemTotal,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -747,6 +749,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         PorefId = PurchaseOrder.Id,
                         ItemId = item.ItemId,
                         ItemName = item.ItemName,
+                        ItemDescription = item.ItemDescription,
                         ItemTotal = item.ItemTotal,
                         UnitTypeId = item.UnitTypeId,
                         Quantity = item.Quantity,
@@ -934,6 +937,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                                      {
                                                          ItemName = i.ItemName,
                                                          ItemId = a.ItemId,
+                                                         ItemDescription = a.ItemDescription,
                                                          Quantity = a.Quantity,
                                                          ItemAmount = a.ItemTotal,
                                                          Gstamount = a.Gst,

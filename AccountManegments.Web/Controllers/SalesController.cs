@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
+using AccountManagement.DBContext.Models.DataTableParameters;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -554,6 +555,69 @@ namespace AccountManegments.Web.Controllers
             else
             {
                 return Ok(new { Code = response.code, Message = response.message });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SalesInvoiceReport(SalesInvoiceReportModel SalesReport)
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                var sortColumn = Request.Form[$"columns[{sortColumnIndex}][data]"].FirstOrDefault();
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir,
+                    filterType = SalesReport.filterType,
+                    SupplierId = SalesReport.SupplierId,
+                    CompanyId = SalesReport.CompanyId,
+                    SelectedYear = SalesReport.SelectedYear,
+                    startDate = SalesReport.startDate,
+                    endDate = SalesReport.endDate,
+                    SupplierName = SalesReport.SupplierName,
+                    CompanyName = SalesReport.CompanyName,
+                    TillMonth = SalesReport.TillMonth,
+                };
+                List<SalesInvoiceMasterModel> SalesDetails = new List<SalesInvoiceMasterModel>();
+                var jsonData = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Sales/SalesInvoiceReport");
+                if (response.code == 200)
+                {
+                    jsonData = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    SalesDetails = JsonConvert.DeserializeObject<List<SalesInvoiceMasterModel>>(jsonData.data.ToString());
+
+                    var result = new
+                    {
+                        draw = jsonData.draw,
+                        recordsFiltered = jsonData.recordsFiltered,
+                        recordsTotal = jsonData.recordsTotal,
+                        data = SalesDetails,
+                        TotalAmount = jsonData.TotalAmount,
+                    };
+                    return new JsonResult(result);
+                }
+                else
+                {
+                    return BadRequest(new { message = "Failed to retrieve data from the API." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

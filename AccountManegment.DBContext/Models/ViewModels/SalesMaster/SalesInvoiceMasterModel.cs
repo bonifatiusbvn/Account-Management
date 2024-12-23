@@ -133,5 +133,17 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public IEnumerable<SalesInvoiceMasterModel>? SalesInvoiceList { get; set; }
         public IDictionary<Guid, IEnumerable<SalesInvoiceDetailsModel>>? SalesInvoiceItemList { get; set; }
     }
-
+    public class SalesInvoiceReportModel
+    {
+        public Guid? SupplierId { get; set; }
+        public Guid? CompanyId { get; set; }
+        public string? filterType { get; set; }
+        public DateTime? TillMonth { get; set; }
+        public DateTime? startDate { get; set; }
+        public DateTime? endDate { get; set; }
+        public string? SelectedYear { get; set; }
+        public string? sortBy { get; set; }
+        public string? SupplierName { get; set; }
+        public string? CompanyName { get; set; }
+    }
 }

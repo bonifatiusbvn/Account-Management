@@ -89,7 +89,7 @@ function GetCompanyDetail(that, selectedCompanyId) {
 
                 $.each(result, function (i, data) {
                     var isSelected = data.companyId === selectedCompanyId ? 'selected' : '';
-                    $dropdown.append('<option value="' + data.companyId + '" ' + isSelected + '>' + data.companyName + '</option>');
+                    $dropdown.append('<option value="' + data.companyId + '" ' + isSelected + ' data-company-name="' + data.companyName + '">' + data.companyName + '</option>');
                 });
 
                 if (selectedCompanyId) {

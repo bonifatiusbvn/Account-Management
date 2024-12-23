@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AccountManagement.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 
 namespace AccountManagement.Repository.Services.Sales
 {
@@ -79,6 +80,11 @@ namespace AccountManagement.Repository.Services.Sales
         public async Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId)
         {
             return await SaleInvoice.ApproveInventoryDetails(InventoryId);
+        }
+
+        public async Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport)
+        {
+            return await SaleInvoice.SalesInvoiceReport(SalesReport);
         }
     }
 }

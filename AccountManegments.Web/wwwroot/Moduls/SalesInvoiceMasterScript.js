@@ -885,3 +885,233 @@ function SalesInvoicesortTable() {
 
     });
 }
+
+
+//-------------- Sales Report---------------//
+
+var SalesCompanyCount = window._SalesCompanyCount || 0;
+if (SalesCompanyCount === 0) {
+    $(document).ready(function () {
+        GetCompanyDetail('textSalesReportCompanyName');
+    });
+}
+SalesReportSupplierList();
+function SalesReportSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+
+            $("#textSalesReportSupplierName").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textSalesReportSupplierName").val(ui.item.label);
+                    $("#textSalesReportSupplierNameHidden").val(ui.item.value);
+                    $("#textSalesReportSupplierNameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+
+var selectedSalesCompanyId = null;
+var selectedSalesSupplierId = null;
+var selectedSalesendDate = null;
+var selectedSalesfilterType = null;
+var selectedSalesYears = null;
+var selectedSalesSortOrder = "DescendingDate";
+var parsedSalesSiteId = null;
+var selectedSalesCompanyName = null;
+var selectedSalesSupplierName = null;
+let currentSalesReportSortOrder = 'AscendingDate';
+
+$(document).ready(function () {
+    function clearSalesReportDates() {
+        $('#SalesstartDate').val('');
+        $('#SalesendDate').val('');
+    }
+    function setTodaysSalesReportDate() {
+        var today = new Date();
+        var formattedDate = today.toISOString().substr(0, 10);
+        $('#SalesstartDate').val(formattedDate);
+        $('#SalesendDate').val(formattedDate);
+    }
+    $('#timePeriodSalesDropdown').change(function () {
+        var selectedSalesValue = $(this).val();
+
+        if (selectedSalesValue === 'This Month' || selectedSalesValue === 'This Year') {
+            $('#SalesendDate, #SalesyearDropdown,#SalesstartDate').hide();
+        } else if (selectedSalesValue === 'Between Date') {
+            $('#SalesstartDate,#SalesendDate, #searchSalesReportButton').show();
+            $('#SalesyearDropdown').hide();
+            clearSalesReportDates();
+            setTodaysSalesReportDate();
+        } else if (selectedSalesValue === 'Between Year') {
+            $('#SalesyearDropdown, #searchSalesReportButton').show();
+            $('#SalesstartDate,#SalesendDate').hide();
+            populateSalesReportYearDropdown();
+        }
+    });
+    $("#textSalesReportCompanyName").on('change', function () {
+        var selectedSalesCompanyOption = $(this).find('option:selected');
+        selectedSalesCompanyName = selectedSalesCompanyOption.data('salescompany-name');
+    });
+});
+function populateSalesReportYearDropdown() {
+    var currentYear = new Date().getFullYear();
+    var startYear = 2023;
+    var yearDropdown = $('#SalesyearDropdown');
+
+    yearDropdown.empty().append('<option value="">Select Year</option>');
+
+    for (var year = startYear; year <= currentYear; year++) {
+        var nextYear = (year + 1).toString().slice(-2);
+        var yearRange = year + '-' + nextYear;
+        yearDropdown.append('<option value="' + yearRange + '">' + yearRange + '</option>');
+    }
+}
+function fn_ResetAllSalesDropdown() {
+    window.location = '/Sales/SalesReport';
+}
+var Salesdtcoulms = [
+    {
+        "data": "companyName",
+        "name": "CompanyName",
+        "orderable": true,
+        "render": function (data, type, row) {
+            return row.companyName;
+        }
+    },
+    {
+        "data": "supplierName",
+        "name": "SupplierName",
+        "orderable": true,
+        "render": function (data, type, row) {
+            return row.supplierName;
+        }
+    },
+    {
+        "data": "netAmount",
+        "name": "NetAmount",
+        "orderable": true,
+        "render": function (data, type, row) {
+            var netAmount = row.totalAmount;
+            return '<span>' + '₹' + netAmount.toFixed(2) + '</span>';
+        }
+    }
+];
+$(document).ready(function () {
+    var Salestable;
+    $('#searchSalesReportButton').click(function () {
+
+        if ($.fn.DataTable.isDataTable('#tblSalesReport')) {
+            Salestable.destroy();
+        }
+        Salestable = $('#tblSalesReport').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: false,
+            paging: false,
+            order: [],
+            ajax: {
+                url: '/Sales/SalesInvoiceReport',
+                type: 'POST',
+                data: function (d) {
+                    d.draw = d.draw;
+                    d.start = d.start;
+                    d.length = d.length;
+                    d.order = d.order;
+                    d.columns = d.columns;
+                    d.CompanyId = $('#textSalesReportCompanyName').val() || null;
+                    d.SupplierId = $('#textSalesReportSupplierNameHidden').val() || null;
+
+                    var selectedSalesValue = $('#timePeriodSalesDropdown').val();
+                    switch (selectedSalesValue) {
+                        case 'This Month':
+                            d.filterType = "currentMonth";
+                            break;
+                        case 'This Year':
+                            d.filterType = "currentYear";
+                            break;
+                        case 'Between Date':
+                            d.filterType = "dateRange";
+                            d.startDate = $('#SalesstartDate').val();
+                            d.endDate = $('#SalesendDate').val();
+                            break;
+                        case 'Between Year':
+                            d.filterType = "betweenYear";
+                            d.SelectedYear = $('#SalesyearDropdown').val();
+                            break;
+                        default:
+                            d.filterType = null;
+                            break;
+                    }
+                }
+            },
+            columns: Salesdtcoulms,
+            scrollX: true,
+            scrollY: '350px',
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: false
+            },
+            autoWidth: false,
+            drawCallback: function (settings) {
+                var api = this.api();
+
+                var TotalAmount = settings.json.totalAmount || 0;
+
+                var formattedNetAmount = formatNumberWithCommas(TotalAmount.toFixed(2));
+
+                $(api.table().footer()).find('#SalesNetAmount').html('<span>' + '₹' + formattedNetAmount + '</span>');
+
+
+                $(this.api().table().container()).find('.current paginate button').removeClass('paginate_button').addClass('btn btn-outline-primary');
+                $(this.api().table().container()).find('.paginate_button current').removeClass('btn-outline-primary').addClass('btn btn-primary');
+
+                var scrollContainer = $('.dataTables_scrollBody');
+                var lastRow = $(this.api().table().body()).find('tr:last');
+
+                if (lastRow.length && scrollContainer.length) {
+                    var offsetTop = lastRow.offset().top - scrollContainer.offset().top + scrollContainer.scrollTop();
+                    scrollContainer.animate({ scrollTop: offsetTop }, 10);
+                }
+            },
+            columnDefs: [{
+                defaultContent: "",
+                targets: "_all",
+                width: 'auto'
+            }]
+        });
+    });
+});
+function formatNumberWithCommas(x) {
+    var parts = x.toString().split(".");
+    var integerPart = parts[0];
+    var decimalPart = parts.length > 1 ? "." + parts[1] : "";
+
+    var lastThree = integerPart.substring(integerPart.length - 3);
+    var otherNumbers = integerPart.substring(0, integerPart.length - 3);
+
+    if (otherNumbers != '')
+        lastThree = ',' + lastThree;
+
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
+}

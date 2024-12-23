@@ -943,6 +943,7 @@ function InsertMultiplePurchaseOrderDetails() {
 
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
+                    ItemDescription: orderRow.find("#txtPOProductDes").val(),
                     UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     Quantity: itemQuantity,
                     TotalPrice: orderRow.find("#txtproductamount").val(),
@@ -1443,6 +1444,7 @@ function UpdateMultiplePurchaseOrderDetails() {
                 var objData = {
                     ItemName: orderRow.find("#txtItemName").text(),
                     ItemId: orderRow.find("#txtItemId").val(),
+                    ItemDescription: orderRow.find("#txtPOProductDes").val(),
                     UnitTypeId: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
                     Quantity: itemQuantity,
                     TotalPrice: orderRow.find("#txtproductamount").val(),
@@ -2343,5 +2345,17 @@ function POActiveDecative(Id) {
     });
 }
 
+function fn_AddPOProductDescription(element) {
+    var itemId = $(element).data('item-id');
 
+    var $productDesBtn = $(`div[data-item-id='${itemId}']#POProductDesBtn`);
+    var $productDesText = $(`div[data-item-id='${itemId}']#POProductDesText`);
+
+    if ($productDesText.is(':visible')) {
+        $productDesText.find('input').val('');
+    }
+
+    $productDesBtn.toggle();
+    $productDesText.toggle();
+}
 

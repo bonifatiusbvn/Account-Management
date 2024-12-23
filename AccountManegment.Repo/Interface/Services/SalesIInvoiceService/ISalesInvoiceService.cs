@@ -1,4 +1,5 @@
 ﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,6 @@ namespace AccountManagement.Repository.Interface.Services.SalesIInvoiceService
         Task<ApiResponseModel> UpdateInventoryDetails(InventoryInwardView InventoryDetails);
         Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId);
         Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId);
+        Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport);
     }
 }

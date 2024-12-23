@@ -222,7 +222,7 @@ function fn_ResetAllPayoutDropdown() {
 $(document).ready(function () {
     $("#textPayoutReportCompanyName").on('change', function () {
         var selectedPayoutCompanyOption = $(this).find('option:selected');
-        selectedPayoutCompanyName = selectedPayoutCompanyOption.data('payoutcompany-name');
+        selectedPayoutCompanyName = selectedPayoutCompanyOption.data('company-name');
     });
     $("#textPayoutReportSiteName").on('change', function () {
         var selectedPayoutSiteOption = $(this).find('option:selected');
@@ -247,7 +247,7 @@ function ExportNetReportToPDF() {
         SupplierId: selectedSupplierId || null,
         GroupName: selectedGroupName || null,
         sortBy: selectedSortOrder,
-        CompanyName: selectedCompanyName || null,
+        CompanyName: selectedPayoutCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
         startDate: null,
@@ -255,7 +255,7 @@ function ExportNetReportToPDF() {
         SelectedYear: null,
         SiteName: selectedPayoutSiteName || null,
     };
-
+    
     switch (selectedValue) {
         case 'This Month':
             PayOutReport.filterType = "currentMonth";
@@ -280,7 +280,7 @@ function ExportNetReportToPDF() {
             selectedValue = null;
             break;
     }
-
+    
     $.ajax({
         url: '/Report/ExportNetReportToPDF',
         type: 'POST',
@@ -348,7 +348,7 @@ function ExportNetReportToExcel() {
         SupplierId: selectedSupplierId || null,
         GroupName: selectedGroupName || null,
         sortBy: selectedSortOrder,
-        CompanyName: selectedCompanyName || null,
+        CompanyName: selectedPayoutCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
         startDate: null,

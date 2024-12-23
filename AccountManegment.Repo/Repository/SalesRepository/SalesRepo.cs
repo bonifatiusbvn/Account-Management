@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.RegularExpressions;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
+using AccountManagement.DBContext.Models.DataTableParameters;
 
 #nullable disable
 
@@ -719,6 +720,145 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport)
+        {
+            try
+            {
+                var supplierInvoicesQuery = from s in Context.SalesInvoices
+                                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                                            select new
+                                            {
+                                                s,
+                                                SupplierName = b.SupplierName,
+                                                CompanyName = c.CompanyName,
+                                                Date = s.Date,
+                                                TotalAmount = s.TotalAmount,
+                                            };
+
+                if (SalesReport.CompanyId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.CompanyId == SalesReport.CompanyId.Value);
+                }
+
+                if (SalesReport.SupplierId.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.SupplierId == SalesReport.SupplierId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(SalesReport.filterType))
+                {
+                    if (SalesReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (SalesReport.filterType == "tillMonth")
+                    {
+                        var tillMonth = SalesReport.TillMonth.Value;
+                        int year = tillMonth.Year;
+                        int month = tillMonth.Month;
+
+                        var startDate = new DateTime(year, 1, 1);
+                        var endDate = new DateTime(year, month, 1).AddDays(-1);
+
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (SalesReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                    else if (SalesReport.filterType == "betweenYear" && !string.IsNullOrEmpty(SalesReport.SelectedYear))
+                    {
+                        var years = SalesReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = years[1].Length == 2
+                            ? int.Parse(years[1]) + (startYear / 100) * 100
+                            : int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+                        supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                    }
+                }
+
+                if (SalesReport.startDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date >= SalesReport.startDate.Value);
+                }
+
+                if (SalesReport.endDate.HasValue)
+                {
+                    supplierInvoicesQuery = supplierInvoicesQuery.Where(s => s.s.Date <= SalesReport.endDate.Value);
+                }
+
+                var CountTotalData = await supplierInvoicesQuery
+                    .GroupBy(g => new { g.s.SupplierId })
+                    .Select(group => new SalesInvoiceMasterModel
+                    {
+                        Id = group.FirstOrDefault().s.Id,
+                        SalesInvoiceNo = group.FirstOrDefault().s.SalesInvoiceNo,
+                        SupplierId = group.Key.SupplierId,
+                        CompanyId = group.FirstOrDefault().s.CompanyId,
+                        Description = string.Join(", ", group.Select(x => x.s.Description)),
+                        CompanyName = group.FirstOrDefault().CompanyName,
+                        SupplierName = group.FirstOrDefault().SupplierName,
+                        PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+                        IsPayOut = group.FirstOrDefault().s.IsPayOut,
+                        SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+                        Date = group.FirstOrDefault().s.Date,
+                        CreatedOn = group.FirstOrDefault().s.CreatedOn,
+                        TotalAmount = group.FirstOrDefault().s.TotalAmount,
+                    })
+                    .ToListAsync();
+
+                if (!string.IsNullOrEmpty(SalesReport.sortColumn) && !string.IsNullOrEmpty(SalesReport.sortColumnDir))
+                {
+                    switch (SalesReport.sortColumn.ToLower())
+                    {
+                        case "suppliername":
+                            CountTotalData = SalesReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.SupplierName).ToList()
+                                : CountTotalData.OrderByDescending(s => s.SupplierName).ToList();
+                            break;
+
+                        case "companyname":
+                            CountTotalData = SalesReport.sortColumnDir == "asc"
+                                ? CountTotalData.OrderBy(s => s.CompanyName).ToList()
+                                : CountTotalData.OrderByDescending(s => s.CompanyName).ToList();
+                            break;
+                    }
+                }
+                var totalRecords = CountTotalData.Count();
+                var TotalData = CountTotalData.ToList();
+                var TotalAmount = CountTotalData.Sum(i => i.TotalAmount);
+                var jsonData = new jsonData
+                {
+                    draw = SalesReport.draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = TotalData,
+                    TotalAmount = TotalAmount
+                };
+
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching invoice details.", ex);
             }
         }
     }
