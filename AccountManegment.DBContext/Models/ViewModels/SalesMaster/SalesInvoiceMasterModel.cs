@@ -33,7 +33,13 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public string? CompanyGstNo { get; set; }
         public string? CompanyStateName { get; set; }
         public int? CompanyStateCode { get; set; }
+        public string? CompanyBankName { get; set; }
 
+        public string? CompanyBankBranch { get; set; }
+
+        public string? CompanyAccountNo { get; set; }
+
+        public string? CompanyIffccode { get; set; }
         public string? SupplierInvoiceNo { get; set; }
 
         public DateTime? Date { get; set; }
