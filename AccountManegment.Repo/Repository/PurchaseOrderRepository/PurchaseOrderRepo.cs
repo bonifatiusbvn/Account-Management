@@ -174,7 +174,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                  join b in Context.SupplierMasters on a.FromSupplierId equals b.SupplierId
                                  join c in Context.Companies on a.ToCompanyId equals c.CompanyId
                                  join d in Context.Sites on a.SiteId equals d.SiteId
-                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid
+                                 join g in Context.PodeliveryAddresses on a.Id equals g.Poid into gJoin
+                                 from g in gJoin.DefaultIfEmpty()
                                  join e in Context.Cities on b.City equals e.CityId
                                  join f in Context.States on b.State equals f.StatesId
                                  join cs in Context.States on c.StateId equals cs.StatesId
@@ -204,7 +205,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      TotalDiscount = a.TotalDiscount,
                                      TotalGstamount = a.TotalGstamount,
                                      BillingAddress = a.BillingAddress,
-                                     ShippingAddress = g.Address,
+                                     ShippingAddress = g != null ? g.Address : null, // Handle null here
                                      Date = a.Date,
                                      ContactName = a.ContactName,
                                      ContactNumber = a.ContactNumber,
@@ -229,6 +230,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      OtherContact = a.OtherContact,
                                      OtherName = a.OtherName,
                                  }).First();
+
 
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
                                                      join b in Context.ItemMasters on a.ItemId equals b.ItemId
@@ -664,7 +666,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         Price = item.Price,
                         Discount = item.Discount,
                         Gst = item.Gst,
-                        Gstper=item.GstPer,
+                        Gstper = item.GstPer,
                         IsDeleted = false,
                         CreatedBy = PurchaseOrderDetails.CreatedBy,
                         CreatedOn = DateTime.Now,
