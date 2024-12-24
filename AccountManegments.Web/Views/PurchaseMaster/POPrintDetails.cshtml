@@ -1,83 +1,87 @@
 ﻿@model AccountManagement.DBContext.Models.ViewModels.PurchaseOrder.PurchaseOrderMasterView
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
+    <style>
 
-<link href="~/assets/css/bootstrap.min.css" rel="stylesheet">
-@{
-    var firstItem = Model;
-    decimal? totalAmount = 0;
-    decimal? totalGst = 0;
-}
-
-<style>
-    .PO-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        .PO-table th, .PO-table td {
-            border-left: 1px solid lightgray;
-            border-right: 1px solid lightgray;
-            padding: 0px;
+        .PO-table {
+            border-collapse: collapse;
+            width: 100%;
         }
 
-            .PO-table th[colspan] {
-                text-align: center;
+            .PO-table th, .PO-table td {
+                border-left: 1px solid lightgray;
+                border-right: 1px solid lightgray;
+                padding: 0px;
             }
 
-        .PO-table thead th {
-            border-top: 1px solid lightgray;
-            border-bottom: 1px solid lightgray;
+                .PO-table th[colspan] {
+                    text-align: center;
+                }
+
+            .PO-table thead th {
+                border-top: 1px solid lightgray;
+                border-bottom: 1px solid lightgray;
+            }
+
+            .PO-table tbody td {
+                border-top: none;
+                border-bottom: none;
+            }
+
+            .PO-table tbody tr:first-child td {
+                border-top: none;
+            }
+
+            .PO-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .PO-table > :not(:last-child) > :last-child > * {
+                border-bottom-color: lightgray;
+            }
+
+        .ProductTotalHR {
+            border: 0px solid lightgray;
+            border-width: 0.5px;
+            margin: -3px;
+            width: -1%;
         }
 
-        .PO-table tbody td {
-            border-top: none;
-            border-bottom: none;
+        .VerticalBorder {
+            border-left: 2px solid lightgray;
+            height: 100%;
         }
 
-        .PO-table tbody tr:first-child td {
-            border-top: none;
+        .Address-Details {
+            display: flex;
+            border: 1px solid lightgray;
+            height: 155px;
         }
 
-        .PO-table tbody tr:last-child td {
-            border-bottom: none;
+        .col-6.no-top-border {
+            border-top: none !important;
         }
 
-        .PO-table > :not(:last-child) > :last-child > * {
-            border-bottom-color: lightgray;
-        }
-
-    .ProductTotalHR {
-        border: 0px solid lightgray;
-        border-width: 0.5px;
-        margin: -3px;
-        width: -1%;
+    </style>
+</head>
+<body>
+    @{
+        var firstItem = Model;
+        decimal? totalAmount = 0;
+        decimal? totalGst = 0;
     }
-
-    .VerticalBorder {
-        border-left: 2px solid lightgray;
-        height: 100%;
-    }
-
-    .Address-Details {
-        display: flex;
-        border: 1px solid lightgray;
-        height: 155px;
-    }
-
-    .col-6.no-top-border {
-        border-top: none !important;
-    }
-</style>
-
-
-<div class="row justify-content-center">
-    <div class="col-xxl-7">
+    <div class="col-xxl-9">
         @if (firstItem.CompanyName == "DH PATEL")
         {
-            <img src="~/assets/images/DH_Latter.jpg" style="width:950px" />
+            <img src="~/assets/images/DH_Latter.jpg" style="width:1410px" height="220px"/>
         }
         @if (firstItem.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
         {
-            <img src="~/assets/images/DH Infra New.jpeg" style="width:950px" />
+            <img src="~/assets/images/DH Infra New.jpeg" style="width:1410px" height="220px" />
         }
         <div class="row">
             <div class="d-flex">
@@ -393,7 +397,7 @@
                     <p class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></p>
 
                     <div class="row d-flex" style="position: relative;">
-                        <div class="col-6">
+                        <div class="col-12">
                             @if (firstItem.PaymentTerms != null)
                             {
                                 <div style="white-space: nowrap;margin-left: 5px;">
@@ -406,14 +410,14 @@
                                 <span class="text-muted"></span>
                             }
                         </div>
-                        <div class="col-6 d-flex align-items-end">
+                        <div class="col-6 d-flex  ms-auto">
                             @if (firstItem.CompanyName == "DH PATEL")
                             {
-                                <img src="~/assets/images/DHPatel_Stamp.jpeg" />
+                                <img src="~/assets/images/DHPatel_Stamp.png" />
                             }
                             @if (firstItem.CompanyName == "DH PATEL INFRASTRUCTURE PRIVATE LIMITED")
                             {
-                                <img src="~/assets/images/D H Infra Stamp.jpeg" style="width:150px" />
+                                <img src="~/assets/images/D H Infra Stamp.png" style="width:150px" />
                             }
                             <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:578px;">
                                 <p class="text-muted"><b>for @firstItem.CompanyName</b></p>
@@ -428,4 +432,5 @@
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>
