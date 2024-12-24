@@ -7,7 +7,7 @@
 
     <tr>
         <td id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">@item.ItemName</td>
-        <td id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">₹@item.PricePerUnit</td>
+        <td id="userCard_@item.ItemId" class="" onclick="DisplayItemDetails('@item.ItemId', this)">₹@item.PricePerUnit.ToString("N2")</td>
         <td>
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && (a.IsApproved == true)))
             {
