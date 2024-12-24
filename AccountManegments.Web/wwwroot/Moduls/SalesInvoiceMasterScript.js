@@ -1012,7 +1012,7 @@ var Salesdtcoulms = [
         "orderable": true,
         "render": function (data, type, row) {
             var netAmount = row.totalAmount;
-            return '<span>' + '₹' + netAmount.toFixed(2) + '</span>';
+            return '<span>' + '₹' + formatNumberWithCommas(netAmount.toFixed(2)) + '</span>';
         }
     }
 ];

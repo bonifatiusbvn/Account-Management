@@ -235,10 +235,9 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                 List<POItemDetailsModel> itemlist = (from a in Context.PurchaseOrderDetails.Where(a => a.PorefId == PurchaseOrder.Id)
                                                      join b in Context.ItemMasters on a.ItemId equals b.ItemId
                                                      join c in Context.UnitMasters on a.UnitTypeId equals c.UnitId
-                                                     join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                                      select new POItemDetailsModel
                                                      {
-                                                         ItemName = i.ItemName,
+                                                         ItemName = b.ItemName,
                                                          ItemId = a.ItemId,
                                                          ItemDescription = a.ItemDescription,
                                                          Quantity = a.Quantity,

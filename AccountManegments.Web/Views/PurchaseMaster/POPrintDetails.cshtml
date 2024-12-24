@@ -233,10 +233,10 @@
                                     <span class="fw-medium text-muted" style="font-size:12px;">@item.ItemDescription</span>
                                 </td>
                                 <td id="txtper">@item.Quantity</td>
-                                <td id="txtHSN">@item.PricePerUnit</td>
+                                <td id="txtHSN">@item.PricePerUnit.ToString("N2")</td>
                                 <td id="txtHSN">@trimmedUnitTypeName</td>
                                 <td id="txtper">@item.GstPercentage</td>
-                                <td id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:F2}")</td>
+                                <td id="txttotal">₹@($"{item.Quantity * item.PricePerUnit:N2}")</td>
                             </tr>
                             index++;
                         }
@@ -265,7 +265,7 @@
                             <td></td>
                             <td style="text-align: end;"></td>
                             <td style="text-align: start;"></td>
-                            <td><b>₹@($"{cgst:F2}")</b></td>
+                            <td><b>₹@($"{cgst:N2}")</b></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -274,7 +274,7 @@
                             <td></td>
                             <td style="text-align: end;"></td>
                             <td style="text-align: start;"></td>
-                            <td><b>₹@($"{sgst:F2}")</b></td>
+                            <td><b>₹@($"{sgst:N2}")</b></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -320,7 +320,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><b>₹@firstItem.TotalAmount</b></td>
+                            <td><b>₹@firstItem.TotalAmount.ToString("N2")</b></td>
                         </tr>
                     </tbody>
                 </table><!--end table-->
@@ -369,22 +369,22 @@
                         {
                             <tr>
                                 <td class="border">@item.Hsncode</td>
-                                <td class="border">₹@item.TaxableValue.ToString("0.00")</td>
+                                <td class="border">₹@item.TaxableValue.ToString("N2")</td>
                                 <td class="border">@item.CenteralTaxPer%</td>
-                                <td class="border">₹@item.CenteralTax.ToString("0.00")</td>
+                                <td class="border">₹@item.CenteralTax.ToString("N2")</td>
                                 <td class="border">@item.StateTaxPer%</td>
-                                <td class="border">₹@item.StateTax.ToString("0.00")</td>
-                                <td class="border"><b>₹@item.GstAmount.ToString("0.00")</b></td>
+                                <td class="border">₹@item.StateTax.ToString("N2")</td>
+                                <td class="border"><b>₹@item.GstAmount.ToString("N2")</b></td>
                             </tr>
                         }
                         <tr>
                             <td class="text-end border">Total</td>
-                            <td class="border"><b>₹@taxTotal?.ToString("0.00")</b></td>
+                            <td class="border"><b>₹@taxTotal?.ToString("N2")</b></td>
                             <td class="border"></td>
-                            <td class="border"><b>₹@TotalCenteralTax?.ToString("0.00")</b></td>
+                            <td class="border"><b>₹@TotalCenteralTax?.ToString("N2")</b></td>
                             <td class="border"></td>
-                            <td class="border"><b>₹@TotalStateTax?.ToString("0.00")</b></td>
-                            <td class="border"><b>₹@TotalGSTAmount?.ToString("0.00")</b></td>
+                            <td class="border"><b>₹@TotalStateTax?.ToString("N2")</b></td>
+                            <td class="border"><b>₹@TotalGSTAmount?.ToString("N2")</b></td>
                         </tr>
                     </tbody>
                 </table><!--end table-->
@@ -396,7 +396,7 @@
                         <div class="col-6">
                             @if (firstItem.PaymentTerms != null)
                             {
-                                <div style="border: 1px solid lightgray; padding: 10px; margin-top: 10px;">
+                                <div style="white-space: nowrap;margin-left: 5px;">
                                     <span class="text-muted">@Html.Raw(firstItem.PaymentTerms)</span>
                                 </div>
                             }

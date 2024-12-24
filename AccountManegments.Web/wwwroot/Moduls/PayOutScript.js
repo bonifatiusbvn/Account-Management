@@ -454,7 +454,7 @@ var Payoutdtcoulms = [
         "orderable": true,
         "render": function (data, type, row) {
             var netAmount = row.nonPayOutTotalAmount - row.payOutTotalAmount;
-            return '<span>' + '₹' + netAmount.toFixed(2) + '</span>';
+            return '<span>' + '₹' + formatNumberWithCommas(netAmount.toFixed(2)) + '</span>';
         }
     }
 ];

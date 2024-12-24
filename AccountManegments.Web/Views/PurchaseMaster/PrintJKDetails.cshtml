@@ -145,9 +145,9 @@
                                     <tr>
                                         <td style="text-align: center;width: 70px;border-bottom: none;"></td>
                                         <td style="text-align: left;padding: 5px;">Per Bag</td>
-                                        <td style="text-align: center;font-size: 15px;">@(item.PricePerUnit / 20)</td>
-                                        <td style="text-align: center;font-size: 15px;">@((singleGstAmount / 20).ToString("F2"))</td>
-                                        <td style="text-align: center;font-size: 15px;"><b>@((singleTotalAmount / 20).ToString("F2"))</b></td>
+                                        <td style="text-align: center;font-size: 15px;">@((item.PricePerUnit / 20).ToString("N2"))</td>
+                                        <td style="text-align: center;font-size: 15px;">@((singleGstAmount / 20).ToString("N2"))</td>
+                                        <td style="text-align: center;font-size: 15px;"><b>@((singleTotalAmount / 20).ToString("N2"))</b></td>
                                     </tr>
                                 }
                                 <tr style="height: 35px;">
