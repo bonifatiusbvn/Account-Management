@@ -676,8 +676,6 @@ namespace AccountManegments.Web.Controllers
                     };
 
                     var newTableHeaderRow = newTable.Rows.Add();
-                    newTableHeaderRow.Cells.Add("Credit");
-                    newTableHeaderRow.Cells.Add("Debit");
                     newTableHeaderRow.Cells.Add("Net Balance");
 
                     foreach (var cell in newTableHeaderRow.Cells)
@@ -691,11 +689,6 @@ namespace AccountManegments.Web.Controllers
                     }
 
                     var newTableRow1 = newTable.Rows.Add();
-                    var creditCell = newTableRow1.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalCreadit));
-                    var debitCell = newTableRow1.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPurchase));
-
-                    creditCell.DefaultCellTextState = new TextState { FontStyle = FontStyles.Bold };
-                    debitCell.DefaultCellTextState = new TextState { FontStyle = FontStyles.Bold };
 
                     var netBalanceCell = newTableRow1.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
                     netBalanceCell.Alignment = HorizontalAlignment.Right;
@@ -837,7 +830,7 @@ namespace AccountManegments.Web.Controllers
                             // Create the detailed table for the current group
                             var detailedTable = new Aspose.Pdf.Table
                             {
-                                ColumnWidths = "40% 20% 20% 20%",
+                                ColumnWidths = "70% 30%",
                                 DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                                 Border = new BorderInfo(BorderSide.None),
                                 DefaultCellBorder = new BorderInfo(BorderSide.None),
@@ -845,8 +838,6 @@ namespace AccountManegments.Web.Controllers
 
                             var headerRow = detailedTable.Rows.Add();
                             headerRow.Cells.Add("Supplier");
-                            headerRow.Cells.Add("Credit");
-                            headerRow.Cells.Add("Debit");
                             headerRow.Cells.Add("Net Total");
 
                             foreach (var cell in headerRow.Cells)
@@ -870,10 +861,7 @@ namespace AccountManegments.Web.Controllers
                                 decimal nonPayOutTotalAmount = item.NonPayOutTotalAmount ?? 0;
                                 decimal payOutTotalAmount = item.PayOutTotalAmount ?? 0;
 
-                                row.Cells.Add(FormatIndianCurrency(nonPayOutTotalAmount));
                                 siteNonPayOutTotal += nonPayOutTotalAmount;
-
-                                row.Cells.Add(FormatIndianCurrency(payOutTotalAmount));
                                 sitePayOutTotal += payOutTotalAmount; 
 
                                 netbalance = nonPayOutTotalAmount - payOutTotalAmount;
@@ -888,8 +876,6 @@ namespace AccountManegments.Web.Controllers
                             siteCombinedTotal = siteNonPayOutTotal - sitePayOutTotal;
                             var footerRow = detailedTable.Rows.Add();
                             footerRow.Cells.Add("Total");
-                            footerRow.Cells.Add(FormatIndianCurrency(siteNonPayOutTotal)); 
-                            footerRow.Cells.Add(FormatIndianCurrency(sitePayOutTotal)); 
                             footerRow.Cells.Add(FormatIndianCurrency(siteCombinedTotal)); 
 
                             TextState boldTextState = new TextState
@@ -920,7 +906,7 @@ namespace AccountManegments.Web.Controllers
                         // Table 3
                         var table = new Aspose.Pdf.Table
                         {
-                            ColumnWidths = "40% 20% 20% 20%",
+                            ColumnWidths = "70% 30%",
                             DefaultCellPadding = new MarginInfo(2, 2, 2, 2),
                             Border = new BorderInfo(BorderSide.None),
                             DefaultCellBorder = new BorderInfo(BorderSide.None),
@@ -928,8 +914,6 @@ namespace AccountManegments.Web.Controllers
 
                         var headerRow = table.Rows.Add();
                         headerRow.Cells.Add("Supplier");
-                        headerRow.Cells.Add("Credit");
-                        headerRow.Cells.Add("Debit");
                         headerRow.Cells.Add("Net Total");
 
                         foreach (var cell in headerRow.Cells)
@@ -951,9 +935,8 @@ namespace AccountManegments.Web.Controllers
                         {
                             var row = table.Rows.Add();
                             row.Cells.Add(item.SupplierName);
-                            row.Cells.Add(FormatIndianCurrency(item.NonPayOutTotalAmount));
+
                             yougettotal += item.NonPayOutTotalAmount;
-                            row.Cells.Add(FormatIndianCurrency(item.PayOutTotalAmount));
                             yougavetotal += item.PayOutTotalAmount;
                             netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
                             row.Cells.Add(FormatIndianCurrency(netbalance));
@@ -966,8 +949,6 @@ namespace AccountManegments.Web.Controllers
                         }
                         var footerRow = table.Rows.Add();
                         footerRow.Cells.Add("Total");
-                        footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalCreadit));
-                        footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPurchase));
                         footerRow.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
 
                         TextState boldTextState = new TextState
@@ -1063,12 +1044,9 @@ namespace AccountManegments.Web.Controllers
                         row += 2;
 
                         // Table-2
+                        ws.Cell(row, 1).Value = "Net Balance";
 
-                        ws.Cell(row, 1).Value = "Credit";
-                        ws.Cell(row, 2).Value = "Debit";
-                        ws.Cell(row, 3).Value = "Net Balance";
-
-                        var headerRange1 = ws.Range(row, 1, row, 3);
+                        var headerRange1 = ws.Range(row, 1, row, 1);
                         headerRange1.Style.Font.Bold = true;
                         headerRange1.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange1.Style.Font.FontColor = XLColor.White;
@@ -1079,16 +1057,12 @@ namespace AccountManegments.Web.Controllers
                         headerRange1.Style.Border.RightBorderColor = XLColor.Black;
 
                         row++;
-                        ws.Cell(row, 1).Value = FormatIndianCurrency(NetInvoiceDetails.TotalCreadit);
-                        ws.Cell(row, 2).Value = FormatIndianCurrency(NetInvoiceDetails.TotalPurchase);
-                        ws.Cell(row, 3).Value = FormatIndianCurrency(NetInvoiceDetails.TotalPending);
+                        ws.Cell(row, 1).Value = FormatIndianCurrency(NetInvoiceDetails.TotalPending);
 
-                        var dataRange1 = ws.Range(row, 1, row, 3);
+                        var dataRange1 = ws.Range(row, 1, row, 1);
                         dataRange1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                         ws.Cell(row, 1).Style.Font.Bold = true;
-                        ws.Cell(row, 2).Style.Font.Bold = true;
-                        ws.Cell(row, 3).Style.Font.Bold = true;
-                        ws.Cell(row, 3).Style.Font.FontColor = XLColor.Green;
+                        ws.Cell(row, 1).Style.Font.FontColor = XLColor.Green;
                         dataRange1.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                         dataRange1.Style.Border.BottomBorderColor = XLColor.Black;
                         dataRange1.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
@@ -1124,11 +1098,9 @@ namespace AccountManegments.Web.Controllers
 
                                 // Create headers for the detailed table
                                 ws.Cell(row, 1).Value = "Supplier";
-                                ws.Cell(row, 2).Value = "Credit";
-                                ws.Cell(row, 3).Value = "Debit";
-                                ws.Cell(row, 4).Value = "Net Total";
+                                ws.Cell(row, 2).Value = "Net Total";
 
-                                var headerRange = ws.Range(row, 1, row, 4);
+                                var headerRange = ws.Range(row, 1, row, 2);
                                 headerRange.Style.Font.Bold = true;
                                 headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
                                 headerRange.Style.Font.FontColor = XLColor.White;
@@ -1148,24 +1120,19 @@ namespace AccountManegments.Web.Controllers
                                     decimal nonPayOutTotalAmount = item.NonPayOutTotalAmount ?? 0;
                                     decimal payOutTotalAmount = item.PayOutTotalAmount ?? 0;
 
-                                    ws.Cell(row, 2).Value = FormatIndianCurrency(nonPayOutTotalAmount);
-                                    ws.Cell(row, 3).Value = FormatIndianCurrency(payOutTotalAmount);
-
                                     siteNonPayOutTotal += nonPayOutTotalAmount;
                                     sitePayOutTotal += payOutTotalAmount;
 
                                     decimal netbalance = nonPayOutTotalAmount - payOutTotalAmount;
-                                    ws.Cell(row, 4).Value = FormatIndianCurrency(netbalance);
+                                    ws.Cell(row, 2).Value = FormatIndianCurrency(netbalance);
                                     row++;
                                 }
 
                                 // Insert site totals
                                 ws.Cell(row, 1).Value = "Total for " + (group.SiteName ?? "N/A");
-                                ws.Cell(row, 2).Value = FormatIndianCurrency(siteNonPayOutTotal);
-                                ws.Cell(row, 3).Value = FormatIndianCurrency(sitePayOutTotal);
-                                ws.Cell(row, 4).Value = FormatIndianCurrency(siteNonPayOutTotal - sitePayOutTotal);
+                                ws.Cell(row, 2).Value = FormatIndianCurrency(siteNonPayOutTotal - sitePayOutTotal);
 
-                                var footerRange2 = ws.Range(row, 1, row, 4);
+                                var footerRange2 = ws.Range(row, 1, row, 2);
                                 footerRange2.Style.Fill.BackgroundColor = XLColor.Gray;
                                 footerRange2.Style.Font.FontColor = XLColor.White;
                                 row++;
@@ -1187,11 +1154,9 @@ namespace AccountManegments.Web.Controllers
                         else
                         {
                             ws.Cell(row, 1).Value = "Supplier";
-                            ws.Cell(row, 2).Value = "Credit";
-                            ws.Cell(row, 3).Value = "Debit";
-                            ws.Cell(row, 4).Value = "Net Total";
+                            ws.Cell(row, 2).Value = "Net Total";
 
-                            var headerRange3 = ws.Range(row, 1, row, 4);
+                            var headerRange3 = ws.Range(row, 1, row, 2);
                             headerRange3.Style.Font.Bold = true;
                             headerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
                             headerRange3.Style.Font.FontColor = XLColor.White;
@@ -1210,23 +1175,19 @@ namespace AccountManegments.Web.Controllers
                             foreach (var item in NetInvoiceDetails.InvoiceList)
                             {
                                 ws.Cell(row, 1).Value = item.SupplierName;
-                                ws.Cell(row, 2).Value = FormatIndianCurrency(item.NonPayOutTotalAmount);
-                                ws.Cell(row, 3).Value = FormatIndianCurrency(item.PayOutTotalAmount);
                                 yougavetotal += item.PayOutTotalAmount;
                                 yougettotal += item.NonPayOutTotalAmount;
                                 netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                                ws.Cell(row, 4).Value = FormatIndianCurrency(netbalance);
+                                ws.Cell(row, 2).Value = FormatIndianCurrency(netbalance);
                                 row++;
                             }
 
                             nettotal = yougettotal - yougavetotal;
 
                             ws.Cell(row, 1).Value = "Total";
-                            ws.Cell(row, 2).Value = FormatIndianCurrency(yougettotal);
-                            ws.Cell(row, 3).Value = FormatIndianCurrency(yougavetotal);
-                            ws.Cell(row, 4).Value = FormatIndianCurrency(nettotal);
+                            ws.Cell(row, 2).Value = FormatIndianCurrency(nettotal);
 
-                            var footerRange3 = ws.Range(row, 1, row, 4);
+                            var footerRange3 = ws.Range(row, 1, row, 2);
                             footerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
                             footerRange3.Style.Font.FontColor = XLColor.White;
 

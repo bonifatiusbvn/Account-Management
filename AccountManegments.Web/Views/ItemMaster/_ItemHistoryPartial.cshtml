@@ -7,10 +7,10 @@
     <table class="table align-middle mb-0">
         <thead class="table-light btn-primary">
             <tr class="text-left">
-                <th>InvoiceNo</th>
+                <th style="width: 90px;">InvoiceNo</th>
                 <th style="width: 130px;">Supplier</th>
-                <th>Date</th>
-                <th>Qty</th>
+                <th>Site</th>
+                <th style="width: 86px;">Date</th>
                 <th>Price</th>
                 <th>GST</th>
                 <th>PriceWithGST</th>
@@ -25,9 +25,10 @@
 
                         <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
                         <td>@item.SupplierName</td>
-                        <td>@item.Date?.ToString("dd/MM/yyyy")</td>
+                        <td>@item.SiteName</td>
+                        <td style="width: 86px;">@item.Date?.ToString("dd/MM/yyyy")</td>
 
-                        @if (Model.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
+                       @*  @if (Model.InvoiceItemList.TryGetValue(item.Id, out var itemDetails))
                         {
                             foreach (var itemDetail in itemDetails)
                             {
@@ -35,7 +36,7 @@
                                     @itemDetail.Quantity
                                 </td>
                             }
-                        }
+                        } *@
                         <td>@item.ItemPrice</td>
                         <td>@item.GSTper</td>
                         <td class="text-center">@item.ItemPricewithGST</td>
