@@ -1430,7 +1430,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 }
                 if (invoiceReport.SiteId.HasValue)
                 {
-                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value || s.s.InvoiceNo == "Opening Balance").OrderBy(s => s.s.CreatedOn);
+                    query = query.Where(s => s.s.SiteId == invoiceReport.SiteId.Value).OrderBy(s => s.s.CreatedOn);
                 }
                 if (invoiceReport.SupplierId.HasValue)
                 {
@@ -1513,7 +1513,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SupplierInvoiceNo = s.s.SupplierInvoiceNo,
                     Date = s.s.Date,
                     CreatedOn = s.s.CreatedOn,
-                    SiteName = s.SiteName
+                    SiteName = s.SiteName,
+                    InvoiceType = s.s.InvoiceType,
                 }).ToListAsync();
 
                 var PayOutDetails = new InvoiceTotalAmount

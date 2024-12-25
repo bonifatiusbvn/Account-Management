@@ -32,8 +32,8 @@ function GetAllSiteList() {
         },
         error: function (err) {
             console.error("Failed to fetch Site list: ", err);
-        }
-    });
+    }
+});
 }
 
 function GetAllCompanyList() {

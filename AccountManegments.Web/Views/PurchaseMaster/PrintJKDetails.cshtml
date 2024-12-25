@@ -215,7 +215,7 @@
                                                     {
                                                         <span>@Index.</span>
                                                         <span class="text-muted" style="padding-left: 5px;">
-                                                            @item.Address.Replace("Group-", "") - @item.Quantity
+                                                            @item.Address.Replace("Group-", "") - @item.Quantity MT
                                                         </span>
                                                         <br />
                                                         Index++;
@@ -229,7 +229,7 @@
                                                 @foreach (var item in Model.AddressList)
                                                 {
                                                     <span>@Index.</span>
-                                                    <span class="text-muted" style="padding-left: 5px;">@item.Address - <span style="background-color: yellow;">@item.Quantity</span></span>
+                                                    <span class="text-muted" style="padding-left: 5px;">@item.Address - <span style="background-color: yellow;">@item.Quantity</span>MT</span>
                                                     <br />
                                                     Index++;
                                                 }

@@ -290,21 +290,36 @@ namespace AccountManegments.Web.Controllers
                     {
                         var row = table.Rows.Add();
                         string cellValue;
-
-                        if (item.InvoiceNo == "Opening Balance")
+                        if (item.InvoiceNo == "Opening Balance" || item.InvoiceNo == "PayOut")
                         {
-                            cellValue = item.Description != null ? $"{item.InvoiceNo} ({item.Description})" : item.InvoiceNo;
+                            var description = (string.IsNullOrEmpty(item.Description) ? "" : " (" + item.Description + ")");
+                            if (item.SupplierInvoiceNo != null)
+                            {
+                                cellValue = item.SupplierInvoiceNo + description;
+                            }
+                            else
+                            {
+                                cellValue = item.InvoiceNo + description;
+                            }
                         }
                         else
                         {
-                            cellValue = item.SupplierInvoiceNo != null ? item.SupplierInvoiceNo : "";
+                            var invoiceType = (string.IsNullOrEmpty(item.InvoiceType) ? "" : " (" + item.InvoiceType + ")");
+                            if (item.SupplierInvoiceNo != null)
+                            {
+                                cellValue = item.SupplierInvoiceNo + invoiceType;
+                            }
+                            else
+                            {
+                                cellValue = item.InvoiceNo + invoiceType;
+                            }
                         }
                         row.Cells.Add(cellValue != "" ? cellValue : "");
                         row.Cells.Add(item.Date?.ToString("dd-MM-yyyy"));
                         row.Cells.Add(item.SiteName != null ? item.SiteName : "");
                         row.Cells.Add(item.GroupName != null ? item.GroupName : "");
                         row.Cells.Add(item.SupplierName);
-                        if (item.InvoiceNo == "PayOut")
+                        if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
                         {
                             row.Cells.Add("");
                             row.Cells.Add(FormatIndianCurrency(item.TotalAmount));
@@ -320,7 +335,6 @@ namespace AccountManegments.Web.Controllers
                             cell.BackgroundColor = backgroundColor;
                         }
                     }
-
                     var footerRow = table.Rows.Add();
                     footerRow.Cells.Add("Total");
                     footerRow.Cells.Add("");
@@ -475,20 +489,37 @@ namespace AccountManegments.Web.Controllers
                         foreach (var item in SupplierDetails.InvoiceList)
                         {
                             string cellValue;
-                            if (item.InvoiceNo == "Opening Balance")
+
+                            if (item.InvoiceNo == "Opening Balance" || item.InvoiceNo == "PayOut")
                             {
-                                cellValue = item.Description != null ? $"{item.InvoiceNo} ({item.Description})" : item.InvoiceNo;
+                                var description = (string.IsNullOrEmpty(item.Description) ? "" : " (" + item.Description + ")");
+                                if (item.SupplierInvoiceNo != null)
+                                {
+                                    cellValue = item.SupplierInvoiceNo + description;
+                                }
+                                else
+                                {
+                                    cellValue = item.InvoiceNo + description;
+                                }
                             }
                             else
                             {
-                                cellValue = item.SupplierInvoiceNo;
+                                var invoiceType = (string.IsNullOrEmpty(item.InvoiceType) ? "" : " (" + item.InvoiceType + ")");
+                                if (item.SupplierInvoiceNo != null)
+                                {
+                                    cellValue = item.SupplierInvoiceNo + invoiceType;
+                                }
+                                else
+                                {
+                                    cellValue = item.InvoiceNo + invoiceType;
+                                }
                             }
                             ws.Cell(row, 1).Value = cellValue;
                             ws.Cell(row, 2).Value = item.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
                             ws.Cell(row, 3).Value = item.SiteName ?? string.Empty;
                             ws.Cell(row, 4).Value = item.GroupName ?? string.Empty;
                             ws.Cell(row, 5).Value = item.SupplierName ?? string.Empty;
-                            if (item.InvoiceNo == "PayOut")
+                            if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
                             {
                                 ws.Cell(row, 6).Value = "";
                                 ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount);
