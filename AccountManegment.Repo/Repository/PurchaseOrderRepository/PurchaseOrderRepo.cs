@@ -199,6 +199,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                                      ToCompanyId = a.ToCompanyId,
                                      CompanyName = c.CompanyName,
                                      CompanyGstno = c.Gstno,
+                                     CompanyPanNo = c.PanNo,
                                      TotalAmount = a.TotalAmount,
                                      Description = a.Description,
                                      DeliveryShedule = a.DeliveryShedule,

@@ -25,6 +25,7 @@ function GetAllSiteList() {
             var $dropdown = $("#textPayoutReportSiteName");
             $dropdown.empty();
             $dropdown.append('<option value="">All Site</option>');
+
             result.forEach(function (data) {
                 $dropdown.append('<option value="' + data.siteId + '" data-payoutsite-name="' + data.siteName + '">' + data.siteName + '</option>');
             });

@@ -52,6 +52,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.PurchaseOrder
         public int? SupplierStateCode { get; set; }
         public string? SupplierFullAddress { get; set; }
         public string? CompanyGstno { get; set; }
+        public string? CompanyPanNo { get; set; }
         public string? CompanyStateName { get; set; }
         public int? CompanyStateCode { get; set; }
         public string? DispatchBy { get; set; }
