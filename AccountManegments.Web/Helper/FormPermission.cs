@@ -8,6 +8,7 @@ namespace AccountManegments.Web.Helper
     public class FormPermissionAttribute : ActionFilterAttribute
     {
         private readonly string _FormnamewithPermisiion;
+        public UserSession UserSession { get; }
         public FormPermissionAttribute(string FormnamewithPermisiion)
         {
             _FormnamewithPermisiion = FormnamewithPermisiion;
@@ -19,8 +20,9 @@ namespace AccountManegments.Web.Helper
             string controllerName = (string)context.RouteData.Values["Controller"].ToString().ToLower();
             string actionName = (string)context.RouteData.Values["Action"].ToString().ToLower();
 
-            if (UserSession.FormPermisionData == null)
-                context.Result = new RedirectToActionResult("Index", "Home", null, false);
+
+            if (UserSession?.UserName == null && UserSession.FormPermisionData == null)
+                context.Result = new RedirectToActionResult("UserLogin", "Authentication", null, false);
             else
             {
                 var hasFeatureAccess = false;
