@@ -304,11 +304,7 @@
                                                                                        id="txtDeliverySchedule"
                                                                                        name="txtDeliverySchedule"
                                                                                        placeholder="Enter Delivery Schedule"
-                                                                                       value="@(string.IsNullOrEmpty(Model.DeliveryShedule) || !Model.DeliveryShedule.Contains(',')
-                        ? DateTime.Today.ToString("yyyy-MM-dd")
-                        : DateTime.TryParse(Model.DeliveryShedule.Split(',')[0], out var parsedDate)
-                            ? parsedDate.ToString("yyyy-MM-dd")
-                            : DateTime.Today.ToString("yyyy-MM-dd"))"
+                                                                                       value="@(string.IsNullOrEmpty(Model.DeliveryShedule) || !Model.DeliveryShedule.Contains(',')? Model.DeliveryShedule?.ToString(): DateTime.TryParse(Model.DeliveryShedule.Split(',')[0], out var parsedDate)? parsedDate.ToString("yyyy-MM-dd"): DateTime.Today.ToString("yyyy-MM-dd"))"
                                                                                 @(Model.DeliveryShedule != null && Model.DeliveryShedule.Contains("Immediate") ? "disabled" : "")>
                                                                             </div>
                                                                         </div>
