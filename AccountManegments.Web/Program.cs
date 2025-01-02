@@ -20,25 +20,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
 
-
-            options.Cookie.HttpOnly = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.IsEssential = true;
-            options.SlidingExpiration = true;
-            options.ExpireTimeSpan = TimeSpan.FromDays(300);
             options.LoginPath = "/Authentication/UserLogin";
             options.LogoutPath = "/Authentication/UserLogin";
-            options.AccessDeniedPath = "/Home/UnAuthorised";
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.Cookie.IsEssential = true;
+            options.SlidingExpiration = true;
+            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+
 
         });
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "UserName";
-    options.Cookie.Expiration = TimeSpan.FromDays(300);
+    options.Cookie.Expiration = TimeSpan.FromMinutes(1);
 });
 builder.Services.AddSession(option =>
 {
-    option.IdleTimeout = TimeSpan.FromDays(300);
+    option.IdleTimeout = TimeSpan.FromHours(8);
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 
