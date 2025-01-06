@@ -374,7 +374,7 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
         //        throw;
         //    }
         //}
-        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IEnumerable<PurchaseOrderView>> GetPurchaseOrderList(string? searchText, string? FilterBy, string? sortBy)
         {
             try
             {
@@ -421,29 +421,33 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                         u.TotalGstamount.ToString().Contains(searchText) ||
                         u.TotalAmount.ToString().Contains(searchText) ||
                         u.CompanyName.ToLower().Contains(searchText) ||
-                        u.Poid.ToLower().Contains(searchText)
+                        u.Poid.ToLower().Contains(searchText) ||
+                        u.SiteName.ToLower().Contains(searchText)
                     );
                 }
 
 
-                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                if (!string.IsNullOrEmpty(FilterBy))
                 {
-                    searchText = searchText.ToLower();
-                    switch (searchBy.ToLower())
+                    switch (FilterBy.ToLower())
                     {
-                        case "suppliername":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.SupplierName.ToLower().Contains(searchText));
+                        case "active":
+                            PurchaseOrder = PurchaseOrder.Where(u => u.IsActive == true);
                             break;
-                        case "totalgstamount":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalGstamount.ToString().Contains(searchText));
+                        case "inactive":
+                            PurchaseOrder = PurchaseOrder.Where(u => u.IsActive == false);
                             break;
-                        case "totalamount":
-                            PurchaseOrder = PurchaseOrder.Where(u => u.TotalAmount.ToString().Contains(searchText));
+                        case "all":
+                            PurchaseOrder = PurchaseOrder;
                             break;
                         default:
 
                             break;
                     }
+                }
+                else
+                {
+                    PurchaseOrder = PurchaseOrder.Where(u => u.IsActive == true);
                 }
 
 

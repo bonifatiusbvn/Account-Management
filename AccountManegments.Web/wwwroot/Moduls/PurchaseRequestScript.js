@@ -1823,9 +1823,8 @@ var value, invoices_list = localStorage.getItem("invoices-list"),
 function GetPOList() {
     siteloadershow();
     var searchText = $('#txtPOSearch').val();
-    var searchBy = $('#ddlPOSearchBy').val();
 
-    $.get("/PurchaseMaster/POListAction", { searchBy: searchBy, searchText: searchText })
+    $.get("/PurchaseMaster/POListAction", { searchText: searchText })
         .done(function (result) {
             siteloaderhide();
 
@@ -1865,18 +1864,35 @@ function filterallItemTable() {
         },
     });
 }
-
-function filterPOTable() {
+function SearchPOTable() {
     siteloadershow();
     var searchText = $('#txtPOSearch').val();
-    var searchBy = $('#ddlPOSearchBy').val();
 
     $.ajax({
         url: '/PurchaseMaster/POListAction',
         type: 'GET',
         data: {
             searchText: searchText,
-            searchBy: searchBy
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#PurchaseOrderListbody").html(result);
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.error(xhr.responseText);
+        }
+    });
+}
+function filterPOTable() {
+    siteloadershow();
+    var FilterBy = $('#ddlPOFilterBy').val();
+
+    $.ajax({
+        url: '/PurchaseMaster/POListAction',
+        type: 'GET',
+        data: {
+            FilterBy: FilterBy
         },
         success: function (result) {
             siteloaderhide();

@@ -46,12 +46,13 @@
                                     <div class="card-body">
                                         <div class="row g-3">
                                             <div class="col-12 col-lg-4">
-                                                <input class="form-control" id="txtPOSearch" onkeyup="filterPOTable()" placeholder="Search" />
+                                                <input class="form-control" id="txtPOSearch" onkeyup="SearchPOTable()" placeholder="Search" />
                                             </div>
                                             <div class="col-12 col-lg-4">
-                                                <select class="form-select" id="ddlPOSearchBy" onchange="filterPOTable()">
-                                                    <option selected="selected">All</option>
-                                                    <option>SupplierName</option>
+                                                <select class="form-select" id="ddlPOFilterBy" onchange="filterPOTable()">
+                                                    <option value="Active" selected="selected">Active</option>
+                                                    <option value="Inactive">Inactive</option>
+                                                    <option value="All">All</option>
                                                 </select>
                                                 <input type="hidden" id="inputSiteId" value="@UserSession.SiteId" />
                                             </div>

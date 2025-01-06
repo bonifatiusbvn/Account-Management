@@ -409,7 +409,7 @@ namespace AccountManegments.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> POListAction(string searchText, string searchBy, string sortBy)
+        public async Task<IActionResult> POListAction(string searchText, string FilterBy, string sortBy)
         {
             try
             {
@@ -417,7 +417,7 @@ namespace AccountManegments.Web.Controllers
                 Guid? SiteId = !string.IsNullOrEmpty(siteIdString) ? Guid.Parse(siteIdString) : (Guid?)null;
                 List<UserCompanyListModel> CompanyData= UserSession.CompanyData;
 
-                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+                string apiUrl = $"PurchaseOrder/GetPurchaseOrderList?searchText={searchText}&searchBy={FilterBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
 

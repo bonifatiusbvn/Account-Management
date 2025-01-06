@@ -478,13 +478,13 @@ namespace AccountManegments.Web.Controllers
                         {
                             var cultureInfo = new CultureInfo("en-IN");
                             var numberFormat = cultureInfo.NumberFormat;
-                            numberFormat.CurrencySymbol = "₹";
                             numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
                             numberFormat.CurrencyDecimalDigits = 2;
                             numberFormat.CurrencyGroupSeparator = ",";
                             numberFormat.CurrencyDecimalSeparator = ".";
-                            return amount.ToString("C", numberFormat);
+                            return amount.ToString("N", numberFormat);
                         }
+
 
                         foreach (var item in SupplierDetails.InvoiceList)
                         {
@@ -1025,12 +1025,11 @@ namespace AccountManegments.Web.Controllers
                     {
                         var cultureInfo = new CultureInfo("en-IN");
                         var numberFormat = cultureInfo.NumberFormat;
-                        numberFormat.CurrencySymbol = "₹";
                         numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
                         numberFormat.CurrencyDecimalDigits = 2;
                         numberFormat.CurrencyGroupSeparator = ",";
                         numberFormat.CurrencyDecimalSeparator = ".";
-                        return amount.ToString("C", numberFormat);
+                        return amount.ToString("N", numberFormat);
                     }
 
                     using (var wb = new XLWorkbook())
