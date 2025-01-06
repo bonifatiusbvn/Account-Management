@@ -17,6 +17,11 @@
         padding: 5px;
     }
 </style>
+@{
+    var usercompany = UserSession.CompanyData;
+    var selectedcompanyId = UserSession.ComapnyId;
+    var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
+}
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
     <div class="d-flex align-items-center">
         <form class="position-relative">
@@ -42,20 +47,30 @@
                                             <div class="card-body">
                                                 <div class="row g-3">
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="filterSupplierInvoiceTable()" placeholder="Search">
+                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="SupplierInvoiceSearchTable()" placeholder="Search">
                                                     </div>
                                                     <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="ddlInvoiceCompanyName" name="ddlInvoiceCompanyName" onchange="companyfilterSupplierInvoice()">
-                                                            <option selected disabled value="">Select Company</option>
+                                                        <select class="form-select" id="ddlFilterInvoiceCompany" name="ddlFilterInvoiceCompany">
+                                                            @if (usercompany != null && usercompany.Any())
+                                                            {
+                                                                foreach (var company in usercompany)
+                                                                {
+                                                                    var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                                                    <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected value="" disabled>Select Company</option>
+                                                            }
                                                         </select>
                                                     </div>
-                                                    <div class="col-12 col-lg-4">
-                                                        <select class="form-select" id="SortBySupplierInvoice" onchange="SupplierInvoicesortTable()">
-                                                            <option value="DescendingCreatedOn" selected="selected">Most Recent</option>
-                                                            <option value="AscendingCreatedOn">First Created</option>
-                                                            <option value="AscendingCompanyName">CompanyName (a-z)</option>
-                                                            <option value="DescendingCompanyName">CompanyName (z-a)</option>
-                                                        </select>
+                                                    <div class="col-12 col-lg-3">
+                                                        <input type="text" id="ddlFilterInvoiceSupplier" name="ddlFilterInvoiceSupplier" class="form-control" placeholder="Supplier" />
+                                                        <input type="hidden" id="ddlFilterInvoiceSupplierHidden" name="ddlFilterInvoiceSupplierHidden" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-1">
+                                                        <button type="button" class="btn btn-primary nav-btn" id="ResetInvoiceButton" onclick="fn_ResetAllInvoiceDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
                                                     </div>
                                                 </div><!--end row-->
                                             </div>
@@ -67,17 +82,17 @@
                                                 <thead class="table-light btn-primary">
                                                     <tr>
                                                         <th>InvoiceNo</th>
-                                                        <th>
+                                                        <th style="width:110px;">
                                                             <a href="#" onclick="sortTable('Date')" class="white-text">Date</a>
                                                         </th>
                                                         <th>Site</th>
-                                                        <th>Group</th>
+                                                        <th style="width: 180px;">Group</th>
                                                         <th>Supplier</th>
                                                         <th>Company</th>
                                                         <th>Total Amount</th>
                                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase  Invoice" && (a.Edit == true || a.Delete == true)))
                                                         {
-                                                            <th>Action</th>
+                                                            <th style="width: 150px;">Action</th>
                                                         }
                                                     </tr>
                                                 </thead>
@@ -262,7 +277,9 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    window._FilterUserCompanyCount = @usercompanyCount;
+</script>
 @section Scripts {
     <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
 }

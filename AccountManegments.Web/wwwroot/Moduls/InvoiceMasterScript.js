@@ -1,7 +1,7 @@
 ﻿var _userCompanyCount = window._userCompanyCount || 0;
 
 AllSupplierInvoiceListTable()
-InvoiceListTable();
+//InvoiceListTable();
 GetItemDetailsList()
 GetSiteDetail();
 GetSupplierDetail();
@@ -346,17 +346,87 @@ function AllSupplierInvoiceListTable() {
         });
 }
 
+var _FilterUserCompanyCount = window._FilterUserCompanyCount || 0;
+if (_FilterUserCompanyCount === 0) {
+    $(document).ready(function () {
+        GetFilterInvoiceCompanyList();
+    });
+}
+GetFilterInvoiceSupplierList();
+
+function GetFilterInvoiceCompanyList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+
+            if (result.length > 0) {
+                var $dropdown = $('#ddlFilterInvoiceCompany');
+                $dropdown.empty();
+
+                $dropdown.append('<option selected value="" disabled>Select Company</option>');
+
+                $.each(result, function (i, data) {
+                    $dropdown.append(
+                        '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' + data.companyName + '</option>'
+                    );
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
+        }
+    });
+}
+function GetFilterInvoiceSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+
+            $("#ddlFilterInvoiceSupplier").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#ddlFilterInvoiceSupplier").val(ui.item.label);
+                    $("#ddlFilterInvoiceSupplierHidden").val(ui.item.value);
+                    $("#ddlFilterInvoiceSupplierHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+$("#ddlFilterInvoiceCompany").on('change', function () {
+    filterSupplierInvoiceTable();
+});
+$("#ddlFilterInvoiceSupplierHidden").on('change', function () {
+    filterSupplierInvoiceTable();
+});
 function filterSupplierInvoiceTable() {
     siteloadershow();
-    var searchText = $('#txtSupplierInvoiceSearch').val();
-    var searchBy = $('#SupplierInvoiceSearchBy').val();
+    var CompanyId = $('#ddlFilterInvoiceCompany').val();
+    var SupplierId = $('#ddlFilterInvoiceSupplierHidden').val();
 
     $.ajax({
         url: '/InvoiceMaster/SupplierInvoiceListAction',
         type: 'GET',
         data: {
-            searchText: searchText,
-            searchBy: searchBy
+            CompanyId: CompanyId,
+            SupplierId: SupplierId
         },
         success: function (result) {
             siteloaderhide();
@@ -366,14 +436,14 @@ function filterSupplierInvoiceTable() {
     });
 }
 
-function SupplierInvoicesortTable() {
+function SupplierInvoiceSearchTable() {
     siteloadershow();
-    var sortBy = $('#SortBySupplierInvoice').val();
+    var Search = $('#txtSupplierInvoiceSearch').val();
     $.ajax({
         url: '/InvoiceMaster/SupplierInvoiceListAction',
         type: 'GET',
         data: {
-            sortBy: sortBy
+            searchText: Search
         },
         success: function (result) {
             siteloaderhide();
@@ -382,7 +452,9 @@ function SupplierInvoicesortTable() {
 
     });
 }
-
+function fn_ResetAllInvoiceDropdown() {
+    window.location = '/InvoiceMaster/SupplierInvoiceListView';
+}
 function DeleteSupplierInvoice(Id, SupplierInvoiceNo, InvoiceNo, element) {
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
@@ -996,60 +1068,60 @@ var value, invoices_list = localStorage.getItem("invoices-list"),
     invoices = JSON.parse(invoices_list);
 
 
-function InvoiceListTable() {
+//function InvoiceListTable() {
 
-    var searchText = $('#txtInvoiceSearch').val();
-    var searchBy = $('#InvoiceSearchBy').val();
+//    var searchText = $('#txtInvoiceSearch').val();
+//    var searchBy = $('#InvoiceSearchBy').val();
 
-    $.get("/InvoiceMaster/InvoiceListAction", { searchBy: searchBy, searchText: searchText })
-        .done(function (result) {
-            $("#Invoicetbody").html(result);
-        })
+//    $.get("/InvoiceMaster/InvoiceListAction", { searchBy: searchBy, searchText: searchText })
+//        .done(function (result) {
+//            $("#Invoicetbody").html(result);
+//        })
 
-}
+//}
 
-function filterInvoiceTable() {
-    siteloadershow();
-    var searchText = $('#txtInvoiceSearch').val();
-    var searchBy = $('#InvoiceSearchBy').val();
+//function filterInvoiceTable() {
+//    siteloadershow();
+//    var searchText = $('#txtInvoiceSearch').val();
+//    var searchBy = $('#InvoiceSearchBy').val();
 
-    $.ajax({
-        url: '/InvoiceMaster/InvoiceListAction',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-            searchBy: searchBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#Invoicetbody").html(result);
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
+//    $.ajax({
+//        url: '/InvoiceMaster/InvoiceListAction',
+//        type: 'GET',
+//        data: {
+//            searchText: searchText,
+//            searchBy: searchBy
+//        },
+//        success: function (result) {
+//            siteloaderhide();
+//            $("#Invoicetbody").html(result);
+//        },
+//        error: function (xhr, status, error) {
+//            siteloaderhide();
 
-        }
-    });
-}
+//        }
+//    });
+//}
 
-function InvoiceSortTable() {
-    siteloadershow();
-    var sortBy = $('#SortByInvoice').val();
-    $.ajax({
-        url: '/InvoiceMaster/InvoiceListAction',
-        type: 'GET',
-        data: {
-            sortBy: sortBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#Invoicetbody").html(result);
-        },
-        error: function (xhr, status, error) {
-            siteloaderhide();
+//function InvoiceSortTable() {
+//    siteloadershow();
+//    var sortBy = $('#SortByInvoice').val();
+//    $.ajax({
+//        url: '/InvoiceMaster/InvoiceListAction',
+//        type: 'GET',
+//        data: {
+//            sortBy: sortBy
+//        },
+//        success: function (result) {
+//            siteloaderhide();
+//            $("#Invoicetbody").html(result);
+//        },
+//        error: function (xhr, status, error) {
+//            siteloaderhide();
 
-        }
-    });
-}
+//        }
+//    });
+//}
 
 function printInvoiceDiv() {
     var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
@@ -1689,11 +1761,16 @@ $(document).ready(function () {
     });
 });
 function ExportToPDFInvoiceDetails() {
-
+    var CompanyId = $('#ddlFilterInvoiceCompany').val();
+    var SupplierId = $('#ddlFilterInvoiceSupplierHidden').val();
     siteloadershow();
     $.ajax({
         url: '/InvoiceMaster/InvoiceDetailsExportToPdf',
         type: 'Get',
+        data: {
+            CompanyId: CompanyId,
+            SupplierId: SupplierId
+        },
         datatype: 'json',
         success: function (data, status, xhr) {
             siteloaderhide();

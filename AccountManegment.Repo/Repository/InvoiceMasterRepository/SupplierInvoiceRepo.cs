@@ -222,9 +222,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         SiteId = group.Key.SiteId,
         SupplierId = group.Key.SupplierId,
         CompanyId = group.FirstOrDefault().s.CompanyId,
-        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
-        NetAmount = group.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - group.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        PayOutTotalAmount = group.Where(x => x.s.InvoiceNo == "PayOut" || x.s.InvoiceType == "Purchase Return" || x.s.InvoiceType == "Credit Note").Sum(x => x.s.TotalAmount),
+        NonPayOutTotalAmount = group.Where(x => x.s.InvoiceNo != "PayOut" && x.s.InvoiceType != "Purchase Return" && x.s.InvoiceType != "Credit Note").Sum(x => x.s.TotalAmount),
+        NetAmount = group.Sum(x => x.s.InvoiceNo != "PayOut" ? x.s.TotalAmount : -x.s.TotalAmount),
         GroupName = group.FirstOrDefault().s.SiteGroup,
         Description = string.Join(", ", group.Select(x => x.s.Description)),
         CompanyName = group.FirstOrDefault().CompanyName,
@@ -238,7 +238,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
     })
     .ToListAsync();
 
+
                 var TotalCredit = CountTotalData.Sum(i => i.NonPayOutTotalAmount);
+
                 var TotalDebit = CountTotalData.Sum(i => i.PayOutTotalAmount);
 
                 if (!string.IsNullOrEmpty(PayOutReport.sortColumn) && !string.IsNullOrEmpty(PayOutReport.sortColumnDir))
@@ -1198,33 +1200,17 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
            })
            .ToListAsync();
 
+                var TotalCredit = allData
+                    .Where(i => i.InvoiceNo != "PayOut" &&
+                        i.InvoiceType != "Purchase Return" &&
+                        i.InvoiceType != "Credit Note")
+                        .Sum(i => i.TotalAmount);
 
-                var CountTotalData = await query
-           .Select(s => new SupplierInvoiceModel
-           {
-               Id = s.s.Id,
-               InvoiceNo = s.s.InvoiceNo,
-               SiteId = s.s.SiteId,
-               SupplierId = s.s.SupplierId,
-               CompanyId = s.s.CompanyId,
-               TotalAmount = s.s.TotalAmount,
-               GroupName = s.s.SiteGroup,
-               TotalDiscount = s.s.TotalDiscount,
-               TotalGstamount = s.s.TotalGstamount,
-               Tds = s.s.Tds,
-               Description = s.s.Description,
-               CompanyName = s.CompanyName,
-               SupplierName = s.SupplierName,
-               PaymentStatus = s.s.PaymentStatus,
-               IsPayOut = s.s.IsPayOut,
-               SupplierInvoiceNo = s.s.SupplierInvoiceNo,
-               Date = s.s.Date,
-               CreatedOn = s.s.CreatedOn,
-               SiteName = s.SiteName
-           }).ToListAsync();
-
-                var TotalCredit = CountTotalData.Sum(i => i.InvoiceNo != "PayOut" || i.InvoiceNo == "Opening Balance" ? i.TotalAmount : 0);
-                var TotalDebit = CountTotalData.Sum(i => i.InvoiceNo == "PayOut" ? i.TotalAmount : 0);
+                var TotalDebit = allData
+                    .Where(i => i.InvoiceNo == "PayOut" ||
+                        i.InvoiceType == "Purchase Return" ||
+                        i.InvoiceType == "Credit Note")
+                        .Sum(i => i.TotalAmount);
 
                 var jsonData = new jsonData
                 {
@@ -1480,17 +1466,6 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     query = query.Where(s => s.s.Date <= invoiceReport.endDate.Value).OrderBy(s => s.s.CreatedOn);
                 }
 
-                var CreditTotalAmount = await Context.SupplierInvoices
-            .Where(s => s.InvoiceNo != "Payout" && query.Any(q => q.s.Id == s.Id))
-            .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
-
-                var DebitTotalAmount = await Context.SupplierInvoices
-                    .Where(s => s.InvoiceNo == "Payout" && query.Any(q => q.s.Id == s.Id))
-                    .SumAsync(s => (decimal?)s.TotalAmount) ?? 0m;
-
-                var PendingTotalAmount = CreditTotalAmount - DebitTotalAmount;
-
-
                 var totalRecords = await query.CountAsync();
 
                 var SupplierInvoiceList = await query.Select(s => new SupplierInvoiceModel
@@ -1516,6 +1491,20 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     SiteName = s.SiteName,
                     InvoiceType = s.s.InvoiceType,
                 }).ToListAsync();
+
+                var CreditTotalAmount = SupplierInvoiceList
+                    .Where(i => i.InvoiceNo != "PayOut" &&
+                        i.InvoiceType != "Purchase Return" &&
+                        i.InvoiceType != "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var DebitTotalAmount = SupplierInvoiceList
+                    .Where(i => i.InvoiceNo == "PayOut" ||
+                        i.InvoiceType == "Purchase Return" ||
+                        i.InvoiceType == "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var PendingTotalAmount = CreditTotalAmount - DebitTotalAmount;
 
                 var PayOutDetails = new InvoiceTotalAmount
                 {
@@ -1642,9 +1631,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
         SiteId = supplierGroup.FirstOrDefault().s.SiteId,
         SupplierId = supplierGroup.Key,
         CompanyId = supplierGroup.FirstOrDefault().s.CompanyId,
-        PayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
-        NonPayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut" || x.s.InvoiceNo == "Opening Balance").Sum(x => x.s.TotalAmount),
-        NetAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut").Sum(x => x.s.TotalAmount) - supplierGroup.Where(x => x.s.InvoiceNo == "PayOut").Sum(x => x.s.TotalAmount),
+        PayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo == "PayOut" || x.s.InvoiceType == "Purchase Return" || x.s.InvoiceType == "Credit Note").Sum(x => x.s.TotalAmount),
+        NonPayOutTotalAmount = supplierGroup.Where(x => x.s.InvoiceNo != "PayOut" && x.s.InvoiceType != "Purchase Return" && x.s.InvoiceType != "Credit Note").Sum(x => x.s.TotalAmount),
+        NetAmount = supplierGroup.Sum(x => x.s.InvoiceNo != "PayOut" ? x.s.TotalAmount : -x.s.TotalAmount),
         GroupName = supplierGroup.FirstOrDefault().s.SiteGroup,
         Description = string.Join(", ", supplierGroup.Select(x => x.s.Description)),
         CompanyName = supplierGroup.FirstOrDefault().CompanyName,
@@ -1660,7 +1649,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                 var totalCredit = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.NonPayOutTotalAmount));
                 var totalDebit = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.PayOutTotalAmount));
-                var totalPending = groupedBySite.Sum(site => site.SupplierInvoices.Sum(i => i.NetAmount));
+                var totalPending = totalCredit - totalDebit;
 
                 var PayOutDetails = new InvoiceTotalAmount
                 {
@@ -1703,7 +1692,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                  join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                                  join c in Context.Companies on a.CompanyId equals c.CompanyId
                                                  join d in Context.Sites on a.SiteId equals d.SiteId
-                                                 where a.InvoiceNo != "PayOut"  && a.IsApproved == true && a.SiteId == SiteId
+                                                 where a.InvoiceNo != "PayOut" && a.IsApproved == true && a.SiteId == SiteId
                                                  select new SupplierInvoiceMasterView
                                                  {
                                                      Id = a.Id,
@@ -1725,7 +1714,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                 {
                     var itemList = await (from a in Context.SupplierInvoiceDetails
                                           join i in Context.ItemMasters on a.ItemId equals i.ItemId
-                                          where a.RefInvoiceId == invoice.Id 
+                                          where a.RefInvoiceId == invoice.Id
                                           select new POItemDetailsModel
                                           {
                                               ItemId = a.ItemId,

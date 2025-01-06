@@ -159,7 +159,7 @@ namespace AccountManegments.Web.Controllers
         }
 
         [FormPermissionAttribute("Purchase  Invoice-View")]
-        public async Task<IActionResult> SupplierInvoiceListAction(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IActionResult> SupplierInvoiceListAction(string? searchText, string? searchBy, string? sortBy, Guid? CompanyId, Guid? SupplierId)
         {
             try
             {
@@ -203,6 +203,18 @@ namespace AccountManegments.Web.Controllers
                                 item => item.Key,
                                 item => item.Value
                             );
+                    }
+                    if (CompanyId != null)
+                    {
+                        GetInvoiceList.InvoiceList = GetInvoiceList.InvoiceList
+                            .Where(invoice => invoice.CompanyId == CompanyId.Value)
+                            .ToList();
+                    }
+                    if (SupplierId != null)
+                    {
+                        GetInvoiceList.InvoiceList = GetInvoiceList.InvoiceList
+                            .Where(invoice => invoice.SupplierId == SupplierId.Value)
+                            .ToList();
                     }
 
                     return PartialView("~/Views/InvoiceMaster/_SupplierInvoiceListPartial.cshtml", GetInvoiceList);
@@ -797,7 +809,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> InvoiceDetailsExportToPdf()
+        public async Task<IActionResult> InvoiceDetailsExportToPdf(Guid? CompanyId, Guid? SupplierId)
         {
             try
             {
@@ -810,8 +822,18 @@ namespace AccountManegments.Web.Controllers
 
                 if (response.code == 200)
                 {
-                    var supplierDetailsList = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(response.data.ToString());
+                    string responseData = response.data.ToString();
 
+                    var supplierDetailsList = JsonConvert.DeserializeObject<List<SupplierInvoiceMasterView>>(responseData);
+
+                    if (CompanyId != null)
+                    {
+                        supplierDetailsList = supplierDetailsList.Where(e => e.CompanyId == CompanyId.Value).ToList();
+                    }
+                    if (SupplierId != null)
+                    {
+                        supplierDetailsList = supplierDetailsList.Where(e => e.SupplierId == SupplierId.Value).ToList();
+                    }
 
                     decimal TotalAmount = 0;
                     decimal AllItemTotalAmount = 0;
@@ -925,7 +947,7 @@ namespace AccountManegments.Web.Controllers
                         {
                             var itemRow = ItemTable.Rows.Add();
                             itemRow.Cells.Add(item.ItemName ?? string.Empty);
-                            itemRow.Cells.Add(item.Quantity?.ToString() ?? "0");
+                            itemRow.Cells.Add(item.Quantity.ToString() ?? "0");
                             itemRow.Cells.Add(FormatIndianCurrency(item.TotalAmount ?? 0));
 
                             var backgroundColor = rowCount % 2 == 0 ? Aspose.Pdf.Color.LightGray : Aspose.Pdf.Color.White;
