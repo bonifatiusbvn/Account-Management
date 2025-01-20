@@ -209,9 +209,10 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                         u.SalesInvoice.SiteName.ToLower().Contains(searchText) ||
                         u.SalesInvoice.CompanyName.ToLower().Contains(searchText) ||
                         u.SalesInvoice.SupplierName.ToLower().Contains(searchText) ||
-                        u.SalesInvoice.SupplierInvoiceNo.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.SalesInvoiceNo.ToLower().Contains(searchText) ||
                         u.SalesInvoice.TotalAmount.ToString().Contains(searchText) ||
-                        u.Item.ItemName.ToLower().Contains(searchText)
+                        u.Item.ItemName.ToLower().Contains(searchText) ||
+                        u.SalesInvoice.Date.ToString().Contains(searchText) 
                     );
                 }
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))

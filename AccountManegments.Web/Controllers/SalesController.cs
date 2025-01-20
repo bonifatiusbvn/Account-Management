@@ -138,7 +138,7 @@ namespace AccountManegments.Web.Controllers
         }
 
 
-        public async Task<IActionResult> SalesInvoiceListAction(string? searchText, string? searchBy, string? sortBy)
+        public async Task<IActionResult> SalesInvoiceListAction(string? searchText, string? searchBy, string? sortBy, Guid? CompanyId, Guid? SupplierId)
         {
             try
             {
@@ -182,6 +182,18 @@ namespace AccountManegments.Web.Controllers
                                 item => item.Key,
                                 item => item.Value
                             );
+                    }
+                    if (CompanyId != null)
+                    {
+                        GetInvoiceList.SalesInvoiceList = GetInvoiceList.SalesInvoiceList
+                            .Where(invoice => invoice.CompanyId == CompanyId.Value)
+                            .ToList();
+                    }
+                    if (SupplierId != null)
+                    {
+                        GetInvoiceList.SalesInvoiceList = GetInvoiceList.SalesInvoiceList
+                            .Where(invoice => invoice.SupplierId == SupplierId.Value)
+                            .ToList();
                     }
 
                     return PartialView("~/Views/Sales/_SalesInvoiceListPartial.cshtml", GetInvoiceList);
@@ -625,6 +637,7 @@ namespace AccountManegments.Web.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [FormPermissionAttribute("Reports & Payments-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertSalesPayInInvoice()
         {

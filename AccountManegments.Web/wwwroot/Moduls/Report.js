@@ -551,7 +551,7 @@ $(document).ready(function () {
 
     for (var i = 0; i < userPermissionArray.length; i++) {
         var permission = userPermissionArray[i];
-        if (permission.formName == "Report & Payout") {
+        if (permission.formName == "Reports & Payments") {
             canEdit = permission.edit;
             canDelete = permission.delete;
             break;

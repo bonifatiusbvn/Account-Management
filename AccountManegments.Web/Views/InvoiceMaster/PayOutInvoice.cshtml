@@ -214,7 +214,7 @@
                                                                                                 <th>Credit</th>
                                                                                                 <th>Debit</th>
                                                                                                 <th>Balance</th>
-                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
                                                                                                 {
                                                                                                     <th>Action</th>
                                                                                                 }
@@ -229,7 +229,7 @@
                                                                                                 <th id="totalDebit"></th>
 
                                                                                                 <th id="NetAmount"></th>
-                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && (a.Edit == true || a.Delete == true)))
+                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
                                                                                                 {
                                                                                                     <th></th>
                                                                                                 }
@@ -365,7 +365,7 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="card border-0">
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Report & Payout" && a.Add == true))
+                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && a.Add == true))
                                                         {
                                                             <div class="card-body">
                                                                 <a class="btn btn-primary" id="AddPayOutInvoiceBtn" onclick="AddNewRowforPayOutInvoice()" style="margin-left:-10px; display: none;">

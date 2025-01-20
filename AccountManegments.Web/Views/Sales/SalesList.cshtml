@@ -4,7 +4,11 @@
     ViewData["Title"] = "SalesList";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
-
+@{
+    var usercompany = UserSession.CompanyData;
+    var selectedcompanyId = UserSession.ComapnyId;
+    var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
+}
 <style>
     .table tbody tr {
         border-bottom: 1px solid #ddd;
@@ -41,9 +45,32 @@
                                             <div class="card-body">
                                                 <div class="row g-3">
                                                     <div class="col-12 col-lg-4">
-                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="filterSalesInvoiceTable()" placeholder="Search">
+                                                        <input class="form-control" id="txtSupplierInvoiceSearch" onkeyup="SalesInvoiceSearchTable()" placeholder="Search">
                                                     </div>
                                                     <div class="col-12 col-lg-4">
+                                                        <select class="form-select" id="ddlFilterSalesInvoiceCompany" name="ddlFilterSalesInvoiceCompany">
+                                                            @if (usercompany != null && usercompany.Any())
+                                                            {
+                                                                foreach (var company in usercompany)
+                                                                {
+                                                                    var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                                                    <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected value="" disabled>Select Company</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 col-lg-3">
+                                                        <input type="text" id="ddlFilterSalesInvoiceSupplier" name="ddlFilterSalesInvoiceSupplier" class="form-control" placeholder="Supplier" />
+                                                        <input type="hidden" id="ddlFilterSalesInvoiceSupplierHidden" name="ddlFilterSalesInvoiceSupplierHidden" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-1">
+                                                        <button type="button" class="btn btn-primary nav-btn" id="ResetSalesInvoiceButton" onclick="fn_ResetAllSalesInvoiceDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
+                                                    </div>
+                                                    @* <div class="col-12 col-lg-4">
                                                         <select class="form-select" id="ddlInvoiceCompanyName" name="ddlInvoiceCompanyName" onchange="filterSalesInvoiceTable()">
                                                             <option selected value="">All</option>
                                                             <option value="CompanyName">CompanyName</option>
@@ -56,7 +83,7 @@
                                                             <option value="AscendingCompanyName">CompanyName (a-z)</option>
                                                             <option value="DescendingCompanyName">CompanyName (z-a)</option>
                                                         </select>
-                                                    </div>
+                                                    </div> *@
                                                 </div><!--end row-->
                                             </div>
                                         </div>
@@ -260,6 +287,9 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    window._FilterUserCompanyCount = @usercompanyCount;
+</script>
 @section Scripts {
     <script src="~/moduls/salesinvoicemasterscript.js" asp-append-version="true"></script>
 }

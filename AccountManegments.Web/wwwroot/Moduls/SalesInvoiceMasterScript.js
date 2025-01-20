@@ -1,6 +1,113 @@
 ﻿GetSalesSupplierDetail();
 GetSalesCompanyDetail();
 GetSalesItemDetailsList();
+
+var _FilterUserCompanyCount = window._FilterUserCompanyCount || 0;
+if (_FilterUserCompanyCount === 0) {
+    $(document).ready(function () {
+        GetFilterSalesInvoiceCompanyList();
+    });
+}
+GetFilterSalesInvoiceSupplierList();
+
+function GetFilterSalesInvoiceCompanyList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+
+            if (result.length > 0) {
+                var $dropdown = $('#ddlFilterSalesInvoiceCompany');
+                $dropdown.empty();
+
+                $dropdown.append('<option selected value="" disabled>Select Company</option>');
+
+                $.each(result, function (i, data) {
+                    $dropdown.append(
+                        '<option value="' + data.companyId + '" data-company-name="' + data.companyName + '">' + data.companyName + '</option>'
+                    );
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
+        }
+    });
+}
+function GetFilterSalesInvoiceSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+
+            $("#ddlFilterSalesInvoiceSupplier").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#ddlFilterSalesInvoiceSupplier").val(ui.item.label);
+                    $("#ddlFilterSalesInvoiceSupplierHidden").val(ui.item.value);
+                    $("#ddlFilterSalesInvoiceSupplierHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+$("#ddlFilterSalesInvoiceCompany").on('change', function () {
+    filterSalesInvoiceTable();
+});
+$("#ddlFilterSalesInvoiceSupplierHidden").on('change', function () {
+    filterSalesInvoiceTable();
+});
+function filterSalesInvoiceTable() {
+    siteloadershow();
+    var CompanyId = $('#ddlFilterSalesInvoiceCompany').val();
+    var SupplierId = $('#ddlFilterSalesInvoiceSupplierHidden').val();
+
+    $.ajax({
+        url: '/Sales/SalesInvoiceListAction',
+        type: 'GET',
+        data: {
+            CompanyId: CompanyId,
+            SupplierId: SupplierId
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#SalesInvoicebody").html(result);
+        },
+    });
+}
+function SalesInvoiceSearchTable() {
+    siteloadershow();
+    var Search = $('#txtSupplierInvoiceSearch').val();
+    $.ajax({
+        url: '/Sales/SalesInvoiceListAction',
+        type: 'GET',
+        data: {
+            searchText: Search
+        },
+        success: function (result) {
+            siteloaderhide();
+            $("#SalesInvoicebody").html(result);
+        },
+    });
+}
+function fn_ResetAllSalesInvoiceDropdown() {
+    window.location = '/Sales/SalesList';
+}
 function GetSalesSupplierDetail() {
 
     $.ajax({
@@ -797,25 +904,7 @@ function DeleteSalesInvoiceDetails(Id, SalesInvoiceNo, element) {
 }
 
 SalesInvoicesortTable();
-function companyfilterSalesInvoice() {
-    siteloadershow();
-    var searchText = $('#ddlInvoiceCompanyName').val();
-    var searchBy = "AscendingCompanyName";
 
-    $.ajax({
-        url: '/Sales/SalesInvoiceListAction',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-            searchBy: searchBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#SalesInvoicebody").html(result);
-        },
-
-    });
-}
 
 
 let currentSortOrder = '';
@@ -843,27 +932,6 @@ function sortTable(field) {
             console.error("Error fetching sorted data:", error);
             siteloaderhide();
         }
-    });
-}
-
-function filterSalesInvoiceTable() {
-
-    siteloadershow();
-    var searchText = $('#txtSupplierInvoiceSearch').val();
-    var searchBy = $('#ddlInvoiceCompanyName').val();
-
-    $.ajax({
-        url: '/Sales/SalesInvoiceListAction',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-            searchBy: searchBy
-        },
-        success: function (result) {
-            siteloaderhide();
-            $("#SalesInvoicebody").html(result);
-        },
-
     });
 }
 
