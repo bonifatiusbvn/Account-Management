@@ -580,6 +580,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                         join d in Context.Sites on a.SiteId equals d.SiteId
                                         join f in Context.ItemMasters on e.ItemId equals f.ItemId
                                         where a.InvoiceNo != "PayOut" && e.ItemId == ItemId
+                                        orderby a.Date
                                         select new
                                         {
                                             Invoice = new SupplierInvoiceModel

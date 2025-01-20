@@ -168,9 +168,9 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                         join b in Context.SupplierMasters on a.SupplierId equals b.SupplierId
                                         join c in Context.Companies on a.CompanyId equals c.CompanyId
                                         join d in Context.Sites on a.SiteId equals d.SiteId into siteJoin
-                                        from d in siteJoin.DefaultIfEmpty() // Handles cases where SiteId is null
+                                        from d in siteJoin.DefaultIfEmpty()
                                         join f in Context.ItemMasters on e.ItemId equals f.ItemId
-
+                                        orderby a.Date
                                         select new
                                         {
                                             SalesInvoice = new SalesInvoiceMasterModel
