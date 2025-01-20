@@ -85,7 +85,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
-
+        public decimal? PayOutTotalAmount { get; set; }
+        public decimal? NonPayOutTotalAmount { get; set; }
+        public decimal? NetAmount { get; set; }
         public List<SalesInvoiceDetailsModel>? SalesInvoiceDetails { get; set; }
         public List<POItemDetailsModel>? SalesItemList { get; set; }
     }
@@ -145,5 +147,13 @@ namespace AccountManagement.DBContext.Models.ViewModels.SalesMaster
         public string? sortBy { get; set; }
         public string? SupplierName { get; set; }
         public string? CompanyName { get; set; }
+    }
+    public class SalesInvoiceTotalAmount
+    {
+        public IEnumerable<SalesInvoiceMasterModel> SalesInvoiceList { get; set; }
+        public decimal TotalPending { get; set; }
+        public decimal TotalCreadit { get; set; }
+        public decimal TotalOutstanding { get; set; }
+        public decimal TotalPurchase { get; set; }
     }
 }

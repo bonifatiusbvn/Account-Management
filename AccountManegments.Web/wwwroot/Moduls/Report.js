@@ -68,7 +68,7 @@ function GetAllSupplierList() {
                     value: data.supplierId
                 };
             });
-
+           
             $("#textReportSupplierName").autocomplete({
                 source: supplierDetails,
                 minLength: 0,
@@ -83,6 +83,9 @@ function GetAllSupplierList() {
                     return false;
                 }
             }).focus(function () {
+                if ($("#textReportSupplierName").val() === "") {
+                    $("#textReportSupplierNameHidden").val("");
+                }
                 $(this).autocomplete("search", "");
             });
         },
@@ -91,8 +94,6 @@ function GetAllSupplierList() {
         }
     });
 }
-
-
 
 var selectedSiteId = null;
 var selectedCompanyId = null;
@@ -106,6 +107,7 @@ var selectedCompanyName = null;
 var selectedSupplierName = null;
 var selectedSortOrder = "DescendingDate";
 var parsedSiteId = null;
+var selectedInvoiceTypeName = null;
 
 function populateYearDropdown() {
     var currentYear = new Date().getFullYear();
@@ -162,6 +164,9 @@ $("#textReportCompanyName").on('change', function () {
     selectedCompanyName = selectedOption.data('company-name');
 });
 
+$("#textReportTypeList").on('change', function () {
+    selectedInvoiceTypeName = $('#textReportTypeList').val();
+});
 function ExportToPDF() {
 
     siteloadershow();
@@ -207,8 +212,11 @@ function ExportToPDF() {
             objData.filterType = null;
             break;
     }
+    var ajaxUrl = selectedInvoiceTypeName === 'Sales'
+        ? '/Sales/ExportSalesPaymentInvoiceToPdf'
+        : '/Report/ExportToPdf';
     $.ajax({
-        url: '/Report/ExportToPdf',
+        url: ajaxUrl,
         type: 'POST',
         data: objData,
         datatype: 'json',
@@ -299,8 +307,11 @@ function ExportToExcel() {
             objData.filterType = null;
             break;
     }
+    var ajaxUrl = selectedInvoiceTypeName === 'Sales'
+        ? '/Sales/ExportSalesPaymentInvoiceToExcel'
+        : '/Report/ExportToExcel';
     $.ajax({
-        url: '/Report/ExportToExcel',
+        url: ajaxUrl,
         type: 'GET',
         data: objData,
         datatype: 'json',
@@ -351,40 +362,115 @@ function ExportToExcel() {
 
 var datas = userPermissions;
 
-var supplierBalances = {}; // Object to store balance for each supplier
-var processedInvoices = {}; // Object to track processed invoices per supplier
+var supplierBalances = {};
+var processedInvoices = {};
+let dtSupplierCoulms = [];
+let dtSalesCoulms = [];
 
-var dtcoulms = [
+dtSalesCoulms = [
+    {
+        "data": "salesInvoiceNo",
+        "name": "SalesInvoiceNo",
+        "render": function (data, type, row) {
+            if (row.salesInvoiceNo === 'PayIn') {
+                var description = row.description ? ' (' + row.description + ')' : '';
+                return row.salesInvoiceNo + description;
+            } else {
+                var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
+                return row.salesInvoiceNo + invoiceType;
+            }
+        }
+    },
+    {
+        "data": "date",
+        "name": "Date",
+        "render": function (data, type, row) {
+            if (data) {
+                var date = new Date(data);
+                return date.toLocaleDateString('en-GB');
+            }
+            return data;
+        }
+    },
+    { "data": "siteName", "name": "SiteName" },
+    { "data": "groupName", "name": "GroupName" },
+    { "data": "supplierName", "name": "SupplierName" },
+    {
+        "data": "totalAmount",
+        "name": "Credit",
+        "render": function (data, type, row) {
+            if (row.salesInvoiceNo !== 'PayIn' && row.invoiceType != 'Sales Return' && row.invoiceType != 'Credit Note') {
+                return '<span style="color:green">' + '₹' + formatReportNumberWithCommas(data.toFixed(2)) + '</span>';
+            } else {
+                return '';
+            }
+        }
+    },
+    {
+        "data": "totalAmount",
+        "name": "Debit",
+        "render": function (data, type, row) {
+            if (row.salesInvoiceNo === 'PayIn' || row.invoiceType === 'Sales Return' || row.invoiceType === 'Credit Note') {
+                return '<span style="color:red">' + '₹' + formatReportNumberWithCommas(data.toFixed(2)) + '</span>';
+            } else {
+                return '';
+            }
+        }
+    },
+    {
+        "data": "totalAmount",
+        "name": "Balance",
+        "render": function (data, type, row) {
+            var supplierName = row.supplierName;
+            var totalAmount = parseFloat(row.totalAmount) || 0;
+            var SalesInvoiceNo = row.salesInvoiceNo;
+            var invoiceType = row.invoiceType;
+
+            if (!supplierBalances[supplierName]) {
+                supplierBalances[supplierName] = 0;
+                processedInvoices[supplierName] = new Set();
+            }
+            var uniqueKey = (SalesInvoiceNo === "PayIn" || invoiceType === 'Sales Return' || invoiceType === 'Credit Note') ? SalesInvoiceNo + "_" + totalAmount : SalesInvoiceNo;
+            
+            if (!processedInvoices[supplierName].has(uniqueKey)) {
+
+                if (SalesInvoiceNo === "PayIn" || invoiceType === 'Sales Return' || invoiceType === 'Credit Note') {
+                    supplierBalances[supplierName] -= totalAmount;
+                }
+                else {
+                    supplierBalances[supplierName] += totalAmount;
+                }
+                
+                processedInvoices[supplierName].add(uniqueKey);
+            }
+
+            return '<span style="color:blue">' + '₹' + formatReportNumberWithCommas(supplierBalances[supplierName].toFixed(2)) + '</span>';
+        }
+    }
+];
+
+dtSupplierCoulms = [
     {
         "data": "supplierInvoiceNo",
         "name": "supplierInvoiceNo",
         "render": function (data, type, row) {
-
             if (row.invoiceNo === 'Opening Balance' || row.invoiceNo === 'PayOut') {
                 var description = row.description ? ' (' + row.description + ')' : '';
                 if (row.supplierInvoiceNo != null) {
                     return row.supplierInvoiceNo + description;
-                }
-                else {
+                } else {
                     return row.invoiceNo + description;
                 }
-
-            }
-            else {
+            } else {
                 var invoiceType = row.invoiceType ? ' (' + row.invoiceType + ')' : '';
                 if (row.supplierInvoiceNo != null) {
-
                     return row.supplierInvoiceNo + invoiceType;
-                }
-                else {
+                } else {
                     return row.invoiceNo + invoiceType;
                 }
-
-
             }
             return data;
         }
-
     },
     {
         "data": "date",
@@ -456,6 +542,7 @@ var dtcoulms = [
 
 
 
+
 $(document).ready(function () {
     var table;
     var userPermissionArray = JSON.parse(datas);
@@ -469,10 +556,34 @@ $(document).ready(function () {
             canDelete = permission.delete;
             break;
         }
-    }
+    } 
     if (canEdit || canDelete) {
-        dtcoulms.push({
+        dtSalesCoulms.push({
             "data": null,
+            "name": "Action",
+            "render": function (data, type, row) {
+                if (row.salesInvoiceNo === 'PayIn') {
+                    var buttons = '';
+                    if (canEdit) {
+                        buttons +=
+                            '<a class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="EditPayInDetails(\'' + row.id + '\')" title="Edit" aria-label="Edit">' +
+                            '<i class="fadeIn animated bx bx-edit"></i>' +
+                            '</a>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<a href="javascript:;" class="btn text-primary p-0 m-0" style="display: inline-block;" onclick="deletePayInDetails(\'' + row.id + '\')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete">' +
+                            '<i class="lni lni-trash"></i>' +
+                            '</a>';
+                    }
+                    return buttons;
+                }
+            },
+        });
+
+        dtSupplierCoulms.push({
+            "data": null,
+            "name": "Action",
             "render": function (data, type, row) {
 
                 if (row.invoiceNo === 'PayOut' || row.invoiceNo === 'Opening Balance') {
@@ -494,12 +605,19 @@ $(document).ready(function () {
             },
         });
     }
-    $('#searchReportButton').click(function () {
 
+    $('#searchReportButton').click(function () {
 
         if ($.fn.DataTable.isDataTable('#tblinvoice')) {
             table.destroy();
         }
+
+        var ajaxUrl = selectedInvoiceTypeName === 'Sales'
+            ? '/Sales/SalesInvoicePaymentReport'
+            : '/Report/GetSupplierInvoiceDetailsReport';
+
+        var dtColumns = selectedInvoiceTypeName === 'Sales'
+            ? dtSalesCoulms : dtSupplierCoulms;
 
         table = $('#tblinvoice').DataTable({
             processing: false,
@@ -512,7 +630,7 @@ $(document).ready(function () {
             destroy: true,
             order: [],
             ajax: {
-                url: '/Report/GetSupplierInvoiceDetailsReport',
+                url: ajaxUrl,
                 type: 'POST',
                 data: function (d) {
                     d.draw = d.draw;
@@ -548,7 +666,7 @@ $(document).ready(function () {
                     }
                 }
             },
-            columns: dtcoulms,
+            columns: dtColumns,
             scrollX: true,
             scrollY: '350px',
             scrollCollapse: true,
@@ -769,5 +887,152 @@ function ClearPayoutTextBox() {
 function updatePayoutRowNumbers() {
     $('#payoutpartialView .payoutinvoicerow').each(function (index) {
         $(this).find('.row-number').text(index + 1 + '.');
+    });
+}
+
+function EditPayInDetails(SalesId) {
+    ClearPayinTextBox();
+    siteloadershow();
+    $.ajax({
+        url: '/Sales/EditSalesPayInInvoice?SalesId=' + SalesId,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            siteloaderhide();
+            $("#updatePayInModal").modal('show');
+            $('#EdittxtpayinId').val(response.id);
+            $('#Edittxtpayindescription').val(response.description);
+            const formattedDate = formatDate(response.date);
+            $('#Edittxtpayindate').val(formattedDate);
+            $('#Edittxtpayinamount').val(response.totalAmount);
+            $('input[name="Editpayinpaymenttype"][value="' + response.paymentStatus + '"]').prop('checked', true);
+
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Data not found");
+        }
+    });
+}
+function UpdatePayInInvoice() {
+    if ($("#updatePayInForm").valid()) {
+        siteloadershow();
+        var objData = {
+            Id: $('#EdittxtpayinId').val(),
+            Description: $('#Edittxtpayindescription').val(),
+            Date: $('#Edittxtpayindate').val(),
+            TotalAmount: $('#Edittxtpayinamount').val(),
+            PaymentStatus: $('input[name="Editpayinpaymenttype"]:checked').val(),
+            UpdatedBy: $('#EdittxtpayinUpdatedBy').val(),
+        }
+        $.ajax({
+            url: '/Sales/UpdateSalesPayInInvoice',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code == 200) {
+                    $("#updatePayInModal").modal('hide');
+                    toastr.success(Result.message);
+                    $("#searchReportButton").click();
+                } else {
+                    toastr.error(Result.message);
+                }
+            }
+        })
+    }
+    else {
+        siteloaderhide();
+        toastr.error("Kindly fill all details");
+    }
+}
+
+var UpdatePayinForm;
+$(document).ready(function () {
+
+    UpdatePayinForm = $("#updatePayInForm").validate({
+        rules: {
+            Edittxtpayindate: "required",
+            Edittxtpayinamount: {
+                required: true,
+                number: true,
+                min: 0
+            }
+        },
+        messages: {
+            Edittxtpayindate: "Enter Date",
+            Edittxtpayinamount: {
+                required: "Enter Total Amount",
+                number: "Enter a valid number",
+                min: "Total Amount must be greater than zero"
+            }
+        }
+    })
+});
+function resetPayinForm() {
+    if (UpdatePayinForm) {
+        UpdatePayinForm.resetForm();
+    }
+}
+function ClearPayinTextBox() {
+    resetPayinForm();
+    $('#EdittxtpayinSupplierName').val('');
+    $('#EdittxtpayinCompanyName').val('');
+    $('#Edittxtpayinamount').val('');
+    $('#Edittxtpayindate').val('');
+    $('#Edittxtpayindescription').val('');
+    $("#Editpayinpaymenttype").prop("checked", false);
+}
+function deletePayInDetails(SalesId) {
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Sales/DeleteSalesPayInInvoice?SalesId=' + SalesId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            $("#searchReportButton").click();
+                        })
+                    }
+                    else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+
+                },
+                error: function () {
+                    siteloaderhide();
+                    toastr.error("Can't delete payin invoice!");
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'payin invoice have no changes.!!😊',
+                'error'
+            );
+        }
     });
 }

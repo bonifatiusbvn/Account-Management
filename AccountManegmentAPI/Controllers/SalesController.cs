@@ -1,5 +1,6 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SalesMaster;
 using AccountManagement.Repository.Interface.Services.SalesIInvoiceService;
@@ -197,6 +198,90 @@ namespace AccountManagement.API.Controllers
         {
             var Report = await SaleInvoice.SalesInvoiceReport(SalesReport);
             return Ok(new { code = 200, data = Report });
+        }
+        [HttpPost]
+        [Route("SalesInvoicePaymentReport")]
+        public async Task<IActionResult> SalesInvoicePaymentReport(DataTableRequstModel SalesPaymentReport)
+        {
+            var Report = await SaleInvoice.SalesInvoicePaymentReport(SalesPaymentReport);
+            return Ok(new { code = 200, data = Report });
+        }
+        [HttpPost]
+        [Route("InsertSalesPayInInvoice")]
+        public async Task<IActionResult> InsertSalesPayInInvoice(List<SalesInvoiceMasterModel> slaesPayInDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SalesInvoice = await SaleInvoice.InsertSalesPayInInvoice(slaesPayInDetails);
+            if (SalesInvoice.code == 200)
+            {
+                response.code = SalesInvoice.code;
+                response.message = SalesInvoice.message;
+                response.data = SalesInvoice.data;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpGet]
+        [Route("EditSalesPayInInvoice")]
+        public async Task<IActionResult> EditSalesPayInInvoice(Guid SalesId)
+        {
+            var SalesInvoice = await SaleInvoice.EditSalesPayInInvoice(SalesId);
+            return Ok(new { code = 200, data = SalesInvoice });
+        }
+        [HttpPost]
+        [Route("UpdateSalesPayInInvoice")]
+        public async Task<IActionResult> UpdateSalesPayInInvoice(SalesInvoiceMasterModel slaesPayInDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SalesInvoice = await SaleInvoice.UpdateSalesPayInInvoice(slaesPayInDetails);
+            if (SalesInvoice.code == 200)
+            {
+                response.code = SalesInvoice.code;
+                response.message = SalesInvoice.message;
+                response.data = SalesInvoice.data;
+            }
+            else
+            {
+                response.code = (int)HttpStatusCode.NotFound;
+                response.message = "There Is Some Problem In Your Request!";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("DeleteSalesPayInInvoice")]
+        public async Task<IActionResult> DeleteSalesPayInInvoice(Guid SalesId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            var SalesInvoice = await SaleInvoice.DeleteSalesPayInInvoice(SalesId);
+            if (SalesInvoice.code == 200)
+            {
+                response.code = SalesInvoice.code;
+                response.message = SalesInvoice.message;
+            }
+            else
+            {
+                response.code = SalesInvoice.code;
+                response.message = SalesInvoice.message;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("SalesInvoicePdfReport")]
+        public async Task<IActionResult> SalesInvoicePdfReport(InvoiceReportModel SalesPaymentReport)
+        {
+            var SalesInvoice = await SaleInvoice.SalesInvoicePdfReport(SalesPaymentReport);
+            return Ok(new { code = 200, data = SalesInvoice });
+        }
+        [HttpPost]
+        [Route("SalesInvoicePaymentPdfReport")]
+        public async Task<IActionResult> SalesInvoicePaymentPdfReport(InvoiceReportModel SalesPaymentReport)
+        {
+            var SalesInvoice = await SaleInvoice.SalesInvoicePaymentPdfReport(SalesPaymentReport);
+            return Ok(new { code = 200, data = SalesInvoice });
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AccountManagement.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 
 namespace AccountManagement.Repository.Services.Sales
 {
@@ -85,6 +86,41 @@ namespace AccountManagement.Repository.Services.Sales
         public async Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport)
         {
             return await SaleInvoice.SalesInvoiceReport(SalesReport);
+        }
+
+        public async Task<ApiResponseModel> InsertSalesPayInInvoice(List<SalesInvoiceMasterModel> slaesPayInDetails)
+        {
+            return await SaleInvoice.InsertSalesPayInInvoice(slaesPayInDetails);
+        }
+
+        public async Task<jsonData> SalesInvoicePaymentReport(DataTableRequstModel SalesPaymentReport)
+        {
+            return await SaleInvoice.SalesInvoicePaymentReport(SalesPaymentReport);
+        }
+
+        public async Task<SalesInvoiceMasterModel> EditSalesPayInInvoice(Guid SalesId)
+        {
+            return await SaleInvoice.EditSalesPayInInvoice(SalesId);
+        }
+
+        public async Task<ApiResponseModel> UpdateSalesPayInInvoice(SalesInvoiceMasterModel slaesPayInDetails)
+        {
+            return await SaleInvoice.UpdateSalesPayInInvoice(slaesPayInDetails);
+        }
+
+        public async Task<ApiResponseModel> DeleteSalesPayInInvoice(Guid SalesId)
+        {
+            return await SaleInvoice.DeleteSalesPayInInvoice(SalesId);
+        }
+
+        public async Task<SalesInvoiceTotalAmount> SalesInvoicePdfReport(InvoiceReportModel SalesReport)
+        {
+            return await SaleInvoice.SalesInvoicePdfReport(SalesReport);
+        }
+
+        public async Task<SalesInvoiceTotalAmount> SalesInvoicePaymentPdfReport(InvoiceReportModel SalesPaymentReport)
+        {
+            return await SaleInvoice.SalesInvoicePaymentPdfReport(SalesPaymentReport);
         }
     }
 }

@@ -8,6 +8,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
+using System.Formats.Asn1;
 
 #nullable disable
 
@@ -310,10 +312,10 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                  SupplierGstNo = b.Gstno,
                                  CompanyId = a.CompanyId,
                                  CompanyName = c.CompanyName,
-                                 CompanyAccountNo=c.AccountNo,
-                                 CompanyBankBranch=c.BankBranch,
-                                 CompanyBankName=c.BankName,
-                                 CompanyIffccode=c.Iffccode,
+                                 CompanyAccountNo = c.AccountNo,
+                                 CompanyBankBranch = c.BankBranch,
+                                 CompanyBankName = c.BankName,
+                                 CompanyIffccode = c.Iffccode,
                                  SupplierInvoiceNo = a.SupplierInvoiceNo,
                                  CompanyGstNo = c.Gstno,
                                  CompanyStateCode = f.StateCode,
@@ -609,7 +611,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                                         select new InventoryInwardView
                                         {
                                             ItemId = a.ItemId,
-                                            ItemName=a.Item,
+                                            ItemName = a.Item,
                                             UnitTypeId = a.UnitTypeId,
                                             Quantity = a.Quantity,
                                             Date = a.Date,
@@ -693,7 +695,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 var InventoryInvoice = Context.InventoryInwards.Where(e => e.Id == InventoryId).FirstOrDefault();
                 if (InventoryInvoice != null)
                 {
-                    if(InventoryInvoice.IsApproved == true)
+                    if (InventoryInvoice.IsApproved == true)
                     {
                         InventoryInvoice.IsApproved = false;
 
@@ -822,8 +824,15 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                         Date = group.FirstOrDefault().s.Date,
                         CreatedOn = group.FirstOrDefault().s.CreatedOn,
                         TotalAmount = group.FirstOrDefault().s.TotalAmount,
+                        PayOutTotalAmount = group.Where(x => x.s.SalesInvoiceNo == "PayIn" || x.s.InvoiceType == "Sales Return" || x.s.InvoiceType == "Credit Note").Sum(x => x.s.TotalAmount),
+                        NonPayOutTotalAmount = group.Where(x => x.s.SalesInvoiceNo != "PayIn" && x.s.InvoiceType != "Sales Return" && x.s.InvoiceType != "Credit Note").Sum(x => x.s.TotalAmount),
+                        NetAmount = group.Sum(x => x.s.SalesInvoiceNo != "PayIn" ? x.s.TotalAmount : -x.s.TotalAmount),
                     })
                     .ToListAsync();
+
+                var TotalCredit = CountTotalData.Sum(i => i.NonPayOutTotalAmount);
+
+                var TotalDebit = CountTotalData.Sum(i => i.PayOutTotalAmount);
 
                 if (!string.IsNullOrEmpty(SalesReport.sortColumn) && !string.IsNullOrEmpty(SalesReport.sortColumnDir))
                 {
@@ -851,7 +860,8 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     recordsFiltered = totalRecords,
                     recordsTotal = totalRecords,
                     data = TotalData,
-                    TotalAmount = TotalAmount
+                    TotalCredit = TotalCredit,
+                    TotalDebit = TotalDebit,
                 };
 
                 return jsonData;
@@ -859,6 +869,607 @@ namespace AccountManagement.Repository.Repository.SalesRepository
             catch (Exception ex)
             {
                 throw new Exception("An error occurred while fetching invoice details.", ex);
+            }
+        }
+
+        public async Task<ApiResponseModel> InsertSalesPayInInvoice(List<SalesInvoiceMasterModel> slaesPayInDetails)
+        {
+            var response = new ApiResponseModel();
+            try
+            {
+                if (slaesPayInDetails == null || !slaesPayInDetails.Any())
+                {
+                    response.code = (int)HttpStatusCode.BadRequest;
+                    response.message = "No data provided.";
+                    return response;
+                }
+                foreach (var invoiceDetail in slaesPayInDetails)
+                {
+                    var salesInvoice = new SalesInvoice
+                    {
+                        Id = Guid.NewGuid(),
+                        SalesInvoiceNo = invoiceDetail.SalesInvoiceNo,
+                        SiteId = invoiceDetail.SiteId,
+                        SupplierId = invoiceDetail.SupplierId,
+                        CompanyId = invoiceDetail.CompanyId,
+                        TotalAmount = invoiceDetail.TotalAmount,
+                        Description = invoiceDetail.Description,
+                        Date = invoiceDetail.Date,
+                        TotalDiscount = invoiceDetail.TotalDiscount,
+                        TotalGstamount = invoiceDetail.TotalGstamount,
+                        Tds = invoiceDetail.Tds,
+                        IsPayOut = true,
+                        PaymentStatus = invoiceDetail.PaymentStatus,
+                        CreatedBy = invoiceDetail.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.SalesInvoices.Add(salesInvoice);
+                }
+                await Context.SaveChangesAsync();
+
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Payments processed successfully.";
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing your request.";
+            }
+            return response;
+        }
+
+        public async Task<jsonData> SalesInvoicePaymentReport(DataTableRequstModel SalesPaymentReport)
+        {
+            try
+            {
+                var query = from s in Context.SalesInvoices
+                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId into suppliers
+                            from b in suppliers.DefaultIfEmpty()
+                            join c in Context.Companies on s.CompanyId equals c.CompanyId into companies
+                            from c in companies.DefaultIfEmpty()
+                            join d in Context.Sites on s.SiteId equals d.SiteId into sites
+                            from d in sites.DefaultIfEmpty()
+                            select new
+                            {
+                                s,
+                                SupplierName = b != null ? b.SupplierName : null,
+                                SalesInvoiceNo = s.SalesInvoiceNo,
+                                TotalAmount = s.TotalAmount,
+                                CompanyName = c != null ? c.CompanyName : null,
+                                SiteName = d != null ? d.SiteName : null,
+                                Date = s.Date
+                            };
+
+
+                if (SalesPaymentReport.CompanyId.HasValue)
+                {
+                    query = query.Where(s => s.s.CompanyId == SalesPaymentReport.CompanyId.Value);
+                }
+                if (SalesPaymentReport.SiteId.HasValue)
+                {
+                    query = query.Where(s => s.s.SiteId == SalesPaymentReport.SiteId.Value);
+                }
+                if (SalesPaymentReport.SupplierId.HasValue)
+                {
+                    query = query.Where(s => s.s.SupplierId == SalesPaymentReport.SupplierId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(SalesPaymentReport.sortColumn) && !string.IsNullOrEmpty(SalesPaymentReport.sortColumnDir))
+                {
+
+                    var queryType = query.FirstOrDefault().GetType();
+
+                    switch (SalesPaymentReport.sortColumn.ToLower())
+                    {
+                        case "suppliername":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.SupplierName)
+                                : query.OrderByDescending(s => s.SupplierName);
+                            break;
+                        case "companyname":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.CompanyName)
+                                : query.OrderByDescending(s => s.CompanyName);
+                            break;
+                        case "salesinvoiceno":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.SalesInvoiceNo)
+                                : query.OrderByDescending(s => s.SalesInvoiceNo);
+                            break;
+                        case "sitename":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.SiteName)
+                                : query.OrderByDescending(s => s.SiteName);
+                            break;
+                        case "credit":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
+                        case "debit":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
+                        case "date":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.Date)
+                                : query.OrderByDescending(s => s.Date);
+                            break;
+                        case "totalamount":
+                            query = SalesPaymentReport.sortColumnDir == "asc"
+                                ? query.OrderBy(s => s.TotalAmount)
+                                : query.OrderByDescending(s => s.TotalAmount);
+                            break;
+                        default:
+                            query = query.OrderByDescending(s => s.s.CreatedOn);
+                            break;
+                    }
+                }
+                else
+                {
+                    query = query.OrderBy(s => s.s.Date);
+                }
+
+                if (!string.IsNullOrEmpty(SalesPaymentReport.filterType))
+                {
+                    if (SalesPaymentReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (SalesPaymentReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                    else if (SalesPaymentReport.filterType == "betweenYear" && !string.IsNullOrEmpty(SalesPaymentReport.SelectedYear))
+                    {
+
+                        var years = SalesPaymentReport.SelectedYear.Split('-');
+
+                        if (years.Length == 2)
+                        {
+
+                            int startYear = int.Parse(years[0]);
+                            int endYear = int.Parse("20" + years[1]);
+
+
+                            var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                            var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+
+
+                            query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                        }
+                    }
+
+                }
+
+                if (SalesPaymentReport.startDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date >= SalesPaymentReport.startDate.Value);
+                }
+                if (SalesPaymentReport.endDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date <= SalesPaymentReport.endDate.Value);
+                }
+                if (!string.IsNullOrEmpty(SalesPaymentReport.searchValue))
+                {
+                    query = query.Where(s => s.SupplierName.Contains(SalesPaymentReport.searchValue) ||
+                                             s.SalesInvoiceNo.Contains(SalesPaymentReport.searchValue) ||
+                                             s.CompanyName.Contains(SalesPaymentReport.searchValue));
+                }
+
+                var totalRecords = await query.CountAsync();
+
+
+                var allData = await query
+           .Select(s => new SalesInvoiceMasterModel
+           {
+               Id = s.s.Id,
+               SalesInvoiceNo = s.s.SalesInvoiceNo,
+               SiteId = s.s.SiteId,
+               SupplierId = s.s.SupplierId,
+               CompanyId = s.s.CompanyId,
+               TotalAmount = s.s.TotalAmount,
+               TotalDiscount = s.s.TotalDiscount,
+               TotalGstamount = s.s.TotalGstamount,
+               Tds = s.s.Tds,
+               Description = s.s.Description,
+               CompanyName = s.CompanyName,
+               SupplierName = s.SupplierName,
+               PaymentStatus = s.s.PaymentStatus,
+               IsPayOut = s.s.IsPayOut,
+               SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+               Date = s.s.Date,
+               CreatedOn = s.s.CreatedOn,
+               SiteName = s.SiteName,
+               InvoiceType = s.s.InvoiceType,
+           })
+           .ToListAsync();
+
+                var TotalCredit = allData
+                    .Where(i => i.SalesInvoiceNo != "PayIn" &&
+                        i.InvoiceType != "Sales Return" &&
+                        i.InvoiceType != "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var TotalDebit = allData
+                    .Where(i => i.SalesInvoiceNo == "PayIn" ||
+                        i.InvoiceType == "Sales Return" ||
+                        i.InvoiceType == "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var jsonData = new jsonData
+                {
+                    draw = SalesPaymentReport.draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = allData,
+                    TotalCredit = TotalCredit,
+                    TotalDebit = TotalDebit,
+                };
+
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<SalesInvoiceMasterModel> EditSalesPayInInvoice(Guid SalesId)
+        {
+            SalesInvoiceMasterModel payindetails = new SalesInvoiceMasterModel();
+            try
+            {
+                payindetails = (from a in Context.SalesInvoices.Where(x => x.Id == SalesId)
+                                join c in Context.SupplierMasters on a.SupplierId equals c.SupplierId
+                                join d in Context.Companies on a.CompanyId equals d.CompanyId
+                                select new SalesInvoiceMasterModel
+                                {
+                                    Id = a.Id,
+                                    SalesInvoiceNo = a.SalesInvoiceNo,
+                                    SiteId = a.SiteId,
+                                    SupplierId = a.SupplierId,
+                                    CompanyId = a.CompanyId,
+                                    SupplierName = c.SupplierName,
+                                    CompanyName = d.CompanyName,
+                                    TotalAmount = a.TotalAmount,
+                                    Description = a.Description,
+                                    Date = a.Date,
+                                    IsPayOut = true,
+                                    PaymentStatus = a.PaymentStatus,
+                                    CreatedBy = a.CreatedBy,
+                                    CreatedOn = a.CreatedOn,
+                                    DiscountRoundoff = a.DiscountRoundoff,
+                                    IsApproved = a.IsApproved,
+                                }).First();
+                return payindetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ApiResponseModel> UpdateSalesPayInInvoice(SalesInvoiceMasterModel salesPayInDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var payindetails = Context.SalesInvoices.Where(a => a.Id == salesPayInDetails.Id).FirstOrDefault();
+
+                if (payindetails != null)
+                {
+                    payindetails.Id = salesPayInDetails.Id;
+                    payindetails.TotalAmount = salesPayInDetails.TotalAmount;
+                    payindetails.PaymentStatus = salesPayInDetails.PaymentStatus;
+                    payindetails.Date = salesPayInDetails.Date;
+                    payindetails.Description = salesPayInDetails.Description;
+                    payindetails.UpdatedBy = salesPayInDetails.UpdatedBy;
+                    payindetails.UpdatedOn = DateTime.Now;
+
+
+                    Context.SalesInvoices.Update(payindetails);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.message = "payin invoice is updated successfully.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in updating payin invoice.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error in updating invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> DeleteSalesPayInInvoice(Guid SalesId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var payindetails = Context.SalesInvoices.Where(a => a.Id == SalesId).FirstOrDefault();
+
+                if (payindetails != null)
+                {
+                    Context.SalesInvoices.Remove(payindetails);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.message = "payin invoice is successfully deleted.";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Error in deleting payin invoice.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = "Error in deleting invoice: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<SalesInvoiceTotalAmount> SalesInvoicePdfReport(InvoiceReportModel SalesReport)
+        {
+            try
+            {
+                var SalesInvoicesQuery = from s in Context.SalesInvoices
+                                         join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                                         join c in Context.Companies on s.CompanyId equals c.CompanyId
+                                         select new
+                                         {
+                                             s,
+                                             SupplierName = b.SupplierName,
+                                             CompanyName = c.CompanyName,
+                                             Date = s.Date,
+                                             TotalAmount = s.TotalAmount,
+
+                                         };
+
+                if (SalesReport.CompanyId.HasValue)
+                {
+                    SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.CompanyId == SalesReport.CompanyId.Value);
+                }
+
+                if (SalesReport.SupplierId.HasValue)
+                {
+                    SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.SupplierId == SalesReport.SupplierId.Value);
+                }
+
+
+                if (!string.IsNullOrEmpty(SalesReport.filterType))
+                {
+                    if (SalesReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (SalesReport.filterType == "tillMonth")
+                    {
+                        var tillMonth = SalesReport.TillMonth.Value;
+                        int year = tillMonth.Year;
+                        int month = tillMonth.Month;
+
+                        var startDate = new DateTime(year, 1, 1);
+                        var endDate = new DateTime(year, month, 1).AddDays(-1);
+
+                        SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date >= startDate && s.s.Date <= endDate);
+                    }
+                    else if (SalesReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear);
+                    }
+                    else if (SalesReport.filterType == "betweenYear" && !string.IsNullOrEmpty(SalesReport.SelectedYear))
+                    {
+                        var years = SalesReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = years[1].Length == 2
+                            ? int.Parse(years[1]) + (startYear / 100) * 100
+                            : int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+                        SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear);
+                    }
+                }
+
+                if (SalesReport.startDate.HasValue)
+                {
+                    SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date >= SalesReport.startDate.Value);
+                }
+
+                if (SalesReport.endDate.HasValue)
+                {
+                    SalesInvoicesQuery = SalesInvoicesQuery.Where(s => s.s.Date <= SalesReport.endDate.Value);
+                }
+
+                var SalesInvoiceData = await SalesInvoicesQuery
+                   .GroupBy(g => new { g.s.SupplierId })
+                   .Select(group => new SalesInvoiceMasterModel
+                   {
+                       Id = group.FirstOrDefault().s.Id,
+                       SalesInvoiceNo = group.FirstOrDefault().s.SalesInvoiceNo,
+                       SupplierId = group.Key.SupplierId,
+                       CompanyId = group.FirstOrDefault().s.CompanyId,
+                       Description = string.Join(", ", group.Select(x => x.s.Description)),
+                       CompanyName = group.FirstOrDefault().CompanyName,
+                       SupplierName = group.FirstOrDefault().SupplierName,
+                       PaymentStatus = group.FirstOrDefault().s.PaymentStatus,
+                       IsPayOut = group.FirstOrDefault().s.IsPayOut,
+                       SupplierInvoiceNo = group.FirstOrDefault().s.SupplierInvoiceNo,
+                       Date = group.FirstOrDefault().s.Date,
+                       CreatedOn = group.FirstOrDefault().s.CreatedOn,
+                       TotalAmount = group.FirstOrDefault().s.TotalAmount,
+                       PayOutTotalAmount = group.Where(x => x.s.SalesInvoiceNo == "PayIn" || x.s.InvoiceType == "Sales Return" || x.s.InvoiceType == "Credit Note").Sum(x => x.s.TotalAmount),
+                       NonPayOutTotalAmount = group.Where(x => x.s.SalesInvoiceNo != "PayIn" && x.s.InvoiceType != "Sales Return" && x.s.InvoiceType != "Credit Note").Sum(x => x.s.TotalAmount),
+                       NetAmount = group.Sum(x => x.s.SalesInvoiceNo != "PayIn" ? x.s.TotalAmount : -x.s.TotalAmount),
+                   })
+                   .ToListAsync();
+
+                var totalCredit = SalesInvoiceData.Sum(i => i.NonPayOutTotalAmount);
+                var totalDebit = SalesInvoiceData.Sum(i => i.PayOutTotalAmount);
+                var totalPending = totalCredit - totalDebit;
+
+                var PayInDetails = new SalesInvoiceTotalAmount
+                {
+                    SalesInvoiceList = SalesInvoiceData.Where(inv => inv.NetAmount != 0).ToList(),
+                    TotalPending = totalPending ?? 0m,
+                    TotalCreadit = totalCredit ?? 0m,
+                    TotalPurchase = totalDebit ?? 0m
+                };
+
+                return PayInDetails;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching invoice details.", ex);
+            }
+        }
+
+        public async Task<SalesInvoiceTotalAmount> SalesInvoicePaymentPdfReport(InvoiceReportModel SalesPaymentReport)
+        {
+            try
+            {
+                var query = from s in Context.SalesInvoices
+                            join b in Context.SupplierMasters on s.SupplierId equals b.SupplierId
+                            join c in Context.Companies on s.CompanyId equals c.CompanyId
+                            select new
+                            {
+                                s,
+                                SupplierName = b.SupplierName,
+                                SalesInvoiceNo = s.SalesInvoiceNo,
+                                CompanyName = c.CompanyName,
+                                Date = s.Date
+                            };
+
+                if (SalesPaymentReport.CompanyId.HasValue)
+                {
+                    query = query.Where(s => s.s.CompanyId == SalesPaymentReport.CompanyId.Value).OrderBy(s => s.s.CreatedOn);
+                }
+
+                if (SalesPaymentReport.SupplierId.HasValue)
+                {
+                    query = query.Where(s => s.s.SupplierId == SalesPaymentReport.SupplierId.Value).OrderBy(s => s.s.CreatedOn);
+                }
+
+                if (!string.IsNullOrEmpty(SalesPaymentReport.filterType))
+                {
+                    if (SalesPaymentReport.filterType == "currentMonth")
+                    {
+                        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var endDate = startDate.AddMonths(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate).OrderBy(s => s.s.CreatedOn);
+                    }
+                    else if (SalesPaymentReport.filterType == "currentYear")
+                    {
+                        var currentYear = DateTime.Now.Year;
+                        var startOfFinancialYear = new DateTime(currentYear, 4, 1);
+
+                        if (DateTime.Now < startOfFinancialYear)
+                        {
+                            startOfFinancialYear = startOfFinancialYear.AddYears(-1);
+                        }
+
+                        var endOfFinancialYear = startOfFinancialYear.AddYears(1).AddDays(-1);
+                        query = query.Where(s => s.s.Date >= startOfFinancialYear && s.s.Date <= endOfFinancialYear).OrderBy(s => s.s.CreatedOn);
+                    }
+                    else if (SalesPaymentReport.filterType == "betweenYear" && !string.IsNullOrEmpty(SalesPaymentReport.SelectedYear))
+                    {
+                        var years = SalesPaymentReport.SelectedYear.Split('-');
+                        int startYear = int.Parse(years[0]);
+                        int endYear = int.Parse(years[1]);
+
+                        var startOfSelectedFinancialYear = new DateTime(startYear, 4, 1);
+                        var endOfSelectedFinancialYear = new DateTime(endYear, 3, 31);
+
+                        query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn);
+                    }
+                }
+
+                if (SalesPaymentReport.endDate.HasValue)
+                {
+                    query = query.Where(s => s.s.Date <= SalesPaymentReport.endDate.Value).OrderBy(s => s.s.CreatedOn);
+                }
+
+                var totalRecords = await query.CountAsync();
+
+                var SalesInvoiceList = await query.Select(s => new SalesInvoiceMasterModel
+                {
+                    Id = s.s.Id,
+                    SalesInvoiceNo = s.s.SalesInvoiceNo,
+                    SiteId = s.s.SiteId,
+                    SupplierId = s.s.SupplierId,
+                    CompanyId = s.s.CompanyId,
+                    TotalAmount = s.s.TotalAmount,
+                    TotalDiscount = s.s.TotalDiscount,
+                    TotalGstamount = s.s.TotalGstamount,
+                    Tds = s.s.Tds,
+                    Description = s.s.Description,
+                    CompanyName = s.CompanyName,
+                    SupplierName = s.SupplierName,
+                    PaymentStatus = s.s.PaymentStatus,
+                    IsPayOut = s.s.IsPayOut,
+                    SupplierInvoiceNo = s.s.SupplierInvoiceNo,
+                    Date = s.s.Date,
+                    CreatedOn = s.s.CreatedOn,
+                    InvoiceType = s.s.InvoiceType,
+                }).ToListAsync();
+
+                var CreditTotalAmount = SalesInvoiceList
+                    .Where(i => i.SalesInvoiceNo != "PayIn" &&
+                        i.InvoiceType != "Sales Return" &&
+                        i.InvoiceType != "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var DebitTotalAmount = SalesInvoiceList
+                    .Where(i => i.SalesInvoiceNo == "PayIn" ||
+                        i.InvoiceType == "Sales Return" ||
+                        i.InvoiceType == "Credit Note")
+                        .Sum(i => i.TotalAmount);
+
+                var PendingTotalAmount = CreditTotalAmount - DebitTotalAmount;
+
+                var PayInDetails = new SalesInvoiceTotalAmount
+                {
+                    SalesInvoiceList = SalesInvoiceList,
+                    TotalPending = PendingTotalAmount,
+                    TotalCreadit = CreditTotalAmount,
+                    TotalPurchase = DebitTotalAmount
+                };
+
+                return PayInDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

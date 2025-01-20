@@ -33,8 +33,8 @@ function GetAllSiteList() {
         },
         error: function (err) {
             console.error("Failed to fetch Site list: ", err);
-    }
-});
+        }
+    });
 }
 
 function GetAllCompanyList() {
@@ -97,6 +97,9 @@ function GetAllSupplierList() {
                     return false;
                 }
             }).focus(function () {
+                if ($("#textPayoutReportSupplierName").val() === "") {
+                    $("#textPayoutReportSupplierNameHidden").val("");
+                }
                 $(this).autocomplete("search", "");
             });
         },
@@ -118,6 +121,7 @@ var parsedPayoutSiteId = null;
 var selectedPayoutCompanyName = null;
 var selectedPayoutSupplierName = null;
 var selectedPayoutSiteName = null;
+var selectedReportInvoiceTypeName = null;
 
 let currentPayoutReportSortOrder = 'AscendingDate';
 function sortReportTable(field) {
@@ -256,7 +260,7 @@ function ExportNetReportToPDF() {
         SelectedYear: null,
         SiteName: selectedPayoutSiteName || null,
     };
-    
+
     switch (selectedValue) {
         case 'This Month':
             PayOutReport.filterType = "currentMonth";
@@ -281,9 +285,12 @@ function ExportNetReportToPDF() {
             selectedValue = null;
             break;
     }
-    
+    var selectedPayoutInvoiceTypeName = $('#textPayoutReportTypeList').val();
+    var ajaxUrl = selectedPayoutInvoiceTypeName === 'Sales'
+        ? '/Sales/ExportSalesInvoiceNetReportToPDF'
+        : '/Report/ExportNetReportToPDF';
     $.ajax({
-        url: '/Report/ExportNetReportToPDF',
+        url: ajaxUrl,
         type: 'POST',
         data: PayOutReport,
         datatype: 'json',
@@ -382,8 +389,12 @@ function ExportNetReportToExcel() {
             selectedValue = null;
             break;
     }
+    var selectedPayoutInvoiceTypeName = $('#textPayoutReportTypeList').val();
+    var ajaxUrl = selectedPayoutInvoiceTypeName === 'Sales'
+        ? '/Sales/ExportSalesInvoiceNetReportToExcel'
+        : '/Report/ExportNetReportToExcel';
     $.ajax({
-        url: '/Report/ExportNetReportToExcel',
+        url: ajaxUrl,
         type: 'GET',
         data: PayOutReport,
         datatype: 'json',
@@ -466,6 +477,12 @@ $(document).ready(function () {
         if ($.fn.DataTable.isDataTable('#tblPayoutReport')) {
             Payouttable.destroy();
         }
+
+        var selectedPayoutInvoiceTypeName = $('#textPayoutReportTypeList').val();
+        var ajaxUrl = selectedPayoutInvoiceTypeName === 'Sales'
+            ? '/Sales/SalesInvoiceReport'
+            : '/InvoiceMaster/GetInvoiceDetails';
+
         Payouttable = $('#tblPayoutReport').DataTable({
             processing: false,
             serverSide: true,
@@ -473,7 +490,7 @@ $(document).ready(function () {
             paging: false,
             order: [],
             ajax: {
-                url: '/InvoiceMaster/GetInvoiceDetails',
+                url: ajaxUrl,
                 type: 'POST',
                 data: function (d) {
                     d.draw = d.draw;
@@ -566,7 +583,7 @@ function formatNumberWithCommas(x) {
 
 
 let rowCounter = 0;
-function AddNewRowforPayOutInvoicebtn() {
+function AddNewRowforPayOutInvoice() {
     selectedPayoutSupplierId = $('#textReportSupplierNameHidden').val();
     selectedPayoutCompanyId = $('#textReportCompanyName').val();
     selectedPayoutReportSiteName = $('#textReportSiteName').val();
@@ -751,6 +768,8 @@ function clearPayoutPartialView() {
     $('.payoutinvoicerow').remove();
     rowCounter = 0;
 }
+
+
 //let rowCounter = 0;
 
 //function AddNewRowforPayOutInvoicebtn() {
@@ -805,3 +824,158 @@ function clearPayoutPartialView() {
 //        $(this).find('.row-number').text(index + 1 + '.');
 //    });
 //}
+$("#textReportTypeList").on('change', function () {
+    selectedReportInvoiceTypeName = $(this).val();
+
+    if (selectedReportInvoiceTypeName === 'Sales') {
+        $("#AddPayInInvoiceBtn").show();
+        $("#AddPayOutInvoiceBtn").hide();
+        $("#PayOutTable").hide();
+        $("#PayInTable").show();
+
+    } else {
+        $("#AddPayInInvoiceBtn").hide();
+        $("#AddPayOutInvoiceBtn").show();
+        $("#PayOutTable").show();
+        $("#PayInTable").hide();
+    }
+});
+
+$(document).ready(function () {
+    $("#textReportTypeList").trigger('change');
+});
+
+let PayInRowCounter = 0;
+function AddNewRowforPayInInvoice() {
+    selectedPayoutSupplierId = $('#textReportSupplierNameHidden').val();
+    selectedPayoutCompanyId = $('#textReportCompanyName').val();
+    var CompanyId = selectedPayoutCompanyId;
+    var SupplierId = selectedPayoutSupplierId;
+    if (SupplierId != "" && CompanyId != "") {
+        $.ajax({
+            url: '/Sales/DisplayPayInSalesInvoice',
+            type: 'Post',
+            datatype: 'json',
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                if (Result.statusText === "success" || Result.statusText === "OK") {
+                    PayInRowCounter++;
+                    AddNewPayInRow(Result.responseText, PayInRowCounter);
+                } else {
+                    toastr.error("Error in display product");
+                }
+            }
+        });
+    } else {
+        toastr.warning("select company and supplier");
+    }
+}
+function AddNewPayInRow(resultHtml, rowNumber) {
+    const rowHtml = resultHtml
+        .replace(/ROWID/g, rowNumber)
+        .replace(/ROWNUMBER/g, rowNumber);
+
+    $('#payinpartialView').show();
+    $('#payinpartialView').append(rowHtml);
+    $('#payinsubmitbutton').show();
+}
+function removePayInRow(buttonElement) {
+    $(buttonElement).closest('tr').remove();
+    updatePayInRowNumbers();
+
+    if ($('.payoutinvoicerow').length >= 1) {
+        $('#payoutsubmitbutton').show();
+    }
+    else {
+        $('#payoutsubmitbutton').hide();
+    }
+}
+function updatePayInRowNumbers() {
+    $('#payinpartialView .payininvoicerow').each(function (index) {
+        $(this).find('.row-number').text(index + 1 + '.');
+    });
+}
+function InsertPayInDetailsReport() {
+    siteloadershow();
+    if ($('.payininvoicerow').length >= 1) {
+        var PayinDetails = [];
+        var isValidPayin = true;
+
+        $(".payininvoicerow").each(function () {
+            var orderRow = $(this);
+            var paymentType = orderRow.find("input[name^='paymenttype']:checked").val();
+            var supplierId = $('#textReportSupplierNameHidden').val();
+            var companyId = $('#textReportCompanyName').val();
+
+            var objData = {
+                SalesInvoiceNo: "PayIn",
+                SupplierId: supplierId,
+                CompanyId: companyId,
+                PaymentStatus: paymentType,
+                Description: orderRow.find("input[id^='txtpayindescription']").val(),
+                Date: orderRow.find("input[id^='txtpayindate']").val(),
+                CreatedBy: $("#txtReportUserId").val(),
+                TotalAmount: orderRow.find("input[id^='txtpayinamount']").val()
+            };
+
+            if (objData.Date === "" || objData.TotalAmount === "") {
+                isValidPayin = false;
+
+                if (objData.Date === "") {
+                    orderRow.find("input[id^='txtpayindate']").css("border", "2px solid red");
+                }
+
+                if (objData.TotalAmount === "") {
+                    orderRow.find("input[id^='txtpayinamount']").css("border", "2px solid red");
+                }
+            } else {
+                PayinDetails.push(objData);
+            }
+        });
+
+        if (isValidPayin) {
+
+            var form_data = new FormData();
+            form_data.append("PAYINDETAILS", JSON.stringify(PayinDetails));
+
+            AddPayInDetails(form_data);
+
+        } else {
+            siteloaderhide();
+            toastr.warning("Kindly fill all data fields");
+        }
+    } else {
+        siteloaderhide();
+        toastr.warning("Add payout details");
+    }
+}
+function AddPayInDetails(form_data) {
+    $.ajax({
+        url: '/Sales/InsertSalesPayInInvoice',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            siteloaderhide();
+            if (result.code == 200) {
+                toastr.success(result.message);
+                clearPayinPartialView();
+                $('#payinpartialView').hide();
+                $("#searchReportButton").click();
+            } else {
+                toastr.error(result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.error('An error occurred while inserting payout details.');
+        }
+    });
+}
+function clearPayinPartialView() {
+    $('.payininvoicerow').remove();
+    rowCounter = 0;
+}

@@ -27,5 +27,12 @@ namespace AccountManagement.Repository.Interface.Repository.Sales
         Task<ApiResponseModel> DeleteInventoryDetails(Guid InventoryId);
         Task<ApiResponseModel> ApproveInventoryDetails(Guid InventoryId);
         Task<jsonData> SalesInvoiceReport(DataTableRequstModel SalesReport);
+        Task<jsonData> SalesInvoicePaymentReport(DataTableRequstModel SalesPaymentReport);
+        Task<ApiResponseModel> InsertSalesPayInInvoice(List<SalesInvoiceMasterModel> slaesPayInDetails);
+        Task<SalesInvoiceMasterModel> EditSalesPayInInvoice(Guid SalesId);
+        Task<ApiResponseModel> UpdateSalesPayInInvoice(SalesInvoiceMasterModel slaesPayInDetails);
+        Task<ApiResponseModel> DeleteSalesPayInInvoice(Guid SalesId);
+        Task<SalesInvoiceTotalAmount> SalesInvoicePdfReport(InvoiceReportModel SalesReport);
+        Task<SalesInvoiceTotalAmount> SalesInvoicePaymentPdfReport(InvoiceReportModel SalesPaymentReport);
     }
 }
