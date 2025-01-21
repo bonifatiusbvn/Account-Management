@@ -21,6 +21,10 @@
             {
                 foreach (var item in Model.InvoiceList)
                 {
+                    decimal? Quantity = item.Quantity;
+                    decimal? TotalAmount = item.TotalAmount;
+                    decimal? PerItemTotalAmoount = TotalAmount / Quantity;
+
                     <tr class="" onclick="window.location.href='/InvoiceMaster/DisplayInvoiceDetails?Id=@item.Id'" style="cursor: pointer;">
 
                         <td><a class="text-primary"><h6 class="product-name mb-2">@item.SupplierInvoiceNo</h6></a></td>
@@ -37,10 +41,9 @@
                                 </td>
                             }
                         } *@
-                        <td>@item.ItemPrice</td>
+                        <td>@item.ItemPrice?.ToString("N2")</td>
                         <td>@item.GSTper</td>
-                        <td class="text-center">@item.ItemPricewithGST</td>
-
+                        <td class="text-center">@PerItemTotalAmoount?.ToString("N2")</td>
                     </tr>
                 }
             }

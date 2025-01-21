@@ -607,6 +607,7 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                                                 ItemPrice = e.Price,
                                                 Itemname = f.ItemName,
                                                 ItemPricewithGST = e.Gst,
+                                                Quantity = e.Quantity,
                                             },
 
                                             Item = new SupplierInvoiceDetailsModel
