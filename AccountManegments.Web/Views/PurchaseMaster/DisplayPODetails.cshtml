@@ -179,6 +179,7 @@
                                                 decimal? totalprice = 0;
                                                 decimal? totalAmt = 0;
                                                 decimal? TotalQty = 0;
+                                                decimal? GSTAmount = 0;
                                                 decimal? cgst = 0;
                                                 decimal? sgst = 0;
                                             }
@@ -188,8 +189,9 @@
                                                 totalprice = (item.Quantity * item.PricePerUnit);
                                                 totalAmt += totalprice;
                                                 TotalQty += item.Quantity;
-                                                cgst = firstItem.TotalGstamount / 2;
-                                                sgst = firstItem.TotalGstamount / 2;
+                                                GSTAmount += item.Quantity * item.PricePerUnit * item.GstPercentage / 100;
+                                                cgst = GSTAmount / 2;
+                                                sgst = GSTAmount / 2;
                                                 var trimmedUnitTypeName = item.UnitTypeName.Split('-').First().Trim();
 
                                                 <tr>
