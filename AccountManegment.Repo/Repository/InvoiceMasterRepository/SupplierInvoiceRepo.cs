@@ -1710,7 +1710,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                      SiteName = d.SiteName,
                                                      SupplierName = b.SupplierName,
                                                      SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                                 }).ToListAsync();
+                                                 }).OrderBy(e=>e.Date).ToListAsync();
 
                 foreach (var invoice in supplierInvoiceData)
                 {
