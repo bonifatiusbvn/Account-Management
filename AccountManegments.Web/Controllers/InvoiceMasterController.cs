@@ -1084,7 +1084,7 @@ namespace AccountManegments.Web.Controllers
                         headerRange.Style.Border.BottomBorderColor = XLColor.Black;
                         headerRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
                         headerRange.Style.Border.RightBorderColor = XLColor.Black;
-
+                        row++;
                         foreach (var Supplier in supplierDetailsList)
                         {
                             decimal ItemTotalAmount = 0;
