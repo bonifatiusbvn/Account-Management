@@ -1066,84 +1066,50 @@ namespace AccountManegments.Web.Controllers
                         row += 2;
 
                         // Table-2
+
+                        ws.Cell(row, 1).Value = "InvoiceNo";
+                        ws.Cell(row, 2).Value = "Date";
+                        ws.Cell(row, 3).Value = "Company";
+                        ws.Cell(row, 4).Value = "Supplier";
+                        ws.Cell(row, 5).Value = "Item Name";
+                        ws.Cell(row, 6).Value = "Quantity";
+                        ws.Cell(row, 7).Value = "Amount";
+
+                        var headerRange = ws.Range(row, 1, row, 7);
+                        headerRange.Style.Font.Bold = true;
+                        headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
+                        headerRange.Style.Font.FontColor = XLColor.White;
+                        headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        headerRange.Style.Border.BottomBorderColor = XLColor.Black;
+                        headerRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                        headerRange.Style.Border.RightBorderColor = XLColor.Black;
+
                         foreach (var Supplier in supplierDetailsList)
                         {
-
-                            ws.Cell(row, 1).Value = "InvoiceNo";
-                            ws.Cell(row, 2).Value = "Date";
-                            ws.Cell(row, 3).Value = "Supplier";
-                            ws.Cell(row, 4).Value = "Company";
-
-                            var headerRange = ws.Range(row, 1, row, 4);
-                            headerRange.Style.Font.Bold = true;
-                            headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
-                            headerRange.Style.Font.FontColor = XLColor.White;
-                            headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                            headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                            headerRange.Style.Border.BottomBorderColor = XLColor.Black;
-                            headerRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                            headerRange.Style.Border.RightBorderColor = XLColor.Black;
-
-                            row++;
+                            decimal ItemTotalAmount = 0;
                             ws.Cell(row, 1).Value = Supplier.InvoiceNo ?? string.Empty;
                             ws.Cell(row, 2).Value = Supplier.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
-                            ws.Cell(row, 3).Value = Supplier.SupplierName ?? string.Empty;
-                            ws.Cell(row, 4).Value = Supplier.CompanyName ?? string.Empty;
-
-                            var dataRange = ws.Range(row, 1, row, 4);
-                            dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                            dataRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                            dataRange.Style.Border.BottomBorderColor = XLColor.Gray;
-                            dataRange.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                            dataRange.Style.Border.LeftBorderColor = XLColor.Gray;
-                            dataRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                            dataRange.Style.Border.RightBorderColor = XLColor.Gray;
-
-                            // Header Row 3
-                            row += 2;
-
-                            ws.Cell(row, 1).Value = "Item Name";
-                            ws.Cell(row, 2).Value = "Quantity";
-                            ws.Cell(row, 3).Value = "Amount";
-
-                            var headerRange2 = ws.Range(row, 1, row, 3);
-                            headerRange2.Style.Font.Bold = true;
-                            headerRange2.Style.Fill.BackgroundColor = XLColor.Gray;
-                            headerRange2.Style.Font.FontColor = XLColor.White;
-                            headerRange2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-
-                            row++;
-
-                            string FormatIndianCurrency(decimal amount)
-                            {
-                                var cultureInfo = new CultureInfo("en-IN");
-                                var numberFormat = cultureInfo.NumberFormat;
-                                numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                                numberFormat.CurrencyDecimalDigits = 2;
-                                numberFormat.CurrencyGroupSeparator = ",";
-                                numberFormat.CurrencyDecimalSeparator = ".";
-                                return amount.ToString("N", numberFormat);
-                            }
-
-                            int rowCount = 0;
-                            decimal ItemTotalAmount = 0;
+                            ws.Cell(row, 3).Value = Supplier.CompanyName ?? string.Empty;
                             foreach (var item in Supplier.ItemList ?? new List<POItemDetailsModel>())
                             {
-                                ws.Cell(row, 1).Value = item.ItemName ?? string.Empty;
-                                ws.Cell(row, 2).Value = item.Quantity.ToString() ?? "0";
-                                ws.Cell(row, 3).Value = FormatIndianCurrency(item.TotalAmount ?? 0);
+                                ws.Cell(row, 4).Value = Supplier.SupplierName ?? string.Empty;
+                                ws.Cell(row, 5).Value = item.ItemName ?? string.Empty;
+                                ws.Cell(row, 6).Value = item.Quantity.ToString() ?? "0";
+                                ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount ?? 0);
                                 row++;
                             }
+                        }
 
-                            ws.Cell(row, 1).Value = "Total";
-                            ws.Cell(row, 2).Value = string.Empty;
-                            ws.Cell(row, 3).Value = FormatIndianCurrency(ItemTotalAmount);
-
-                            var footerRange2 = ws.Range(row, 1, row, 3);
-                            footerRange2.Style.Font.Bold = true;
-                            footerRange2.Style.Fill.BackgroundColor = XLColor.Black;
-                            footerRange2.Style.Font.FontColor = XLColor.White;
+                        string FormatIndianCurrency(decimal amount)
+                        {
+                            var cultureInfo = new CultureInfo("en-IN");
+                            var numberFormat = cultureInfo.NumberFormat;
+                            numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                            numberFormat.CurrencyDecimalDigits = 2;
+                            numberFormat.CurrencyGroupSeparator = ",";
+                            numberFormat.CurrencyDecimalSeparator = ".";
+                            return amount.ToString("N", numberFormat);
                         }
                         using (var stream = new MemoryStream())
                         {

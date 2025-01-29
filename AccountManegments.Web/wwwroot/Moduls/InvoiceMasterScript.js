@@ -1868,7 +1868,11 @@ function ExportToExcelInvoiceDetails() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.warning("No data found for the selected criteria.");
+            if (xhr.status === 400) {
+                toastr.warning("Please select a Site.");
+            } else {
+                toastr.warning("An error occurred while processing the request.");
+            }
         },
         xhrFields: {
             responseType: 'blob'

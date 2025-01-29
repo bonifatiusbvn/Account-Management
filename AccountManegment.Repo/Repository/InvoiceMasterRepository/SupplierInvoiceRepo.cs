@@ -1490,7 +1490,9 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                     CreatedOn = s.s.CreatedOn,
                     SiteName = s.SiteName,
                     InvoiceType = s.s.InvoiceType,
-                }).ToListAsync();
+                })
+                    .OrderBy(s => s.Date)
+                .ToListAsync();
 
                 var CreditTotalAmount = SupplierInvoiceList
                     .Where(i => i.InvoiceNo != "PayOut" &&
