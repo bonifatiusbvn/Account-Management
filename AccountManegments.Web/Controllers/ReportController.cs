@@ -893,7 +893,7 @@ namespace AccountManegments.Web.Controllers
                                 decimal payOutTotalAmount = item.PayOutTotalAmount ?? 0;
 
                                 siteNonPayOutTotal += nonPayOutTotalAmount;
-                                sitePayOutTotal += payOutTotalAmount; 
+                                sitePayOutTotal += payOutTotalAmount;
 
                                 netbalance = nonPayOutTotalAmount - payOutTotalAmount;
                                 row.Cells.Add(FormatIndianCurrency(netbalance));
@@ -907,7 +907,7 @@ namespace AccountManegments.Web.Controllers
                             siteCombinedTotal = siteNonPayOutTotal - sitePayOutTotal;
                             var footerRow = detailedTable.Rows.Add();
                             footerRow.Cells.Add("Total");
-                            footerRow.Cells.Add(FormatIndianCurrency(siteCombinedTotal)); 
+                            footerRow.Cells.Add(FormatIndianCurrency(siteCombinedTotal));
 
                             TextState boldTextState = new TextState
                             {
@@ -1119,7 +1119,7 @@ namespace AccountManegments.Web.Controllers
                             foreach (var group in groupedInvoices)
                             {
                                 // Insert site header
-                                ws.Cell(row, 1).Value = "Site: " + (group.SiteName ?? "Opening Balance");                
+                                ws.Cell(row, 1).Value = "Site: " + (group.SiteName ?? "Opening Balance");
                                 ws.Cell(row, 2).Value = "Company: " + (PayOutReport.CompanyName ?? "");
                                 row++;
 
@@ -1230,6 +1230,204 @@ namespace AccountManegments.Web.Controllers
                                 string fileName = Guid.NewGuid() + "_NetReportDetails.xlsx";
                                 return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                             }
+                        }
+                    }
+                }
+                return RedirectToAction("ReportDetails");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+        public async Task<IActionResult> GetInvoiceDetailsBySupplierExcelReport(InvoiceReportModel invoiceReport)
+        {
+            try
+            {
+                ApiResponseModel response = await APIServices.PostAsync(invoiceReport, "SupplierInvoice/GetInvoiceDetailsBySupplierExcelReport");
+
+                if (response.code == 200)
+                {
+                    var SupplierDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
+
+                    string FormatIndianCurrency(decimal amount)
+                    {
+                        var cultureInfo = new CultureInfo("en-IN");
+                        var numberFormat = cultureInfo.NumberFormat;
+                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
+                        numberFormat.CurrencyDecimalDigits = 2;
+                        numberFormat.CurrencyGroupSeparator = ",";
+                        numberFormat.CurrencyDecimalSeparator = ".";
+                        return amount.ToString("N", numberFormat);
+                    }
+                    using (var wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("Report");
+
+                        var row = 1;
+
+                        // Header Row 1
+                        ws.Cell(row, 1).Value = "Site";
+                        ws.Cell(row, 2).Value = "Supplier";
+                        ws.Cell(row, 3).Value = "Company";
+
+                        var headerRange1 = ws.Range(row, 1, row, 3);
+                        headerRange1.Style.Font.Bold = true;
+                        headerRange1.Style.Fill.BackgroundColor = XLColor.Black;
+                        headerRange1.Style.Font.FontColor = XLColor.White;
+                        headerRange1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        headerRange1.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        headerRange1.Style.Border.BottomBorderColor = XLColor.Black;
+                        headerRange1.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                        headerRange1.Style.Border.RightBorderColor = XLColor.Black;
+
+                        row++;
+                        ws.Cell(row, 1).Value = UserSession.SiteName ?? string.Empty;
+                        ws.Cell(row, 2).Value = invoiceReport.SupplierName ?? string.Empty;
+                        ws.Cell(row, 3).Value = invoiceReport.CompanyName ?? string.Empty;
+
+                        var dataRange1 = ws.Range(row, 1, row, 3);
+                        dataRange1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        dataRange1.Style.Font.Bold = true;
+                        dataRange1.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        dataRange1.Style.Border.BottomBorderColor = XLColor.Black;
+                        dataRange1.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                        dataRange1.Style.Border.LeftBorderColor = XLColor.Black;
+                        dataRange1.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                        dataRange1.Style.Border.RightBorderColor = XLColor.Black;
+
+                        row += 2;
+
+                        // Table-2
+
+                        ws.Cell(row, 1).Value = "Credit";
+                        ws.Cell(row, 2).Value = "Debit";
+                        ws.Cell(row, 3).Value = "Net Balance";
+
+                        var headerRange = ws.Range(row, 1, row, 3);
+                        headerRange.Style.Font.Bold = true;
+                        headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
+                        headerRange.Style.Font.FontColor = XLColor.White;
+                        headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        headerRange.Style.Border.BottomBorderColor = XLColor.Black;
+                        headerRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                        headerRange.Style.Border.RightBorderColor = XLColor.Black;
+
+                        row++;
+                        ws.Cell(row, 1).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
+                        ws.Cell(row, 2).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
+                        ws.Cell(row, 3).Value = FormatIndianCurrency(SupplierDetails.TotalPending);
+
+                        var dataRange = ws.Range(row, 1, row, 3);
+                        dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Cell(row, 1).Style.Font.Bold = true;
+                        ws.Cell(row, 2).Style.Font.Bold = true;
+                        ws.Cell(row, 3).Style.Font.Bold = true;
+                        ws.Cell(row, 3).Style.Font.FontColor = XLColor.Green;
+                        dataRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                        dataRange.Style.Border.BottomBorderColor = XLColor.Black;
+                        dataRange.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                        dataRange.Style.Border.LeftBorderColor = XLColor.Black;
+                        dataRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                        dataRange.Style.Border.RightBorderColor = XLColor.Black;
+
+                        row+=2;
+                        // Header Row 3
+
+                        string previousSupplier = null;
+                        foreach (var item in SupplierDetails.InvoiceList)
+                        {
+                            if (previousSupplier == null || previousSupplier != item.SupplierName)
+                            {
+                                if (previousSupplier != null)
+                                {
+                                    row += 2; // Add spacing between suppliers
+                                }
+
+                                ws.Cell(row, 1).Value = "Invoice No";
+                                ws.Cell(row, 2).Value = "Date";
+                                ws.Cell(row, 3).Value = "Site";
+                                ws.Cell(row, 4).Value = "Group";
+                                ws.Cell(row, 5).Value = "Supplier";
+                                ws.Cell(row, 6).Value = "Credit";
+                                ws.Cell(row, 7).Value = "Debit";
+
+                                var headerRange2 = ws.Range(row, 1, row, 7);
+                                headerRange2.Style.Font.Bold = true;
+                                headerRange2.Style.Fill.BackgroundColor = XLColor.Black;
+                                headerRange2.Style.Font.FontColor = XLColor.White;
+                                headerRange2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                                row++;
+                            }
+
+                            string cellValue;
+
+                            if (item.InvoiceNo == "Opening Balance" || item.InvoiceNo == "PayOut")
+                            {
+                                var description = (string.IsNullOrEmpty(item.Description) ? "" : " (" + item.Description + ")");
+                                if (item.SupplierInvoiceNo != null)
+                                {
+                                    cellValue = item.SupplierInvoiceNo + description;
+                                }
+                                else
+                                {
+                                    cellValue = item.InvoiceNo + description;
+                                }
+                            }
+                            else
+                            {
+                                var invoiceType = (string.IsNullOrEmpty(item.InvoiceType) ? "" : " (" + item.InvoiceType + ")");
+                                if (item.SupplierInvoiceNo != null)
+                                {
+                                    cellValue = item.SupplierInvoiceNo + invoiceType;
+                                }
+                                else
+                                {
+                                    cellValue = item.InvoiceNo + invoiceType;
+                                }
+                            }
+                            ws.Cell(row, 1).Value = cellValue;
+                            ws.Cell(row, 2).Value = item.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
+                            ws.Cell(row, 3).Value = item.SiteName ?? string.Empty;
+                            ws.Cell(row, 4).Value = item.GroupName ?? string.Empty;
+                            ws.Cell(row, 5).Value = item.SupplierName ?? string.Empty;
+                            if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
+                            {
+                                ws.Cell(row, 6).Value = "";
+                                ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount);
+                            }
+                            else
+                            {
+
+                                ws.Cell(row, 6).Value = FormatIndianCurrency(item.TotalAmount);
+                                ws.Cell(row, 7).Value = "";
+                            }
+                            row++;
+                            previousSupplier = item.SupplierName;
+                        }
+
+                        row++;
+                        ws.Cell(row, 1).Value = "Total";
+                        ws.Cell(row, 2).Value = string.Empty;
+                        ws.Cell(row, 3).Value = string.Empty;
+                        ws.Cell(row, 4).Value = string.Empty;
+                        ws.Cell(row, 5).Value = string.Empty;
+                        ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
+                        ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
+
+                        var footerRange2 = ws.Range(row, 1, row, 7);
+                        footerRange2.Style.Font.Bold = true;
+                        footerRange2.Style.Fill.BackgroundColor = XLColor.Black;
+                        footerRange2.Style.Font.FontColor = XLColor.White;
+
+                        using (var stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            stream.Seek(0, SeekOrigin.Begin);
+                            var fileName = $"{Guid.NewGuid()}_ReportDetails.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                         }
                     }
                 }

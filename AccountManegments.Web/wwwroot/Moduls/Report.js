@@ -359,7 +359,99 @@ function ExportToExcel() {
         }
     });
 }
+function GetInvoiceDetailsBySupplierExcelReport() {
+    siteloadershow();
+    var selectedValue = $('#timePeriodDropdown').val();
+    var selectedSupplierId = $('#textReportSupplierNameHidden').val();
+    var selectedSupplierName = $('#textReportSupplierName').val();
+    var selectedCompanyId = $('#textReportCompanyName').val();
+    var selectedGroupName = $('#textReportGroupList').val();
+    var selectedReportSiteName = $('#textReportSiteName').val();
+    var selectedSortOrder = "AscendingDate";
+    var objData = {
+        SiteId: selectedReportSiteName || null,
+        CompanyId: selectedCompanyId || null,
+        SupplierId: selectedSupplierId || null,
+        GroupName: selectedGroupName || null,
+        sortBy: selectedSortOrder,
+        CompanyName: selectedCompanyName || null,
+        SupplierName: selectedSupplierName || null,
+        filterType: null,
+        startDate: null,
+        endDate: null,
+        SelectedYear: null,
+    };
+    var selectedValue = $('#timePeriodDropdown').val();
+    switch (selectedValue) {
+        case 'This Month':
+            objData.filterType = "currentMonth";
+            break;
+        case 'This Year':
+            objData.filterType = "currentYear";
+            break;
+        case 'Between Date':
+            objData.filterType = "dateRange";
+            objData.filterType = $('#startDate').val();
+            objData.filterType = $('#endDate').val();
+            break;
+        case 'Between Year':
+            objData.filterType = "betweenYear";
+            objData.filterType = $('#yearDropdown').val();
+            break;
+        default:
+            objData.filterType = null;
+            break;
+    }
+    var ajaxUrl ='/Report/GetInvoiceDetailsBySupplierExcelReport';
+    $.ajax({
+        url: ajaxUrl,
+        type: 'GET',
+        data: objData,
+        datatype: 'json',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
 
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.warning("No data found for the selected criteria.");
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
 var datas = userPermissions;
 
 var supplierBalances = {};

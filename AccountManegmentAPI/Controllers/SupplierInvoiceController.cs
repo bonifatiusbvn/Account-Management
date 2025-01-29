@@ -307,5 +307,12 @@ namespace AccountManagement.API.Controllers
             var supplierList = await SupplierInvoice.InvoiceDetailsExportToPdf(SiteId);
             return Ok(new { code = 200, data = supplierList });
         }
+        [HttpPost]
+        [Route("GetInvoiceDetailsBySupplierExcelReport")]
+        public async Task<IActionResult> GetInvoiceDetailsBySupplierExcelReport(InvoiceReportModel invoiceReport)
+        {
+            var supplierList = await SupplierInvoice.GetInvoiceDetailsBySupplierExcelReport(invoiceReport);
+            return Ok(new { code = 200, data = supplierList });
+        }
     }
 }

@@ -32,5 +32,6 @@ namespace AccountManagement.Repository.Interface.Repository.InvoiceMaster
         Task<InvoiceTotalAmount> GetPayoutInvoiceDetailsPdfReport(InvoiceReportModel invoiceReport);
         Task<bool> CheckSupplierInvoiceNo(SupplierInvoiceModel InvoiceData);
         Task<List<SupplierInvoiceMasterView>> InvoiceDetailsExportToPdf(Guid? SiteId);
+        Task<InvoiceTotalAmount> GetInvoiceDetailsBySupplierExcelReport(InvoiceReportModel invoiceReport);
     }
 }

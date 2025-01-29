@@ -1759,7 +1759,7 @@ function updateProductTotalAmount(that) {
 
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
-    var quantity = parseInt(row.find("#txtproductquantity").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
     var gst = parseFloat(row.find("#txtgst").val());
     var totalGst = (productPrice * quantity * gst) / 100;
     var totalAmount = productPrice * quantity + totalGst;
