@@ -1333,16 +1333,33 @@ namespace AccountManegments.Web.Controllers
                         dataRange.Style.Border.RightBorderColor = XLColor.Black;
 
                         row+=2;
-                        // Header Row 3
 
+                        // Header Row 3
+                        decimal SupplierTotalCredit = 0;
+                        decimal SupplierTotalDebit = 0;
                         string previousSupplier = null;
+
                         foreach (var item in SupplierDetails.InvoiceList)
                         {
                             if (previousSupplier == null || previousSupplier != item.SupplierName)
                             {
                                 if (previousSupplier != null)
                                 {
-                                    row += 2; // Add spacing between suppliers
+                                    ws.Cell(row, 1).Value = "Total";
+                                    ws.Cell(row, 2).Value = string.Empty;
+                                    ws.Cell(row, 3).Value = string.Empty;
+                                    ws.Cell(row, 4).Value = string.Empty;
+                                    ws.Cell(row, 5).Value = string.Empty;
+                                    ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierTotalCredit);
+                                    ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierTotalDebit);
+
+                                    var footerRange2 = ws.Range(row, 1, row, 7);
+                                    footerRange2.Style.Font.Bold = true;
+                                    footerRange2.Style.Font.FontColor = XLColor.Black;
+
+                                    SupplierTotalCredit = 0;
+                                    SupplierTotalDebit = 0;
+                                    row += 2; 
                                 }
 
                                 ws.Cell(row, 1).Value = "Invoice No";
@@ -1363,64 +1380,56 @@ namespace AccountManegments.Web.Controllers
                             }
 
                             string cellValue;
-
                             if (item.InvoiceNo == "Opening Balance" || item.InvoiceNo == "PayOut")
                             {
-                                var description = (string.IsNullOrEmpty(item.Description) ? "" : " (" + item.Description + ")");
-                                if (item.SupplierInvoiceNo != null)
-                                {
-                                    cellValue = item.SupplierInvoiceNo + description;
-                                }
-                                else
-                                {
-                                    cellValue = item.InvoiceNo + description;
-                                }
+                                var description = string.IsNullOrEmpty(item.Description) ? "" : " (" + item.Description + ")";
+                                cellValue = item.SupplierInvoiceNo ?? item.InvoiceNo;
+                                cellValue += description;
                             }
                             else
                             {
-                                var invoiceType = (string.IsNullOrEmpty(item.InvoiceType) ? "" : " (" + item.InvoiceType + ")");
-                                if (item.SupplierInvoiceNo != null)
-                                {
-                                    cellValue = item.SupplierInvoiceNo + invoiceType;
-                                }
-                                else
-                                {
-                                    cellValue = item.InvoiceNo + invoiceType;
-                                }
+                                var invoiceType = string.IsNullOrEmpty(item.InvoiceType) ? "" : " (" + item.InvoiceType + ")";
+                                cellValue = item.SupplierInvoiceNo ?? item.InvoiceNo;
+                                cellValue += invoiceType;
                             }
+
                             ws.Cell(row, 1).Value = cellValue;
                             ws.Cell(row, 2).Value = item.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
                             ws.Cell(row, 3).Value = item.SiteName ?? string.Empty;
                             ws.Cell(row, 4).Value = item.GroupName ?? string.Empty;
                             ws.Cell(row, 5).Value = item.SupplierName ?? string.Empty;
+
                             if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
                             {
                                 ws.Cell(row, 6).Value = "";
                                 ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount);
+                                SupplierTotalDebit += item.TotalAmount;
                             }
                             else
                             {
-
                                 ws.Cell(row, 6).Value = FormatIndianCurrency(item.TotalAmount);
                                 ws.Cell(row, 7).Value = "";
+                                SupplierTotalCredit += item.TotalAmount;
                             }
+
                             row++;
                             previousSupplier = item.SupplierName;
                         }
 
-                        row++;
-                        ws.Cell(row, 1).Value = "Total";
-                        ws.Cell(row, 2).Value = string.Empty;
-                        ws.Cell(row, 3).Value = string.Empty;
-                        ws.Cell(row, 4).Value = string.Empty;
-                        ws.Cell(row, 5).Value = string.Empty;
-                        ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
-                        ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
+                        if (previousSupplier != null)
+                        {
+                            ws.Cell(row, 1).Value = "Total";
+                            ws.Cell(row, 2).Value = string.Empty;
+                            ws.Cell(row, 3).Value = string.Empty;
+                            ws.Cell(row, 4).Value = string.Empty;
+                            ws.Cell(row, 5).Value = string.Empty;
+                            ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierTotalCredit);
+                            ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierTotalDebit);
 
-                        var footerRange2 = ws.Range(row, 1, row, 7);
-                        footerRange2.Style.Font.Bold = true;
-                        footerRange2.Style.Fill.BackgroundColor = XLColor.Black;
-                        footerRange2.Style.Font.FontColor = XLColor.White;
+                            var footerRange2 = ws.Range(row, 1, row, 7);
+                            footerRange2.Style.Font.Bold = true;
+                            footerRange2.Style.Font.FontColor = XLColor.Black;
+                        }
 
                         using (var stream = new MemoryStream())
                         {
