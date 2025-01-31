@@ -498,7 +498,7 @@
             <div class="modal-header d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
                     <label class="form-label mb-0">Search Product</label>
-                    <input class="form-control" id="mdSalesProductSearch" onkeyup="filterallSalesItemTable()" style="width: 500px;" />
+                    <input class="form-control" id="mdSalesProductSearch" onkeyup="GetSalesItemDetailsList()" style="width: 500px;" />
                 </div>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Item" && a.Add))
                 {
