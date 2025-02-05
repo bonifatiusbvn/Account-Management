@@ -540,14 +540,17 @@ namespace AccountManagement.Repository.Repository.SiteMasterRepository
                         }
                         else
                         {
-                            var groupModel = new GroupMaster()
+                            foreach (var siteId in GroupDetails.SiteIdList)
                             {
-                                GroupId = groupId,
-                                GroupName = GroupDetails.GroupName,
-                                SiteId = GroupDetails.SiteId,
-                                CreatedOn = DateTime.Now,
-                            };
-                            Context.GroupMasters.Add(groupModel);
+                                var groupModel = new GroupMaster()
+                                {
+                                    GroupId = groupId,
+                                    GroupName = GroupDetails.GroupName,
+                                    SiteId = siteId.SiteId,
+                                    CreatedOn = DateTime.Now,
+                                };
+                                Context.GroupMasters.Add(groupModel);
+                            }
                         }
                         await Context.SaveChangesAsync();
                         response.code = 200;
