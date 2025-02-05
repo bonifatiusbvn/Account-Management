@@ -35,7 +35,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                 else
                 {
                     var lastInvoice = Context.SalesInvoices
-                        .Where(a => a.CompanyId == CompanyId)
+                        .Where(a => a.CompanyId == CompanyId && a.SalesInvoiceNo != "PayIn")
                         .OrderByDescending(e => e.CreatedOn)
                         .FirstOrDefault();
 
