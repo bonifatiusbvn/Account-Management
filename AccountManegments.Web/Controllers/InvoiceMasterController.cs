@@ -1088,7 +1088,7 @@ namespace AccountManegments.Web.Controllers
                         foreach (var Supplier in supplierDetailsList)
                         {
                             decimal ItemTotalAmount = 0;
-                            ws.Cell(row, 1).Value = Supplier.InvoiceNo ?? string.Empty;
+                            ws.Cell(row, 1).Value = (Supplier.InvoiceNo ?? string.Empty) + " - " + (Supplier.SupplierInvoiceNo ?? string.Empty);
                             ws.Cell(row, 2).Value = Supplier.Date?.ToString("dd-MM-yyyy") ?? string.Empty;
                             ws.Cell(row, 3).Value = Supplier.CompanyName ?? string.Empty;
                             foreach (var item in Supplier.ItemList ?? new List<POItemDetailsModel>())
