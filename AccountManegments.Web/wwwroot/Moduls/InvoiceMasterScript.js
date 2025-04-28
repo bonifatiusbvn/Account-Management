@@ -94,7 +94,6 @@ function GetItemDetailsList() {
 }
 
 
-
 $(document).ready(function () {
     $('#textCompanyName').change(function () {
 
@@ -182,40 +181,16 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    function handleFocus(event, selector) {
+    function handleFocus(event, $selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
-            $(selector).focus();
+            $selector.focus();
         }
     }
+
     function showErrorMessage(selector, message) {
         $(selector).text(message).show();
     }
-    $(document).on('input', '#txtproductquantity', function () {
-        var productRow = $(this).closest(".product");
-        updateProductTotalAmount(productRow);
-        updateTotals();
-    }).on('keydown', '#txtproductquantity', function (event) {
-        var productRow = $(this).closest(".product");
-        if (event.key === 'Tab' && event.shiftKey) {
-            event.preventDefault();
-            productRow.find('#txtHSNcode').focus();
-        } else if (event.key === 'Tab') {
-            var productFocus = productRow.find('#txtproductamount');
-            handleFocus(event, productFocus);
-        }
-    });
-
-    $(document).on('input', '#txtgst', function () {
-        var productRow = $(this).closest(".product");
-        var gstvalue = $('#txtgst').val();
-        if (gstvalue > 100) {
-            toastr.warning("GST% cannot be greater than 100%");
-            $(this).val(100);
-        }
-        updateProductTotalAmount(productRow);
-        updateTotals();
-    })
 
     function debounce(func, delay) {
         let timer;
@@ -225,82 +200,91 @@ $(document).ready(function () {
         };
     }
 
-    $(document).on('input', '#txtdiscountpercentage', debounce(function () {
-        var value = $(this).val();
-        var productRow = $(this).closest(".product");
-
-        if (value > 100) {
-            toastr.warning("Discount cannot be greater than 100%");
-            productRow.find("#txtdiscountpercentage").val(0);
-            productRow.find("#txtdiscountamount").val(0);
-        } else if (value <= 0 || value == "") {
-            productRow.find("#txtdiscountamount").val(0);
-            productRow.find("#txtdiscountpercentage").val(0);
-            updateProductTotalAmount(productRow);
-        } else {
-            UpdateDiscountPercentage(productRow);
-        }
-    }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
-        var productRow = $(this).closest(".product");
-        if (event.key === 'Tab' && event.shiftKey) {
-            event.preventDefault();
-            productRow.find('#txtdiscountamount').focus();
-        } else if (event.key === 'Tab') {
-            var gstFocus = productRow.find('#txtgst');
-            handleFocus(event, gstFocus);
-        }
-    });
-
-
-    $(document).on('input', '#txtdiscountamount', debounce(function () {
-        var productRow = $(this).closest(".product");
-        var discountAmount = parseFloat($(this).val());
-        var productAmount = parseFloat($(productRow).find("#productamount").val());
-
-        if (discountAmount > productAmount) {
-            toastr.warning("Amount cannot be greater than Item price");
-            productRow.find("#txtdiscountamount").val(0);
-            productRow.find("#txtdiscountpercentage").val(0);
-        } else if (discountAmount <= 0 || discountAmount == "") {
-            productRow.find("#txtdiscountamount").val(0);
-            productRow.find("#txtdiscountpercentage").val(0);
-            updateProductTotalAmount(productRow);
-        } else {
-            updateDiscount(productRow);
-        }
-    }, 300)).on('keydown', '#txtdiscountamount', function (event) {
-        var productRow = $(this).closest(".product");
-        if (event.key === 'Tab' && event.shiftKey) {
-            event.preventDefault();
-            productRow.find('#txtproductamount').focus();
-        } else if (event.key === 'Tab') {
-            var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
-            handleFocus(event, discountPercentagefocus);
-        }
-    });
-
-    $(document).on('input', '#txtproductamount', function () {
-        var productRow = $(this).closest(".product");
-        var productAmount = parseFloat($(this).val());
-        var discountAmountfocus = productRow.find('#txtdiscountamount');
-
-        if (!isNaN(productAmount)) {
-            productRow.find("#txtdiscountamount").val(0);
-            productRow.find("#txtdiscountpercentage").val(0);
-        }
-
-        productRow.find("#productamount").val(productAmount.toFixed(2));
+    // Handle quantity input
+    $(document).on('input', '.txtproductquantity', function () {
+        var productRow = $(this).closest(".productRow");
         updateProductTotalAmount(productRow);
         updateTotals();
-
-    }).on('keydown', '#txtproductamount', function (event) {
-        var productRow = $(this).closest(".product");
-        if (event.key === 'Tab' && event.shiftKey) {
+    }).on('keydown', '.txtproductquantity', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
             event.preventDefault();
-            productRow.find('#txtproductquantity').focus();
+            productRow.find('.txtHSNcode').focus();
         } else if (event.key === 'Tab') {
-            var discountAmountfocus = productRow.find('#txtdiscountamount');
-            handleFocus(event, discountAmountfocus);
+            handleFocus(event, productRow.find('.txtproductamount'));
+        }
+    });
+
+    // Handle GST input
+    $(document).on('input', '.txtgst', function () {
+        var productRow = $(this).closest(".productRow");
+        var gstvalue = parseFloat($(this).val()) || 0;
+        if (gstvalue > 100) {
+            toastr.warning("GST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    });
+
+    // Handle discount percentage input
+    $(document).on('input', '.txtdiscountpercentage', debounce(function () {
+        var productRow = $(this).closest(".productRow");
+        var discountPercentage = parseFloat($(this).val()) || 0;
+        if (discountPercentage > 100) {
+            toastr.warning("Discount % cannot be greater than 100%");
+            productRow.find(".txtdiscountpercentage").val(0);
+            productRow.find(".txtdiscountamount").val(0);
+        }
+        UpdateDiscountPercentage(productRow);
+    }, 300)).on('keydown', '.txtdiscountpercentage', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
+            event.preventDefault();
+            productRow.find('.txtdiscountamount').focus();
+        } else if (event.key === 'Tab') {
+            handleFocus(event, productRow.find('.txtgst'));
+        }
+    });
+
+    // Handle discount amount input
+    $(document).on('input', '.txtdiscountamount', debounce(function () {
+        var productRow = $(this).closest(".productRow");
+        var discountAmount = parseFloat($(this).val()) || 0;
+        var productAmount = parseFloat(productRow.find(".productamount").val()) || 0;
+
+        if (discountAmount > productAmount) {
+            toastr.warning("Discount amount cannot exceed product price!");
+            productRow.find(".txtdiscountamount").val(0);
+            productRow.find(".txtdiscountpercentage").val(0);
+        }
+        updateDiscount(productRow);
+    }, 300)).on('keydown', '.txtdiscountamount', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
+            event.preventDefault();
+            productRow.find('.txtproductamount').focus();
+        } else if (event.key === 'Tab') {
+            handleFocus(event, productRow.find('.txtdiscountpercentage'));
+        }
+    });
+
+    // Handle product amount input
+    $(document).on('input', '.txtproductamount', function () {
+        var productRow = $(this).closest(".productRow");
+        var productAmount = parseFloat($(this).val()) || 0;
+        productRow.find(".productamount").val(productAmount.toFixed(2));
+        productRow.find(".txtdiscountamount").val(0);
+        productRow.find(".txtdiscountpercentage").val(0);
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    }).on('keydown', '.txtproductamount', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
+            event.preventDefault();
+            productRow.find('.txtproductquantity').focus();
+        } else if (event.key === 'Tab') {
+            handleFocus(event, productRow.find('.txtdiscountamount'));
         }
     });
 
@@ -570,20 +554,20 @@ function InsertMultipleSupplierItem() {
         if ($('#addnewproductlink tr').length >= 1) {
 
             var ItemDetails = [];
-            $(".product").each(function () {
+            $(".productRow").each(function () {
                 var orderRow = $(this);
                 var objData = {
-                    ItemName: orderRow.find("#txtItemName").text(),
-                    ItemId: orderRow.find("#txtItemId").val(),
-                    ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
-                    UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
-                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
-                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
-                    Quantity: orderRow.find("#txtproductquantity").val(),
-                    PricePerUnit: orderRow.find("#txtproductamount").val(),
-                    GSTamount: orderRow.find("#txtgstAmount").val(),
-                    GSTPercentage: orderRow.find("#txtgst").val(),
-                    TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+                    ItemName: orderRow.find(".txtInvoiceItemName").val(),
+                    ItemId: orderRow.find(".txtInvoiceItemNameHidden").val(),
+                    ItemDescription: orderRow.find(".txtInvoiceProductDes").val(),
+                    UnitType: orderRow.find(".txtPOUnitType").val(),
+                    DiscountAmount: orderRow.find(".txtdiscountamount").val(),
+                    DiscountPer: orderRow.find(".txtdiscountpercentage").val(),
+                    Quantity: orderRow.find(".txtproductquantity").val(),
+                    PricePerUnit: orderRow.find(".txtproductamount").val(),
+                    GSTamount: orderRow.find(".txtgstAmount").val(),
+                    GSTPercentage: orderRow.find(".txtgst").val(),
+                    TotalAmount: orderRow.find(".txtproducttotalamount").val(),
                 };
                 ItemDetails.push(objData);
             });
@@ -681,21 +665,21 @@ function UpdateInvoiceDetails() {
         if ($('#addnewproductlink tr').length >= 1) {
 
             var ItemDetails = [];
-            $(".product").each(function () {
+            $(".productRow").each(function () {
 
                 var orderRow = $(this);
                 var objData = {
-                    ItemName: orderRow.find("#txtItemName").text(),
-                    ItemId: orderRow.find("#txtItemId").val(),
-                    ItemDescription: orderRow.find("#txtInvoiceProductDes").val(),
-                    UnitType: orderRow.find("#txtPOUnitType_" + orderRow.find("#txtItemId").val()).val(),
-                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
-                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
-                    Quantity: orderRow.find("#txtproductquantity").val(),
-                    PricePerUnit: orderRow.find("#txtproductamount").val(),
-                    GSTamount: orderRow.find("#txtgstAmount").val(),
-                    GSTPercentage: orderRow.find("#txtgst").val(),
-                    TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+                    ItemName: orderRow.find(".txtInvoiceItemName").val(),
+                    ItemId: orderRow.find(".txtInvoiceItemNameHidden").val(),
+                    ItemDescription: orderRow.find(".txtInvoiceProductDes").val(),
+                    UnitType: orderRow.find(".txtPOUnitType").val(),
+                    DiscountAmount: orderRow.find(".txtdiscountamount").val(),
+                    DiscountPer: orderRow.find(".txtdiscountpercentage").val(),
+                    Quantity: orderRow.find(".txtproductquantity").val(),
+                    PricePerUnit: orderRow.find(".txtproductamount").val(),
+                    GSTamount: orderRow.find(".txtgstAmount").val(),
+                    GSTPercentage: orderRow.find(".txtgst").val(),
+                    TotalAmount: orderRow.find(".txtproducttotalamount").val(),
                 };
                 ItemDetails.push(objData);
             });
@@ -912,142 +896,85 @@ function preventEmptyValue(input) {
     }
 }
 
-function updateProductTotalAmount(that) {
-    var row = $(that);
-    var productPrice = parseFloat(row.find("#txtproductamount").val());
-    var hiddenproductPrice = parseFloat(row.find("#productamount").val());
-    var quantity = parseFloat(row.find("#txtproductquantity").val());
-    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-    var AmtWithDisc = hiddenproductPrice - discountprice;
+function updateProductTotalAmount(row) {
+    var $row = $(row); 
+    var productPrice = parseFloat($row.find(".txtproductamount").val()) || 0;
+    var quantity = parseFloat($row.find(".txtproductquantity").val()) || 0;
+    var discount = parseFloat($row.find(".txtdiscountamount").val()) || 0;
+    var gstPercent = parseFloat($row.find(".txtgst").val()) || 0;
 
-    var gst = parseFloat(row.find("#txtgst").val());
+    var priceAfterDiscount = productPrice;
+    var gstAmount = (priceAfterDiscount * quantity * gstPercent) / 100;
+    var totalAmount = (priceAfterDiscount * quantity) + gstAmount;
 
-    var totalGst = (AmtWithDisc * quantity * gst) / 100;
-
-    var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
-
-    row.find("#txtgstAmount").val(totalGst.toFixed(2));
-    row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
+    $row.find(".txtgstAmount").val(gstAmount.toFixed(2));
+    $row.find(".txtproducttotalamount").val(totalAmount.toFixed(2));
 }
 
-function updateDiscount(that) {
-    var row = $(that);
-    var productPrice = parseFloat(row.find("#productamount").val());
-    var quantity = parseFloat(row.find("#txtproductquantity").val());
-    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
 
-    if (isNaN(discountprice)) {
-        row.find("#txtdiscountamount").val(0);
-        row.find("#txtdiscountpercentage").val(0);
-        row.find("#txtproductamount").val(productPrice.toFixed(2));
-        updateProductTotalAmount(row);
-        updateTotals();
-        return;
-    }
+function updateDiscount(row) {
+    var originalPrice = parseFloat(row.find(".productamount").val()) || 0;
+    var discountAmount = parseFloat(row.find(".txtdiscountamount").val()) || 0;
 
-    if (discountPercentage == 0 && discountprice > 0) {
-        var discountperbyamount = discountprice / productPrice * 100;
-        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
-    } else if (discountprice > 0 && discountPercentage > 0) {
-        var discountperbyamount = discountprice / productPrice * 100;
-        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    if (originalPrice > 0) {
+        var discountedPrice = originalPrice - discountAmount;
+        var discountPercent = (discountAmount / originalPrice) * 100;
+        row.find(".txtdiscountpercentage").val(discountPercent.toFixed(2));
+        row.find(".txtproductamount").val(discountedPrice.toFixed(2));
     }
-    var AmountAfterDisc = productPrice - discountprice;
-    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     updateProductTotalAmount(row);
     updateTotals();
 }
 
-function UpdateDiscountPercentage(that) {
-    var row = $(that);
-    var productPrice = parseFloat(row.find("#productamount").val());
-    var quantity = parseFloat(row.find("#txtproductquantity").val());
-    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
-    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+function UpdateDiscountPercentage(row) {
+    var originalPrice = parseFloat(row.find(".productamount").val()) || 0;
+    var discountPercent = parseFloat(row.find(".txtdiscountpercentage").val()) || 0;
 
-    if (isNaN(discountPercentage)) {
-        row.find("#txtdiscountamount").val(0);
-        row.find("#txtdiscountpercentage").val(0);
-        row.find("#txtproductamount").val(productPrice.toFixed(2));
-        updateProductTotalAmount(row);
-        updateTotals();
-        return;
+    if (originalPrice > 0) {
+        var discountAmount = (originalPrice * discountPercent) / 100;
+        var discountedPrice = originalPrice - discountAmount;
+        row.find(".txtdiscountamount").val(discountAmount.toFixed(2));
+        row.find(".txtproductamount").val(discountedPrice.toFixed(2));
     }
-
-    if (discountprice == 0 && discountPercentage > 0) {
-        discountprice = productPrice * discountPercentage / 100;
-        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
-    } else if (discountprice > 0 && discountPercentage > 0) {
-        discountprice = productPrice * discountPercentage / 100;
-        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
-    }
-
-    var AmountAfterDisc = productPrice - discountprice;
-    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     updateProductTotalAmount(row);
     updateTotals();
-}
-
-function updateProductQuantity(row, increment) {
-    var quantityInput = parseFloat(row.find(".product-quantity").val());
-    var newQuantity = quantityInput + increment;
-    if (newQuantity >= 0) {
-        row.find(".product-quantity").val(newQuantity);
-        updateProductTotalAmount(row);
-        updateTotals();
-    }
 }
 
 function updateTotals() {
-    var totalSubtotal = 0;
-    var totalGst = 0;
-    var totalAmount = 0;
-    var TotalItemQuantity = 0;
-    var TotalDiscount = 0;
+    var totalSubtotal = 0, totalGst = 0, totalQuantity = 0, totalDiscount = 0;
 
-    $(".product").each(function () {
+    $(".productRow").each(function () {
         var row = $(this);
-        var subtotal = parseFloat(row.find("#txtproductamount").val()) || 0;
-        var gst = parseFloat(row.find("#txtgstAmount").val()) || 0;
-        var totalquantity = parseFloat(row.find("#txtproductquantity").val()) || 0;
-        var discountprice = parseFloat(row.find("#txtdiscountamount").val()) || 0;
+        var price = parseFloat(row.find(".txtproductamount").val()) || 0;
+        var quantity = parseFloat(row.find(".txtproductquantity").val()) || 0;
+        var gstAmount = parseFloat(row.find(".txtgstAmount").val()) || 0;
+        var discountAmount = parseFloat(row.find(".txtdiscountamount").val()) || 0;
 
-        totalSubtotal += subtotal * totalquantity;
-        totalGst += gst;
-        TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice * totalquantity;
+        totalSubtotal += price * quantity;
+        totalGst += gstAmount;
+        totalQuantity += quantity;
+        totalDiscount += discountAmount * quantity;
     });
-    var Tds = $('#cart-tds').val();
-    totalAmount = totalSubtotal + totalGst - Tds;
 
+    var Tds = parseFloat($('#cart-tds').val()) || 0;
+    var discountRoundOff = parseFloat($('#IDiscountRoundOff').val()) || 0;
 
-    var dicountRoundOff = parseFloat($('#IDiscountRoundOff').val()) || 0;
+    var grandTotal = totalSubtotal + totalGst - Tds + discountRoundOff;
 
-
-    totalAmount += dicountRoundOff;
+    // Round off
+    var decimal = grandTotal - Math.floor(grandTotal);
+    grandTotal = (decimal <= 0.5) ? Math.floor(grandTotal) : Math.ceil(grandTotal);
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
-    $("#cart-discount").val(TotalDiscount.toFixed(2));
-    $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
-    $("#TotalProductQuantity").text(TotalItemQuantity);
+    $("#cart-discount").val(totalDiscount.toFixed(2));
+    $("#TotalDiscountPrice").html(totalDiscount.toFixed(2));
+    $("#TotalProductQuantity").text(totalQuantity);
     $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
     $("#TotalProductGST").html(totalGst.toFixed(2));
-
-
-    var decimalPart = totalAmount - Math.floor(totalAmount);
-
-    if (decimalPart <= 0.50) {
-        totalAmount = Math.floor(totalAmount);
-    } else {
-        totalAmount = Math.ceil(totalAmount);
-    }
-
-    $("#cart-total").val(totalAmount.toFixed(2));
-    $("#TotalProductAmount").html(totalAmount.toFixed(2));
+    $("#cart-total").val(grandTotal.toFixed(2));
+    $("#TotalProductAmount").html(grandTotal.toFixed(2));
 }
-
 
 function removeItem(btn) {
     $(btn).closest("tr").remove();
@@ -1591,10 +1518,9 @@ document.getElementById('textIsWithGst').addEventListener('change', function () 
 });
 
 function fn_AddInvoiceProductDescription(element) {
-    var itemId = $(element).data('item-id');
-
-    var $productDesBtn = $(`div[data-item-id='${itemId}']#ProductDesBtn`);
-    var $productDesText = $(`div[data-item-id='${itemId}']#ProductDesText`);
+    var $currentTd = $(element).closest('td');
+    var $productDesBtn = $currentTd.find('.ProductDesBtn');
+    var $productDesText = $currentTd.find('.ProductDesText');
 
     if ($productDesText.is(':visible')) {
         $productDesText.find('input').val('');
@@ -1878,4 +1804,189 @@ function ExportToExcelInvoiceDetails() {
             responseType: 'blob'
         }
     });
+}
+
+
+//----------------------------------------------------------- Add New Row ----------------------------------------------------//
+
+function GetAllProductList(row) {
+    $.ajax({
+        url: '/ItemMaster/GetItemNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.itemName,
+                    value: data.itemId
+                };
+            });
+
+            var $itemInput = $(row).find('.txtInvoiceItemName');
+
+            $itemInput.autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+
+                    var $row = $(this).closest('.productRow');
+
+                    $row.find('.txtInvoiceItemNameHidden').val(ui.item.value);
+                    $row.find('.txtInvoiceItemNameHidden').trigger('change');
+
+                    GetItemDetailsByItemId(ui.item.value, $row);
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                if ($(this).val() === "") {
+                    $(this).closest('.productRow').find('.txtInvoiceItemNameHidden').val("");
+                }
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+
+function GetProductUnittypeList(row) {
+    $.ajax({
+        url: '/ItemMaster/GetAllUnitType',
+        type: 'GET',
+        success: function (result) {
+            const $unitTypeDropdown = $(row).find('.txtPOUnitType');
+            $unitTypeDropdown.empty();
+            $unitTypeDropdown.append('<option value="">Select</option>');
+
+            $.each(result, function (i, data) {
+                $unitTypeDropdown.append('<option value="' + data.unitId + '">' + data.unitName + '</option>');
+            });
+
+            const unitTypeId = $(row).find('.txtunittype').val();
+
+            if (unitTypeId) {
+
+                $unitTypeDropdown.val(unitTypeId).change(); 
+            }
+        },
+        error: function (err) {
+            console.error('Failed to fetch unit type list: ', err);
+        }
+    });
+}
+
+
+function GetItemDetailsByItemId(ItemId, row) {
+    $.ajax({
+        url: '/InvoiceMaster/GetItemDetailsByProductId?ProductId=' + ItemId,
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            if (data != null) {
+                $(row).find('.txtHSNcode').val(data.hsncode);
+                $(row).find('.txtproductquantity').val(1);
+                $(row).find('.txtunittype').val(data.unitType);
+                $(row).find('.txtPOUnitType').val(data.unitType); 
+                $(row).find('.txtproductamount').val(data.pricePerUnit);
+                $(row).find('.productamount').val(data.pricePerUnit);
+                $(row).find('.txtgstAmount').val(data.gstamount);
+                $(row).find('.txtgst').val(data.gstPercentage);
+                $(row).find('.txtproducttotalamount').val(data.totalAmount);
+            }
+        },
+        error: function (err) {
+            console.error("Failed to fetch product details: ", err);
+        }
+    });
+}
+
+
+
+function AddNewInvoiceProductDetailRow() {
+    const tableBody = document.querySelector("#InvoiceProductDetailsTable tbody");
+    if (tableBody != null) {
+        const rowCount = tableBody.rows.length + 1;  
+
+        const lastRow = tableBody.lastElementChild;
+        var lastProductNameInput = lastRow ? lastRow.querySelector(".txtInvoiceItemName") : null;
+
+        if (lastProductNameInput && lastProductNameInput.value.trim() === "") {
+            toastr.error("Please select a product before adding a new row.");
+            lastProductNameInput.focus();
+            return;
+        }
+
+        const newRow = document.createElement("tr");
+        newRow.classList.add("productRow");
+        newRow.innerHTML = `
+            <td scope="row" class="product-id text-start">${rowCount}</td>
+            <td class="text-start" style="width:230px">
+                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName${rowCount}" /></p>
+                <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden${rowCount}" />
+                <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
+                    <div class="col-sm-1" style="margin-top : -5px;">
+                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                    </div>
+                    <div class="col-sm-10" style="margin-left:-5px;">
+                        <p class="text-primary mb-0"><b>Item Description</b></p>
+                    </div>
+                </div>
+                <div class="row align-items-center ProductDesText" id="ProductDesText" style="display:none;">
+                    <div class="col-sm-10" style="margin-right:-7px;">
+                        <input type="text" class="form-control txtInvoiceProductDes" placeholder="Description" id="txtInvoiceProductDes${rowCount}" />
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="fn_AddInvoiceProductDescription(this)">x</div>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center">
+                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode${rowCount}" readonly style="width: 100px;" />
+            </td>
+            <td class="text-start">
+                <div class="">
+                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity${rowCount}" value="" style="width:110px;">
+                </div>
+            </td>
+            <td class="text-start">
+                <div class="">
+                    <input type="hidden" class="txtunittype" id="txtunittype${rowCount}" />
+                    <select class="form-control txtPOUnitType" id="txtPOUnitType${rowCount}" style="width: 112px;">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </td>
+            <td class="text-start">
+                <input type="text" class="form-control txtproductamount" id="txtproductamount${rowCount}" oninput="preventEmptyValue(this)" style="width:125px;" />
+                <input type="hidden" class="form-control productamount" id="productamount${rowCount}" />
+            </td>
+            <td class="text-start">
+                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount${rowCount}" value="0" style="width:100px;" />
+            </td>
+            <td class="text-start">
+                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage${rowCount}" value="0" style="width:100px;" />
+            </td>
+            <td class="text-start">
+                <input type="text" class="product-Gstper form-control txtgst" id="txtgst${rowCount}" oninput="preventEmptyValue(this)" style="width:100px;" />
+            </td>
+            <td>
+                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount${rowCount}" readonly style="width:140px;" />
+            </td>
+            <td class="text-start">
+                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount${rowCount}" readonly style="width:140px;" />
+            </td>
+            <td class="product-removal">
+                <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+            </td>
+        `;
+
+        tableBody.appendChild(newRow);
+
+        GetAllProductList(newRow);
+        GetProductUnittypeList(newRow);
+    }
 }

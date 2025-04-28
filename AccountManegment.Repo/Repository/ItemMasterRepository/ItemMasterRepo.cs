@@ -656,6 +656,31 @@ namespace AccountManagement.Repository.Repository.ItemMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<POItemDetailsModel> GetItemDetailsByProductId(Guid ItemId)
+        {
+            try
+            {
+                var data = (from a in Context.ItemMasters.Where(x => x.ItemId == ItemId)
+                            join b in Context.UnitMasters on a.UnitType equals b.UnitId
+                            select new POItemDetailsModel
+                            {
+                                ItemId = a.ItemId,
+                                ItemName = a.ItemName,
+                                UnitType = a.UnitType,
+                                UnitTypeName = b.UnitName,
+                                PricePerUnit = a.PricePerUnit,
+                                Gstamount = a.Gstamount,
+                                GstPercentage = a.Gstper,
+                                Hsncode = a.Hsncode,
+                            }).FirstOrDefault();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

@@ -55,7 +55,6 @@ namespace AccountManagement.Repository.Services.InvoiceMaster
             return await SupplierInvoice.UpdateSupplierInvoice(SupplierInvoiceDetails);
         }
 
-
         public string CheckSuppliersInvoiceNo(Guid? CompanyId)
         {
             return SupplierInvoice.CheckSuppliersInvoiceNo(CompanyId);

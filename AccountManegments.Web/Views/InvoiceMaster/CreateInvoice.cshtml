@@ -207,21 +207,28 @@
                                                 </div>
                                                 <div class="card">
                                                     <div class="row p-3">
-
-                                                        <h5 class="card-header">
-                                                            Add Product
-
-                                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
-                                                                <i class="lni lni-circle-plus"></i>
-                                                            </a>
-
-                                                            <span id="spnitembutton" class="text-danger"></span>
-                                                        </h5>
+                                                        <div class="card-header">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-6">
+                                                                    <h3 class="fm-fmheader">
+                                                                        Add Product <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                                            <i class="lni lni-circle-plus"></i>
+                                                                        </a>
+                                                                    </h3>
+                                                                    <span id="spnitembutton" class="text-danger"></span>
+                                                                </div>
+                                                                <div class="col-6 " style="text-align: right;">
+                                                                    <a type="button" class="btn btn-md btn-primary" id="AddNewInvoiceProductDetail" onclick="AddNewInvoiceProductDetailRow()">
+                                                                        <i class="lni lni-circle-plus"></i> Add
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div class="card-body pt-0">
-                                                        <div class="table-responsive" style="height:350px">
-                                                            <table class="table align-middle mb-0">
+                                                        <div class="table-responsive" style="height: 720px;">
+                                                            <table class="table align-middle mb-0" id="InvoiceProductDetailsTable">
                                                                 <thead class="table-light btn-primary">
                                                                     <tr class="text-uppercase">
                                                                         <th>No</th>
@@ -238,19 +245,171 @@
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>
-                                                                @if (Model.ItemList != null)
-                                                                {
-                                                                    <tbody id="addnewproductlink">
-                                                                        @Html.Partial("_DisplayInvoiceItemDetailsPartial", Model.ItemList)
-                                                                    </tbody>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <tbody id="addnewproductlink">
-                                                                    </tbody>
-                                                                }
-                                                            </table>
+                                                                <tbody id="addnewproductlink">
+                                                                    @{
+                                                                        var ItemCounter = 1;
+                                                                    }
+                                                                    @if (Model.ItemList != null)
+                                                                    {
+                                                                        @*  <tbody id="addnewproductlink">
+                                                                    @Html.Partial("_DisplayInvoiceItemDetailsPartial", Model.ItemList)
+                                                                    </tbody> *@
+                                                                        foreach (var item in Model.ItemList)
+                                                                        {
 
+                                                                            <tr class="productRow" onclick="updateProductTotalAmount(this)">
+                                                                                <td scope="row" class="product-id text-start">@ItemCounter</td>
+                                                                                <td class="text-start" style="width:230px">
+                                                                                    <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName_@ItemCounter" value="@item.ItemName" /></p>
+                                                                                    <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden_@ItemCounter" value="@item.ItemId" />
+                                                                                    @if (item.ItemDescription == null || item.ItemDescription == "")
+                                                                                    {
+                                                                                        <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
+                                                                                            <div class="col-sm-1" style="margin-top : -5px;">
+                                                                                                <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                                                                                            </div>
+                                                                                            <div class="col-sm-10" style="margin-left:-5px;">
+                                                                                                <p class="text-primary mb-0"><b>Item Description</b></p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="row align-items-center ProductDesText" id="ProductDesText" style="display:none;">
+                                                                                            <div class="col-sm-10" style=" margin-right:-7px;">
+                                                                                                <input type="text" class="form-control txtInvoiceProductDes" placeholder="Description" id="txtInvoiceProductDes_@ItemCounter" />
+                                                                                            </div>
+                                                                                            <div class="col-sm-1">
+                                                                                                <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="fn_AddInvoiceProductDescription(this)">x</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" style="display:none;" onclick="fn_AddInvoiceProductDescription(this)">
+                                                                                            <div class="col-sm-1" style="margin-top : -5px;">
+                                                                                                <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                                                                                            </div>
+                                                                                            <div class="col-sm-10" style="margin-left:-5px;">
+                                                                                                <p class="text-primary mb-0"><b>Item Description</b></p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="row align-items-center ProductDesText" id="ProductDesText" style="display:flex">
+                                                                                            <div class="col-sm-10" style=" margin-right:-7px;">
+                                                                                                <input type="text" class="form-control" placeholder="Description" id="txtInvoiceProductDes_@ItemCounter" value="@item.ItemDescription" />
+                                                                                            </div>
+                                                                                            <div class="col-sm-1">
+                                                                                                <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="fn_AddInvoiceProductDescription(this)">x</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                </td>
+                                                                                <td class="text-center">
+                                                                                    <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode_@ItemCounter" value="@item.Hsncode" readonly style="width: 100px;" />
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <div class="">
+                                                                                        <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity_@ItemCounter" value="@item.Quantity" style="width:110px;">
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <div class="">
+                                                                                        <input type="hidden" class="txtunittype" id="txtunittype_@ItemCounter" value="@item.UnitType" />
+                                                                                        <select class="form-control txtPOUnitType" id="txtPOUnitType_@ItemCounter" style="width: 112px;">
+                                                                                            <option value="@item.UnitType">@item.UnitTypeName</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <input type="text" class="form-control txtproductamount" id="txtproductamount_@ItemCounter" value="@item.PricePerUnit" oninput="preventEmptyValue(this)" style="width:125px;" />
+                                                                                    <input type="hidden" class="form-control productamount" id="productamount_@ItemCounter" value="@item.PricePerUnit" />
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount_@ItemCounter" value="@item.DiscountAmount" style="width:100px;" />
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage_@ItemCounter" value="@item.DiscountPer" style="width:100px;" />
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <input type="text" class="product-Gstper form-control txtgst" id="txtgst_@ItemCounter" value="@item.GstPercentage" oninput="preventEmptyValue(this)" style="width:100px;" />
+                                                                                </td>
+                                                                                <td>
+                                                                                    <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount_@ItemCounter" value="@item.Gstamount" readonly style="width:140px;" />
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount_@ItemCounter" value="@item.TotalAmount" readonly style="width:140px;" />
+                                                                                </td>
+                                                                                <td class="product-removal">
+                                                                                    <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            ItemCounter++;
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr class="productRow" onclick="updateProductTotalAmount(this)">
+                                                                            <td scope="row" class="product-id text-start">1</td>
+                                                                            <td class="text-start" style="width:230px">
+                                                                                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName" /></p>
+                                                                                <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden" />
+                                                                                <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
+                                                                                    <div class="col-sm-1" style="margin-top : -5px;">
+                                                                                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                                                                                    </div>
+                                                                                    <div class="col-sm-10" style="margin-left:-5px;">
+                                                                                        <p class="text-primary mb-0"><b>Item Description</b></p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row align-items-center ProductDesText" id="ProductDesText" style="display:none;">
+                                                                                    <div class="col-sm-10" style=" margin-right:-7px;">
+                                                                                        <input type="text" class="form-control txtInvoiceProductDes" placeholder="Description" id="txtInvoiceProductDes" />
+                                                                                    </div>
+                                                                                    <div class="col-sm-1">
+                                                                                        <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="fn_AddInvoiceProductDescription(this)">x</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode" readonly style="width: 100px;" />
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <div class="">
+                                                                                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity" value="" style="width:110px;">
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <div class="">
+                                                                                    <input type="hidden" class="txtunittype" id="txtunittype" />
+                                                                                    <select class="form-control txtPOUnitType" id="txtPOUnitType" style="width: 112px;">
+                                                                                        <option value=""></option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <input type="text" class="form-control txtproductamount" id="txtproductamount" oninput="preventEmptyValue(this)" style="width:125px;" />
+                                                                                <input type="hidden" class="form-control productamount" id="productamount" />
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount" value="0" style="width:100px;" />
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage" value="0" style="width:100px;" />
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <input type="text" class="product-Gstper form-control txtgst" id="txtgst" oninput="preventEmptyValue(this)" style="width:100px;" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount" readonly style="width:140px;" />
+                                                                            </td>
+                                                                            <td class="text-start">
+                                                                                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount" readonly style="width:140px;" />
+                                                                            </td>
+                                                                            <td class="product-removal">
+                                                                                <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                         <div class="card-footer">
                                                             <table class="table align-middle mb-0">
@@ -728,36 +887,43 @@
 <script type="text/javascript">
 
     window._userCompanyCount = @usercompanyCount;
-     function fn_OpenShippingModal() {
-         $('#textmdAddress').val('');
-         $('#textmdQty').val('');
-         $('#mdShippingAdd').modal('show');
-     }
+    function fn_OpenShippingModal() {
+        $('#textmdAddress').val('');
+        $('#textmdQty').val('');
+        $('#mdShippingAdd').modal('show');
+    }
 
-     function fn_mdAddAddress() {
-         var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
-         if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
-             var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>`
-             $('#dvShippingAddress').append(html);
-         } else {
-             tostar.error('Please select address!');
-             $('#textmdAddress').focus();
-         }
+    function fn_mdAddAddress() {
+        var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
+        if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
+            var html = `<div class="row ac-invoice-shippingadd">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>`
+            $('#dvShippingAddress').append(html);
+        } else {
+            tostar.error('Please select address!');
+            $('#textmdAddress').focus();
+        }
 
-     }
-     function fn_removeShippingAdd(that) {
-         $(that).closest('.ac-invoice-shippingadd').remove();
-     }
+    }
+    function fn_removeShippingAdd(that) {
+        $(that).closest('.ac-invoice-shippingadd').remove();
+    }
 
-     document.addEventListener("DOMContentLoaded", function () {
-         const supplierNameDropdown = document.getElementById("textSupplierName");
-         const companyNameDropdown = document.getElementById("textCompanyName");
+    document.addEventListener("DOMContentLoaded", function () {
+        const supplierNameDropdown = document.getElementById("textSupplierName");
+        const companyNameDropdown = document.getElementById("textCompanyName");
 
-         supplierNameDropdown.addEventListener("change", function () {
-             companyNameDropdown.focus();
-         });
-     });
+        supplierNameDropdown.addEventListener("change", function () {
+            companyNameDropdown.focus();
+        });
+    });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const InvoiceDetailsRows = document.querySelectorAll(".productRow");
+        for (const row of InvoiceDetailsRows) {
+            GetAllProductList(row);
+            GetProductUnittypeList(row);
+        }
+    });
 
 </script>

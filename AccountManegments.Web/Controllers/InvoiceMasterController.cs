@@ -1136,5 +1136,26 @@ namespace AccountManegments.Web.Controllers
             return amount.ToString("C", numberFormat);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetItemDetailsByProductId(Guid ProductId)
+        {
+            try
+            {
+                var ItemDetail = new POItemDetailsModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "ItemMaster/GetItemDetailsByProductId?ItemId=" + ProductId);
+                if (response.code == 200)
+                {
+                    ItemDetail = JsonConvert.DeserializeObject<POItemDetailsModel>(response.data.ToString());
+
+                    ItemDetail.Gstamount = (ItemDetail.PricePerUnit * ItemDetail.GstPercentage) / 100;
+                    ItemDetail.TotalAmount = ItemDetail.PricePerUnit + ItemDetail.Gstamount;
+                }
+                return new JsonResult(ItemDetail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

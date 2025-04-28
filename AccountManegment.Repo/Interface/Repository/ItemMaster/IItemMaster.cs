@@ -28,5 +28,6 @@ namespace AccountManagement.Repository.Interface.Repository.ItemMaster
         Task<List<POItemDetailsModel>> GetItemDetailsListById(Guid ItemId);
         Task<ApiResponseModel> MutipleItemsIsApproved(ItemIsApprovedMasterModel ItemIdList);
         Task<SupplierInvoiceList> GetItemHistory(Guid ItemId);
+        Task<POItemDetailsModel> GetItemDetailsByProductId(Guid ItemId);
     }
 }

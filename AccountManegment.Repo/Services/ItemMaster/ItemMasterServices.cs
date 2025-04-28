@@ -83,5 +83,10 @@ namespace AccountManagement.Repository.Services.ItemMaster
         {
             return await ItemMaster.GetItemHistory(ItemId);
         }
+
+        public async Task<POItemDetailsModel> GetItemDetailsByProductId(Guid ItemId)
+        {
+            return await ItemMaster.GetItemDetailsByProductId(ItemId);
+        }
     }
 }

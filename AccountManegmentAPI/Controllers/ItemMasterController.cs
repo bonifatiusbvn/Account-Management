@@ -213,5 +213,12 @@ namespace AccountManagement.API.Controllers
             return Ok(new { code = 200, data = ItemDetails });
         }
 
+        [HttpGet]
+        [Route("GetItemDetailsByProductId")]
+        public async Task<IActionResult> GetItemDetailsByProductId(Guid ItemId)
+        {
+            var ItemDetails = await ItemMaster.GetItemDetailsByProductId(ItemId);
+            return Ok(new { code = 200, data = ItemDetails });
+        }
     }
 }

@@ -366,7 +366,8 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                     SiteGroupId = subgroup != null ? subgroup.GroupId : (Guid?)null
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
-                                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId
+                                                     join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId into unitJoin
+                                                     from b in unitJoin.DefaultIfEmpty() 
                                                      join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                                      select new POItemDetailsModel
                                                      {
@@ -377,7 +378,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
                                                          UnitType = a.UnitTypeId,
-                                                         UnitTypeName = b.UnitName,
+                                                         UnitTypeName = b != null ? b.UnitName : null, 
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = a.Gstper,
                                                          DiscountAmount = a.DiscountAmount,
