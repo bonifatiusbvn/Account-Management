@@ -643,5 +643,77 @@ namespace AccountManegments.Web.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DownloadItemListDemoExcelFile(string searchText = null, string searchBy = null, string sortBy = null)
+        {
+            try
+            {
+                string apiUrl = $"ItemMaster/GetItemList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
+
+                ApiResponseModel responseModel = await APIServices.PostAsync("", apiUrl);
+                if (responseModel.code == 200)
+                {
+                    List<ItemMasterModel> GetItemList = JsonConvert.DeserializeObject<List<ItemMasterModel>>(responseModel.data.ToString());
+
+                    using (var wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("Download ItemList Demo File");
+                        int row = 1;
+
+                        var headers = new List<string>
+                {
+                    "Item Name", "Unit type", "PricePerUnit", "Gst(%)",
+                    "HSN Code"
+                };
+
+                        for (int i = 0; i < headers.Count; i++)
+                        {
+                            ws.Cell(row, i + 1).Value = headers[i];
+                        }
+
+                        var headerRange = ws.Range(row, 1, row, headers.Count);
+                        headerRange.Style.Font.Bold = true;
+                        headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
+                        headerRange.Style.Font.FontColor = XLColor.White;
+                        headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                        row++;
+
+
+                        foreach (var data in GetItemList)
+                        {
+                            ws.Cell(row, 1).Value = data.ItemName;
+                            ws.Cell(row, 2).Value = data.UnitTypeName;
+                            ws.Cell(row, 3).Value = data.PricePerUnit;
+                            ws.Cell(row, 4).Value = data.Gstper;
+                            ws.Cell(row, 5).Value = data.Hsncode;
+                            row++;
+                        }
+
+                        var totalRowRange = ws.Range(row, 1, row, headers.Count);
+                        totalRowRange.Style.Font.Bold = true;
+
+                        using (var stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            stream.Seek(0, SeekOrigin.Begin);
+                            string fileName = $"DemoItemListfile_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                            return File(stream.ToArray(),
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                fileName);
+                        }
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve item list." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while processing the request.", error = ex.Message });
+            }
+        }
     }
 }

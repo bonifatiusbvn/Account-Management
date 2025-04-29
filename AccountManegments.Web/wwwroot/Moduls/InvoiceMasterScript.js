@@ -980,6 +980,25 @@ function removeItem(btn) {
     $(btn).closest("tr").remove();
     updateRowNumbers();
     updateTotals();
+
+    const tableBody = document.querySelector("#InvoiceProductDetailsTable tbody");
+    if (!tableBody) return;
+
+    const allAddBtns = tableBody.querySelectorAll(".AddNewInvoiceProductDetailBtn");
+    allAddBtns.forEach(btn => btn.remove());
+
+    const lastRow = tableBody.querySelector("tr:last-child");
+    if (lastRow) {
+        const actionTd = lastRow.querySelector(".product-removal");
+        if (actionTd) {
+            const addBtn = document.createElement("a");
+            addBtn.className = "btn text-primary AddNewInvoiceProductDetailBtn";
+            addBtn.style.marginLeft = "-33px";
+            addBtn.onclick = function () { AddNewInvoiceProductDetailRow(); };
+            addBtn.innerHTML = '<i class="lni lni-circle-plus"></i>';
+            actionTd.appendChild(addBtn);
+        }
+    }
 }
 
 function updateQuantity(e, t, n) {
@@ -1920,12 +1939,15 @@ function AddNewInvoiceProductDetailRow() {
             return;
         }
 
+        const allAddRowButtons = tableBody.querySelectorAll(".AddNewInvoiceProductDetailBtn");
+        allAddRowButtons.forEach(btn => btn.remove());
+
         const newRow = document.createElement("tr");
         newRow.classList.add("productRow");
         newRow.innerHTML = `
             <td scope="row" class="product-id text-start">${rowCount}</td>
             <td class="text-start" style="width:230px">
-                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName${rowCount}" /></p>
+                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName${rowCount}" placeholder="Item Name"/></p>
                 <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden${rowCount}" />
                 <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
                     <div class="col-sm-1" style="margin-top : -5px;">
@@ -1945,11 +1967,11 @@ function AddNewInvoiceProductDetailRow() {
                 </div>
             </td>
             <td class="text-center">
-                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode${rowCount}" readonly style="width: 100px;" />
+                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode${rowCount}" placeholder="Hsn" readonly style="width: 100px;" />
             </td>
             <td class="text-start">
                 <div class="">
-                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity${rowCount}" value="" style="width:110px;">
+                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity${rowCount}" placeholder="Quantity" value="" style="width:110px;">
                 </div>
             </td>
             <td class="text-start">
@@ -1961,26 +1983,29 @@ function AddNewInvoiceProductDetailRow() {
                 </div>
             </td>
             <td class="text-start">
-                <input type="text" class="form-control txtproductamount" id="txtproductamount${rowCount}" oninput="preventEmptyValue(this)" style="width:125px;" />
+                <input type="text" class="form-control txtproductamount" id="txtproductamount${rowCount}" oninput="preventEmptyValue(this)" placeholder="Product amount" style="width:125px;" />
                 <input type="hidden" class="form-control productamount" id="productamount${rowCount}" />
             </td>
             <td class="text-start">
-                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount${rowCount}" value="0" style="width:100px;" />
+                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount${rowCount}" value="0" placeholder="Dis(₹)" style="width:100px;" />
             </td>
             <td class="text-start">
-                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage${rowCount}" value="0" style="width:100px;" />
+                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage${rowCount}" value="0" placeholder="Dis(%)" style="width:100px;" />
             </td>
             <td class="text-start">
-                <input type="text" class="product-Gstper form-control txtgst" id="txtgst${rowCount}" oninput="preventEmptyValue(this)" style="width:100px;" />
+                <input type="text" class="product-Gstper form-control txtgst" id="txtgst${rowCount}" oninput="preventEmptyValue(this)" placeholder="Gst(%)" style="width:100px;" />
             </td>
             <td>
-                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount${rowCount}" readonly style="width:140px;" />
+                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount${rowCount}" readonly placeholder="Gst(₹)" style="width:140px;" />
             </td>
             <td class="text-start">
-                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount${rowCount}" readonly style="width:140px;" />
+                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount${rowCount}" placeholder="Total Amount" readonly style="width:140px;" />
             </td>
-            <td class="product-removal">
+           <td class="product-removal">
                 <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                <a class="btn text-primary AddNewInvoiceProductDetailBtn" onclick="AddNewInvoiceProductDetailRow()" style="margin-left: -33px;">
+                   <i class="lni lni-circle-plus"></i> 
+                </a>
             </td>
         `;
 

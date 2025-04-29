@@ -217,11 +217,11 @@
                                                                     </h3>
                                                                     <span id="spnitembutton" class="text-danger"></span>
                                                                 </div>
-                                                                <div class="col-6 " style="text-align: right;">
+                                                               @*  <div class="col-6 " style="text-align: right;">
                                                                     <a type="button" class="btn btn-md btn-primary" id="AddNewInvoiceProductDetail" onclick="AddNewInvoiceProductDetailRow()">
                                                                         <i class="lni lni-circle-plus"></i> Add
                                                                     </a>
-                                                                </div>
+                                                                </div> *@
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,6 +251,8 @@
                                                                     }
                                                                     @if (Model.ItemList != null)
                                                                     {
+                                                                        var LastRowIndex = Model.ItemList.Count;
+
                                                                         @*  <tbody id="addnewproductlink">
                                                                     @Html.Partial("_DisplayInvoiceItemDetailsPartial", Model.ItemList)
                                                                     </tbody> *@
@@ -338,6 +340,12 @@
                                                                                 </td>
                                                                                 <td class="product-removal">
                                                                                     <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                                                                                    @if (ItemCounter == LastRowIndex)
+                                                                                    {
+                                                                                        <a class="btn text-primary AddNewInvoiceProductDetailBtn" onclick="AddNewInvoiceProductDetailRow()" style="margin-left: -33px;">
+                                                                                            <i class="lni lni-circle-plus"></i>
+                                                                                        </a>
+                                                                                    }
                                                                                 </td>
                                                                             </tr>
 
@@ -349,7 +357,7 @@
                                                                         <tr class="productRow" onclick="updateProductTotalAmount(this)">
                                                                             <td scope="row" class="product-id text-start">1</td>
                                                                             <td class="text-start" style="width:230px">
-                                                                                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName" /></p>
+                                                                                <input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName" placeholder="Item Name"/>
                                                                                 <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden" />
                                                                                 <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
                                                                                     <div class="col-sm-1" style="margin-top : -5px;">
@@ -369,11 +377,11 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode" readonly style="width: 100px;" />
+                                                                                <input type="text" class="form-control bg-light txtHSNcode" id="txtHSNcode" placeholder="Hsn" readonly style="width: 100px;" />
                                                                             </td>
                                                                             <td class="text-start">
                                                                                 <div class="">
-                                                                                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity" value="" style="width:110px;">
+                                                                                    <input type="number" class="product-quantity form-control txtproductquantity" id="txtproductquantity" value="" placeholder="Quantity" style="width:110px;">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="text-start">
@@ -385,26 +393,29 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td class="text-start">
-                                                                                <input type="text" class="form-control txtproductamount" id="txtproductamount" oninput="preventEmptyValue(this)" style="width:125px;" />
+                                                                                <input type="text" class="form-control txtproductamount" id="txtproductamount" oninput="preventEmptyValue(this)" placeholder="Product amount" style="width:125px;" />
                                                                                 <input type="hidden" class="form-control productamount" id="productamount" />
                                                                             </td>
                                                                             <td class="text-start">
-                                                                                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount" value="0" style="width:100px;" />
+                                                                                <input type="text" class="form-control txtdiscountamount" id="txtdiscountamount" value="0" placeholder="Dis(₹)" style="width:100px;" />
                                                                             </td>
                                                                             <td class="text-start">
-                                                                                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage" value="0" style="width:100px;" />
+                                                                                <input type="text" class="form-control txtdiscountpercentage" id="txtdiscountpercentage" placeholder="Dis(%)" value="0" style="width:100px;" />
                                                                             </td>
                                                                             <td class="text-start">
-                                                                                <input type="text" class="product-Gstper form-control txtgst" id="txtgst" oninput="preventEmptyValue(this)" style="width:100px;" />
+                                                                                <input type="text" class="product-Gstper form-control txtgst" id="txtgst" oninput="preventEmptyValue(this)" placeholder="Gst(%)" style="width:100px;" />
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount" readonly style="width:140px;" />
+                                                                                <input type="number" class="product-Gstamount form-control bg-light txtgstAmount" id="txtgstAmount" placeholder="Gst(₹)" readonly style="width:140px;" />
                                                                             </td>
                                                                             <td class="text-start">
-                                                                                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount" readonly style="width:140px;" />
+                                                                                <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount" placeholder="Total Amount" readonly style="width:140px;" />
                                                                             </td>
                                                                             <td class="product-removal">
                                                                                 <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                                                                                <a class="btn text-primary AddNewInvoiceProductDetailBtn" onclick="AddNewInvoiceProductDetailRow()" style="margin-left: -33px;">
+                                                                                    <i class="lni lni-circle-plus"></i>
+                                                                                </a>
                                                                             </td>
                                                                         </tr>
                                                                     }

@@ -61,7 +61,7 @@ function sortItemTable() {
 var ItemHistoryId = null;
 function ItemHistory(ItemId, element) {
     siteloadershow();
-    ItemHistoryId  = ItemId
+    ItemHistoryId = ItemId
     $('tr').removeClass('active');
     $(element).closest('tr').addClass('active');
     $('.ac-detail').removeClass('d-none');
@@ -560,24 +560,65 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+//function downloadFile() {
+//    siteloadershow();
+//    var fileUrl = '/uploadexcelfile/ItemMastersDetails.xlsx';
+
+//    var link = document.createElement('a');
+
+//    link.href = fileUrl;
+
+//    link.setAttribute('download', '');
+
+//    document.body.appendChild(link);
+
+//    link.click();
+
+//    document.body.removeChild(link);
+//    siteloaderhide();
+//}
 function downloadFile() {
-    siteloadershow();
-    var fileUrl = '/uploadexcelfile/ItemMastersDetails.xlsx';
 
-    var link = document.createElement('a');
+    $.ajax({
+        url: '/ItemMaster/DownloadItemListDemoExcelFile',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'binary',
+        xhrFields: { responseType: 'blob' },
+        success: function (data, status, xhr) {
+            let filename = "DemoItemListfile.xlsx";
+            let disposition = xhr.getResponseHeader('Content-Disposition');
 
-    link.href = fileUrl;
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                let matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
 
-    link.setAttribute('download', '');
+            let blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
 
-    document.body.appendChild(link);
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                let downloadUrl = URL.createObjectURL(blob);
+                let a = document.createElement("a");
 
-    link.click();
-
-    document.body.removeChild(link);
-    siteloaderhide();
+                if ('download' in a) {
+                    a.href = downloadUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    window.location = downloadUrl;
+                }
+                setTimeout(() => { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr) {
+            toastr.error("An error occurred while exporting the file.");
+        }
+    });
 }
-
 var UploadExcelFile;
 $(document).ready(function () {
     UploadExcelFile = $("#uploadItemFile").validate({
