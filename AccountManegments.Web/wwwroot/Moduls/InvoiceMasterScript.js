@@ -1947,7 +1947,7 @@ function AddNewInvoiceProductDetailRow() {
         newRow.innerHTML = `
             <td scope="row" class="product-id text-start">${rowCount}</td>
             <td class="text-start" style="width:230px">
-                <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName${rowCount}" placeholder="Item Name"/></p>
+                <input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName${rowCount}" placeholder="Item Name" style="margin-top:25px;"/>
                 <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden${rowCount}" />
                 <div class="row align-items-center ProductDesBtn" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
                     <div class="col-sm-1" style="margin-top : -5px;">
