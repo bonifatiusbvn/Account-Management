@@ -262,7 +262,7 @@
                                                                             <tr class="productRow" onclick="updateProductTotalAmount(this)">
                                                                                 <td scope="row" class="product-id text-start">@ItemCounter</td>
                                                                                 <td class="text-start" style="width:230px">
-                                                                                    <p><input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName_@ItemCounter" value="@item.ItemName" /></p>
+                                                                                    <input type="text" class="form-control txtInvoiceItemName" id="txtInvoiceItemName_@ItemCounter" value="@item.ItemName" style="margin-top:25px;" />
                                                                                     <input type="hidden" class="txtInvoiceItemNameHidden" id="txtInvoiceItemNameHidden_@ItemCounter" value="@item.ItemId" />
                                                                                     @if (item.ItemDescription == null || item.ItemDescription == "")
                                                                                     {

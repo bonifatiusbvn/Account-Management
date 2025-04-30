@@ -32,46 +32,46 @@ function filterallItemTable() {
 
     });
 }
-function SerchItemDetailsById(Id, inputField) {
-    clearItemErrorMessage();
-    siteloadershow();
-    var qty = $(inputField).closest('.ac-item').find('.product-quantity').val();
-    var Item = {
-        ItemId: Id,
-        Quantity: qty,
-    }
+//function SerchItemDetailsById(Id, inputField) {
+//    clearItemErrorMessage();
+//    siteloadershow();
+//    var qty = $(inputField).closest('.ac-item').find('.product-quantity').val();
+//    var Item = {
+//        ItemId: Id,
+//        Quantity: qty,
+//    }
 
-    var form_data = new FormData();
-    form_data.append("ITEMID", JSON.stringify(Item));
+//    var form_data = new FormData();
+//    form_data.append("ITEMID", JSON.stringify(Item));
 
 
-    $.ajax({
-        url: '/ItemMaster/DisplayItemListInInvoiceById',
-        type: 'Post',
-        datatype: 'json',
-        data: form_data,
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
+//    $.ajax({
+//        url: '/ItemMaster/DisplayItemListInInvoiceById',
+//        type: 'Post',
+//        datatype: 'json',
+//        data: form_data,
+//        processData: false,
+//        contentType: false,
+//        complete: function (Result) {
 
-            siteloaderhide();
-            if (Result.statusText === "success") {
-                AddNewRow(Result.responseText);
-            }
-            else {
-                siteloaderhide();
-                var GetItemId = $('#searchItemname').val();
-                if (GetItemId === "Select ProductName" || GetItemId === null) {
-                    $('#searchvalidationMessage').text('Please select ProductName!!');
-                }
-                else {
-                    siteloaderhide();
-                    $('#searchvalidationMessage').text('');
-                }
-            }
-        }
-    });
-}
+//            siteloaderhide();
+//            if (Result.statusText === "success") {
+//                AddNewRow(Result.responseText);
+//            }
+//            else {
+//                siteloaderhide();
+//                var GetItemId = $('#searchItemname').val();
+//                if (GetItemId === "Select ProductName" || GetItemId === null) {
+//                    $('#searchvalidationMessage').text('Please select ProductName!!');
+//                }
+//                else {
+//                    siteloaderhide();
+//                    $('#searchvalidationMessage').text('');
+//                }
+//            }
+//        }
+//    });
+//}
 function GetSiteDetail() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
@@ -200,7 +200,31 @@ $(document).ready(function () {
         };
     }
 
-    // Handle quantity input
+    //----- focus HSN ----//
+    $(document).on('keydown', '.txtInvoiceItemName', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.key === 'Tab') {
+            const FocusHsn = productRow.find('.txtHSNcode');
+            handleFocus(event, FocusHsn);
+            FocusHsn.select();
+        }
+    });
+
+    //----- focus Quantity ----//
+    $(document).on('keydown', '.txtHSNcode', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
+            event.preventDefault();
+            productRow.find('.txtInvoiceItemName').focus();
+        } else if (event.key === 'Tab') {
+            const FocusQuantity = productRow.find('.txtproductquantity');
+            handleFocus(event, FocusQuantity);
+            FocusQuantity.select();
+           
+        }
+    });
+
+    //------- Handle quantity input & Focus Unittype --------//
     $(document).on('input', '.txtproductquantity', function () {
         var productRow = $(this).closest(".productRow");
         updateProductTotalAmount(productRow);
@@ -211,43 +235,45 @@ $(document).ready(function () {
             event.preventDefault();
             productRow.find('.txtHSNcode').focus();
         } else if (event.key === 'Tab') {
-            handleFocus(event, productRow.find('.txtproductamount'));
+            handleFocus(event, productRow.find('.txtPOUnitType'));
         }
     });
 
-    // Handle GST input
-    $(document).on('input', '.txtgst', function () {
-        var productRow = $(this).closest(".productRow");
-        var gstvalue = parseFloat($(this).val()) || 0;
-        if (gstvalue > 100) {
-            toastr.warning("GST% cannot be greater than 100%");
-            $(this).val(100);
-        }
-        updateProductTotalAmount(productRow);
-        updateTotals();
-    });
-
-    // Handle discount percentage input
-    $(document).on('input', '.txtdiscountpercentage', debounce(function () {
-        var productRow = $(this).closest(".productRow");
-        var discountPercentage = parseFloat($(this).val()) || 0;
-        if (discountPercentage > 100) {
-            toastr.warning("Discount % cannot be greater than 100%");
-            productRow.find(".txtdiscountpercentage").val(0);
-            productRow.find(".txtdiscountamount").val(0);
-        }
-        UpdateDiscountPercentage(productRow);
-    }, 300)).on('keydown', '.txtdiscountpercentage', function (event) {
+    //-------- Focus ProductAmount ----------//
+    $(document).on('keydown', '.txtPOUnitType', function (event) {
         var productRow = $(this).closest(".productRow");
         if (event.shiftKey && event.key === 'Tab') {
             event.preventDefault();
-            productRow.find('.txtdiscountamount').focus();
+            productRow.find('.txtproductquantity').focus();
         } else if (event.key === 'Tab') {
-            handleFocus(event, productRow.find('.txtgst'));
+            const FocusProductamount = productRow.find('.txtproductamount');
+            handleFocus(event, FocusProductamount);
+            FocusProductamount.select();
         }
     });
 
-    // Handle discount amount input
+    //------ Handle product amount input & Focus DiscountAmount --------//
+    $(document).on('input', '.txtproductamount', function () {
+        var productRow = $(this).closest(".productRow");
+        var productAmount = parseFloat($(this).val()) || 0;
+        productRow.find(".productamount").val(productAmount.toFixed(2));
+        productRow.find(".txtdiscountamount").val(0);
+        productRow.find(".txtdiscountpercentage").val(0);
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    }).on('keydown', '.txtproductamount', function (event) {
+        var productRow = $(this).closest(".productRow");
+        if (event.shiftKey && event.key === 'Tab') {
+            event.preventDefault();
+            productRow.find('.txtPOUnitType').focus();
+        } else if (event.key === 'Tab') {
+            const FocusDiscountamount = productRow.find('.txtdiscountamount');
+            handleFocus(event, FocusDiscountamount);
+            FocusDiscountamount.select();
+        }
+    });
+
+    //----- Handle discount amount input & Focus Discount Percentage --------//
     $(document).on('input', '.txtdiscountamount', debounce(function () {
         var productRow = $(this).closest(".productRow");
         var discountAmount = parseFloat($(this).val()) || 0;
@@ -265,29 +291,45 @@ $(document).ready(function () {
             event.preventDefault();
             productRow.find('.txtproductamount').focus();
         } else if (event.key === 'Tab') {
-            handleFocus(event, productRow.find('.txtdiscountpercentage'));
+            const FocusDiscountPercentage = productRow.find('.txtdiscountpercentage');
+            handleFocus(event, FocusDiscountPercentage);
+            FocusDiscountPercentage.select();
         }
     });
 
-    // Handle product amount input
-    $(document).on('input', '.txtproductamount', function () {
+    //----- Handle discount percentage input & Focus Gst Percentage -------//
+    $(document).on('input', '.txtdiscountpercentage', debounce(function () {
         var productRow = $(this).closest(".productRow");
-        var productAmount = parseFloat($(this).val()) || 0;
-        productRow.find(".productamount").val(productAmount.toFixed(2));
-        productRow.find(".txtdiscountamount").val(0);
-        productRow.find(".txtdiscountpercentage").val(0);
-        updateProductTotalAmount(productRow);
-        updateTotals();
-    }).on('keydown', '.txtproductamount', function (event) {
+        var discountPercentage = parseFloat($(this).val()) || 0;
+        if (discountPercentage > 100) {
+            toastr.warning("Discount % cannot be greater than 100%");
+            productRow.find(".txtdiscountpercentage").val(0);
+            productRow.find(".txtdiscountamount").val(0);
+        }
+        UpdateDiscountPercentage(productRow);
+    }, 300)).on('keydown', '.txtdiscountpercentage', function (event) {
         var productRow = $(this).closest(".productRow");
         if (event.shiftKey && event.key === 'Tab') {
             event.preventDefault();
-            productRow.find('.txtproductquantity').focus();
+            productRow.find('.txtdiscountamount').focus();
         } else if (event.key === 'Tab') {
-            handleFocus(event, productRow.find('.txtdiscountamount'));
+            const FocusGstPercentage = productRow.find('.txtgst');
+            handleFocus(event, FocusGstPercentage);
+            FocusGstPercentage.select();
         }
     });
 
+    // Handle GST input
+    $(document).on('input', '.txtgst', function () {
+        var productRow = $(this).closest(".productRow");
+        var gstvalue = parseFloat($(this).val()) || 0;
+        if (gstvalue > 100) {
+            toastr.warning("GST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    });
 
     $(document).on('input', '#cart-roundOff', debounce(function () {
         var roundoff = $('#cart-roundOff').val();
@@ -805,34 +847,34 @@ function UnitTypeDropdown(itemId) {
 }
 
 
-var paymentSign = "$";
+//var paymentSign = "$";
 
-function otherPayment() {
-    var e = document.getElementById("choices-payment-currency").value;
-    paymentSign = e, Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
-        isUpdate = e.value.slice(1), e.value = paymentSign + isUpdate
-    }), recalculateCart()
-}
-Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
-    e.value = paymentSign + "0.00"
-});
+//function otherPayment() {
+//    var e = document.getElementById("choices-payment-currency").value;
+//    paymentSign = e, Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
+//        isUpdate = e.value.slice(1), e.value = paymentSign + isUpdate
+//    }), recalculateCart()
+//}
+//Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
+//    e.value = paymentSign + "0.00"
+//});
 
 
-function isData() {
-    var e = document.getElementsByClassName("plus"),
-        t = document.getElementsByClassName("minus");
-    e && Array.from(e).forEach(function (n) {
-        n.onclick = function (e) {
-            var t;
-            parseInt(n.previousElementSibling.value) < 10 && (e.target.previousElementSibling.value++, e = n.parentElement.parentElement.previousElementSibling.querySelector(".product-price").value, t = n.parentElement.parentElement.nextElementSibling.querySelector(".product-line-price"), updateQuantity(n.parentElement.querySelector(".product-quantity").value, e, t))
-        }
-    }), t && Array.from(t).forEach(function (n) {
-        n.onclick = function (e) {
-            var t;
-            1 < parseInt(n.nextElementSibling.value) && (e.target.nextElementSibling.value--, e = n.parentElement.parentElement.previousElementSibling.querySelector(".product-price").value, t = n.parentElement.parentElement.nextElementSibling.querySelector(".product-line-price"), updateQuantity(n.parentElement.querySelector(".product-quantity").value, e, t))
-        }
-    })
-}
+//function isData() {
+//    var e = document.getElementsByClassName("plus"),
+//        t = document.getElementsByClassName("minus");
+//    e && Array.from(e).forEach(function (n) {
+//        n.onclick = function (e) {
+//            var t;
+//            parseInt(n.previousElementSibling.value) < 10 && (e.target.previousElementSibling.value++, e = n.parentElement.parentElement.previousElementSibling.querySelector(".product-price").value, t = n.parentElement.parentElement.nextElementSibling.querySelector(".product-line-price"), updateQuantity(n.parentElement.querySelector(".product-quantity").value, e, t))
+//        }
+//    }), t && Array.from(t).forEach(function (n) {
+//        n.onclick = function (e) {
+//            var t;
+//            1 < parseInt(n.nextElementSibling.value) && (e.target.nextElementSibling.value--, e = n.parentElement.parentElement.previousElementSibling.querySelector(".product-price").value, t = n.parentElement.parentElement.nextElementSibling.querySelector(".product-line-price"), updateQuantity(n.parentElement.querySelector(".product-quantity").value, e, t))
+//        }
+//    })
+//}
 
 //document.querySelector("#profile-img-file-input").addEventListener("change", function () {
 //    var e = document.querySelector(".user-profile-image"),
@@ -844,18 +886,18 @@ function isData() {
 //}), isData();
 
 
-var count = 0;
-function AddNewRow(Result) {
-    var newProductRow = $(Result);
-    var itemId = newProductRow.data('product-id');
-    UnitTypeDropdown(itemId);
+//var count = 0;
+//function AddNewRow(Result) {
+//    var newProductRow = $(Result);
+//    var itemId = newProductRow.data('product-id');
+//    UnitTypeDropdown(itemId);
 
 
-    count++;
-    $("#addnewproductlink").append(Result);
-    updateTotals();
-    updateRowNumbers();
-}
+//    count++;
+//    $("#addnewproductlink").append(Result);
+//    updateTotals();
+//    updateRowNumbers();
+//}
 
 
 
@@ -1001,10 +1043,10 @@ function removeItem(btn) {
     }
 }
 
-function updateQuantity(e, t, n) {
-    e = (e = e * t).toFixed(2);
-    n.value = paymentSign + e, recalculateCart()
-}
+//function updateQuantity(e, t, n) {
+//    e = (e = e * t).toFixed(2);
+//    n.value = paymentSign + e, recalculateCart()
+//}
 
 
 let viewobj;
