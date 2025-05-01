@@ -1250,16 +1250,6 @@ namespace AccountManegments.Web.Controllers
                 {
                     var SupplierDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
 
-                    string FormatIndianCurrency(decimal amount)
-                    {
-                        var cultureInfo = new CultureInfo("en-IN");
-                        var numberFormat = cultureInfo.NumberFormat;
-                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                        numberFormat.CurrencyDecimalDigits = 2;
-                        numberFormat.CurrencyGroupSeparator = ",";
-                        numberFormat.CurrencyDecimalSeparator = ".";
-                        return amount.ToString("N", numberFormat);
-                    }
                     using (var wb = new XLWorkbook())
                     {
                         var ws = wb.Worksheets.Add("Report");
@@ -1315,9 +1305,9 @@ namespace AccountManegments.Web.Controllers
                         headerRange.Style.Border.RightBorderColor = XLColor.Black;
 
                         row++;
-                        ws.Cell(row, 1).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
-                        ws.Cell(row, 2).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
-                        ws.Cell(row, 3).Value = FormatIndianCurrency(SupplierDetails.TotalPending);
+                        ws.Cell(row, 1).Value = SupplierDetails.TotalCreadit;
+                        ws.Cell(row, 2).Value = SupplierDetails.TotalPurchase;
+                        ws.Cell(row, 3).Value = SupplierDetails.TotalPending;
 
                         var dataRange = ws.Range(row, 1, row, 3);
                         dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -1350,8 +1340,8 @@ namespace AccountManegments.Web.Controllers
                                     ws.Cell(row, 3).Value = string.Empty;
                                     ws.Cell(row, 4).Value = string.Empty;
                                     ws.Cell(row, 5).Value = string.Empty;
-                                    ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierTotalCredit);
-                                    ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierTotalDebit);
+                                    ws.Cell(row, 6).Value = SupplierTotalCredit;
+                                    ws.Cell(row, 7).Value = SupplierTotalDebit;
 
                                     var footerRange2 = ws.Range(row, 1, row, 7);
                                     footerRange2.Style.Font.Bold = true;
@@ -1402,12 +1392,12 @@ namespace AccountManegments.Web.Controllers
                             if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
                             {
                                 ws.Cell(row, 6).Value = "";
-                                ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount);
+                                ws.Cell(row, 7).Value = item.TotalAmount;
                                 SupplierTotalDebit += item.TotalAmount;
                             }
                             else
                             {
-                                ws.Cell(row, 6).Value = FormatIndianCurrency(item.TotalAmount);
+                                ws.Cell(row, 6).Value = item.TotalAmount;
                                 ws.Cell(row, 7).Value = "";
                                 SupplierTotalCredit += item.TotalAmount;
                             }
@@ -1423,8 +1413,8 @@ namespace AccountManegments.Web.Controllers
                             ws.Cell(row, 3).Value = string.Empty;
                             ws.Cell(row, 4).Value = string.Empty;
                             ws.Cell(row, 5).Value = string.Empty;
-                            ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierTotalCredit);
-                            ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierTotalDebit);
+                            ws.Cell(row, 6).Value = SupplierTotalCredit;
+                            ws.Cell(row, 7).Value = SupplierTotalDebit;
 
                             var footerRange2 = ws.Range(row, 1, row, 7);
                             footerRange2.Style.Font.Bold = true;
