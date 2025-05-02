@@ -438,9 +438,9 @@ namespace AccountManegments.Web.Controllers
                         headerRange.Style.Border.RightBorderColor = XLColor.Black;
 
                         row++;
-                        ws.Cell(row, 1).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
-                        ws.Cell(row, 2).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
-                        ws.Cell(row, 3).Value = FormatIndianCurrency(SupplierDetails.TotalPending);
+                        ws.Cell(row, 1).Value = SupplierDetails.TotalCreadit;
+                        ws.Cell(row, 2).Value = SupplierDetails.TotalPurchase;
+                        ws.Cell(row, 3).Value = SupplierDetails.TotalPending;
 
                         var dataRange = ws.Range(row, 1, row, 3);
                         dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -473,17 +473,6 @@ namespace AccountManegments.Web.Controllers
                         headerRange2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                         row++;
-
-                        string FormatIndianCurrency(decimal amount)
-                        {
-                            var cultureInfo = new CultureInfo("en-IN");
-                            var numberFormat = cultureInfo.NumberFormat;
-                            numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                            numberFormat.CurrencyDecimalDigits = 2;
-                            numberFormat.CurrencyGroupSeparator = ",";
-                            numberFormat.CurrencyDecimalSeparator = ".";
-                            return amount.ToString("N", numberFormat);
-                        }
 
 
                         foreach (var item in SupplierDetails.InvoiceList)
@@ -522,12 +511,12 @@ namespace AccountManegments.Web.Controllers
                             if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
                             {
                                 ws.Cell(row, 6).Value = "";
-                                ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount);
+                                ws.Cell(row, 7).Value = item.TotalAmount;
                             }
                             else
                             {
 
-                                ws.Cell(row, 6).Value = FormatIndianCurrency(item.TotalAmount);
+                                ws.Cell(row, 6).Value = item.TotalAmount;
                                 ws.Cell(row, 7).Value = "";
                             }
                             row++;
@@ -538,8 +527,8 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 3).Value = string.Empty;
                         ws.Cell(row, 4).Value = string.Empty;
                         ws.Cell(row, 5).Value = string.Empty;
-                        ws.Cell(row, 6).Value = FormatIndianCurrency(SupplierDetails.TotalCreadit);
-                        ws.Cell(row, 7).Value = FormatIndianCurrency(SupplierDetails.TotalPurchase);
+                        ws.Cell(row, 6).Value = SupplierDetails.TotalCreadit;
+                        ws.Cell(row, 7).Value = SupplierDetails.TotalPurchase;
 
                         var footerRange2 = ws.Range(row, 1, row, 7);
                         footerRange2.Style.Font.Bold = true;
@@ -1021,17 +1010,6 @@ namespace AccountManegments.Web.Controllers
                 {
                     var NetInvoiceDetails = JsonConvert.DeserializeObject<InvoiceTotalAmount>(response.data.ToString());
 
-                    string FormatIndianCurrency(decimal amount)
-                    {
-                        var cultureInfo = new CultureInfo("en-IN");
-                        var numberFormat = cultureInfo.NumberFormat;
-                        numberFormat.CurrencyGroupSizes = new[] { 3, 2 };
-                        numberFormat.CurrencyDecimalDigits = 2;
-                        numberFormat.CurrencyGroupSeparator = ",";
-                        numberFormat.CurrencyDecimalSeparator = ".";
-                        return amount.ToString("N", numberFormat);
-                    }
-
                     using (var wb = new XLWorkbook())
                     {
                         var ws = wb.Worksheets.Add("Report");
@@ -1087,7 +1065,7 @@ namespace AccountManegments.Web.Controllers
                         headerRange1.Style.Border.RightBorderColor = XLColor.Black;
 
                         row++;
-                        ws.Cell(row, 1).Value = FormatIndianCurrency(NetInvoiceDetails.TotalPending);
+                        ws.Cell(row, 1).Value = NetInvoiceDetails.TotalPending;
 
                         var dataRange1 = ws.Range(row, 1, row, 1);
                         dataRange1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -1154,13 +1132,13 @@ namespace AccountManegments.Web.Controllers
                                     sitePayOutTotal += payOutTotalAmount;
 
                                     decimal netbalance = nonPayOutTotalAmount - payOutTotalAmount;
-                                    ws.Cell(row, 2).Value = FormatIndianCurrency(netbalance);
+                                    ws.Cell(row, 2).Value = netbalance;
                                     row++;
                                 }
 
                                 // Insert site totals
                                 ws.Cell(row, 1).Value = "Total for " + (group.SiteName ?? "N/A");
-                                ws.Cell(row, 2).Value = FormatIndianCurrency(siteNonPayOutTotal - sitePayOutTotal);
+                                ws.Cell(row, 2).Value = siteNonPayOutTotal - sitePayOutTotal;
 
                                 var footerRange2 = ws.Range(row, 1, row, 2);
                                 footerRange2.Style.Fill.BackgroundColor = XLColor.Gray;
@@ -1208,14 +1186,14 @@ namespace AccountManegments.Web.Controllers
                                 yougavetotal += item.PayOutTotalAmount;
                                 yougettotal += item.NonPayOutTotalAmount;
                                 netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                                ws.Cell(row, 2).Value = FormatIndianCurrency(netbalance);
+                                ws.Cell(row, 2).Value = netbalance;
                                 row++;
                             }
 
                             nettotal = yougettotal - yougavetotal;
 
                             ws.Cell(row, 1).Value = "Total";
-                            ws.Cell(row, 2).Value = FormatIndianCurrency(nettotal);
+                            ws.Cell(row, 2).Value = nettotal;
 
                             var footerRange3 = ws.Range(row, 1, row, 2);
                             footerRange3.Style.Fill.BackgroundColor = XLColor.Gray;
