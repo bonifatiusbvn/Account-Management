@@ -220,7 +220,7 @@ $(document).ready(function () {
             const FocusQuantity = productRow.find('.txtproductquantity');
             handleFocus(event, FocusQuantity);
             FocusQuantity.select();
-           
+
         }
     });
 
@@ -939,7 +939,7 @@ function preventEmptyValue(input) {
 }
 
 function updateProductTotalAmount(row) {
-    var $row = $(row); 
+    var $row = $(row);
     var productPrice = parseFloat($row.find(".txtproductamount").val()) || 0;
     var quantity = parseFloat($row.find(".txtproductquantity").val()) || 0;
     var discount = parseFloat($row.find(".txtdiscountamount").val()) || 0;
@@ -1931,7 +1931,7 @@ function GetProductUnittypeList(row) {
 
             if (unitTypeId) {
 
-                $unitTypeDropdown.val(unitTypeId).change(); 
+                $unitTypeDropdown.val(unitTypeId).change();
             }
         },
         error: function (err) {
@@ -1951,7 +1951,7 @@ function GetItemDetailsByItemId(ItemId, row) {
                 $(row).find('.txtHSNcode').val(data.hsncode);
                 $(row).find('.txtproductquantity').val(1);
                 $(row).find('.txtunittype').val(data.unitType);
-                $(row).find('.txtPOUnitType').val(data.unitType); 
+                $(row).find('.txtPOUnitType').val(data.unitType);
                 $(row).find('.txtproductamount').val(data.pricePerUnit);
                 $(row).find('.productamount').val(data.pricePerUnit);
                 $(row).find('.txtgstAmount').val(data.gstamount);
@@ -1970,13 +1970,13 @@ function GetItemDetailsByItemId(ItemId, row) {
 function AddNewInvoiceProductDetailRow() {
     const tableBody = document.querySelector("#InvoiceProductDetailsTable tbody");
     if (tableBody != null) {
-        const rowCount = tableBody.rows.length + 1;  
+        const rowCount = tableBody.rows.length + 1;
 
         const lastRow = tableBody.lastElementChild;
         var lastProductNameInput = lastRow ? lastRow.querySelector(".txtInvoiceItemName") : null;
 
         if (lastProductNameInput && lastProductNameInput.value.trim() === "") {
-            toastr.error("Please select a product before adding a new row.");
+            toastr.warning("Please select a product before adding a new row.");
             lastProductNameInput.focus();
             return;
         }
@@ -2044,10 +2044,12 @@ function AddNewInvoiceProductDetailRow() {
                 <input type="text" class="product-producttotalamount form-control bg-light txtproducttotalamount" id="txtproducttotalamount${rowCount}" placeholder="Total Amount" readonly style="width:140px;" />
             </td>
            <td class="product-removal">
-                <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
-                <a class="btn text-primary AddNewInvoiceProductDetailBtn" onclick="AddNewInvoiceProductDetailRow()" style="margin-left: -33px;">
+           <div>
+           <a class="btn text-primary AddNewInvoiceProductDetailBtn" onclick="AddNewInvoiceProductDetailRow()" style="margin-left: -33px;">
                    <i class="lni lni-circle-plus"></i> 
                 </a>
+                <a class="btn text-primary remove-btn" onclick="removeItem(this)"><i class="lni lni-trash"></i></a>
+                </div>
             </td>
         `;
 
