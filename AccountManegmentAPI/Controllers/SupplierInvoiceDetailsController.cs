@@ -85,10 +85,8 @@ namespace AccountManagement.API.Controllers
             var invoiceId = await SupplierInvoiceDetails.DeleteSupplierInvoiceDetails(InvoiceId);
             try
             {
-
                 if (invoiceId.code == 200)
                 {
-
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = invoiceId.message;
                 }
@@ -112,5 +110,6 @@ namespace AccountManagement.API.Controllers
             IEnumerable<SupplierPendingDetailsModel> supplierDetails = await SupplierInvoiceDetails.GetSupplierPendingDetailsList(CompanyId);
             return Ok(new { code = 200, data = supplierDetails.ToList() });
         }
+
     }
 }

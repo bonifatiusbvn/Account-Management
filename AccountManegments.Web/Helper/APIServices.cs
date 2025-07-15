@@ -136,7 +136,6 @@ namespace AccountManegments.Web.Helper
                 model = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
                 model.code = (int)response.StatusCode;
 
-
                 return model;
             }
             catch (Exception ex)
