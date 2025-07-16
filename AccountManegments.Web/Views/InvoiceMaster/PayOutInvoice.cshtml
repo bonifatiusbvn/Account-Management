@@ -14,428 +14,408 @@
 <input type="hidden" id="txtUserId" value="@_userSession.UserId" hidden />
 
 
-<div class="">
-    <div class="">
-        <div class=" radius-10 w-100">
-            <div class="d-flex align-items-center">
+<div class="container-fluid p-3">
+    <!-- Payout Summary Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Payout Summary</h5>
+        </div>
+        <div class="card-body">
+            <!-- Filter Controls -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-2">
+                    <select id="textPayoutReportSiteName" class="form-select">
+                        <option value="">All Sites</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <select id="textPayoutReportCompanyName" class="form-select">
+                        @if (usercompany != null && usercompany.Any())
+                        {
+                            foreach (var company in usercompany)
+                            {
+                                var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
+                            }
+                        }
+                        else
+                        {
+                            <option selected value="" disabled>Select Company</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <div class="input-group">
+                        <input type="text" id="textPayoutReportSupplierName" class="form-control" placeholder="Supplier">
+                        <input type="hidden" id="textPayoutReportSupplierNameHidden">
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-1">
+                    <select id="textPayoutReportGroupList" class="form-select">
+                        <option value="">Select Group</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-1">
+                    <select id="textPayoutReportTypeList" class="form-select">
+                        <option value="Purchase">Purchase</option>
+                        <option value="Sales">Sales</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <select id="timePeriodPayoutDropdown" class="form-select">
+                        <option value="" selected disabled>Search By</option>
+                        <option value="This Month">This Month</option>
+                        <option value="This Year">This Year</option>
+                        <option value="Till Month">Till Month</option>
+                        <option value="Between Year">Between Year</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2 d-flex align-items-center gap-2" id="PayoutdateYearControls">
+                    <input type="month" id="txtPayoutmonth" class="form-control d-none">
+                    <select id="PayoutyearDropdown" class="form-select d-none" style="width: 110px;">
+                        <option value="">Select Year</option>
+                    </select>
+                    <button class="btn btn-primary nav-btn" id="searchPayoutReportButton" data-bs-toggle="tab" role="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="ResetButton" onclick="fn_ResetAllPayoutDropdown()">
+                        Reset
+                    </button>
+                </div>
             </div>
-            <div class="my-3 border-bottom"></div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-12">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <ul class="nav nav-pills mb-3 row" role="tablist">
-                                                <li class="nav-item col-md-2" role="presentation">
-                                                    <select id="textPayoutReportSiteName" name="textPayoutReportSiteName" class="form-control">
-                                                        <option value="">All Site</option>
-                                                    </select>
-                                                </li>
-                                                <li class="nav-item col-md-2" role="presentation">
-                                                    <select id="textPayoutReportCompanyName" name="textPayoutReportCompanyName" class="form-control">
-                                                        @if (usercompany != null && usercompany.Any())
-                                                        {
-                                                            foreach (var company in usercompany)
-                                                            {
-                                                                var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
-                                                                <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <option selected value="" disabled>Select Company</option>
-                                                        }
-                                                    </select>
-                                                </li>
-                                                <li class="nav-item col-md-2" role="presentation">
-                                                    <input type="text" id="textPayoutReportSupplierName" name="textPayoutReportSupplierName" class="form-control" placeholder="Supplier" />
-                                                    <input type="hidden" id="textPayoutReportSupplierNameHidden" name="textPayoutReportSupplierNameHidden" />
-                                                </li>
-                                                <li class="nav-item col-md-1" role="presentation">
-                                                    <select id="textPayoutReportGroupList" name="textPayoutReportGroupList" class="form-control" style="width:120px;">
-                                                        <option value="">Select Group</option>
-                                                    </select>
-                                                </li>
-                                                <li class="nav-item col-md-1" role="presentation">
-                                                    <select id="textPayoutReportTypeList" name="textPayoutReportTypeList" class="form-control">
-                                                        <option value="Purchase">Purchase</option>
-                                                        <option value="Sales">Sales</option>
-                                                    </select>
-                                                </li>
-                                                <li class="nav-item col-md-2" role="presentation">
-                                                    <select id="timePeriodPayoutDropdown" name="timePeriodPayoutDropdown" class="form-control">
-                                                        <option value="" selected disabled>Search By</option>
-                                                        <option value="This Month">This Month</option>
-                                                        <option value="This Year">This Year</option>
-                                                        <option value="Till Month">Till Month</option>
-                                                        <option value="Between Year">Between Year</option>
-                                                    </select>
-                                                </li>
-                                                <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="PayoutdateYearControls">
 
-                                                    <input type="month" id="txtPayoutmonth" class="form-control search" placeholder="Search By Month" style="display:none;width: 170px;">
-                                                    <select id="PayoutyearDropdown" class="form-control" style="display:none; width: 110px;">
-                                                        <option value="">Select Year</option>
-                                                    </select>
-                                                    <button class="btn btn-primary nav-btn" id="searchPayoutReportButton" data-bs-toggle="tab" role="tab">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                            <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="fn_ResetAllPayoutDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
-                                                </li>
+            <!-- Payout Table -->
+            <div class="table-responsive">
+                <table id="tblPayoutReport" class="table table-hover table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Site</th>
+                            <th>Supplier</th>
+                            <th class="text-end">Net Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot class="table-primary">
+                        <tr>
+                            <th class="text-end">Total:</th>
+                            <th></th>
+                            <th class="text-end" id="PayoutNetAmount"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-                                            </ul>
-                                            <div class="tab-content" id="pills-tabContent">
-                                                <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
-                                                    <div class="p-3">
-                                                        <table id="tblPayoutReport" class="table table-bordered table-striped align-middle dataTable dtr-inline">
-                                                            <thead class="table-light btn-primary">
-                                                                <tr>
-                                                                    <th>Site</th>
-                                                                    <th>Supplier</th>
-                                                                    <th>Net Amount</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                            <tfoot>
-                                                                <tr class="table-light btn-primary">
-                                                                    <th style="text-align:right">Total:</th>
-                                                                    <th></th>
-                                                                    <th id="PayoutNetAmount"></th>
-                                                                </tr>
-                                                            </tfoot>
-                                                        </table>
-                                                        <div id="downloadnetreportfile" class="col-12 text-end mt-3">
-                                                            <a class="btn" onclick="ExportNetReportToExcel()" style="background-color:#018749;color:white;">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
-                                                                    <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
-                                                                </svg><span>  </span>Export To Excel
-                                                            </a>
-                                                            <a class="btn" onclick="ExportNetReportToPDF()" style="background-color:#B31B1B;color:white;">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1536 1792">
-                                                                    <path fill="currentColor" d="M1468 380q28 28 48 76t20 88v1152q0 40-28 68t-68 28H96q-40 0-68-28t-28-68V96q0-40 28-68T96 0h896q40 0 88 20t76 48zm-444-244v376h376q-10-29-22-41l-313-313q-12-12-41-22m384 1528V640H992q-40 0-68-28t-28-68V128H128v1536zm-514-593q33 26 84 56q59-7 117-7q147 0 177 49q16 22 2 52q0 1-1 2l-2 2v1q-6 38-71 38q-48 0-115-20t-130-53q-221 24-392 83q-153 262-242 262q-15 0-28-7l-24-12q-1-1-6-5q-10-10-6-36q9-40 56-91.5t132-96.5q14-9 23 6q2 2 2 4q52-85 107-197q68-136 104-262q-24-82-30.5-159.5T657 552q11-40 42-40h22q23 0 35 15q18 21 9 68q-2 6-4 8q1 3 1 8v30q-2 123-14 192q55 164 146 238m-576 411q52-24 137-158q-51 40-87.5 84t-49.5 74m398-920q-15 42-2 132q1-7 7-44q0-3 7-43q1-4 4-8q-1-1-1-2q-1-2-1-3q-1-22-13-36q0 1-1 2zm-124 661q135-54 284-81q-2-1-13-9.5t-16-13.5q-76-67-127-176q-27 86-83 197q-30 56-45 83m646-16q-24-24-140-24q76 28 124 28q14 0 18-1q0-1-2-3" />
-                                                                </svg><span> </span>Export To Pdf
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="shop-cart">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="checkout-details">
-                                                                <div class="card">
-                                                                    <div class="card-header border-bottom">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <h2 class="h5">Payment Report</h2>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="card-body">
-                                                                        <ul class="nav nav-pills mb-3 row" role="tablist">
-                                                                            <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="textReportSiteName" name="textReportSiteName" class="form-control">
-                                                                                    <option value="">All Site</option>
-                                                                                </select>
-                                                                            </li>
-                                                                            <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="textReportCompanyName" name="textReportCompanyName" class="form-control">
-                                                                                    @if (usercompany != null && usercompany.Any())
-                                                                                    {
-                                                                                        foreach (var company in usercompany)
-                                                                                        {
-                                                                                            var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
-                                                                                            <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <option selected value="" disabled>Select Company</option>
-                                                                                    }
-                                                                                </select>
-                                                                            </li>
-                                                                            <li class="nav-item col-md-2" role="presentation">
-                                                                                <input type="text" id="textReportSupplierName" name="textReportSupplierName" class="form-control" placeholder="Supplier" />
-                                                                                <input type="hidden" id="textReportSupplierNameHidden" name="textReportSupplierNameHidden" />
-                                                                            </li>
-                                                                            <li class="nav-item col-md-1" role="presentation">
-                                                                                <select id="textReportGroupList" name="textReportGroupList" class="form-control" style="width:120px;">
-                                                                                    <option value="">Select Group</option>
-                                                                                </select>
-                                                                            </li>
-                                                                            <li class="nav-item col-md-1" role="presentation">
-                                                                                <select id="textReportTypeList" name="textReportTypeList" class="form-control">
-                                                                                    <option value="Purchase">Purchase</option>
-                                                                                    <option value="Sales">Sales</option> 
-                                                                                </select>
-                                                                            </li>
-                                                                            <li class="nav-item col-md-2" role="presentation">
-                                                                                <select id="timePeriodDropdown" name="timePeriodDropdown" class="form-control" style="width:160px;margin-left:6px;">
-                                                                                    <option value="" selected disabled>Search By</option>
-                                                                                    <option value="This Month">This Month</option>
-                                                                                    <option value="This Year">This Year</option>
-                                                                                    <option value="Between Date">Between Date</option>
-                                                                                    <option value="Between Year">Between Year</option>
-                                                                                </select>
-                                                                            </li>
+            <!-- Export Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <a class="btn" onclick="ExportNetReportToExcel()" style="background-color:#018749;color:white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+                        <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
+                    </svg><span>  </span>Export To Excel
+                </a>
+                <a class="btn" onclick="ExportNetReportToPDF()" style="background-color:#B31B1B;color:white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1536 1792">
+                        <path fill="currentColor" d="M1468 380q28 28 48 76t20 88v1152q0 40-28 68t-68 28H96q-40 0-68-28t-28-68V96q0-40 28-68T96 0h896q40 0 88 20t76 48zm-444-244v376h376q-10-29-22-41l-313-313q-12-12-41-22m384 1528V640H992q-40 0-68-28t-28-68V128H128v1536zm-514-593q33 26 84 56q59-7 117-7q147 0 177 49q16 22 2 52q0 1-1 2l-2 2v1q-6 38-71 38q-48 0-115-20t-130-53q-221 24-392 83q-153 262-242 262q-15 0-28-7l-24-12q-1-1-6-5q-10-10-6-36q9-40 56-91.5t132-96.5q14-9 23 6q2 2 2 4q52-85 107-197q68-136 104-262q-24-82-30.5-159.5T657 552q11-40 42-40h22q23 0 35 15q18 21 9 68q-2 6-4 8q1 3 1 8v30q-2 123-14 192q55 164 146 238m-576 411q52-24 137-158q-51 40-87.5 84t-49.5 74m398-920q-15 42-2 132q1-7 7-44q0-3 7-43q1-4 4-8q-1-1-1-2q-1-2-1-3q-1-22-13-36q0 1-1 2zm-124 661q135-54 284-81q-2-1-13-9.5t-16-13.5q-76-67-127-176q-27 86-83 197q-30 56-45 83m646-16q-24-24-140-24q76 28 124 28q14 0 18-1q0-1-2-3" />
+                    </svg><span> </span>Export To Pdf
+                </a>
+            </div>
+        </div>
+    </div>
 
-                                                                            <li class="nav-item col-md-2 d-flex align-items-center gap-2" role="presentation" id="dateYearControls" style="margin-left: -75px;">
-                                                                                <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="startDate" style="display:none;width: 135px;">
-                                                                                <input class="form-control date-input" placeholder="dd-mm-yyyy" type="date" id="endDate" style="display:none;width: 135px;">
-                                                                                <select id="yearDropdown" class="form-control" style="display:none; width: 110px;">
-                                                                                    <option value="">Select Year</option>
-                                                                                </select>
-                                                                                <button class="btn btn-primary nav-btn" id="searchReportButton" data-bs-toggle="tab" role="tab">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                                                        <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
-                                                                                    </svg>
-                                                                                </button>
-                                                                                <button type="button" class="btn btn-primary nav-btn" id="ResetButton" onclick="fn_ResetAllPayoutDropdown()" data-bs-toggle="tab" role="tab">Reset</button>
-                                                                            </li>
-                                                                        </ul>
-                                                                        <div class="tab-content" id="pills-tabContent">
-                                                                            <div class="tab-pane fade show active" id="credit-card" role="tabpanel">
-                                                                                <div class="table-container">
-                                                                                    <table id="tblinvoice" class="table table-bordered table-striped align-middle dataTable dtr-inline">
-                                                                                        <thead class="text-center table-light btn-primary">
-                                                                                            <tr>
-                                                                                                <th>Invoice No</th>
-                                                                                                <th>Date</th>
-                                                                                                <th>Site</th>
-                                                                                                <th>Group</th>
-                                                                                                <th>Supplier</th>
-                                                                                                <th>Credit</th>
-                                                                                                <th>Debit</th>
-                                                                                                <th>Balance</th>
-                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
-                                                                                                {
-                                                                                                    <th>Action</th>
-                                                                                                }
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <tbody class="text-center">
-                                                                                        </tbody>
-                                                                                        <tfoot>
-                                                                                            <tr class="text-center table-light btn-primary">
-                                                                                                <th colspan="5" style="text-align:right">Total:</th>
-                                                                                                <th id="totalCredit"></th>
-                                                                                                <th id="totalDebit"></th>
+    <!-- Payment Report Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Payment Report</h5>
+        </div>
+        <div class="card-body">
+            <!-- Filter Controls -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-2">
+                    <select id="textReportSiteName" class="form-select">
+                        <option value="">All Sites</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <select id="textReportCompanyName" class="form-select">
+                        @if (usercompany != null && usercompany.Any())
+                        {
+                            foreach (var company in usercompany)
+                            {
+                                var isSelect = company.CompanyId.ToString().Equals(selectedcompanyId, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+                                <option value="@company.CompanyId" (isSelect)>@company.CompanyName</option>
 
-                                                                                                <th id="NetAmount"></th>
-                                                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
-                                                                                                {
-                                                                                                    <th></th>
-                                                                                                }
-                                                                                            </tr>
-                                                                                        </tfoot>
-                                                                                    </table>
-                                                                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <option selected value="" disabled>Select Company</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <div class="input-group">
+                        <input type="text" id="textReportSupplierName" class="form-control" placeholder="Supplier">
+                        <input type="hidden" id="textReportSupplierNameHidden">
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-1">
+                    <select id="textReportGroupList" class="form-select">
+                        <option value="">Select Group</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-1">
+                    <select id="textReportTypeList" class="form-select">
+                        <option value="Purchase">Purchase</option>
+                        <option value="Sales">Sales</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <select id="timePeriodDropdown" class="form-select">
+                        <option value="" selected disabled>Search By</option>
+                        <option value="This Month">This Month</option>
+                        <option value="This Year">This Year</option>
+                        <option value="Between Date">Between Date</option>
+                        <option value="Between Year">Between Year</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-2 d-flex align-items-center gap-2" id="dateYearControls">
+                    <input type="date" id="startDate" class="form-control d-none">
+                    <input type="date" id="endDate" class="form-control d-none">
+                    <select id="yearDropdown" class="form-select d-none" style="width: 110px;">
+                        <option value="">Select Year</option>
+                    </select>
+                    <button class="btn btn-primary nav-btn" id="searchReportButton" data-bs-toggle="tab" role="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+                        </svg>
+                    </button>
 
-                                                                                <div class="col-12 text-end mt-3">
-                                                                                    <a class="btn" onclick="GetInvoiceDetailsBySupplierExcelReport()" style="background-color:#018749;color:white;">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
-                                                                                            <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
-                                                                                        </svg><span>  </span>Supplier Excel
-                                                                                    </a>
-                                                                                    <a class="btn" onclick="ExportToExcel()" style="background-color:#018749;color:white;">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
-                                                                                            <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
-                                                                                        </svg><span>  </span>Export To Excel
-                                                                                    </a>
-                                                                                    <a class="btn" onclick="ExportToPDF()" style="background-color:#B31B1B;color:white;">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1536 1792">
-                                                                                            <path fill="currentColor" d="M1468 380q28 28 48 76t20 88v1152q0 40-28 68t-68 28H96q-40 0-68-28t-28-68V96q0-40 28-68T96 0h896q40 0 88 20t76 48zm-444-244v376h376q-10-29-22-41l-313-313q-12-12-41-22m384 1528V640H992q-40 0-68-28t-28-68V128H128v1536zm-514-593q33 26 84 56q59-7 117-7q147 0 177 49q16 22 2 52q0 1-1 2l-2 2v1q-6 38-71 38q-48 0-115-20t-130-53q-221 24-392 83q-153 262-242 262q-15 0-28-7l-24-12q-1-1-6-5q-10-10-6-36q9-40 56-91.5t132-96.5q14-9 23 6q2 2 2 4q52-85 107-197q68-136 104-262q-24-82-30.5-159.5T657 552q11-40 42-40h22q23 0 35 15q18 21 9 68q-2 6-4 8q1 3 1 8v30q-2 123-14 192q55 164 146 238m-576 411q52-24 137-158q-51 40-87.5 84t-49.5 74m398-920q-15 42-2 132q1-7 7-44q0-3 7-43q1-4 4-8q-1-1-1-2q-1-2-1-3q-1-22-13-36q0 1-1 2zm-124 661q135-54 284-81q-2-1-13-9.5t-16-13.5q-76-67-127-176q-27 86-83 197q-30 56-45 83m646-16q-24-24-140-24q76 28 124 28q14 0 18-1q0-1-2-3" />
-                                                                                        </svg><span> </span>Export To Pdf
-                                                                                    </a>
-                                                                                </div>
-                                                                            </div>
+                    <button type="button" class="btn btn-outline-secondary" onclick="fn_ResetAllPayoutDropdown()">
+                        Reset
+                    </button>
+                </div>
+            </div>
 
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <form id="updatePayoutForm">
-                                                                    <div class="modal fade show" tabindex="-1" id="updatePayoutModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
-                                                                        <div class="modal-dialog modal-md modal-dialog-centered">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header bg-primary-subtle p-3">
-                                                                                    <h5 class="modal-title" id="flipModalLabel">Edit Payout</h5>
-                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <input type="text" class="form-control" id="EdittxtpayoutSiteId" hidden />
-                                                                                    <input type="text" class="form-control" id="EdittxtpayoutId" hidden />
-                                                                                    <input type="text" class="form-control" id="EdittxtpayoutUpdatedBy" value="@_userSession.UserId" hidden />
-                                                                                    <input type="hidden" id="EdittxtpayoutSupplierNameHidden" name="EdittxtpayoutSupplierNameHidden" />
-                                                                                    <input type="hidden" id="EdittxtpayoutCompanyNameHidden" name="EdittxtpayoutCompanyNameHidden" />
-                                                                                    <div class="row mb-3">
-                                                                                        <div class="col-lg-12 col-12">
-                                                                                            <label class="me-2">Payment Status : </label>
-                                                                                            <div class="form-check form-check-inline">
-                                                                                                <input class="form-check-input" type="radio" id="Online" value="NEFT/RTGS" name="Editpayoutpaymenttype">
-                                                                                                <label class="form-check-label" for="Online">NEFT/RTGS</label>
-                                                                                            </div>
-                                                                                            <div class="form-check form-check-inline">
-                                                                                                <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayoutpaymenttype">
-                                                                                                <label class="form-check-label" for="Cheque">Cheque</label>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row mb-3">
-                                                                                        <div class="col-lg-4 col-12">
-                                                                                            <label class="form-label">Description</label>
-                                                                                            <div class="form-label">
-                                                                                                <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-lg-5 col-12">
-                                                                                            <label class="form-label">Date</label>
-                                                                                            <input type="date" id="Edittxtpayoutdate" class="form-control" name="Edittxtpayoutdate" />
-                                                                                        </div>
-                                                                                        <div class="col-lg-3 col-12">
-                                                                                            <label class="form-label">Total Amount</label>
-                                                                                            <input type="text" class="form-control" id="Edittxtpayoutamount" name="Edittxtpayoutamount">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                                                    <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()" id="btnitem">Save</button>
-                                                                                </div>
-                                                                            </div><!-- /.modal-content -->
-                                                                        </div><!-- /.modal-dialog -->
-                                                                    </div><!-- /.modal -->
-                                                                </form>
-                                                                <form id="updatePayInForm">
-                                                                    <div class="modal fade show" tabindex="-1" id="updatePayInModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true" style="display:none;">
-                                                                        <div class="modal-dialog modal-md modal-dialog-centered">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header bg-primary-subtle p-3">
-                                                                                    <h5 class="modal-title" id="flipModalLabel">Edit PayIn</h5>
-                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <input type="text" class="form-control" id="EdittxtpayinId" hidden />
-                                                                                    <input type="text" class="form-control" id="EdittxtpayinUpdatedBy" value="@_userSession.UserId" hidden />
-                                                                                    <div class="row mb-3">
-                                                                                        <div class="col-lg-12 col-12">
-                                                                                            <label class="me-2">Payment Status : </label>
-                                                                                            <div class="form-check form-check-inline">
-                                                                                                <input class="form-check-input" type="radio" id="Online" value="NEFT/RTGS" name="Editpayinpaymenttype">
-                                                                                                <label class="form-check-label" for="Online">NEFT/RTGS</label>
-                                                                                            </div>
-                                                                                            <div class="form-check form-check-inline">
-                                                                                                <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayinpaymenttype">
-                                                                                                <label class="form-check-label" for="Cheque">Cheque</label>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row mb-3">
-                                                                                        <div class="col-lg-4 col-12">
-                                                                                            <label class="form-label">Description</label>
-                                                                                            <div class="form-label">
-                                                                                                <input type="text" class="form-control" id="Edittxtpayindescription" placeholder="Description" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-lg-5 col-12">
-                                                                                            <label class="form-label">Date</label>
-                                                                                            <input type="date" id="Edittxtpayindate" class="form-control" name="Edittxtpayindate" />
-                                                                                        </div>
-                                                                                        <div class="col-lg-3 col-12">
-                                                                                            <label class="form-label">Total Amount</label>
-                                                                                            <input type="text" class="form-control" id="Edittxtpayinamount" name="Edittxtpayinamount">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                                                                    <button type="button" class="btn btn-primary" onclick="UpdatePayInInvoice()">Update</button>
-                                                                                </div>
-                                                                            </div><!-- /.modal-content -->
-                                                                        </div><!-- /.modal-dialog -->
-                                                                    </div><!-- /.modal -->
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end row-->
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="card border-0">
-                                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && a.Add == true))
-                                                        {
-                                                            <div class="card-body">
-                                                                <a class="btn btn-primary" id="AddPayOutInvoiceBtn" onclick="AddNewRowforPayOutInvoice()" style="margin-left:-10px; display: none;">
-                                                                    <i class="lni lni-circle-plus"></i>PayOut
-                                                                </a>
-                                                                <a class="btn btn-primary" id="AddPayInInvoiceBtn" onclick="AddNewRowforPayInInvoice()" style="margin-left:-10px; display: none;">
-                                                                    <i class="lni lni-circle-plus"></i>PayIn
-                                                                </a>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="card-body pt-0" id="PayOutTable" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table align-middle mb-0">
-                                                                    <thead class="table-light btn-primary">
-                                                                        <tr>
-                                                                            <th>#</th>
-                                                                            <th>Payment Status</th>
-                                                                            <th>Date</th>
-                                                                            <th>Site</th>
-                                                                            <th>Description</th>
-                                                                            <th>Amount</th>
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="payoutpartialView">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payoutsubmitbutton" style="display:none;">
-                                                                <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayOutDetailsReport()">Submit</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-body pt-0" id="PayInTable" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table align-middle mb-0">
-                                                                    <thead class="table-light btn-primary">
-                                                                        <tr>
-                                                                            <th>#</th>
-                                                                            <th>Payment Status</th>
-                                                                            <th>Date</th>
-                                                                            <th>Description</th>
-                                                                            <th>Amount</th>
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="payinpartialView">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <div class="hstack gap-2 justify-content-end d-print-none mt-4" id="payinsubmitbutton" style="display:none;">
-                                                                <button type="button" class="btn btn-primary" id="creditdebitsubmitbtn" style="width: 150px;height: 40px;" onclick="InsertPayInDetailsReport()">Submit</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+            <!-- Invoice Table -->
+            <div class="table-responsive">
+                <table id="tblinvoice" class="table table-hover table-bordered">
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th>Invoice No</th>
+                            <th>Date</th>
+                            <th>Site</th>
+                            <th>Group</th>
+                            <th>Supplier</th>
+                            <th class="text-end">Credit</th>
+                            <th class="text-end">Debit</th>
+                            <th class="text-end">Balance</th>
+                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
+                            {
+                                <th>Action</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody class="text-center"></tbody>
+                    <tfoot class="table-primary text-center">
+                        <tr>
+                            <th colspan="5" class="text-end">Total:</th>
+                            <th class="text-end" id="totalCredit"></th>
+                            <th class="text-end" id="totalDebit"></th>
+                            <th class="text-end" id="NetAmount"></th>
+                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && (a.Edit == true || a.Delete == true)))
+                            {
+                                <th></th>
+                            }
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <a class="btn" onclick="GetInvoiceDetailsBySupplierExcelReport()" style="background-color:#018749;color:white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+                        <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
+                    </svg><span>  </span>Supplier Excel
+                </a>
+                <a class="btn" onclick="ExportToExcel()" style="background-color:#018749;color:white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+                        <path fill="currentColor" fill-rule="evenodd" d="M29 6v8h13v2H29v7h13V8c0-1.105-.836-2-1.867-2zm0 19h13v7H29zm0 9h13v6c0 1.105-.836 2-1.867 2H29zm-2 0v8H15.867C14.836 42 14 41.105 14 40v-6zm0-20H14V8c0-1.105.836-2 1.867-2H27zm-3.948 2v7H27v-7zm0 9v7H27v-7zM6 17a1 1 0 0 1 1-1h13.158a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm3.607 2h2.26l1.834 3.754L15.64 19h2.112l-2.91 5l2.976 5H15.59l-1.999-3.93l-1.99 3.93H9.34l3.024-5.018z" clip-rule="evenodd" />
+                    </svg><span>  </span>Export To Excel
+                </a>
+                <a class="btn" onclick="ExportToPDF()" style="background-color:#B31B1B;color:white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1536 1792">
+                        <path fill="currentColor" d="M1468 380q28 28 48 76t20 88v1152q0 40-28 68t-68 28H96q-40 0-68-28t-28-68V96q0-40 28-68T96 0h896q40 0 88 20t76 48zm-444-244v376h376q-10-29-22-41l-313-313q-12-12-41-22m384 1528V640H992q-40 0-68-28t-28-68V128H128v1536zm-514-593q33 26 84 56q59-7 117-7q147 0 177 49q16 22 2 52q0 1-1 2l-2 2v1q-6 38-71 38q-48 0-115-20t-130-53q-221 24-392 83q-153 262-242 262q-15 0-28-7l-24-12q-1-1-6-5q-10-10-6-36q9-40 56-91.5t132-96.5q14-9 23 6q2 2 2 4q52-85 107-197q68-136 104-262q-24-82-30.5-159.5T657 552q11-40 42-40h22q23 0 35 15q18 21 9 68q-2 6-4 8q1 3 1 8v30q-2 123-14 192q55 164 146 238m-576 411q52-24 137-158q-51 40-87.5 84t-49.5 74m398-920q-15 42-2 132q1-7 7-44q0-3 7-43q1-4 4-8q-1-1-1-2q-1-2-1-3q-1-22-13-36q0 1-1 2zm-124 661q135-54 284-81q-2-1-13-9.5t-16-13.5q-76-67-127-176q-27 86-83 197q-30 56-45 83m646-16q-24-24-140-24q76 28 124 28q14 0 18-1q0-1-2-3" />
+                    </svg><span> </span>Export To Pdf
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay In/Out Section -->
+    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Reports & Payments" && a.Add == true))
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Payment Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-2 mb-3">
+                    <button class="btn btn-primary" id="AddPayOutInvoiceBtn" onclick="AddNewRowforPayOutInvoice()" style="display: none;">
+                        <i class="fas fa-plus-circle me-2"></i>PayOut
+                    </button>
+                    <button class="btn btn-primary" id="AddPayInInvoiceBtn" onclick="AddNewRowforPayInInvoice()" style="display: none;">
+                        <i class="fas fa-plus-circle me-2"></i>PayIn
+                    </button>
+                </div>
+
+                <!-- PayOut Table -->
+                <div class="table-responsive mb-4" id="PayOutTable" style="display: none;">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>#</th>
+                                <th>Payment Status</th>
+                                <th>Date</th>
+                                <th>Site</th>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payoutpartialView"></tbody>
+                    </table>
+                    <div class="text-end mt-3" id="payoutsubmitbutton" style="display:none;">
+                        <button type="button" class="btn btn-primary" onclick="InsertPayOutDetailsReport()">Submit</button>
+                    </div>
+                </div>
+
+                <!-- PayIn Table -->
+                <div class="table-responsive" id="PayInTable" style="display: none;">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>#</th>
+                                <th>Payment Status</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payinpartialView"></tbody>
+                    </table>
+                    <div class="text-end mt-3" id="payinsubmitbutton" style="display:none;">
+                        <button type="button" class="btn btn-primary" onclick="InsertPayInDetailsReport()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Edit Modals -->
+    <!-- Payout Edit Modal -->
+    <div class="modal fade" id="updatePayoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Edit Payout</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="updatePayoutForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="EdittxtpayoutSiteId">
+                        <input type="hidden" id="EdittxtpayoutId">
+                        <input type="hidden" id="EdittxtpayoutUpdatedBy" value="@_userSession.UserId">
+                        <input type="hidden" id="EdittxtpayoutSupplierNameHidden">
+                        <input type="hidden" id="EdittxtpayoutCompanyNameHidden">
+
+                        <div class="mb-3">
+                            <label class="form-label">Payment Status</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="Online" value="NEFT/RTGS" name="Editpayoutpaymenttype">
+                                    <label class="form-check-label" for="Online">NEFT/RTGS</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="Cheque" value="Cheque" name="Editpayoutpaymenttype">
+                                    <label class="form-check-label" for="Cheque">Cheque</label>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" id="Edittxtpayoutdescription" placeholder="Description">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" id="Edittxtpayoutdate">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Total Amount</label>
+                                <input type="text" class="form-control" id="Edittxtpayoutamount">
+                            </div>
+                        </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="UpdatePayoutInvoice()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PayIn Edit Modal -->
+    <div class="modal fade" id="updatePayInModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Edit PayIn</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="updatePayInForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="EdittxtpayinId">
+                        <input type="hidden" id="EdittxtpayinUpdatedBy" value="@_userSession.UserId">
+
+                        <div class="mb-3">
+                            <label class="form-label">Payment Status</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="EditPayInOnline" value="NEFT/RTGS" name="Editpayinpaymenttype">
+                                    <label class="form-check-label" for="EditPayInOnline">NEFT/RTGS</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="EditPayInCheque" value="Cheque" name="Editpayinpaymenttype">
+                                    <label class="form-check-label" for="EditPayInCheque">Cheque</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-control" id="Edittxtpayindescription" placeholder="Description">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" id="Edittxtpayindate">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Total Amount</label>
+                                <input type="text" class="form-control" id="Edittxtpayinamount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="UpdatePayInInvoice()">Update</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
