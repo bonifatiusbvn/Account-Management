@@ -139,20 +139,19 @@ $(document).ready(function () {
         $('#endDate').val(formattedDate);
     }
 
-
     $('#timePeriodDropdown').change(function () {
         var selectedValue = $(this).val();
 
         if (selectedValue === 'This Month' || selectedValue === 'This Year') {
-            $('#startDate,#endDate, #yearDropdown').hide();
+            $('#startDate, #endDate, #yearDropdown').addClass('d-none');
         } else if (selectedValue === 'Between Date') {
-            $('#startDate,#endDate, #searchReportButton').show();
-            $('#yearDropdown').hide();
-            setTodaysDate();  // Automatically set today's date when "Between Date" is selected
+            $('#startDate, #endDate, #searchReportButton').removeClass('d-none');
+            $('#yearDropdown').addClass('d-none');
+            setTodaysDate(); 
         } else if (selectedValue === 'Between Year') {
-            $('#yearDropdown, #searchReportButton').show();
-            $('#startDate,#endDate').hide();
-            populateYearDropdown();
+            $('#yearDropdown, #searchReportButton').removeClass('d-none');
+            $('#startDate, #endDate').addClass('d-none');
+            populateYearDropdown(); 
         }
     });
 });

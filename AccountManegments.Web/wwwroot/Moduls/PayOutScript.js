@@ -192,15 +192,15 @@ $(document).ready(function () {
         var selectedPayoutValue = $(this).val();
 
         if (selectedPayoutValue === 'This Month' || selectedPayoutValue === 'This Year') {
-            $('#PayoutendDate, #PayoutyearDropdown').hide();
+            $('#PayoutendDate, #PayoutyearDropdown').addClass('d-none');
         } else if (selectedPayoutValue === 'Till Month') {
-            $('#txtPayoutmonth, #searchPayoutReportButton').show();
-            $('#PayoutyearDropdown').hide();
+            $('#txtPayoutmonth, #searchPayoutReportButton').removeClass('d-none');
+            $('#PayoutyearDropdown').addClass('d-none');
             clearPayoutDates();
             setTodaysPayoutDate();
         } else if (selectedPayoutValue === 'Between Year') {
-            $('#PayoutyearDropdown, #searchPayoutReportButton').show();
-            $('#txtPayoutmonth').hide();
+            $('#PayoutyearDropdown, #searchPayoutReportButton').removeClass('d-none');
+            $('#txtPayoutmonth').addClass('d-none');
             populatePayoutYearDropdown();
         }
     });
