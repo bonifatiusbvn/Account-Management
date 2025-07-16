@@ -1073,9 +1073,11 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 4).Value = "Supplier";
                         ws.Cell(row, 5).Value = "Item Name";
                         ws.Cell(row, 6).Value = "Quantity";
-                        ws.Cell(row, 7).Value = "Amount";
+                        ws.Cell(row, 7).Value = "Rate";
+                        ws.Cell(row, 8).Value = "Gst";
+                        ws.Cell(row, 9).Value = "Amount";
 
-                        var headerRange = ws.Range(row, 1, row, 7);
+                        var headerRange = ws.Range(row, 1, row, 9);
                         headerRange.Style.Font.Bold = true;
                         headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange.Style.Font.FontColor = XLColor.White;
@@ -1095,8 +1097,10 @@ namespace AccountManegments.Web.Controllers
                             {
                                 ws.Cell(row, 4).Value = Supplier.SupplierName ?? string.Empty;
                                 ws.Cell(row, 5).Value = item.ItemName ?? string.Empty;
-                                ws.Cell(row, 6).Value = item.Quantity.ToString() ?? "0";
-                                ws.Cell(row, 7).Value = FormatIndianCurrency(item.TotalAmount ?? 0);
+                                ws.Cell(row, 6).Value = item.Quantity ;
+                                ws.Cell(row, 7).Value = item.PricePerUnit;
+                                ws.Cell(row, 8).Value = item.Gstamount ?? 0;
+                                ws.Cell(row, 9).Value = item.TotalAmount ?? 0;
                                 row++;
                             }
                         }

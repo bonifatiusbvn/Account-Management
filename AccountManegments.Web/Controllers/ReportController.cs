@@ -710,7 +710,7 @@ namespace AccountManegments.Web.Controllers
 
                     var newTableRow1 = newTable.Rows.Add();
 
-                    var netBalanceCell = newTableRow1.Cells.Add(FormatIndianCurrency(NetInvoiceDetails.TotalPending));
+                    var netBalanceCell = newTableRow1.Cells.Add(NetInvoiceDetails.TotalPending);
                     netBalanceCell.Alignment = HorizontalAlignment.Right;
                     netBalanceCell.DefaultCellTextState = new TextState
                     {

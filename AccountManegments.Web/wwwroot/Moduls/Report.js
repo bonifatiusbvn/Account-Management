@@ -187,8 +187,8 @@ function ExportToPDF() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
-        startDate: null,
-        endDate: null,
+        startDate: $('#startDate').val(),
+        endDate: $('#endDate').val(),
         SelectedYear: null,
     };
     var selectedValue = $('#timePeriodDropdown').val();
@@ -282,8 +282,8 @@ function ExportToExcel() {
         CompanyName: selectedCompanyName || null,
         SupplierName: selectedSupplierName || null,
         filterType: null,
-        startDate: null,
-        endDate: null,
+        startDate: $('#startDate').val(),
+        endDate: $('#endDate').val(),
         SelectedYear: null,
     };
     var selectedValue = $('#timePeriodDropdown').val();
@@ -295,9 +295,7 @@ function ExportToExcel() {
             objData.filterType = "currentYear";
             break;
         case 'Between Date':
-            objData.filterType = "dateRange";
-            objData.filterType = $('#startDate').val();
-            objData.filterType = $('#endDate').val();
+            objData.filterType = "betweenDate";
             break;
         case 'Between Year':
             objData.filterType = "betweenYear";

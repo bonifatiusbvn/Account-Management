@@ -1460,6 +1460,13 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 
                         query = query.Where(s => s.s.Date >= startOfSelectedFinancialYear && s.s.Date <= endOfSelectedFinancialYear).OrderBy(s => s.s.CreatedOn);
                     }
+                    else if (invoiceReport.filterType == "betweenDate" && invoiceReport.startDate.HasValue && invoiceReport.endDate.HasValue)
+                    {
+                        var startDate = invoiceReport.startDate.Value.Date;
+                        var endDate = invoiceReport.endDate.Value.Date;
+
+                        query = query.Where(s => s.s.Date >= startDate && s.s.Date <= endDate).OrderBy(s => s.s.CreatedOn);
+                    }
                 }
 
                 if (invoiceReport.endDate.HasValue)
@@ -1723,6 +1730,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                               ItemId = a.ItemId,
                                               ItemName = i.ItemName,
                                               Quantity = a.Quantity,
+                                              Gstamount = a.Gst,
                                               TotalAmount = a.TotalAmount,
                                               PricePerUnit = a.Price,
                                           }).ToListAsync();
