@@ -77,6 +77,358 @@
             top: 80px;
             right: 170px;
         }
+
+        /* ===================== Full Responsive Helpers (paste at end of <style>) ===================== */
+
+        /* Generic responsive helpers */
+        .select2-container {
+            width: 100% !important;
+        }
+
+            .select2-container .select2-selection {
+                min-height: calc(1.5em + .75rem + 2px);
+            }
+
+        /* ---------------- Off-canvas / Sidebar behavior for medium & small screens ---------------- */
+                            @@media (max-width: 1199px) {
+            .sidebar-wrapper
+
+        {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            overflow-y: auto;
+            z-index: 1400;
+            transition: left .25s ease, transform .25s ease;
+            -webkit-overflow-scrolling: touch;
+            background: inherit;
+        }
+
+        /* support common toggle class names that JS might add */
+        .sidebar-wrapper.active,
+        .sidebar-wrapper.open,
+        .sidebar-wrapper.show,
+        body.sidebar-open .sidebar-wrapper {
+            left: 0 !important;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        /* overlay: shown when sidebar is open */
+        .overlay.nav-toggle-icon {
+            display: none;
+        }
+
+            .overlay.nav-toggle-icon.active,
+            .overlay.nav-toggle-icon.show,
+            body.sidebar-open .overlay.nav-toggle-icon {
+                display: block;
+                position: fixed;
+                inset: 0;
+                z-index: 1350;
+                background: rgba(0,0,0,0.45);
+            }
+
+        /* ensure top content doesn't get hidden; keep page content full width by default */
+        .page-content-wrapper {
+            margin-left: 0 !important;
+            transition: margin-left .25s ease, padding .25s ease;
+            padding: 12px;
+        }
+
+        /* toggle icon visibility */
+        .toggle-icon {
+            display: inline-block;
+            cursor: pointer;
+            z-index: 1500;
+        }
+
+        /* menu layout adjustments for touch */
+        .metismenu {
+            padding-bottom: 100px;
+        }
+
+            .metismenu li {
+                width: 100%;
+            }
+
+                .metismenu li a {
+                    padding: 10px 18px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+
+                .metismenu li ul {
+                    display: none;
+                    padding-left: 10px;
+                }
+                /* allow metismenu/mm-js classes to reveal submenus */
+                .metismenu li .mm-show,
+                .metismenu li .show,
+                .metismenu li .mm-active > ul {
+                    display: block !important;
+                }
+
+        /* make parent icons aligned */
+        .parent-icon {
+            width: 36px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        }
+
+        /* ---------------- Tablet / small-desktop adjustments ---------------- */
+                            @@media (max-width: 991px) {
+            .logo-text
+
+        {
+            font-size: 18px;
+        }
+
+        #drpSiteName {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .user-setting img {
+            width: 36px;
+            height: 36px;
+        }
+
+        .user-setting span {
+            display: none;
+        }
+        /* hide full name to save space */
+        .page-breadcrumb {
+            font-size: 13px;
+        }
+
+        .fixed-button, .fixedButton {
+            right: 16px;
+        }
+
+        }
+
+        /* ---------------- Mobile: make tables usable & reduce paddings ---------------- */
+                            @@media (max-width: 767px) {
+            .sidebar-wrapper
+
+        {
+            width: 220px;
+            left: -240px;
+        }
+
+        .menu-title {
+            font-size: 14px;
+        }
+
+        .page-breadcrumb .breadcrumb {
+            font-size: 12px;
+        }
+
+        .top-header .navbar {
+            padding: 8px;
+        }
+
+        #drpSiteName {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        /* DataTables / tables: horizontal scroll + smaller cells */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
+        table.dataTable, table {
+            width: auto !important;
+            min-width: 700px;
+            table-layout: auto;
+        }
+
+            table.dataTable th, table.dataTable td, table th, table td {
+                white-space: nowrap;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+        /* stack datatable controls */
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_length {
+            float: none;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            text-align: center;
+            width: 100%;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* datatable buttons wrap */
+        .dt-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* reduce header/footer spacing */
+        .page-content-wrapper {
+            padding: 10px;
+        }
+
+        }
+
+        /* ---------------- Very small phones ---------------- */
+        @@media (max-width: 480px) {
+            body {
+                font-size: 13px;
+            }
+
+            .sidebar-wrapper {
+                width: 200px;
+                left: -220px;
+            }
+
+            .menu-title {
+                font-size: 13px;
+            }
+
+            .page-content-wrapper {
+                padding: 6px;
+            }
+
+            .metismenu li a {
+                padding: 8px 12px;
+            }
+
+            table.dataTable, table {
+                min-width: 600px;
+            }
+
+                table th, table td {
+                    padding: 6px 8px;
+                    font-size: 12px;
+                }
+
+            .toggle-icon ion-icon {
+                font-size: 22px;
+            }
+        }
+
+        /* ---------------- Optional: CSS-only stacked card style for tables on very small screens ----------------
+                   To use this: wrap the table in a div.responsive-stack and add data-label attributes to each <td>
+                   Example:
+                   <div class="responsive-stack">
+                     <table> <thead>... </thead> <tbody>
+                       <tr>
+                         <td data-label="Invoice No">INV001</td>
+                         <td data-label="Date">2025-01-01</td>
+                         ...
+                       </tr>
+                     </tbody></table>
+                   </div>
+                */
+        @@media (max-width: 480px) {
+            .responsive-stack table, .responsive-stack thead {
+                display: block;
+                width: 100%;
+            }
+
+            .responsive-stack tbody {
+                display: block;
+                max-height: 60vh;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .responsive-stack tr {
+                display: block;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 10px;
+                padding-bottom: 6px;
+            }
+
+            .responsive-stack td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 6px;
+                white-space: normal;
+            }
+
+                .responsive-stack td::before {
+                    content: attr(data-label);
+                    font-weight: 600;
+                    margin-right: 8px;
+                    color: #333;
+                }
+
+            .responsive-stack th {
+                display: none;
+            }
+        }
+
+        /* ---------------- Small visual tweaks to keep layout tight on mobile ---------------- */
+        @@media (max-width: 992px) {
+            .parent-icon svg, .parent-icon i, .parent-icon ion-icon, .parent-icon img {
+                font-size: 18px;
+                width: 22px;
+                height: 22px;
+            }
+
+            .menu-title {
+                line-height: 1.2;
+            }
+        }
+
+        /* Ensure long breadcrumbs and other texts wrap */
+        .breadcrumb, .breadcrumb-item, .page-breadcrumb nav {
+            word-wrap: break-word;
+        }
+
+        /* keep table-hover UX on small view */
+        .table tbody tr {
+            transition: background .12s ease;
+        }
+
+        /* small helper: ensure the back-to-top and fixed buttons don't overlap critical UI on tiny screens */
+        @@media (max-width: 400px) {
+            .back-to-top {
+                right: 8px;
+                bottom: 12px;
+            }
+
+            .fixed-button, .fixedButton {
+                right: 60px;
+                bottom: 12px;
+            }
+        }
+
+                                @@media (max-width: 768px) {
+            .sidebar-wrapper
+
+        {
+            background-color: #2c003e !important; /* dark purple/navy */
+        }
+
+        .sidebar-wrapper .menu-title,
+        .sidebar-wrapper a {
+            color: #fff !important; /* white text for visibility */
+        }
+
+        }
     </style>
 
     <title>@ViewData["Title"] - @_Configuration.GetSection("ProjectName")?.Value </title>
