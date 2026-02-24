@@ -3,7 +3,6 @@ using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
 using AccountManagement.DBContext.Models.ViewModels.SupplierMaster;
-using AccountManagement.Repository.Interface.Repository.ItemInWord;
 using AccountManagement.Repository.Interface.Services.ItemInWordService;
 using AccountManagement.Repository.Interface.Services.PurchaseRequestService;
 using AccountManagement.Repository.Services.ItemInWord;
@@ -19,20 +18,20 @@ namespace AccountManagement.API.Controllers
     [ApiController]
     public class ItemInWordController : ControllerBase
     {
-        public ItemInWordController(IiteminwordService itemInWord)
+        public ItemInWordController(Repository.Interface.Services.ItemInWordService.IItemInwardService itemInWord)
         {
             ItemInWord = itemInWord;
         }
 
-        public IiteminwordService ItemInWord { get; }
+        public Repository.Interface.Services.ItemInWordService.IItemInwardService ItemInWord { get; }
 
         [HttpPost]
         [Route("GetItemInWordList")]
         [Authorize]
 
-        public async Task<IActionResult> GetItemInWordList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
+        public async Task<IActionResult> GetItemInWordList(InwardListRequestModel request)
         {
-            IEnumerable<ItemInWordModel> ItemInWordList = await ItemInWord.GetItemInWordList(searchText, searchBy, sortBy, siteId);
+            IEnumerable<ItemInWordModel> ItemInWordList = await ItemInWord.GetItemInWordList(request);
             return Ok(new { code = 200, data = ItemInWordList.ToList() });
         }
 

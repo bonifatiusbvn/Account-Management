@@ -592,8 +592,8 @@
                                                             <div class="card-body Address" id="dvShippingAddress">
                                                                 @{
                                                                     var counter = 1;
-                                                                    var selectedShippingAddress = ViewBag.EditShippingAddress;
-                                                                    var siteAddresses = ViewBag.SiteAddress;
+                                                                    var selectedShippingAddress = ViewData["EditShippingAddress"];
+                                                                    var siteAddresses = ViewData["SiteAddress"];
 
                                                                     bool isSingleAddress = siteAddresses is string;
                                                                     bool isAddressList = siteAddresses is IEnumerable<AccountManagement.DBContext.Models.ViewModels.SiteMaster.SiteAddressModel>;

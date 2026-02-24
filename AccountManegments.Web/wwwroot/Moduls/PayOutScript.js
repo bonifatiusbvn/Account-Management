@@ -198,15 +198,29 @@ $(document).ready(function () {
             $('#PayoutyearDropdown').addClass('d-none');
             clearPayoutDates();
             setTodaysPayoutDate();
+        } else if (selectedPayoutValue === 'Between Date') {
+            $('#timePeriodendDate, #searchReportButton').removeClass('d-none');
+            $('#yearDropdown').addClass('d-none');
+            setTodaystimePeriodDate();
         } else if (selectedPayoutValue === 'Between Year') {
             $('#PayoutyearDropdown, #searchPayoutReportButton').removeClass('d-none');
             $('#txtPayoutmonth').addClass('d-none');
             populatePayoutYearDropdown();
         }
     });
+
+    $('#timePeriodPayoutDropdown').trigger('change');
+
 });
 
-
+function setTodaystimePeriodDate() {
+    var today = new Date();
+    var fromday = new Date("2017-01-01");
+    var fromDate = fromday.toISOString().substr(0, 10);
+    var formattedDate = today.toISOString().substr(0, 10);
+    $('#timePeriodstartDate').val(fromDate);
+    $('#timePeriodendDate').val(formattedDate);
+}
 function populatePayoutYearDropdown() {
     var currentYear = new Date().getFullYear();
     var startYear = 2023;
@@ -515,6 +529,11 @@ $(document).ready(function () {
                             d.filterType = "tillMonth";
                             d.TillMonth = $('#txtPayoutmonth').val();
                             break;
+                        case 'Between Date':
+                            d.filterType = "dateRange";
+                            d.startDate = $('#timePeriodstartDate').val();
+                            d.endDate = $('#timePeriodendDate').val();
+                            break;
                         case 'Between Year':
                             d.filterType = "betweenYear";
                             d.SelectedYear = $('#PayoutyearDropdown').val();
@@ -525,8 +544,15 @@ $(document).ready(function () {
                     }
                 }
             },
-            columns: Payoutdtcoulms,
+            createdRow: function (row, data, dataIndex) {
+                var netAmount = data.nonPayOutTotalAmount - data.payOutTotalAmount;
+
+                if (netAmount <= 0) {
+                    $(row).hide();   // hides the entire row
+                }
+            },
             scrollX: true,
+            columns: Payoutdtcoulms,
             scrollY: '350px',
             scrollCollapse: true,
             fixedHeader: {

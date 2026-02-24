@@ -9,7 +9,7 @@
         <td>@item.Item</td>
         <td style="width:90px;">@item.Date?.ToString("dd/MM/yyyy")</td>
         <td>@item.Quantity</td>
-        <td>
+        @* <td>
             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Inward Challan" && (a.Edit == true)))
             {
                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked_@item.InwordId" @(item.IsApproved.HasValue && item.IsApproved.Value ? "checked" : "") onclick="ItemInWordIsApproved('@item.InwordId')" />
@@ -25,12 +25,18 @@
                     <span class="badge bg-light-warning text-warning w-100">Pending</span>
                 }
             }
-        </td>
+        </td> *@
         <td>@item.SupplierName</td>
-        @if (UserSession.SiteId == "")
+        <td>@item.SiteName</td>
+        <td>@item.InvoiceNo</td>
+        @* @if (UserSession.SiteId == "")
         {
-            <td>@item.SiteName</td>
+
         }
+        else
+        {
+            <td></td>
+        } *@
 
         @if (item.IsApproved == true)
         {
@@ -51,7 +57,7 @@
         }
         else
         {
-            <td style="width:131px;">
+            <td style="width:200px;">
                 <a class="btn text-primary" onclick="EditItemInWordDetails('@item.InwordId')" title="Edit" aria-label="Edit"><i class="fadeIn animated bx bx-edit"></i></a>
 
                 <a href="javascript:;" class="btn text-primary" onclick="DeleteItemInWord('@item.InwordId')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" aria-label="Delete"><i class="lni lni-trash"></i></a>

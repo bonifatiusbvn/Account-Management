@@ -6,6 +6,11 @@
     ViewData["Title"] = "Inward Challan";
     Layout = "~/Views/Shared/Main_Layout.cshtml";
 }
+@{
+    var usercompany = UserSession.CompanyData;
+    var selectedcompanyId = UserSession.ComapnyId;
+    var usercompanyCount = (usercompany != null) ? usercompany.Count : 0;
+}
 
 <style>
     .error-border {
@@ -42,11 +47,11 @@
             <div class="my-3 border-bottom"></div>
             <div class="">
                 <div class="row">
-                    <div class="col-12 col-lg-7 col-md-7 col-xl-7">
+                    <div class="col-12 col-lg-8 col-md-8 col-xl-8">
                         <div class="card radius-10 w-100">
                             <div class="card-body" style="height:700px;">
                                 <div class="row w-100 ac-view-list card radius-10 w-100">
-                                    <div class="row ">
+                                    <div class="row d-none">
                                         <div class="col-12">
                                             <div class="card-body">
                                                 <div class="row g-3">
@@ -71,21 +76,73 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-2 d-none">
 
+
+                                            <select id="drpInwardSiteName" class="form-select">
+                                                <option value="">All Sites</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="input-group">
+                                                <input type="text" id="textInwardSupplierName" class="form-control" placeholder="Supplier">
+                                                <input type="hidden" id="textInwardSupplierNameHidden">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="input-group">
+                                                <input type="text" id="textInwardItemName" class="form-control" placeholder="Item">
+                                                <input type="hidden" id="textInwardItemNameHidden">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-4">
+                                            <select id="timePeriodInwardDropdown" class="form-select">
+                                                <option value="" selected disabled>Search By</option>
+                                                <option value="This Month">This Month</option>
+                                                <option value="This Year">This Year</option>
+                                                <option value="Between Date">Between Date</option>
+                                                <option value="Between Year">Between Year</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4 d-flex align-items-center gap-2" id="InwarddateYearControls">
+                                            <input type="date" id="InwardstartDate" class="form-control d-none" style="width: 130px;">
+                                            <input type="date" id="InwardendDate" class="form-control d-none" style="width: 130px;">
+                                            <select id="InwardyearDropdown" class="form-select d-none" style="width: 110px;">
+                                                <option value="">Select Year</option>
+                                            </select>
+                                            <button class="btn btn-primary nav-btn" id="InwardsearchButton" data-bs-toggle="tab" role="tab" onclick="filterItemInWordTable()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+                                                </svg>
+                                            </button>
+
+                                            <button type="button" class="btn btn-outline-secondary" onclick="fn_ResetAllInwardDropdown()">
+                                                Reset
+                                            </button>
+                                        </div>
+
+                                    </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table align-middle mb-0">
                                                 <thead class="table-light btn-primary">
                                                     <tr>
-                                                        <th>Item Name</th>
-                                                        <th>Date</th>
-                                                        <th>Quantity</th>
-                                                        <th>Status</th>
-                                                        <th>Supplier</th>
+                                                        <th style="width:200px">Item Name</th>
+                                                        <th style="width:180px">Date</th>
+                                                        <th style="width:150px;">Quantity</th>
+                                                        @* <th>Status</th> *@
+                                                        <th style="width:200px;">Supplier</th>
 
-                                                        <th>SiteName</th>
+                                                        <th style="width:300px;">SiteName</th>
+                                                        <th style="width:200px;">InvoiceNo</th>
 
-                                                        <th>Action</th>
+                                                        <th style="width:200px;">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="itemInWordtbody">
@@ -98,7 +155,7 @@
                         </div>
                         <!--end row-->
                     </div>
-                    <div class="col-12 col-lg-5 col-xl-5 ac-detail hide-sm">
+                    <div class="col-12 col-lg-4 col-xl-4 ac-detail hide-sm">
                         <div class="card radius-10">
                             <div class="card-body" style="height:auto;">
                                 <h5 class="mb-0 mt-4" id="inwardheadingtxt"></h5>
@@ -195,11 +252,17 @@
                                                 <input type="hidden" id="siteNameIdHidden" value="@UserSession.SiteId">
                                             }
                                         </div>
-                                        <div class="col-lg-12 col-12">
+                                        <div class="col-lg-8 col-12">
                                             <label class="form-label">Supplier</label>
                                             <input type="text" id="inwardSupplierList" name="inwardSupplierList" class="form-control" placeholder="Supplier">
                                             <input type="hidden" id="inwardSupplierListHidden" name="inwardSupplierListHidden">
                                         </div>
+                                        <div class="col-lg-4 col-12">
+                                            <label class="form-label">Invoice NO</label>
+                                            <input type="text" id="txtIteminwordInvoice" class="form-control" value="" />
+                                            <span id="spninvoiceNo" class="text-danger"></span>
+                                        </div>
+
                                         <div class="container">
                                             <div id="MultipleImageContainer">
                                                 <div class="row multiple-images">

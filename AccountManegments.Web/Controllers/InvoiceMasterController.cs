@@ -61,7 +61,7 @@ namespace AccountManegments.Web.Controllers
                         }
                     }
                     ViewBag.SupplierInvoiceNo = invoiceDetails.InvoiceNo;
-                    ViewBag.EditShippingAddress = invoiceDetails.ShippingAddress;
+                    ViewData["EditShippingAddress"] = invoiceDetails.ShippingAddress ?? string.Empty;
                     ViewBag.GroupAddress = invoiceDetails.GroupAddress;
                 }
 
@@ -83,7 +83,7 @@ namespace AccountManegments.Web.Controllers
                 var SiteId = UserSession.SiteId;
                 if (string.IsNullOrEmpty(SiteId))
                 {
-                    ViewBag.SiteAddress = "";
+                    ViewData["SiteAddress"] = "";
                 }
                 else
                 {
@@ -314,7 +314,7 @@ namespace AccountManegments.Web.Controllers
                 {
                     jsonData = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
                     supplierDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceModel>>(jsonData.data.ToString());
-
+                    //supplierDetails = supplierDetails.Where(a => a.SupplierName == "ASIAN PIPES AND VALVES" && a.NetAmount > 0).ToList();
                     var result = new
                     {
                         TotalCredit = jsonData.TotalCredit,
@@ -1071,13 +1071,15 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 2).Value = "Date";
                         ws.Cell(row, 3).Value = "Company";
                         ws.Cell(row, 4).Value = "Supplier";
-                        ws.Cell(row, 5).Value = "Item Name";
-                        ws.Cell(row, 6).Value = "Quantity";
-                        ws.Cell(row, 7).Value = "Rate";
-                        ws.Cell(row, 8).Value = "Gst";
-                        ws.Cell(row, 9).Value = "Amount";
+                        ws.Cell(row, 5).Value = "Group";
+                        ws.Cell(row, 6).Value = "Item Name";
+                        ws.Cell(row, 7).Value = "Units";
+                        ws.Cell(row, 8).Value = "Quantity";
+                        ws.Cell(row, 9).Value = "Rate";
+                        ws.Cell(row, 10).Value = "Gst";
+                        ws.Cell(row, 11).Value = "Amount";
 
-                        var headerRange = ws.Range(row, 1, row, 9);
+                        var headerRange = ws.Range(row, 1, row, 11);
                         headerRange.Style.Font.Bold = true;
                         headerRange.Style.Fill.BackgroundColor = XLColor.Gray;
                         headerRange.Style.Font.FontColor = XLColor.White;
@@ -1096,11 +1098,13 @@ namespace AccountManegments.Web.Controllers
                             foreach (var item in Supplier.ItemList ?? new List<POItemDetailsModel>())
                             {
                                 ws.Cell(row, 4).Value = Supplier.SupplierName ?? string.Empty;
-                                ws.Cell(row, 5).Value = item.ItemName ?? string.Empty;
-                                ws.Cell(row, 6).Value = item.Quantity ;
-                                ws.Cell(row, 7).Value = item.PricePerUnit;
-                                ws.Cell(row, 8).Value = item.Gstamount ?? 0;
-                                ws.Cell(row, 9).Value = item.TotalAmount ?? 0;
+                                ws.Cell(row, 5).Value = Supplier.SiteGroup ?? string.Empty;
+                                ws.Cell(row, 6).Value = item.ItemName ?? string.Empty;
+                                ws.Cell(row, 7).Value = item.UnitTypeName ?? string.Empty;
+                                ws.Cell(row, 8).Value = item.Quantity;
+                                ws.Cell(row, 9).Value = item.PricePerUnit;
+                                ws.Cell(row, 10).Value = item.Gstamount ?? 0;
+                                ws.Cell(row, 11).Value = item.TotalAmount ?? 0;
                                 row++;
                             }
                         }

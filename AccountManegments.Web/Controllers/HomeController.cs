@@ -205,9 +205,18 @@ namespace AccountManegments.Web.Controllers
                     UserSession.SiteId = SiteId.ToString();
                 }
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
-                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+                string apiUrl = $"ItemInWord/GetItemInWordList";
+                InwardListRequestModel request = new InwardListRequestModel()
+                {
+                    itemname = searchText,
+                    supplier = null,
+                    startDate = null,
+                    enddate = null,
+                    sortBy = sortBy,
+                    siteId = siteId
+                };
 
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+                ApiResponseModel res = await APIServices.PostAsync(request, apiUrl);
 
                 if (res.code == 200)
                 {

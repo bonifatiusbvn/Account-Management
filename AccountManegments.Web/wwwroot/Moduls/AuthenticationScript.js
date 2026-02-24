@@ -6,6 +6,26 @@ GetDashboardInvoiceList();
 GetDashboardSupplierList();
 GetDashboardInwardList();
 fn_getState('dropState', 1);
+
+function fn_getState(drpstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+    $('#' + drpstate).empty();
+    $('#' + drpstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
 function GetUserSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',

@@ -36,7 +36,7 @@ namespace AccountManegments.Web.Controllers
         }
         [FormPermissionAttribute("Inward Challan-View")]
         [HttpGet]
-        public async Task<IActionResult> ItemInWordListAction(string? searchText, string? searchBy, string? sortBy, Guid? SiteId)
+        public async Task<IActionResult> ItemInWordListAction(string? supplier, string? itemname, DateTime? startDate, DateTime? enddate, string? sortBy, Guid? SiteId)
         {
             try
             {
@@ -45,9 +45,18 @@ namespace AccountManegments.Web.Controllers
                     UserSession.SiteId = SiteId.ToString();
                 }
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
-                string apiUrl = $"ItemInWord/GetItemInWordList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}&&siteId={siteId}";
+                string apiUrl = $"ItemInWord/GetItemInWordList";
+                InwardListRequestModel request = new InwardListRequestModel()
+                {
+                    itemname = itemname,
+                    supplier = supplier,
+                    startDate = startDate,
+                    enddate = enddate,
+                    sortBy = sortBy,
+                    siteId = siteId
+                };
 
-                ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
+                ApiResponseModel res = await APIServices.PostAsync(request, apiUrl);
 
                 if (res.code == 200)
                 {
@@ -93,6 +102,7 @@ namespace AccountManegments.Web.Controllers
                     CreatedOn = DateTime.Now,
                     IsApproved = false,
                     IsDeleted = false,
+                    InvoiceNo = ItemInWordDetails.InvoiceNo
                 };
                 var postuser = await APIServices.PostAsync(ItemInword, "ItemInWord/AddItemInWordDetails");
                 if (postuser.code == 200)
@@ -246,7 +256,7 @@ namespace AccountManegments.Web.Controllers
                     IsApproved = isApproved,
                     DocumentLists = documentList,
                     SupplierId = InsertDetails.SupplierId,
-
+                    InwardInvoiceNo = InsertDetails.InwardInvoiceNo
                 };
 
                 ApiResponseModel postuser = await APIServices.PostAsync(ItemInwordDetails, "ItemInWord/InsertMultipleItemInWordDetails");
@@ -307,7 +317,7 @@ namespace AccountManegments.Web.Controllers
                     DocumentLists = documentList,
                     SiteId = UpdateDetails.SiteId,
                     SupplierId = UpdateDetails.SupplierId,
-
+                    InwardInvoiceNo = UpdateDetails.InwardInvoiceNo
                 };
 
                 ApiResponseModel postuser = await APIServices.PostAsync(ItemInwordDetails, "ItemInWord/UpdatetMultipleItemInWordDetails");

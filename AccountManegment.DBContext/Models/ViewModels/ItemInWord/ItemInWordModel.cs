@@ -41,6 +41,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? SiteName { get; set; }
         public Guid? SupplierId { get; set; }
         public string? SupplierName { get; set; }
+        public string? InvoiceNo { get; set; }
 
     }
     public class ItemInWordRequestModel
@@ -70,6 +71,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
 
         public DateTime CreatedOn { get; set; }
         public Guid? SupplierId { get; set; }
+        public string? InvoiceNo { get; set; }
 
     }
     public class InwardIsApprovedMasterModel
@@ -81,5 +83,21 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
     {
         public Guid InwardId { get; set; }
         public bool? IsApproved { get; set; }
+    }
+
+
+
+    public class InwardListRequestModel
+    {
+
+        public string? supplier { get; set; }
+        public string? itemname { get; set; }
+        public DateTime? startDate { get; set; }
+        public DateTime? enddate { get; set; }
+        public string? searchText { get; set; }
+        public string? searchBy { get; set; }
+        public string? sortBy { get; set; }
+        public Guid? siteId { get; set; }
+
     }
 }

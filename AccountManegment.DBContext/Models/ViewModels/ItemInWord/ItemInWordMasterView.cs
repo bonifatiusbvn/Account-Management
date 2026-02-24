@@ -45,6 +45,8 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public Guid? SupplierId { get; set; }
 
         public string? SupplierName { get; set; }
+        public string? InwardInvoiceNo { get; set; }
+
         public List<ItemInWordDocumentModel>? DocumentLists { get; set; }
-    }   
+    }
 }

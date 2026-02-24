@@ -1,9 +1,10 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.DBContext;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.ItemInWord;
 using AccountManagement.DBContext.Models.ViewModels.ItemMaster;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseRequest;
-using AccountManagement.Repository.Interface.Repository.ItemInWord;
+using AccountManagement.Repository.Interface.Repository.IItemInWord;
 using AccountManagement.Repository.Interface.Repository.PurchaseOrder;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace AccountManagement.Repository.Repository.ItemInWordRepository
 {
-    public class ItemInWordRepo : Iiteminword
+    public class ItemInWordRepo : IItemInward
     {
         public ItemInWordRepo(DbaccManegmentContext context)
         {
@@ -45,6 +46,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     IsDeleted = ItemInWordDetails.IsDeleted,
                     CreatedBy = ItemInWordDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
+                    InvoiceNo = ItemInWordDetails.InvoiceNo
                 };
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "Item inward successfully created.";
@@ -87,7 +89,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             return response;
         }
 
-        public async Task<IEnumerable<ItemInWordModel>> GetItemInWordList(string? searchText, string? searchBy, string? sortBy, Guid? siteId)
+        public async Task<IEnumerable<ItemInWordModel>> GetItemInWordList(InwardListRequestModel request)
         {
             try
             {
@@ -97,7 +99,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                       join j in Context.SupplierMasters on a.SupplierId equals j.SupplierId into supplierGroup
                                       from j in supplierGroup.DefaultIfEmpty()
-                                      where a.IsDeleted == false && (siteId == null || a.SiteId == siteId)
+                                      where a.IsDeleted == false && (request.siteId == null || a.SiteId == request.siteId)
                                       select new ItemInWordModel
                                       {
                                           InwordId = a.InwordId,
@@ -116,24 +118,25 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                           IsApproved = a.IsApproved,
                                           SupplierId = a.SupplierId,
                                           SupplierName = j != null ? j.SupplierName : null,
+                                          InvoiceNo = a.InvoiceNo
                                       });
 
-                if (!string.IsNullOrEmpty(searchText))
+                if (!string.IsNullOrEmpty(request.searchText))
                 {
-                    searchText = searchText.ToLower();
+                    request.searchText = request.searchText.ToLower();
                     ItemInWordList = ItemInWordList.Where(u =>
-                        u.Item.ToLower().Contains(searchText) ||
-                        u.Quantity.ToString().Contains(searchText)
+                        u.Item.ToLower().Contains(request.searchText) ||
+                        u.Quantity.ToString().Contains(request.searchText)
                     );
                 }
 
-                if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
+                if (!string.IsNullOrEmpty(request.searchText) && !string.IsNullOrEmpty(request.searchBy))
                 {
-                    searchText = searchText.ToLower();
-                    switch (searchBy.ToLower())
+                    request.searchText = request.searchText.ToLower();
+                    switch (request.searchBy.ToLower())
                     {
                         case "itemname":
-                            ItemInWordList = ItemInWordList.Where(u => u.Item.ToLower().Contains(searchText));
+                            ItemInWordList = ItemInWordList.Where(u => u.Item.ToLower().Contains(request.searchText));
                             break;
                         default:
 
@@ -141,14 +144,14 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     }
                 }
 
-                if (string.IsNullOrEmpty(sortBy))
+                if (string.IsNullOrEmpty(request.sortBy))
                 {
                     ItemInWordList = ItemInWordList.OrderByDescending(u => u.CreatedOn);
                 }
                 else
                 {
-                    string sortOrder = sortBy.StartsWith("Ascending") ? "ascending" : "descending";
-                    string field = sortBy.Substring(sortOrder.Length);
+                    string sortOrder = request.sortBy.StartsWith("Ascending") ? "ascending" : "descending";
+                    string field = request.sortBy.Substring(sortOrder.Length);
 
                     switch (field.ToLower())
                     {
@@ -208,6 +211,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                                       CreatedOn = a.CreatedOn,
                                       SupplierId = a.SupplierId,
                                       SupplierName = s != null ? s.SupplierName : null,
+                                      InwardInvoiceNo = a.InvoiceNo
                                   }).First();
 
                 List<ItemInWordDocumentModel> documentList = (from a in Context.ItemInWordDocuments.Where(a => a.RefInWordId == itemInWordList.InwordId)
@@ -273,6 +277,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.ReceiverName = ItemInWordDetails.ReceiverName;
                     ItemInWordData.VehicleNumber = ItemInWordDetails.VehicleNumber;
                     ItemInWordData.Date = ItemInWordDetails.Date;
+                    ItemInWordData.InvoiceNo = ItemInWordData.InvoiceNo;
 
                 }
                 Context.ItemInwords.Update(ItemInWordData);
@@ -309,6 +314,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     IsDeleted = false,
                     CreatedBy = firstItemInWordDetail.CreatedBy,
                     CreatedOn = DateTime.Now,
+                    InvoiceNo = firstItemInWordDetail.InwardInvoiceNo
                 };
                 Context.ItemInwords.Add(ItemDetails);
                 foreach (var item in firstItemInWordDetail.DocumentLists)
@@ -357,6 +363,7 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
                     ItemInWordData.Date = UpdateInWordDetails.Date;
                     ItemInWordData.SiteId = UpdateInWordDetails.SiteId;
                     ItemInWordData.SupplierId = UpdateInWordDetails.SupplierId;
+                    ItemInWordData.InvoiceNo = UpdateInWordDetails.InwardInvoiceNo;
 
                     Context.ItemInwords.Update(ItemInWordData);
                 }
@@ -424,6 +431,8 @@ namespace AccountManagement.Repository.Repository.ItemInWordRepository
             }
             return response;
         }
+
+
     }
 }
 

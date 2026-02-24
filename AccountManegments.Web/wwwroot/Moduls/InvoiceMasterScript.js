@@ -1608,7 +1608,7 @@ $(document).ready(function () {
         var groupId = selectedOption.data('groupids');
         GetGroupAddress(groupId);
     });
-    var EditSiteId = $('#txtModelSiteId').val();
+    var EditSiteId = $('#txtModelSiteId').val() == "" ? "00000000-0000-0000-0000-000000000000" : $('#txtModelSiteId').val();
     var SessionSiteId = $('#txtsessionSiteName').val();
     var Company = $('#textCompanyName').val();
     if (EditSiteId != "00000000-0000-0000-0000-000000000000" && Company != null && SessionSiteId == "") {
@@ -1807,6 +1807,7 @@ function ExportToPDFInvoiceDetails() {
     });
 }
 function ExportToExcelInvoiceDetails() {
+
     var CompanyId = $('#ddlFilterInvoiceCompany').val();
     var SupplierId = $('#ddlFilterInvoiceSupplierHidden').val();
     siteloadershow();

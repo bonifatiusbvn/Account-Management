@@ -68,7 +68,7 @@ function GetAllSupplierList() {
                     value: data.supplierId
                 };
             });
-           
+
             $("#textReportSupplierName").autocomplete({
                 source: supplierDetails,
                 minLength: 0,
@@ -133,9 +133,11 @@ $(document).ready(function () {
 
 
     function setTodaysDate() {
+        var fromtoday = new Date("2017-01-01");
+        var fromDate = fromtoday.toISOString().substr(0, 10);
         var today = new Date();
         var formattedDate = today.toISOString().substr(0, 10);
-        $('#startDate').val(formattedDate);
+        $('#startDate').val(fromDate);
         $('#endDate').val(formattedDate);
     }
 
@@ -145,15 +147,17 @@ $(document).ready(function () {
         if (selectedValue === 'This Month' || selectedValue === 'This Year') {
             $('#startDate, #endDate, #yearDropdown').addClass('d-none');
         } else if (selectedValue === 'Between Date') {
-            $('#startDate, #endDate, #searchReportButton').removeClass('d-none');
+            $('#endDate, #searchReportButton').removeClass('d-none');
             $('#yearDropdown').addClass('d-none');
-            setTodaysDate(); 
+            setTodaysDate();
         } else if (selectedValue === 'Between Year') {
             $('#yearDropdown, #searchReportButton').removeClass('d-none');
             $('#startDate, #endDate').addClass('d-none');
-            populateYearDropdown(); 
+            populateYearDropdown();
         }
     });
+
+    $('#timePeriodDropdown').trigger('change');
 });
 
 
@@ -388,8 +392,8 @@ function GetInvoiceDetailsBySupplierExcelReport() {
             break;
         case 'Between Date':
             objData.filterType = "dateRange";
-            objData.filterType = $('#startDate').val();
-            objData.filterType = $('#endDate').val();
+            objData.startDate = $('#startDate').val();
+            objData.endDate = $('#endDate').val();
             break;
         case 'Between Year':
             objData.filterType = "betweenYear";
@@ -399,7 +403,7 @@ function GetInvoiceDetailsBySupplierExcelReport() {
             objData.filterType = null;
             break;
     }
-    var ajaxUrl ='/Report/GetInvoiceDetailsBySupplierExcelReport';
+    var ajaxUrl = '/Report/GetInvoiceDetailsBySupplierExcelReport';
     $.ajax({
         url: ajaxUrl,
         type: 'GET',
@@ -520,7 +524,7 @@ dtSalesCoulms = [
                 processedInvoices[supplierName] = new Set();
             }
             var uniqueKey = (SalesInvoiceNo === "PayIn" || invoiceType === 'Sales Return' || invoiceType === 'Credit Note') ? SalesInvoiceNo + "_" + totalAmount : SalesInvoiceNo;
-            
+
             if (!processedInvoices[supplierName].has(uniqueKey)) {
 
                 if (SalesInvoiceNo === "PayIn" || invoiceType === 'Sales Return' || invoiceType === 'Credit Note') {
@@ -529,7 +533,7 @@ dtSalesCoulms = [
                 else {
                     supplierBalances[supplierName] += totalAmount;
                 }
-                
+
                 processedInvoices[supplierName].add(uniqueKey);
             }
 
@@ -645,7 +649,7 @@ $(document).ready(function () {
             canDelete = permission.delete;
             break;
         }
-    } 
+    }
     if (canEdit || canDelete) {
         dtSalesCoulms.push({
             "data": null,

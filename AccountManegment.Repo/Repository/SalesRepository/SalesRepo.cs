@@ -212,7 +212,7 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                         u.SalesInvoice.SalesInvoiceNo.ToLower().Contains(searchText) ||
                         u.SalesInvoice.TotalAmount.ToString().Contains(searchText) ||
                         u.Item.ItemName.ToLower().Contains(searchText) ||
-                        u.SalesInvoice.Date.ToString().Contains(searchText) 
+                        u.SalesInvoice.Date.ToString().Contains(searchText)
                     );
                 }
                 if (!string.IsNullOrEmpty(searchText) && !string.IsNullOrEmpty(searchBy))
@@ -645,7 +645,8 @@ namespace AccountManagement.Repository.Repository.SalesRepository
                     InventoryInvoice.Details = InventoryDetails.Details;
                     InventoryInvoice.UpdatedOn = DateTime.Now;
                     InventoryInvoice.UpdatedBy = InventoryDetails.CreatedBy;
-                };
+                }
+                ;
                 Context.InventoryInwards.Update(InventoryInvoice);
 
                 await Context.SaveChangesAsync();

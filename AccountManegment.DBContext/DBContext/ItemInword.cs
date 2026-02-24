@@ -39,6 +39,8 @@ public partial class ItemInword
 
     public DateTime? UpdatedOn { get; set; }
 
+    public string? InvoiceNo { get; set; }
+
     public virtual ICollection<ItemInWordDocument> ItemInWordDocuments { get; set; } = new List<ItemInWordDocument>();
 
     public virtual ItemMaster ItemNavigation { get; set; } = null!;

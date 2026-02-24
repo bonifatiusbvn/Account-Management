@@ -1820,3 +1820,47 @@ table.td {
     border-right-style: solid;
     border-right-width: 1pt
 }
+
+
+.table-responsive::-webkit-scrollbar {
+    width: 16px; /* increase width */
+    height: 16px; /* for horizontal scrollbar */
+}
+
+/* Track */
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Thumb */
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #d5cfcf;
+    border-radius: 5px;
+}
+
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #d5cfcf;
+    }
+
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front {
+    width: 350px !important;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar {
+    width: 16px; /* increase width */
+    height: 16px; /* for horizontal scrollbar */
+}
+/* Track */
+.dataTables_scrollBody::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Thumb */
+.dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background: #d5cfcf;
+    border-radius: 5px;
+}
+
+    .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+        background: #d5cfcf;
+    }

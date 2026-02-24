@@ -25,6 +25,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Linq.Dynamic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using AccountManagement.DBContext.DBContext;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 {
@@ -367,7 +368,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                 }).FirstOrDefault();
                 List<POItemDetailsModel> itemlist = (from a in Context.SupplierInvoiceDetails.Where(a => a.RefInvoiceId == supplierList.Id)
                                                      join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId into unitJoin
-                                                     from b in unitJoin.DefaultIfEmpty() 
+                                                     from b in unitJoin.DefaultIfEmpty()
                                                      join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                                      select new POItemDetailsModel
                                                      {
@@ -378,7 +379,7 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                          Gstamount = a.Gst,
                                                          TotalAmount = a.TotalAmount,
                                                          UnitType = a.UnitTypeId,
-                                                         UnitTypeName = b != null ? b.UnitName : null, 
+                                                         UnitTypeName = b != null ? b.UnitName : null,
                                                          PricePerUnit = a.Price,
                                                          GstPercentage = a.Gstper,
                                                          DiscountAmount = a.DiscountAmount,
@@ -1716,19 +1717,24 @@ namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
                                                      Date = a.Date,
                                                      CompanyName = c.CompanyName,
                                                      SiteName = d.SiteName,
+                                                     SiteGroup = a.SiteGroup,
                                                      SupplierName = b.SupplierName,
                                                      SupplierInvoiceNo = a.SupplierInvoiceNo,
-                                                 }).OrderBy(e=>e.Date).ToListAsync();
+                                                 }).OrderBy(e => e.Date).ToListAsync();
 
                 foreach (var invoice in supplierInvoiceData)
                 {
                     var itemList = await (from a in Context.SupplierInvoiceDetails
+                                          join b in Context.UnitMasters on a.UnitTypeId equals b.UnitId into unitJoin
+                                          from b in unitJoin.DefaultIfEmpty()
                                           join i in Context.ItemMasters on a.ItemId equals i.ItemId
                                           where a.RefInvoiceId == invoice.Id
                                           select new POItemDetailsModel
                                           {
                                               ItemId = a.ItemId,
                                               ItemName = i.ItemName,
+                                              UnitType = a.UnitTypeId,
+                                              UnitTypeName = b != null ? b.UnitName : null,
                                               Quantity = a.Quantity,
                                               Gstamount = a.Gst,
                                               TotalAmount = a.TotalAmount,

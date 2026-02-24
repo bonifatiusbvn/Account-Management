@@ -22,6 +22,7 @@ using AccountManagement.DBContext.Models.ViewModels.InvoiceMaster;
 using AccountManagement.Repository.Interface.Repository.InvoiceMaster;
 using AccountManagement.Repository.Services.PurchaseOrder;
 using Azure;
+using AccountManagement.DBContext.DBContext;
 
 namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
 {
@@ -839,7 +840,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.BillingAddress = PurchaseOrderDetails.BillingAddress;
                     PurchaseOrder.CreatedBy = PurchaseOrderDetails.CreatedBy;
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
-                };
+                }
+                ;
                 responseModel.code = (int)HttpStatusCode.OK;
                 responseModel.message = "Purchase order successfully updated.";
                 Context.PurchaseOrders.Update(PurchaseOrder);

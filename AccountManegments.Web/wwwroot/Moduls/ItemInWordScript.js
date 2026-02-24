@@ -2,12 +2,24 @@
 GetSiteList();
 ClearItemInWordTextBox();
 GetSupplierList();
-
+GetAllSupplierList();
+GetAllItemList();
 function AllItemInWordListTable() {
     var searchText = $('#txtItemInWordSearch').val();
     var searchBy = $('#ItemInWordSearchBy').val();
+    var supplier = $('#textInwardSupplierNameHidden').val();
+    var itemname = $('#textInwardItemNameHidden').val();
+    var startDate = $('#InwardstartDate').val();
+    var enddate = $('#InwardendDate').val();
 
-    $.get("/ItemInWord/ItemInWordListAction", { searchBy: searchBy, searchText: searchText })
+    $.get("/ItemInWord/ItemInWordListAction", {
+        supplier: supplier,
+        itemname: itemname,
+        startDate: startDate,
+        enddate: enddate,
+        sortBy: $('#ItemInWordSortBy').val() || '',
+        //     SiteId: siteid
+    })
         .done(function (result) {
             clearCreateInwardtext();
             $("#itemInWordtbody").html(result);
@@ -18,17 +30,49 @@ function AllItemInWordListTable() {
         });
 }
 
+function GetAllSiteList() {
+    $.ajax({
+        url: '/SiteMaster/GetSiteNameList',
+        method: 'GET',
+        success: function (result) {
+            var $dropdown = $("#drpInwardSiteName");
+            $dropdown.empty();
+            $dropdown.append('<option value="">All Site</option>');
+
+            result.forEach(function (data) {
+                $dropdown.append('<option value="' + data.siteId + '" data-payoutsite-name="' + data.siteName + '">' + data.siteName + '</option>');
+            });
+
+        },
+        error: function (err) {
+            console.error("Failed to fetch Site list: ", err);
+        }
+    });
+}
+
 function filterItemInWordTable() {
     siteloadershow();
-    var searchText = $('#txtItemInWordSearch').val();
-    var searchBy = $('#ItemInWordSearchBy').val();
+    //var searchText = $('#txtItemInWordSearch').val();
+
+    ///var siteid = $('#drpInwardSiteName').val();
+    var supplier = $('#textInwardSupplierNameHidden').val();
+    var itemname = $('#textInwardItemNameHidden').val();
+    var startDate = $('#InwardstartDate').val();
+    var enddate = $('#InwardendDate').val();
+
+
+
 
     $.ajax({
         url: '/ItemInWord/ItemInWordListAction',
         type: 'GET',
         data: {
-            searchText: searchText,
-            searchBy: searchBy
+            supplier: supplier,
+            itemname: itemname,
+            startDate: startDate,
+            enddate: enddate,
+            sortBy: $('#ItemInWordSortBy').val() || '',
+            //     SiteId: siteid
         },
         success: function (result) {
             siteloaderhide();
@@ -45,11 +89,21 @@ function filterItemInWordTable() {
 function sortItemInWordTable() {
     siteloadershow();
     var sortBy = $('#ItemInWordSortBy').val();
+    var supplier = $('#textInwardSupplierNameHidden').val();
+    var itemname = $('#textInwardItemNameHidden').val();
+    var startDate = $('#InwardstartDate').val();
+    var enddate = $('#InwardendDate').val();
+
     $.ajax({
         url: '/ItemInWord/ItemInWordListAction',
         type: 'GET',
         data: {
-            sortBy: sortBy
+            supplier: supplier,
+            itemname: itemname,
+            startDate: startDate,
+            enddate: enddate,
+            sortBy: $('#ItemInWordSortBy').val() || '',
+            //     SiteId: siteid
         },
         success: function (result) {
             siteloaderhide();
@@ -123,10 +177,186 @@ function SelectItemInWordDetails(InwordId, element) {
     });
 }
 
+
+function GetAllSupplierList() {
+    $.ajax({
+        url: '/Supplier/GetSupplierNameList',
+        method: 'GET',
+        success: function (result) {
+            var supplierDetails = result.map(function (data) {
+                return {
+                    label: data.supplierName,
+                    value: data.supplierId
+                };
+            });
+
+            $("#textInwardSupplierName").autocomplete({
+                source: supplierDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textInwardSupplierName").val(ui.item.label);
+                    $("#textInwardSupplierNameHidden").val(ui.item.value);
+                    selectedSupplierName = ui.item.label;
+                    $("#textInwardSupplierNameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                if ($("#textInwardSupplierName").val() === "") {
+                    $("#textInwardSupplierNameHidden").val("");
+                }
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch supplier list: ", err);
+        }
+    });
+}
+
+function GetAllItemList() {
+    $.ajax({
+        url: '/ItemMaster/GetItemNameList',
+        method: 'GET',
+        success: function (result) {
+            var itemDetails = result.map(function (data) {
+
+                return {
+                    label: data.itemName,
+                    value: data.itemId
+
+                };
+            });
+
+            $("#textInwardItemName").autocomplete({
+                source: itemDetails,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#textInwardItemName").val(ui.item.label);
+                    $("#textInwardItemNameHidden").val(ui.item.value);
+                    selectedItemName = ui.item.label;
+                    $("#textInwardItemNameHidden").trigger('change');
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                if ($("#textInwardItemName").val() === "") {
+                    $("#textInwardItemNameHidden").val("");
+                }
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch Item list: ", err);
+        }
+    });
+}
+
 $(document).ready(function () {
     fn_autoselect('#txtUnitType', '/ItemMaster/GetAllUnitType', '#txtUnitTypeHidden');
     fn_autoselect('#searchItemnameInput', '/ItemMaster/GetItemNameList', '#txtItemName');
+    GetAllSiteList();
+    $('#timePeriodInwardDropdown').change(function () {
+        var selectedValue = $(this).val();
+
+        if (selectedValue === 'This Month' || selectedValue === 'This Year') {
+            $('#InwardstartDate, #InwardendDate, #InwardyearDropdown').addClass('d-none');
+            if (selectedValue === 'This Month') {
+                setThisMonthDates();
+            } else {
+                setThisYearDates();
+            }
+        } else if (selectedValue === 'Between Date') {
+            $('#InwardstartDate, #InwardendDate, #InwardsearchReportButton').removeClass('d-none');
+            $('#InwardyearDropdown').addClass('d-none');
+            setTodaysDate();
+        } else if (selectedValue === 'Between Year') {
+            $('#InwardyearDropdown, #InwardsearchButton').removeClass('d-none');
+            $('#InwardstartDate, #InwardendDate').addClass('d-none');
+            populateYearDropdown();
+        }
+    });
+
+    $('#InwardyearDropdown').change(function () {
+        var selectedYear = $(this).val(); // e.g. 2024-2025
+
+        if (!selectedYear) return;
+
+        var years = selectedYear.split('-');
+        var startYear = parseInt(years[0]);
+        var endYear = parseInt(years[1]);
+
+        // Financial year: 1 Apr – 31 Mar
+        var startDate = new Date(startYear, 3, 1);   // April 1
+        var endDate = new Date(startYear + 1, 2, 31);      // March 31
+        
+        $('#InwardstartDate').val(formatDate(startDate));
+        $('#InwardendDate').val(formatDate(endDate));
+    });
 });
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+function setThisMonthDates() {
+    var today = new Date();
+
+    // First day of current month
+    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // Last day of current month
+    var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    $('#InwardstartDate').val(formatDate(firstDay));
+    $('#InwardendDate').val(formatDate(lastDay));
+}
+
+function setThisYearDates() {
+    var today = new Date();
+
+    // First day of current year
+    var firstDay = new Date(today.getFullYear(), 0, 1);
+
+    // Last day of current year
+    var lastDay = new Date(today.getFullYear(), 11, 31);
+
+    $('#InwardstartDate').val(formatDate(firstDay));
+    $('#InwardendDate').val(formatDate(lastDay));
+}
+function populateYearDropdown() {
+    var currentYear = new Date().getFullYear();
+    var startYear = 2023;
+    var yearDropdown = $('#InwardyearDropdown');
+
+    yearDropdown.empty().append('<option value="">Select Year</option>');
+
+    for (var year = startYear; year <= currentYear; year++) {
+        var nextYear = (year + 1).toString().slice(-2);
+        var yearRange = year + '-' + nextYear;
+        yearDropdown.append('<option value="' + yearRange + '">' + yearRange + '</option>');
+    }
+}
+
+function setTodaysDate() {
+    var today = new Date();
+    var formattedDate = today.toISOString().substr(0, 10);
+    $('#InwardstartDate').val(formattedDate);
+    $('#InwardendDate').val(formattedDate);
+}
+
+
+
+function fn_ResetAllInwardDropdown() {
+    window.location = '/ItemInWord/ItemInWord';
+}
 function GetSiteList() {
     $.ajax({
         url: '/SiteMaster/GetSiteNameList',
@@ -209,7 +439,7 @@ function GetSupplierList() {
 
 function ClearItemInWordTextBox() {
     clearCreateInwardtext();
-    $('#inwardheadingtxt').text('Create Item Inword');
+    $('#inwardheadingtxt').text('Create Inward Item');
     $('#addInWordInfo').removeClass('d-none');
     $('#inwardInfo').addClass('d-none');
     $('#btnitemInWord').show();
@@ -221,6 +451,8 @@ function ClearItemInWordTextBox() {
     $("#inwardSupplierListHidden").val('');
     $("#inwardSupplierList").val('');
     $("#spnInWardSiteName").hide();
+    $("#txtIteminwordInvoice").val('')
+
 }
 
 function clearCreateInwardtext() {
@@ -303,6 +535,8 @@ function EditItemInWordDetails(InwordId) {
             var date = response.date;
             var formattedDate = date.substr(0, 10);
             $('#txtIteminwordDate').val(formattedDate);
+            
+            $('#txtIteminwordInvoice').val(response.inwardInvoiceNo);
 
             if (response.documentLists && response.documentLists.length > 0) {
                 var documentNames = "";
@@ -447,7 +681,7 @@ function removenewaddImage(element) {
     row.remove();
 
     if (fileIndex !== undefined) {
-        additionalFiles.splice(fileIndex, 1); 
+        additionalFiles.splice(fileIndex, 1);
     }
 
     additionalFiles.forEach((file, index) => {
@@ -468,7 +702,7 @@ function showpictures() {
                 return function (event) {
                     var newRow = "<div class='col-6 col-sm-6 DocumentName'><div><div id='showimages'><div onclick='removenewaddImage(this)' class='img-remove'><div class='font-22'><i class='lni lni-close'></i></div></div><img src='" + event.target.result + "' class='displayImage' data-document='" + file.name + "' data-file-index='" + additionalFiles.length + "'></div></div></div>";
                     $("#addNewImage").append(newRow);
-                    additionalFiles.push(file); 
+                    additionalFiles.push(file);
                 };
             })(file);
             reader.readAsDataURL(file);
@@ -480,10 +714,10 @@ function InsertMultipleItemInWordDetails() {
     siteloadershow();
     if ($("#itemInWordForm").valid()) {
         var siteId = $("#siteNameListHidden").val();
-        if (siteId == undefined)
-        {
+        if (siteId == undefined) {
             siteId = $("#siteNameIdHidden").val();
         }
+
         if (siteId != "") {
             var ItemInWordRequest = {
                 UnitTypeId: $("#txtUnitTypeHidden").val(),
@@ -496,6 +730,7 @@ function InsertMultipleItemInWordDetails() {
                 ReceiverName: $("#txtReceiverName").val(),
                 Date: $("#txtIteminwordDate").val(),
                 SupplierId: $("#inwardSupplierListHidden").val(),
+                InwardInvoiceNo: $("#txtIteminwordInvoice").val()
             };
 
             var form_data = new FormData();
@@ -504,7 +739,7 @@ function InsertMultipleItemInWordDetails() {
             for (var i = 0; i < additionalFiles.length; i++) {
                 form_data.append("DocDetails", additionalFiles[i]);
             }
-
+            
             $.ajax({
                 url: '/ItemInWord/InsertMultipleItemInWordDetail',
                 type: 'POST',
@@ -529,8 +764,7 @@ function InsertMultipleItemInWordDetails() {
                 }
             });
         }
-        else
-        {
+        else {
             siteloaderhide();
             $("#spnInWardSiteName").show().text('select the site');
             toastr.error("Kindly select the site");
@@ -564,8 +798,9 @@ function UpdateMultipleItemInWordDetails() {
                 SupplierId: $("#inwardSupplierListHidden").val(),
                 DocumentName: documentName,
                 SiteId: siteId,
+                InwardInvoiceNo: $("#txtIteminwordInvoice").val(),
             };
-
+            
             var form_data = new FormData();
             form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 
@@ -598,8 +833,7 @@ function UpdateMultipleItemInWordDetails() {
                 }
             });
         }
-        else
-        {
+        else {
             siteloaderhide();
             $("#spnInWardSiteName").show().text('select the site');
             toastr.error("Kindly select the site");

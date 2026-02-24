@@ -1,4 +1,5 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.DBContext;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
@@ -136,7 +137,8 @@ namespace AccountManagement.Repository.Repository.PurchaseOrderRepository
                     PurchaseOrder.Gst = PurchaseOrderDetails.Gst;
                     PurchaseOrder.CreatedBy = PurchaseOrderDetails.CreatedBy;
                     PurchaseOrder.CreatedOn = PurchaseOrderDetails.CreatedOn;
-                };
+                }
+                ;
                 responseModel.code = (int)HttpStatusCode.OK;
                 responseModel.message = "Purchase order details successfully updated.";
                 Context.PurchaseOrderDetails.Update(PurchaseOrder);

@@ -1,4 +1,5 @@
 ﻿using AccountManagement.API;
+using AccountManagement.DBContext.DBContext;
 using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
@@ -201,7 +202,7 @@ namespace AccountManagement.Repository.Repository.AuthenticationRepository
             var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(Configuration["Jwt:Issuer"], Configuration["Jwt:Audience"], claims: claims.ToArray(),
-                expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+                expires: DateTime.Now.AddHours(8), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

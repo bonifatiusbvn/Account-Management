@@ -101,7 +101,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.InvoiceMaster
 
     public class SupplierInvoiceQueryResult
     {
-        public SupplierInvoice S { get; set; }
+        public String SupplierInvoiceS { get; set; }
         public string SupplierName { get; set; }
         public string CompanyName { get; set; }
         public DateTime? Date { get; set; }

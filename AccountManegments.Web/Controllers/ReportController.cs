@@ -465,8 +465,9 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 5).Value = "Supplier";
                         ws.Cell(row, 6).Value = "Credit";
                         ws.Cell(row, 7).Value = "Debit";
+                        ws.Cell(row, 8).Value = "Balance";
 
-                        var headerRange2 = ws.Range(row, 1, row, 7);
+                        var headerRange2 = ws.Range(row, 1, row, 8);
                         headerRange2.Style.Font.Bold = true;
                         headerRange2.Style.Fill.BackgroundColor = XLColor.Black;
                         headerRange2.Style.Font.FontColor = XLColor.White;
@@ -474,7 +475,7 @@ namespace AccountManegments.Web.Controllers
 
                         row++;
 
-
+                        decimal runningBalance = 0;
                         foreach (var item in SupplierDetails.InvoiceList)
                         {
                             string cellValue;
@@ -508,18 +509,28 @@ namespace AccountManegments.Web.Controllers
                             ws.Cell(row, 3).Value = item.SiteName ?? string.Empty;
                             ws.Cell(row, 4).Value = item.GroupName ?? string.Empty;
                             ws.Cell(row, 5).Value = item.SupplierName ?? string.Empty;
-                            if (item.InvoiceNo == "PayOut" || item.InvoiceType == "Purchase Return" || item.InvoiceType == "Credit Note")
+                            bool isDeduction = item.InvoiceNo == "PayOut"
+                            || item.InvoiceType == "Purchase Return"
+                            || item.InvoiceType == "Credit Note";
+
+                            if (isDeduction)
                             {
-                                ws.Cell(row, 6).Value = "";
-                                ws.Cell(row, 7).Value = item.TotalAmount;
+                                ws.Cell(row, 6).Value = "";                // Debit
+                                ws.Cell(row, 7).Value = item.TotalAmount; // Credit
+                                runningBalance -= item.TotalAmount;
                             }
                             else
                             {
-
-                                ws.Cell(row, 6).Value = item.TotalAmount;
-                                ws.Cell(row, 7).Value = "";
+                                ws.Cell(row, 6).Value = item.TotalAmount; // Debit
+                                ws.Cell(row, 7).Value = "";               // Credit
+                                runningBalance += item.TotalAmount;
                             }
+
+                            // Balance Column (Column 8)
+                            ws.Cell(row, 8).Value = runningBalance;
+
                             row++;
+
                         }
 
                         ws.Cell(row, 1).Value = "Total";
@@ -529,8 +540,9 @@ namespace AccountManegments.Web.Controllers
                         ws.Cell(row, 5).Value = string.Empty;
                         ws.Cell(row, 6).Value = SupplierDetails.TotalCreadit;
                         ws.Cell(row, 7).Value = SupplierDetails.TotalPurchase;
+                        ws.Cell(row, 8).Value = SupplierDetails.TotalPending;
 
-                        var footerRange2 = ws.Range(row, 1, row, 7);
+                        var footerRange2 = ws.Range(row, 1, row, 8);
                         footerRange2.Style.Font.Bold = true;
                         footerRange2.Style.Fill.BackgroundColor = XLColor.Black;
                         footerRange2.Style.Font.FontColor = XLColor.White;
@@ -1300,7 +1312,7 @@ namespace AccountManegments.Web.Controllers
                         dataRange.Style.Border.RightBorder = XLBorderStyleValues.Thin;
                         dataRange.Style.Border.RightBorderColor = XLColor.Black;
 
-                        row+=2;
+                        row += 2;
 
                         // Header Row 3
                         decimal SupplierTotalCredit = 0;
@@ -1327,7 +1339,7 @@ namespace AccountManegments.Web.Controllers
 
                                     SupplierTotalCredit = 0;
                                     SupplierTotalDebit = 0;
-                                    row += 2; 
+                                    row += 2;
                                 }
 
                                 ws.Cell(row, 1).Value = "Invoice No";

@@ -61,16 +61,20 @@
                         <option value="Sales">Sales</option>
                     </select>
                 </div>
-                <div class="col-md-6 col-lg-2">
-                    <select id="timePeriodPayoutDropdown" class="form-select">
-                        <option value="" selected disabled>Search By</option>
+                <div class="col-md-6 col-lg-2 d-none">
+                    <select id="timePeriodPayoutDropdown" class="form-select d-none">
+                        <option value="" disabled>Search By</option>
                         <option value="This Month">This Month</option>
                         <option value="This Year">This Year</option>
                         <option value="Till Month">Till Month</option>
                         <option value="Between Year">Between Year</option>
+                        <option value="Between Date" selected>Between Date</option>
                     </select>
                 </div>
                 <div class="col-md-6 col-lg-2 d-flex align-items-center gap-2" id="PayoutdateYearControls">
+                    <input type="date" id="timePeriodstartDate" class="form-control d-none" style="width: 130px;">
+                    <input type="date" id="timePeriodendDate" class="form-control d-none" style="width: 130px;">
+
                     <input type="month" id="txtPayoutmonth" class="form-control d-none">
                     <select id="PayoutyearDropdown" class="form-select d-none" style="width: 110px;">
                         <option value="">Select Year</option>
@@ -170,12 +174,12 @@
                         <option value="Sales">Sales</option>
                     </select>
                 </div>
-                <div class="col-md-6 col-lg-1">
-                    <select id="timePeriodDropdown" class="form-select">
-                        <option value="" selected disabled>Search By</option>
+                <div class="col-md-6 col-lg-1 d-none">
+                    <select id="timePeriodDropdown" class="form-select d-none">
+                        <option value="" disabled>Search By</option>
                         <option value="This Month">This Month</option>
                         <option value="This Year">This Year</option>
-                        <option value="Between Date">Between Date</option>
+                        <option value="Between Date" selected>Between Date</option>
                         <option value="Between Year">Between Year</option>
                     </select>
                 </div>
@@ -425,14 +429,14 @@
 <script type="text/javascript">
     let currentPayOutSortOrder = 'AscendingSupplier';
     window._userCompanyCount = @usercompanyCount;
-    document.addEventListener('DOMContentLoaded', function () {
+    @* document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('OBPayoutModal');
         modal.addEventListener('shown.bs.modal', function () {
             const today = new Date();
             const formattedDate = formatDate(today);
             document.getElementById('txtOBdate').value = formattedDate;
         });
-    });
+    }); *@
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 
     function formatDate(date) {
