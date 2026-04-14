@@ -5,8 +5,7 @@ GetSupplierList();
 GetAllSupplierList();
 GetAllItemList();
 function AllItemInWordListTable() {
-    var searchText = $('#txtItemInWordSearch').val();
-    var searchBy = $('#ItemInWordSearchBy').val();
+
     var supplier = $('#textInwardSupplierNameHidden').val();
     var itemname = $('#textInwardItemNameHidden').val();
     var startDate = $('#InwardstartDate').val();
@@ -17,16 +16,32 @@ function AllItemInWordListTable() {
         itemname: itemname,
         startDate: startDate,
         enddate: enddate,
-        sortBy: $('#ItemInWordSortBy').val() || '',
-        //     SiteId: siteid
+        sortBy: $('#ItemInWordSortBy').val() || ''
     })
         .done(function (result) {
-            clearCreateInwardtext();
-            $("#itemInWordtbody").html(result);
-        })
-        .fail(function (error) {
-            siteloaderhide();
 
+            $("#itemInWordtbody").html(result);
+
+            // ✅ CALCULATE TOTAL FROM UI (BEST WAY)
+            let totalQty = 0;
+            let totalRows = 0;
+
+            $("#itemInWordtbody tr").each(function () {
+
+                let qtyText = $(this).find(".qty").text().trim();
+
+                if (qtyText !== "") {
+                    let qty = parseFloat(qtyText) || 0;
+                    totalQty += qty;
+                    totalRows++;
+                }
+            });
+
+            $("#totalRows").text(totalRows);
+            $("#totalQty").text(totalQty.toFixed(2));
+        })
+        .fail(function () {
+            console.log("Error loading data");
         });
 }
 
@@ -293,7 +308,7 @@ $(document).ready(function () {
         // Financial year: 1 Apr – 31 Mar
         var startDate = new Date(startYear, 3, 1);   // April 1
         var endDate = new Date(startYear + 1, 2, 31);      // March 31
-        
+
         $('#InwardstartDate').val(formatDate(startDate));
         $('#InwardendDate').val(formatDate(endDate));
     });
@@ -535,7 +550,7 @@ function EditItemInWordDetails(InwordId) {
             var date = response.date;
             var formattedDate = date.substr(0, 10);
             $('#txtIteminwordDate').val(formattedDate);
-            
+
             $('#txtIteminwordInvoice').val(response.inwardInvoiceNo);
 
             if (response.documentLists && response.documentLists.length > 0) {
@@ -739,7 +754,7 @@ function InsertMultipleItemInWordDetails() {
             for (var i = 0; i < additionalFiles.length; i++) {
                 form_data.append("DocDetails", additionalFiles[i]);
             }
-            
+
             $.ajax({
                 url: '/ItemInWord/InsertMultipleItemInWordDetail',
                 type: 'POST',
@@ -800,7 +815,7 @@ function UpdateMultipleItemInWordDetails() {
                 SiteId: siteId,
                 InwardInvoiceNo: $("#txtIteminwordInvoice").val(),
             };
-            
+
             var form_data = new FormData();
             form_data.append("UpdateItemInWord", JSON.stringify(UpdateItemInWord));
 

@@ -43,6 +43,9 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? SupplierName { get; set; }
         public string? InvoiceNo { get; set; }
 
+        public int TotalRows { get; set; }
+        public decimal TotalQuantity { get; set; }
+
     }
     public class ItemInWordRequestModel
     {
@@ -84,8 +87,6 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public Guid InwardId { get; set; }
         public bool? IsApproved { get; set; }
     }
-
-
 
     public class InwardListRequestModel
     {
