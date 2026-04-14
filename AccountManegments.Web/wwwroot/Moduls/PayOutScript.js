@@ -390,6 +390,16 @@ function ExportNetReportToExcel() {
             PayOutReport.filterType = "tillMonth";
             PayOutReport.TillMonth = $('#txtPayoutmonth').val();
             break;
+        case 'Between Date':
+            PayOutReport.filterType = "dateRange";
+            PayOutReport.startDate = $('#timePeriodstartDate').val();
+            PayOutReport.endDate = $('#timePeriodendDate').val();
+            break;
+        case 'Between Date':
+            d.filterType = "dateRange";
+            d.startDate = $('#timePeriodstartDate').val();
+            d.endDate = $('#timePeriodendDate').val();
+            break;
         case 'Between Year':
             selectedYears = $('#PayoutyearDropdown').val();
             if (!selectedYears) {
@@ -547,7 +557,7 @@ $(document).ready(function () {
             createdRow: function (row, data, dataIndex) {
                 var netAmount = data.nonPayOutTotalAmount - data.payOutTotalAmount;
 
-                if (netAmount <= 0) {
+                if (netAmount == 0) {
                     $(row).hide();   // hides the entire row
                 }
             },
