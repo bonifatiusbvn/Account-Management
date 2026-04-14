@@ -1194,12 +1194,17 @@ namespace AccountManegments.Web.Controllers
                             row++;
                             foreach (var item in NetInvoiceDetails.InvoiceList)
                             {
-                                ws.Cell(row, 1).Value = item.SupplierName;
+
                                 yougavetotal += item.PayOutTotalAmount;
                                 yougettotal += item.NonPayOutTotalAmount;
                                 netbalance = item.NonPayOutTotalAmount - item.PayOutTotalAmount;
-                                ws.Cell(row, 2).Value = netbalance;
-                                row++;
+                                if (netbalance != 0)
+                                {
+                                    ws.Cell(row, 1).Value = item.SupplierName;
+                                    ws.Cell(row, 2).Value = netbalance;
+                                    row++;
+                                }
+
                             }
 
                             nettotal = yougettotal - yougavetotal;

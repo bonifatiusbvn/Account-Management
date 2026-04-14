@@ -34,9 +34,16 @@ namespace AccountManegments.Web.Controllers
         {
             return View();
         }
+
         [FormPermissionAttribute("Inward Challan-View")]
         [HttpGet]
-        public async Task<IActionResult> ItemInWordListAction(string? supplier, string? itemname, DateTime? startDate, DateTime? enddate, string? sortBy, Guid? SiteId)
+        public async Task<IActionResult> ItemInWordListAction(
+    string? supplier,
+    string? itemname,
+    DateTime? startDate,
+    DateTime? enddate,
+    string? sortBy,
+    Guid? SiteId)
         {
             try
             {
@@ -44,8 +51,11 @@ namespace AccountManegments.Web.Controllers
                 {
                     UserSession.SiteId = SiteId.ToString();
                 }
+
                 Guid? siteId = string.IsNullOrEmpty(UserSession.SiteId) ? null : new Guid(UserSession.SiteId);
+
                 string apiUrl = $"ItemInWord/GetItemInWordList";
+
                 InwardListRequestModel request = new InwardListRequestModel()
                 {
                     itemname = itemname,
@@ -60,21 +70,20 @@ namespace AccountManegments.Web.Controllers
 
                 if (res.code == 200)
                 {
-                    List<ItemInWordModel> GetSiteList = JsonConvert.DeserializeObject<List<ItemInWordModel>>(res.data.ToString());
+                    List<ItemInWordModel> list = JsonConvert.DeserializeObject<List<ItemInWordModel>>(res.data.ToString());
 
-                    return PartialView("~/Views/ItemInWord/_ItemInWordPartial.cshtml", GetSiteList);
+                    // ✅ RETURN PARTIAL VIEW ONLY
+                    return PartialView("~/Views/ItemInWord/_ItemInWordPartial.cshtml", list);
                 }
-                else
-                {
-                    return BadRequest(new { Message = "Failed to retrieve Item In Word list." });
-                }
+
+                return BadRequest();
             }
             catch (Exception ex)
             {
-
-                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(ex.Message);
             }
         }
+
 
         [FormPermissionAttribute("Inward Challan-Add")]
         [HttpPost]
