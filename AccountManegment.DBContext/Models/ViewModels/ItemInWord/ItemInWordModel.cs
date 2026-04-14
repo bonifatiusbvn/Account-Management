@@ -43,6 +43,10 @@ namespace AccountManagement.DBContext.Models.ViewModels.ItemInWord
         public string? SupplierName { get; set; }
         public string? InvoiceNo { get; set; }
 
+        public int? TotalRows { get; set; }
+
+        public decimal? TotalQuantity { get; set; }
+
     }
     public class ItemInWordRequestModel
     {
