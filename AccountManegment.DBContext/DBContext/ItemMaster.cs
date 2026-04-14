@@ -23,6 +23,8 @@ public partial class ItemMaster
 
     public bool? IsApproved { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }
@@ -30,6 +32,14 @@ public partial class ItemMaster
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<InventoryInward> InventoryInwards { get; set; } = new List<InventoryInward>();
+
+    public virtual ICollection<ItemInword> ItemInwords { get; set; } = new List<ItemInword>();
+
+    public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
+
+    public virtual ICollection<SalesInvoiceDetail> SalesInvoiceDetails { get; set; } = new List<SalesInvoiceDetail>();
 
     public virtual UnitMaster UnitTypeNavigation { get; set; } = null!;
 }

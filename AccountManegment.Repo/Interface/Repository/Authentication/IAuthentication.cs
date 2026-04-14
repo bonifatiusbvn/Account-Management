@@ -1,4 +1,6 @@
-﻿using AccountManagement.DBContext.Models.DataTableParameters;
+﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -12,14 +14,12 @@ namespace AccountManagement.Repository.Interface.Interfaces.Authentication
     {
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
         Task<IEnumerable<LoginView>> GetUsersList(string? searchText, string? searchBy, string? sortBy);
-
         Task<LoginView> GetUserById(Guid UserId);
-
         Task<UserResponceModel> CreateUser(UserViewModel CreateUser);
         Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser);
-
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId);
+        Task<UserResponceModel> DeleteUserDetails(Guid UserId);
 
-
+        string GenerateToken(LoginRequest model);
     }
 }

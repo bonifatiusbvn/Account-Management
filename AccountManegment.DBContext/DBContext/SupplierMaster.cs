@@ -9,7 +9,9 @@ public partial class SupplierMaster
 
     public string SupplierName { get; set; } = null!;
 
-    public string Mobile { get; set; } = null!;
+    public string? Mobile { get; set; }
+
+    public string? Email { get; set; }
 
     public string? Gstno { get; set; }
 
@@ -21,15 +23,23 @@ public partial class SupplierMaster
 
     public int City { get; set; }
 
-    public string PincodeCode { get; set; } = null!;
+    public string? PinCode { get; set; }
 
     public string? BankName { get; set; }
+
+    public string? BankBranch { get; set; }
 
     public string? AccountNo { get; set; }
 
     public string? Iffccode { get; set; }
 
-    public bool? IsApproved { get; set; }
+    public bool IsApproved { get; set; }
+
+    public decimal? OpeningBalance { get; set; }
+
+    public DateTime? OpeningBalanceDate { get; set; }
+
+    public bool? IsDelete { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -40,6 +50,10 @@ public partial class SupplierMaster
     public DateTime? UpdatedOn { get; set; }
 
     public virtual City CityNavigation { get; set; } = null!;
+
+    public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
+
+    public virtual ICollection<SalesInvoice> SalesInvoices { get; set; } = new List<SalesInvoice>();
 
     public virtual State StateNavigation { get; set; } = null!;
 }

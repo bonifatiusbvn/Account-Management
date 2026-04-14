@@ -11,12 +11,9 @@ namespace AccountManagement.Repository.Interface.Services.FormPermissionMasterSe
 {
     public interface IFormPermissionMasterService
     {
-        Task<ApiResponseModel> CreateRolewiseFormPermission(RolewiseFormPermissionModel formPermission);
 
-        Task<IEnumerable<RolewiseFormPermissionModel>> GetRolewiseFormPermissionList();
-
-        Task<RolewiseFormPermissionModel> GetRolewiseFormPermissionById(int formPermissionId);
-
-        Task<ApiResponseModel> UpdateRolewiseFormPermission(RolewiseFormPermissionModel updateFormPermission);
+        Task<IEnumerable<UserwiseFormPermissionModel>> GetUserwiseFormPermissionList();
+        Task<List<UserwiseFormPermissionModel>> GetUserwiseFormPermissionById(Guid UserId);
+        Task<ApiResponseModel> UpdateMultipleUserwiseFormPermission(List<UserwiseFormPermissionModel> UpdatedUserwiseFormPermissions);
     }
 }

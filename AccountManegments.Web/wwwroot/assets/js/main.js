@@ -1,11 +1,8 @@
 $(function () {
 
-
-
     $(function () {
         $("#menu").metisMenu()
     })
-
 
     $(".nav-toggle-icon").on("click", function () {
         $(".wrapper").toggleClass("toggled")
@@ -166,12 +163,7 @@ $(function () {
     }
 
 
-
-
-
-
-
-    new PerfectScrollbar(".header-notifications-list")
+    /*new PerfectScrollbar(".header-notifications-list")*/
 
 
     // Tooltops

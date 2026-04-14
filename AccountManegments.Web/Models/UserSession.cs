@@ -1,4 +1,8 @@
-﻿namespace AccountManegments.Web.Models
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+using Newtonsoft.Json;
+
+namespace AccountManegments.Web.Models
 {
     public class UserSession
     {
@@ -42,7 +46,133 @@
                 return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "UserName", true) == 0)?.Value;
             }
         }
+        public static string ComapnyId
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetString("ComapnyId") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("ComapnyId");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("ComapnyId", value);
+            }
+        }
+
+        public static string CompanyName
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetString("CompanyName") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("CompanyName");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("CompanyName", value);
+            }
+
+        }
+        public static string SiteName
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetString("SiteName") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("SiteName");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("SiteName", value);
+            }
+        }
+        public static string SiteId
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetString("SiteId") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("SiteId");
+
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("SiteId", value);
+            }
+        }
+
+        public static List<FromPermission> FormPermisionData
+        {
+
+            get
+            {
+                if (StaticHttpContext.Session.GetObjectFromJson<List<FromPermission>>("FromPermission") == null)
+                    return new List<FromPermission>();
+                else
+                    return StaticHttpContext.Session.GetObjectFromJson<List<FromPermission>>("FromPermission");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("FromPermission", value);
+            }
+
+        }
+        public static List<UserSiteListModel> SiteData
+        {
+            get
+            {
+                var siteData = StaticHttpContext.Session.GetObjectFromJson<List<UserSiteListModel>>("SiteData");
+                return siteData ?? new List<UserSiteListModel>();
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("SiteData", value);
+            }
+        }
+
+        public static List<UserCompanyListModel> CompanyData
+        {
+            get
+            {
+                var companylData = StaticHttpContext.Session.GetObjectFromJson<List<UserCompanyListModel>>("CompanyData");
+                return companylData ?? new List<UserCompanyListModel>();
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("CompanyData", value);
+            }
+        }
 
 
+        public string Token
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "Token", true) == 0)?.Value;
+            }
+        }
+
+    }
+
+    public static class SessionExtensions
+    {
+        public static void SetObjectAsJson(this ISession session, string key, object value)
+        {
+            session.SetString(key, JsonConvert.SerializeObject(value));
+        }
+
+        public static T GetObjectFromJson<T>(this ISession session, string key)
+        {
+            var value = session.GetString(key);
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+        }
     }
 }

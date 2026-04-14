@@ -11,5 +11,13 @@ public partial class Form
 
     public string FormName { get; set; } = null!;
 
+    public string? Controller { get; set; }
+
+    public int? OrderId { get; set; }
+
+    public string? Action { get; set; }
+
     public bool IsActive { get; set; }
+
+    public virtual ICollection<UserwiseFormPermission> UserwiseFormPermissions { get; set; } = new List<UserwiseFormPermission>();
 }

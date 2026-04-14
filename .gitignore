@@ -409,3 +409,4 @@ obj/
 /AccountManegment.Repo
 /AccountManegmentAPI
 /AccountManegments.Web
+/AccountManegments.Web/Views/InvoiceMaster/_DocumentListPartial.cshtml

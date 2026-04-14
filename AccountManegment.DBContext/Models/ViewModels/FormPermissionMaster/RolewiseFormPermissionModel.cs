@@ -15,11 +15,14 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
 
         public int FormId { get; set; }
 
+        public bool IsAddAllow { get; set; }
+
         public bool IsViewAllow { get; set; }
 
         public bool IsEditAllow { get; set; }
 
         public bool IsDeleteAllow { get; set; }
+        public bool? IsApproved { get; set; }
 
         public Guid CreatedBy { get; set; }
 
@@ -33,5 +36,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster
 
         public string? FullName { get; set; }
         public string? FormName { get; set; }
+
+        public int RowNumber { get; set; }
     }
 }

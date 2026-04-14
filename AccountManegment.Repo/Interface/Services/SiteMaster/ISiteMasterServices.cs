@@ -15,5 +15,17 @@ namespace AccountManagement.Repository.Interface.Services.SiteMaster
         Task<ApiResponseModel> AddSiteDetails(SiteMasterModel SiteDetails);
         Task<SiteMasterModel> GetSiteDetailsById(Guid SiteId);
         Task<ApiResponseModel> UpdateSiteDetails(SiteMasterModel SiteDetails);
+        Task<ApiResponseModel> ActiveDeactiveSite(Guid SiteId);
+        Task<ApiResponseModel> DeleteSite(Guid SiteId);
+        Task<IEnumerable<SiteMasterModel>> GetSiteNameList();
+        Task<IEnumerable<SiteAddressModel>> GetSiteAddressList(Guid SiteId);
+        Task<ApiResponseModel> AddSiteGroupDetails(SiteGroupModel GroupDetails);
+        Task<IEnumerable<GroupMasterModel>> GetGroupNameListBySiteId(Guid SiteId);
+        Task<IEnumerable<SiteGroupModel>> GetGroupNameList();
+        Task<IEnumerable<GroupMasterModel>> GetGroupNamesList(string? searchText, string? searchBy, string? sortBy);
+        Task<ApiResponseModel> DeleteSiteGroupDetails(Guid GroupId);
+        Task<SiteGroupModel> GetGroupDetailsByGroupId(Guid GroupId);
+        Task<ApiResponseModel> UpdateSiteGroupMaster(SiteGroupModel groupDetails);
+        Task<SiteGroupModel> GetGroupDetailsByGroupName(string GroupName);
     }
 }

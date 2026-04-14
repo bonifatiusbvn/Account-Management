@@ -19,9 +19,15 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int RoleId { get; set; }
+    public Guid? RoleId { get; set; }
+
+    public string? SiteId { get; set; }
+
+    public string? CompanyId { get; set; }
 
     public bool IsActive { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -30,4 +36,6 @@ public partial class User
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<UserwiseFormPermission> UserwiseFormPermissions { get; set; } = new List<UserwiseFormPermission>();
 }

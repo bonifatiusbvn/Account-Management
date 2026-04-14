@@ -1,13 +1,19 @@
 ﻿using AccountManagement.DBContext.Models.API;
 using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.FormMaster;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
+using AccountManagement.DBContext.Models.ViewModels.PurchaseOrder;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Data;
+using System.Net.Http.Headers;
 
 namespace AccountManegments.Web.Controllers
 {
@@ -27,7 +33,7 @@ namespace AccountManegments.Web.Controllers
             _userSession = userSession;
         }
 
-
+        [FormPermissionAttribute("User List-View")]
         public IActionResult UserListView()
         {
             return View();
@@ -37,7 +43,6 @@ namespace AccountManegments.Web.Controllers
         {
             try
             {
-
                 string apiUrl = $"Authentication/GetAllUserList?searchText={searchText}&searchBy={searchBy}&sortBy={sortBy}";
 
                 ApiResponseModel res = await APIServices.PostAsync("", apiUrl);
@@ -50,17 +55,17 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve user list." });
+                    return BadRequest(new { Message = "Failed to retrieve user list." });
                 }
             }
             catch (Exception ex)
             {
 
-                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
 
-
+        [FormPermissionAttribute("User List-View")]
         public async Task<JsonResult> DisplayUserDetails(Guid UserId)
         {
             try
@@ -79,7 +84,7 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("User List-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserViewModel CreatUser)
         {
@@ -93,8 +98,11 @@ namespace AccountManegments.Web.Controllers
                     LastName = CreatUser.LastName,
                     UserName = CreatUser.UserName,
                     Email = CreatUser.Email,
+                    Role = CreatUser.Role,
                     Password = CreatUser.Password,
                     PhoneNo = CreatUser.PhoneNo,
+                    SiteId = CreatUser.SiteId,
+                    CompanyId = CreatUser.CompanyId,
                     CreatedBy = _userSession.UserId,
                 };
 
@@ -105,7 +113,7 @@ namespace AccountManegments.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -114,29 +122,20 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
         {
             try
             {
-                var Updateuser = new UserViewModel()
-                {
-                    Id = UpdateUser.Id,
-                    FirstName = UpdateUser.FirstName,
-                    LastName = UpdateUser.LastName,
-                    UserName = UpdateUser.UserName,
-                    Password = UpdateUser.Password,
-                    Email = UpdateUser.Email,
-                    PhoneNo = UpdateUser.PhoneNo,
-                };
-                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "Authentication/UpdateUserDetails");
+                ApiResponseModel postUser = await APIServices.PostAsync(UpdateUser, "Authentication/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -145,22 +144,113 @@ namespace AccountManegments.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("User List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UserActiveDecative(Guid UserId)
         {
             try
             {
-
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Authentication/ActiveDeactiveUsers?UserId=" + UserId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("User List-Delete")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteUserDetails(Guid UserId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Authentication/DeleteUserDetails?UserId=" + UserId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult UserwisePermission()
+        {
+            return View();
+        }
+        public async Task<IActionResult> UserwisePermissionListAction()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.PostAsync("", "Authentication/GetAllUserList");
+
+                if (res.code == 200)
+                {
+                    List<LoginView> GetUserList = JsonConvert.DeserializeObject<List<LoginView>>(res.data.ToString());
+
+                    return PartialView("~/Views/User/_UserwisePermissionPartial.cshtml", GetUserList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user role list." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<IActionResult> GetUserwiseFormListById(Guid UserId)
+        {
+            try
+            {
+                List<UserwiseFormPermissionModel> UserwiseFormList = new List<UserwiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserwiseFormPermissionById?UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    UserwiseFormList = JsonConvert.DeserializeObject<List<UserwiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/User/_EditUserwiseFormPermissionPartial.cshtml", UserwiseFormList);
+                }
+                else
+                {
+                    return BadRequest(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateMultipleUserwiseFormPermission()
+        {
+            try
+            {
+                var UserwisePermissionDetails = HttpContext.Request.Form["UserwisePermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<UserwiseFormPermissionModel>>(UserwisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleUserewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)

@@ -18,6 +18,21 @@ namespace AccountManagement.DBContext.Models.DataTableParameters
         public int pageSize { get; set; }
         public int skip { get; set; }
 
+        public Guid? SiteId { get; set; }
+        public Guid? SupplierId { get; set; }
+        public Guid? CompanyId { get; set; }
+        public string? filterType { get; set; }
+
+        public DateTime? startDate { get; set; }
+        public DateTime? TillMonth { get; set; }
+        public DateTime? endDate { get; set; }
+        public string? SelectedYear { get; set; }
+        public string? GroupName { get; set; }
+        public string? sortBy { get; set; }
+        public string? SupplierName { get; set; }
+        public string? CompanyName { get; set; }
+
+
     }
 
     public class jsonData
@@ -26,8 +41,9 @@ namespace AccountManagement.DBContext.Models.DataTableParameters
         public int recordsFiltered { get; set; }
         public int recordsTotal { get; set; }
         public dynamic data { get; set; }
-
-
+        public dynamic? TotalCredit { get; set; }
+        public dynamic? TotalDebit { get; set; }
+        public dynamic? TotalAmount { get; set; }
     }
 
 }

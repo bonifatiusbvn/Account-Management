@@ -2,44 +2,67 @@
 $(document).ready(function () {
 
     GetCountry();
-    $('#ddlCountry').change(function () {
-        var Text = $("#ddlCountry Option:Selected").text();
-        var StateId = $(this).val();
-        $("#txtcountry").val(Text);
-        $('#ddlState').empty();
-        $('#ddlState').append('<Option >--Select State--</Option>');
-        $.ajax({
-            url: '/Authentication/GetState?StateId=' + StateId,
-            success: function (result) {
 
-                $.each(result, function (i, data) {
-                    $('#ddlState').append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-                });
-            }
-        });
+    $('#dropState').change(function () {
+
+        var Text = $("#dropState Option:Selected").text();
+        var txtstateid = $(this).val();
+        $("#txtstate").val(txtstateid);
     });
 
+    $('#ddlCity').change(function () {
 
-    $('#ddlState').change(function () {
+        var Text = $("#ddlCity Option:Selected").text();
+        var txtcityid = $(this).val();
+        $("#txtcity").val(txtcityid);
+    });
 
-        var Text = $("#ddlState Option:Selected").text();
-        var CityId = $(this).val();
-        $("#txtstate").val(Text);
-        $('#ddlCity').empty();
-        $('#ddlCity').append('<Option >--Select City--</Option>');
-        $.ajax({
-            url: '/Authentication/GetCity?CityId=' + CityId,
-            success: function (result) {
-                $.each(result, function (i, data) {
-                    $('#ddlCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-                });
-            }
-        });
+    $('#ddlUserRole').change(function () {
+        var Text = $("#ddlUserRole Option:Selected").text();
+        var txtroleid = $(this).val();
+        $("#txtrole").val(txtroleid);
     });
 
 });
 
+function fn_getState(drpstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+    $('#' + drpstate).empty();
+    $('#' + drpstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getcitiesbystateId(drpcity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+    $('#' + drpcity).empty();
+    $('#' + drpcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
 
 function GetCountry() {
 
@@ -47,15 +70,38 @@ function GetCountry() {
         url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
+                $('#ddlCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
 
             });
         }
     });
 }
 
-function Citytext(sel) {
-    $("#txtcity").val((sel.options[sel.selectedIndex].text));
-}
+function GetCompanyDetail(that, selectedCompanyId) {
 
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            if (result.length > 0) {
+                var $dropdown = $('#' + that);
+                $dropdown.empty();
+                $dropdown.append('<option value="" disabled>Select Company</option>');
+
+                $.each(result, function (i, data) {
+                    var isSelected = data.companyId === selectedCompanyId ? 'selected' : '';
+                    $dropdown.append('<option value="' + data.companyId + '" ' + isSelected + ' data-company-name="' + data.companyName + '">' + data.companyName + '</option>');
+                });
+
+                if (selectedCompanyId) {
+                    $dropdown.val(selectedCompanyId);
+                } else {
+                    $dropdown.val('');
+                }
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching company details:', error);
+        }
+    });
+}
 

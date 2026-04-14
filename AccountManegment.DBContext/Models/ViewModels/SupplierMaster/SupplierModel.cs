@@ -10,29 +10,36 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
     {
         public Guid SupplierId { get; set; }
 
-        public string SupplierName { get; set; }
+        public string SupplierName { get; set; } = null!;
 
-        public string Mobile { get; set; }
+        public string? Mobile { get; set; }
+
+        public string? Email { get; set; }
 
         public string? Gstno { get; set; }
 
         public string? BuildingName { get; set; }
 
-        public string Area { get; set; }
+        public string Area { get; set; } = null!;
 
         public int State { get; set; }
+        public string? StateName { get; set; }
 
         public int City { get; set; }
+        public string? CityName { get; set; }
 
-        public string PincodeCode { get; set; }
+        public string? PinCode { get; set; }
 
         public string? BankName { get; set; }
+        public string? BranchName { get; set; }
 
         public string? AccountNo { get; set; }
 
         public string? Iffccode { get; set; }
 
-        public bool? IsApproved { get; set; }
+        public bool IsApproved { get; set; }
+
+        public bool? IsDelete { get; set; }
 
         public Guid CreatedBy { get; set; }
 
@@ -41,5 +48,21 @@ namespace AccountManagement.DBContext.Models.ViewModels.SupplierMaster
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? FullAddress { get; set; }
+
+        public decimal? OpeningBalance { get; set; }
+
+        public DateTime? OpeningBalanceDate { get; set; }
+    }
+    public class SupplierIsApprovedMasterModel
+    {
+        public List<SupplierIsApprovedModel>? SupplierList { get; set; }
+    }
+
+    public class SupplierIsApprovedModel
+    {
+        public Guid SupplierId { get; set; }
+        public bool? IsApproved { get; set; }
     }
 }

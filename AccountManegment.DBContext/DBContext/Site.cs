@@ -27,17 +27,19 @@ public partial class Site
 
     public string? Pincode { get; set; }
 
-    public string ShippingAddress { get; set; } = null!;
+    public string? ShippingAddress { get; set; }
 
-    public string ShippingArea { get; set; } = null!;
+    public string? ShippingArea { get; set; }
 
-    public int ShippingCityId { get; set; }
+    public int? ShippingCityId { get; set; }
 
-    public int ShippingStateId { get; set; }
+    public int? ShippingStateId { get; set; }
 
-    public int ShippingCountry { get; set; }
+    public int? ShippingCountry { get; set; }
 
     public string? ShippingPincode { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -46,4 +48,14 @@ public partial class Site
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<GroupMaster> GroupMasters { get; set; } = new List<GroupMaster>();
+
+    public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
+
+    public virtual ICollection<SalesInvoice> SalesInvoices { get; set; } = new List<SalesInvoice>();
+
+    public virtual ICollection<SiteAddress> SiteAddresses { get; set; } = new List<SiteAddress>();
+
+    public virtual ICollection<SupplierInvoice> SupplierInvoices { get; set; } = new List<SupplierInvoice>();
 }

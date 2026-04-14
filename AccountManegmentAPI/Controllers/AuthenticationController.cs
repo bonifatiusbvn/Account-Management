@@ -31,6 +31,7 @@ namespace AccountManagement.API.Controllers
 
                 if (result != null && result.Data != null)
                 {
+                    var token = Authentication.GenerateToken(login);
                     loginresponsemodel.Code = (int)HttpStatusCode.OK;
                     loginresponsemodel.Data = result.Data;
                     loginresponsemodel.Message = result.Message;
@@ -47,8 +48,9 @@ namespace AccountManagement.API.Controllers
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
-        [HttpPost]
-        [Route("GetAllUserList")]
+
+        [HttpPost("GetAllUserList")]
+        [Authorize]
         public async Task<IActionResult> GetAllUserList(string? searchText, string? searchBy, string? sortBy)
         {
             IEnumerable<LoginView> userList = await Authentication.GetUsersList(searchText, searchBy, sortBy);
@@ -57,6 +59,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpGet]
         [Route("GetUserById")]
+        [Authorize]
+
         public async Task<IActionResult> GetEmployeeById(Guid UserId)
         {
             var userProfile = await Authentication.GetUserById(UserId);
@@ -65,6 +69,8 @@ namespace AccountManagement.API.Controllers
 
         [HttpPost]
         [Route("CreateUser")]
+        [Authorize]
+
         public async Task<IActionResult> CreateUser(UserViewModel UpdateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -75,10 +81,17 @@ namespace AccountManagement.API.Controllers
                 response.Message = updateUser.Message;
                 response.Icone = updateUser.Icone;
             }
+            else
+            {
+                response.Code = updateUser.Code;
+                response.Message = updateUser.Message;
+            }
             return StatusCode(response.Code, response);
         }
         [HttpPost]
         [Route("UpdateUserDetails")]
+        [Authorize]
+
         public async Task<IActionResult> UpdateUserDetails(UserViewModel UpdateUser)
         {
             UserResponceModel response = new UserResponceModel();
@@ -89,11 +102,17 @@ namespace AccountManagement.API.Controllers
                 response.Message = updateUser.Message;
                 response.Icone = updateUser.Icone;
             }
+            else
+            {
+                response.Code = updateUser.Code;
+                response.Message = updateUser.Message;
+            }
             return StatusCode(response.Code, response);
         }
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]
+        [Authorize]
         public async Task<IActionResult> ActiveDeactiveUsers(Guid UserId)
         {
             UserResponceModel responseModel = new UserResponceModel();
@@ -101,17 +120,42 @@ namespace AccountManagement.API.Controllers
             var userName = await Authentication.ActiveDeactiveUsers(UserId);
             try
             {
-
-                if (userName != null)
+                if (responseModel.Code == 200)
                 {
-
-                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Code = userName.Code;
                     responseModel.Message = userName.Message;
                 }
                 else
                 {
                     responseModel.Message = userName.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = userName.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
+        [HttpPost]
+        [Route("DeleteUserDetails")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserDetails(Guid UserId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var User = await Authentication.DeleteUserDetails(UserId);
+            try
+            {
+                if (responseModel.Code == 200)
+                {
+                    responseModel.Code = User.Code;
+                    responseModel.Message = User.Message;
+                }
+                else
+                {
+                    responseModel.Message = User.Message;
+                    responseModel.Code = User.Code;
                 }
             }
             catch (Exception ex)

@@ -11,6 +11,12 @@ using System.Security.Claims;
 using AccountManagement.DBContext.Models.DataTableParameters;
 using AccountManagement.DBContext.Models.ViewModels;
 using AccountManagement.API;
+using AccountManagement.DBContext.Models.ViewModels.FormMaster;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+
 
 namespace AccountManegments.Web.Controllers
 {
@@ -94,62 +100,116 @@ namespace AccountManegments.Web.Controllers
         [HttpGet]
         public IActionResult UserLogin()
         {
+
+            if (Request.Cookies["UserName"] != null && Request.Cookies["Password"] != null)
+            {
+                ViewBag.UserName = (Request.Cookies["UserName"].ToString());
+                var pwd = Request.Cookies["Password"].ToString();
+                ViewBag.Password = pwd;
+                ViewBag.chkRememberMe = true;
+
+            }
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> UserLogin(LoginRequest login)
         {
             try
             {
-                if (ModelState.IsValid)
+                ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
+
+                if (responsemodel.code != (int)HttpStatusCode.OK)
                 {
+                    TempData["ErrorMessage"] = responsemodel.message;
 
-                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "Authentication/Login");
-                    LoginResponseModel userlogin = new LoginResponseModel();
-
-
-                    if (responsemodel.code != (int)HttpStatusCode.OK)
+                    if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                     {
-                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
-                        }
-                        else
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                        }
+                        return Ok(new { Message = responsemodel.message, Code = responsemodel.code });
                     }
 
-                    else
-                    {
-                        var data = JsonConvert.SerializeObject(responsemodel.data);
-                        userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
-                        var claims = new List<Claim>()
-                              {
-                                new Claim("UserId", userlogin.Data.Id.ToString()),
-                                new Claim("FullName", userlogin.Data.FullName),
-                                new Claim("UserName", userlogin.Data.UserName),
-                              };
-
-
-
-
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return View(login);
                 }
-                return View();
+
+
+                var userLogin = new LoginResponseModel
+                {
+                    Data = JsonConvert.DeserializeObject<LoginView>(responsemodel.data.ToString())
+                };
+
+                if (userLogin.Data == null)
+                {
+                    TempData["ErrorMessage"] = "Invalid login data received.";
+                    return View(login);
+                }
+
+
+                userLogin.Data.userSites ??= JsonConvert.DeserializeObject<List<UserSiteListModel>>(responsemodel.data["userSites"]?.ToString() ?? "[]");
+                userLogin.Data.userCompany ??= JsonConvert.DeserializeObject<List<UserCompanyListModel>>(responsemodel.data["userCompany"]?.ToString() ?? "[]");
+
+
+                var claims = new List<Claim>
+        {
+            new Claim("UserId", userLogin.Data.Id.ToString()),
+            new Claim("FullName", userLogin.Data.FullName ?? ""),
+            new Claim("UserName", userLogin.Data.UserName ?? ""),
+            new Claim("Token", userLogin.Data.Token ?? "")
+        };
+
+
+                if (userLogin.Data.userSites.Any())
+                {
+                    var singleSite = userLogin.Data.userSites.First();
+                    claims.Add(new Claim("SiteId", singleSite.SiteId.ToString()));
+                    claims.Add(new Claim("SiteName", singleSite.SiteName ?? ""));
+                    UserSession.SiteId = singleSite.SiteId.ToString();
+                    UserSession.SiteName = singleSite.SiteName;
+                }
+
+
+                if (userLogin.Data.userCompany.Any())
+                {
+                    var singleCompany = userLogin.Data.userCompany.First();
+                    claims.Add(new Claim("CompanyId", singleCompany.CompanyId.ToString())); // Corrected the typo
+                    claims.Add(new Claim("CompanyName", singleCompany.CompanyName ?? ""));
+                    UserSession.ComapnyId = singleCompany.CompanyId.ToString();
+                    UserSession.CompanyName = singleCompany.CompanyName;
+                }
+
+
+                if (login.RememberMe)
+                {
+                    CookieOptions cookie = new CookieOptions { Expires = DateTime.UtcNow.AddDays(7) };
+                    Response.Cookies.Append("UserName", login.UserName, cookie);
+                    Response.Cookies.Append("Password", login.Password, cookie);
+                }
+                else
+                {
+                    Response.Cookies.Delete("UserName");
+                    Response.Cookies.Delete("Password");
+                }
+
+
+                UserSession.FormPermisionData = userLogin.Data.FromPermissionData;
+                UserSession.SiteData = userLogin.Data.userSites;
+                UserSession.CompanyData = userLogin.Data.userCompany;
+
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = "InternalServer" });
+                ViewBag.LoginError = "Login failed due to an unexpected error.";
+                return View(login);
             }
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -167,8 +227,5 @@ namespace AccountManegments.Web.Controllers
             }
             return RedirectToAction("UserLogin");
         }
-
-
-
     }
 }

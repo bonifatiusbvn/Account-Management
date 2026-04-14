@@ -13,7 +13,7 @@ namespace AccountManagement.Repository.Services.Company
     public class CompanyService : ICompanyService
     {
 
-        public CompanyService(ICompany company) 
+        public CompanyService(ICompany company)
         {
             Company = company;
         }
@@ -25,11 +25,19 @@ namespace AccountManagement.Repository.Services.Company
             return await Company.AddCompany(AddCompany);
         }
 
-       
-
-        public async Task<IEnumerable<CompanyModel>> GetAllCompany()
+        public async Task<ApiResponseModel> DeleteCompanyDetails(Guid CompanyId)
         {
-            return await Company.GetAllCompany();
+            return await Company.DeleteCompanyDetails(CompanyId);
+        }
+
+        public async Task<IEnumerable<CompanyModel>> GetAllCompany(string? searchText, string? searchBy, string? sortBy)
+        {
+            return await Company.GetAllCompany(searchText, searchBy, sortBy);
+        }
+
+        public async Task<IEnumerable<CompanyModel>> GetCompanyNameList()
+        {
+            return await Company.GetCompanyNameList();
         }
 
         public async Task<CompanyModel> GetCompnaytById(Guid CompanyId)

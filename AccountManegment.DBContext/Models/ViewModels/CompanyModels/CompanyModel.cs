@@ -21,13 +21,30 @@ namespace AccountManagement.DBContext.Models.ViewModels.CompanyModels
 
         public string? Area { get; set; }
 
+        public string? InvoicePef { get; set; }
+
         public int CityId { get; set; }
+
+        public string? CityName { get; set; }
 
         public int StateId { get; set; }
 
+        public string? StateName { get; set; }
+
         public int Country { get; set; }
 
+        public string? CountryName { get; set; }
+
         public string Pincode { get; set; } = null!;
+        public string? BankName { get; set; }
+
+        public string? BankBranch { get; set; }
+
+        public string? AccountNo { get; set; }
+
+        public string? Iffccode { get; set; }
+
+        public bool? IsDelete { get; set; }
 
         public Guid CreatedBy { get; set; }
 
@@ -36,5 +53,7 @@ namespace AccountManagement.DBContext.Models.ViewModels.CompanyModels
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? FullAddress { get; set; }
     }
 }

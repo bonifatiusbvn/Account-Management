@@ -9,5 +9,15 @@ public partial class UnitMaster
 
     public string UnitName { get; set; } = null!;
 
+    public virtual ICollection<InventoryInward> InventoryInwards { get; set; } = new List<InventoryInward>();
+
     public virtual ICollection<ItemMaster> ItemMasters { get; set; } = new List<ItemMaster>();
+
+    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
+
+    public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
+
+    public virtual ICollection<SalesInvoiceDetail> SalesInvoiceDetails { get; set; } = new List<SalesInvoiceDetail>();
+
+    public virtual ICollection<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; } = new List<SupplierInvoiceDetail>();
 }

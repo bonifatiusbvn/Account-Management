@@ -11,11 +11,15 @@ public partial class RolewiseFormPermission
 
     public int FormId { get; set; }
 
+    public bool IsAddAllow { get; set; }
+
     public bool IsViewAllow { get; set; }
 
     public bool IsEditAllow { get; set; }
 
     public bool IsDeleteAllow { get; set; }
+
+    public bool? IsApproved { get; set; }
 
     public Guid CreatedBy { get; set; }
 
@@ -24,4 +28,6 @@ public partial class RolewiseFormPermission
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual Form Form { get; set; } = null!;
 }

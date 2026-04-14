@@ -1,7 +1,10 @@
 ﻿
 using AccountManagement.API;
+using AccountManagement.DBContext.DBContext;
 using AccountManagement.DBContext.Models.ViewModels;
+using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Repository.MasterList;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +28,7 @@ namespace AccountManagement.Repository.Repository.MasterListRepository
             {
                 IEnumerable<CityView> cities = Context.Cities.Where(e => e.State.StatesId == cityid).ToList().Select(a => new CityView
                 {
-                    Id = a.StateId,
+                    Id = a.CityId,
                     CityName = a.CityName,
                 });
                 return cities;
@@ -61,7 +64,7 @@ namespace AccountManagement.Repository.Repository.MasterListRepository
             {
                 IEnumerable<StateView> states = Context.States.Where(e => e.Country.CountryId == stateid).ToList().Select(a => new StateView
                 {
-                    Id = a.CountryId,
+                    Id = a.StatesId,
                     StateName = a.StatesName
                 });
                 return states;
@@ -71,6 +74,8 @@ namespace AccountManagement.Repository.Repository.MasterListRepository
                 throw ex;
             }
         }
+
+
 
     }
 }

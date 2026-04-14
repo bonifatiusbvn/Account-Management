@@ -1,6 +1,7 @@
 using AccountManegments.Web.Helper;
 using AccountManegments.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddScoped<WebAPI, WebAPI>();
 builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<Common>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -17,13 +19,16 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
-            options.LoginPath = "/Authentication/Login";
-            options.LogoutPath = "/Authentication/Logout";
+
+            options.LoginPath = "/Authentication/UserLogin";
+            options.LogoutPath = "/Authentication/UserLogin";
             options.Cookie.HttpOnly = true;
-            //options.Cookie.Name = "localhost:7204";
             options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+            options.Cookie.IsEssential = true;
             options.SlidingExpiration = true;
+            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+
+
         });
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -32,19 +37,16 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddSession(option =>
 {
-    option.IdleTimeout = TimeSpan.FromMinutes(50);
+    option.IdleTimeout = TimeSpan.FromHours(8);
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

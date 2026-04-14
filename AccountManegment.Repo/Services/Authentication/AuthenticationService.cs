@@ -1,4 +1,6 @@
-﻿using AccountManagement.DBContext.Models.DataTableParameters;
+﻿using AccountManagement.DBContext.Models.API;
+using AccountManagement.DBContext.Models.DataTableParameters;
+using AccountManagement.DBContext.Models.ViewModels.FormPermissionMaster;
 using AccountManagement.DBContext.Models.ViewModels.UserModels;
 using AccountManagement.Repository.Interface.Interfaces.Authentication;
 using AccountManagement.Repository.Interface.Services.AuthenticationService;
@@ -30,6 +32,16 @@ namespace AccountManagement.Repository.Services.Authentication
             return await Authentication.CreateUser(CreateUser);
         }
 
+        public async Task<UserResponceModel> DeleteUserDetails(Guid UserId)
+        {
+            return await Authentication.DeleteUserDetails(UserId);
+        }
+
+        public string GenerateToken(LoginRequest model)
+        {
+            return Authentication.GenerateToken(model);
+        }
+
         public async Task<LoginView> GetUserById(Guid UserId)
         {
             return await Authentication.GetUserById(UserId);
@@ -45,6 +57,8 @@ namespace AccountManagement.Repository.Services.Authentication
         {
             return await Authentication.LoginUser(LoginUser);
         }
+
+
 
         public async Task<UserResponceModel> UpdateUserDetails(UserViewModel UpdateUser)
         {

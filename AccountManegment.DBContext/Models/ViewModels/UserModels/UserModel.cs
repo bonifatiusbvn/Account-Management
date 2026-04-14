@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AccountManagement.API;
+using AccountManagement.DBContext.Models.ViewModels.SiteMaster;
+using AccountManegments.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,12 +22,22 @@ namespace AccountManagement.DBContext.Models.ViewModels.UserModels
         public string Email { get; set; }
 
         public string PhoneNo { get; set; }
-        public int Role { get; set; }
+        public int RoleId { get; set; }
 
         public bool IsActive { get; set; }
         public string RoleName { get; set; }
 
         public DateTime CreatedOn { get; set; }
+        public string? SiteName { get; set; }
+        public string? CompanyName { get; set; }
+        public string? SiteId { get; set; }
+        public string? CompanyId { get; set; }
+        public bool? IsDeleted { get; set; }
+        public List<FromPermission> FromPermissionData { get; set; }
+
+        public List<UserSiteListModel> userSites { get; set; }
+        public List<UserCompanyListModel> userCompany { get; set; }
+        public string? Token { get; set; }
     }
     public class LoginResponseModel
     {
