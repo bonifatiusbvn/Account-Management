@@ -25,7 +25,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Linq.Dynamic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
+using AccountManagement.DBContext.DBContext;
 #nullable disable
 namespace AccountManagement.Repository.Repository.InvoiceMasterRepository
 {
